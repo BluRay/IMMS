@@ -47,12 +47,71 @@ public class LoginController extends BaseController{
 				return null;
 			}else
 				//mv.getModel();
-				mv.setViewName("index");
+				mv.setViewName("home");
 		}else{
 			mv.setViewName("error");
 		}
 		
         return mv;  
     }
+	
+	@RequestMapping("/index")  
+    public ModelAndView  index1(){ 
+		mv.setViewName("index");
+        return mv;  
+    } 
 
+	@RequestMapping("/tables")  
+    public ModelAndView  tables(){ 
+		mv.setViewName("tables");
+        return mv;  
+    }  
+	
+	@RequestMapping("/elements")  
+    public ModelAndView  elements(){ 
+		mv.setViewName("elements");
+        return mv;  
+    }  
+	
+	@RequestMapping("/buttons")  
+    public ModelAndView  buttons(){ 
+		mv.setViewName("buttons");
+        return mv;  
+    }  
+	
+	@RequestMapping("/dropzone")  
+    public ModelAndView  dropzone(){ 
+		mv.setViewName("dropzone");
+        return mv;  
+    } 
+	
+	@RequestMapping("/formelements")  
+    public ModelAndView  formelements(){ 
+		mv.setViewName("formelements");
+        return mv;  
+    } 
+	
+	@RequestMapping("/formwizard")  
+    public ModelAndView  formwizard(){ 
+		mv.setViewName("formwizard");
+        return mv;  
+    } 
+	
+	@RequestMapping("/jqueryui")  
+    public ModelAndView  jqueryui(){ 
+		mv.setViewName("jqueryui");
+        return mv;  
+    } 
+	
+	@RequestMapping("/treeview")  
+    public ModelAndView  treeview(){ 
+		mv.setViewName("treeview");
+        return mv;  
+    } 
+	
+	@RequestMapping("/wysiwyg")  
+    public ModelAndView  wysiwyg(){ 
+		mv.setViewName("wysiwyg");
+        return mv;  
+    } 
 }

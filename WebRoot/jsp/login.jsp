@@ -1,172 +1,338 @@
-<%@ page language="java" pageEncoding="utf-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>  
-<%
-	String path = request.getContextPath();
-	String basePath = request.getScheme() + "://"
-			+ request.getServerName() + ":" + request.getServerPort()
-			+ path + "/";
-%>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=Edge">
-<meta http-equiv="pragma" content="no-cache">
-<meta http-equiv="cache-control" content="no-cache">
-<title><fmt:message key="login.title" /></title>
-<link rel="stylesheet" type="text/css" href="css/base.css" media="all">
-<link type="text/css" rel="stylesheet" href="css/comm.css" source="widget">
-<link charset="utf-8" rel="stylesheet" href="css/tips.css">
-<link href="css/bootstrap.min.css" rel="stylesheet">
-<link href="css/login.css" rel="stylesheet">
-<script type="text/javascript" src="js/jquery-2.1.0.min.js"></script>
-<script type="text/javascript" src="js/bootstrap.min.js"></script>
-<script type="text/javascript" src="js/common.js"></script>
-<script type="text/javascript">
-$(document).ready(function(){
-	var last_url=getQueryString("last_url");
-	$("#last_url").val(last_url);
-});
-</script>
-<style id="style-1-cropbar-clipper">
-.en-markup-crop-options {
-	top: 18px !important;
-	left: 50% !important;
-	margin-left: -100px !important;
-	width: 200px !important;
-	border: 2px rgba(255, 255, 255, .38) solid !important;
-	border-radius: 4px !important;
-}
+<!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<html lang="en">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta charset="utf-8" />
+		<title>19BMS - 登录</title>
 
-.en-markup-crop-options div div:first-of-type {
-	margin-left: 0px !important;
-}
-</style>
-</head>
+		<meta name="description" content="User login page" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 
-<body style="overflow: hidden;">
-	<div class="w">
-		<div id="logo">
-			<a href="http://www.byd.com/"
-				clstag="pageclick|keycount|20150112ABD|45"><img
-				src="images/logo.png" alt="BYD"></a>
-		</div>
-	</div>
-	<div id="content">
-		<div class="login-wrap">
-			<div class="w">
-				<div class="login-form" style="border: 1px solid #FDCC97;">
-					<div class="login-box">
-						<div class="mt">
-							<h1 style="top: -10px;"><fmt:message key="login.system_welcome" /></h1>
-							<div class="extra-r"></div>
-						</div>
+		<!-- bootstrap & fontawesome -->
+		<link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="assets/css/font-awesome.min.css" />
 
-						<div class="mc" style="margin-top:20px">
-							<div class="form">
-								<form id="login" action="login" method="post">
-									<div class="msg-wrap" style="margin-bottom: 14px">
-										<div class="msg-warn">
-											<b></b><span style="margin-left: -85px"><fmt:message key="login.tip" /></span>
-										</div>
-										<div class="msg-error hide" style="display: none;">
-											<b></b>
-										</div>
-									</div>
-									<div class="item item-fore1">
-										<label for="loginname" class="login-label name-label"></label>
-										<input
-											style="width: 267px; height: 38px; margin-left: 38px;margin-top: -1px; position:absolute ;z-index:10"
-											placeholder="请输入账号" name="username" id="username"
-											label="用户名："></input>
-										<!-- <span class="clear-btn" style="display: inline;"></span> -->
-									</div>
-									<div id="entry" class="item item-fore2">
-										<label class="login-label pwd-label" for="nloginpwd"></label>
-										<input type="password"
-											style="width: 267px; height: 38px; margin-left: 38px;margin-top: -1px; position:absolute ;z-index:10"
-											placeholder="请输入密码" name="password" id="password" label="密码："></input>
-									</div>
+		<!-- text fonts -->
+		<link rel="stylesheet" href="assets/css/ace-fonts.css" />
 
-									<div class="item item-fore5">
-										<div class="login-btn">
-											<a href="javascript:login.submit();"
-												class="btn-img btn-entry" id="loginsubmit" tabindex="6"
-												clstag="pageclick|keycount|20150112ABD|2">登&nbsp;&nbsp;&nbsp;&nbsp;录</a>
-										</div>
-									</div>
-									 <p>* 请使用 <a href="firefox.exe">火狐浏览器(点击下载)</a> 使用本系统</p> 
-									 
-									 <input type="hidden" id="last_url" name="last_url" ></input>
-								</form>
+		<!-- ace styles -->
+		<link rel="stylesheet" href="assets/css/ace.min.css" />
+
+		<!--[if lte IE 9]>
+			<link rel="stylesheet" href="assets/css/ace-part2.min.css" />
+		<![endif]-->
+		<link rel="stylesheet" href="assets/css/ace-rtl.min.css" />
+
+		<!--[if lte IE 9]>
+		  <link rel="stylesheet" href="assets/css/ace-ie.min.css" />
+		<![endif]-->
+		<link rel="stylesheet" href="assets/css/ace.onpage-help.css" />
+
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+		<!--[if lt IE 9]>
+		<script src="assets/js/html5shiv.js"></script>
+		<script src="assets/js/respond.min.js"></script>
+		<![endif]-->
+	</head>
+
+	<body class="login-layout">
+		<div class="main-container">
+			<div class="main-content">
+				<div class="row">
+					<div class="col-sm-10 col-sm-offset-1">
+						<div class="login-container">
+							<div class="center">
+								<h1>
+									<i class="ace-icon fa fa-leaf green"></i>
+									<span class="red">BYD</span>
+									<span class="white" id="id-text2">19BMS</span>
+								</h1>
+								<h4 class="blue" id="id-company-text">&copy; 比亚迪汽车有限公司</h4>
 							</div>
-							
-						</div>						
-					</div>
-					<div style="margin-top:50px">
-								<p id="accessTip" style="display: none;">* 请使用 <a href="firefox.exe">火狐浏览器(点击下载)</a> 使用本系统</p>									
+
+							<div class="space-6"></div>
+
+							<div class="position-relative">
+								<div id="login-box" class="login-box visible widget-box no-border">
+									<div class="widget-body">
+										<div class="widget-main">
+											<h4 class="header blue lighter bigger">
+												<i class="ace-icon fa fa-coffee green"></i>
+												请登录
+											</h4>
+
+											<div class="space-6"></div>
+
+											<form id="login" action="login" method="post">
+												<fieldset>
+													<label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input type="text" class="form-control" placeholder="用户名..." id="username" name="username"  />
+															<i class="ace-icon fa fa-user"></i>
+														</span>
+													</label>
+
+													<label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input type="password" class="form-control" placeholder="密码..." id="password" name="password" />
+															<i class="ace-icon fa fa-lock"></i>
+														</span>
+													</label>
+
+													<div class="space"></div>
+
+													<div class="clearfix">
+														<label class="inline">
+															<input type="checkbox" class="ace" />
+															<span class="lbl">记住我</span>
+														</label>
+
+														<button type="button" class="width-35 pull-right btn btn-sm btn-primary" onclick="javascript:login.submit();" >
+															<i class="ace-icon fa fa-key"></i>
+															<span class="bigger-110">登录</span>
+														</button>
+													</div>
+
+													<div class="space-4"></div>
+												</fieldset>
+											</form>
+
+											<!-- <div class="social-or-login center">
+												<span class="bigger-110">Or Login Using</span>
+											</div>
+
+											<div class="space-6"></div>
+
+											<div class="social-login center">
+												<a class="btn btn-primary">
+													<i class="ace-icon fa fa-facebook"></i>
+												</a>
+
+												<a class="btn btn-info">
+													<i class="ace-icon fa fa-twitter"></i>
+												</a>
+
+												<a class="btn btn-danger">
+													<i class="ace-icon fa fa-google-plus"></i>
+												</a>
+											</div> -->
+										</div><!-- /.widget-main -->
+
+										<div class="toolbar clearfix">
+											<div>
+												<a href="#" data-target="#forgot-box" class="forgot-password-link">
+													<i class="ace-icon fa fa-arrow-left"></i>
+													忘记密码
+												</a>
+											</div>
+
+											<div>
+												<a href="#" data-target="#signup-box" class="user-signup-link">
+													我要注册
+													<i class="ace-icon fa fa-arrow-right"></i>
+												</a>
+											</div>
+										</div>
+									</div><!-- /.widget-body -->
+								</div><!-- /.login-box -->
+
+								<div id="forgot-box" class="forgot-box widget-box no-border">
+									<div class="widget-body">
+										<div class="widget-main">
+											<h4 class="header red lighter bigger">
+												<i class="ace-icon fa fa-key"></i>
+												重置密码
+											</h4>
+
+											<div class="space-6"></div>
+											<p>
+												输入邮箱
+											</p>
+
+											<form>
+												<fieldset>
+													<label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input type="email" class="form-control" placeholder="邮箱" />
+															<i class="ace-icon fa fa-envelope"></i>
+														</span>
+													</label>
+
+													<div class="clearfix">
+														<button type="button" class="width-35 pull-right btn btn-sm btn-danger">
+															<i class="ace-icon fa fa-lightbulb-o"></i>
+															<span class="bigger-110">发送给我!</span>
+														</button>
+													</div>
+												</fieldset>
+											</form>
+										</div><!-- /.widget-main -->
+
+										<div class="toolbar center">
+											<a href="#" data-target="#login-box" class="back-to-login-link">
+												返回
+												<i class="ace-icon fa fa-arrow-right"></i>
+											</a>
+										</div>
+									</div><!-- /.widget-body -->
+								</div><!-- /.forgot-box -->
+
+								<div id="signup-box" class="signup-box widget-box no-border">
+									<div class="widget-body">
+										<div class="widget-main">
+											<h4 class="header green lighter bigger">
+												<i class="ace-icon fa fa-users blue"></i>
+												新用户注册
+											</h4>
+
+											<div class="space-6"></div>
+											<p> 输入信息: </p>
+
+											<form>
+												<fieldset>
+													<label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input type="email" class="form-control" placeholder="邮箱" />
+															<i class="ace-icon fa fa-envelope"></i>
+														</span>
+													</label>
+
+													<label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input type="text" class="form-control" placeholder="用户名" />
+															<i class="ace-icon fa fa-user"></i>
+														</span>
+													</label>
+
+													<label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input type="password" class="form-control" placeholder="密码" />
+															<i class="ace-icon fa fa-lock"></i>
+														</span>
+													</label>
+
+													<label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input type="password" class="form-control" placeholder="再次输入密码" />
+															<i class="ace-icon fa fa-retweet"></i>
+														</span>
+													</label>
+
+													<label class="block">
+														<input type="checkbox" class="ace" />
+														<span class="lbl">
+															我同意
+															<a href="#">用户协议</a>
+														</span>
+													</label>
+
+													<div class="space-24"></div>
+
+													<div class="clearfix">
+														<button type="reset" class="width-30 pull-left btn btn-sm">
+															<i class="ace-icon fa fa-refresh"></i>
+															<span class="bigger-110">重置</span>
+														</button>
+
+														<button type="button" class="width-65 pull-right btn btn-sm btn-success">
+															<span class="bigger-110">注册</span>
+
+															<i class="ace-icon fa fa-arrow-right icon-on-right"></i>
+														</button>
+													</div>
+												</fieldset>
+											</form>
+										</div>
+
+										<div class="toolbar center">
+											<a href="#" data-target="#login-box" class="back-to-login-link">
+												<i class="ace-icon fa fa-arrow-left"></i>
+												返回
+											</a>
+										</div>
+									</div><!-- /.widget-body -->
+								</div><!-- /.signup-box -->
+							</div><!-- /.position-relative -->
+
+							<div class="navbar-fixed-top align-right">
+								<br />
+								&nbsp;
+								<a id="btn-login-dark" href="#">黑色</a>
+								&nbsp;
+								<span class="blue">/</span>
+								&nbsp;
+								<a id="btn-login-blur" href="#">蓝色</a>
+								&nbsp;
+								<span class="blue">/</span>
+								&nbsp;
+								<a id="btn-login-light" href="#">亮色</a>
+								&nbsp; &nbsp; &nbsp;
+							</div>
 						</div>
-				</div>
-			</div>
-			
-			<div class="login-banner" style="background-color: White">
-				<div class="w">
-					<div id="banner-bg" clstag="pageclick|keycount|20150112ABD|46"
-						class="i-inner"
-						style="background: url(images/1.png) 0px 0px no-repeat; background-color: White">
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="w">
-		<div id="footer-2013">
-			<div class="links">
-				<a rel="nofollow" target="_blank" href="#"> 关于我们 </a> | <a
-					rel="nofollow" target="_blank" href="#"> 联系我们 </a> | <a
-					target="_blank" href="#"> 友情链接 </a>
-			</div>
-			<div class="copyright" style="font-family: Microsoft YaHei;">
-				Copyright©2015&nbsp;&nbsp;&nbsp;比亚迪·信息中心</div>
-		</div>
-	</div>
-	<script type="text/javascript">
-		document.getElementById('banner-bg').style.background = "url(images/"
-				+ (Math.floor(Math.random() * 4) + 1) + ".png)";
+					</div><!-- /.col -->
+				</div><!-- /.row -->
+			</div><!-- /.main-content -->
+		</div><!-- /.main-container -->
 
-		$(document).ready(function() {
-			if (navigator.appName=='Microsoft Internet Explorer'){						
-				$('.form').hide();
-				$("#accessTip").show();
-				if(confirm("请使用火狐浏览器，点击‘确定’下载！")){
-					window.location.href="firefox.exe";
-				}
-				return ;
-			}else{
-				var s = window.location + "";
-				//alert(s.substr(28,38));
-				/* if (s.substr(28,38) == "login.jsp"){
-					window.navigate('logout.action');
-				} */
+		<!-- basic scripts -->
 
-				$('#username').focus();
-				$('#username').bind('keydown', function(event) {
-					if (event.keyCode == "13") {
-						$('#password').focus();
-						$('#password').select();
-						return false;
-					}
-				});
-				$('#password').bind('keydown', function(event) {
-					if (event.keyCode == "13") {
-						document.getElementById("login").submit()
-						return false;
-					}
-				});
-			}
-			})
+		<!--[if !IE]> -->
+		<script type="text/javascript">
+			window.jQuery || document.write("<script src='assets/js/jquery.min.js'>"+"<"+"/script>");
+		</script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script type="text/javascript">
+ window.jQuery || document.write("<script src='assets/js/jquery1x.min.js'>"+"<"+"/script>");
+</script>
+<![endif]-->
+		<script type="text/javascript">
+			if('ontouchstart' in document.documentElement) document.write("<script src='assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+		</script>
+
+		<!-- inline scripts related to this page -->
+		<script type="text/javascript">
+			jQuery(function($) {
+			 $(document).on('click', '.toolbar a[data-target]', function(e) {
+				e.preventDefault();
+				var target = $(this).data('target');
+				$('.widget-box.visible').removeClass('visible');//hide others
+				$(target).addClass('visible');//show target
+			 });
+			});
 			
-	</script>
-</body>
+			
+			
+			//you don't need this, just used for changing background
+			jQuery(function($) {
+			 $('#btn-login-dark').on('click', function(e) {
+				$('body').attr('class', 'login-layout');
+				$('#id-text2').attr('class', 'white');
+				$('#id-company-text').attr('class', 'blue');
+				
+				e.preventDefault();
+			 });
+			 $('#btn-login-light').on('click', function(e) {
+				$('body').attr('class', 'login-layout light-login');
+				$('#id-text2').attr('class', 'grey');
+				$('#id-company-text').attr('class', 'blue');
+				
+				e.preventDefault();
+			 });
+			 $('#btn-login-blur').on('click', function(e) {
+				$('body').attr('class', 'login-layout blur-login');
+				$('#id-text2').attr('class', 'white');
+				$('#id-company-text').attr('class', 'light-blue');
+				
+				e.preventDefault();
+			 });
+			 
+			});
+		</script>
+	</body>
 </html>
