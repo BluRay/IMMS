@@ -1,12 +1,10 @@
 <!DOCTYPE html>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <html lang="en">
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta charset="utf-8" />
 		<title>19BMS - 登录</title>
-
 		<meta name="description" content="User login page" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 
@@ -19,26 +17,13 @@
 
 		<!-- ace styles -->
 		<link rel="stylesheet" href="assets/css/ace.min.css" />
-
-		<!--[if lte IE 9]>
-			<link rel="stylesheet" href="assets/css/ace-part2.min.css" />
-		<![endif]-->
 		<link rel="stylesheet" href="assets/css/ace-rtl.min.css" />
-
-		<!--[if lte IE 9]>
-		  <link rel="stylesheet" href="assets/css/ace-ie.min.css" />
-		<![endif]-->
 		<link rel="stylesheet" href="assets/css/ace.onpage-help.css" />
 
 		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-
-		<!--[if lt IE 9]>
-		<script src="assets/js/html5shiv.js"></script>
-		<script src="assets/js/respond.min.js"></script>
-		<![endif]-->
 	</head>
 
-	<body class="login-layout">
+	<body class="login-layout light-login">
 		<div class="main-container">
 			<div class="main-content">
 				<div class="row">
@@ -46,11 +31,10 @@
 						<div class="login-container">
 							<div class="center">
 								<h1>
-									<i class="ace-icon fa fa-leaf green"></i>
+									<img style="width:30px;height:30px;margin-top:-10px" alt="" src="images/favicon.ico">
 									<span class="red">BYD</span>
 									<span class="white" id="id-text2">19BMS</span>
 								</h1>
-								<h4 class="blue" id="id-company-text">&copy; 比亚迪汽车有限公司</h4>
 							</div>
 
 							<div class="space-6"></div>
@@ -59,13 +43,8 @@
 								<div id="login-box" class="login-box visible widget-box no-border">
 									<div class="widget-body">
 										<div class="widget-main">
-											<h4 class="header blue lighter bigger">
-												<i class="ace-icon fa fa-coffee green"></i>
-												请登录
-											</h4>
-
+											<h4 class="header blue lighter bigger"><i class="ace-icon fa fa-coffee green"></i>请登录</h4>
 											<div class="space-6"></div>
-
 											<form id="login" action="login" method="post">
 												<fieldset>
 													<label class="block clearfix">
@@ -103,18 +82,14 @@
 											<!-- <div class="social-or-login center">
 												<span class="bigger-110">Or Login Using</span>
 											</div>
-
 											<div class="space-6"></div>
-
 											<div class="social-login center">
 												<a class="btn btn-primary">
 													<i class="ace-icon fa fa-facebook"></i>
 												</a>
-
 												<a class="btn btn-info">
 													<i class="ace-icon fa fa-twitter"></i>
 												</a>
-
 												<a class="btn btn-danger">
 													<i class="ace-icon fa fa-google-plus"></i>
 												</a>
@@ -128,16 +103,14 @@
 													忘记密码
 												</a>
 											</div>
-
 											<div>
-												<a href="#" data-target="#signup-box" class="user-signup-link">
-													我要注册
-													<i class="ace-icon fa fa-arrow-right"></i>
-												</a>
+												<!-- <a href="#" data-target="#signup-box" class="user-signup-link">我要注册<i class="ace-icon fa fa-arrow-right"></i>
+												</a> -->
 											</div>
 										</div>
 									</div><!-- /.widget-body -->
 								</div><!-- /.login-box -->
+								<h4 class="blue" id="id-company-text">&copy; 比亚迪汽车有限公司</h4>
 
 								<div id="forgot-box" class="forgot-box widget-box no-border">
 									<div class="widget-body">
@@ -331,6 +304,19 @@
 				
 				e.preventDefault();
 			 });
+			 $('#username').bind('keydown', function(event) {
+				if (event.keyCode == "13") {
+					$('#password').focus();
+					$('#password').select();
+					return false;
+				}
+			});
+			$('#password').bind('keydown', function(event) {
+				if (event.keyCode == "13") {
+					document.getElementById("login").submit()
+					return false;
+				}
+			});
 			 
 			});
 		</script>
