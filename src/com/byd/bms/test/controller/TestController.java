@@ -1,8 +1,18 @@
 package com.byd.bms.test.controller;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpUtils;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.byd.bms.util.controller.BaseController;
 import com.byd.bms.util.model.BmsBaseUser;
 import com.byd.bms.util.service.ILoginService;
+import com.google.gson.Gson;
 
 @Controller
 public class TestController extends BaseController{
@@ -75,4 +86,55 @@ public class TestController extends BaseController{
     	
     	return model;
     }
+    
+    @RequestMapping("validateVin")
+    @ResponseBody
+    public ModelMap validateVin(String vin,int flag){
+    	Map<String,Object> param=new HashMap<String,Object>();
+       /* param.put("vin","LC06S24R5G1990226");
+        param.put("flag",1);*/
+    	param.put("vin",vin);
+        param.put("flag",flag);
+        Gson gson=new Gson();
+        String jsonstr=this.post("http://10.9.32.67:8082/i.dbhttpservice_bms/auto/validateVin",
+        gson.toJson(param).toString());
+        model.put("valresult",jsonstr);
+        return model;
+    }
+    
+    public String post(String strURL, String params) {
+        try {
+            URL url = new URL(strURL);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoOutput(true);
+            connection.setDoInput(true);
+            connection.setUseCaches(false);
+            connection.setInstanceFollowRedirects(true);
+            connection.setConnectTimeout(10000);
+            connection.setReadTimeout(3000);
+            connection.setRequestMethod("POST"); // 设置请求方式
+            connection.setRequestProperty("Accept", "application/json"); // 设置接收数据的格式
+            connection.setRequestProperty("Content-Type", "application/json"); // 设置发送数据的格式
+            connection.connect();
+            OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream(), "UTF-8");
+            out.append(params);
+            out.flush();
+            out.close();
+            // 读取响应
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String lines;
+            StringBuffer sb = new StringBuffer("");
+            while ((lines = reader.readLine()) != null) {
+               lines = new String(lines.getBytes(), "utf-8");
+               sb.append(lines);
+            }
+            reader.close();
+            connection.disconnect();
+            return sb.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "error";
+     }
+
 }

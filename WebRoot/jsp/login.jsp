@@ -279,7 +279,9 @@
 			 });
 			});
 			
-			
+			$(document).ready(function() {
+				$('#username').focus();
+			});
 			
 			//you don't need this, just used for changing background
 			jQuery(function($) {
@@ -304,6 +306,7 @@
 				
 				e.preventDefault();
 			 });
+			 
 			 $('#username').bind('keydown', function(event) {
 				if (event.keyCode == "13") {
 					$('#password').focus();
