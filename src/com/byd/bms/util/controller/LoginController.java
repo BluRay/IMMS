@@ -114,4 +114,10 @@ public class LoginController extends BaseController{
 		mv.setViewName("wysiwyg");
         return mv;  
     } 
+	
+	@RequestMapping("/blank")  
+    public ModelAndView  blank(){ 
+		mv.setViewName("blank");
+        return mv;  
+    } 
 }

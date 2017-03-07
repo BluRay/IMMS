@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ include file="common.jsp"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -197,7 +198,7 @@
 									<ul class="dropdown-menu dropdown-navbar">
 										<li>
 											<a href="#">
-												<img src="assets/avatars/avatar.png" class="msg-photo" alt="Alex's Avatar" />
+												<img src="<%=basePath%>/assets/avatars/avatar.png" class="msg-photo" alt="Alex's Avatar" />
 												<span class="msg-body">
 													<span class="msg-title">
 														<span class="blue">Alex:</span>
@@ -214,7 +215,7 @@
 
 										<li>
 											<a href="#">
-												<img src="assets/avatars/avatar3.png" class="msg-photo" alt="Susan's Avatar" />
+												<img src="<%=basePath%>/assets/avatars/avatar3.png" class="msg-photo" alt="Susan's Avatar" />
 												<span class="msg-body">
 													<span class="msg-title">
 														<span class="blue">Susan:</span>
@@ -231,7 +232,7 @@
 
 										<li>
 											<a href="#">
-												<img src="assets/avatars/avatar4.png" class="msg-photo" alt="Bob's Avatar" />
+												<img src="<%=basePath%>/assets/avatars/avatar4.png" class="msg-photo" alt="Bob's Avatar" />
 												<span class="msg-body">
 													<span class="msg-title">
 														<span class="blue">Bob:</span>
@@ -248,7 +249,7 @@
 
 										<li>
 											<a href="#">
-												<img src="assets/avatars/avatar2.png" class="msg-photo" alt="Kate's Avatar" />
+												<img src="<%=basePath%>/assets/avatars/avatar2.png" class="msg-photo" alt="Kate's Avatar" />
 												<span class="msg-body">
 													<span class="msg-title">
 														<span class="blue">Kate:</span>
@@ -265,7 +266,7 @@
 
 										<li>
 											<a href="#">
-												<img src="assets/avatars/avatar5.png" class="msg-photo" alt="Fred's Avatar" />
+												<img src="<%=basePath%>/assets/avatars/avatar5.png" class="msg-photo" alt="Fred's Avatar" />
 												<span class="msg-body">
 													<span class="msg-title">
 														<span class="blue">Fred:</span>

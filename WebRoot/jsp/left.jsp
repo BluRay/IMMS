@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ include file="common.jsp"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -9,7 +10,7 @@
 <body>
 	<ul class="nav nav-list">
 					<li class="active">
-						<a href="index">
+						<a href="<%=basePath%>/index">
 							<i class="menu-icon fa fa-tachometer"></i>
 							<span class="menu-text"> 菜单栏 </span>
 						</a>
@@ -85,9 +86,18 @@
 
 								<b class="arrow"></b>
 							</li> -->
+							
+							<li class="">
+								<a href="<%=basePath%>/blank.html">
+									<i class="menu-icon fa fa-caret-right"></i>
+									模板
+								</a>
+
+								<b class="arrow"></b>
+							</li>
 
 							<li class="">
-								<a href="elements.html">
+								<a href="<%=basePath%>/elements.html">
 									<i class="menu-icon fa fa-caret-right"></i>
 									元素
 								</a>
@@ -96,7 +106,7 @@
 							</li>
 
 							<li class="">
-								<a href="buttons.html">
+								<a href="<%=basePath%>/buttons.html">
 									<i class="menu-icon fa fa-caret-right"></i>
 									按钮 &amp; 图标
 								</a>
@@ -105,7 +115,7 @@
 							</li>
 
 							<li class="">
-								<a href="treeview.html">
+								<a href="<%=basePath%>/treeview.html">
 									<i class="menu-icon fa fa-caret-right"></i>
 									树形菜单
 								</a>
@@ -114,7 +124,7 @@
 							</li>
 
 							<li class="">
-								<a href="jqueryui.html">
+								<a href="<%=basePath%>/jqueryui.html">
 									<i class="menu-icon fa fa-caret-right"></i>
 									jQuery UI
 								</a>
@@ -198,7 +208,7 @@
 
 						<ul class="submenu">
 							<li class="">
-								<a href="tables.html">
+								<a href="<%=basePath%>/tables.html">
 									<i class="menu-icon fa fa-caret-right"></i>
 									简单 &amp; 动态
 								</a>
@@ -229,7 +239,7 @@
 
 						<ul class="submenu">
 							<li class="">
-								<a href="formelements.html">
+								<a href="<%=basePath%>/formelements.html">
 									<i class="menu-icon fa fa-caret-right"></i>
 									表单元素
 								</a>
@@ -238,7 +248,7 @@
 							</li>
 
 							<li class="">
-								<a href="formwizard.html">
+								<a href="<%=basePath%>/formwizard.html">
 									<i class="menu-icon fa fa-caret-right"></i>
 									向导 &amp; 校验
 								</a>
@@ -247,7 +257,7 @@
 							</li>
 
 							<li class="">
-								<a href="wysiwyg.html">
+								<a href="<%=basePath%>/wysiwyg.html">
 									<i class="menu-icon fa fa-caret-right"></i>
 									文本编辑器
 								</a>
@@ -256,7 +266,7 @@
 							</li>
 
 							<li class="">
-								<a href="dropzone.html">
+								<a href="<%=basePath%>/dropzone.html">
 									<i class="menu-icon fa fa-caret-right"></i>
 									拖拽上传文件
 								</a>
