@@ -273,6 +273,14 @@
 
 								<b class="arrow"></b>
 							</li>
+							<li class="">
+								<a href="<%=basePath%>/flow.html">
+									<i class="menu-icon fa fa-caret-right"></i>
+									流程测试
+								</a>
+
+								<b class="arrow"></b>
+							</li>
 						</ul>
 					</li>
 
