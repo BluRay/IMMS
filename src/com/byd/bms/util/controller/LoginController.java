@@ -24,13 +24,13 @@ public class LoginController extends BaseController{
 	@Autowired
 	protected ILoginService loginService;
 	
-	@RequestMapping("/")  
-    public ModelAndView  index(){ 
+	@RequestMapping("/loginPage")  
+    public ModelAndView index(){ 
 		mv.setViewName("login");
         return mv;  
     }  
-	@RequestMapping("/login")  
-    public ModelAndView  login(BmsBaseUser user,Model model) throws NoSuchAlgorithmException, UnsupportedEncodingException, IOException{ 
+	@RequestMapping("/login")
+    public ModelAndView login(BmsBaseUser user,Model model) throws NoSuchAlgorithmException, UnsupportedEncodingException, IOException{ 
 		String password=StringUtils.isEmpty(user.getPassword())?"":user.getPassword();
 		user=loginService.getUser(user.getUsername());
 		String last_url=request.getParameter("last_url");
@@ -46,82 +46,91 @@ public class LoginController extends BaseController{
 				response.sendRedirect(last_url);
 				return null;
 			}else
-				//mv.getModel();
 				mv.setViewName("home");
 		}else{
 			mv.setViewName("error");
 		}
-		
+        return mv;  
+    }
+	@RequestMapping("/logout")
+	public ModelAndView logout(){ 
+		mv.setViewName("login");
+		session.setAttribute("user_name", null);
+		session.setAttribute("display_name", null);
+		session.setAttribute("user_id", null);
+		session.setAttribute("factory", null);
+		session.setAttribute("bmsuser", null);
+		mv.setViewName("login");
         return mv;  
     }
 	
 	@RequestMapping("/index")  
-    public ModelAndView  index1(){ 
+    public ModelAndView index1(){ 
 		mv.setViewName("index");
         return mv;  
     } 
 
 	@RequestMapping("/tables")  
-    public ModelAndView  tables(){ 
+    public ModelAndView tables(){ 
 		mv.setViewName("tables");
         return mv;  
     }  
 	
 	@RequestMapping("/elements")  
-    public ModelAndView  elements(){ 
+    public ModelAndView elements(){ 
 		mv.setViewName("elements");
         return mv;  
     }  
 	
 	@RequestMapping("/buttons")  
-    public ModelAndView  buttons(){ 
+    public ModelAndView buttons(){ 
 		mv.setViewName("buttons");
         return mv;  
     }  
 	
 	@RequestMapping("/dropzone")  
-    public ModelAndView  dropzone(){ 
+    public ModelAndView dropzone(){ 
 		mv.setViewName("dropzone");
         return mv;  
     } 
 	
 	@RequestMapping("/formelements")  
-    public ModelAndView  formelements(){ 
+    public ModelAndView formelements(){ 
 		mv.setViewName("formelements");
         return mv;  
     } 
 	
 	@RequestMapping("/formwizard")  
-    public ModelAndView  formwizard(){ 
+    public ModelAndView formwizard(){ 
 		mv.setViewName("formwizard");
         return mv;  
     } 
 	
 	@RequestMapping("/jqueryui")  
-    public ModelAndView  jqueryui(){ 
+    public ModelAndView jqueryui(){ 
 		mv.setViewName("jqueryui");
         return mv;  
     } 
 	
 	@RequestMapping("/treeview")  
-    public ModelAndView  treeview(){ 
+    public ModelAndView treeview(){ 
 		mv.setViewName("treeview");
         return mv;  
     } 
 	
 	@RequestMapping("/wysiwyg")  
-    public ModelAndView  wysiwyg(){ 
+    public ModelAndView wysiwyg(){ 
 		mv.setViewName("wysiwyg");
         return mv;  
     }
 	@RequestMapping("/flow")  
-    public ModelAndView  flow(){ 
+    public ModelAndView flow(){ 
 		mv.setViewName("flow");
         return mv;  
     } 
 	
 	@RequestMapping("/blank")  
-    public ModelAndView  blank(){ 
+    public ModelAndView blank(){ 
 		mv.setViewName("blank");
         return mv;  
     } 

@@ -7,22 +7,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <base href="<%=basePath%>">
-    
-    <title>My JSP 'errer.jsp' starting page</title>
-    
+    <base href="<%=basePath%>">   
+    <title>ErrorPage</title>    
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
-	<meta http-equiv="expires" content="0">    
-	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
-	<meta http-equiv="description" content="This is my page">
-	<!--
-	<link rel="stylesheet" type="text/css" href="styles.css">
-	-->
-
+	<meta http-equiv="expires" content="0">
   </head>
-  
   <body>
-   			<h3>用户名或密码不正确！</h3>
+  	<div style="CURSOR:pointer">
+  	<center>
+  	<img onclick="location='loginPage'" alt="登录失败" src="images/error.jpg">
+  	</center>
+  	</div>
   </body>
 </html>
