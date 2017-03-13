@@ -12,12 +12,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="expires" content="0">
+	<link rel="stylesheet" href="assets/css/ace.min.css" />
   </head>
-  <body>
-  	<div style="CURSOR:pointer">
+  <body class="login-layout light-login">
   	<center>
-  	<img onclick="location='loginPage'" alt="登录失败" src="images/error.jpg">
-  	</center>
+  	<div style="CURSOR:pointer;width:900px;border:2px solid #ffcc00;background:#fffff7""> 	
+  	<img onclick="location='loginPage'" alt="登录失败" src="images/error.jpg">  	
   	</div>
+  	</center>
   </body>
 </html>

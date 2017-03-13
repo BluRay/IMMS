@@ -24,8 +24,13 @@ public class LoginController extends BaseController{
 	@Autowired
 	protected ILoginService loginService;
 	
-	@RequestMapping("/loginPage")  
+	@RequestMapping("/")  
     public ModelAndView index(){ 
+		mv.setViewName("index");
+        return mv;  
+    }
+	@RequestMapping("/loginPage")  
+    public ModelAndView login(){ 
 		mv.setViewName("login");
         return mv;  
     }  
