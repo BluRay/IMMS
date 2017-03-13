@@ -39,6 +39,8 @@
 		<mvc:resources location="/docs/" mapping="/docs/**"/> 
 		<!-- add by wuxiao test!  -->
 		<mvc:resources location="/assets/" mapping="/assets/**"/> 
+		
+		<mvc:resources location="/snaker/" mapping="/snaker/**"/> 
 		<!-- end -->
 		<mvc:interceptors>
 		<!-- 切换语言拦截器 -->
