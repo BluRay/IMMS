@@ -7,7 +7,7 @@
 		<result property="username" column="username" />
 		<result property="password" column="password" />
 		<result property="role_id" column="role_id" />
-		<result property="card_number" column="card_number" />
+		<result property="staff_number" column="staff_number" />
 		<result property="email" column="email" />
 		<result property="telephone" column="telephone" />
 		<result property="cellphone" column="cellphone" />
@@ -28,8 +28,8 @@
 		from BMS_BASE_USER u left join
 		BMS_BASE_DEPARTMENT d on u.department_id=d.id
 		left join BMS_BASE_FACTORY f on u.factory_id=f.id 
-		left join BMS_HR_STAFF s on s.staff_number=u.card_number
-		where u.card_number=#{userName} and u.isdelete='0'
+		left join BMS_HR_STAFF s on s.staff_number=u.staff_number
+		where u.staff_number=#{userName} and u.isdelete='0'
 	</select>
 	
 	<insert id="insertUser" parameterType="com.byd.bms.util.model.BmsBaseUser">

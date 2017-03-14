@@ -4,7 +4,7 @@
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta charset="utf-8" />
-		<title>19BMS - 登录</title>
+		<title>欢迎使用BMS</title>
 		<meta name="description" content="User login page" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 
@@ -20,21 +20,31 @@
 		<link rel="stylesheet" href="assets/css/ace-rtl.min.css" />
 		<link rel="stylesheet" href="assets/css/ace.onpage-help.css" />
 
-		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+		<style type="text/css">
+			#main {
+				background: url(images/bg.jpg) no-repeat center;
+				height: 650px;
+				display: -webkit-flex;
+				display: flex;
+				-webkit-align-items: center;
+				align-items: center;
+				-webkit-justify-content: center;
+				justify-content: center;
+			}
+			</style>
 	</head>
 
-	<body class="login-layout light-login">
-		<div class="main-container">
+	<body class="login-layout light-login" style="font-family: 'Microsoft YaHei';">
+		<div id="main" class="main-container">
 			<div class="main-content">
 				<div class="row">
 					<div class="col-sm-10 col-sm-offset-1">
 						<div class="login-container">
 							<div class="center">
-								<h1>
+								<h2>
 									<img style="width:30px;height:30px;margin-top:-10px" alt="" src="images/favicon.ico">
-									<span class="red">BYD</span>
-									<span class="white" id="id-text2">19BMS</span>
-								</h1>
+									<span id="id-text2">欢迎使用BMS</span>
+								</h2>
 							</div>
 
 							<div class="space-6"></div>
@@ -110,7 +120,7 @@
 										</div>
 									</div><!-- /.widget-body -->
 								</div><!-- /.login-box -->
-								<h4 class="blue" id="id-company-text">&copy; 比亚迪汽车有限公司</h4>
+								<h5 class="blue" id="id-company-text">&copy; 比亚迪汽车有限公司 信息中心</h5>
 
 								<div id="forgot-box" class="forgot-box widget-box no-border">
 									<div class="widget-body">

@@ -8,7 +8,7 @@ public class BmsBaseUser {
 	private int id;
 	private String username;
 	private String password;
-	private String card_number;
+	private String staff_number;
 	private String card_8H10D;
 	private int role_id;
 	private String email;
@@ -53,11 +53,11 @@ public class BmsBaseUser {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public String getCard_number() {
-		return card_number;
+	public String getStaff_number() {
+		return staff_number;
 	}
-	public void setCard_number(String card_number) {
-		this.card_number = card_number;
+	public void setStaff_number(String staff_number) {
+		this.staff_number = staff_number;
 	}
 	public String getCard_8H10D() {
 		return card_8H10D;
