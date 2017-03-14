@@ -1,11 +1,24 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ include file="common.jsp"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+String path = request.getContextPath();
+String rqip= request.getRemoteAddr();
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path;
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>top</title>
+<!-- bootstrap & fontawesome -->
+<link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+<link rel="stylesheet" href="assets/css/font-awesome.min.css" />
+<!-- text fonts -->
+<link rel="stylesheet" href="assets/css/ace-fonts.css" />
+<!-- ace styles -->
+<link rel="stylesheet" href="assets/css/ace.min.css" id="main-ace-style" />
+<link rel="stylesheet" href="assets/css/ace-skins.min.css" />
+<link rel="stylesheet" href="assets/css/ace-rtl.min.css" />
+<script src="assets/js/ace-extra.min.js"></script>
 </head>
 <body>
 	<div id="navbar" class="navbar navbar-default">
@@ -17,11 +30,8 @@
 				<!-- #section:basics/sidebar.mobile.toggle -->
 				<button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler">
 					<span class="sr-only">Toggle sidebar</span>
-
 					<span class="icon-bar"></span>
-
 					<span class="icon-bar"></span>
-
 					<span class="icon-bar"></span>
 				</button>
 
@@ -34,12 +44,6 @@
 							19BMS
 						</small>
 					</a>
-
-					<!-- /section:basics/navbar.layout.brand -->
-
-					<!-- #section:basics/navbar.toggle -->
-
-					<!-- /section:basics/navbar.toggle -->
 				</div>
 
 				<!-- #section:basics/navbar.dropdown -->
@@ -63,7 +67,6 @@
 											<span class="pull-left">Software Update</span>
 											<span class="pull-right">65%</span>
 										</div>
-
 										<div class="progress progress-mini">
 											<div style="width:65%" class="progress-bar"></div>
 										</div>
@@ -295,7 +298,7 @@
 						<!-- #section:basics/navbar.user_menu -->
 						<li class="light-blue">
 							<a data-toggle="dropdown" href="#" class="dropdown-toggle">
-								<img class="nav-user-photo" src="assets/avatars/user.jpg" alt="Jason's Photo" />
+								<img class="nav-user-photo" src="<%=basePath%>/assets/avatars/user.jpg" alt="Jason's Photo" />
 								<span class="user-info">
 									<small>Welcome,</small>
 									Jason
@@ -333,9 +336,37 @@
 						<!-- /section:basics/navbar.user_menu -->
 					</ul>
 				</div>
-
-				<!-- /section:basics/navbar.dropdown -->
 			</div><!-- /.navbar-container -->
 		</div>
+		
+		<!--[if !IE]> -->
+		<script type="text/javascript">
+			window.jQuery || document.write("<script src='assets/js/jquery.min.js'>"+"<"+"/script>");
+		</script>
+		<!-- <![endif]-->
+		<script type="text/javascript">
+			if('ontouchstart' in document.documentElement) document.write("<script src='assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+		</script>
+		<script src="assets/js/bootstrap.min.js"></script>
+		<!-- page specific plugin scripts -->
+		<!-- ace scripts -->
+		<script src="assets/js/ace-elements.min.js"></script>
+		<script src="assets/js/ace.min.js"></script>
+		<!-- inline scripts related to this page -->
+		<script type="text/javascript">
+			jQuery(function($) {
+				$('#loading-btn').on(ace.click_event, function () {
+					var btn = $(this);
+					btn.button('loading')
+					setTimeout(function () {
+						btn.button('reset')
+					}, 2000)
+				});			
+				$('#id-button-borders').attr('checked' , 'checked').on('click', function(){
+						$('#default-buttons .btn').toggleClass('no-border');
+				});
+			})
+		</script>		
+		
 </body>
 </html>

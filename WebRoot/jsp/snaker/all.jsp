@@ -178,7 +178,7 @@
 			<!-- 主体 -->
 			<div class="main-content">
 			
-			<jsp:include page="../path.jsp" flush="true"/>
+			<!-- <jsp:include page="../path.jsp" flush="true"/> -->
 				
 				<div class="page-content">
 							<jsp:include page="../settings.jsp" flush="true"/>
@@ -215,7 +215,7 @@
 			</div><!-- /.main-content -->
 
 			<!-- 脚 -->
-			<jsp:include page="../footer.jsp" flush="true"/>
+			<!-- <jsp:include page="../footer.jsp" flush="true"/> -->
 			
 		</div><!-- /.main-container -->
 		</div>
