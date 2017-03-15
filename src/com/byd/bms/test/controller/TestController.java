@@ -11,9 +11,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpUtils;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,7 +35,7 @@ public class TestController extends BaseController{
 	public ModelMap getUser(){
 		BmsBaseUser user=new BmsBaseUser();
 		String username=request.getParameter("username");
-		List list=new ArrayList();
+		List<BmsBaseUser> list=new ArrayList<BmsBaseUser>();
 		user=loginService.getUser(username);
 		list.add(user);
 		initModel(true,"success",list);

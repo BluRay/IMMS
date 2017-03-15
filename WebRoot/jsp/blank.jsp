@@ -41,7 +41,7 @@
 					<!-- /section:settings.box -->
 					<div class="page-content-area">
 					
-					<!-- 东西放这里！ -->
+					<!-- 东西放这里！ -->		
 					
 					</div>
 			</div><!-- /.main-content -->
