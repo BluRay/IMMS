@@ -45,7 +45,7 @@
 		<![endif]-->
 	</head>
 
-	<body class="no-skin">
+	<body class="no-skin" style="font-family: 'Microsoft YaHei';">
 		<!-- #section:basics/navbar.layout -->
 		<jsp:include page="top.jsp" flush="true"/>
 

@@ -1,42 +1,67 @@
 jQuery(function($) {
 	
-	function initiateDemoData() {
-        var tree_data = { '刑侦': { 'text': '刑侦', 'type': 'folder', 'additionalParameters': { 'id': '1', 'children': { '痕迹检验': { 'text': '痕迹检验', 'type': 'item', 'additionalParameters': { 'id': '10' } }, '声像技术': { 'text': '声像技术', 'type': 'item', 'additionalParameters': { 'id': '9', 'item-selected': true } } } } }, '交警': { 'text': '交警', 'type': 'folder', 'additionalParameters': { 'id': '32', 'children': { '交通事故': { 'text': '交通事故', 'type': 'item', 'additionalParameters': { 'id': '33' } }, '交通道理管理': { 'text': '交通道理管理', 'type': 'item', 'additionalParameters': { 'id': '34' } } } } } }
-        var dataSource1 = function (options, callback) {
-            var $data = null
-            if (!("text" in options) && !("type" in options)) {
-                $data = tree_data;//the root tree
-                callback({ data: $data });
-                return;
-            }
-            else if ("type" in options && options.type == "folder") {
-                if ("additionalParameters" in options && "children" in options.additionalParameters)
-                    $data = options.additionalParameters.children || {};
-                else $data = {}//no data
-            }
+	var DataSourceTree = function(options) {
+		this._data 	= options.data;
+		this._delay = options.delay;
+	}
 
-            if ($data != null)//this setTimeout is only for mimicking some random delay
-                setTimeout(function () { callback({ data: $data }); }, parseInt(Math.random() * 500) + 200);
-        }
-        return { 'dataSource1': dataSource1 }
-    }
-	var sampleData = initiateDemoData();
-	
+	DataSourceTree.prototype.data = function(options, callback) {
+		var self = this;
+		var $data = null;
+		if (!("name" in options) && !("type" in options)) {
+			$data = this._data;
+			callback({
+				data : $data
+			});
+			return;
+		} else if ("type" in options && options.type == "folder") {
+			if ("additionalParameters" in options && "children" in options.additionalParameters)
+				$data = options.additionalParameters.children;
+			else
+				$data = {}
+		}
+		if ($data != null)
+			setTimeout(function() {
+				callback({
+					data : $data
+				});
+			}, parseInt(Math.random() * 500) + 200);
+	};
+	var ace_icon = ace.vars['icon'];
+	var tree_data = {
+		'role01' : {name: '<i class="'+ace_icon+' fa fa-users blue"></i>角色1', type: 'item'},
+		'role02' : {name: '<i class="'+ace_icon+' fa fa-users blue"></i>角色2', type: 'item'},
+		'role03' : {name: '<i class="'+ace_icon+' fa fa-users blue"></i>角色3', type: 'item'},
+		'role04' : {name: '<i class="'+ace_icon+' fa fa-users blue"></i>角色4', type: 'item'},
+		'role05' : {name: '<i class="'+ace_icon+' fa fa-users blue"></i>角色5', type: 'item'}
+	}
+	var treeDataSource = new DataSourceTree({data: tree_data});
 
 	$('#tree1').ace_tree({
-		dataSource: sampleData['dataSource1'],
+		dataSource: treeDataSource,
 		multiSelect : false,
 		loadingHTML : '<div class="tree-loading"><i class="ace-icon fa fa-refresh fa-spin blue"></i></div>',
 		'open-icon' : 'ace-icon tree-minus','close-icon' : 'ace-icon tree-plus',
 		'selectable' : true,'selected-icon' : 'ace-icon fa fa-check','unselected-icon' : 'ace-icon fa fa-times'
 	});
+	
+	
 
 	$('#tree1').on('updated', function(e, result) {
 		// result.info >> an array containing selected items
 		// result.item
 		// result.eventType >> (selected or unselected)
 	}).on('selected', function(e) {
+		
+		$('#tree2').ace_tree({
+			dataSource: treeDataSource,
+			multiSelect : false,
+			loadingHTML : '<div class="tree-loading"><i class="ace-icon fa fa-refresh fa-spin blue"></i></div>',
+			'open-icon' : 'ace-icon tree-minus','close-icon' : 'ace-icon tree-plus',
+			'selectable' : true,'selected-icon' : 'ace-icon fa fa-check','unselected-icon' : 'ace-icon fa fa-times'
+		});
 	}).on('unselected', function(e) {
+		$('#tree2').html("");
 	}).on('opened', function(e) {
 	}).on('closed', function(e) {
 	});

@@ -10,15 +10,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>top</title>
 <!-- bootstrap & fontawesome -->
-<link rel="stylesheet" href="assets/css/bootstrap.min.css" />
-<link rel="stylesheet" href="assets/css/font-awesome.min.css" />
+<link rel="stylesheet" href="<%=basePath%>/assets/css/bootstrap.min.css" />
+<link rel="stylesheet" href="<%=basePath%>/assets/css/font-awesome.min.css" />
 <!-- text fonts -->
-<link rel="stylesheet" href="assets/css/ace-fonts.css" />
+<link rel="stylesheet" href="<%=basePath%>/assets/css/ace-fonts.css" />
 <!-- ace styles -->
-<link rel="stylesheet" href="assets/css/ace.min.css" id="main-ace-style" />
-<link rel="stylesheet" href="assets/css/ace-skins.min.css" />
-<link rel="stylesheet" href="assets/css/ace-rtl.min.css" />
-<script src="assets/js/ace-extra.min.js"></script>
+<link rel="stylesheet" href="<%=basePath%>/assets/css/ace.min.css" id="main-ace-style" />
+<link rel="stylesheet" href="<%=basePath%>/assets/css/ace-skins.min.css" />
+<link rel="stylesheet" href="<%=basePath%>/assets/css/ace-rtl.min.css" />
+<script src="<%=basePath%>/assets/js/jquery.min.js"></script>
+<script src="<%=basePath%>/assets/js/jquery.mobile.custom.min.js"></script>
+<script src="<%=basePath%>/assets/js/ace-extra.min.js"></script>
 </head>
 <body>
 	<div id="navbar" class="navbar navbar-default">
@@ -40,8 +42,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<!-- #section:basics/navbar.layout.brand -->
 					<a href="#" class="navbar-brand">
 						<small>
-							<i class="fa fa-leaf"></i>
-							19BMS
+							<img style="width:25px;height:25px;margin-top:-10px" alt="" src="<%=basePath%>/images/favicon2.ico">
+							BMS
 						</small>
 					</a>
 				</div>
@@ -339,19 +341,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div><!-- /.navbar-container -->
 		</div>
 		
-		<!--[if !IE]> -->
-		<script type="text/javascript">
-			window.jQuery || document.write("<script src='assets/js/jquery.min.js'>"+"<"+"/script>");
-		</script>
-		<!-- <![endif]-->
-		<script type="text/javascript">
-			if('ontouchstart' in document.documentElement) document.write("<script src='assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
-		</script>
-		<script src="assets/js/bootstrap.min.js"></script>
+		<script src="<%=basePath%>/assets/js/bootstrap.min.js"></script>
 		<!-- page specific plugin scripts -->
 		<!-- ace scripts -->
-		<script src="assets/js/ace-elements.min.js"></script>
-		<script src="assets/js/ace.min.js"></script>
+		<script src="<%=basePath%>/assets/js/ace-elements.min.js"></script>
+		<script src="<%=basePath%>/assets/js/ace.min.js"></script>
 		<!-- inline scripts related to this page -->
 		<script type="text/javascript">
 			jQuery(function($) {
