@@ -5,4 +5,14 @@
 	<select id="getRoleList" resultType="com.byd.bms.setting.model.BmsBaseRole">
 		SELECT id, role_name, role_description, type, edit_user, edit_time FROM BMS_BASE_ROLE
 	</select>
+	
+	<select id="getFunctionList" resultType="com.byd.bms.setting.model.BmsBaseFunction">
+		SELECT f1.*,
+		(SELECT COUNT(f2.id) FROM BMS_BASE_FUNCTION f2 WHERE f2.parent_function_id = f1.id) AS sub_count
+		FROM BMS_BASE_FUNCTION f1  order by f1.parent_function_id,f1.priority;
+	</select>
+	
+	<select id="getRolePermission" parameterType="String" resultType="com.byd.bms.setting.model.BmsBaseRolePermission">
+		SELECT id, role_id, function_id FROM BMS_BASE_ROLE_PERMISSION where role_id = #{role_id};
+	</select>
 </mapper>

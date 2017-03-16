@@ -5,13 +5,18 @@
 	<resultMap type="com.byd.bms.util.model.BmsBaseMenu" id="menuMap">
 		<id property="id" column="id" />
 		<result property="name" column="name" />
+		<result property="icon" column="icon" />
 		<result property="path" column="path" />
 		<result property="parent" column="parent" />
+		<result property="priority" column="priority" />
+		<result property="isPermission" column="isPermission" />
+		<result property="isDeleted" column="isDeleted" />
 	</resultMap>
 
 	<select id="getMenu" parameterType="String" resultMap="menuMap">
 		select *
 		from BMS_BASE_MODEL
+		order by priority
 	</select>
 	
 </mapper>

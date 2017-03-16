@@ -13,7 +13,7 @@
 		<!-- 头 -->
 		<jsp:include page="../top.jsp" flush="true"/>
 		<!-- 身 -->
-		<div class="main-container" id="main-container">
+		<div id="div_row" class="main-container" id="main-container">
 			<!-- 左边菜单 -->
 			<jsp:include page="../left.jsp" flush="true"/>
 			<!-- 主体 -->
@@ -39,14 +39,14 @@
 					<!-- 设置小部件 -->
 					<!-- /section:settings.box -->
 					
-					<div id="div_row" class="row">
+					<div class="row">
 						<div class="col-xs-12">
 							<div class="row">
 								<div class="col-sm-4">
 									<div id="div_tree1" class="widget-box widget-color-blue2" style="height:350px">
 										<div class="widget-header">
 											<h4 class="widget-title lighter smaller">选择用户角色&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-											<button id="btn_addRole" class="btn btn-xs btn-danger">增加</button>
+											<button id="btn_addRole" class="btn btn-xs btn-yellow">增加</button>
 											<button id="btn_save" class="btn btn-xs btn-danger">保存</button>
 										</div>
 
@@ -74,7 +74,7 @@
 							
 							<div class="row">
 								<div class="col-sm-12">
-									<div class="widget-box widget-color-blue2" style="height:100px">
+									<div id="div_3" class="widget-box widget-color-blue2" style="height:100px">
 										<div class="widget-header">
 											<h4 class="widget-title lighter smaller">角色内容配置</h4>
 										</div>

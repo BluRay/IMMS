@@ -18,7 +18,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 var s = [];
 function ajaxQueryMenu(){
 	$.ajax({
-	    url: "getMenu",
+	    url: "<%=basePath%>/getMenu",
 	    async: false,
 	    dataType: "json",
 		type: "get",
@@ -103,21 +103,28 @@ $(document).ready(function () {
 			var root = $('.nav-list');
 			
 			var li = $('<li  class="" />');
-			var a = $('<a href=\"'+value.path+'\" class=\"dropdown-toggle\" ></a>');
-			var i = $('<i class="menu-icon fa fa-desktop"></i>');
+			var a = $('<a href=\"<%=basePath%>/'+value.path+'\" ></a>');
+			if(value.icon==='' || value.icon==undefined){
+				var i = $('<i class="menu-icon fa fa-desktop"></i>');
+			}else{
+				var i = $('<i class="'+value.icon+'"></i>');
+			}
 			i.appendTo(a);
 			var span = $('<span class="menu-text"> '+value.name+' </span>');
 			span.appendTo(a);
 			if(value.list.length>0){
+				a.addClass('dropdown-toggle');
 				var b = $('<b class="arrow fa fa-angle-down"></b>');
 				b.appendTo(a);
 			}
+			/* var i1 = $('<i class="'+value.icon+'"></i>');
+			i1.appendTo(a); */
 			a.appendTo(li);
 			var b1 = $('<b class="arrow"></b>');
 			b1.appendTo(li);
 			
-			traverseTree(value,li);
-			//console.log(li.html());
+			traverseTree(value,li,true);
+			console.log('---->' + index + ' ' + li.html());
 			
 			li.appendTo(root);
 		});
@@ -137,29 +144,58 @@ $(document).ready(function () {
 	});
 });
 
-function getRealPath(str){
-	/* var index = str.indexOf("\/");
-	var tmp  = str.substring(index + 1, str.length); */
+function getRealPath(url){
+	var str = url;
+	var index2 = str.lastIndexOf("\/");
+	if(index2===-1){
+		//do nothing
+	}else{
+		str  = str.substring(index2 + 1, str.length);
+	}
+	var index = str.lastIndexOf("?");
+	if(index===-1){
+		//do nothing
+	}else{
+		str = str.substring(0,index);
+	}
 	var index1 = str.lastIndexOf(".");
 	if(index1===-1){
 		return str;
 	}
-	var result = str.substring(0,index1);
-	return result;
+	str = str.substring(0,index1);
+	return str;
 }
 
 //遍历树生成菜单元素
-function traverseTree(node,parentli){
+function traverseTree(node,parentli,two){
+	var ul = $('<ul class="submenu" />');
 	$.each(node.list, function (index, value) {
-		var ul = $('<ul class="submenu" />');
 		var li = $('<li  class="" />');
-		var a = $('<a href=\"'+value.path+'\" class=\"dropdown-toggle\" >'+value.name+'</a>');
+		var a = $('<a href=\"<%=basePath%>/'+value.path+'\" ></a>');
 		if(value.list.length>0){
-			var i = $('<i class="menu-icon fa fa-caret-right"></i>');
-			i.appendTo(a);
-		
+			a.addClass('dropdown-toggle');
+			if(two){
+				var i = $('<i class="menu-icon fa fa-caret-right"></i>');
+				i.appendTo(a);
+			}else{
+				var i = $('<i class="'+value.icon+'"></i>');
+				i.appendTo(a);
+			}
 			var b = $('<b class="arrow fa fa-angle-down"></b>');
 			b.appendTo(a);
+		}else{
+			if(two){
+				var i1 = $('<i class="menu-icon fa fa-caret-right"></i>');
+				i1.appendTo(a);
+			}else{
+				var i1 = $('<i class="'+value.icon+'"></i>');
+				i1.appendTo(a);
+			}
+		} 
+		if(two){
+			a.append('<span><i class="'+value.icon+'" style="margin-right:3px;"></i>'+value.name+'</span>');
+		}else{
+			a.append(value.name);
 		}
 		a.appendTo(li);
 		var b1 = $('<b class="arrow"></b>');

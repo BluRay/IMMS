@@ -23,11 +23,6 @@ jQuery(function($) {
 				callback({data : $data});
 			}, parseInt(Math.random() * 500) + 200);
 	};
-	var ace_icon = ace.vars['icon'];
-	var tree_data2 = '{"role01" : {"name": "<i class=\'fa fa-pencil-square-o blue\'></i> 首页", "type": "item"},' + 
-	'"role02" : {"name": "<i class=\'fa fa-pencil-square-o  blue\'></i> 计划", "type": "item","additionalParameters" : {"item-selected": true} }}';
-	var tree_data = eval('(' + tree_data2 + ')');
-	var treeDataSource2 = new DataSourceTree({data: tree_data});
 	
 	var role_str = '{';
 	$.ajax({
@@ -37,7 +32,7 @@ jQuery(function($) {
 	    data: {},
 	    success:function(response){
 	    	$.each(response.data, function(index, value) {
-	    		role_str += '"role_'+value.id+'" : {"name": "<i class=\'fa fa-users blue\'></i>'+value.role_name+'", "type": "item"},'
+	    		role_str += '"role_'+value.id+'" : {"name": "<i class=\'fa fa-users blue\'></i> '+value.role_name+'","id":"'+value.id+'","type": "item"},'
 	    	});
 	    	role_str = role_str.substring(0,role_str.length-1) + '}';
 	    	var role_data = eval('(' + role_str + ')');
@@ -61,10 +56,12 @@ jQuery(function($) {
 		// result.item
 		// result.eventType >> (selected or unselected)
 	})
-	.on('selected', function(e) {
+	.on('selected', function(e,data) {
 		$("#tree2").removeData();
 		$("#tree2").unbind();
-		showtree2();
+		//var items = $('#this').tree('selectedItems');
+		//alert(data.info[0].id);
+		showtree2(data.info[0].id);
 	})
 	.on('click', function(e) {
 	})
@@ -73,20 +70,89 @@ jQuery(function($) {
 	.on('closed', function(e) {
 	});
 	
-	function showtree2(){
-		
-		
-		$('#tree2').ace_tree({
-			dataSource: treeDataSource2,
-			multiSelect : true,
-			cacheItems: true,
-			loadingHTML : '<div class="tree-loading"><i class="ace-icon fa fa-refresh fa-spin blue"></i></div>',
-			'open-icon' : 'ace-icon tree-minus',
-			'close-icon' : 'ace-icon tree-plus',
-			'selectable' : true,
-			'selected-icon' : 'ace-icon fa fa-check',
-			'unselected-icon' : 'ace-icon fa fa-check'
+	function showtree2(role_id){
+		var fun_str = '{';
+		var subFun = [];
+		var subFun2 = [];
+		$.ajax({
+		    url: "getFunctionList",
+		    dataType: "json",
+			type: "get",
+		    data: {"role_id":role_id},
+		    success:function(response){
+		    	var funs = response.data[0];
+		    	var roles = response.data[1];
+		    	var roles_arr = new Array();
+		    	$.each(roles, function(index, value) {
+		    		roles_arr.push(value.function_id);
+		    	})
+
+		    	$.each(funs, function(index, value) {
+		    		if(value.parent_function_id === '0'){
+		    			if(value.sub_count === '0'){
+		    				fun_str += '"'+value.id+'" : {"name": "<i class=\'fa fa-pencil-square-o blue\'></i> '+value.function_name+'","id":"'+value.id+'", "type": "item" ' + ((jQuery.inArray(value.id+'', roles_arr) >= 0)?',"additionalParameters" : {"item-selected": true}':'') +'},';
+		    			}else{
+		    				fun_str += '"'+value.id+'" : {"name": "<i class=\'fa fa-pencil-square-o blue\'></i> '+value.function_name+'","id":"'+value.id+'", "type": "folder"},';   				
+		    				var subFun_str = '{"children" : {';
+		    				var cur_id = value.id + '';
+		    				$.each(funs, function(i, v) {
+		    					//console.log('---->parent_function_id = ' + v.parent_function_id + " id=" + v.id + " cur_id = " + cur_id);
+		    					if(v.parent_function_id === cur_id){
+		    						if(v.sub_count === '0'){
+		    							subFun_str += '"'+v.id+'" : {"name": "<i class=\'fa fa-pencil-square-o blue\'></i> '+v.function_name+'","id":"'+value.id+'", "type": "item" ' + ((jQuery.inArray(v.id+'', roles_arr) >= 0)?',"additionalParameters" : {"item-selected": true}':'') +'},';
+		    						}else{
+		    							subFun_str += '"'+v.id+'" : {"name": "<i class=\'fa fa-pencil-square-o blue\'></i> '+v.function_name+'","id":"'+value.id+'", "type": "folder"},';
+		    							var subFun_str2 = '{"children" : {';
+		    							var cur_id2 = v.id + '';
+		    							$.each(funs, function(i2, v2) {
+		    								if(v2.parent_function_id === cur_id2)subFun_str2 += '"'+v2.id+'" : {"name": "<i class=\'fa fa-pencil-square-o blue\'></i> '+v2.function_name+'","id":"'+value.id+'", "type": "item" ' + ((jQuery.inArray(v2.id+'', roles_arr) >= 0)?',"additionalParameters" : {"item-selected": true}':'') +'},';
+		    							})
+		    							subFun_str2 = subFun_str2.substring(0,subFun_str2.length-1) + '}}';
+		    							subFun2[v.id] = eval('(' + subFun_str2 + ')');
+		    						}
+		    					}
+		    				});
+		    				subFun_str = subFun_str.substring(0,subFun_str.length-1) + '}}';
+	    					//console.log('---->subFun_str = ' + subFun_str);
+		    				subFun[value.id] = eval('(' + subFun_str + ')'); 				
+		    			}
+		    		}
+		    	});
+		    	fun_str = fun_str.substring(0,fun_str.length-1) + '}';
+	    		var fun_data = eval('(' + fun_str + ')');
+	    		
+	    		$.each(funs, function(index, value) {
+	    			if(value.parent_function_id === '0'){
+	    				if(value.sub_count !== '0'){
+	    					fun_data[value.id]['additionalParameters'] = subFun[value.id];
+	    				}
+	    			}else{
+	    				if(value.sub_count !== '0'){
+	    					fun_data[value.parent_function_id]['additionalParameters']['children'][value.id]['additionalParameters'] = subFun2[value.id];
+	    				}
+	    			}
+	    		});
+
+		    	var treeDataFun = new DataSourceTree({data: fun_data});
+		    	$('#tree2').ace_tree({
+					dataSource: treeDataFun,
+					multiSelect : true,
+					cacheItems: true,
+					loadingHTML : '<div class="tree-loading"><i class="ace-icon fa fa-refresh fa-spin blue"></i></div>',
+					'open-icon' : 'ace-icon tree-minus',
+					'close-icon' : 'ace-icon tree-plus',
+					'selectable' : true,
+					'selected-icon' : 'ace-icon fa fa-check',
+					'unselected-icon' : 'ace-icon fa fa-check'
+				});
+		    	$("#tree2").find(".tree-folder-header").each(function(){  
+				    if($(this).parent().css("display")=="block"){   
+				        $(this).trigger("click");  
+				    }  
+				}); 
+		    }
 		});
+		
 	}
 	
 	///$('#tree2').on('selected', function (evt, data) {alert(data.info[0].name)});
@@ -124,7 +190,9 @@ jQuery(function($) {
 	$("#btn_cancel").on('click', function(e) {
 		$("#dialog-confirm").dialog("close");
 	});
-	
-	alert($("#div_row").height());
-	$("#div_tree1").height(500);
+	if($(window).height() * 0.6 > 350){
+		$("#div_tree1").height($(window).height() * 0.6);
+		$("#div_tree2").height($(window).height() * 0.6);
+	}
+
 });
