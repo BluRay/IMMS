@@ -61,6 +61,9 @@ jQuery(function($) {
 		$("#tree2").unbind();
 		//var items = $('#this').tree('selectedItems');
 		//alert(data.info[0].id);
+		$("#checkbox_workshop").removeAttr("checked"); 
+		$("#checkbox_factory").removeAttr("checked");
+		$("#checkbox_line").removeAttr("checked");
 		showtree2(data.info[0].id);
 	})
 	.on('click', function(e) {
@@ -82,11 +85,20 @@ jQuery(function($) {
 		    success:function(response){
 		    	var funs = response.data[0];
 		    	var roles = response.data[1];
+		    	var contents = response.data[2];
 		    	var roles_arr = new Array();
 		    	$.each(roles, function(index, value) {
 		    		roles_arr.push(value.function_id);
-		    	})
-
+		    	});
+		    	//$("#checkbox_factory").removeAttr("checked"); 
+		    	$.each(contents, function(index, value) {
+		    		if(value.permission_id + '' ==='1'){
+			    		console.log('---->permission_id = ' + value.permission_id);
+		    			//$("#checkbox_factory").attr("checked",'true');
+		    		}
+		    		//if(value.permission_id + '' ==='2'){$("#checkbox_workshop").attr("checked",'true');}
+		    		//if(value.permission_id + '' ==='3'){$("#checkbox_line").attr("checked",'true');}
+		    	});
 		    	$.each(funs, function(index, value) {
 		    		if(value.parent_function_id === '0'){
 		    			if(value.sub_count === '0'){
@@ -96,7 +108,6 @@ jQuery(function($) {
 		    				var subFun_str = '{"children" : {';
 		    				var cur_id = value.id + '';
 		    				$.each(funs, function(i, v) {
-		    					//console.log('---->parent_function_id = ' + v.parent_function_id + " id=" + v.id + " cur_id = " + cur_id);
 		    					if(v.parent_function_id === cur_id){
 		    						if(v.sub_count === '0'){
 		    							subFun_str += '"'+v.id+'" : {"name": "<i class=\'fa fa-pencil-square-o blue\'></i> '+v.function_name+'","id":"'+value.id+'", "type": "item" ' + ((jQuery.inArray(v.id+'', roles_arr) >= 0)?',"additionalParameters" : {"item-selected": true}':'') +'},';
@@ -195,4 +206,5 @@ jQuery(function($) {
 		$("#div_tree2").height($(window).height() * 0.6);
 	}
 
+	$("#checkbox_factory").attr("checked",'true');
 });

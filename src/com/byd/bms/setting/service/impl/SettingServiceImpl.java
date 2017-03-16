@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.byd.bms.setting.dao.ISettingDao;
 import com.byd.bms.setting.model.BmsBaseFunction;
+import com.byd.bms.setting.model.BmsBaseFunctionPermission;
 import com.byd.bms.setting.model.BmsBaseRole;
 import com.byd.bms.setting.model.BmsBaseRolePermission;
 import com.byd.bms.setting.service.ISettingService;
@@ -32,6 +33,12 @@ public class SettingServiceImpl implements ISettingService {
 	@Override
 	public List<BmsBaseRolePermission> getRolePermission(String role_id) {
 		List<BmsBaseRolePermission> list = settingDao.getRolePermission(role_id);
+		return list;
+	}
+
+	@Override
+	public List<BmsBaseFunctionPermission> getBaseFunctionPermission(String role_id) {
+		List<BmsBaseFunctionPermission> list = settingDao.getBaseFunctionPermission(role_id);
 		return list;
 	}
 

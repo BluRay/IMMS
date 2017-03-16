@@ -15,4 +15,8 @@
 	<select id="getRolePermission" parameterType="String" resultType="com.byd.bms.setting.model.BmsBaseRolePermission">
 		SELECT id, role_id, function_id FROM BMS_BASE_ROLE_PERMISSION where role_id = #{role_id};
 	</select>
+	
+	<select id="getBaseFunctionPermission" parameterType="String" resultType="com.byd.bms.setting.model.BmsBaseFunctionPermission">
+		SELECT id, role_id, permission_id FROM BMS_BASE_FUNCTION_PERMISSION where role_id = #{role_id};
+	</select>
 </mapper>

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.byd.bms.setting.model.BmsBaseFunction;
+import com.byd.bms.setting.model.BmsBaseFunctionPermission;
 import com.byd.bms.setting.model.BmsBaseRole;
 import com.byd.bms.setting.model.BmsBaseRolePermission;
 import com.byd.bms.setting.service.ISettingService;
@@ -51,6 +52,10 @@ public class AccountController extends BaseController{
 		List<BmsBaseRolePermission> list2 = new ArrayList<BmsBaseRolePermission>();
 		list2 = settingService.getRolePermission(role_id);
 		result.add(1,list2);
+		
+		List<BmsBaseFunctionPermission> list3 = new ArrayList<BmsBaseFunctionPermission>();
+		list3 = settingService.getBaseFunctionPermission(role_id);
+		result.add(2,list3);
 		
 		initModel(true,"success",result);
 		model = mv.getModelMap();
