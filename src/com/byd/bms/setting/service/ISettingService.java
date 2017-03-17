@@ -12,4 +12,9 @@ public interface ISettingService {
 	public List<BmsBaseFunction> getFunctionList();
 	public List<BmsBaseRolePermission> getRolePermission(String role_id);
 	public List<BmsBaseFunctionPermission> getBaseFunctionPermission(String role_id);
+	public int addRole(BmsBaseRole role);
+	public int delRoleFunction(String role_id,String function_ids);
+	public int addRoleFunction(String role_id,String function_id);
+	public int delFunctionPermission(String role_id,String permission_ids);
+	public int addFunctionPermission(String role_id,String permission_id);
 }

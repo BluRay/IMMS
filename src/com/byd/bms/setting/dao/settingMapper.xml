@@ -19,4 +19,39 @@
 	<select id="getBaseFunctionPermission" parameterType="String" resultType="com.byd.bms.setting.model.BmsBaseFunctionPermission">
 		SELECT id, role_id, permission_id FROM BMS_BASE_FUNCTION_PERMISSION where role_id = #{role_id};
 	</select>
+	
+	<insert id="addRole" useGeneratedKeys="true" keyProperty="id" parameterType="com.byd.bms.setting.model.BmsBaseRole">
+		INSERT INTO BMS_BASE_ROLE( role_name, role_description, type, edit_user, edit_time)
+		VALUES( #{role_name}, #{role_description}, #{type}, #{edit_user}, #{edit_time});
+	</insert>
+	
+	<update id="delRoleFunction" parameterType="String">
+		<![CDATA[
+		DELETE FROM BMS_BASE_ROLE_PERMISSION
+		WHERE role_id = #{role_id} AND function_id  NOT IN (${function_ids});
+		]]>
+	</update>
+	
+	<insert id="addRoleFunction" parameterType="String">
+		<![CDATA[
+		INSERT INTO BMS_BASE_ROLE_PERMISSION (role_id, function_id)
+		SELECT #{role_id},#{function_id} FROM DUAL WHERE NOT EXISTS
+		(SELECT id FROM BMS_BASE_ROLE_PERMISSION WHERE role_id = #{role_id} AND function_id = #{function_id})
+		]]>
+	</insert>
+	
+	<update id="delFunctionPermission" parameterType="String">
+		<![CDATA[
+		DELETE FROM BMS_BASE_FUNCTION_PERMISSION
+		WHERE role_id = #{role_id} AND permission_id  NOT IN (${permission_ids});
+		]]>
+	</update>
+	
+	<insert id="addFunctionPermission" parameterType="String">
+		<![CDATA[
+		INSERT INTO BMS_BASE_FUNCTION_PERMISSION (role_id, permission_id)
+		SELECT #{role_id},#{permission_id} FROM DUAL WHERE NOT EXISTS
+		(SELECT id FROM BMS_BASE_FUNCTION_PERMISSION WHERE role_id = #{role_id} AND permission_id = #{permission_id})
+		]]>
+	</insert>
 </mapper>

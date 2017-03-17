@@ -42,4 +42,29 @@ public class SettingServiceImpl implements ISettingService {
 		return list;
 	}
 
+	@Override
+	public int addRole(BmsBaseRole role) {
+		return settingDao.addRole(role);
+	}
+
+	@Override
+	public int delRoleFunction(String role_id, String function_ids) {
+		return settingDao.delRoleFunction(role_id, function_ids);
+	}
+
+	@Override
+	public int addRoleFunction(String role_id, String function_id) {
+		return settingDao.addRoleFunction(role_id, function_id);
+	}
+
+	@Override
+	public int delFunctionPermission(String role_id, String permission_ids) {
+		return settingDao.delFunctionPermission(role_id, permission_ids);
+	}
+
+	@Override
+	public int addFunctionPermission(String role_id, String permission_id) {
+		return settingDao.addFunctionPermission(role_id, permission_id);
+	}
+
 }

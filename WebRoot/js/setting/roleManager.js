@@ -24,56 +24,62 @@ jQuery(function($) {
 			}, parseInt(Math.random() * 500) + 200);
 	};
 	
-	var role_str = '{';
-	$.ajax({
-	    url: "getRoleList",
-	    dataType: "json",
-		type: "get",
-	    data: {},
-	    success:function(response){
-	    	$.each(response.data, function(index, value) {
-	    		role_str += '"role_'+value.id+'" : {"name": "<i class=\'fa fa-users blue\'></i> '+value.role_name+'","id":"'+value.id+'","type": "item"},'
-	    	});
-	    	role_str = role_str.substring(0,role_str.length-1) + '}';
-	    	var role_data = eval('(' + role_str + ')');
-	    	var treeDataSource = new DataSourceTree({data: role_data});
-	    	$('#tree1').ace_tree({
-	    		dataSource: treeDataSource,
-	    		multiSelect : false,
-	    		cacheItems: true,
-	    		loadingHTML : '<div class="tree-loading"><i class="ace-icon fa fa-refresh fa-spin blue"></i></div>',
-	    		'open-icon' : 'ace-icon tree-minus','close-icon' : 'ace-icon tree-plus',
-	    		'selectable' : true,
-	    		'selected-icon' : 'ace-icon fa fa-check',
-	    		'unselected-icon' : 'ace-icon fa fa-times'
-	    	});
-	    }
-	});
-
-	$('#tree1')
-	.on('updated', function(e, result) {
-		// result.info >> an array containing selected items
-		// result.item
-		// result.eventType >> (selected or unselected)
-	})
-	.on('selected', function(e,data) {
+	showtree1();
+	
+	
+	
+	function showtree1(){
+		$("#tree1").removeData();
+		$("#tree1").unbind();
 		$("#tree2").removeData();
 		$("#tree2").unbind();
-		//var items = $('#this').tree('selectedItems');
-		//alert(data.info[0].id);
-		$("#checkbox_workshop").removeAttr("checked"); 
-		$("#checkbox_factory").removeAttr("checked");
-		$("#checkbox_line").removeAttr("checked");
-		showtree2(data.info[0].id);
-	})
-	.on('click', function(e) {
-	})
-	.on('opened', function(e) {
-	})
-	.on('closed', function(e) {
-	});
+		$.ajax({
+		    url: "getRoleList",
+		    dataType: "json",
+			type: "get",
+		    data: {},
+		    success:function(response){
+		    	var role_str = '{';
+		    	$.each(response.data, function(index, value) {
+		    		role_str += '"role_'+value.id+'" : {"name": "<i class=\'fa fa-users blue\'></i> '+value.role_name+'","id":"'+value.id+'","type": "item"},'
+		    	});
+		    	role_str = role_str.substring(0,role_str.length-1) + '}';
+		    	var role_data = eval('(' + role_str + ')');
+		    	var treeDataSource = new DataSourceTree({data: role_data});
+		    	$('#tree1').ace_tree({
+		    		dataSource: treeDataSource,
+		    		multiSelect : false,
+		    		cacheItems: true,
+		    		loadingHTML : '<div class="tree-loading"><i class="ace-icon fa fa-refresh fa-spin blue"></i></div>',
+		    		'open-icon' : 'ace-icon tree-minus',
+		    		'close-icon' : 'ace-icon tree-plus',
+		    		'selectable' : true,
+		    		'selected-icon' : 'ace-icon fa fa-check',
+		    		'unselected-icon' : 'ace-icon fa fa-times'
+		    	});
+
+		    }
+		});
+		$('#tree1')
+		.on('updated', function(e, result) {
+			// result.info >> an array containing selected items
+			// result.item
+			// result.eventType >> (selected or unselected)
+		})
+		.on('selected', function(e,data) {
+			showtree2(data.info[0].id);
+		})
+		.on('click', function(e) {
+		})
+		.on('opened', function(e) {
+		})
+		.on('closed', function(e) {
+		});
+	}
 	
 	function showtree2(role_id){
+		$("#tree2").removeData();
+		$("#tree2").unbind();
 		var fun_str = '{';
 		var subFun = [];
 		var subFun2 = [];
@@ -90,14 +96,13 @@ jQuery(function($) {
 		    	$.each(roles, function(index, value) {
 		    		roles_arr.push(value.function_id);
 		    	});
-		    	//$("#checkbox_factory").removeAttr("checked"); 
+		    	$("#checkbox1").prop('checked',false);
+		    	$("#checkbox2").prop('checked',false);
+		    	$("#checkbox3").prop('checked',false);
 		    	$.each(contents, function(index, value) {
-		    		if(value.permission_id + '' ==='1'){
-			    		console.log('---->permission_id = ' + value.permission_id);
-		    			//$("#checkbox_factory").attr("checked",'true');
-		    		}
-		    		//if(value.permission_id + '' ==='2'){$("#checkbox_workshop").attr("checked",'true');}
-		    		//if(value.permission_id + '' ==='3'){$("#checkbox_line").attr("checked",'true');}
+		    		if(value.permission_id + '' ==='1')$("#checkbox1").prop('checked',true);
+		    		if(value.permission_id + '' ==='2')$("#checkbox2").prop('checked',true);
+		    		if(value.permission_id + '' ==='3')$("#checkbox3").prop('checked',true);
 		    	});
 		    	$.each(funs, function(index, value) {
 		    		if(value.parent_function_id === '0'){
@@ -110,13 +115,13 @@ jQuery(function($) {
 		    				$.each(funs, function(i, v) {
 		    					if(v.parent_function_id === cur_id){
 		    						if(v.sub_count === '0'){
-		    							subFun_str += '"'+v.id+'" : {"name": "<i class=\'fa fa-pencil-square-o blue\'></i> '+v.function_name+'","id":"'+value.id+'", "type": "item" ' + ((jQuery.inArray(v.id+'', roles_arr) >= 0)?',"additionalParameters" : {"item-selected": true}':'') +'},';
+		    							subFun_str += '"'+v.id+'" : {"name": "<i class=\'fa fa-pencil-square-o blue\'></i> '+v.function_name+'","id":"'+v.id+'", "type": "item" ' + ((jQuery.inArray(v.id+'', roles_arr) >= 0)?',"additionalParameters" : {"item-selected": true}':'') +'},';
 		    						}else{
-		    							subFun_str += '"'+v.id+'" : {"name": "<i class=\'fa fa-pencil-square-o blue\'></i> '+v.function_name+'","id":"'+value.id+'", "type": "folder"},';
+		    							subFun_str += '"'+v.id+'" : {"name": "<i class=\'fa fa-pencil-square-o blue\'></i> '+v.function_name+'","id":"'+v.id+'", "type": "folder"},';
 		    							var subFun_str2 = '{"children" : {';
 		    							var cur_id2 = v.id + '';
 		    							$.each(funs, function(i2, v2) {
-		    								if(v2.parent_function_id === cur_id2)subFun_str2 += '"'+v2.id+'" : {"name": "<i class=\'fa fa-pencil-square-o blue\'></i> '+v2.function_name+'","id":"'+value.id+'", "type": "item" ' + ((jQuery.inArray(v2.id+'', roles_arr) >= 0)?',"additionalParameters" : {"item-selected": true}':'') +'},';
+		    								if(v2.parent_function_id === cur_id2)subFun_str2 += '"'+v2.id+'" : {"name": "<i class=\'fa fa-pencil-square-o blue\'></i> '+v2.function_name+'","id":"'+v2.id+'", "type": "item" ' + ((jQuery.inArray(v2.id+'', roles_arr) >= 0)?',"additionalParameters" : {"item-selected": true}':'') +'},';
 		    							})
 		    							subFun_str2 = subFun_str2.substring(0,subFun_str2.length-1) + '}}';
 		    							subFun2[v.id] = eval('(' + subFun_str2 + ')');
@@ -188,6 +193,7 @@ jQuery(function($) {
 	$("#btn_addRole").on('click', function(e) {
 		///var items = $('#tree2').tree('selectedItems');
 		///alert(items.length);
+		
 		e.preventDefault();
 		$("#dialog-confirm").removeClass('hide').dialog({
 			resizable: false,
@@ -196,15 +202,94 @@ jQuery(function($) {
 			width:'500px',
 			modal: true
 		});
+		$("#new_role_name").val("");
+		$("#new_role_description").val("");
+	});
+	
+	$("#btn_save").on('click', function(e) {
+		///console.log($('#tree1').tree('selectedItems')[0].id);
+		///console.log($('#tree1').tree('selectedItems').length);
+		var function_ids = "";var permission_ids = "";
+		if($('#tree1').tree('selectedItems').length > 0){
+			$.each($('#tree2').tree('selectedItems'), function(index, value) {
+				function_ids += value.id + ",";
+			});
+			if("" === function_ids){
+				$.gritter.add({
+					title: '系统提示：',
+					text: '<h5>请选择角色对应的权限信息！</h5>',
+					class_name: 'gritter-error'
+				});
+				return false;
+			}
+			if($("#checkbox1").prop("checked")) permission_ids+= "1,";
+			if($("#checkbox2").prop("checked")) permission_ids+= "2,";
+			if($("#checkbox3").prop("checked")) permission_ids+= "3,";
+			$.ajax({
+			    url: "saveRole",
+			    dataType: "json",
+				type: "get",
+			    data: {
+			    	"role_id" : $('#tree1').tree('selectedItems')[0].id,
+			    	"function_ids" : function_ids.substring(0,function_ids.length-1),
+			    	"permission_ids" : permission_ids.substring(0,permission_ids.length-1)
+			    },
+			    success:function(response){
+			    	$.gritter.add({
+						title: '系统提示：',
+						text: '<h5>保存成功！</h5>',
+						class_name: 'gritter-info'
+					});
+			    }
+			});
+			
+		}else{
+			$.gritter.add({
+				title: '系统提示：',
+				text: '<h5>请选择要保存的角色！</h5>',
+				class_name: 'gritter-error'
+			});
+			return false;
+		}
+	});
+	
+	$("#btn_ok").on('click', function(e) {
+		if(""===$("#new_role_name").val()){
+			alert("用户角色名称不能为空！");
+			$("#new_role_name").focus();
+			return false
+		}
+		if(""===$("#new_role_description").val()){
+			alert("用户角色描述不能为空！");
+			$("#new_role_description").focus();
+			return false
+		}
+		$.ajax({
+		    url: "addRole",
+		    dataType: "json",
+			type: "get",
+		    data: {
+		    	"new_role_name" : $("#new_role_name").val(),
+		    	"new_role_description" : $("#new_role_description").val(),
+		    	"new_type" : $("#new_type").val()
+		    },
+		    success:function(response){
+		    	if(response.data > 0){
+		    		alert("增加用户成功！");
+		    		$("#dialog-confirm").dialog("close");
+		    	}
+		    	showtree1();
+		    }
+		});
 	});
 	
 	$("#btn_cancel").on('click', function(e) {
 		$("#dialog-confirm").dialog("close");
 	});
+	
 	if($(window).height() * 0.6 > 350){
 		$("#div_tree1").height($(window).height() * 0.6);
 		$("#div_tree2").height($(window).height() * 0.6);
 	}
 
-	$("#checkbox_factory").attr("checked",'true');
 });
