@@ -45,7 +45,7 @@
 						<div class="col-xs-12">
 							<div class="row">
 								<div class="col-sm-4">
-									<div id="div_tree1" class="widget-box widget-color-blue2" style="height:350px">
+									<div id="div_tree1" class="widget-box widget-color-blue2" style="height:350px;OVERFLOW-X:auto;OVERFLOW:scroll">
 										<div class="widget-header">
 											<h4 class="widget-title lighter smaller">选择用户角色&nbsp;&nbsp;&nbsp;&nbsp;</h4>
 											<button id="btn_save" style="float:right;margin-top:2px" class="btn btn-sm btn-purple">保存</button>&nbsp;&nbsp;
@@ -61,7 +61,7 @@
 									</div>
 								</div>
 								<div class="col-sm-8">
-									<div id="div_tree2" class="widget-box widget-color-green2" style="height:350px">
+									<div id="div_tree2" class="widget-box widget-color-green2" style="height:350px;OVERFLOW-X:auto;OVERFLOW:scroll">
 										<div class="widget-header">
 											<h4 class="widget-title lighter smaller">角色权限信息</h4>
 										</div>

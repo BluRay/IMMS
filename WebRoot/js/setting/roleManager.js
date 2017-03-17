@@ -1,10 +1,13 @@
 jQuery(function($) {
+	if($(window).height() * 0.6 > 350){
+		$("#div_tree1").height($(window).height() * 0.6);
+		$("#div_tree2").height($(window).height() * 0.6);
+	}
 	
 	var DataSourceTree = function(options) {
 		this._data 	= options.data;
 		this._delay = options.delay;
 	}
-
 	DataSourceTree.prototype.data = function(options, callback) {
 		var self = this;
 		var $data = null;
@@ -25,9 +28,7 @@ jQuery(function($) {
 	};
 	
 	showtree1();
-	
-	
-	
+
 	function showtree1(){
 		$("#tree1").removeData();
 		$("#tree1").unbind();
@@ -62,9 +63,6 @@ jQuery(function($) {
 		});
 		$('#tree1')
 		.on('updated', function(e, result) {
-			// result.info >> an array containing selected items
-			// result.item
-			// result.eventType >> (selected or unselected)
 		})
 		.on('selected', function(e,data) {
 			showtree2(data.info[0].id);
@@ -170,18 +168,6 @@ jQuery(function($) {
 		});
 		
 	}
-	
-	///$('#tree2').on('selected', function (evt, data) {alert(data.info[0].name)});
-
-	/**
-	 * $('#tree1').on('loaded', function (evt, data) { });
-	 * 
-	 * $('#tree1').on('opened', function (evt, data) { });
-	 * 
-	 * $('#tree1').on('closed', function (evt, data) { });
-	 * 
-	 * $('#tree1').on('selected', function (evt, data) { });
-	 */
 	$.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
 		_title: function(title) {
 			var $title = this.options.title || '&nbsp;'
@@ -190,10 +176,7 @@ jQuery(function($) {
 			else title.text($title);
 		}
 	}));
-	$("#btn_addRole").on('click', function(e) {
-		///var items = $('#tree2').tree('selectedItems');
-		///alert(items.length);
-		
+	$("#btn_addRole").on('click', function(e) {	
 		e.preventDefault();
 		$("#dialog-confirm").removeClass('hide').dialog({
 			resizable: false,
@@ -207,8 +190,6 @@ jQuery(function($) {
 	});
 	
 	$("#btn_save").on('click', function(e) {
-		///console.log($('#tree1').tree('selectedItems')[0].id);
-		///console.log($('#tree1').tree('selectedItems').length);
 		var function_ids = "";var permission_ids = "";
 		if($('#tree1').tree('selectedItems').length > 0){
 			$.each($('#tree2').tree('selectedItems'), function(index, value) {
@@ -287,9 +268,4 @@ jQuery(function($) {
 		$("#dialog-confirm").dialog("close");
 	});
 	
-	if($(window).height() * 0.6 > 350){
-		$("#div_tree1").height($(window).height() * 0.6);
-		$("#div_tree2").height($(window).height() * 0.6);
-	}
-
 });
