@@ -99,7 +99,7 @@ public class AccountController extends BaseController{
 			reuslt += settingService.addRoleFunction(role_id, function_id[i]);
 		}
 		
-		reuslt += settingService.delFunctionPermission(role_id, permission_ids);
+		if(!"".equals(permission_ids))reuslt += settingService.delFunctionPermission(role_id, permission_ids);
 		String[] permission_id = permission_ids.split(",");
 		for (int i = 0 ; i <permission_id.length ; i++ ) {
 			reuslt += settingService.addFunctionPermission(role_id, permission_id[i]);

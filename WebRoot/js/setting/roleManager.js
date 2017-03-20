@@ -3,7 +3,6 @@ jQuery(function($) {
 		$("#div_tree1").height($(window).height() * 0.6);
 		$("#div_tree2").height($(window).height() * 0.6);
 	}
-	
 	var DataSourceTree = function(options) {
 		this._data 	= options.data;
 		this._delay = options.delay;
