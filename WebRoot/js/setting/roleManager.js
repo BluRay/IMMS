@@ -161,7 +161,7 @@ jQuery(function($) {
 		    	$("#tree2").find(".tree-folder-header").each(function(){  
 				    if($(this).parent().css("display")=="block"){   
 				        $(this).trigger("click");  
-				    }  
+				    }
 				}); 
 		    }
 		});
