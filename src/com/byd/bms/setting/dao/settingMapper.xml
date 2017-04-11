@@ -61,4 +61,11 @@
 		VALUES( #{staff_number}, '0', #{username}, #{email}, #{telephone}, #{cellphone}, #{password}, #{display_name}, #{factory_id}, #{department_id}, #{admin},'0', #{create_user}, #{create_time},'0')
 		]]>
 	</insert>
+	
+	<select id="getUserList" parameterType="String" resultType="com.byd.bms.util.model.BmsBaseUser">
+		SELECT * FROM BMS_BASE_USER where 1=1 
+		<if test="search_key!=''">
+		
+		</if>
+	</select>
 </mapper>

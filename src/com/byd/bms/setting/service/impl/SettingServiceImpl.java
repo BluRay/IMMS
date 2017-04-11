@@ -73,4 +73,9 @@ public class SettingServiceImpl implements ISettingService {
 		return settingDao.addUser(user);
 	}
 
+	@Override
+	public List<BmsBaseUser> getUserList(String search_key) {
+		return settingDao.getUserList(search_key);
+	}
+
 }

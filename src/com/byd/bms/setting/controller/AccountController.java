@@ -85,7 +85,16 @@ public class AccountController extends BaseController{
 		return model;
 	}
 	
-	
+	@RequestMapping("/getUserList")
+	@ResponseBody
+	public ModelMap getUserList(){		
+		String key=request.getParameter("key");
+		List<BmsBaseUser> list = new ArrayList<BmsBaseUser>();
+		//list = settingService.getRoleList();		
+		initModel(true,"success",list);
+		model = mv.getModelMap();
+		return model;
+	}
 	
 	@RequestMapping("/getRoleList")
 	@ResponseBody

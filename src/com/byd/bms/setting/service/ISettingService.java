@@ -20,4 +20,5 @@ public interface ISettingService {
 	public int addFunctionPermission(String role_id,String permission_id);
 	
 	public int addUser(BmsBaseUser user);
+	public List<BmsBaseUser> getUserList(String search_key);
 }

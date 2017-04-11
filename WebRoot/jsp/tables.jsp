@@ -2451,18 +2451,18 @@
 					"aaSorting": [],
 			
 					//,
-					//"sScrollY": "200px",
+					"sScrollY": "200px",
 					//"bPaginate": false,
 			
 					//"sScrollX": "100%",
 					//"sScrollXInner": "120%",
-					//"bScrollCollapse": true,
+					"bScrollCollapse": true,
 					//Note: if you are applying horizontal scrolling (sScrollX) on a ".table-bordered"
 					//you may want to wrap the table inside a "div.dataTables_borderWrap" element
 			
-					//"iDisplayLength": 50
+					"iDisplayLength": 50
 			    } );
-				/**
+				
 				var tableTools = new $.fn.dataTable.TableTools( oTable1, {
 					"sSwfPath": "copy_csv_xls_pdf.swf",
 			        "buttons": [
@@ -2474,7 +2474,7 @@
 			        ]
 			    } );
 			    $( tableTools.fnContainer() ).insertBefore('#sample-table-2');
-				*/
+				
 			
 			
 				$(document).on('click', 'th input:checkbox' , function(){
