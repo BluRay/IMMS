@@ -9,6 +9,7 @@ import com.byd.bms.setting.model.BmsBaseFunction;
 import com.byd.bms.setting.model.BmsBaseFunctionPermission;
 import com.byd.bms.setting.model.BmsBaseRole;
 import com.byd.bms.setting.model.BmsBaseRolePermission;
+import com.byd.bms.util.model.BmsBaseUser;
 
 @Repository(value="settingDao")
 public interface ISettingDao {
@@ -21,4 +22,5 @@ public interface ISettingDao {
 	public int addRoleFunction(@Param("role_id") String role_id,@Param("function_id") String function_id);
 	public int delFunctionPermission(@Param("role_id") String role_id,@Param("permission_ids") String permission_ids);
 	public int addFunctionPermission(@Param("role_id") String role_id,@Param("permission_id") String permission_id);
+	public int addUser(BmsBaseUser user);
 }

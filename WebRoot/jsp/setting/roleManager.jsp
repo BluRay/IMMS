@@ -106,7 +106,7 @@
 						</div>							
 					</div>
 			</div><!-- /.main-content -->
-			<div id="dialog-confirm" class="hide" style="width:800px;height:500px">
+			<div id="dialog-confirm" class="hide" style="width:800px;height:600px">
 				<form>
 					<fieldset>
 						<div class="form-group form-horizontal">

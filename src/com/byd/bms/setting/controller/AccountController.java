@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,7 +20,9 @@ import com.byd.bms.setting.model.BmsBaseFunctionPermission;
 import com.byd.bms.setting.model.BmsBaseRole;
 import com.byd.bms.setting.model.BmsBaseRolePermission;
 import com.byd.bms.setting.service.ISettingService;
+import com.byd.bms.util.MD5Util;
 import com.byd.bms.util.controller.BaseController;
+import com.byd.bms.util.model.BmsBaseUser;
 
 @Controller
 @RequestMapping("/account")
@@ -32,6 +36,56 @@ public class AccountController extends BaseController{
 		mv.setViewName("setting/roleManager");
         return mv;  
 	}
+	
+	@RequestMapping("/userManagerPage")
+	public ModelAndView userManagerPage(){
+		mv.setViewName("setting/userManager");
+        return mv;  
+	}
+	
+	@RequestMapping("/userRoleManagerPage")
+	public ModelAndView userRoleManagerPage(){
+		mv.setViewName("setting/userRoleManager");
+        return mv;  
+	}
+	
+	@RequestMapping("/addUser")
+	@ResponseBody
+	public ModelMap addUser() throws NoSuchAlgorithmException, UnsupportedEncodingException{
+		String staff_number=request.getParameter("staff_number");
+		String username=request.getParameter("username");
+		String email=request.getParameter("email");
+		String telephone=request.getParameter("telephone");
+		String cellphone=request.getParameter("cellphone");
+		String password=request.getParameter("password");
+		String display_name=request.getParameter("display_name");
+		String factory_id=request.getParameter("factory_id");
+		String department_id=request.getParameter("department_id");
+		String admin=request.getParameter("admin");
+		String edit_user = request.getSession().getAttribute("user_name") + "";
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String edit_time = df.format(new Date());
+		
+		BmsBaseUser user = new BmsBaseUser();
+		user.setStaff_number(staff_number);
+		user.setUsername(username);
+		user.setEmail(email);
+		user.setTelephone(telephone);
+		user.setCellphone(cellphone);
+		user.setPassword(MD5Util.getEncryptedPwd(password));
+		user.setDisplay_name(display_name);
+		user.setFactory_id(Integer.valueOf(factory_id));
+		user.setDepartment_id(Integer.valueOf(department_id));
+		user.setAdmin(admin);
+		user.setCreate_user(edit_user);
+		user.setCreate_time(edit_time);
+		int reuslt = settingService.addUser(user);
+		initModel(true,"success",reuslt);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	
 	
 	@RequestMapping("/getRoleList")
 	@ResponseBody

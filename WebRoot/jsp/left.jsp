@@ -124,7 +124,7 @@ $(document).ready(function () {
 			b1.appendTo(li);
 			
 			traverseTree(value,li,true);
-			console.log('---->' + index + ' ' + li.html());
+			//console.log('---->' + index + ' ' + li.html());
 			
 			li.appendTo(root);
 		});

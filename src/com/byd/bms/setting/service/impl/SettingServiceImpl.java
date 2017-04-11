@@ -12,6 +12,7 @@ import com.byd.bms.setting.model.BmsBaseFunctionPermission;
 import com.byd.bms.setting.model.BmsBaseRole;
 import com.byd.bms.setting.model.BmsBaseRolePermission;
 import com.byd.bms.setting.service.ISettingService;
+import com.byd.bms.util.model.BmsBaseUser;
 
 @Service
 public class SettingServiceImpl implements ISettingService {
@@ -65,6 +66,11 @@ public class SettingServiceImpl implements ISettingService {
 	@Override
 	public int addFunctionPermission(String role_id, String permission_id) {
 		return settingDao.addFunctionPermission(role_id, permission_id);
+	}
+
+	@Override
+	public int addUser(BmsBaseUser user) {
+		return settingDao.addUser(user);
 	}
 
 }

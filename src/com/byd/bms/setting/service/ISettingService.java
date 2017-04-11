@@ -6,6 +6,7 @@ import com.byd.bms.setting.model.BmsBaseFunction;
 import com.byd.bms.setting.model.BmsBaseFunctionPermission;
 import com.byd.bms.setting.model.BmsBaseRole;
 import com.byd.bms.setting.model.BmsBaseRolePermission;
+import com.byd.bms.util.model.BmsBaseUser;
 
 public interface ISettingService {
 	public List<BmsBaseRole> getRoleList();
@@ -17,4 +18,6 @@ public interface ISettingService {
 	public int addRoleFunction(String role_id,String function_id);
 	public int delFunctionPermission(String role_id,String permission_ids);
 	public int addFunctionPermission(String role_id,String permission_id);
+	
+	public int addUser(BmsBaseUser user);
 }

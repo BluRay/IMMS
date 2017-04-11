@@ -54,4 +54,11 @@
 		(SELECT id FROM BMS_BASE_FUNCTION_PERMISSION WHERE role_id = #{role_id} AND permission_id = #{permission_id})
 		]]>
 	</insert>
+	
+	<insert id="addUser" useGeneratedKeys="true" keyProperty="id" parameterType="com.byd.bms.util.model.BmsBaseUser">
+		<![CDATA[
+		INSERT INTO BMS_BASE_USER(staff_number, card_8H10D, username, email, telephone, cellphone, password, display_name, factory_id, department_id, admin, isdelete, create_user, create_time, login_count)
+		VALUES( #{staff_number}, '0', #{username}, #{email}, #{telephone}, #{cellphone}, #{password}, #{display_name}, #{factory_id}, #{department_id}, #{admin},'0', #{create_user}, #{create_time},'0')
+		]]>
+	</insert>
 </mapper>

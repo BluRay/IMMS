@@ -25,10 +25,45 @@ public class BmsBaseUser {
 	private String workshop_org;
 	private String workgroup_org;
 	private String team_org;
+	private String create_user;
+	private String create_time;
+	private String modify_time;
+	private String login_count;
+	private String last_login_time;
 	
 	//add by wuxiao
 	private String pwd_modified;
 	
+	public String getCreate_user() {
+		return create_user;
+	}
+	public void setCreate_user(String create_user) {
+		this.create_user = create_user;
+	}
+	public String getCreate_time() {
+		return create_time;
+	}
+	public void setCreate_time(String create_time) {
+		this.create_time = create_time;
+	}
+	public String getModify_time() {
+		return modify_time;
+	}
+	public void setModify_time(String modify_time) {
+		this.modify_time = modify_time;
+	}
+	public String getLogin_count() {
+		return login_count;
+	}
+	public void setLogin_count(String login_count) {
+		this.login_count = login_count;
+	}
+	public String getLast_login_time() {
+		return last_login_time;
+	}
+	public void setLast_login_time(String last_login_time) {
+		this.last_login_time = last_login_time;
+	}
 	public String getPwd_modified() {
 		return pwd_modified;
 	}

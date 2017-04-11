@@ -13,9 +13,27 @@ public class PlanController extends BaseController{
 	static Logger logger = Logger.getLogger(PlanController.class.getName());
 	
 	@RequestMapping("/importMaster")
-	public ModelAndView maintain(){ 
+	public ModelAndView importMaster(){ 		//总计划导入
 		mv.setViewName("plan/importMaster");
         return mv;  
-    } 
+    }
+	
+	@RequestMapping("/planPreview")
+	public ModelAndView planPreview(){ 			//总计划详情
+		mv.setViewName("plan/planPreview");
+        return mv;  
+    }
+	
+	@RequestMapping("/planRevision")
+	public ModelAndView planRevision(){ 		//计划调整
+		mv.setViewName("plan/planRevision");
+        return mv;  
+    }
+	
+	@RequestMapping("/planIssuance")
+	public ModelAndView planIssuance(){ 		//计划发布
+		mv.setViewName("plan/planIssuance");
+        return mv;  
+    }
 
 }
