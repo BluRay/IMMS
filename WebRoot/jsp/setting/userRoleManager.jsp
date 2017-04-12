@@ -40,21 +40,22 @@
 				<div class="row">
 					<div class="col-xs-12">
 						<div class="row">
-							<div class="col-sm-2">
+							<div class="col-sm-3">
 								<div id="div_tree1" class="widget-box widget-color-blue2" style="height:350px;OVERFLOW-X:auto;OVERFLOW-Y:auto;OVERFLOW:auto">
 									<div class="widget-header">
 										<h4 class="widget-title lighter smaller">选择用户&nbsp;&nbsp;&nbsp;&nbsp;</h4>
 									</div>
 									<div class="widget-body">
-										<input type="text" placeholder="Search ..." style="margin-top:1px;margin-left:1px;width:100px"/>
+										<input id="search_key" type="text" placeholder="Search ..." style="margin-top:1px;margin-left:1px;width:100px"/>
 										<button id="btn_search_user" style="margin-top:-2px" class="btn btn-sm btn-purple">查询</button>
+										<button id="btn_save" style="margin-top:-2px" class="btn btn-sm btn-success">保存</button>
 										<div class="widget-main padding-8">
 											<div id="tree1" class="tree"></div>
 										</div>
 									</div>
 								</div>
 							</div>
-							<div class="col-sm-4">
+							<div class="col-sm-3">
 								<div id="div_tree2" class="widget-box widget-color-blue2" style="height:350px;OVERFLOW-X:auto;OVERFLOW-Y:auto;OVERFLOW:auto">
 									<div class="widget-header">
 										<h4 class="widget-title lighter smaller">选择角色&nbsp;&nbsp;&nbsp;&nbsp;</h4>
@@ -69,11 +70,16 @@
 							<div class="col-sm-6">
 								<div id="div_tree3" class="widget-box widget-color-green2" style="height:350px;OVERFLOW-X:auto;OVERFLOW-Y:auto;OVERFLOW:auto">
 									<div class="widget-header">
-										<h4 class="widget-title lighter smaller">程序权限&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+										<h4 class="widget-title lighter smaller">查看程序权限&nbsp;&nbsp;&nbsp;&nbsp;</h4>
 									</div>
 									<div class="widget-body">
 										<div class="widget-main padding-8">
-											<div id="tree3" class="tree"></div>
+											<table style="width:100%;height:100%;border: 1px solid green;">
+											<tr>
+												<td valign="top" style="width:30%;border: 0.5px solid green;"><div id="tree4" class="tree"></div></td>
+												<td valign="top" width="70%"><div id="tree3" class="tree"></div></td>
+											</tr>
+											</table>
 										</div>
 									</div>
 								</div>
@@ -83,26 +89,29 @@
 						
 						<div class="row">
 							<div class="col-sm-12">
-								<div id="div_3" class="widget-box widget-color-blue2" style="height:100px">
+								<div id="div_3" class="widget-box widget-color-blue2" style="height:180px">
 									<div class="widget-header">
 										<h4 class="widget-title lighter smaller">数据权限配置</h4>
 									</div>
 									<div class="widget-body">
 										<div class="widget-main padding-8">
-											<div class="checkbox">
-												<label>
-													<input id="checkbox1" name="form-field-checkbox" type="checkbox" class="ace" />
-													<span class="lbl"> 工厂</span>
-												</label>
-												<label>
-													<input id="checkbox2" name="form-field-checkbox" type="checkbox" class="ace" />
-													<span class="lbl"> 车间</span>
-												</label>
-												<label>
-													<input id="checkbox3" name="form-field-checkbox" type="checkbox" class="ace" />
-													<span class="lbl"> 线别</span>
-												</label>
-											</div>
+										<table>
+											<tr>
+												<td width="100px">权限对象:</td><td width="510px">对象值:</td>
+											</tr>
+											<tr>
+												<td><input disabled="disabled" type="text" value="工厂权限" style="width:80px"/></td>
+												<td><input id="permission_1" type="text" placeholder="工厂权限值...." style="width:500px"/></td>
+											</tr>
+											<tr>
+												<td><input disabled="disabled" type="text" value="车间权限" style="width:80px"/></td>
+												<td><input id="permission_2" type="text" placeholder="车间权限值...." style="width:500px"/></td>
+											</tr>
+											<tr>
+												<td><input disabled="disabled" type="text" value="线别权限" style="width:80px"/></td>
+												<td><input id="permission_3" type="text" placeholder="线别权限值...." style="width:500px"/></td>
+											</tr>
+										</table>										
 										</div>
 									</div>
 								</div>

@@ -11,6 +11,7 @@ import com.byd.bms.setting.model.BmsBaseFunction;
 import com.byd.bms.setting.model.BmsBaseFunctionPermission;
 import com.byd.bms.setting.model.BmsBaseRole;
 import com.byd.bms.setting.model.BmsBaseRolePermission;
+import com.byd.bms.setting.model.BmsUserRole;
 import com.byd.bms.setting.service.ISettingService;
 import com.byd.bms.util.model.BmsBaseUser;
 
@@ -76,6 +77,11 @@ public class SettingServiceImpl implements ISettingService {
 	@Override
 	public List<BmsBaseUser> getUserList(String search_key) {
 		return settingDao.getUserList(search_key);
+	}
+
+	@Override
+	public List<BmsUserRole> getUserRole(String staff_number) {
+		return settingDao.getUserRole(staff_number);
 	}
 
 }

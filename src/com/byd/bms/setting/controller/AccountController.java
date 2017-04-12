@@ -19,6 +19,7 @@ import com.byd.bms.setting.model.BmsBaseFunction;
 import com.byd.bms.setting.model.BmsBaseFunctionPermission;
 import com.byd.bms.setting.model.BmsBaseRole;
 import com.byd.bms.setting.model.BmsBaseRolePermission;
+import com.byd.bms.setting.model.BmsUserRole;
 import com.byd.bms.setting.service.ISettingService;
 import com.byd.bms.util.MD5Util;
 import com.byd.bms.util.controller.BaseController;
@@ -89,9 +90,11 @@ public class AccountController extends BaseController{
 	@ResponseBody
 	public ModelMap getUserList(){		
 		String key=request.getParameter("key");
+		List<Object> result = new ArrayList<Object>();
 		List<BmsBaseUser> list = new ArrayList<BmsBaseUser>();
-		//list = settingService.getRoleList();		
-		initModel(true,"success",list);
+		list = settingService.getUserList(key);	
+		result.add(0,list);
+		initModel(true,"success",result);
 		model = mv.getModelMap();
 		return model;
 	}
@@ -102,6 +105,24 @@ public class AccountController extends BaseController{
 		List<BmsBaseRole> list = new ArrayList<BmsBaseRole>();
 		list = settingService.getRoleList();		
 		initModel(true,"success",list);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/getUserRoleList")
+	@ResponseBody
+	public ModelMap getUserRoleList(){
+		String staff_number=request.getParameter("staff_number");
+		List<Object> result = new ArrayList<Object>();
+		List<BmsBaseRole> list = new ArrayList<BmsBaseRole>();
+		list = settingService.getRoleList();
+		result.add(0,list);
+		
+		List<BmsUserRole> list2 = new ArrayList<BmsUserRole>();
+		list2 = settingService.getUserRole(staff_number);
+		result.add(1,list2);
+		
+		initModel(true,"success",result);
 		model = mv.getModelMap();
 		return model;
 	}

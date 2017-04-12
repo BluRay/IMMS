@@ -65,7 +65,21 @@
 	<select id="getUserList" parameterType="String" resultType="com.byd.bms.util.model.BmsBaseUser">
 		SELECT * FROM BMS_BASE_USER where 1=1 
 		<if test="search_key!=''">
-		
+		<![CDATA[
+		AND (staff_number LIKE '%${search_key}%' OR username LIKE '%${search_key}%' OR display_name LIKE '%${search_key}%' OR email LIKE '%${search_key}%' 
+		 OR telephone LIKE '%${search_key}%' OR cellphone LIKE '%${search_key}%')		 
+		]]>
+		</if>
+	</select>
+	
+	<select id="getUserRole" parameterType="String" resultType="com.byd.bms.setting.model.BmsUserRole">
+		SELECT U.*,R.role_name,P.permission_name FROM BMS_BASE_USER_ROLE U
+		LEFT JOIN BMS_BASE_ROLE R ON U.role_id = R.id
+		LEFT JOIN BMS_BASE_PERMISSION P ON U.permission_key = P.id 
+		<if test="staff_number!=''">
+		<![CDATA[
+			WHERE U.staff_number = #{staff_number}
+		]]>
 		</if>
 	</select>
 </mapper>
