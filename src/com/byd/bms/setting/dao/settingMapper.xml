@@ -82,4 +82,42 @@
 		]]>
 		</if>
 	</select>
+	
+	<insert id="addUserRole" parameterType="String">
+		<![CDATA[
+		INSERT INTO BMS_BASE_USER_ROLE
+		(staff_number, role_id, permission_key, permission_value, edit_user, edit_time)
+		SELECT #{staff_number},#{role_id},#{permission_key},#{permission_value},#{edit_user},#{edit_time} FROM DUAL WHERE NOT EXISTS
+		(SELECT id FROM BMS_BASE_USER_ROLE WHERE staff_number = #{staff_number} AND role_id = #{role_id})
+		]]>
+	</insert>
+	<insert id="addOneUserRole" parameterType="String">
+		<![CDATA[
+		INSERT INTO BMS_BASE_USER_ROLE
+		(staff_number, role_id, permission_key, permission_value, edit_user, edit_time)
+		SELECT #{staff_number},#{role_id},#{permission_key},#{permission_value},#{edit_user},#{edit_time} FROM DUAL WHERE NOT EXISTS
+		(SELECT id FROM BMS_BASE_USER_ROLE WHERE staff_number = #{staff_number} AND role_id = #{role_id} AND permission_key = #{permission_key})
+		]]>
+	</insert>
+	
+	<update id="updateUserRole" parameterType="String">
+		<![CDATA[
+		DELETE FROM BMS_BASE_FUNCTION_PERMISSION
+		WHERE role_id = #{role_id} AND permission_id  NOT IN (${permission_ids});
+		]]>
+	</update>
+	
+	<update id="delUserRole" parameterType="String">
+		<![CDATA[
+		DELETE FROM BMS_BASE_USER_ROLE
+		WHERE staff_number = #{staff_number} AND role_id NOT IN (${roles});
+		]]>
+	</update>
+	<update id="delOneUserRole" parameterType="String">
+		<![CDATA[
+		DELETE FROM BMS_BASE_USER_ROLE
+		WHERE staff_number = #{staff_number} AND role_id = #{role};
+		]]>
+	</update>
+	
 </mapper>

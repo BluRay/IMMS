@@ -103,6 +103,9 @@ $(document).ready(function () {
 		    	$.each(response.data[0], function(index, value) {
 		    		if(jQuery.inArray(value.id+'', role_arr) >= 0){
 		    			this_role = value.id;
+		    			this_role_name = value.role_name;
+		    			$("#role_name").html(this_role_name);
+		    			$("#role_name2").html(this_role_name);
 		    			updatePermissionInput(this_role);
 		    			role_str += '"role_'+value.id+'" : {"name": "<i class=\'fa fa-users blue\'></i> '+value.role_name+'","id":"'+value.id+'","type": "item"' + ',"additionalParameters" : {"item-selected": true}' + '},'
 		    		}else{
@@ -133,6 +136,10 @@ $(document).ready(function () {
 		.on('selected', function(e,data) {
 			console.log('selected:' + data.info[data.info.length-1].id);
 			this_role = data.info[data.info.length-1].id;
+			this_role_name = data.info[data.info.length-1].name.replace("<i class=\'fa fa-users blue\'></i> ","");
+			$("#role_name").html(this_role_name);
+			$("#role_name2").html(this_role_name);
+			console.log(this_role_name);
 			showtree3(this_role);
 			updatePermissionInput(this_role);
 		})
@@ -181,6 +188,9 @@ $(document).ready(function () {
 		.on('selected', function(e,data) {
 			console.log('selected:' + data.info[data.info.length-1].id);
 			this_role = data.info[data.info.length-1].id;
+			this_role_name = data.info[data.info.length-1].role_name;
+			$("#role_name").html(this_role_name);
+			$("#role_name2").html(this_role_name);
 			showtree3(this_role);
 			updatePermissionInput(this_role);
 		})
@@ -315,6 +325,7 @@ $(document).ready(function () {
 			});
 			return false;
 		}
+		$("#btn_save").attr("disabled","disabled");
 		staff_number = tree1_items[0].id;
 		console.log("---->user = " + staff_number );
 		console.log("---->this_role = " + this_role );
@@ -338,8 +349,12 @@ $(document).ready(function () {
 		    	"line_permission":$('#permission_3').val()
 		    },
 		    success:function(response){
-		    	
-		    	
+		    	$("#btn_save").removeAttr("disabled");
+		    	$.gritter.add({
+					title: '系统提示：',
+					text: '<h5>保存成功！</h5>',
+					class_name: 'gritter-info'
+				});
 		    }
 		});
 		

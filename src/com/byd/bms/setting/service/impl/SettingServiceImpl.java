@@ -1,5 +1,7 @@
 package com.byd.bms.setting.service.impl;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -87,9 +89,67 @@ public class SettingServiceImpl implements ISettingService {
 
 	@Override
 	@Transactional
-	public int saveUserRole(String staff_number, String this_role, String role_permission, String factory_permission,String workshop_permission, String line_permission) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int saveUserRole(String staff_number, String this_role, String role_permission, String factory_permission,String workshop_permission, String line_permission,String edit_user) {
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String edit_time = df.format(new Date());
+		String[] roles = role_permission.split(",");
+		System.out.println("---->staff_number" + "=" + staff_number + " " + role_permission.substring(0, role_permission.length()-1));
+		int result = 0;
+		//删除roles以外的用户权限
+		settingDao.delUserRole(staff_number, role_permission.substring(0, role_permission.length()-1));
+		//增加 新增的用户权限
+		for (int i = 0 ; i <roles.length ; i++ ) {
+			System.out.println("---->" + i + "=" + roles[i]);
+			BmsUserRole userRole = new BmsUserRole();
+			userRole.setStaff_number(staff_number);
+			userRole.setRole_id(roles[i]);
+			userRole.setPermission_key("");
+			userRole.setPermission_value("");
+			userRole.setEdit_user(edit_user);
+			userRole.setEdit_time(edit_time);
+			result += settingDao.addUserRole(userRole);
+		}
+		//修改 当前权限的 数据权限
+		int permission_count = 0;
+		if (!factory_permission.equals(""))permission_count++;
+		if (!workshop_permission.equals(""))permission_count++;
+		if (!line_permission.equals(""))permission_count++;
+		if (permission_count > 0){
+			//delete
+			settingDao.delOneUserRole(staff_number, this_role);
+			if(!factory_permission.equals("")){
+				BmsUserRole userRole = new BmsUserRole();
+				userRole.setStaff_number(staff_number);
+				userRole.setRole_id(this_role);
+				userRole.setPermission_key("1");
+				userRole.setPermission_value(factory_permission);
+				userRole.setEdit_user(edit_user);
+				userRole.setEdit_time(edit_time);
+				result += settingDao.addOneUserRole(userRole);
+			}
+			if(!workshop_permission.equals("")){
+				BmsUserRole userRole = new BmsUserRole();
+				userRole.setStaff_number(staff_number);
+				userRole.setRole_id(this_role);
+				userRole.setPermission_key("2");
+				userRole.setPermission_value(workshop_permission);
+				userRole.setEdit_user(edit_user);
+				userRole.setEdit_time(edit_time);
+				result += settingDao.addOneUserRole(userRole);
+			}
+			if(!line_permission.equals("")){
+				BmsUserRole userRole = new BmsUserRole();
+				userRole.setStaff_number(staff_number);
+				userRole.setRole_id(this_role);
+				userRole.setPermission_key("3");
+				userRole.setPermission_value(line_permission);
+				userRole.setEdit_user(edit_user);
+				userRole.setEdit_time(edit_time);
+				result += settingDao.addOneUserRole(userRole);
+			}			
+		}
+		
+		return result;
 	}
 
 }

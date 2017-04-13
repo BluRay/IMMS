@@ -73,7 +73,7 @@
 							<div class="col-sm-6">
 								<div id="div_tree3" class="widget-box widget-color-green2" style="height:350px;OVERFLOW-X:auto;OVERFLOW-Y:auto;OVERFLOW:auto">
 									<div class="widget-header">
-										<h4 class="widget-title lighter smaller">查看程序权限&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+										<h4 class="widget-title lighter smaller">查看程序权限 <span id="role_name2"></span></h4>
 									</div>
 									<div class="widget-body">
 										<div class="widget-main padding-8">
@@ -89,7 +89,7 @@
 							<div class="col-sm-12">
 								<div id="div_3" class="widget-box widget-color-blue2" style="height:180px">
 									<div class="widget-header">
-										<h4 class="widget-title lighter smaller">数据权限配置</h4>
+										<h4 class="widget-title lighter smaller">数据权限配置 <span id="role_name"></span></h4>
 									</div>
 									<div class="widget-body">
 										<div class="widget-main padding-8">

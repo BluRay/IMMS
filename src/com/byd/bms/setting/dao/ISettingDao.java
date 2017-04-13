@@ -26,4 +26,9 @@ public interface ISettingDao {
 	public int addUser(BmsBaseUser user);
 	public List<BmsBaseUser> getUserList(@Param("search_key") String search_key);
 	public List<BmsUserRole> getUserRole(@Param("staff_number") String staff_number);
+	public int addUserRole(BmsUserRole userRole);
+	public int addOneUserRole(BmsUserRole userRole);
+	public int updateUserRole(BmsUserRole userRole);
+	public int delUserRole(@Param("staff_number")String staff_number,@Param("roles")String roles);
+	public int delOneUserRole(@Param("staff_number")String staff_number,@Param("role")String role);
 }

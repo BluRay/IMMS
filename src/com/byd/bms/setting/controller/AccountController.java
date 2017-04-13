@@ -203,9 +203,9 @@ public class AccountController extends BaseController{
 		String factory_permission=request.getParameter("factory_permission");
 		String workshop_permission=request.getParameter("workshop_permission");
 		String line_permission=request.getParameter("line_permission");
-		
-		System.out.println("---->role_permission = " + role_permission);
-		
+		String edit_user = request.getSession().getAttribute("user_name") + "";
+		int reuslt = settingService.saveUserRole(staff_number, this_role, role_permission, factory_permission, workshop_permission, line_permission,edit_user);
+		initModel(true,"success",reuslt);
 		model = mv.getModelMap();
 		return model;
 	}
