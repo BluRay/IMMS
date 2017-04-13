@@ -1,4 +1,4 @@
-package com.byd.bms.util.service;
+package com.byd.bms.util.service.impl;
 
 import java.util.List;
 
@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.byd.bms.util.dao.IMenuDao;
 import com.byd.bms.util.model.BmsBaseMenu;
+import com.byd.bms.util.service.IMenuService;
 @Service
 public class MenuServiceImpl implements IMenuService {
 	@Resource(name="menuDao")

@@ -1,3 +1,5 @@
+var this_role = '0';
+var this_role_name = '';
 $(document).ready(function () {	
 	initPage();
 	function initPage(){
@@ -33,7 +35,6 @@ $(document).ready(function () {
 	
 	showtree1();
 	showtree2();
-	showtree4();
 
 	function showtree1(){
 		$("#tree1").removeData();
@@ -73,6 +74,7 @@ $(document).ready(function () {
 		})
 		.on('selected', function(e,data) {
 			updatetree2(data.info[0].id);
+			
 		})
 		.on('click', function(e) {
 		})
@@ -100,6 +102,8 @@ $(document).ready(function () {
 		    	var role_str = '{';
 		    	$.each(response.data[0], function(index, value) {
 		    		if(jQuery.inArray(value.id+'', role_arr) >= 0){
+		    			this_role = value.id;
+		    			updatePermissionInput(this_role);
 		    			role_str += '"role_'+value.id+'" : {"name": "<i class=\'fa fa-users blue\'></i> '+value.role_name+'","id":"'+value.id+'","type": "item"' + ',"additionalParameters" : {"item-selected": true}' + '},'
 		    		}else{
 		    			role_str += '"role_'+value.id+'" : {"name": "<i class=\'fa fa-users blue\'></i> '+value.role_name+'","id":"'+value.id+'","type": "item"},'
@@ -119,14 +123,18 @@ $(document).ready(function () {
 		    		'selected-icon' : 'ace-icon fa fa-check',
 		    		'unselected-icon' : 'ace-icon fa fa-check'
 		    	});
-
+		    	console.log(this_role)
+				showtree3(this_role);
 		    }
 		});
 		$('#tree2')
 		.on('updated', function(e, result) {
 		})
 		.on('selected', function(e,data) {
-			
+			console.log('selected:' + data.info[data.info.length-1].id);
+			this_role = data.info[data.info.length-1].id;
+			showtree3(this_role);
+			updatePermissionInput(this_role);
 		})
 		.on('click', function(e,data) {
 		})
@@ -134,6 +142,7 @@ $(document).ready(function () {
 		})
 		.on('closed', function(e) {
 		});
+		
 	}
 	
 	function showtree2(){
@@ -170,10 +179,13 @@ $(document).ready(function () {
 		.on('updated', function(e, result) {
 		})
 		.on('selected', function(e,data) {
-			updatePermissionInput(data.info[data.info.length-1].id);
-			console.log(data.info[data.info.length-1].id);
+			console.log('selected:' + data.info[data.info.length-1].id);
+			this_role = data.info[data.info.length-1].id;
+			showtree3(this_role);
+			updatePermissionInput(this_role);
 		})
 		.on('click', function(e,data) {
+			//console.log(e);
 		})
 		.on('opened', function(e) {
 		})
@@ -289,52 +301,48 @@ $(document).ready(function () {
 		});		
 	}
 	
-	function showtree4(){
-		$("#tree4").removeData();
-		$("#tree4").unbind();
-		$.ajax({
-		    url: "getRoleList",
-		    dataType: "json",
-			type: "get",
-		    data: {},
-		    success:function(response){
-		    	var role_str = '{';
-		    	$.each(response.data, function(index, value) {
-		    		role_str += '"role_'+value.id+'" : {"name": "<i class=\'fa fa-users blue\'></i> '+value.role_name+'","id":"'+value.id+'","type": "item"},'
-		    	});
-		    	role_str = role_str.substring(0,role_str.length-1) + '}';
-		    	var role_data = eval('(' + role_str + ')');
-		    	var treeDataSource = new DataSourceTree({data: role_data});
-		    	$('#tree4').ace_tree({
-		    		dataSource: treeDataSource,
-		    		multiSelect : false,
-		    		cacheItems: true,
-		    		loadingHTML : '<div class="tree-loading"><i class="ace-icon fa fa-refresh fa-spin blue"></i></div>',
-		    		'open-icon' : 'ace-icon tree-minus',
-		    		'close-icon' : 'ace-icon tree-plus',
-		    		'selectable' : true,
-		    		'selected-icon' : 'ace-icon fa fa-check',
-		    		'unselected-icon' : 'ace-icon fa fa-times'
-		    	});
-
-		    }
-		});
-		$('#tree4')
-		.on('updated', function(e, result) {
-		})
-		.on('selected', function(e,data) {
-			showtree3(data.info[0].id);
-		})
-		.on('click', function(e,data) {
-		})
-		.on('opened', function(e) {
-		})
-		.on('closed', function(e) {
-		});
-	}
-	
 	$("#btn_search_user").on('click', function(e) {	
 		showtree1();
+	});
+	
+	$("#btn_save").on('click', function(e) {		
+		var tree1_items = $('#tree1').tree('selectedItems'); 
+		if(tree1_items.length === 0){
+			$.gritter.add({
+				title: '系统提示：',
+				text: '<h5>请先选择要授权的用户！</h5>',
+				class_name: 'gritter-error'
+			});
+			return false;
+		}
+		staff_number = tree1_items[0].id;
+		console.log("---->user = " + staff_number );
+		console.log("---->this_role = " + this_role );
+		var tree2_items = $('#tree2').tree('selectedItems'); 
+		var role_permission = '';
+		$.each(tree2_items, function(index, value) {
+			console.log("---->role " + index + " = "+ value.id )
+			role_permission += value.id + ',';
+		});
+		
+		$.ajax({
+		    url: "saveUserRole",
+		    dataType: "json",
+			type: "get",
+		    data: {
+		    	"staff_number":staff_number,
+		    	"this_role":this_role,
+		    	"role_permission":role_permission,
+		    	"factory_permission":$('#permission_1').val(),
+		    	"workshop_permission":$('#permission_2').val(),
+		    	"line_permission":$('#permission_3').val()
+		    },
+		    success:function(response){
+		    	
+		    	
+		    }
+		});
+		
 	});
 
 });

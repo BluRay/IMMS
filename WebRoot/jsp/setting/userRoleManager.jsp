@@ -7,6 +7,9 @@
 		<title>BMS 设置 帐号授权</title>
 		<meta name="description" content="Common Buttons &amp; Icons" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+		<link rel="stylesheet" href="../assets/css/jquery-ui.min.css" />
+		<link rel="stylesheet" href="../assets/css/jquery-ui.custom.min.css" />
+		<link rel="stylesheet" href="../assets/css/jquery.gritter.css" />
 	</head>
 	<body class="no-skin" style="font-family: 'Microsoft YaHei';">
 		<!-- 头 -->
@@ -74,12 +77,7 @@
 									</div>
 									<div class="widget-body">
 										<div class="widget-main padding-8">
-											<table style="width:100%;height:100%;border: 1px solid green;">
-											<tr>
-												<td valign="top" style="width:30%;border: 0.5px solid green;"><div id="tree4" class="tree"></div></td>
-												<td valign="top" width="70%"><div id="tree3" class="tree"></div></td>
-											</tr>
-											</table>
+											<div id="tree3" class="tree"></div>
 										</div>
 									</div>
 								</div>
@@ -130,5 +128,8 @@
 	</div>
 	<script src="../assets/js/fuelux/fuelux.tree.min.js"></script>
 	<script src="../js/setting/userRoleManager.js"></script>
+	<script src="../assets/js/jquery-ui.min.js"></script>
+	<script src="../assets/js/jquery.ui.touch-punch.min.js"></script>
+	<script src="../assets/js/jquery.gritter.min.js"></script>
 	</body>
 </html>

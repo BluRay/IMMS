@@ -1,4 +1,4 @@
-package com.byd.bms.util.service;
+package com.byd.bms.util.service.impl;
 
 import java.util.List;
 
@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.byd.bms.util.dao.ILoginDao;
 import com.byd.bms.util.model.BmsBaseUser;
+import com.byd.bms.util.service.ILoginService;
 @Service
 public class LoginServiceImpl implements ILoginService {
 	@Resource(name="loginDao")

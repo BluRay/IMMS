@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.byd.bms.setting.dao.ISettingDao;
 import com.byd.bms.setting.model.BmsBaseFunction;
@@ -82,6 +83,13 @@ public class SettingServiceImpl implements ISettingService {
 	@Override
 	public List<BmsUserRole> getUserRole(String staff_number) {
 		return settingDao.getUserRole(staff_number);
+	}
+
+	@Override
+	@Transactional
+	public int saveUserRole(String staff_number, String this_role, String role_permission, String factory_permission,String workshop_permission, String line_permission) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

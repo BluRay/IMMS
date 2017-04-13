@@ -22,5 +22,6 @@ public interface ISettingService {
 	
 	public int addUser(BmsBaseUser user);
 	public List<BmsBaseUser> getUserList(String search_key);
-	public List<BmsUserRole> getUserRole(String staff_number);
+	public List<BmsUserRole> getUserRole(String staff_number);	
+	public int saveUserRole(String staff_number,String this_role,String role_permission,String factory_permission,String workshop_permission,String line_permission);
 }

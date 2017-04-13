@@ -193,5 +193,21 @@ public class AccountController extends BaseController{
 		model = mv.getModelMap();
 		return model;
 	}
+	
+	@RequestMapping("/saveUserRole")
+	@ResponseBody
+	public ModelMap saveUserRole(){
+		String staff_number=request.getParameter("staff_number");
+		String this_role=request.getParameter("this_role");
+		String role_permission=request.getParameter("role_permission");
+		String factory_permission=request.getParameter("factory_permission");
+		String workshop_permission=request.getParameter("workshop_permission");
+		String line_permission=request.getParameter("line_permission");
+		
+		System.out.println("---->role_permission = " + role_permission);
+		
+		model = mv.getModelMap();
+		return model;
+	}
 
 }

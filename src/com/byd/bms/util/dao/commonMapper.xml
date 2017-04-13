@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.byd.bms.util.dao.ICommonDao">
+
+	<select id="queryOrderList" parameterType="Map" resultType="Map">
+		select o.id,o.order_name name,o.order_no orderNo,o.order_code
+		orderCode,o.order_qty orderQty,t.internal_name busType
+		from BMS_OR_ORDER o
+		left join BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id 
+		<if test="factory !=null and  factory !=''">
+		left join BMS_OR_FACTORY_ORDER fo on fo.order_id=o.id
+		left join BMS_BASE_FACTORY f on fo.factory_id=f.id
+		</if>		
+		where o.order_no like CONCAT('%',#{orderNo},'%') 
+		<if test="busType!=null and  busType!=''">
+			and t.internal_name=#{busType}
+		</if>
+		<if test="factory !=null and  factory !=''">
+			and f.factory_name=#{factory}
+		</if>
+		order by o.id desc
+	</select>
+
+</mapper>
