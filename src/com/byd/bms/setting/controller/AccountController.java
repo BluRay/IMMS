@@ -13,7 +13,9 @@ import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.byd.bms.setting.model.BmsBaseFunction;
 import com.byd.bms.setting.model.BmsBaseFunctionPermission;
@@ -88,14 +90,27 @@ public class AccountController extends BaseController{
 	
 	@RequestMapping("/getUserList")
 	@ResponseBody
-	public ModelMap getUserList(){		
-		String key=request.getParameter("key");
+	public ModelMap getUserList(){
+		int draw=Integer.parseInt(request.getParameter("draw"));		//jquerydatatables 
+		int start=Integer.parseInt(request.getParameter("start"));		//分页数据起始数
+		int length=Integer.parseInt(request.getParameter("length"));	//每一页数据条数
+		String search_key=request.getParameter("search_key");
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("draw", draw);
+		condMap.put("start", start);
+		condMap.put("length", length);
+		condMap.put("search_key", search_key);
+		condMap.put("orderColumn", "id");
+		
+		Map<String,Object> result=settingService.getUserList(condMap);
+		model.addAllAttributes(result);
+		/**
 		List<Object> result = new ArrayList<Object>();
 		List<BmsBaseUser> list = new ArrayList<BmsBaseUser>();
-		list = settingService.getUserList(key);	
+		list = settingService.getUserList(search_key);	
 		result.add(0,list);
 		initModel(true,"success",result);
-		model = mv.getModelMap();
+		model = mv.getModelMap();**/
 		return model;
 	}
 	
@@ -131,6 +146,7 @@ public class AccountController extends BaseController{
 	@ResponseBody
 	public ModelMap getFunctionList(){
 		String role_id=request.getParameter("role_id");
+		String staff_number=request.getParameter("staff_number");
 		List<Object> result = new ArrayList<Object>();
 		List<BmsBaseFunction> list = new ArrayList<BmsBaseFunction>();
 		list = settingService.getFunctionList();				
@@ -143,6 +159,10 @@ public class AccountController extends BaseController{
 		List<BmsBaseFunctionPermission> list3 = new ArrayList<BmsBaseFunctionPermission>();
 		list3 = settingService.getBaseFunctionPermission(role_id);
 		result.add(2,list3);
+		
+		List<BmsUserRole> list4 = new ArrayList<BmsUserRole>();
+		list4 = settingService.getOneUserRole(staff_number, role_id);
+		result.add(3,list4);
 		
 		initModel(true,"success",result);
 		model = mv.getModelMap();

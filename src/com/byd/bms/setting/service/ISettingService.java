@@ -1,6 +1,7 @@
 package com.byd.bms.setting.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.byd.bms.setting.model.BmsBaseFunction;
 import com.byd.bms.setting.model.BmsBaseFunctionPermission;
@@ -21,7 +22,8 @@ public interface ISettingService {
 	public int addFunctionPermission(String role_id,String permission_id);
 	
 	public int addUser(BmsBaseUser user);
-	public List<BmsBaseUser> getUserList(String search_key);
-	public List<BmsUserRole> getUserRole(String staff_number);	
+	public Map<String,Object> getUserList(Map<String,Object> condMap);
+	public List<BmsUserRole> getUserRole(String staff_number);
+	public List<BmsUserRole> getOneUserRole(String staff_number,String role_id);
 	public int saveUserRole(String staff_number,String this_role,String role_permission,String factory_permission,String workshop_permission,String line_permission,String edit_user);
 }

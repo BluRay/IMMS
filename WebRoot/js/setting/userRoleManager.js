@@ -1,5 +1,6 @@
 var this_role = '0';
 var this_role_name = '';
+var this_staff_number = '';
 $(document).ready(function () {	
 	initPage();
 	function initPage(){
@@ -74,7 +75,7 @@ $(document).ready(function () {
 		})
 		.on('selected', function(e,data) {
 			updatetree2(data.info[0].id);
-			
+			this_staff_number = data.info[0].id;
 		})
 		.on('click', function(e) {
 		})
@@ -112,6 +113,7 @@ $(document).ready(function () {
 		    			role_str += '"role_'+value.id+'" : {"name": "<i class=\'fa fa-users blue\'></i> '+value.role_name+'","id":"'+value.id+'","type": "item"},'
 		    		}
 		    	});
+		    	
 		    	role_str = role_str.substring(0,role_str.length-1) + '}';
 		    	var role_data = eval('(' + role_str + ')');
 		    	var treeDataSource = new DataSourceTree({data: role_data});
@@ -126,7 +128,7 @@ $(document).ready(function () {
 		    		'selected-icon' : 'ace-icon fa fa-check',
 		    		'unselected-icon' : 'ace-icon fa fa-check'
 		    	});
-		    	console.log(this_role)
+		    	//console.log(this_role)
 				showtree3(this_role);
 		    }
 		});
@@ -204,11 +206,12 @@ $(document).ready(function () {
 	}
 	
 	function updatePermissionInput(role_id){
+		console.info('updatePermissionInput');
 		$.ajax({
 		    url: "getFunctionList",
 		    dataType: "json",
 			type: "get",
-		    data: {"role_id":role_id},
+		    data: {"role_id":role_id,"staff_number":this_staff_number},
 		    success:function(response){
 		    	var contents = response.data[2];
 		    	$("#permission_1").attr("disabled","disabled");
@@ -217,9 +220,20 @@ $(document).ready(function () {
 		    	$("#permission_1").val("");$("#permission_2").val("");$("#permission_3").val("");
 
 		    	$.each(contents, function(index, value) {
-		    		if(value.permission_id + '' ==='1')$("#permission_1").removeAttr("disabled");
-		    		if(value.permission_id + '' ==='2')$("#permission_2").removeAttr("disabled");
-		    		if(value.permission_id + '' ==='3')$("#permission_3").removeAttr("disabled");
+		    		if(value.permission_id + '' ==='1'){$("#permission_1").removeAttr("disabled");}
+		    		if(value.permission_id + '' ==='2'){$("#permission_2").removeAttr("disabled");}
+		    		if(value.permission_id + '' ==='3'){$("#permission_3").removeAttr("disabled");}
+		    	});
+		    	//根据用户和角色 获取角色数据权限内容
+		    	permissions = response.data[3];
+		    	$.each(permissions, function(index, value) {
+		    		console.info("---->value.role_id = " + value.role_id + "|" + this_role);
+		    		if((value.role_id + '') == this_role){
+		    			console.info("---->value.permission_value = " + value.permission_value);
+		    			if(value.permission_key ==='1'){$("#permission_1").val(value.permission_value);}
+		    			if(value.permission_key ==='2'){$("#permission_2").val(value.permission_value);}
+		    			if(value.permission_key ==='3'){$("#permission_3").val(value.permission_value);}
+		    		}
 		    	});
 		    }
 		});
@@ -317,10 +331,19 @@ $(document).ready(function () {
 	
 	$("#btn_save").on('click', function(e) {		
 		var tree1_items = $('#tree1').tree('selectedItems'); 
+		var tree2_items = $('#tree2').tree('selectedItems'); 
 		if(tree1_items.length === 0){
 			$.gritter.add({
 				title: '系统提示：',
 				text: '<h5>请先选择要授权的用户！</h5>',
+				class_name: 'gritter-error'
+			});
+			return false;
+		}
+		if(tree2_items.length === 0){
+			$.gritter.add({
+				title: '系统提示：',
+				text: '<h5>一个用户至少应授予一个角色！</h5>',
 				class_name: 'gritter-error'
 			});
 			return false;

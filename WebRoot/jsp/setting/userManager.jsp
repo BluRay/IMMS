@@ -39,9 +39,6 @@
 				</div>
 				
 			<div class="page-content">
-					<!-- 设置小部件 -->
-					<jsp:include page="../settings.jsp" flush="true"/>
-					<!-- /section:settings.box -->
 					<div class="page-content-area">
 					
 					<div class="well">
@@ -54,29 +51,8 @@
 							</tr>
 						</table>
 					</div>
-					
-					<table id="data_table" class="table table-striped table-bordered table-hover">
-						<thead>
-							<tr>
-								<th>序号</th>
-								<th>工号</th>
-								<th>姓名</th>
-								<th>电子邮件</th>
-								<th>手机号码</th>
-								<th>办公电话</th>
-								<th>所属工厂</th>
-								<th>所属部门</th>
-								<th>是否管理员</th>
-								<th>访问次数</th>
-								<th>最后登录</th>
-								<th>操作</th>
-							</tr>
-						</thead>
-
-						<tbody>
-						</tbody>
+					<table id="tableData" class="table table-striped table-bordered table-hover" style="font-size: 12px;">
 					</table>
-					
 					</div>
 			</div><!-- /.main-content -->
 
@@ -135,11 +111,6 @@
 							</div>
 						</div>
 					</fieldset>
-	
-					<div class="form-actions center">
-						<button id="btn_ok" type="button" class="btn btn-success" role="button"><span class="ui-button-text"><i class="ace-icon glyphicon glyphicon-ok"></i>&nbsp; 增加</span></button>
-					<button id="btn_cancel" type="button" class="btn" role="button"><span class="ui-button-text"><i class="ace-icon glyphicon glyphicon-remove"></i>&nbsp; 取消</span></button>
-					</div>
 				</form>
 
 			</div>
@@ -153,5 +124,11 @@
 	<script src="../assets/js/jquery-ui.min.js"></script>
 	<script src="../assets/js/jquery.ui.touch-punch.min.js"></script>
 	<script src="../assets/js/jquery.gritter.min.js"></script>
+	
+	<script src="../assets/js/jquery.dataTables.min.js"></script>
+	<script src="../assets/js/jquery.dataTables.bootstrap.js"></script>
+	<script src="../assets/js/dataTables.fixedColumns.min.js"></script>
+	
+	<script src="../js/common.js"></script>
 	<script src="../js/setting/userManager.js"></script>
 </html>

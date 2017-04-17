@@ -2,7 +2,9 @@ package com.byd.bms.setting.service.impl;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -78,8 +80,16 @@ public class SettingServiceImpl implements ISettingService {
 	}
 
 	@Override
-	public List<BmsBaseUser> getUserList(String search_key) {
-		return settingDao.getUserList(search_key);
+	public Map<String,Object> getUserList(Map<String,Object> condMap) {
+		int totalCount=0;
+		List<BmsBaseUser> datalist = settingDao.getUserList(condMap);
+		totalCount = settingDao.getTotalUserCount(condMap);
+		Map<String, Object> result = new HashMap<String,Object>();
+		result.put("draw", condMap.get("draw"));
+		result.put("recordsTotal", totalCount);
+		result.put("recordsFiltered", totalCount);
+		result.put("data", datalist);
+		return result;
 	}
 
 	@Override
@@ -148,8 +158,12 @@ public class SettingServiceImpl implements ISettingService {
 				result += settingDao.addOneUserRole(userRole);
 			}			
 		}
-		
 		return result;
+	}
+
+	@Override
+	public List<BmsUserRole> getOneUserRole(String staff_number, String role_id) {
+		return settingDao.getOneUserRole(staff_number,role_id);
 	}
 
 }

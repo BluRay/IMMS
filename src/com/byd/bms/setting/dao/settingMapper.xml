@@ -62,12 +62,27 @@
 		]]>
 	</insert>
 	
-	<select id="getUserList" parameterType="String" resultType="com.byd.bms.util.model.BmsBaseUser">
-		SELECT * FROM BMS_BASE_USER where 1=1 
+	<select id="getUserList" parameterType="Map" resultType="com.byd.bms.util.model.BmsBaseUser">
+		SELECT U.*,F.factory_name,D.department FROM BMS_BASE_USER U
+		LEFT JOIN BMS_BASE_FACTORY F ON U.factory_id = F.id
+		LEFT JOIN BMS_BASE_DEPARTMENT D ON U.department_id = D.id where 1=1 
 		<if test="search_key!=''">
 		<![CDATA[
-		AND (staff_number LIKE '%${search_key}%' OR username LIKE '%${search_key}%' OR display_name LIKE '%${search_key}%' OR email LIKE '%${search_key}%' 
-		 OR telephone LIKE '%${search_key}%' OR cellphone LIKE '%${search_key}%')		 
+		AND (U.staff_number LIKE '%${search_key}%' OR U.username LIKE '%${search_key}%' OR U.display_name LIKE '%${search_key}%' OR U.email LIKE '%${search_key}%' 
+		 OR U.telephone LIKE '%${search_key}%' OR U.cellphone LIKE '%${search_key}%')		 
+		]]>
+		</if>
+		<if test="start !=null">
+			LIMIT #{start} ,#{length} 
+		</if>	
+	</select>
+	
+	<select id="getTotalUserCount" parameterType="Map" resultType="int">
+		SELECT COUNT(id) FROM BMS_BASE_USER WHERE 1=1 
+		<if test="search_key !=null and search_key !=''">
+		<![CDATA[
+			AND (staff_number LIKE '%${search_key}%' OR username LIKE '%${search_key}%' OR display_name LIKE '%${search_key}%' OR email LIKE '%${search_key}%' 
+			OR telephone LIKE '%${search_key}%' OR cellphone LIKE '%${search_key}%')		 
 		]]>
 		</if>
 	</select>
@@ -79,6 +94,20 @@
 		<if test="staff_number!=''">
 		<![CDATA[
 			WHERE U.staff_number = #{staff_number}
+		]]>
+		</if>
+	</select>
+	
+	<select id="getOneUserRole" parameterType="String" resultType="com.byd.bms.setting.model.BmsUserRole">
+		SELECT U.* FROM BMS_BASE_USER_ROLE U WHERE 1=1 
+		<if test="staff_number!=''">
+		<![CDATA[
+			AND U.staff_number = #{staff_number}
+		]]>
+		</if>
+		<if test="role_id!=''">
+		<![CDATA[
+			AND U.role_id = #{role_id}
 		]]>
 		</if>
 	</select>

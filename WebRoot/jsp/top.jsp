@@ -25,8 +25,8 @@ String display_name = (String)session.getAttribute("display_name");
 					<!-- #section:basics/navbar.layout.brand -->
 					<a href="#" class="navbar-brand">
 						<small>
-							<img style="width:25px;height:25px;margin-top:-10px" alt="" src="<%=basePath%>/images/favicon2.ico">
-							BMS
+							<img style="width: 110px;height:35px;margin-top:-10px" alt="" src="<%=basePath%>/images/bydlogo.png">
+							
 						</small>
 					</a>
 
