@@ -3,37 +3,20 @@
 String path = request.getContextPath();
 String rqip= request.getRemoteAddr();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path;
+String display_name = (String)session.getAttribute("display_name");
 %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>top</title>
-<!-- bootstrap & fontawesome -->
-<link rel="stylesheet" href="<%=basePath%>/assets/css/bootstrap.min.css" />
-<link rel="stylesheet" href="<%=basePath%>/assets/css/font-awesome.min.css" />
-<!-- text fonts -->
-<link rel="stylesheet" href="<%=basePath%>/assets/css/ace-fonts.css" />
-<!-- ace styles -->
-<link rel="stylesheet" href="<%=basePath%>/assets/css/ace.min.css" id="main-ace-style" />
-<link rel="stylesheet" href="<%=basePath%>/assets/css/ace-skins.min.css" />
-<link rel="stylesheet" href="<%=basePath%>/assets/css/ace-rtl.min.css" />
-<script src="<%=basePath%>/assets/js/jquery.min.js"></script>
-<script src="<%=basePath%>/assets/js/jquery.mobile.custom.min.js"></script>
-<script src="<%=basePath%>/assets/js/ace-extra.min.js"></script>
-</head>
-<body>
-	<div id="navbar" class="navbar navbar-default">
-			<script type="text/javascript">
-				try{ace.settings.check('navbar' , 'fixed')}catch(e){}
-			</script>
+<div id="navbar" class="navbar navbar-default navbar-fixed-top">
+			
 
 			<div class="navbar-container" id="navbar-container">
 				<!-- #section:basics/sidebar.mobile.toggle -->
 				<button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler">
 					<span class="sr-only">Toggle sidebar</span>
+
 					<span class="icon-bar"></span>
+
 					<span class="icon-bar"></span>
+
 					<span class="icon-bar"></span>
 				</button>
 
@@ -46,6 +29,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							BMS
 						</small>
 					</a>
+
+					<!-- /section:basics/navbar.layout.brand -->
+
+					<!-- #section:basics/navbar.toggle -->
+
+					<!-- /section:basics/navbar.toggle -->
 				</div>
 
 				<!-- #section:basics/navbar.dropdown -->
@@ -69,6 +58,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 											<span class="pull-left">Software Update</span>
 											<span class="pull-right">65%</span>
 										</div>
+
 										<div class="progress progress-mini">
 											<div style="width:65%" class="progress-bar"></div>
 										</div>
@@ -302,8 +292,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<a data-toggle="dropdown" href="#" class="dropdown-toggle">
 								<img class="nav-user-photo" src="<%=basePath%>/assets/avatars/user.jpg" alt="Jason's Photo" />
 								<span class="user-info">
-									<small>Welcome,</small>
-									Jason
+									<small>欢迎,</small>
+									<%=display_name%>
 								</span>
 
 								<i class="ace-icon fa fa-caret-down"></i>
@@ -313,14 +303,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								<li>
 									<a href="#">
 										<i class="ace-icon fa fa-cog"></i>
-										Settings
+										设置
 									</a>
 								</li>
 
 								<li>
 									<a href="profile.html">
 										<i class="ace-icon fa fa-user"></i>
-										Profile
+										用户中心
 									</a>
 								</li>
 
@@ -329,7 +319,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								<li>
 									<a href="#">
 										<i class="ace-icon fa fa-power-off"></i>
-										Logout
+										登出
 									</a>
 								</li>
 							</ul>
@@ -338,29 +328,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<!-- /section:basics/navbar.user_menu -->
 					</ul>
 				</div>
+
+				<!-- /section:basics/navbar.dropdown -->
 			</div><!-- /.navbar-container -->
 		</div>
-		
-		<script src="<%=basePath%>/assets/js/bootstrap.min.js"></script>
-		<!-- page specific plugin scripts -->
-		<!-- ace scripts -->
-		<script src="<%=basePath%>/assets/js/ace-elements.min.js"></script>
-		<script src="<%=basePath%>/assets/js/ace.min.js"></script>
-		<!-- inline scripts related to this page -->
-		<script type="text/javascript">
-			jQuery(function($) {
-				$('#loading-btn').on(ace.click_event, function () {
-					var btn = $(this);
-					btn.button('loading')
-					setTimeout(function () {
-						btn.button('reset')
-					}, 2000)
-				});			
-				$('#id-button-borders').attr('checked' , 'checked').on('click', function(){
-						$('#default-buttons .btn').toggleClass('no-border');
-				});
-			})
-		</script>		
-		
-</body>
-</html>

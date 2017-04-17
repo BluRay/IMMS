@@ -12,6 +12,37 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<link rel="stylesheet" href="<%=basePath%>/assets/css/bootstrap.min.css" />
+<link rel="stylesheet" href="<%=basePath%>/assets/css/font-awesome.min.css" />
+<!-- text fonts -->
+<link rel="stylesheet" href="<%=basePath%>/assets/css/ace-fonts.css" />
+<!-- ace styles -->
+<link rel="stylesheet" href="<%=basePath%>/assets/css/ace.min.css" id="main-ace-style" />
+<link rel="stylesheet" href="<%=basePath%>/assets/css/ace-skins.min.css" />
+<link rel="stylesheet" href="<%=basePath%>/assets/css/ace-rtl.min.css" />
+<script src="<%=basePath%>/assets/js/jquery.min.js"></script>
+<script src="<%=basePath%>/assets/js/jquery.mobile.custom.min.js"></script>
+<script src="<%=basePath%>/assets/js/ace-extra.min.js"></script>
+<script src="<%=basePath%>/assets/js/bootstrap.min.js"></script>
+		<!-- page specific plugin scripts -->
+		<!-- ace scripts -->
+		<script src="<%=basePath%>/assets/js/ace-elements.min.js"></script>
+		<script src="<%=basePath%>/assets/js/ace.min.js"></script>
+		<!-- inline scripts related to this page -->
+		<script type="text/javascript">
+			jQuery(function($) {
+				$('#loading-btn').on(ace.click_event, function () {
+					var btn = $(this);
+					btn.button('loading')
+					setTimeout(function () {
+						btn.button('reset')
+					}, 2000)
+				});			
+				$('#id-button-borders').attr('checked' , 'checked').on('click', function(){
+						$('#default-buttons .btn').toggleClass('no-border');
+				});
+			})
+		</script>	
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>left</title>
 <script type="text/javascript">
@@ -209,10 +240,8 @@ function traverseTree(node,parentli,two){
 </head>
 <body>
 	<!-- #section:basics/sidebar -->
-	<div id="sidebar" class="sidebar                  responsive">
-				<script type="text/javascript">
-					try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
-				</script>
+	<div id="sidebar" class="sidebar                  responsive sidebar-fixed sidebar-scroll">
+				
 
 				<div class="sidebar-shortcuts" id="sidebar-shortcuts">
 					<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
@@ -250,14 +279,14 @@ function traverseTree(node,parentli,two){
 				<ul class="nav nav-list">
 					<li class="">
 						<a href="<%=basePath%>/index">
-							<i class="menu-icon fa fa-tachometer"></i>
-							<span class="menu-text"> 菜单栏 </span>
+							<i class="menu-icon fa fa-home green"></i>
+							<span class="menu-text"> 系统首页 </span>
 						</a>
 
 						<b class="arrow"></b>
 					</li>
 
-					<li  class="">
+					<%-- <li  class="">
 						<a href="#" class="dropdown-toggle">
 							<i class="menu-icon fa fa-desktop"></i>
 							<span class="menu-text"> 界面 &amp; 元素 </span>
@@ -392,7 +421,7 @@ function traverseTree(node,parentli,two){
 								<b class="arrow"></b>
 							</li>
 						</ul>
-					</li>
+					</li> --%>
 				</ul><!-- /.nav-list -->
 
 				<!-- #section:basics/sidebar.layout.minimize -->

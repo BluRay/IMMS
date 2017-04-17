@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.byd.bms.order.dao.IOrderDao">
+		<resultMap type="com.byd.bms.order.model.BmsOrder" id="orderMap">
+		<id property="id" column="id"/>
+		<result property="order_no" column="order_no"/>
+		<result property="order_name" column="order_name"/>	
+		<result property="order_name_str" column="order_name_str"/>	
+		<result property="order_code" column="order_code"/>	
+		<result property="order_type" column="order_type" />
+		<result property="factory_name" column="factory_name"/>	
+		<result property="production_qty" column="production_qty"/>	
+		<result property="issed_qty" column="issed_qty"/>	
+		<result property="bus_type_id" column="bus_type_id"/>
+		<result property="bus_type" column="bus_type_code"/>	
+		<result property="order_qty" column="order_qty"/>	
+		<result property="productive_year" column="productive_year"/>	
+		<result property="color" column="color"/>	
+		<result property="seats" column="seats"/>	
+		<result property="delivery_date" column="delivery_date"/>	
+		<result property="status" column="status"/>	
+		<result property="memo" column="memo"/>	
+		<result property="bus_number_start" column="bus_number_start"/>	
+		<result property="bus_number_end" column="bus_number_end"/>	
+		<result property="editor_id" column="editor_id"/>	
+		<result property="edit_date" column="edit_date"/>	
+	</resultMap>
+	
+	<select id="getOrderList" parameterType="Map" resultMap="orderMap">
+		SELECT f.production_qty,f.busnum_start,f.busnum_end,a.factory_name area,a.id AS 'factory_id',a.factory_name,f.edit_date,u.display_name as 'user_name',
+		t.bus_type_code,o.*,CONCAT(o.order_name,t.bus_type_code,o.order_qty,'台') AS 'order_name_str',f.status,
+		f.bus_number_start,(f.bus_number_start+f.busnum_end-f.busnum_start) bus_number_end
+		FROM BMS_OR_ORDER o			
+		LEFT JOIN BMS_OR_FACTORY_ORDER f ON f.order_id = o.id
+		LEFT JOIN BMS_BASE_FACTORY a ON f.factory_id = a.id 
+		LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id = t.id 
+		left join BMS_BASE_USER u on f.editor_id = u.id 
+		where 1=1
+		<if test="orderNo !=null and orderNo !=''">
+			and o.order_no like CONCAT('%',#{orderNo},'%')   
+		</if>
+		<if test="orderName !=null and orderName !=''">
+			and o.order_name like CONCAT('%',#{orderName},'%')   
+		</if>
+		<if test="orderStatus !=null and orderStatus !=''">
+			and f.status = #{orderStatus} 
+		</if>
+		<if test="actYear !=null and actYear !=''">
+			and o.productive_year = #{actYear} 
+		</if>
+		<if test="factory !=null and factory !=''">
+			and f.factory_id = #{factory} 
+		</if>
+		<if test="orderColumn==null">
+			ORDER BY id DESC,d.busnum_start ASC
+		</if>
+		<if test="orderColumn !=null">
+			ORDER BY #{orderColumn} ASC
+		</if>
+		<if test="start !=null">
+			LIMIT #{start} ,#{length} 
+		</if>			
+	</select>
+	
+	<select id="getOrderTotalCount" parameterType="Map" resultType="int">
+		SELECT count(o.id) FROM BMS_OR_ORDER o
+		LEFT JOIN BMS_OR_FACTORY_ORDER f on o.id=f.order_id
+		LEFT JOIN BMS_BASE_FACTORY a ON f.factory_id = a.id 
+		<if test="orderNo !=null and orderNo !=''">
+			and o.order_no like CONCAT('%',#{orderNo},'%')   
+		</if>
+		<if test="orderName !=null and orderName !=''">
+			and o.order_name like CONCAT('%',#{orderName},'%')   
+		</if>
+		<if test="orderStatus !=null and orderStatus !=''">
+			and f.status = #{orderStatus} 
+		</if>
+		<if test="actYear !=null and actYear !=''">
+			and o.productive_year = #{actYear} 
+		</if>
+		<if test="factory !=null and factory !=''">
+			and f.factory_id = #{factory} 
+		</if>
+	</select>
+</mapper>

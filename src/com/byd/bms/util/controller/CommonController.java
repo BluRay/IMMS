@@ -34,4 +34,30 @@ public class CommonController extends BaseController {
 
 		return model;
 	}
+	/**
+	 * added by xjw for 查询工厂下拉列表
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/getFactorySelect")
+	@ResponseBody
+	public ModelMap getFactorySelect(){
+
+		model.put("data", commonService.getFactorySelect());
+
+		return model;
+	}
+	/**
+	 * added by xjw for 查询车型列表
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/getBusType")
+	@ResponseBody
+	public ModelMap getBusType(){
+
+		model.put("data", commonService.getBusTypeSelect());
+
+		return model;
+	}
 }

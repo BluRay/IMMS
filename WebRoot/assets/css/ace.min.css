@@ -8,7 +8,7 @@ body {
 	min-height: 100%;
 	padding-bottom: 0;
 	font-family: 'Open Sans';
-	font-size: 13px;
+	font-size: 12px;
 	color: #393939;
 	line-height: 1.5
 }
@@ -58,7 +58,10 @@ body {
 	background-color: #fff;
 	position: relative;
 	margin: 0;
-	padding: 8px 20px 24px
+	padding-left:20px;
+	padding-right:20px;
+	padding-top:8px;
+	padding-bottom:2px;
 }
 
 .page-header {
@@ -14276,8 +14279,8 @@ ul.attachment-list>li {
 
 .dataTables_wrapper .row:last-child {
 	border-bottom: 1px solid #e0e0e0;
-	padding-top: 12px;
-	padding-bottom: 12px;
+	padding-top: 1px;
+	padding-bottom: 0px;
 	background-color: #EFF3F8
 }
 
@@ -14307,9 +14310,9 @@ ul.attachment-list>li {
 	color: #547ea8
 }
 
-.dataTable>thead>tr>th[class*=sorting_] {
+/* .dataTable>thead>tr>th[class*=sorting_] {
 	color: #307ecc
-}
+} */
 
 .dataTable>thead>tr>th.sorting_asc, .dataTable>thead>tr>th.sorting_desc
 	{

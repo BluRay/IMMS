@@ -9,4 +9,8 @@ public interface ICommonDao {
 
 	List<Map<String, Object>> queryOrderList(Map<String,Object> condMap);
 
+	List<Map<String, Object>> queryFactoryList();
+
+	List<Map<String, Object>> queryBusTypeList();
+
 }
