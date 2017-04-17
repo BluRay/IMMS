@@ -114,6 +114,65 @@
 				</form>
 
 			</div>
+			
+			<div id="dialog-edit" class="hide" style="width:800px;height:500px">
+				<form>
+					<fieldset>
+						<div class="form-group form-horizontal">
+							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 姓名： </label>
+							<div class="col-sm-9"><input id="edit_username" placeholder="姓名" class="col-sm-9" type="text"></div>
+						</div>
+					</fieldset>
+					<fieldset style ="padding-top:4px">
+						<div class="form-group form-horizontal">
+							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 工号： </label>
+							<div class="col-sm-9"><input id="edit_staff_number" placeholder="工号" disabled="disabled" class="col-sm-9" type="text"></div>
+						</div>
+					</fieldset>
+					<fieldset style ="padding-top:4px">
+						<div class="form-group form-horizontal">
+							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 邮箱地址： </label>
+							<div class="col-sm-9"><input id="edit_email" placeholder="邮箱地址" class="col-sm-9" type="text"></div>
+						</div>
+					</fieldset>
+					<fieldset style ="padding-top:4px">
+						<div class="form-group form-horizontal">
+							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 手机号码： </label>
+							<div class="col-sm-9"><input id="edit_cellphone" placeholder="手机号码" class="col-sm-9" type="text"></div>
+						</div>
+					</fieldset>
+					<fieldset style ="padding-top:4px">
+						<div class="form-group form-horizontal">
+							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 办公电话： </label>
+							<div class="col-sm-9"><input id="edit_telephone" placeholder="办公电话" class="col-sm-9" type="text"></div>
+						</div>
+					</fieldset>
+					<fieldset style ="padding-top:4px">
+						<div class="form-group form-horizontal">
+							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 所属工厂： </label>
+							<div class="col-sm-9"><input id="new_factory_id" placeholder="所属工厂" class="col-sm-9" type="text"></div>
+						</div>
+					</fieldset>
+					<fieldset style ="padding-top:4px">
+						<div class="form-group form-horizontal">
+							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 所属部门： </label>
+							<div class="col-sm-9"><input id="new_department_id" placeholder="所属部门" class="col-sm-9" type="text"></div>
+						</div>
+					</fieldset>
+					<fieldset style ="padding-top:4px">
+						<div class="form-group form-horizontal">
+							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 用户类型： </label>
+							<div class="col-sm-9">
+								<select id="edit_admin" class="col-sm-9" id="form-field-select-1">
+									<option value="0">普通用户</option>
+									<option value="1">系统管理员</option>
+								</select>
+							</div>
+						</div>
+					</fieldset>
+				</form>
+
+			</div>
 			<!-- 脚 -->
 			<%-- <jsp:include page="footer.jsp" flush="true"/> --%>
 			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse"><i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i></a>

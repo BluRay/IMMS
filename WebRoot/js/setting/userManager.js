@@ -64,8 +64,10 @@ $(document).ready(function () {
 			            	"render": function ( data, type, row ) {
 			                    return "<i class=\"glyphicon glyphicon-remove bigger-130 showbus\" title=\"删除\" onclick='delUser(" + row['staff_number'] + 
 			                    ")' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;" + 
-			                    "<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"修改\" onclick='editUser(" + row['staff_number'] + 
-			                    ")' style='color:blue;cursor: pointer;'></i>";
+			                    "<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"修改\" onclick='editUser(\"" + 
+			                    row['staff_number'] + "\",\"" + row['display_name'] + "\",\"" + row['email'] + "\",\"" + row['cellphone'] +
+			                    "\",\"" + row['telephone'] + "\",\"" + row['factory_id'] + "\",\"" + row['department_id'] + "\",\"" + row['admin'] +
+			                    "\")' style='color:blue;cursor: pointer;'></i>";
 			                },
 			            }
 			          ],
@@ -152,4 +154,74 @@ $(document).ready(function () {
 function delUser(user){
 	console.info(user);
 	//alert($("#tableOrder").row( this ).data()['staff_number']);
+}
+
+function editUser(staff_name,display_name,email,cellphone,telephone,factory_id,dep_id,admin){
+	$("#edit_staff_number").val(staff_name);
+	$("#edit_username").val(display_name);
+	$("#edit_email").val(email);
+	$("#edit_cellphone").val(cellphone);
+	$("#edit_telephone").val(telephone);
+	$("#dialog-edit").removeClass('hide').dialog({
+		resizable: false,
+		title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 编辑用户信息</h4></div>',
+		title_html: true,
+		width:'500px',
+		modal: true,
+		buttons: [{
+					text: "取消",
+					"class" : "btn btn-minier",
+					click: function() {$( this ).dialog( "close" );} 
+				},
+				{
+					text: "保存",
+					id:"btn_ok",
+					"class" : "btn btn-success btn-minier",
+					click: function() {
+						//$( this ).dialog( "close" ); 
+						if($("#new_username").val()===""){
+							alert("用户姓名不能为空！");
+							$("#new_username").focus();
+							return false;
+						}
+						if($("#new_staff_number").val()===""){
+							alert("用户工号不能为空！");
+							$("#new_staff_number").focus();
+							return false;
+						}
+						$.ajax({
+						    url: "addUser",
+						    dataType: "json",
+							type: "get",
+						    data: {
+						    	"staff_number" : $("#new_staff_number").val(),
+						    	"username" : $("#new_username").val(),
+						    	"email" : $("#new_email").val(),
+						    	"telephone" : $("#new_telephone").val(),
+						    	"cellphone" : $("#new_cellphone").val(),
+						    	"password" : $("#new_staff_number").val(),
+						    	"display_name" : $("#new_username").val(),
+						    	"factory_id" : $("#new_factory_id").val(),
+						    	"department_id" : $("#new_department_id").val(),
+						    	"admin" : $("#new_admin").val()
+						    },
+						    success:function(response){
+						    	$.gritter.add({
+									title: '系统提示：',
+									text: '<h5>增加用户成功！</h5>',
+									class_name: 'gritter-info'
+								});
+						    	$("#new_staff_number").val("");
+						    	$("#new_username").val("");
+						    	$("#new_email").val("");
+						    	$("#new_telephone").val("");
+						    	$("#new_cellphone").val("");
+						    	$("#new_username").focus();
+						    	ajaxQuery();
+						    }
+						});
+					} 
+				}
+			]
+	});
 }
