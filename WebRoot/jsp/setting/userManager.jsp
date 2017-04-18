@@ -160,7 +160,7 @@
 					<fieldset style ="padding-top:4px">
 						<div class="form-group form-horizontal">
 							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 所属部门： </label>
-							<div class="col-sm-9"><input id="new_department_id" placeholder="所属部门" class="col-sm-9" type="text"></div>
+							<div class="col-sm-9"><input id="edit_department_id" placeholder="所属部门" class="col-sm-9" type="text"></div>
 						</div>
 					</fieldset>
 					<fieldset style ="padding-top:4px">

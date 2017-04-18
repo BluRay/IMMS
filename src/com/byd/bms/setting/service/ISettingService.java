@@ -22,6 +22,8 @@ public interface ISettingService {
 	public int addFunctionPermission(String role_id,String permission_id);
 	
 	public int addUser(BmsBaseUser user);
+	public int editUser(BmsBaseUser user);
+	public int delUser(BmsBaseUser user);
 	public Map<String,Object> getUserList(Map<String,Object> condMap);
 	public List<BmsUserRole> getUserRole(String staff_number);
 	public List<BmsUserRole> getOneUserRole(String staff_number,String role_id);

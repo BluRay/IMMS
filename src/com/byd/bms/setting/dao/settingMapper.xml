@@ -62,10 +62,24 @@
 		]]>
 	</insert>
 	
+	<update id="editUser" parameterType="com.byd.bms.util.model.BmsBaseUser">
+		<![CDATA[
+		UPDATE BMS_BASE_USER SET username=#{username}, email=#{email}, telephone=#{telephone}, cellphone=#{cellphone}, display_name=#{display_name}, 
+		factory_id=#{factory_id}, department_id=#{department_id}, admin=#{admin}, modify_time=#{create_time}
+		WHERE staff_number=#{staff_number};
+		]]>
+	</update>
+	
+	<update id="delUser" parameterType="com.byd.bms.util.model.BmsBaseUser">
+		<![CDATA[
+		UPDATE BMS_BASE_USER SET isdelete='1' WHERE staff_number=#{staff_number};
+		]]>
+	</update>
+	
 	<select id="getUserList" parameterType="Map" resultType="com.byd.bms.util.model.BmsBaseUser">
 		SELECT U.*,F.factory_name,D.department FROM BMS_BASE_USER U
 		LEFT JOIN BMS_BASE_FACTORY F ON U.factory_id = F.id
-		LEFT JOIN BMS_BASE_DEPARTMENT D ON U.department_id = D.id where 1=1 
+		LEFT JOIN BMS_BASE_DEPARTMENT D ON U.department_id = D.id where isdelete = 0 
 		<if test="search_key!=''">
 		<![CDATA[
 		AND (U.staff_number LIKE '%${search_key}%' OR U.username LIKE '%${search_key}%' OR U.display_name LIKE '%${search_key}%' OR U.email LIKE '%${search_key}%' 
@@ -78,7 +92,7 @@
 	</select>
 	
 	<select id="getTotalUserCount" parameterType="Map" resultType="int">
-		SELECT COUNT(id) FROM BMS_BASE_USER WHERE 1=1 
+		SELECT COUNT(id) FROM BMS_BASE_USER WHERE isdelete = 0 
 		<if test="search_key !=null and search_key !=''">
 		<![CDATA[
 			AND (staff_number LIKE '%${search_key}%' OR username LIKE '%${search_key}%' OR display_name LIKE '%${search_key}%' OR email LIKE '%${search_key}%' 

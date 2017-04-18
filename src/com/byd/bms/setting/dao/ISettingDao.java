@@ -25,6 +25,8 @@ public interface ISettingDao {
 	public int delFunctionPermission(@Param("role_id") String role_id,@Param("permission_ids") String permission_ids);
 	public int addFunctionPermission(@Param("role_id") String role_id,@Param("permission_id") String permission_id);
 	public int addUser(BmsBaseUser user);
+	public int editUser(BmsBaseUser user);
+	public int delUser(BmsBaseUser user);
 	public List<BmsBaseUser> getUserList(Map<String,Object> queryMap);
 	public int getTotalUserCount(Map<String,Object> queryMap);
 	public List<BmsUserRole> getUserRole(@Param("staff_number") String staff_number);
