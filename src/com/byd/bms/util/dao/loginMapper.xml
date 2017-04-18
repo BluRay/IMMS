@@ -41,4 +41,11 @@
 		(card_number,card_8H10D,username,email,telephone,cellphone,password,display_name,factory_id,department_id,admin)
 		values(#{user.card_number},#{user.card_8H10D},#{user.username},#{user.email},#{user.telephone},#{user.cellphone},#{user.password},#{user.username},#{user.factory_id},#{user.department_id},#{user.admin})
 	</insert>
+	
+	<update id="saveUserLoginInfo" parameterType="com.byd.bms.util.model.BmsBaseUser">
+		<![CDATA[
+		UPDATE BMS_BASE_USER SET login_count=login_count + 1 ,last_login_time=#{user.last_login_time} WHERE staff_number=#{user.staff_number}
+		]]>
+	</update>
+	
 </mapper>

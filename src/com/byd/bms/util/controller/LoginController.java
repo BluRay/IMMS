@@ -3,7 +3,9 @@ package com.byd.bms.util.controller;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -47,6 +49,12 @@ public class LoginController extends BaseController{
 			session.setAttribute("factory", user.getFactory());
 			session.setAttribute("bmsuser", user);
 			model.addAttribute("user", user);
+			
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String login_time = df.format(new Date());
+			user.setLast_login_time(login_time);			
+			loginService.saveUserLoginInfo(user);
+			
 			if(last_url!=""&&last_url!=null){
 				response.sendRedirect(last_url);
 				return null;

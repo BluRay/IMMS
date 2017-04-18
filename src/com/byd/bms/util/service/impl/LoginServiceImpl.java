@@ -34,4 +34,8 @@ public class LoginServiceImpl implements ILoginService {
 		throw new RuntimeException("创建一个运行时异常！");		
 
 	}
+	@Override
+	public int saveUserLoginInfo(BmsBaseUser user) {
+		return loginDao.saveUserLoginInfo(user);
+	}
 }

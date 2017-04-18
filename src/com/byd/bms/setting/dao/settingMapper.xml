@@ -3,7 +3,7 @@
 <mapper namespace="com.byd.bms.setting.dao.ISettingDao">
 
 	<select id="getRoleList" resultType="com.byd.bms.setting.model.BmsBaseRole">
-		SELECT id, role_name, role_description, type, edit_user, edit_time FROM BMS_BASE_ROLE
+		SELECT id, CONCAT(role_name,'(', role_description,')') as role_name, role_description, type, edit_user, edit_time FROM BMS_BASE_ROLE
 	</select>
 	
 	<select id="getFunctionList" resultType="com.byd.bms.setting.model.BmsBaseFunction">

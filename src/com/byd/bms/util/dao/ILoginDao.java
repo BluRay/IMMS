@@ -11,4 +11,5 @@ import com.byd.bms.util.model.BmsBaseUser;
 public interface ILoginDao {
 	public List getUser(@Param("userName") String userName);
 	public int insertUser(@Param("user") BmsBaseUser userMap);
+	public int saveUserLoginInfo(@Param("user") BmsBaseUser user);
 }
