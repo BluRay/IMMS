@@ -91,9 +91,9 @@ public class AccountController extends BaseController{
 	@RequestMapping("/getUserList")
 	@ResponseBody
 	public ModelMap getUserList(){
-		int draw=Integer.parseInt(request.getParameter("draw"));		//jquerydatatables 
-		int start=Integer.parseInt(request.getParameter("start"));		//分页数据起始数
-		int length=Integer.parseInt(request.getParameter("length"));	//每一页数据条数
+		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
+		int start=(request.getParameter("start")!=null)?Integer.parseInt(request.getParameter("start")):0;		//分页数据起始数
+		int length=(request.getParameter("length")!=null)?Integer.parseInt(request.getParameter("length")):500;	//每一页数据条数
 		String search_key=request.getParameter("search_key");
 		Map<String,Object> condMap=new HashMap<String,Object>();
 		condMap.put("draw", draw);

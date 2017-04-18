@@ -46,9 +46,9 @@ $(document).ready(function () {
 		    url: "getUserList",
 		    dataType: "json",
 			type: "get",
-		    data: {"key":$("#search_key").val()},
+		    data: {"search_key":$("#search_key").val()},
 		    success:function(response){
-		    	var users = response.data[0];
+		    	var users = response.data;
 		    	var user_str = '{';
 		    	$.each(users, function(index, value) {
 		    		user_str += '"user_'+value.id+'" : {"name": "<i class=\'fa fa-user blue\'></i> '+value.display_name+'","id":"'+value.staff_number+'","type": "item"},'

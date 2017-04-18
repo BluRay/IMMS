@@ -4,6 +4,7 @@ var table_height = $(window).height()-240;
 $(document).ready(function () {	
 	initPage();
 	function initPage(){
+		getFactorySelect();
 		ajaxQuery();
 	}
 	
@@ -82,6 +83,11 @@ $(document).ready(function () {
 			else title.text($title);
 		}
 	}));
+	
+	$("#btnQuery").on('click', function(e) {	
+		ajaxQuery();
+	});
+	
 	$("#btnAdd").on('click', function(e) {	
 		e.preventDefault();
 		$("#dialog-confirm").removeClass('hide').dialog({
@@ -148,6 +154,21 @@ $(document).ready(function () {
 		});
 	});
 	
+	function getFactorySelect(){
+		$.ajax({
+			url : "/IMMS/common/getFactorySelect",
+			dataType : "json",
+			data : {},
+			async : false,
+			error : function(response) {
+				alert(response.message)
+			},
+			success : function(response) {
+				getSelects_noall(response.data, "", "#new_factory_id");
+				getSelects_noall(response.data, "", "#edit_factory_id");
+			}
+		});
+	}
 
 
 });
@@ -162,6 +183,7 @@ function editUser(staff_name,display_name,email,cellphone,telephone,factory_id,d
 	$("#edit_email").val(email);
 	$("#edit_cellphone").val(cellphone);
 	$("#edit_telephone").val(telephone);
+	$("#edit_factory_id").val(factory_id);
 	$("#dialog-edit").removeClass('hide').dialog({
 		resizable: false,
 		title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 编辑用户信息</h4></div>',

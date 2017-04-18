@@ -91,7 +91,11 @@
 					<fieldset style ="padding-top:4px">
 						<div class="form-group form-horizontal">
 							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 所属工厂： </label>
-							<div class="col-sm-9"><input id="new_factory_id" placeholder="所属工厂" class="col-sm-9" type="text"></div>
+							<div class="col-sm-9">
+							<select id="new_factory_id" class="col-sm-9" id="form-field-select-1">
+							
+							</select>
+							</div>
 						</div>
 					</fieldset>
 					<fieldset style ="padding-top:4px">
@@ -150,7 +154,7 @@
 					<fieldset style ="padding-top:4px">
 						<div class="form-group form-horizontal">
 							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 所属工厂： </label>
-							<div class="col-sm-9"><input id="new_factory_id" placeholder="所属工厂" class="col-sm-9" type="text"></div>
+							<div class="col-sm-9"><select id="edit_factory_id" class="col-sm-9" id="form-field-select-1"></select></div>
 						</div>
 					</fieldset>
 					<fieldset style ="padding-top:4px">
