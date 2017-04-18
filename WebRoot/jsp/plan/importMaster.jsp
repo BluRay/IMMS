@@ -36,8 +36,6 @@
 				</div>
 				
 			<div class="page-content">
-					<!-- 设置小部件 -->
-					<jsp:include page="../settings.jsp" flush="true"/>
 					<!-- /section:settings.box -->
 					<div class="page-content-area">					
 					
@@ -57,11 +55,11 @@
 					
 					<div id="divBulkAdd" class="well" style="display:none;">
 					<button id="btnBulkHide" type="button" class="close"><i class="ace-icon fa fa-times"></i></button>
-						<form action="plan!upload.action" enctype="multipart/form-data" method="post">
+						<form id="uploadMasterPlanForm" action="#" enctype="multipart/form-data" method="post">
 						<table>
 							<tr>
 								<td><input id="file" type="file" name="file" accept="*.csv"/></td>
-								<td><input id="btn_upload" type="submit" class="btn btn-sm btn-primary" value="上传并导入" onclick="javascript:return LimitAttach(this.form, this.form.file.value)"/></td>
+								<td><input id="btn_upload" type="button" class="btn btn-sm btn-primary" value="上传并导入" onclick="javascript:return LimitAttach(this.form, this.form.file.value)"/></td>
 								<td></td><td><a href="download/masterPlan.csv">下载批导模板</a></td>
 							</tr>
 						</table>
@@ -95,5 +93,7 @@
 		</div><!-- /.main-container -->
 	</div>
 	</body>
+	<script type="text/javascript" src="../js/common.js"></script>
+	<script type="text/javascript" src="../js/jquery.form.js"></script>
 	<script type="text/javascript" src="../js/plan/importMaster.js"></script>
 </html>

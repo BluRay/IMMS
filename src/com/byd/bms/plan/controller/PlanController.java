@@ -2,7 +2,12 @@ package com.byd.bms.plan.controller;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.byd.bms.util.controller.BaseController;
@@ -35,5 +40,15 @@ public class PlanController extends BaseController{
 		mv.setViewName("plan/planIssuance");
         return mv;  
     }
+	
+	@RequestMapping(value="/uploadMasterPlan",method=RequestMethod.POST)
+	@ResponseBody
+	public ModelMap uploadMasterPlan(@RequestParam(value="file",required=false) MultipartFile file){
+		logger.info("---->uploadMasterPlan");
+		
+		initModel(true,"success",null);
+		model = mv.getModelMap();
+		return model;
+	}
 
 }
