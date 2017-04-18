@@ -28,5 +28,10 @@ public class CommonServiceImpl implements ICommonService {
 		List<Map<String, Object>> busTypeList=commonDao.queryBusTypeList();
 		return busTypeList;
 	}
+	@Override
+	public List<Map<String, Object>> getDepartmentByFactory(String factory_id) {
+		List<Map<String, Object>> departmentList=commonDao.queryDepartmentByFactory(factory_id);
+		return departmentList;
+	}
 
 }

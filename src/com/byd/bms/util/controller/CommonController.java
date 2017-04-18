@@ -60,4 +60,11 @@ public class CommonController extends BaseController {
 
 		return model;
 	}
+	
+	@RequestMapping("/getDepartmentByFactory")
+	@ResponseBody
+	public ModelMap getDepartmentByFactory(String factory_id){
+		model.put("data", commonService.getDepartmentByFactory(factory_id));
+		return model;
+	}
 }

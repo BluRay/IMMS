@@ -87,6 +87,16 @@ $(document).ready(function () {
 					}
 				]
 		});
+		//获取工厂下属部门，填充下拉框
+		getDepartmentByFactory($("#new_factory_id").val(),"new_department_id");
+	});
+	
+	$('#new_factory_id').change(function(){ 
+		getDepartmentByFactory($("#new_factory_id").val(),"new_department_id");
+	});
+	
+	$('#edit_factory_id').change(function(){ 
+		getDepartmentByFactory($("#edit_factory_id").val(),"edit_department_id");
 	});
 	
 	function getFactorySelect(){
@@ -104,6 +114,7 @@ $(document).ready(function () {
 			}
 		});
 	}
+	
 
 
 });
@@ -205,6 +216,7 @@ function editUser(staff_name,display_name,email,cellphone,telephone,factory_id,d
 	$("#edit_cellphone").val(cellphone);
 	$("#edit_telephone").val(telephone);
 	$("#edit_factory_id").val(factory_id);
+	$("#edit_admin").val(admin);
 	$("#dialog-edit").removeClass('hide').dialog({
 		resizable: false,
 		title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 编辑用户信息</h4></div>',
@@ -254,5 +266,22 @@ function editUser(staff_name,display_name,email,cellphone,telephone,factory_id,d
 					} 
 				}
 			]
+	});
+	getDepartmentByFactory($("#edit_factory_id").val(),"edit_department_id");
+	$("#edit_department_id").val(department_id);
+}
+
+function getDepartmentByFactory(factory_id,select_id){
+	$.ajax({
+		url : "/IMMS/common/getDepartmentByFactory",
+		dataType : "json",
+		data : {"factory_id":factory_id},
+		async : false,
+		error : function(response) {
+			alert(response.message)
+		},
+		success : function(response) {
+			getSelects_noall(response.data, "", "#"+select_id);
+		}
 	});
 }

@@ -12,5 +12,7 @@ public interface ICommonDao {
 	List<Map<String, Object>> queryFactoryList();
 
 	List<Map<String, Object>> queryBusTypeList();
+	
+	List<Map<String, Object>> queryDepartmentByFactory(String factory_id);
 
 }

@@ -93,7 +93,6 @@
 							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 所属工厂： </label>
 							<div class="col-sm-9">
 							<select id="new_factory_id" class="col-sm-9" id="form-field-select-1">
-							
 							</select>
 							</div>
 						</div>
@@ -101,7 +100,10 @@
 					<fieldset style ="padding-top:4px">
 						<div class="form-group form-horizontal">
 							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 所属部门： </label>
-							<div class="col-sm-9"><input id="new_department_id" placeholder="所属部门" class="col-sm-9" type="text"></div>
+							<div class="col-sm-9">
+							<select id="new_department_id" class="col-sm-9" id="form-field-select-1">
+							</select>
+							</div>
 						</div>
 					</fieldset>
 					<fieldset style ="padding-top:4px">
@@ -123,14 +125,14 @@
 				<form>
 					<fieldset>
 						<div class="form-group form-horizontal">
-							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 姓名： </label>
-							<div class="col-sm-9"><input id="edit_username" placeholder="姓名" class="col-sm-9" type="text"></div>
+							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 工号： </label>
+							<div class="col-sm-9"><input id="edit_staff_number" placeholder="工号" disabled="disabled" class="col-sm-9" type="text"></div>
 						</div>
 					</fieldset>
 					<fieldset style ="padding-top:4px">
 						<div class="form-group form-horizontal">
-							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 工号： </label>
-							<div class="col-sm-9"><input id="edit_staff_number" placeholder="工号" disabled="disabled" class="col-sm-9" type="text"></div>
+							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 姓名： </label>
+							<div class="col-sm-9"><input id="edit_username" placeholder="姓名" class="col-sm-9" type="text"></div>
 						</div>
 					</fieldset>
 					<fieldset style ="padding-top:4px">
@@ -160,7 +162,10 @@
 					<fieldset style ="padding-top:4px">
 						<div class="form-group form-horizontal">
 							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 所属部门： </label>
-							<div class="col-sm-9"><input id="edit_department_id" placeholder="所属部门" class="col-sm-9" type="text"></div>
+							<div class="col-sm-9">
+							<select id="edit_department_id" class="col-sm-9" id="form-field-select-1">
+							</select>
+							</div>
 						</div>
 					</fieldset>
 					<fieldset style ="padding-top:4px">
