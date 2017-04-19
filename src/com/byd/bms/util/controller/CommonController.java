@@ -60,6 +60,18 @@ public class CommonController extends BaseController {
 
 		return model;
 	}
+	/**
+	 * added by xjw for 查询弹性建下拉列表
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/getKeysSelect")
+	@ResponseBody
+	public ModelMap getKeysSelect(){
+		model.put("data", commonService.getKeysSelect(request.getParameter("keyCode")
+				.toString()));
+		return model;
+	}
 	
 	@RequestMapping("/getDepartmentByFactory")
 	@ResponseBody

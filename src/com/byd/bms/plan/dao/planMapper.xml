@@ -10,4 +10,35 @@
 		limit 1
 	</select>
 	
+	<insert id="insertPlanMaster" useGeneratedKeys="true" keyProperty="id" parameterType="com.byd.bms.plan.model.PlanMasterPlan">
+		INSERT INTO BMS_PLAN_MASTER_PLAN
+		(version, order_id, factory_id, plan_code_id, plan_month, flag, D1, D2, D3, D4, D5, D6, D7, D8, D9, D10, D11, D12, D13, D14, D15, D16, D17, D18, D19, D20, D21, D22, D23, D24, D25, D26, D27, D28, D29, D30, D31, creator_id, create_date)
+		VALUES(#{version}, (SELECT id FROM BMS_OR_ORDER WHERE order_no = #{order_no}), (SELECT id FROM BMS_BASE_FACTORY WHERE factory_name = #{factory_name}),
+		(SELECT id FROM BMS_BASE_KEY WHERE key_code = 'PLAN_CODE' AND key_name = #{plan_code_keyname}),
+		#{plan_month}, #{flag}, #{D1}, #{D2}, #{D3}, #{D4}, #{D5}, #{D6}, #{D7}, #{D8}, #{D9}, #{D10}, 
+		#{D11}, #{D12}, #{D13}, #{D14}, #{D15}, #{D16}, #{D17}, #{D18}, #{D19}, #{D20}, 
+		#{D21}, #{D22}, #{D23}, #{D24}, #{D25}, #{D26}, #{D27}, #{D28}, #{D29}, #{D30}, #{D31}, 
+		#{creator_id}, #{create_date})
+	</insert>
+	
+	<select id="getPlanMasterIndex" parameterType="Map" resultType="com.byd.bms.plan.model.PlanMasterIndex">
+		SELECT DISTINCT
+		m.version,o.order_no,f.factory_name,u.display_name,create_date FROM
+		BMS_PLAN_MASTER_PLAN m
+		LEFT JOIN BMS_OR_ORDER o ON m.order_id = o.id
+		LEFT JOIN BMS_BASE_FACTORY f ON m.factory_id = f.id
+		LEFT JOIN BMS_BASE_USER u ON m.creator_id = u.id where 1=1
+		<if test="factory_id!=''">
+			and m.factory_id = #{factory_id}
+		</if>
+		<if test="order_no!=''">
+			and o.order_no like CONCAT('%',#{order_no},'%')
+		</if>
+		AND flag = '0'
+		ORDER BY m.version DESC
+		<if test="offset!=null">
+			LIMIT #{start} ,#{length} 
+		</if>
+	</select>
+	
 </mapper>

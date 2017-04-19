@@ -10,6 +10,8 @@ public interface ICommonService {
 	List<Map<String,Object>> getFactorySelect();
 
 	List<Map<String,Object>> getBusTypeSelect();
+
+	List<Map<String,Object>> getKeysSelect(String string);
 	
 	List<Map<String,Object>> getDepartmentByFactory(String factory_id);
 	

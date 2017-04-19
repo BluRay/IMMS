@@ -63,27 +63,10 @@
 								<td></td><td><a href="download/masterPlan.csv">下载批导模板</a></td>
 							</tr>
 						</table>
-							
 						</form>
 					</div>
-					
-					<table id="sample-table-1" class="table table-striped table-bordered table-hover">
-						<thead>
-							<tr>
-								<th>序号</th>
-								<th>计划版本</th>
-								<th>生产工厂</th>
-								<th>订单编号</th>
-								<th>导入人</th>
-								<th>导入时间</th>
-								<th>查看详情</th>
-							</tr>
-						</thead>
-
-						<tbody>
-						</tbody>
+					<table id="tableData" class="table table-striped table-bordered table-hover" style="font-size: 12px;">
 					</table>
-					
 					</div>
 			</div><!-- /.main-content -->
 
@@ -93,6 +76,11 @@
 		</div><!-- /.main-container -->
 	</div>
 	</body>
+	<script src="../assets/js/jquery.gritter.min.js"></script>
+	<script src="../assets/js/jquery.dataTables.min.js"></script>
+	<script src="../assets/js/jquery.dataTables.bootstrap.js"></script>
+	<script src="../assets/js/dataTables.fixedColumns.min.js"></script>
+	
 	<script type="text/javascript" src="../js/common.js"></script>
 	<script type="text/javascript" src="../js/jquery.form.js"></script>
 	<script type="text/javascript" src="../js/plan/importMaster.js"></script>

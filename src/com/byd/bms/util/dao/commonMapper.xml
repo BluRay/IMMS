@@ -31,6 +31,11 @@
 		group by bus_type_code
 	</select>
 	
+	<select id="queryKeysList" parameterType="String" resultType="map">
+		SELECT id,key_name,key_name_en,value from BMS_BASE_KEY where
+		delete_flag='0' and key_code=#{keyCode}
+	</select>
+	
 	<select id="queryDepartmentByFactory" parameterType="String" resultType="Map">
 		SELECT id, factory_id, department AS name, memo, editor_id, edit_date
 		FROM BMS_BASE_DEPARTMENT WHERE factory_id = #{factory_id} AND deleted_flag = '0';

@@ -2,8 +2,6 @@ package com.byd.bms.plan.controller;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +18,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.byd.bms.util.controller.BaseController;
 import com.byd.bms.util.ExcelTool;
 import com.byd.bms.plan.service.IPlanService;
-import com.byd.bms.setting.service.ISettingService;
 import com.byd.bms.util.ExcelModel;
 
 @Controller
@@ -59,7 +56,7 @@ public class PlanController extends BaseController{
 	public ModelMap uploadMasterPlan(@RequestParam(value="file",required=false) MultipartFile file){
 		logger.info("---->uploadMasterPlan");
 		String fileFileName = "masterPlan.xls";
-		
+		int result = 0;
 		ExcelModel excelModel =new ExcelModel();
 		excelModel.setReadSheets(1);
 		excelModel.setStart(1);
@@ -82,7 +79,7 @@ public class PlanController extends BaseController{
 		excelModel.setDataType(dataType);
 		excelModel.setPath(fileFileName);
 
-        File planFile = new File("masterPlan.xls");
+        File planFile = new File(fileFileName);
 		
 		/**
 		 * 读取输入流中的excel文件，并且将数据封装到ExcelModel对象中
@@ -95,7 +92,6 @@ public class PlanController extends BaseController{
 			
 			//数据校验/
 			int lineCount = excelModel.getData().size();
-			logger.info("---->lineCount = " + lineCount);
 			//上传的文件行数验证
 			if(((lineCount)%12) != 0){
 				initModel(false,"导入文件的行数有误！",null);
@@ -105,11 +101,11 @@ public class PlanController extends BaseController{
 			for(int i=0;i<lineCount;i++){
 				String plan_no = "";		//订单编号 同一个文件只能导入一个订单
 				String factory_name = "";
-				String plan_date = "";
+				//String plan_date = "";
 				if (i==0){
 					plan_no = excelModel.getData().get(i)[0].toString().trim();
 					factory_name = excelModel.getData().get(i)[1].toString().trim();
-					plan_date = excelModel.getData().get(i)[2].toString().trim();
+					//plan_date = excelModel.getData().get(i)[2].toString().trim();
 				}
 				//判断上传计划的工厂是否属于这些订单
 				Map<String,Object> importPlanMap=new HashMap<String,Object>();
@@ -124,9 +120,7 @@ public class PlanController extends BaseController{
 				}**/
 				
 				String node = excelModel.getData().get(i)[2].toString().trim();
-				logger.info("---->node = " + node);
 				int lineCountSwitch = i % 12;
-				logger.info("---->lineCountSwitch = " + lineCountSwitch);
 				switch(lineCountSwitch){
 					case 0 : if(!node.equals("自制件下线")){throw new RuntimeException("导入文件的格式有误！");}break; 
 					case 1 : if(!node.equals("部件上线")){throw new RuntimeException("导入文件的格式有误！");}break; 
@@ -143,8 +137,8 @@ public class PlanController extends BaseController{
 				}
 			}
 			//上传的文件验证完成
-			int result = planService.savePlanMaster(excelModel);
-			
+			String userid=request.getSession().getAttribute("user_name") + "";;
+			result = planService.savePlanMaster(excelModel,userid);			
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -153,9 +147,30 @@ public class PlanController extends BaseController{
 			return model;
 		}
 		
-		initModel(true,"success",null);
+		initModel(true,"导入成功！",result);
 		model = mv.getModelMap();
 		return model;
 	}
+	
+	@RequestMapping("/showPlanMasterIndex")
+	@ResponseBody
+	public ModelMap showPlanMasterIndex(){
+		String factory_id=request.getParameter("factory_id");
+		String order_no=request.getParameter("order_no");
+		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
+		int start=(request.getParameter("start")!=null)?Integer.parseInt(request.getParameter("start")):0;		//分页数据起始数
+		int length=(request.getParameter("length")!=null)?Integer.parseInt(request.getParameter("length")):500;	//每一页数据条数
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("draw", draw);
+		condMap.put("start", start);
+		condMap.put("length", length);
+		condMap.put("factory_id", factory_id);
+		condMap.put("order_no", order_no);
+		
+		Map<String,Object> result = planService.getPlanMasterIndex(condMap);
+		model.addAllAttributes(result);
+		return model;
+	}
+	
 
 }
