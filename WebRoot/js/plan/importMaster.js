@@ -15,7 +15,6 @@ $(document).ready(function () {
 	});
 	
 	$("#btn_upload").click (function () {
-		alert("btn_upload");
 		$("#uploadMasterPlanForm").ajaxSubmit({
 			url:"uploadMasterPlan",
 			type: "post",
