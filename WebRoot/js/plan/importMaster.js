@@ -1,5 +1,6 @@
 $(document).ready(function () {	
 	initPage();
+	
 	function initPage(){
 		$("#file").val("");
 		getFactorySelect();
@@ -8,9 +9,11 @@ $(document).ready(function () {
 	$("#btnBulkAdd").click (function () {
 		$("#divBulkAdd").show();
 	});
+	
 	$("#btnBulkHide").click (function () {
 		$("#divBulkAdd").hide();
 	});
+	
 	$("#btn_upload").click (function () {
 		alert("btn_upload");
 		$("#uploadMasterPlanForm").ajaxSubmit({

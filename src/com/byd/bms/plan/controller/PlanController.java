@@ -15,7 +15,7 @@ import com.byd.bms.util.controller.BaseController;
 @Controller
 @RequestMapping("/plan")
 public class PlanController extends BaseController{
-	static Logger logger = Logger.getLogger(PlanController.class.getName());
+	static Logger logger = Logger.getLogger("PLAN");
 	
 	@RequestMapping("/importMaster")
 	public ModelAndView importMaster(){ 		//总计划导入
@@ -44,7 +44,7 @@ public class PlanController extends BaseController{
 	@RequestMapping(value="/uploadMasterPlan",method=RequestMethod.POST)
 	@ResponseBody
 	public ModelMap uploadMasterPlan(@RequestParam(value="file",required=false) MultipartFile file){
-		logger.info("---->uploadMasterPlan");
+		logger.info("---->uploadMasterPlan" + file.getContentType());
 		
 		initModel(true,"success",null);
 		model = mv.getModelMap();
