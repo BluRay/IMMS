@@ -103,6 +103,12 @@ public class PlanServiceImpl implements IPlanService {
 		result.put("data", datalist);
 		return result;
 	}
+
+	@Override
+	public List<PlanMasterPlan> showPlanMasterList(Map<String, Object> queryMap) {
+		List<PlanMasterPlan> datalist = planDao.getPlanMasterList(queryMap);
+		return datalist;
+	}
 	
 	
 

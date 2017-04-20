@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import com.byd.bms.util.controller.BaseController;
 import com.byd.bms.util.ExcelTool;
+import com.byd.bms.plan.model.PlanMasterPlan;
 import com.byd.bms.plan.service.IPlanService;
 import com.byd.bms.util.ExcelModel;
 
@@ -148,6 +150,24 @@ public class PlanController extends BaseController{
 		}
 		
 		initModel(true,"导入成功！",result);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/showPlanMasterList")
+	@ResponseBody
+	public ModelMap showPlanMasterList(){
+		String version=request.getParameter("version");
+		String factory_id=request.getParameter("factory_id");
+		String order_no=request.getParameter("order_no");
+		
+		Map<String,Object> conditionMap=new HashMap<String,Object>();
+		if (request.getParameter("version") != null) conditionMap.put("version", version);
+		if (request.getParameter("factory_id") != null) conditionMap.put("factory_id", factory_id);
+		if (request.getParameter("order_no") != null) conditionMap.put("order_no", order_no);
+		
+		List<PlanMasterPlan> datalist = planService.showPlanMasterList(conditionMap);
+		initModel(true,"success",datalist);
 		model = mv.getModelMap();
 		return model;
 	}

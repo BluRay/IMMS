@@ -41,4 +41,46 @@
 		</if>
 	</select>
 	
+	<select id="getPlanMasterList" parameterType="Map" resultType="com.byd.bms.plan.model.PlanMasterPlan">
+		SELECT
+		m.D1+m.D2+m.D3+m.D4+m.D5+m.D6+m.D7+m.D8+m.D9+m.D10+m.D11+m.D12+m.D13+m.D14+m.D15+m.D16+m.D17+m.D18+m.D19+m.D20+
+		m.D21+m.D22+m.D23+m.D24+m.D25+m.D26+m.D27+m.D28+m.D29+m.D30+m.D31 AS
+		sumQty, k.key_name AS plan_code_keyname, m.*,o.order_no,f.factory_name
+		FROM BMS_PLAN_MASTER_PLAN m
+		LEFT JOIN BMS_OR_ORDER o ON m.order_id = o.id
+		LEFT JOIN BMS_BASE_FACTORY f ON
+		m.factory_id = f.id
+		LEFT JOIN
+		BMS_BASE_KEY k ON m.plan_code_id=k.id
+		where 1=1
+		<if test="version!=''">
+			AND version = #{version}
+			AND flag = (SELECT MAX(flag+0)
+			FROM
+			BMS_PLAN_MASTER_PLAN WHERE version = #{version})
+		</if>
+		<if test="order_no!=''">
+			and order_id = (SELECT id FROM BMS_OR_ORDER WHERE
+			order_no=#{order_no})
+			AND factory_id = #{factory_id}
+			AND version =
+			(SELECT MAX(version) FROM BMS_PLAN_MASTER_PLAN WHERE
+			order_id =
+			(SELECT id FROM BMS_OR_ORDER WHERE order_no=#{order_no}) AND
+			factory_id =
+			#{factory_id} AND plan_month=#{plan_month})
+			AND flag =
+			(SELECT
+			MAX(flag+0) FROM BMS_PLAN_MASTER_PLAN WHERE version =(SELECT
+			MAX(version) FROM BMS_PLAN_MASTER_PLAN WHERE order_id = (SELECT id
+			FROM BMS_OR_ORDER WHERE order_no=#{order_no}) AND factory_id =
+			#{factory_id} AND plan_month=#{plan_month}) AND
+			plan_month=#{plan_month})
+			AND plan_month=#{plan_month}
+			ORDER BY version
+			DESC,flag
+			DESC,plan_month,plan_code_id
+		</if>
+	</select>
+	
 </mapper>

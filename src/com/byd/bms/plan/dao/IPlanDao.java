@@ -13,4 +13,5 @@ public interface IPlanDao {
 	public int insertPlanMaster(PlanMasterPlan masterPlan);
 	public List<PlanMasterIndex> getPlanMasterIndex(Map<String,Object> queryMap);
 	public int getPlanMasterCount(Map<String,Object> queryMap);
+	public List<PlanMasterPlan> getPlanMasterList(Map<String,Object> queryMap);
 }
