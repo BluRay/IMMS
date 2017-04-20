@@ -7,6 +7,7 @@ $(document).ready(function () {
 	function initPage(){
 		$("#search_plan_version").val(GetQueryString("version"));
 		getFactorySelect();
+		ajaxQuery();
 	}
 	
 	$("#btnQuery").click (function () {
