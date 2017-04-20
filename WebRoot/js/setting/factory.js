@@ -28,7 +28,7 @@ $(document).ready(function(){
 		var dialog = $( "#dialog-add" ).removeClass('hide').dialog({
 			width:600,
 			modal: true,
-			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i>新增工厂</h4></div>",
+			title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-gear green"></i> 新增工厂</h4></div>',
 			title_html: true,
 			buttons: [ 
 				{
@@ -125,7 +125,7 @@ $(document).ready(function(){
 			width:600,
 			height:500,
 			modal: true,
-			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i>编辑工厂</h4></div>",
+			title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-gear green"></i> 编辑工厂</h4></div>',
 			title_html: true,
 			buttons: [ 
 				{
@@ -217,7 +217,7 @@ function ajaxDelete(){
 	$(":checkbox").each(function(){
 		if($(this).prop("checked")){
 			//alert($(this).attr('fid'));
-			if($(this).attr('fid').split('_')[1]){
+			if($(this).attr('fid')){
 				ids += $(this).attr('fid').split('_')[1] + ',';
 			}
 		}

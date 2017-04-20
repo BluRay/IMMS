@@ -134,6 +134,19 @@ public class AccountController extends BaseController{
 		return model;
 	}
 	
+	@RequestMapping("/resetUserPass")
+	@ResponseBody
+	public ModelMap resetUserPass() throws NoSuchAlgorithmException, UnsupportedEncodingException{
+		String staff_number=request.getParameter("staff_number");
+		BmsBaseUser user = new BmsBaseUser();
+		user.setStaff_number(staff_number);
+		user.setPassword(MD5Util.getEncryptedPwd(staff_number));
+		int reuslt = settingService.resetUserPass(user);
+		initModel(true,"success",reuslt);
+		model = mv.getModelMap();
+		return model;
+	}
+	
 	@RequestMapping("/getUserList")
 	@ResponseBody
 	public ModelMap getUserList(){

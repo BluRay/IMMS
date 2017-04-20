@@ -180,11 +180,36 @@ function ajaxQuery(){
 		                    "<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"修改\" onclick='editUser(\"" + 
 		                    row['staff_number'] + "\",\"" + row['display_name'] + "\",\"" + row['email'] + "\",\"" + row['cellphone'] +
 		                    "\",\"" + row['telephone'] + "\",\"" + row['factory_id'] + "\",\"" + row['department_id'] + "\",\"" + row['admin'] +
-		                    "\")' style='color:blue;cursor: pointer;'></i>";
+		                    "\")' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;" + 
+		                    "<i class=\"glyphicon glyphicon-refresh bigger-130 showbus\" title=\"重置密码\" onclick='resetUserPass(" + row['staff_number'] + 
+		                    ")' style='color:blue;cursor: pointer;'></i>";
 		                },
 		            }
 		          ],
 	});
+}
+
+function resetUserPass(staff_number){
+	var r=confirm("确认将工号为"+staff_number+"的用户重置密码吗？")
+	if (r==true){
+		$.ajax({
+		    url: "resetUserPass",
+		    dataType: "json",
+			type: "get",
+		    data: {
+		    	"staff_number" : staff_number,
+		    },
+		    success:function(response){
+		    	ajaxQuery();
+		    	$.gritter.add({
+					title: '系统提示：',
+					text: '<h5>密码已重置为工号！</h5>',
+					class_name: 'gritter-info'
+				});
+		    }
+		});
+	}
+	
 }
 
 function delUser(staff_number){

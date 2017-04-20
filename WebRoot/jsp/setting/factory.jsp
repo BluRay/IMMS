@@ -4,7 +4,7 @@
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <meta charset="utf-8" />
-<title>BMS 标题</title>
+<title>BMS 系统设置 工厂</title>
 <meta name="description" content="Common Buttons &amp; Icons" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 
@@ -47,7 +47,7 @@
 							<tr>
 								<td>工厂：</td>
 								<td><input type="text" style="height: 30px;" class="input-medium revise" placeholder="请输入工厂..." value="" id="search_factory" /></td>
-								<td>VIN装配厂代码：</td>
+								<td>&nbsp;VIN装配厂代码：</td>
 								<td><input type="text" style="height: 30px;" class="input-medium revise" placeholder="请输入VIN装配厂代码..." value="" id="search_assembcode" /></td>
 								<!-- <td><select id="search_order_status" class="input-medium revise">
 								<option value=''>全部</option>

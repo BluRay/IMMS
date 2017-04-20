@@ -76,6 +76,12 @@
 		]]>
 	</update>
 	
+	<update id="resetUserPass" parameterType="com.byd.bms.util.model.BmsBaseUser">
+		<![CDATA[
+		UPDATE BMS_BASE_USER SET password=#{password} WHERE staff_number=#{staff_number};
+		]]>
+	</update>
+	
 	<select id="getUserList" parameterType="Map" resultType="com.byd.bms.util.model.BmsBaseUser">
 		SELECT U.*,F.factory_name,D.department FROM BMS_BASE_USER U
 		LEFT JOIN BMS_BASE_FACTORY F ON U.factory_id = F.id
