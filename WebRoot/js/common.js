@@ -192,3 +192,48 @@ function select_selectOption(elementId,value){
 		}
 	})
 }
+
+/*
+ * 弹性建下拉选项
+ */
+function getKeysSelect(keyCode, selectval, element,selectType,valueItem) {
+	$.ajax({
+		url : "/IMMS/common/getKeysSelect",
+		dataType : "json",
+		data : {
+			keyCode : keyCode
+		},
+		//async : false,
+		error : function(response) {
+			alert(response.message)
+		},
+		success : function(response) {
+			var strs ;
+			if (selectType == 'noall') {
+				strs="";
+			}else
+				strs="<option value=''>请选择</option>";
+			$(element).html("");
+			$.each(response.data, function(index, value) {
+				if (selectval == value.id || selectval == value.key_name) {
+					if(valueItem=='keyName'){
+						strs += "<option value=" + value.key_name + " keyValue="
+						+ value.value + " selected='selected'>"
+						+ value.key_name + "</option>";
+					}else
+					strs += "<option value=" + value.id + " keyValue="
+							+ value.value + " selected='selected'>"
+							+ value.key_name + "</option>";
+				} else {
+					if(valueItem=='keyName'){
+						strs += "<option value=" + value.key_name + " keyValue="
+						+ value.value + ">" + value.key_name + "</option>";
+					}else
+					strs += "<option value=" + value.id + " keyValue="
+							+ value.value + ">" + value.key_name + "</option>";
+				}
+			});
+			$(element).append(strs);
+		}
+	})
+}

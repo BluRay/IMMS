@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.byd.bms.setting.model.BmsBaseFactory;
+import com.byd.bms.setting.model.BmsBaseWorkshop;
 import com.byd.bms.setting.service.IBaseDataService;
 import com.byd.bms.util.controller.BaseController;
 
@@ -183,6 +184,111 @@ public class BaseDataController extends BaseController {
 				idlist.add(id);
 			}
 			baseDateService.deleteFactory(idlist);
+			initModel(true, "success", "");
+		} catch (Exception e) {
+			initModel(false, e.getMessage(), e.toString());
+		}
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	/**
+	 * ajax 获取车间列表
+	 * 
+	 * @return model
+	 */
+	@RequestMapping("/getWorkshopList")
+	@ResponseBody
+	public ModelMap getWorkshopList() {
+		Map<String, Object> queryMap = new HashMap<String, Object>();
+		int draw = Integer.parseInt(request.getParameter("draw"));// jquerydatatables
+		int start = Integer.parseInt(request.getParameter("start"));// 分页数据起始数
+		int length = Integer.parseInt(request.getParameter("length"));// 每一页数据条数
+
+		String workshopName = request.getParameter("workshopName");//
+
+		queryMap.put("draw", draw);
+		queryMap.put("start", start);
+		queryMap.put("length", length);
+		queryMap.put("workshopName", workshopName);
+		Map<String, Object> result = baseDateService.getWorkshopList(queryMap);
+		model.addAllAttributes(result);
+
+		return model;
+	}
+	
+	@RequestMapping("/addWorkshop")
+	@ResponseBody
+	public ModelMap addWrokshop() {
+		try {
+			String workshop_name = request.getParameter("workshop_name") == null ? "" : request.getParameter("workshop_name");
+			String workshop_code = request.getParameter("workshop_code") == null ? "" : request.getParameter("workshop_code");
+			String memo = request.getParameter("memo") == null ? "" : request.getParameter("memo");
+
+			String editor_id = request.getSession().getAttribute("user_name") + "";
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String edit_date = df.format(new Date());
+
+			BmsBaseWorkshop workshop = new BmsBaseWorkshop();
+
+			workshop.setWorkshopName(workshop_name);
+			workshop.setWorkshopCode(workshop_code);
+			workshop.setMemo(memo);
+			workshop.setEditorId(editor_id);
+			workshop.setEditDate(edit_date);
+
+			int reuslt = baseDateService.addWorkshop(workshop);
+			initModel(true, "success", reuslt);
+		} catch (Exception e) {
+			initModel(false, e.getMessage(), e.toString());
+		}
+		model = mv.getModelMap();
+		return model;
+	}
+
+	@RequestMapping("/updateWorkshop")
+	@ResponseBody
+	public ModelMap updateWorkshop() {
+		try {
+			int id = Integer.parseInt(request.getParameter("id"));
+			
+			String workshop_name = request.getParameter("workshop_name") == null ? "" : request.getParameter("workshop_name");
+			String workshop_code = request.getParameter("workshop_code") == null ? "" : request.getParameter("workshop_code");
+			String memo = request.getParameter("memo") == null ? "" : request.getParameter("memo");
+
+			String editor_id = request.getSession().getAttribute("user_name") + "";
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String edit_date = df.format(new Date());
+
+			BmsBaseWorkshop workshop = new BmsBaseWorkshop();
+			
+			workshop.setId(id);
+
+			workshop.setWorkshopName(workshop_name);
+			workshop.setWorkshopCode(workshop_code);
+			workshop.setMemo(memo);
+			workshop.setEditorId(editor_id);
+			workshop.setEditDate(edit_date);
+
+			baseDateService.updateWorkshop(workshop);
+			initModel(true, "success", "");
+		} catch (Exception e) {
+			initModel(false, e.getMessage(), e.toString());
+		}
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/deleteWorkshop")
+	@ResponseBody
+	public ModelMap deleteWorkshop() {
+		try {
+			String ids = request.getParameter("ids");
+			List<String> idlist = new ArrayList<String>();
+			for(String id : ids.split(",")){
+				idlist.add(id);
+			}
+			baseDateService.deleteWorkshop(idlist);
 			initModel(true, "success", "");
 		} catch (Exception e) {
 			initModel(false, e.getMessage(), e.toString());

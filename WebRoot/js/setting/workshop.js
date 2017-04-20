@@ -28,7 +28,7 @@ $(document).ready(function(){
 		var dialog = $( "#dialog-add" ).removeClass('hide').dialog({
 			width:600,
 			modal: true,
-			title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-gear green"></i> 新增工厂</h4></div>',
+			title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-gear green"></i> 新增车间</h4></div>',
 			title_html: true,
 			buttons: [ 
 				{
@@ -43,54 +43,30 @@ $(document).ready(function(){
 					text: "确定",
 					"class" : "btn btn-primary btn-minier",
 					click: function() {
-						if($("#addFactoryName").val()===""){
-							alert("工厂名称不能为空！");
-							$("#addFactoryName").focus();
+						if($("#addWorkshopName").val()===""){
+							alert("车间名称不能为空！");
+							$("#addWorkshopName").focus();
 							return false;
 						}
-						if($("#addFactoryCode").val()===""){
-							alert("工厂代码不能为空！");
-							$("#addFactoryCode").focus();
-							return false;
-						}
-						if($("#addShortName").val()===""){
-							alert("工厂简称不能为空！");
-							$("#addShortName").focus();
-							return false;
-						}
-						if($("#addCapacity").val()===""){
-							alert("产能不能为空！");
-							$("#addCapacity").focus();
-							return false;
-						}
-						if($("#addArea").val()===""){
-							alert("地区不能为空！");
-							$("#addArea").focus();
-							return false;
-						}
-						if($("#addVinAssemblyCode").val()===""){
-							alert("VIN装配厂代码不能为空！");
-							$("#addVinAssemblyCode").focus();
+						if($("#addWorkshopCode").val()===""){
+							alert("车间代码不能为空！");
+							$("#addWorkshopCode").focus();
 							return false;
 						}
 						$.ajax({
-						    url: "addFactory",
+						    url: "addWorkshop",
 						    dataType: "json",
 							type: "get",
 						    data: {
-						    	"factory_name" : $("#addFactoryName").val(),
-						    	"factory_code" : $("#addFactoryCode").val(),
-						    	"short_name" : $("#addShortName").val(),
-						    	"capacity" : $("#addCapacity").val(),
-						    	"area" : $("#addArea").val(),
-						    	"vin_assembly_code" : $("#addVinAssemblyCode").val(),
+						    	"workshop_name" : $("#addWorkshopName").val(),
+						    	"workshop_code" : $("#addWorkshopCode").val(),
 						    	"memo" : $("#addMemo").val(),
 						    },
 						    success:function(response){
 						    	if(response.success){
 						    	$.gritter.add({
 									title: '系统提示：',
-									text: '<h5>增加工厂成功！</h5>',
+									text: '<h5>增加车间成功！</h5>',
 									class_name: 'gritter-info'
 								});
 						    	$("#addForm")[0].reset();
@@ -98,7 +74,7 @@ $(document).ready(function(){
 						    	}else{
 						    		$.gritter.add({
 										title: '系统提示：',
-										text: '<h5>增加工厂失败！</h5><br>'+response.message,
+										text: '<h5>增加车间失败！</h5><br>'+response.message,
 										class_name: 'gritter-info'
 									});
 						    	}
@@ -113,19 +89,15 @@ $(document).ready(function(){
 	
 	$(document).on("click",".editfactory",function(){
 		$('#editId').val($(this).closest('tr').find('td').eq(0).find('input').eq(0).val());
-		$('#editFactoryName').val($(this).closest('tr').find('td').eq(1).html());
-		$('#editFactoryCode').val($(this).closest('tr').find('td').eq(2).html());
-		$('#editShortName').val($(this).closest('tr').find('td').eq(3).html());
-		$('#editCapacity').val($(this).closest('tr').find('td').eq(4).html());
-		$('#editArea').val($(this).closest('tr').find('td').eq(5).html());
-		$('#editVinAssemblyCode').val($(this).closest('tr').find('td').eq(6).html());
-		$('#editMemo').val($(this).closest('tr').find('td').eq(7).html());
+		$('#editWorkshopName').val($(this).closest('tr').find('td').eq(1).html());
+		$('#editWorkshopCode').val($(this).closest('tr').find('td').eq(2).html());
+		$('#editMemo').val($(this).closest('tr').find('td').eq(3).html());
 		
 		var dialog = $( "#dialog-edit" ).removeClass('hide').dialog({
 			width:600,
 			/*height:500,*/
 			modal: true,
-			title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-gear green"></i> 编辑工厂</h4></div>',
+			title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-gear green"></i> 编辑车间</h4></div>',
 			title_html: true,
 			buttons: [ 
 				{
@@ -140,55 +112,31 @@ $(document).ready(function(){
 					text: "确定",
 					"class" : "btn btn-primary btn-minier",
 					click: function() {
-						if($("#editFactoryName").val()===""){
-							alert("工厂名称不能为空！");
-							$("#editFactoryName").focus();
+						if($("#editWorkshopName").val()===""){
+							alert("车间名称不能为空！");
+							$("#editWorkshopName").focus();
 							return false;
 						}
-						if($("#editFactoryCode").val()===""){
-							alert("工厂代码不能为空！");
-							$("#editFactoryCode").focus();
-							return false;
-						}
-						if($("#editShortName").val()===""){
-							alert("工厂简称不能为空！");
-							$("#editShortName").focus();
-							return false;
-						}
-						if($("#editCapacity").val()===""){
-							alert("产能不能为空！");
-							$("#editCapacity").focus();
-							return false;
-						}
-						if($("#editArea").val()===""){
-							alert("地区不能为空！");
-							$("#editArea").focus();
-							return false;
-						}
-						if($("#editVinAssemblyCode").val()===""){
-							alert("VIN装配厂代码不能为空！");
-							$("#editVinAssemblyCode").focus();
+						if($("#editWorkshopCode").val()===""){
+							alert("车间代码不能为空！");
+							$("#editWorkshopCode").focus();
 							return false;
 						}
 					$.ajax({
-					    url: "updateFactory",
+					    url: "updateWorkshop",
 					    dataType: "json",
 						type: "get",
 					    data: {
 					    	"id" : $("#editId").val(),
-					    	"factory_name" : $("#editFactoryName").val(),
-					    	"factory_code" : $("#editFactoryCode").val(),
-					    	"short_name" : $("#editShortName").val(),
-					    	"capacity" : $("#editCapacity").val(),
-					    	"area" : $("#editArea").val(),
-					    	"vin_assembly_code" : $("#editVinAssemblyCode").val(),
+					    	"workshop_name" : $("#editWorkshopName").val(),
+					    	"workshop_code" : $("#editWorkshopCode").val(),
 					    	"memo" : $("#editMemo").val(),
 					    },
 					    success:function(response){
 					    	if(response.success){
 					    	$.gritter.add({
 								title: '系统提示：',
-								text: '<h5>编辑工厂成功！</h5>',
+								text: '<h5>编辑车间成功！</h5>',
 								class_name: 'gritter-info'
 							});
 					    	$("#editForm")[0].reset();
@@ -196,7 +144,7 @@ $(document).ready(function(){
 					    	}else{
 					    		$.gritter.add({
 									title: '系统提示：',
-									text: '<h5>编辑工厂失败！</h5><br>'+response.message,
+									text: '<h5>编辑车间失败！</h5><br>'+response.message,
 									class_name: 'gritter-info'
 								});
 					    	}
@@ -225,13 +173,13 @@ function ajaxDelete(){
 	if(ids===''){
 		$.gritter.add({
 			title: '系统提示：',
-			text: '<h5>请至少勾选一个要删除的工厂！</h5>',
+			text: '<h5>请至少勾选一个要删除的车间！</h5>',
 			class_name: 'gritter-info'
 		});
 		return false;
 	}
 	$.ajax({
-	    url: "deleteFactory",
+	    url: "deleteWorkshop",
 	    dataType: "json",
 		type: "get",
 	    data: {
@@ -241,7 +189,7 @@ function ajaxDelete(){
 	    	if(response.success){
 	    	$.gritter.add({
 				title: '系统提示：',
-				text: '<h5>删除工厂成功！</h5>',
+				text: '<h5>删除车间成功！</h5>',
 				class_name: 'gritter-info'
 			});
 	    	
@@ -249,7 +197,7 @@ function ajaxDelete(){
 	    	}else{
 	    		$.gritter.add({
 					title: '系统提示：',
-					text: '<h5>删除工厂失败！</h5><br>'+response.message,
+					text: '<h5>删除车间失败！</h5><br>'+response.message,
 					class_name: 'gritter-info'
 				});
 	    	}
@@ -291,8 +239,7 @@ function ajaxQuery(){
 		ajax:function (data, callback, settings) {
 			var param ={
 				"draw":1,
-				"factory":$("#search_factory").val(),
-				"assembcode":$("#search_assembcode").val(),
+				"workshopName":$("#search_workshop").val(),
 			};
             param.length = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
             param.start = data.start;//开始的记录序号
@@ -300,7 +247,7 @@ function ajaxQuery(){
 
             $.ajax({
                 type: "post",
-                url: "getFactoryList",
+                url: "getWorkshopList",
                 cache: false,  //禁用缓存
                 data: param,  //传入组装的参数
                 dataType: "json",
@@ -324,14 +271,11 @@ function ajaxQuery(){
 		          	{"title":"<input type='checkbox' id='selectAll' onclick='selectAll()'/>","class":"center","data":"id","render": function ( data, type, row ) {
 	                    return "<input id='id' value='"+data+"' type='hidden' /><input type='checkbox' fid='cb_"+data+"'>";
 	                },"defaultContent": ""},
-		            {"title":"工厂名称","class":"center","data":"factoryName",/*"render": function ( data, type, row ) {
+		            {"title":"车间名称","class":"center","data":"workshopName",/*"render": function ( data, type, row ) {
 	                    return "<input style='border:0;width:100%;height:100%;background-color:transparent;text-align:center;' value='"+data+"' />";
 	                },*/"defaultContent": ""},
-		            {"title":"工厂代码","class":"center","data":"factoryCode","defaultContent": ""},
-		            {"title":"工厂简称","class":"center","data":"shortName","defaultContent": ""},
-		            {"title":"产能","class":"center","data":"capacity","defaultContent": ""},
-		            {"title":"地区","class":"center","data":"area","defaultContent": ""},
-		            {"title":"VIN装配厂代码","class":"center","data": "assemblyCode","defaultContent": ""},
+		            {"title":"车间代码","class":"center","data":"workshopCode","defaultContent": ""},
+		            
 		            {"title":"备注","class":"center","data": "memo","defaultContent": ""},
 		            /*{"title":"工厂地址","class":"center","data":null,"defaultContent": ""},*/		            
 		            {"title":"维护人","class":"center","data":"editor","defaultContent": ""},		            

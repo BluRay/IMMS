@@ -55,23 +55,27 @@ public class BaseDataServiceImpl implements IBaseDataService {
 	//车间
 	@Override
 	public Map<String, Object> getWorkshopList(Map<String, Object> queryMap) {
-		// TODO Auto-generated method stub
-		return null;
+		int totalCount=0;
+		List<BmsBaseWorkshop> datalist=baseDataDao.getWorkshopList(queryMap);
+		totalCount=baseDataDao.getWorkshopTotalCount(queryMap);
+		Map<String, Object> result=new HashMap<String,Object>();
+		result.put("draw", queryMap.get("draw"));
+		result.put("recordsTotal", totalCount);
+		result.put("recordsFiltered", totalCount);
+		result.put("data", datalist);
+		return result;
 	}
 	@Override
 	public int addWorkshop(BmsBaseWorkshop workshop) {
-		// TODO Auto-generated method stub
-		return 0;
+		return baseDataDao.addWorkshop(workshop);
 	}
 	@Override
 	public void updateWorkshop(BmsBaseWorkshop workshop) {
-		// TODO Auto-generated method stub
-		
+		baseDataDao.updateWorkshop(workshop);
 	}
 	@Override
 	public void deleteWorkshop(List ids) {
-		// TODO Auto-generated method stub
-		
+		baseDataDao.deleteWorkshop(ids);
 	}
 	@Override
 	public int checkDeleteWorkshop(List ids) {

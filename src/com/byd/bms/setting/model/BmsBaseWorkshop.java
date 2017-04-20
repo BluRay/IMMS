@@ -2,48 +2,28 @@ package com.byd.bms.setting.model;
 
 public class BmsBaseWorkshop {
 	private int id;
-	private int factoryId;
-	private String factoryName;
 	private String workshopName;
 	private String workshopCode;
 	private String deleteFlag;
-	private int preposing_workshop_id; //前置车间
 	private String memo;
-	private int editorId;
+	private String editorId;
 	private String editor;
 	private String editDate;
 	
-	
-	public int getPreposing_workshop_id() {
-		return preposing_workshop_id;
-	}
-	public void setPreposing_workshop_id(int preposing_workshop_id) {
-		this.preposing_workshop_id = preposing_workshop_id;
-	}
 	public String getWorkshopCode() {
 		return workshopCode;
 	}
 	public void setWorkshopCode(String workshopCode) {
 		this.workshopCode = workshopCode;
 	}
-	public String getFactoryName() {
-		return factoryName;
-	}
-	public void setFactoryName(String factoryName) {
-		this.factoryName = factoryName;
-	}
+	
 	public int getId() {
 		return id;
 	}
 	public void setId(int id) {
 		this.id = id;
 	}
-	public int getFactoryId() {
-		return factoryId;
-	}
-	public void setFactoryId(int factoryId) {
-		this.factoryId = factoryId;
-	}
+	
 	public String getWorkshopName() {
 		return workshopName;
 	}
@@ -62,10 +42,10 @@ public class BmsBaseWorkshop {
 	public void setMemo(String memo) {
 		this.memo = memo;
 	}
-	public int getEditorId() {
+	public String getEditorId() {
 		return editorId;
 	}
-	public void setEditorId(int editorId) {
+	public void setEditorId(String editorId) {
 		this.editorId = editorId;
 	}
 	public String getEditor() {

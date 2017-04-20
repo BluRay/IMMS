@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.byd.bms.setting.dao.IBaseDataDao">
-	<!-- 工厂表映射 -->
+	<!-- 工厂 -->
 	<resultMap type="com.byd.bms.setting.model.BmsBaseFactory" id="factoryMap">
 		<id property="id" column="id" />
 		<result property="factoryCode" column="factory_code" />
@@ -26,7 +26,7 @@
 		<if test="assembcode!=null and assembcode!=''">
 			and f.vin_assembly_code = #{assembcode}
 		</if>
-		<if test="start !=null">
+		<if test="start !=null and length!=-1">
 			LIMIT #{start} ,#{length} 
 		</if>
 
@@ -35,11 +35,11 @@
 		resultType="int">
 		select count(f.id) from BMS_BASE_FACTORY f left join BMS_BASE_USER u
 		on u.staff_number=f.editor_id where 1=1 and f.delete_flag='0'
-		<if test="factory!=null">
+		<if test="factory!=null and factory!=''">
 			and (f.factory_name like CONCAT('%',#{factory},'%') or
 			f.factory_code like CONCAT('%',#{factory},'%') )
 		</if>
-		<if test="assembcode!=null">
+		<if test="assembcode!=null and assembcode!=''">
 			and f.vin_assembly_code = #{assembcode}
 		</if>
 	</select>
@@ -66,5 +66,60 @@
 			#{ids}
 		</foreach>
 
+	</update>
+	
+	<!-- 车间 -->
+	<resultMap type="com.byd.bms.setting.model.BmsBaseWorkshop" id="workshopMap">
+		<id property="id" column="id" />
+		<result property="workshopName" column="workshop_name" />
+		<result property="workshopCode" column="workshop_code" />
+		<result property="deleteFlag" column="delete_flag" />
+		<result property="memo" column="memo" />
+		<result property="editorId" column="editor_id" />
+		<result property="editDate" column="edit_date" />
+		<result property="editor" column="editor" />
+	</resultMap>
+	<select id="getWorkshopList" parameterType="Map" resultMap="workshopMap">
+		SELECT w.id,w.workshop_name,w.workshop_code,w.delete_flag,w.edit_date,w.memo,u.display_name editor from BMS_BASE_WORKSHOP as w left join
+		BMS_BASE_USER u on u.staff_number=w.editor_id where 1=1 and w.delete_flag='0'
+		<if test="workshopName!=null">
+			and (w.workshop_name like CONCAT('%',#{workshopName},'%') or
+			w.workshop_code like CONCAT('%',#{workshopName},'%') )
+		</if>
+		<if test="start !=null and length!=-1">
+			LIMIT #{start} ,#{length} 
+		</if>
+	</select>
+	<select id="getWorkshopTotalCount" parameterType="Map"
+		resultType="int">
+		select count(w.id) from BMS_BASE_WORKSHOP as w left join
+		BMS_BASE_USER u on u.staff_number=w.editor_id where 1=1 and w.delete_flag='0'
+		<if test="workshopName!=null">
+			and (w.workshop_name like CONCAT('%',#{workshopName},'%') or
+			w.workshop_code like CONCAT('%',#{workshopName},'%') )
+		</if>
+	</select>
+	<insert id="addWorkshop" parameterType="com.byd.bms.setting.model.BmsBaseWorkshop">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT LAST_INSERT_ID() AS id
+		</selectKey>
+		insert into BMS_BASE_WORKSHOP
+		(workshop_name,workshop_code,memo,editor_id,edit_date)
+		values(#{workshopName},#{workshopCode},#{memo},#{editorId},#{editDate})
+	</insert>
+	<update id="updateWorkshop" parameterType="com.byd.bms.setting.model.BmsBaseWorkshop">
+		update
+		BMS_BASE_WORKSHOP set
+		workshop_name=#{workshopName},workshop_code=#{workshopCode},
+		memo=#{memo},editor_id=#{editorId},edit_date=#{editDate}
+		where id=#{id}
+	</update>
+	<update id="deleteWorkshop" parameterType="java.util.List">
+
+		update BMS_BASE_WORKSHOP set delete_flag='1' where id in
+		<foreach collection="list" item="ids" index="index" open="("
+			close=")" separator=",">
+			#{ids}
+		</foreach>
 	</update>
 </mapper>

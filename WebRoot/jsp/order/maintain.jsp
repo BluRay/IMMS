@@ -75,7 +75,7 @@
 							<td><select name="" id="search_factory" class="input-small">
 							</select>
 							 	<script id="tmplBusTypeSelect" type="text/x-jsrander">
-                                    <option value='{{:id}}'>{{:bus_type_code}}</option>
+                                    <option value='{{:id}}'>{{:code}}</option>
                                 </script>
 							</td>
 							<td><input type="button"
@@ -91,28 +91,6 @@
 						<table id="tableOrder"
 							class="table table-striped table-bordered table-hover"
 							style="font-size: 12px;">
-							<!-- <thead>
-								<tr>
-									<th style="text-align: center;">订单编号</th>
-									<th style="text-align: center;">订单描述</th>
-									<th style="text-align: center;">客户</th>
-									<th style="text-align: center;">生产年份</th>
-									<th style="text-align: center;">订单交期</th>
-									<th style="text-align: center;">订单总数量</th>
-									<th style="text-align: center;">订单状态</th>
-									<th style="text-align: center;">生产工厂</th>
-									<th style="text-align: center;">生产数量</th>
-									<th style="text-align: center;">起始车号流水</th>
-									<th style="text-align: center;">结束车号流水</th>
-									<th style="text-align: center;">车号</th>
-									<th style="text-align: center;">维护者</th>
-									<th style="text-align: center;">维护时间</th>
-									<th style="text-align: center;">分配</th>
-								</tr>
-							</thead>
-							<tbody>
-							
-							</tbody> -->
 						</table>
 					</div>
 				</div>
@@ -191,7 +169,7 @@
 						<label class="col-sm-3 control-label no-padding-right" for="">*&nbsp;车型</label>
 						<div class="col-sm-9">
 							<select name="" disabled="disabled" id="editBusType"
-								class="input-small busType">
+								class="input-medium busType">
 							</select>
 							<script id="tmplBusTypeSelect" type="text/x-jsrander">
                                     <option value='{{:id}}'>{{:bus_type_code}}</option>
@@ -205,18 +183,18 @@
 								placeholder="订单数量..." id="edit_order_qty" />
 						</div>
 					</div>
-					<div class="form-group">
+					<!-- <div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="">&nbsp;订单描述</label>
 						<div class="col-sm-9">
 							<input type="text" disabled="disabled" class="input-medium"
 								placeholder="订单描述..." id="edit_order_descriptive" />
 						</div>
-					</div>
+					</div> -->
 					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="edit_productive_year">*&nbsp;生产年份</label>
 						<div class="col-sm-9">
 							<select name="" disabled="disabled" id="edit_productive_year"
-								class="input-small">
+								class="input-medium">
 							</select>
 						</div>
 					</div>
@@ -233,7 +211,7 @@
 						<label class="col-sm-3 control-label no-padding-right" for="">产地分配</label>
 						<div class="col-sm-9">
 							<!-- <input type="text" class="input-medium" placeholder="选择订单交期..." id="bmsFactoryOrder" /> -->
-							<table class="table table-striped table-hover">
+							<table class="exp-table table">
 								<thead>
 									<tr>
 										<th><i id="editFactoryOrder" class="fa fa-plus"
@@ -260,10 +238,114 @@
 					</div>
 				</form>
 			</div>
+			
+			<div id="dialog-order_new" class="hide">
+				<form id="" class="form-horizontal">
+					<!-- <div class="form-group">
+						<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newOrderID">*&nbsp;订单编号</label>
+						<div class="col-sm-9">
+							<input type="text" style="display: none"
+								class="input-medium" placeholder="订单编号..." id="newOrderID" /> <input
+								type="text" disabled="disabled" class="input-medium"
+								placeholder="订单编号..." id="editOrderNo" />
+						</div>
+					</div> -->
+					<div class="form-group">
+						<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newOrderName">*&nbsp;订单名称</label>
+						<div class="col-sm-9">
+							<input type="text" class="input-medium"
+								placeholder="订单名称..." id="newOrderName" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newOrderCode">*&nbsp;订单简码</label>
+						<div class="col-sm-9">
+							<input type="text" class="input-medium"
+								placeholder="订单简码..." id="newOrderCode" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newOrderCode">*&nbsp;订单类型</label>
+						<div class="col-sm-9">
+							<select name="" id="newOrderType" class="input-medium"></select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="">*&nbsp;车型</label>
+						<div class="col-sm-9">
+							<select name="" id="newBusType"
+								class="input-medium busType">
+							</select>
+
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="new_order_qty">*&nbsp;订单数量</label>
+						<div class="col-sm-9">
+							<input type="text" class="input-medium"
+								placeholder="订单数量..." id="new_order_qty" />
+						</div>
+					</div>
+ 					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="">&nbsp;客户</label>
+						<div class="col-sm-9">
+							<input type="text" class="input-medium"
+								placeholder="客户..." id="new_customer" />
+						</div>
+					</div> 
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="new_productive_year">*&nbsp;生产年份</label>
+						<div class="col-sm-9">
+							<select name="" id="new_productive_year"
+								class="input-medium">
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="new_delivery_date">*&nbsp;订单交期</label>
+						<div class="col-sm-9">
+							<input type="text" class="input-medium" placeholder="选择订单交期..."
+								id="new_delivery_date"
+								onClick="WdatePicker({el:'new_delivery_date',dateFmt:'yyyy-MM-dd'});" />
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="">产地分配</label>
+						<div class="col-sm-9">
+							<!-- <input type="text" class="input-medium" placeholder="选择订单交期..." id="bmsFactoryOrder" /> -->
+							<table class="exp-table table">
+								<thead>
+									<tr>
+										<th><i id="newFactoryOrder" class="fa fa-plus"
+											style="cursor: pointer;color: blue;"></i>
+											<%-- <button style="height:24px" class="btn btn-success btn-xs" id="editFactoryOrder"><span class="glyphicon glyphicon-plus">+</span></button> --%></th>
+										<th class="col-sm-3">生产工厂</th>
+										<th class="col-sm-3">数量</th>
+										<th class="col-sm-3">开始</th>
+										<th class="col-sm-3">结束</th>
+										<!-- <th></th><th></th> -->
+									</tr>
+								</thead>
+								<tbody id="new_factoryOrder_parameters" class="exp-table">
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="new_memo">备注</label>
+						<div class="col-sm-9">
+							<textarea class="input-xlarge" style="width: 355px"
+								id="new_memo" rows="2"></textarea>
+						</div>
+					</div>
+				</form>
+			</div>
 		</div>
 	</div>	
 		<!-- /.main-container -->
 	</div>
+	<script src="../js/datePicker/WdatePicker.js"></script>
 	<script src="../assets/js/jquery-ui.min.js"></script>
 	<script src="../assets/js/jquery.gritter.min.js"></script>
 	<script src="../assets/js/jquery.dataTables.min.js"></script>
