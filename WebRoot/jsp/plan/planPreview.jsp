@@ -21,7 +21,7 @@
 			<div class="breadcrumbs" id="breadcrumbs">
 					<ul class="breadcrumb">
 						<li><i class="ace-icon fa fa-home home-icon"></i><a href="<%=request.getContextPath()%>/index">首页</a></li>
-						<li><a href="#">生产计划</a></li>
+						<li><a href="importMaster">计划导入</a></li>
 						<li class="active">计划预览</li>
 					</ul><!-- /.breadcrumb -->
 
@@ -55,11 +55,22 @@
 					</div>		
 					<table id="tableData" class="table table-striped table-bordered table-hover" style="font-size: 12px;">
 					<thead><tr>
-						<th>计划预览</th><th id="th_order_no" style="text-align:center;padding-left:0px;padding-right:0px;" width="55px">D2017001</th>
-						<th style="text-align:center;padding-left:0px;padding-right:0px;" width="30px">日期</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th>
-						<th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th>
-						<th>21</th><th>22</th><th>23</th><th>24</th><th>25</th><th>26</th><th>27</th><th>28</th><th>29</th><th>30</th><th>31</th>
-						<th>合计</th><th>总计</th>
+						<th style="text-align:center;padding-left:0px;padding-right:0px;width:60px;">计划预览</th><th id="th_order_no" style="text-align:center;padding-left:0px;padding-right:0px;" width="55px">D2017001</th>
+						<th style="text-align:center;padding-left:0px;padding-right:0px;" width="30px">日期</th>
+						<th style="text-align:center;padding-left:0px;padding-right:0px;" width="23px">1</th><th style="text-align:center;padding-left:0px;padding-right:0px;" width="23px">2</th><th style="text-align:center;padding-left:0px;padding-right:0px;" width="23px">3</th>
+						<th style="text-align:center;padding-left:0px;padding-right:0px;" width="23px">4</th><th style="text-align:center;padding-left:0px;padding-right:0px;" width="23px">5</th><th style="text-align:center;padding-left:0px;padding-right:0px;" width="23px">6</th>
+						<th style="text-align:center;padding-left:0px;padding-right:0px;" width="23px">7</th><th style="text-align:center;padding-left:0px;padding-right:0px;" width="23px">8</th><th style="text-align:center;padding-left:0px;padding-right:0px;" width="23px">9</th>
+						<th style="text-align:center;padding-left:0px;padding-right:0px;" width="23px">10</th><th style="text-align:center;padding-left:0px;padding-right:0px;" width="23px">11</th><th style="text-align:center;padding-left:0px;padding-right:0px;" width="23px">12</th>
+						<th style="text-align:center;padding-left:0px;padding-right:0px;" width="23px">13</th><th style="text-align:center;padding-left:0px;padding-right:0px;" width="23px">14</th><th style="text-align:center;padding-left:0px;padding-right:0px;" width="23px">15</th>
+						
+						<th style="text-align:center;padding-left:0px;padding-right:0px;" width="23px">16</th><th style="text-align:center;padding-left:0px;padding-right:0px;" width="23px">17</th><th style="text-align:center;padding-left:0px;padding-right:0px;" width="23px">18</th>
+						<th style="text-align:center;padding-left:0px;padding-right:0px;" width="23px">19</th><th style="text-align:center;padding-left:0px;padding-right:0px;" width="23px">20</th><th style="text-align:center;padding-left:0px;padding-right:0px;" width="23px">21</th>
+						<th style="text-align:center;padding-left:0px;padding-right:0px;" width="23px">22</th><th style="text-align:center;padding-left:0px;padding-right:0px;" width="23px">23</th><th style="text-align:center;padding-left:0px;padding-right:0px;" width="23px">24</th>
+						<th style="text-align:center;padding-left:0px;padding-right:0px;" width="23px">25</th><th style="text-align:center;padding-left:0px;padding-right:0px;" width="23px">26</th><th style="text-align:center;padding-left:0px;padding-right:0px;" width="23px">27</th>
+						<th style="text-align:center;padding-left:0px;padding-right:0px;" width="23px">28</th><th style="text-align:center;padding-left:0px;padding-right:0px;" width="23px">29</th><th style="text-align:center;padding-left:0px;padding-right:0px;" width="23px">30</th>
+						
+						<th style="text-align:center;padding-left:0px;padding-right:0px;" width="23px">31</th><th style="text-align:center;padding-left:0px;padding-right:0px;" width="38px">合计</th>
+						<th style="text-align:center;padding-left:0px;padding-right:0px;" width="38px">总计</th>
 					</tr></thead>
 					<tbody></tbody>
 					</table>

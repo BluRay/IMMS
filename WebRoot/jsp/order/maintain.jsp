@@ -7,13 +7,9 @@
 <meta charset="utf-8" />
 <title>BMS 标题</title>
 <meta name="description" content="Common Buttons &amp; Icons" />
-<meta name="viewport"
-	content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-
-<link rel="stylesheet"
-	href="../assets/css/fixedColumns.bootstrap.min.css" />
-<link rel="stylesheet"
-	href="../assets/css/fixedColumns.dataTables.min.css" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<link rel="stylesheet" href="../assets/css/fixedColumns.bootstrap.min.css" />
+<link rel="stylesheet" href="../assets/css/fixedColumns.dataTables.min.css" />
 <link rel="stylesheet" href="../assets/css/jquery-ui.min.css" />
 </head>
 <body class="no-skin" style="font-family: 'Microsoft YaHei';">
@@ -241,15 +237,6 @@
 			
 			<div id="dialog-order_new" class="hide">
 				<form id="" class="form-horizontal">
-					<!-- <div class="form-group">
-						<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newOrderID">*&nbsp;订单编号</label>
-						<div class="col-sm-9">
-							<input type="text" style="display: none"
-								class="input-medium" placeholder="订单编号..." id="newOrderID" /> <input
-								type="text" disabled="disabled" class="input-medium"
-								placeholder="订单编号..." id="editOrderNo" />
-						</div>
-					</div> -->
 					<div class="form-group">
 						<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newOrderName">*&nbsp;订单名称</label>
 						<div class="col-sm-9">

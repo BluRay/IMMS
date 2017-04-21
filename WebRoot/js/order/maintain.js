@@ -24,32 +24,6 @@ $(document).ready(function(){
 	
 	$(".btnQuery").on("click",function(){
 		ajaxQuery();
-	});
-	
-	$(document).on("click",".showbus",function(){
-		var dialog = $( "#dialog-message" ).removeClass('hide').dialog({
-			width:600,
-			modal: true,
-			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i>车辆明细</h4></div>",
-			title_html: true,
-			buttons: [ 
-				{
-					text: "取消",
-					"class" : "btn btn-minier",
-					click: function() {
-						$( this ).dialog( "close" ); 
-					} 
-				},
-				{
-					text: "确定",
-					"class" : "btn btn-primary btn-minier",
-					click: function() {
-						//$( this ).dialog( "close" ); 
-						ajaxEditConfirm();
-					} 
-				}
-			]
-		});
 	}); 
 	
 	$(document).on("click","#btnAdd",function(){
@@ -191,9 +165,6 @@ $(document).ready(function(){
 		var factoryOrder_parameters=$("#new_factoryOrder_parameters").find("tr");
 		$.each(factoryOrder_parameters,function(index,param){
 			var tds=$(param).children("td");
-			//$(tds[1]).find("select");
-			//alert($(tds[2]).find("input").val());
-			//maxOrderNo = $(tds[2]).find("input").val();
 			$(tds[3]).find("input").val(maxOrderNo);
 			$(tds[4]).find("input").val(Number(maxOrderNo) + Number($(tds[2]).find("input").val()) - 1);
 			maxOrderNo = Number(maxOrderNo) + Number($(tds[2]).find("input").val());
@@ -398,16 +369,6 @@ $(document).ready(function(){
 		});
 	});
 	
-/*	$("#btnAddConfirm").click (function () {
-		ajaxAdd();
-		return false;
-	});
-	
-	$("#btnEditConfirm").click (function () {
-		alert("aa");
-		ajaxEditConfirm();
-		return false;
-	});*/
 	
 });
 
@@ -491,7 +452,9 @@ function ajaxQuery(){
 		            {"title":"订单状态","class":"center","data":"status","render":function(data,type,row){
 		            	return data=="0"?"未开始":(data=="1"?"生产中":"已完成")},"defaultContent":""
 		            },
-		            {"title":"车号信息","class":"center","data":null,"defaultContent": "<i class=\"glyphicon glyphicon-search bigger-110 showbus\" title=\"车辆详情\" style='color:blue;cursor: pointer;'></i>"},
+		            {"title":"车号信息","class":"center","data":null,"render":function(data,type,row){
+		            	return "<i class=\"glyphicon glyphicon-search bigger-110 showbus\" onclick = 'ajaxShowBusNumber(" + row.id+ ","+row.factory_id+");' style='color:blue;cursor: pointer;'></i>";
+		            },"defaultContent": "<i class=\"glyphicon glyphicon-search bigger-110 showbus\" title=\"车辆详情\" style='color:blue;cursor: pointer;'></i>"},
 		            {"title":"起始车号流水","class":"center","data":"bus_number_start","defaultContent": ""},
 		            {"title":"结束车号流水","class":"center","data":"bus_number_end","defaultContent": ""},		            
 		            {"title":"编辑者","class":"center","data": "user_name","defaultContent": ""},
@@ -791,32 +754,6 @@ function ajaxAdd (argument) {
 	});
 	
 }
-function ajaxShowBusNumber(order_id,factory_id){
-	$.ajax({
-		url: "order!showBusNumber.action",
-		dataType: "json",
-		data: {"order_id" : order_id,"factory_id":factory_id},
-		async: false,
-		error: function () {alertError();},
-		success: function (response) {
-			if(response.success){
-				$("#tableBusNumber tbody").html("");
-	    		$.each(response.data,function (index,value) {
-	    			var tr = $("<tr />");
-	    			$("<td style=\"text-align:center;\" />").html(index+1).appendTo(tr);
-	    			$("<td style=\"text-align:center;\" />").html(value.bus_number).appendTo(tr);
-	    			$("<td style=\"text-align:center;\" />").html(value.factory_name).appendTo(tr);
-	    			$("<td style=\"text-align:center;\" />").html(value.process_name).appendTo(tr);
-	    			$("#tableBusNumber tbody").append(tr);
-	    			
-	    		});
-				$("#busNumberModal").modal("show");
-			} else {
-				alert(response.message);
-			}
-		}
-	})
-}
 
 function ajaxEdit(order_id){
 	original="";
@@ -912,6 +849,54 @@ function ajaxEdit(order_id){
 					]
 				});
 				$("#editOrderNo").focus();
+		}
+	})
+}
+
+function ajaxShowBusNumber(order_id,factory_id){
+	$.ajax({
+		url: "/IMMS/order/showBusNumber",
+		dataType: "json",
+		data: {"order_id" : order_id,"factory_id":factory_id},
+		async: false,
+		error: function () {alertError();},
+		success: function (response) {
+			if(response.success){
+				$("#tableBusNumber tbody").html("");
+	    		$.each(response.data,function (index,value) {
+	    			var tr = $("<tr />");
+	    			$("<td style=\"text-align:center;\" />").html(index+1).appendTo(tr);
+	    			$("<td style=\"text-align:center;\" />").html(value.bus_number).appendTo(tr);
+	    			$("<td style=\"text-align:center;\" />").html(value.factory_name).appendTo(tr);
+	    			$("<td style=\"text-align:center;\" />").html(value.process_name).appendTo(tr);
+	    			$("#tableBusNumber tbody").append(tr);
+	    			
+	    		});
+			} else {
+				alert(response.message);
+			}
+			var dialog = $( "#dialog-message" ).removeClass('hide').dialog({
+				width:600,
+				modal: true,
+				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i>车辆明细</h4></div>",
+				title_html: true,
+				buttons: [ 
+					{
+						text: "取消",
+						"class" : "btn btn-minier",
+						click: function() {
+							$( this ).dialog( "close" ); 
+						} 
+					},
+					{
+						text: "确定",
+						"class" : "btn btn-primary btn-minier",
+						click: function() {
+							$( this ).dialog( "close" ); 
+						} 
+					}
+				]
+			});
 		}
 	})
 }

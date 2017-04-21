@@ -8,7 +8,7 @@ body {
 	min-height: 100%;
 	padding-bottom: 0;
 	font-family: 'Open Sans';
-	font-size: 14px;
+	font-size: 13px;
 	color: #393939;
 	line-height: 1.5
 }
@@ -7844,7 +7844,7 @@ input[type=color], input[type=date], input[type=datetime-local], input[type=date
 	background-color: #fff;
 	border: 1px solid #d5d5d5;
 	padding: 5px 4px 6px;
-	font-size: 14px;
+	font-size: 13px;
 	font-family: inherit;
 	-webkit-box-shadow: none !important;
 	box-shadow: none !important;
@@ -14278,8 +14278,8 @@ ul.attachment-list>li {
 }
 
 .dataTables_wrapper .row:last-child {
-	border-bottom: 1px solid #e0e0e0;
-	padding-top: 1px;
+	border-bottom: 0px solid #e0e0e0;
+	padding-top: 0px;
 	padding-bottom: 0px;
 	background-color: #EFF3F8
 }
@@ -16699,7 +16699,7 @@ img.editable-click:hover {
 .ui-dialog .ui-dialog-buttonpane button, .ui-dialog .ui-jqdialog-buttonpane button,
 	.ui-jqdialog .ui-dialog-buttonpane button, .ui-jqdialog .ui-jqdialog-buttonpane button
 	{
-	font-size: 14px
+	font-size: 13px
 }
 
 .ui-dialog .ui-dialog-titlebar-close, .ui-dialog .ui-jqdialog-titlebar-close,
