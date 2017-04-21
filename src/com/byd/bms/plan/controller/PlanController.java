@@ -160,11 +160,12 @@ public class PlanController extends BaseController{
 		String version=request.getParameter("version");
 		String factory_id=request.getParameter("factory_id");
 		String order_no=request.getParameter("order_no");
-		
+		String plan_month = request.getParameter("plan_month");
 		Map<String,Object> conditionMap=new HashMap<String,Object>();
 		if (request.getParameter("version") != null) conditionMap.put("version", version);
 		if (request.getParameter("factory_id") != null) conditionMap.put("factory_id", factory_id);
 		if (request.getParameter("order_no") != null) conditionMap.put("order_no", order_no);
+		if (request.getParameter("plan_month") != null) conditionMap.put("plan_month", plan_month);
 		
 		List<PlanMasterPlan> datalist = planService.showPlanMasterList(conditionMap);
 		initModel(true,"success",datalist);
