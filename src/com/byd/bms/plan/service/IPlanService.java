@@ -11,4 +11,6 @@ public interface IPlanService {
 	public int savePlanMaster(ExcelModel excelModel,String userid);
 	public Map<String,Object> getPlanMasterIndex(Map<String,Object> queryMap);
 	public List<PlanMasterPlan> showPlanMasterList(Map<String,Object> queryMap);
+	public List<Map<String,String>> getPlanIssed(Map<String,Object> queryMap);
+	public int reVisionPlan(String factory_id,String order_no,String revision_str,String plan_month,String userId);
 }

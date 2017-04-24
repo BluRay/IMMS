@@ -83,4 +83,46 @@
 		</if>
 	</select>
 	
+	<select id="getPlanIssed" parameterType="Map" resultType="Map">
+		SELECT
+		plan_code_id,plan_date FROM BMS_PLAN_PRODUCTION_PLAN
+		WHERE order_id =
+		(SELECT id FROM BMS_OR_ORDER WHERE order_no=#{order_no})
+		AND factory_id =
+		#{factory_id}
+	</select>
+	
+	<insert id="insertMasterPlan" useGeneratedKeys="true" keyProperty="id" parameterType="com.byd.bms.plan.model.PlanMasterPlan">
+		<![CDATA[
+		insert into BMS_PLAN_MASTER_PLAN (
+		version,order_id,factory_id,plan_code_id,plan_month,flag,D1,D2,D3,D4,D5,D6,D7,D8,D9,D10,D11,D12,D13,D14,D15,D16,D17,
+		D18,D19,D20,D21,D22,D23,D24,D25,D26,D27,D28,D29,D30,D31,creator_id,create_date)
+		values(
+		#{version},(SELECT id FROM BMS_OR_ORDER WHERE order_no=#{order_no}),(SELECT id FROM BMS_BASE_FACTORY WHERE factory_name=#{factory_name}),
+		(SELECT id FROM BMS_BASE_KEY WHERE key_code = 'PLAN_CODE' AND key_name = #{plan_code_keyname}),#{plan_month},#{flag},#{D1},#{D2},#{D3},#{D4},#{D5},#{D6},#{D7},
+		#{D8},#{D9},#{D10},#{D11},#{D12},#{D13},#{D14},#{D15},#{D16},#{D17},#{D18},#{D19},#{D20},#{D21},#{D22},#{D23},#{D24},
+		#{D25},#{D26},#{D27},#{D28},#{D29},#{D30},#{D31},#{creator_id},#{create_date})
+		]]>
+	</insert>
+	
+	<update id="updatePlanMasterInfo" parameterType="com.byd.bms.plan.model.PlanMasterPlan">
+		<![CDATA[
+		UPDATE BMS_PLAN_MASTER_PLAN SET version=#{version},order_id=#{order_id},factory_id=#{factory_id},plan_code_id=#{plan_code_id},plan_month=#{plan_month},
+		flag=#{flag},D1=#{D1},D2=#{D2},D3=#{D3},D4=#{D4},D5=#{D5},D6=#{D6},D7=#{D7},D8=#{D8},D9=#{D9},D10=#{D10},D11=#{D11},
+		D12=#{D12},D13=#{D13},D14=#{D14},D15=#{D15},D16=#{D16},D17=#{D17},D18=#{D18},D19=#{D19},D20=#{D20},D21=#{D21},D22=#{D22},
+		D23=#{D23},D24=#{D24},D25=#{D25},D26=#{D26},D27=#{D27},D28=#{D28},D29=#{D29},D30=#{D30},D31=#{D31}
+		WHERE id=#{id}
+		]]>
+	</update>
+	
+	<insert id="insertOperateChangeLog" useGeneratedKeys="true"
+		keyProperty="id" parameterType="com.byd.bms.util.model.BmsBaseOperateChangeLog">
+		<![CDATA[
+		insert into BMS_BASE_OPERATE_CHANGE_LOG (
+		operate_change_type_id,table_name,field_id,field_name,old_value,new_value,changer_id,change_date)
+		VALUES(
+		#{operate_change_type_id},#{table_name},#{field_id},#{field_name},#{old_value},#{new_value},#{changer_id},#{change_date})
+		]]>
+	</insert>
+	
 </mapper>

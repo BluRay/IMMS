@@ -30,6 +30,56 @@ $(document).ready(function () {
 		return false;
 	});
 	
+	$("body").on("change",".cell",function(e){
+		//alert("012;345;6".indexOf(";"));
+		//判断是否已经修改过此单元格数据
+		
+		var start = String($('#revision_str').val()).indexOf(String($("#order_id").val()) + "," + String($("#factory_id").val()) + "," 
+				+ String($(e.target).closest("tr").attr("id"))+ "," 
+				+ String($(e.target).closest("td").prevAll().length-2));
+		var revision_str = String($('#revision_str').val());
+		if(start>=0){
+			str2 = revision_str.substring(start,revision_str.length);
+			revision_str.replace(revision_str.substr(start,str2.indexOf(";")+1),"");
+			$("#revision_str").val(revision_str.replace(revision_str.substr(start,str2.indexOf(";")+1),""));
+		}
+		var chang_num = "0";
+		if($(e.target).val() == ""){
+			chang_num = "0";
+		}else{
+			chang_num = $(e.target).val();
+		}
+		
+		$("#revision_str").val(String($('#revision_str').val()) + String($("#order_id").val()) 
+				+ "," + String($("#factory_id").val()) + "," 
+				+ String($(e.target).closest("tr").attr("id")) + "," 
+				+ String($(e.target).closest("td").prevAll().length-2) + "," 
+				+ String(chang_num) + ",0;");
+	});
+	
+	$("#btnSave").click (function () {
+		//alert($('#revision_str').val());
+		$("#btnSave").attr("disabled","disabled");
+		$.ajax({
+		    url: "reVisionPlan",
+    	    dataType: "json",
+			type: "get",
+		    data: {
+		    	"factory_id": $('#search_factory').val(),
+		    	"order_no": $('#search_order_no').val(),
+		    	"revision_str": $('#revision_str').val(),
+		    	"plan_month": $("#search_year").val() + $("#search_month").val(),
+		    },
+		    success:function(response){		
+		    	alert("计划调整成功");
+		    	ajaxQuery();
+		    	$("#btnSave").removeAttr("disabled");
+				return false;
+		    }
+		});
+		return false;
+	});
+	
 });
 
 function ajaxQuery(){
@@ -126,9 +176,24 @@ function ajaxQuery(){
     			$("<td style=\"line-height:12px; padding-bottom:0px;padding-left:5px\" />").html(value.sumQty + stock[index%11]).appendTo(tr);
     			stock[index]+=value.sumQty;
     			$("#tableData tbody").append(tr);
-    			
     		});
-    		
+    		$.ajax({
+			    url: "getPlanIssed",
+	    	    dataType: "json",
+				type: "get",
+			    data: {
+			    	"order_no": $('#search_order_no').val(),
+			    	"factory_id": $('#search_factory').val(),   			    	
+			    },
+			    success:function(response){
+			    	// TODO 已发布的计划不能调整
+			    	$.each(response.data,function (index,value) {
+			    		//alert(value.PLAN_CODE_ID + "_" + value.PLAN_DATE)
+			    		$("#"+value.PLAN_CODE_ID + "_" + value.PLAN_DATE).attr("disabled","disabled")
+			    	})
+			    }
+			});
+			return false;
 	    }
 	});
 }

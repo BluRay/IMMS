@@ -56,6 +56,11 @@
 								</td>
 								<td><input type="button" class="btn btn-sm btn-success" id="btnQuery" value="查询" style="margin-left: 2px;"></input>&nbsp;</td>
 								<td><input type="button" class="btn btn-sm btn-info" id="btnSave" value="保存" style="margin-left: 2px;"></input>&nbsp;</td>
+								<td>
+								<input type="text" style="display:none" class="input-small revise" id="order_id"></input>
+								<input type="text" style="display:none" class="input-small revise" id="factory_id"></input>
+								<input type="text" style="display:none;width:400px" class="input-large revise" id="revision_str"></input>
+								</td>
 							</tr>
 						</table>
 					</div>	

@@ -3,6 +3,9 @@ package com.byd.bms.plan.controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -176,7 +179,30 @@ public class PlanController extends BaseController{
 	@RequestMapping("/getPlanIssed")
 	@ResponseBody
 	public ModelMap getPlanIssed(){
+		String factory_id=request.getParameter("factory_id");
+		String order_no=request.getParameter("order_no");
+		Map<String,Object> conditionMap=new HashMap<String,Object>();
+		if (request.getParameter("factory_id") != null) conditionMap.put("factory_id", factory_id);
+		if (request.getParameter("order_no") != null) conditionMap.put("order_no", order_no);
 		
+		List<Map<String,String>> datalist = planService.getPlanIssed(conditionMap);
+		initModel(true,"success",datalist);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/reVisionPlan")
+	@ResponseBody
+	public ModelMap reVisionPlan(){
+		String factory_id = request.getParameter("factory_id");
+		String order_no = request.getParameter("order_no");
+		String revision_str = request.getParameter("revision_str");
+		String plan_month = request.getParameter("plan_month");
+		String edit_user = request.getSession().getAttribute("user_id") + "";
+		int result = planService.reVisionPlan(factory_id, order_no, revision_str, plan_month,edit_user);		
+		
+		
+		initModel(true,"success",result);
 		model = mv.getModelMap();
 		return model;
 	}
