@@ -89,161 +89,98 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="configName">*&nbsp;配置名称：</label>
 						<div class="col-sm-3">
-							<input type="text"  class="input-medium" style="width:98%"
+							<input type="text"  class="input-medium" style="width:100%"
 								placeholder="配置名称..." id="configName" />
 						</div>
 						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="configQty">*&nbsp;配置数量：</label>
 						<div class="col-sm-3">
-							<input type="text" class="input-medium" style="width:98%"
+							<input type="text" class="input-medium" style="width:100%"
 								placeholder="配置数量..." id="configQty" />
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="materialNo">*&nbsp;总成料号：</label>
 						<div class="col-sm-3">
-							<input type="text"  class="input-medium" style="width:98%"
+							<input type="text"  class="input-medium" style="width:100%"
 								placeholder="总成料号..." id="materialNo" />
 						</div>
-						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="materialNo">*&nbsp;物料描述：</label>
+						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="customer">*&nbsp;客户：</label>
 						<div class="col-sm-3">
-							<input type="text"  class="input-medium" style="width:98%"
-								placeholder="物料描述..." id="materialNo" />
+							<input type="text"  class="input-medium" style="width:100%"
+								placeholder="客户..." id="customer" />
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="material">*&nbsp;物料描述：</label>
+						<div class="col-sm-8">
+							<input type="text"  class="input-medium" style="width:100%"
+								placeholder="物料描述..." id="material" />
 						</div>
 					</div>
 					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="tire_type">*&nbsp;轮胎规格：</label>
+						<div class="col-sm-3">
+							<input type="text"  class="input-medium" style="width:100%"
+								placeholder="轮胎规格..." id="tire_type" />
+						</div>
+						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="spring_num">*&nbsp;弹簧片数：</label>
+						<div class="col-sm-3">
+							<input type="text"  class="input-medium" style="width:100%"
+								placeholder="弹簧片数..." id="spring_num" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="bus_seats">*&nbsp;座位数：</label>
+						<div class="col-sm-3">
+							<input type="text"  class="input-medium" style="width:100%"
+								placeholder="座位数..." id="bus_seats" />
+						</div>
+						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="rated_voltage">*&nbsp;额定电压：</label>
+						<div class="col-sm-3">
+							<input type="text"  class="input-medium" style="width:100%"
+								placeholder="额定电压..." id="rated_voltage" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="battery_capacity">*&nbsp;电池容量：</label>
+						<div class="col-sm-3">
+							<input type="text"  class="input-medium" style="width:100%"
+								placeholder="电池容量..." id="battery_capacity" />
+						</div>
+						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="passenger_num">*&nbsp;额定载客人数：</label>
+						<div class="col-sm-3">
+							<input type="text"  class="input-medium" style="width:100%"
+								placeholder="额定载客人数..." id="passenger_num" />
+						</div>
+					</div>
+					
+					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="editOrderCode">*&nbsp;配置信息：</label>
 						<div class="col-sm-9">
-							<form id="uploadForm" action="techTask!uploadChangedMaterialList.action" enctype="multipart/form-data" method="post">
+							<form id="uploadForm" action="" enctype="multipart/form-data" method="post">
 								<div class="col-sm-4">
-									<input id="file" style="margin-left: -10px;padding:0px 0px;font-size: 12px" class="btn btn-info btn-small" name="file" accept=".xlsx" type="file"> 				
+									<input id="file" style="margin-left: -10px;padding:0px 0px;font-size: 12px" class="btn btn-info btn-small" name="file" accept=".xls" type="file"> 				
 								</div>
 								<div class="col-sm-4">
-									<input id="btn_upload" style="margin-left: -10px;padding:0px 0px;font-size: 12px;height:35px" class="btn btn-primary" value="上传并导入" onclick="javascript:return LimitAttach2(this.form, this.form.file.value)" type="button"> 
-									<a href="../files/configDetail.xlsx">下载批导模板</a>
+									<input id="btn_upload" style="padding:0px 0px;font-size: 12px;height:35px" class="btn btn-primary" value="上传并导入" onclick="javascript:return upload(this.form, this.form.file.value)" type="button"> 
+									<a href="../docs/configDetail.xls">下载批导模板</a>
 								</div>							
 							</form>
 						</div>
 						
 					</div>
 
-					<div class="form-group">
-						
+					<div class="form-group">					
 						<div class="col-sm-12">			
-							<table class="table table-striped table-bordered table-hover">
-								<thead>
-									<tr>										
-										<td>零部件类别</td>
-										<td>物料编码</td>
-										<td>零部件编号</td>
-										<td>零部件名称</td>	
-										<td>材料/规格</td>
-										<td>类别</td>
-										<td>供应商名称</td>
-										<td>装配车间</td>
-										<td>备注</td>										
-									</tr>
-								</thead>
-								<tbody id="edit_factoryOrder_parameters" class="exp-table">
-								</tbody>
+							<table class="table table-striped table-bordered table-hover" id="orderConfigTable">
 							</table>
 						</div>
 					</div>
 				</div>
 			</div>
 			
-			<div id="dialog-order_new" class="hide">
-				<form id="" class="form-horizontal">
-					<div class="form-group">
-						<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newOrderName">*&nbsp;订单名称</label>
-						<div class="col-sm-9">
-							<input type="text" class="input-medium"
-								placeholder="订单名称..." id="newOrderName" />
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newOrderCode">*&nbsp;订单简码</label>
-						<div class="col-sm-9">
-							<input type="text" class="input-medium"
-								placeholder="订单简码..." id="newOrderCode" />
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newOrderCode">*&nbsp;订单类型</label>
-						<div class="col-sm-9">
-							<select name="" id="newOrderType" class="input-medium"></select>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-sm-3 control-label no-padding-right" for="">*&nbsp;车型</label>
-						<div class="col-sm-9">
-							<select name="" id="newBusType"
-								class="input-medium busType">
-							</select>
-
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-sm-3 control-label no-padding-right" for="new_order_qty">*&nbsp;订单数量</label>
-						<div class="col-sm-9">
-							<input type="text" class="input-medium"
-								placeholder="订单数量..." id="new_order_qty" />
-						</div>
-					</div>
- 					<div class="form-group">
-						<label class="col-sm-3 control-label no-padding-right" for="">&nbsp;客户</label>
-						<div class="col-sm-9">
-							<input type="text" class="input-medium"
-								placeholder="客户..." id="new_customer" />
-						</div>
-					</div> 
-					<div class="form-group">
-						<label class="col-sm-3 control-label no-padding-right" for="new_productive_year">*&nbsp;生产年份</label>
-						<div class="col-sm-9">
-							<select name="" id="new_productive_year"
-								class="input-medium">
-							</select>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-sm-3 control-label no-padding-right" for="new_delivery_date">*&nbsp;订单交期</label>
-						<div class="col-sm-9">
-							<input type="text" class="input-medium" placeholder="选择订单交期..."
-								id="new_delivery_date"
-								onClick="WdatePicker({el:'new_delivery_date',dateFmt:'yyyy-MM-dd'});" />
-						</div>
-					</div>
-
-					<div class="form-group">
-						<label class="col-sm-3 control-label no-padding-right" for="">产地分配</label>
-						<div class="col-sm-9">
-							<!-- <input type="text" class="input-medium" placeholder="选择订单交期..." id="bmsFactoryOrder" /> -->
-							<table class="exp-table table">
-								<thead>
-									<tr>
-										<th><i id="newFactoryOrder" class="fa fa-plus"
-											style="cursor: pointer;color: blue;"></i>
-											<%-- <button style="height:24px" class="btn btn-success btn-xs" id="editFactoryOrder"><span class="glyphicon glyphicon-plus">+</span></button> --%></th>
-										<th class="col-sm-3">生产工厂</th>
-										<th class="col-sm-3">数量</th>
-										<th class="col-sm-3">开始</th>
-										<th class="col-sm-3">结束</th>
-										<!-- <th></th><th></th> -->
-									</tr>
-								</thead>
-								<tbody id="new_factoryOrder_parameters" class="exp-table">
-								</tbody>
-							</table>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-sm-3 control-label no-padding-right" for="new_memo">备注</label>
-						<div class="col-sm-9">
-							<textarea class="input-xlarge" style="width: 355px"
-								id="new_memo" rows="2"></textarea>
-						</div>
-					</div>
-				</form>
-			</div>
+		
 		</div>
 	</div>	
 		<!-- /.main-container -->
@@ -256,6 +193,7 @@
 	<script src="../assets/js/ace/elements.onpage-help.js"></script>
 	<script src="../assets/js/ace/ace.onpage-help.js"></script>
 	<script src="../assets/js/bootstrap3-typeahead.js"></script>
+	<script src="../js/jquery.form.js"></script>
 	<script src="../js/common.js"></script>
 	<script src="../js/order/configUpload.js"></script>
 </body>

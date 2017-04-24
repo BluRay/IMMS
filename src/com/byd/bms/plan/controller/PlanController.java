@@ -173,6 +173,14 @@ public class PlanController extends BaseController{
 		return model;
 	}
 	
+	@RequestMapping("/getPlanIssed")
+	@ResponseBody
+	public ModelMap getPlanIssed(){
+		
+		model = mv.getModelMap();
+		return model;
+	}
+	
 	@RequestMapping("/showPlanMasterIndex")
 	@ResponseBody
 	public ModelMap showPlanMasterIndex(){

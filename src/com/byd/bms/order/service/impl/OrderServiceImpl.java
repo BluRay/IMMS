@@ -174,4 +174,32 @@ public class OrderServiceImpl implements IOrderService {
 		}
 	}
 
+	@Override
+	public List getBusNumberByOrder(Map<String, Object> conditionMap) {
+		List datalist=new ArrayList();
+		datalist=orderDao.queryBusNumberByOrder(conditionMap);
+		return datalist;
+	}
+
+	@Override
+	public Map<String, Object> getOrderConfigListPage(
+			Map<String, Object> condMap) {
+		int totalCount=0;
+		List<Map<String, Object>> datalist=orderDao.getOrderConfigList(condMap);
+		totalCount=orderDao.getConfigTotalCount(condMap);
+		Map<String, Object> result=new HashMap<String,Object>();
+		result.put("draw", condMap.get("draw"));
+		result.put("recordsTotal", totalCount);
+		result.put("recordsFiltered", totalCount);
+		result.put("data", datalist);
+		return result;
+	}
+
+	@Override
+	public List getConfigDetailList(String configId) {
+		List datalist=new ArrayList();
+		datalist=orderDao.queryConfigDetailList(configId);
+		return datalist;
+	}
+
 }

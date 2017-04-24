@@ -1,5 +1,8 @@
 package com.byd.bms.order.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,11 +15,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.byd.bms.order.model.BmsOrder;
 import com.byd.bms.order.service.IOrderService;
+import com.byd.bms.util.ExcelModel;
+import com.byd.bms.util.ExcelTool;
 import com.byd.bms.util.controller.BaseController;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -46,6 +54,7 @@ public class OrderController extends BaseController{
 	@RequestMapping("/showOrderList")
 	@ResponseBody
 	public ModelMap showOrderList(){
+		model=new ModelMap();
 		Map<String,Object> condMap=new HashMap<String,Object>();
 		int draw=Integer.parseInt(request.getParameter("draw"));//jquerydatatables 
 		int start=Integer.parseInt(request.getParameter("start"));//分页数据起始数
@@ -76,6 +85,7 @@ public class OrderController extends BaseController{
 	@RequestMapping("/getLatestBusSeries")
 	@ResponseBody
 	public ModelMap getLatestBusSeries(){
+		model=new ModelMap();
 		String productive_year=request.getParameter("productive_year");
 		Map<String,Object> conditionMap=new HashMap<String,Object>();
 		conditionMap.put("productive_year", productive_year);	
@@ -90,6 +100,7 @@ public class OrderController extends BaseController{
 	@RequestMapping("/showOrderDetailList")
 	@ResponseBody
 	public ModelMap showOrderDetailList(){
+		model=new ModelMap();
 		Map<String,Object> conditionMap=new HashMap<String,Object>();
 		if (request.getParameter("search_order_no") != null) conditionMap.put("search_order_no", request.getParameter("search_order_no"));
 		if (request.getParameter("search_order_name") != null) conditionMap.put("search_order_name", request.getParameter("search_order_name"));
@@ -116,6 +127,7 @@ public class OrderController extends BaseController{
 	@RequestMapping("/editOrder")
 	@ResponseBody
 	public ModelMap editOrder(){
+		
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String curTime = df.format(new Date());
 		String userid=String.valueOf(session.getAttribute("user_id"));
@@ -145,12 +157,12 @@ public class OrderController extends BaseController{
 		}
 		try{
 			orderService.editOrder(jsar_del,jsonArray,ordermap);
-			model.put("success", true);
+			initModel(true,"修改成功！",null);
 		}catch(Exception e){
-			model.put("success", false);
+			initModel(false,"修改失败！",null);
 		}		
 		
-		return model;
+		return mv.getModelMap();
 	}
 	/**
 	 * 新增订单
@@ -204,4 +216,116 @@ public class OrderController extends BaseController{
 		}
 		return new_order_no;		
 	}
+	/**
+	 * 展示订单车辆明细
+	 * @return model
+	 */
+	@RequestMapping("/showBusNumber")
+	@ResponseBody
+	public ModelMap showBusNumber(){
+		Map<String,Object> conditionMap=new HashMap<String,Object>();
+		conditionMap.put("order_id",request.getParameter("order_id"));
+		conditionMap.put("factory_id",request.getParameter("factory_id"));
+		initModel(true,"查询成功！",orderService.getBusNumberByOrder(conditionMap));
+		return mv.getModelMap();
+	}
+	/**
+	 * 订单配置导入页面
+	 * @return
+	 */
+	@RequestMapping("/configUpload")
+	public ModelAndView configUpload(){ 
+		mv.setViewName("order/configUpload");
+        return mv;  
+    } 
+	
+	@RequestMapping("/showOrderConfigList")
+	@ResponseBody
+	public ModelMap showOrderConfigList(){
+		model=new ModelMap();
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		int draw=Integer.parseInt(request.getParameter("draw"));//jquerydatatables 
+		int start=Integer.parseInt(request.getParameter("start"));//分页数据起始数
+		int length=Integer.parseInt(request.getParameter("length"));//每一页数据条数
+		String orderNo=request.getParameter("orderNo");//订单编号
+		String orderName=request.getParameter("orderName");//订单名称模糊匹配
+		String actYear=request.getParameter("actYear");//生产年份
+		condMap.put("draw", draw);
+		condMap.put("start", start);
+		condMap.put("length", length);
+		condMap.put("orderNo", orderNo);
+		condMap.put("orderName", orderName);
+		condMap.put("actYear",actYear);
+		Map<String,Object> result=orderService.getOrderConfigListPage(condMap);
+		model.addAllAttributes(result);
+		return model;
+	}
+	
+	@RequestMapping("/getConfigDetailList")
+	@ResponseBody
+	public ModelMap getConfigDetailList(){
+		model=new ModelMap();
+		String configId=request.getParameter("configId");
+		List datalist=orderService.getConfigDetailList(configId);
+		model.put("data",datalist);
+		model.put("draw", request.getParameter("draw"));
+		return model;
+	}
+	
+	
+	@RequestMapping(value="/uploadConfigListFile",method=RequestMethod.POST)
+	@ResponseBody
+	public ModelMap uploadConfigListFile(@RequestParam(value="file",required=false) MultipartFile file){
+		logger.info("uploading.....");
+		String fileName="configDetail.xls";
+		try{
+		ExcelModel excelModel = new ExcelModel();
+		excelModel.setReadSheets(1);
+		excelModel.setStart(1);
+		Map<String, Integer> dataType = new HashMap<String, Integer>();
+		dataType.put("0", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("1", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("2", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("3", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("4", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("5", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("6", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("7", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("8", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("9", ExcelModel.CELL_TYPE_CANNULL);
+		excelModel.setDataType(dataType);
+		excelModel.setPath(fileName);
+		File tempfile=new File(fileName);
+		file.transferTo(tempfile);
+		/**
+		 * 读取输入流中的excel文件，并且将数据封装到ExcelModel对象中
+		 */
+		InputStream is = new FileInputStream(tempfile);
+
+		ExcelTool excelTool = new ExcelTool();
+		excelTool.readExcel(is, excelModel);
+
+		List<Map<String, String>> addList = new ArrayList<Map<String, String>>();
+		for (Object[] data : excelModel.getData()) {
+			Map<String, String> infomap = new HashMap<String, String>();
+
+			infomap.put("parts_type", data[0] == null ? null : data[0].toString().trim());
+			infomap.put("sap_mat", data[1] == null ? null : data[1].toString().trim());
+			infomap.put("components_no", data[2] == null ? null : data[2].toString().trim());
+			infomap.put("components_name", data[3] == null ? null : data[3].toString().trim());
+			infomap.put("size", data[4] == null ? null : data[4].toString().trim());
+			infomap.put("type", data[5] == null ? null : data[5].toString().trim());
+			infomap.put("vendor", data[6] == null ? null : data[6].toString().trim());
+			infomap.put("workshop", data[7] == null ? null : data[7].toString().trim());
+			infomap.put("notes", data[8] == null ? null : data[8].toString().trim());
+
+			addList.add(infomap);
+		}
+		initModel(true,"导入成功！",addList);
+		}catch(Exception e){
+			initModel(false,"导入失败！",null);
+		}
+		return mv.getModelMap();
+	}
+
 }

@@ -20,6 +20,10 @@ public interface IOrderDao {
 	public int updateFactoryOrder(BmsFactoryOrderDetail factoryorder);
 	public String queryOrderSerial(String year);
 	public int insertOrder(BmsOrder order);
+	public List queryBusNumberByOrder(Map<String, Object> conditionMap);
+	public List<Map<String, Object>> getOrderConfigList(Map<String, Object> condMap);
+	public int getConfigTotalCount(Map<String, Object> condMap);
+	public List queryConfigDetailList(String configId);
 	
 	
 }

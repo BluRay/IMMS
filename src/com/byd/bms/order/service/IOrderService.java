@@ -18,4 +18,7 @@ public interface IOrderService {
 	public String getOrderSerial(String year);
 	@Transactional
 	public void createOrder(BmsOrder order, String factoryOrderNum);
+	public List getBusNumberByOrder(Map<String, Object> conditionMap);
+	public Map<String,Object> getOrderConfigListPage(Map<String, Object> condMap);
+	public List getConfigDetailList(String configId);
 }
