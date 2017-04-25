@@ -7,7 +7,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+
+import com.byd.bms.util.service.ICommonService;
 
 /**
  * @author Yangke 170313
@@ -15,6 +18,8 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
  */
 public class LoginInterceptor extends HandlerInterceptorAdapter{
 	static Logger logger = Logger.getLogger("[BMS]");
+	@Autowired
+	protected ICommonService commonService;
 	private List<String> excludedUrls;
 
 	public void setExcludeUrls(List<String> excludeUrls) {
@@ -42,6 +47,24 @@ public class LoginInterceptor extends HandlerInterceptorAdapter{
 		// 其他情况判断session中是否有key，有的话继续用户的操作
 		if (request.getSession().getAttribute("user_name") != null) {
 			//TODO 判断user是否拥有该请求的访问权限,没有则跳到无权限的错误提示页面
+			List<String> authlist = commonService.getRoleAuthority(request.getSession().getAttribute("staff_number") + "");
+			boolean check_permission = false;
+			for(int i=0;i<authlist.size();i++){
+				authlist.set(i, uri.substring(0, uri.indexOf("/", 1)+1) + authlist.get(i));
+			}
+			if (authlist.contains(uri)) {
+				check_permission = true;
+			}
+			// 通用页面不需要校验
+			if((uri.indexOf("common")>0)||(uri.indexOf("getMenu")>0)){
+				check_permission = true;
+			}
+			logger.info ("check_permission = " + check_permission);
+			if(!check_permission){
+				response.sendRedirect(request.getContextPath() + "/loginPage");
+				return false;
+			}
+			
 			
 			//保存操作日志 TODO 先判断请求是否需要记录操作日志
 			//操作日志格式：	工号		IP地址		  请求地址	  请求数据

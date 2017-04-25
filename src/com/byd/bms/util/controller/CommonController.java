@@ -23,6 +23,7 @@ public class CommonController extends BaseController {
 	@RequestMapping("/getOrderFuzzySelect")
 	@ResponseBody
 	public ModelMap getOrderFuzzySelect() {
+		model=new ModelMap();
 		String orderNo = request.getParameter("orderNo");
 		String busType = request.getParameter("busType");
 		String factory = request.getParameter("factory");
@@ -42,7 +43,7 @@ public class CommonController extends BaseController {
 	@RequestMapping("/getFactorySelect")
 	@ResponseBody
 	public ModelMap getFactorySelect(){
-
+		model=new ModelMap();
 		model.put("data", commonService.getFactorySelect());
 
 		return model;
@@ -55,7 +56,7 @@ public class CommonController extends BaseController {
 	@RequestMapping("/getBusType")
 	@ResponseBody
 	public ModelMap getBusType(){
-
+		model=new ModelMap();
 		model.put("data", commonService.getBusTypeSelect());
 
 		return model;
@@ -68,6 +69,7 @@ public class CommonController extends BaseController {
 	@RequestMapping("/getKeysSelect")
 	@ResponseBody
 	public ModelMap getKeysSelect(){
+		model=new ModelMap();
 		model.put("data", commonService.getKeysSelect(request.getParameter("keyCode")
 				.toString()));
 		return model;
@@ -76,6 +78,7 @@ public class CommonController extends BaseController {
 	@RequestMapping("/getDepartmentByFactory")
 	@ResponseBody
 	public ModelMap getDepartmentByFactory(String factory_id){
+		model=new ModelMap();
 		model.put("data", commonService.getDepartmentByFactory(factory_id));
 		return model;
 	}

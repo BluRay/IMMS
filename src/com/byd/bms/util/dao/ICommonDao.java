@@ -17,5 +17,7 @@ public interface ICommonDao {
 	List<Map<String, Object>> queryDepartmentByFactory(String factory_id);
 
 	List<Map<String, Object>> queryKeysList(String keyCode);
+	
+	List<String> getRoleAuthority(String staff_number);
 
 }
