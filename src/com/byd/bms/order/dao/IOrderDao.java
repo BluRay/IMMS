@@ -24,6 +24,10 @@ public interface IOrderDao {
 	public List<Map<String, Object>> getOrderConfigList(Map<String, Object> condMap);
 	public int getConfigTotalCount(Map<String, Object> condMap);
 	public List queryConfigDetailList(String configId);
+	public int saveOrderConfig(Map<String, Object> configDetail);
+	public void saveConfigDetails(Map<String, Object> smap);
+	public void updateOrderConfig(Map<String, Object> configDetail);
+	public void deleteConfigDetailById(int config_id);
 	
 	
 }

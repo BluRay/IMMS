@@ -86,23 +86,27 @@ public class BaseDataServiceImpl implements IBaseDataService {
 	//线别
 	@Override
 	public Map<String, Object> getLineList(Map<String, Object> queryMap) {
-		// TODO Auto-generated method stub
-		return null;
+		int totalCount=0;
+		List<BmsBaseLine> datalist=baseDataDao.getLineList(queryMap);
+		totalCount=baseDataDao.getLineTotalCount(queryMap);
+		Map<String, Object> result=new HashMap<String,Object>();
+		result.put("draw", queryMap.get("draw"));
+		result.put("recordsTotal", totalCount);
+		result.put("recordsFiltered", totalCount);
+		result.put("data", datalist);
+		return result;
 	}
 	@Override
 	public int addLine(BmsBaseLine line) {
-		// TODO Auto-generated method stub
-		return 0;
+		return baseDataDao.addLine(line);
 	}
 	@Override
 	public void updateLine(BmsBaseLine line) {
-		// TODO Auto-generated method stub
-		
+		baseDataDao.updateLine(line);
 	}
 	@Override
 	public void deleteLine(List ids) {
-		// TODO Auto-generated method stub
-		
+		baseDataDao.deleteLine(ids);
 	}
 	@Override
 	public int checkDeleteLine(List ids) {

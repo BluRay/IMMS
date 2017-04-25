@@ -19,4 +19,5 @@ public interface IPlanDao {
 	public int insertMasterPlan(PlanMasterPlan masterPlan);
 	public int updatePlanMasterInfo(PlanMasterPlan masterPlan);
 	public int insertOperateChangeLog(BmsBaseOperateChangeLog changLog);
+	public List<Map<String,String>> checkPlanIssuanceList(Map<String,Object> queryMap);
 }

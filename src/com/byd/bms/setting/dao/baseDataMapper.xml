@@ -122,4 +122,59 @@
 			#{ids}
 		</foreach>
 	</update>
+	
+	<!-- 线别表映射 -->
+	<resultMap type="com.byd.bms.setting.model.BmsBaseLine" id="lineMap">
+		<id property="id" column="id" />
+		<result property="lineName" column="line" />
+		<result property="deleteFlag" column="delete_flag" />
+		<result property="memo" column="memo" />
+		<result property="editorId" column="editor_id" />
+		<result property="editDate" column="edit_date" />
+		<result property="editor" column="editor" />
+	</resultMap>
+	<select id="getLineList" parameterType="Map" resultMap="lineMap">
+		SELECT l.*,u.display_name editor,u.id editorId FROM BMS_BASE_LINE as l 
+			LEFT JOIN BMS_BASE_USER u on l.editor_id = u.staff_number 
+				where 1=1 and l.delete_flag='0'
+		<if test="lineName!=null and lineName!=''">
+			and l.line like CONCAT('%',#{lineName},'%')
+		</if>
+		<if test="start !=null and length!=-1">
+			LIMIT #{start} ,#{length} 
+		</if>
+	</select>
+	<select id="getLineTotalCount" parameterType="Map"
+		resultType="int">
+		SELECT count(l.id) FROM BMS_BASE_LINE as l 
+			LEFT JOIN BMS_BASE_USER u on l.editor_id = u.staff_number 
+				where 1=1 and l.delete_flag='0'
+		
+		<if test="lineName!=null and lineName!=''">
+			and l.line like CONCAT('%',#{lineName},'%')
+		</if>
+		
+	</select>
+	<insert id="addLine" parameterType="com.byd.bms.setting.model.BmsBaseLine">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT LAST_INSERT_ID() AS id
+		</selectKey>
+		insert into BMS_BASE_LINE
+		(line,memo,editor_id,edit_date)
+		values(#{lineName},#{memo},#{editorId},#{editDate})
+	</insert>
+	<update id="updateLine" parameterType="com.byd.bms.setting.model.BmsBaseLine">
+		update
+		BMS_BASE_LINE set
+		line=#{lineName},memo=#{memo},editor_id=#{editorId},edit_date=#{editDate}
+		where id=#{id}
+	</update>
+	<update id="deleteLine" parameterType="java.util.List">
+
+		update BMS_BASE_LINE set delete_flag='1' where id in
+		<foreach collection="list" item="ids" index="index" open="("
+			close=")" separator=",">
+			#{ids}
+		</foreach>
+	</update>
 </mapper>

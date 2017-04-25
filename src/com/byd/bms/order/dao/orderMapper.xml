@@ -207,4 +207,79 @@
 		SELECT * FROM BMS_OR_ORDER_CONFIG_DETAIL 
 		WHERE order_config_id=#{configId}
 	</select>
+	
+	<insert id="saveOrderConfig" parameterType="Map"   useGeneratedKeys="true" keyProperty="id" >
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into BMS_OR_ORDER_CONFIG (order_id,sap_materialNo,material,order_config_name,customer,config_qty,
+		editor_id,edit_date,battery_capacity,rated_voltage,spring_num,tire_type,passenger_num,bus_seats)
+		values(#{order_id},#{materialNo},#{material},#{config_name},#{customer},#{config_qty},#{editor_id},
+		#{edit_date},#{battery_capacity},#{rated_voltage},#{spring_num},#{tire_type},#{passenger_num},#{bus_seats})
+	</insert>
+	
+	<update id="updateOrderConfig" parameterType="Map">
+		update BMS_OR_ORDER_CONFIG 
+		 <trim prefix="SET" suffixOverrides=","> 
+			<if test="sap_materialNo !=null">
+				sap_materialNo=#{materialNo},
+			</if>
+			<if test="material !=null">
+				material=#{material},
+			</if>
+			<if test="order_config_name !=null">
+				order_config_name=#{config_name},
+			</if>
+			<if test="customer !=null">
+				customer=#{customer},
+			</if>
+			<if test="config_qty !=null">
+				config_qty=#{config_qty},
+			</if>
+			<if test="editor_id !=null">
+				editor_id=#{editor_id},
+			</if>
+			<if test="edit_date !=null">
+				edit_date=#{edit_date},
+			</if>
+			<if test="battery_capacity !=null">
+				battery_capacity=#{battery_capacity},
+			</if>
+			<if test="rated_voltage !=null">
+				rated_voltage=#{rated_voltage},
+			</if>
+			<if test="spring_num !=null">
+				spring_num=#{spring_num},
+			</if>
+			<if test="tire_type !=null">
+				tire_type=#{tire_type},
+			</if>
+			<if test="bus_seats !=null">
+				bus_seats=#{bus_seats},
+			</if>
+			<if test="passenger_num !=null">
+				passenger_num=#{passenger_num}
+			</if>
+		</trim>
+		where id=#{config_id}
+	</update>
+	
+	<update id="deleteConfigDetailById" parameterType="int">
+		delete from BMS_OR_ORDER_CONFIG_DETAIL where order_config_id=#{config_id}
+	</update>
+	
+	<insert id="saveConfigDetails" parameterType="Map"  useGeneratedKeys="true">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into BMS_OR_ORDER_CONFIG_DETAIL
+		(order_config_id,parts_type,sap_mat,components_no,components_name,size,type,vendor,workshop,notes)
+		values
+		<foreach collection="detail_list" item="detail" index="index" separator=",">
+			(#{config_id},#{detail.parts_type},#{detail.sap_mat},#{detail.components_no},#{detail.components_name},
+			#{detail.size},#{detail.type},#{detail.vendor},#{detail.workshop},#{detail.notes})
+		</foreach>
+	</insert>
 </mapper>

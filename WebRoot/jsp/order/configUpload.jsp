@@ -63,6 +63,9 @@
 							<td><input type="button"
 								class="btn btn-sm btn-primary btnQuery" id="btnQuery" value="查询"
 								style="margin-left: 2px;"></input>
+								<input type="button"
+								class="btn btn-sm btn-success btnQuery" id="btnAdd" value="新增"
+								style="margin-left: 2px;"></input>
 							</td>
 						</tr>
 					</table>
@@ -79,11 +82,13 @@
 			</div>
 
 			<div id="dialog-config" class="hide">
-				<div id="" class="form-horizontal">
+				<div id="config_form" class="form-horizontal">
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="order">*&nbsp;订单：</label>
-						<div class="col-sm-9">
-							<p style="width:98%;margin-bottom: 4px;font-size: 14px;margin-top: 4px;"id="order" >D2017003 K7 200台</p>
+						<div class="col-sm-3">
+							<!-- <p style="width:98%;margin-bottom: 4px;font-size: 14px;margin-top: 4px;"id="order" >D2017003 K7 200台</p> -->
+							<input type="text"  class="input-medium" style="width:100%"  id="order" />
+							<input type="text" style="display:none" id="order_id" />
 						</div>
 					</div>
 					<div class="form-group">
@@ -155,7 +160,7 @@
 						</div>
 					</div>
 					
-					<div class="form-group">
+					<div class="form-group" id="upload_div">
 						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="editOrderCode">*&nbsp;配置信息：</label>
 						<div class="col-sm-9">
 							<form id="uploadForm" action="" enctype="multipart/form-data" method="post">
@@ -177,7 +182,6 @@
 							</table>
 						</div>
 					</div>
-				</div>
 			</div>
 			
 		

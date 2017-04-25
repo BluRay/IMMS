@@ -8,16 +8,20 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.byd.bms.order.dao.IOrderDao;
 import com.byd.bms.order.model.BmsFactoryOrderDetail;
 import com.byd.bms.order.model.BmsOrder;
+import com.byd.bms.order.model.BmsOrderConfigDetail;
 import com.byd.bms.order.service.IOrderService;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 @Service
 public class OrderServiceImpl implements IOrderService {
 	@Resource(name="orderDao")
@@ -200,6 +204,51 @@ public class OrderServiceImpl implements IOrderService {
 		List datalist=new ArrayList();
 		datalist=orderDao.queryConfigDetailList(configId);
 		return datalist;
+	}
+
+	@Override
+	@Transactional
+	public void saveOrderConfigDetail(Map<String, Object> configDetail) {
+		int config_id=(int)configDetail.get("config_id");
+		String config_detail=(String)configDetail.get("config_detail");
+		List detail_list=new ArrayList();
+		JsonArray jsa=new JsonArray();
+		JsonParser parser=new JsonParser();
+		JsonElement jel=parser.parse(config_detail);
+		Gson gson = new Gson();
+		if (jel.isJsonArray()) {
+			jsa=jel.getAsJsonArray();
+		}
+		Iterator it=jsa.iterator();
+		while(it.hasNext()){
+			JsonElement el= (JsonElement) it.next();
+			BmsOrderConfigDetail detail=gson.fromJson(el, BmsOrderConfigDetail.class);
+			detail_list.add(detail);
+		}
+		
+		Map<String,Object> smap=null;
+		if(config_id==0){
+			orderDao.saveOrderConfig(configDetail);
+			int config_id_new=(int) configDetail.get("id");	
+			smap=new HashMap<String,Object>();
+			smap.put("config_id", config_id_new);
+			smap.put("detail_list", detail_list);
+			
+			if(detail_list.size()>0){
+				orderDao.saveConfigDetails(smap);
+			}	
+		}else{
+			orderDao.updateOrderConfig(configDetail);
+			if(detail_list.size()>0){
+				smap=new HashMap<String,Object>();
+				smap.put("config_id", config_id);
+				smap.put("detail_list", detail_list);
+				orderDao.deleteConfigDetailById(config_id);
+				orderDao.saveConfigDetails(smap);
+			}
+			
+		}
+		
 	}
 
 }

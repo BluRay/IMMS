@@ -3,9 +3,7 @@ package com.byd.bms.plan.controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -224,6 +222,36 @@ public class PlanController extends BaseController{
 		
 		Map<String,Object> result = planService.getPlanMasterIndex(condMap);
 		model.addAllAttributes(result);
+		return model;
+	}
+	
+	@RequestMapping("/getIssuancePlan")
+	@ResponseBody
+	public ModelMap getIssuancePlan(){
+		Map<String,Object> conditionMap=new HashMap<String,Object>();
+		if (request.getParameter("issuance_date") != null) conditionMap.put("issuance_date", request.getParameter("issuance_date"));
+		conditionMap.put("day",Integer.valueOf(request.getParameter("issuance_date").substring(6, 8)));		
+		conditionMap.put("issuance_month",request.getParameter("issuance_date").substring(0, 6));	
+		if (request.getParameter("factory_id") != null) conditionMap.put("factory_id", request.getParameter("factory_id"));
+		if (request.getParameter("order_no") != null) conditionMap.put("order_no", request.getParameter("order_no"));
+
+		//判断发布订单是否已经发布到工厂
+		String msg = "查询成功";
+		List<Map<String,String>> checkdatalist=new ArrayList<Map<String, String>>();
+		checkdatalist = planService.checkPlanIssuanceList(conditionMap);
+		if (checkdatalist.size() == 0){
+			msg = "当前没有可发布的计划";
+		}else{
+			for(int i=0;i<checkdatalist.size(); i++){
+				Map<String,String> cerMap = (Map<String, String>) checkdatalist.get(i);
+				if(cerMap.get("product_qty") == null){
+					msg = cerMap.get("order_no") + "没有发布工厂配置！";
+				}
+			}
+		}
+		
+		
+		model = mv.getModelMap();
 		return model;
 	}
 	

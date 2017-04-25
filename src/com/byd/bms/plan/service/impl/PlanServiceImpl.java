@@ -200,6 +200,13 @@ public class PlanServiceImpl implements IPlanService {
 		
 		return 0;
 	}
+
+	@Override
+	public List<Map<String, String>> checkPlanIssuanceList(Map<String, Object> queryMap) {
+		List<Map<String, String>> checkdatalist=new ArrayList<Map<String, String>>();
+		checkdatalist = planDao.checkPlanIssuanceList(queryMap);
+		return checkdatalist;
+	}
 	
 	
 

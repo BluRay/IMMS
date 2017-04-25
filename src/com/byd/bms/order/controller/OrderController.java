@@ -328,4 +328,38 @@ public class OrderController extends BaseController{
 		return mv.getModelMap();
 	}
 
+	@RequestMapping("/saveOrderConfigDetail")
+	@ResponseBody
+	public ModelMap saveOrderConfigDetail(){
+		Map<String,Object> configDetail=new HashMap<String,Object>();
+		configDetail.put("config_id",Integer.parseInt(request.getParameter("config_id")));
+		configDetail.put("order_id",Integer.parseInt(request.getParameter("order_id")));
+		configDetail.put("config_name",request.getParameter("config_name"));
+		configDetail.put("config_qty",request.getParameter("config_qty"));
+		configDetail.put("materialNo",request.getParameter("materialNo"));
+		configDetail.put("customer",request.getParameter("customer"));
+		configDetail.put("material",request.getParameter("material"));
+		configDetail.put("tire_type",request.getParameter("tire_type"));
+		configDetail.put("spring_num",request.getParameter("spring_num"));
+		configDetail.put("bus_seats",request.getParameter("bus_seats"));
+		configDetail.put("rated_voltage",request.getParameter("rated_voltage"));
+		configDetail.put("battery_capacity",request.getParameter("battery_capacity"));
+		configDetail.put("passenger_num",request.getParameter("passenger_num"));
+		configDetail.put("config_detail",request.getParameter("config_detail"));
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		int userid=(int) session.getAttribute("user_id");
+		configDetail.put("editor_id", userid);
+		configDetail.put("edit_date", curTime);
+		
+		try{
+			orderService.saveOrderConfigDetail(configDetail);
+			initModel(true,"保存成功！",null);
+		}catch(Exception e){
+			logger.error(e.getMessage());
+			initModel(true,"保存失败！",null);
+		}
+		return mv.getModelMap();
+		
+	}
 }

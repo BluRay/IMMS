@@ -2,53 +2,28 @@ package com.byd.bms.setting.model;
 
 public class BmsBaseLine {
 	private int id;
-	private int factoryId;
-	private String factoryName;
-	private int workshopId;
-	private String workshopName;
 	private String lineName;
 	private String deleteFlag;
 	private String memo;
-	private int editorId;
+	private String editorId;
 	private String editor;
 	private String editDate;
 	
-	public int getWorkshopId() {
-		return workshopId;
-	}
-	public void setWorkshopId(int workshopId) {
-		this.workshopId = workshopId;
-	}
+	
 	public String getLineName() {
 		return lineName;
 	}
 	public void setLineName(String lineName) {
 		this.lineName = lineName;
 	}
-	public String getFactoryName() {
-		return factoryName;
-	}
-	public void setFactoryName(String factoryName) {
-		this.factoryName = factoryName;
-	}
+	
 	public int getId() {
 		return id;
 	}
 	public void setId(int id) {
 		this.id = id;
 	}
-	public int getFactoryId() {
-		return factoryId;
-	}
-	public void setFactoryId(int factoryId) {
-		this.factoryId = factoryId;
-	}
-	public String getWorkshopName() {
-		return workshopName;
-	}
-	public void setWorkshopName(String workshopName) {
-		this.workshopName = workshopName;
-	}
+	
 	public String getDeleteFlag() {
 		return deleteFlag;
 	}
@@ -61,10 +36,10 @@ public class BmsBaseLine {
 	public void setMemo(String memo) {
 		this.memo = memo;
 	}
-	public int getEditorId() {
+	public String getEditorId() {
 		return editorId;
 	}
-	public void setEditorId(int editorId) {
+	public void setEditorId(String editorId) {
 		this.editorId = editorId;
 	}
 	public String getEditor() {

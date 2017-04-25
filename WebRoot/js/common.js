@@ -3,7 +3,7 @@
  */
 function getSelects(data, selectval, element,defaultVal,valName) {
 	defaultVal=defaultVal||"";	
-	var strs = "<option value="+defaultVal+">全部</option>";
+	var strs = "<option value="+defaultVal+">"+defaultVal+"</option>";
 	$(element).html("");
 	$.each(data, function(index, value) {
 		if(valName=="name"){
@@ -26,67 +26,7 @@ function getSelects(data, selectval, element,defaultVal,valName) {
 	});
 	$(element).append(strs);
 }
-/*
- * 填充下拉列表 with id=>value;不包括全部选项
- */
-function getSelects_noall(data, selectval, element,defaultVal,valName) {
-	//defaultVal=defaultVal||"";
-	var strs ="";
-	if(defaultVal!=undefined){
-		 strs = "<option value="+defaultVal+"></option>";
-	}
-	
-	$(element).html("");
-	$.each(data, function(index, value) {
-		if(valName=="name"){
-			if (selectval == value.id || selectval == value.name) {
-				strs += "<option value=" + value.name + " selected='selected'" + ">"
-						+ value.name + "</option>";
-			} else {
-				strs += "<option value=" + value.name + ">" + value.name
-						+ "</option>";
-			}
-		}else{
-			if (selectval == value.id || selectval == value.name) {
-				strs += "<option value=" + value.id + " selected='selected'" + ">"
-						+ value.name + "</option>";
-			} else {
-				strs += "<option value=" + value.id + ">" + value.name
-						+ "</option>";
-			}
-		}
-	});
-	$(element).append(strs);
-}
-/*
- * 填充下拉列表 with id=>value;不包括全部选项
- */
-function getSelects_empty(data, selectval, element,defaultVal,valName) {
-	//var strs = "<option value=''>请选择</option>";
-	defaultVal=defaultVal||"";	
-	var strs = "<option value="+defaultVal+">请选择</option>";
-	$(element).html("");
-	$.each(data, function(index, value) {
-		if(valName=="name"){
-			if (selectval == value.id || selectval == value.name) {
-				strs += "<option value=" + value.name + " selected='selected'" + ">"
-						+ value.name + "</option>";
-			} else {
-				strs += "<option value=" + value.name + ">" + value.name
-						+ "</option>";
-			}
-		}else{
-			if (selectval == value.id || selectval == value.name) {
-				strs += "<option value=" + value.id + " selected='selected'" + ">"
-						+ value.name + "</option>";
-			} else {
-				strs += "<option value=" + value.id + ">" + value.name
-						+ "</option>";
-			}
-		}
-	});
-	$(element).append(strs);
-}
+
 /*
  * 订单编号模糊查询 submitId： 用于提交的元素的id
  */
@@ -236,4 +176,30 @@ function getKeysSelect(keyCode, selectval, element,selectType,valueItem) {
 			$(element).append(strs);
 		}
 	})
+}
+/**
+ * 工厂选择下拉列表（包括权限控制）
+ * auth:true/false 是否权限控制
+ * url:权限控制url
+ * selectval:选中的值
+ * selectId:下拉框组件id
+ * selectType:下拉框组件类型：==全部==、==请选择==、== ==
+ * valName:option value值:id/name
+ */
+function getFactorySelect(auth,url,selectval,selectId,selectType,valName) {
+	$.ajax({
+		url : "/IMMS/common/getFactorySelect",
+		dataType : "json",
+		data : {
+			auth:auth,
+			url:url
+		},
+		async : false,
+		error : function(response) {
+			alert(response.message)
+		},
+		success : function(response) {
+			getSelects(response.data,selectval,selectId,selectType, valName);		
+		}
+	});
 }

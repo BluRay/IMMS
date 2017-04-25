@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.byd.bms.setting.model.BmsBaseFactory;
+import com.byd.bms.setting.model.BmsBaseLine;
 import com.byd.bms.setting.model.BmsBaseWorkshop;
 import com.byd.bms.setting.service.IBaseDataService;
 import com.byd.bms.util.controller.BaseController;
@@ -289,6 +290,108 @@ public class BaseDataController extends BaseController {
 				idlist.add(id);
 			}
 			baseDateService.deleteWorkshop(idlist);
+			initModel(true, "success", "");
+		} catch (Exception e) {
+			initModel(false, e.getMessage(), e.toString());
+		}
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	/**
+	 * ajax 获取线别列表
+	 * 
+	 * @return model
+	 */
+	@RequestMapping("/getLineList")
+	@ResponseBody
+	public ModelMap getLineList() {
+		Map<String, Object> queryMap = new HashMap<String, Object>();
+		int draw = Integer.parseInt(request.getParameter("draw"));// jquerydatatables
+		int start = Integer.parseInt(request.getParameter("start"));// 分页数据起始数
+		int length = Integer.parseInt(request.getParameter("length"));// 每一页数据条数
+
+		String lineName = request.getParameter("lineName");//
+
+		queryMap.put("draw", draw);
+		queryMap.put("start", start);
+		queryMap.put("length", length);
+		queryMap.put("lineName", lineName);
+		Map<String, Object> result = baseDateService.getLineList(queryMap);
+		model.addAllAttributes(result);
+
+		return model;
+	}
+	
+	@RequestMapping("/addLine")
+	@ResponseBody
+	public ModelMap addLine() {
+		try {
+			String lineName = request.getParameter("lineName") == null ? "" : request.getParameter("lineName");
+			
+			String memo = request.getParameter("memo") == null ? "" : request.getParameter("memo");
+
+			String editor_id = request.getSession().getAttribute("user_name") + "";
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String edit_date = df.format(new Date());
+
+			BmsBaseLine line = new BmsBaseLine();
+
+			line.setLineName(lineName);
+			line.setMemo(memo);
+			line.setEditorId(editor_id);
+			line.setEditDate(edit_date);
+
+			int reuslt = baseDateService.addLine(line);
+			initModel(true, "success", reuslt);
+		} catch (Exception e) {
+			initModel(false, e.getMessage(), e.toString());
+		}
+		model = mv.getModelMap();
+		return model;
+	}
+
+	@RequestMapping("/updateLine")
+	@ResponseBody
+	public ModelMap updateLine() {
+		try {
+			int id = Integer.parseInt(request.getParameter("id"));
+			
+			String lineName = request.getParameter("lineName") == null ? "" : request.getParameter("lineName");
+			String memo = request.getParameter("memo") == null ? "" : request.getParameter("memo");
+
+			String editor_id = request.getSession().getAttribute("user_name") + "";
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String edit_date = df.format(new Date());
+
+			BmsBaseLine line = new BmsBaseLine();
+			
+			line.setId(id);
+
+			line.setLineName(lineName);
+			line.setMemo(memo);
+			line.setEditorId(editor_id);
+			line.setEditDate(edit_date);
+
+			baseDateService.updateLine(line);
+			initModel(true, "success", "");
+		} catch (Exception e) {
+			initModel(false, e.getMessage(), e.toString());
+		}
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/deleteLine")
+	@ResponseBody
+	public ModelMap deleteLine() {
+		try {
+			String ids = request.getParameter("ids");
+			List<String> idlist = new ArrayList<String>();
+			for(String id : ids.split(",")){
+				idlist.add(id);
+			}
+			baseDateService.deleteLine(idlist);
 			initModel(true, "success", "");
 		} catch (Exception e) {
 			initModel(false, e.getMessage(), e.toString());
