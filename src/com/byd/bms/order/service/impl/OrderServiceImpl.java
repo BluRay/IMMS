@@ -251,4 +251,18 @@ public class OrderServiceImpl implements IOrderService {
 		
 	}
 
+	@Override
+	public Map<String, Object> getConfigAllotListPage(
+			Map<String, Object> condMap) {
+		int totalCount=0;
+		List<Map<String, Object>> datalist=orderDao.queryConfigAllotList(condMap);
+		totalCount=orderDao.queryConfigAllotTotalCount(condMap);
+		Map<String, Object> result=new HashMap<String,Object>();
+		result.put("draw", condMap.get("draw"));
+		result.put("recordsTotal", totalCount);
+		result.put("recordsFiltered", totalCount);
+		result.put("data", datalist);
+		return result;
+	}
+
 }

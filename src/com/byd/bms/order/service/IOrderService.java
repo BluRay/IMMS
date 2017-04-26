@@ -22,4 +22,5 @@ public interface IOrderService {
 	public Map<String,Object> getOrderConfigListPage(Map<String, Object> condMap);
 	public List getConfigDetailList(String configId);
 	public void saveOrderConfigDetail(Map<String, Object> configDetail);
+	public Map<String, Object> getConfigAllotListPage(Map<String, Object> condMap);
 }

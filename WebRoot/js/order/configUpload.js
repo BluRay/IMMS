@@ -111,19 +111,20 @@ function ajaxQuery(){
 function showEditPage(row){
 	//显示订单配置数据
 	$("#order").val(row.order_no).attr("disabled",true);
-	$("#order_id").val(row.id);
-	$("#configName").val(row.order_config_name);
-	$("#configQty").val(row.config_qty);
-	$("#materialNo").val(row.sap_materialNo);
-	$("#customer").val(row.customer);
-	$("#material").val(row.material);
-	$("#tire_type").val(row.tire_type);
-	$("#spring_num").val(row.spring_num);
-	$("#bus_seats").val(row.bus_seats);
-	$("#rated_voltage").val(row.rated_voltage);
-	$("#battery_capacity").val(row.battery_capacity);
-	$("#passenger_num").val(row.passenger_num);
+	$("#order_id").val(row.id)
+	$("#configName").val(row.order_config_name).attr("disabled",false);
+	$("#configQty").val(row.config_qty).attr("disabled",false);
+	$("#materialNo").val(row.sap_materialNo).attr("disabled",false);
+	$("#customer").val(row.customer).attr("disabled",false);
+	$("#material").val(row.material).attr("disabled",false);
+	$("#tire_type").val(row.tire_type).attr("disabled",false);
+	$("#spring_num").val(row.spring_num).attr("disabled",false);
+	$("#bus_seats").val(row.bus_seats).attr("disabled",false);
+	$("#rated_voltage").val(row.rated_voltage).attr("disabled",false);
+	$("#battery_capacity").val(row.battery_capacity).attr("disabled",false);
+	$("#passenger_num").val(row.passenger_num).attr("disabled",false);
 	$("#upload_div").show();
+	json_configList=null;
 	
 	var param ={
 			"configId":row.config_id||0
@@ -170,18 +171,19 @@ function showCreatePage(){
 	//显示订单配置数据
 	$("#order").attr("disabled",false);
 	$("#order_id").val('0');
-	$("#configName").val("");
-	$("#configQty").val("");
-	$("#materialNo").val("");
-	$("#customer").val("");
-	$("#material").val("");
-	$("#tire_type").val("");
-	$("#spring_num").val("");
-	$("#bus_seats").val("");
-	$("#rated_voltage").val("");
-	$("#battery_capacity").val("");
-	$("#passenger_num").val("");
+	$("#configName").val("").attr("disabled",false);;
+	$("#configQty").val("").attr("disabled",false);;
+	$("#materialNo").val("").attr("disabled",false);;
+	$("#customer").val("").attr("disabled",false);;
+	$("#material").val("").attr("disabled",false);;
+	$("#tire_type").val("").attr("disabled",false);;
+	$("#spring_num").val("").attr("disabled",false);;
+	$("#bus_seats").val("").attr("disabled",false);;
+	$("#rated_voltage").val("").attr("disabled",false);;
+	$("#battery_capacity").val("").attr("disabled",false);;
+	$("#passenger_num").val("").attr("disabled",false);;
 	$("#upload_div").show();
+	json_configList=null;
 	
 	var dialog = $( "#dialog-config" ).removeClass('hide').dialog({
 		width:900,

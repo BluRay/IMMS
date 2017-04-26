@@ -362,4 +362,57 @@ public class OrderController extends BaseController{
 		return mv.getModelMap();
 		
 	}
+	
+	/**
+	 * 订单配置分配页面
+	 * @return
+	 */
+	@RequestMapping("/configAllot")
+	public ModelAndView configAllot(){ 
+		mv.setViewName("order/configAllot");
+        return mv;  
+    } 
+	/**
+	 * 获取配置产地分配列表
+	 * @return
+	 */
+	@RequestMapping("/getConfigAllotList")
+	@ResponseBody
+	public ModelMap getConfigAllotList(){
+		model=new ModelMap();
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		int draw=Integer.parseInt(request.getParameter("draw"));//jquerydatatables 
+		int start=Integer.parseInt(request.getParameter("start"));//分页数据起始数
+		int length=Integer.parseInt(request.getParameter("length"));//每一页数据条数
+		String orderNo=request.getParameter("orderNo");//订单编号
+		String orderName=request.getParameter("orderName");//订单名称模糊匹配
+		String actYear=request.getParameter("actYear");//生产年份
+		String factory=request.getParameter("factory");//工厂
+		String orderColumn=request.getParameter("orderColumn");//排序字段
+		condMap.put("draw", draw);
+		condMap.put("start", start);
+		condMap.put("length", length);
+		condMap.put("orderNo", orderNo);
+		condMap.put("orderName", orderName);
+		condMap.put("actYear",actYear);
+		condMap.put("factory", factory);
+		condMap.put("orderColumn", orderColumn);
+		
+		Map<String,Object> result=orderService.getConfigAllotListPage(condMap);
+		model.addAllAttributes(result);
+		return model;
+	}
+	
+	/**
+	 * 根据订单获取配置列表
+	 * @return
+	 */
+	@RequestMapping("/getConfigListByOrder")
+	@ResponseBody
+	public ModelMap getConfigListByOrder(){
+		model=new ModelMap();
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		
+		return model;
+	}
 }

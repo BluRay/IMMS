@@ -28,6 +28,8 @@ public interface IOrderDao {
 	public void saveConfigDetails(Map<String, Object> smap);
 	public void updateOrderConfig(Map<String, Object> configDetail);
 	public void deleteConfigDetailById(int config_id);
+	public List<Map<String, Object>> queryConfigAllotList(Map<String, Object> condMap);
+	public int queryConfigAllotTotalCount(Map<String, Object> condMap);
 	
 	
 }

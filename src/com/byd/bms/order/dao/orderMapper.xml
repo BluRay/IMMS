@@ -127,7 +127,7 @@
 	</insert>
 	
 	<update id='updateFactoryOrder' parameterType="com.byd.bms.order.model.BmsFactoryOrderDetail">
-		update BMS_OR_FACTORY_ORDER set production_qty=#{production_qty},busnum_start=#{busnum_start},
+		update BMS_OR_FACTORY_ORDER set production_qty=#{production_qty},busnum_start=#{busnum_start},factory_id=#{factory_id},
 		busnum_end=#{busnum_end},bus_number_start=#{bus_number_start},editor_id=#{editor_id},edit_date=#{edit_date}
 		where id=#{factory_order_id}
 	</update>
@@ -282,4 +282,55 @@
 			#{detail.size},#{detail.type},#{detail.vendor},#{detail.workshop},#{detail.notes})
 		</foreach>
 	</insert>
+	
+	<select id="queryConfigAllotList" parameterType="Map" resultType="Map">
+		SELECT fo.id factory_order_id,o.id order_id,c.id config_id,o.order_no,CONCAT(o.order_name,t.bus_type_code,o.order_qty,'台') AS order_name_str,
+		f.factory_name,fo.production_qty,c.order_config_name,fc.product_qty,c.config_qty,fc.sequence,c.customer
+		FROM BMS_OR_ORDER_CONFIG c
+		LEFT JOIN BMS_OR_FACTORY_ORDER fo ON c.order_id=fo.order_id
+		LEFT JOIN BMS_OR_ORDER o ON o.id=fo.order_id
+		LEFT JOIN BMS_BASE_FACTORY f on fo.factory_id=f.id
+		LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id=t.id
+		LEFT JOIN BMS_OR_FACTORY_ORDER_CONFIG fc ON fc.order_config_id=c.id
+		WHERE 1=1
+		<if test="orderNo !=null and orderNo !=''">
+			and o.order_no=#{orderNo}
+		</if>
+		<if test="orderName !=null and orderName !=''">
+			and o.order_name like concat('%',#{orderName},'%')
+		</if>
+		<if test="actYear !=null">
+			and o.productive_year=#{actYear}
+		</if>
+		<if test="factory !=null and factory !='全部'">
+			and fo.factory_id=#{factory}
+		</if>
+			order by o.order_no desc
+		<if test="start !=null">
+			limit #{start},#{length}
+		</if>
+	</select>
+	
+	<select id="queryConfigAllotTotalCount" parameterType="Map" resultType="int">
+		SELECT count(c.id)
+		FROM BMS_OR_ORDER_CONFIG c
+		LEFT JOIN BMS_OR_FACTORY_ORDER fo ON c.order_id=fo.order_id
+		LEFT JOIN BMS_OR_ORDER o ON o.id=fo.order_id
+		LEFT JOIN BMS_BASE_FACTORY f on fo.factory_id=f.id
+		LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id=t.id
+		LEFT JOIN BMS_OR_FACTORY_ORDER_CONFIG fc ON fc.order_config_id=c.id
+		WHERE 1=1
+		<if test="orderNo !=null and orderNo !=''">
+			and o.order_no=#{orderNo}
+		</if>
+		<if test="orderName !=null and orderName !=''">
+			and o.order_name like concat('%',#{orderName},'%')
+		</if>
+		<if test="actYear !=null">
+			and o.productive_year=#{actYear}
+		</if>
+		<if test="factory !=null and factory !='全部'">
+			and fo.factory_id=#{factory}
+		</if>
+	</select>
 </mapper>
