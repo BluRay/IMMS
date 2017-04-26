@@ -36,6 +36,11 @@ public class LoginController extends BaseController{
 		mv.setViewName("login");
         return mv;  
     }  
+	@RequestMapping("/page403")  
+    public ModelAndView page403(){ 
+		mv.setViewName("403");
+        return mv;  
+    }  
 	@RequestMapping("/login")
     public ModelAndView login(BmsBaseUser user,Model model) throws NoSuchAlgorithmException, UnsupportedEncodingException, IOException{ 
 		String password=StringUtils.isEmpty(user.getPassword())?"":user.getPassword();

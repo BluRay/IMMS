@@ -7,6 +7,7 @@ $(document).ready(function () {
 	function initPage(){
 		$("#file").val("");
 		getFactorySelect();
+		ajaxQuery();
 	}
 	
 	$("#btnBulkAdd").click (function () {

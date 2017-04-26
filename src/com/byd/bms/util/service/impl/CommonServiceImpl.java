@@ -39,6 +39,11 @@ public class CommonServiceImpl implements ICommonService {
 		return departmentList;
 	}
 	@Override
+	public List<String> getAllRoleAuthority() {
+		List<String> datalist = commonDao.getAllRoleAuthority();
+		return datalist;
+	}
+	@Override
 	public List<String> getRoleAuthority(String staff_number) {
 		List<String> datalist = commonDao.getRoleAuthority(staff_number);
 		return datalist;

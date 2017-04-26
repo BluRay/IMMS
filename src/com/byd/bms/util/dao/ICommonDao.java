@@ -18,6 +18,8 @@ public interface ICommonDao {
 
 	List<Map<String, Object>> queryKeysList(String keyCode);
 	
+	List<String> getAllRoleAuthority();
+	
 	List<String> getRoleAuthority(String staff_number);
 
 }

@@ -15,6 +15,8 @@ public interface ICommonService {
 	
 	List<Map<String,Object>> getDepartmentByFactory(String factory_id);
 	
+	List<String> getAllRoleAuthority();
+	
 	List<String> getRoleAuthority(String staff_number);
 	
 }
