@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.stereotype.Repository;
 
+import com.byd.bms.plan.model.PlanIssuance;
+import com.byd.bms.plan.model.PlanIssuanceTotal;
 import com.byd.bms.plan.model.PlanMasterIndex;
 import com.byd.bms.plan.model.PlanMasterPlan;
 import com.byd.bms.util.model.BmsBaseOperateChangeLog;
@@ -20,4 +22,6 @@ public interface IPlanDao {
 	public int updatePlanMasterInfo(PlanMasterPlan masterPlan);
 	public int insertOperateChangeLog(BmsBaseOperateChangeLog changLog);
 	public List<Map<String,String>> checkPlanIssuanceList(Map<String,Object> queryMap);
+	public List<PlanIssuance> getPlanIssuanceList(Map<String,Object> queryMap);
+	public List<PlanIssuanceTotal> getPlanIssuanceTotal(Map<String,Object> queryMap);
 }

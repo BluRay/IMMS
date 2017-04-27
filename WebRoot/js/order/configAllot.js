@@ -1,8 +1,9 @@
 var cur_year="";
 var pageSize=10;
-
+var configlist_table=null;
 $(document).ready(function(){
 	initPage();
+	
 	$("#btnQuery").on("click",function(){
 		ajaxQuery();
 	}); 
@@ -11,6 +12,8 @@ $(document).ready(function(){
 		getOrderNoSelect("#order","#order_id");
 		
 	})
+	
+	
 });
 
 function initPage(){
@@ -20,9 +23,15 @@ function initPage(){
 	getOrderNoSelect("#search_order_no","#orderId");
 	getFactorySelect(false,"","","#search_factory","全部","id")
 	ajaxQuery();
+	
 }
 function ajaxQuery(){
-	$("#tableOrder").dataTable({
+	configlist_table=$("#tableOrder").DataTable({
+		columnDefs: [{
+            "searchable": false,
+            "orderable": false,
+            "targets": 0
+        }],
 		serverSide: true,
 		fixedColumns:   {
             leftColumns: 1,
@@ -109,49 +118,153 @@ function ajaxQuery(){
 function showEditPage(data){
 	var CheckOrder = true;
 	$("#configStr").val("");
+	//填充订单基本信息
+	$("#order").val(data.order_no+" "+data.order_name_str);
+	$("#factory").val(data.factory_name);
+	$("#productionQty").val(data.production_qty);
+	$("#order_id").val(data.order_id);
+	$("#factory_id").val(data.factory_id);
 	$.ajax({
 		//url: "order!showOrderReviewList.action",
-		url: "getOrderConfigList",
+		url: "getConfigListByOrder",
 		dataType: "json",
 		data: {"order_id" : data.order_id,
 			"factory_id" : data.factory_id},
 		async: false,
 		error: function () {alertError();},
 		success: function (response) {
-			if(response.success){
-				$("#editOrderConfig_parameters").html("");
-				//先判断订单是否存在配置
-				$.each(response.data,function(index,value){
-					if(index == 0){
-						if(value.order_config_name == ""){
-							alert("该订单还没有配置信息，请先进行配置！");
-							CheckOrder = false;
-						}else{
-							//填充订单基本信息
-							$("#ConfigOrderNo").val(value.order_no);
-							$("#ConfigOrderfactory").val(factory_name);
-							$("#ConfigOrderfactoryQty").val(production_qty);
-							$("#ConfigOrderDescriptive").val(value.order_name + value.bus_type + " " + value.order_qty + "台");	
-							$("#order_id").val(value.o_id);
-							$("#factory_id").val(factory_id);
-						}						
+			drawConfigListTable(response.data);
+			
+			var dialog = $( "#dialog-config" ).removeClass('hide').dialog({
+				width:600,
+				height:400,
+				modal: true,
+				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i> 配置产地分配</h4></div>",
+				title_html: true,
+				buttons: [ 
+					{
+						text: "取消",
+						"class" : "btn btn-minier",
+						click: function() {
+							$( this ).dialog( "close" ); 
+						} 
+					},
+					{
+						text: "确定",
+						"class" : "btn btn-primary btn-minier",
+						click: function() {
+							ajaxEdit(data.order_id,data.factory_id); 
+						} 
 					}
-					//填充配置项
-					var paramHtml="<tr height=\"40px\">" +
-							"<td width=\"40px\"></td>" +
-							"<td width=\"80px\"><input type=\"text\" disabled=\"disabled\" class=\"input-small revise\" placeholder=\"配置编号...\" value=\""+value.id+"\" id=\"order_config_id_"+value.id+"\"/></td>" +
-							"<td width=\"100px\"><input type=\"text\" disabled=\"disabled\" class=\"input-medium revise\" placeholder=\"配置简称...\" value=\""+value.order_config_name+"\" id=\"order_config_name_"+value.id+"\"/></td>" +
-							"<td width=\"80px\"><input type=\"text\" class=\"input-small revise\" value=\""+ (index+1) +"\" id=\"config_qty_0\" /></td>" +
-							"<td width=\"80px\"><input type=\"text\" class=\"input-small revise\" onclick=\"javascript:$(this).select();\" value=\""+value.allot_qty+"\" id=\"config_qty_0\" /></td>" +
-							"<td width=\"80px\"><input type=\"text\" class=\"input-small revise\" onclick=\"javascript:$(this).select();\" disabled = \"disabled\" value=\""+value.online_count+"\" id=\"config_qty_0\" /></td>" +
-							"</tr>";
-					$(paramHtml).appendTo("#editOrderConfig_parameters");
-				})
-				
-				if(CheckOrder) $("#editModal").modal("show");
-			} else {
-				alert(response.message);
-			}
+				]
+			});
 		}
 	})
+}
+
+function drawConfigListTable(data){
+	var t=$("#configAllot_table").DataTable({
+		paiging:false,
+		showRowNumber:true,
+		ordering:false,
+		searching: false,
+		bAutoWidth:false,
+		destroy: true,
+		paginate:false,
+		//sScrollY: $(window).height()-250,
+		/*scrollX: "1200px",*/
+		createdRow: function ( row, data, index ) {
+			//alert(index)
+			 $('td', row).	eq(1).find("input").data("allot_config_id",data.allot_config_id||0);
+			 $('td', row).	eq(1).find("input").data("order_config_id",data.order_config_id);
+        },
+		scrollCollapse: true,
+		lengthChange:false,
+		orderMulti:false,
+		info:false,
+		language: {
+			emptyTable:"",					     
+			infoEmpty:"",
+			zeroRecords:"请导入配置明细！"
+		},
+		data:data,
+		columns: [
+		            {"title":"配置简称","class":"center","data":"order_config_name","defaultContent": ""},
+		            {"title":"生产序号","class":"center","data":null,"defaultContent": "","render":function(data,type,row){
+		            	return "<input style='border:0;width:50px;text-align:center' class='sequence'  value='"+(row.sequence||"")+"'/>";
+		            }
+		            },
+		            {"title":"生产数量","class":"center","data": "product_qty","defaultContent": "","render":function(data,type,row){
+		            	return "<input style='border:0;width:50px;text-align:center' class='product_qty' old_val='"+data+"'value='"+(data||"")+"'/>";
+		            }},
+		            {"title":"配置数量","class":"center","data":"config_qty","defaultContent": ""},		            
+		            {"title":"已分配数量","class":"center","data":"already_qty","defaultContent": ""}          
+		          ]	      
+	});
+}
+
+function ajaxEdit(order_id,factory_id){
+	var trs=$("#configAllot_table tbody").children("tr");
+	var arr_config_allot=[];
+	var total_allot_qty=0;
+	var save_flag=true;
+	$.each(trs,function(index,tr){
+		var tds=$(tr).children("td");
+		var config_qty=Number($(tds[3]).html());//配置数量
+		var already_qty=Number($(tds[4]).html());//已配置分配的数量
+		
+		var seq_input=$(tds[1]).find("input");
+		var product_qty_input=$(tds[2]).find("input");
+		var allot_config_id=$(seq_input).data("allot_config_id");
+		var order_config_id=$(seq_input).data("order_config_id");
+		var sequence=$(seq_input).val();
+		var product_qty=Number($(product_qty_input).val());
+		var old_product_qty=Number($(product_qty_input).attr("old_val"));
+		if(isNaN(product_qty)){
+			alert("生产数量必须为数字！");
+			save_flag=false;
+			return false;
+		}
+		if(product_qty>(config_qty-already_qty+old_product_qty)){
+			alert("生产数量不能超过配置数量减已分配数量！");
+			save_flag=false;
+			return false;
+		}
+		
+		var obj={};
+		obj.id=allot_config_id;
+		obj.order_config_id=order_config_id;
+		obj.sequence=sequence;
+		obj.product_qty=product_qty;
+		obj.order_id=order_id;
+		obj.factory_id=factory_id;
+		
+		arr_config_allot.push(obj);	
+		
+		total_allot_qty+=product_qty;//所有配置分配数量之和
+		//alert($(seq_input).data("allot_config_id"))		
+	});
+	if(total_allot_qty>Number($("#productionQty").val())){
+		alert("各配置生产数量之和不能超过订单生产数量！");
+		save_flag=false;
+		return false;
+	}
+	
+	if(save_flag){
+		$.ajax({
+			//url: "order!showOrderReviewList.action",
+			url: "updateConfigAllot",
+			dataType: "json",
+			data: {
+				"allot_config_list":JSON.stringify(arr_config_allot)
+			},
+			async: false,
+			error: function () {alertError();},
+			success: function (response) {
+				$( "#dialog-config" ).dialog("close");
+				ajaxQuery();
+			}
+		})
+	}
+;	
 }

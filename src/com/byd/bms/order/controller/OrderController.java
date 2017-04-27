@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -22,10 +23,12 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.byd.bms.order.model.BmsOrder;
+import com.byd.bms.order.model.BmsOrderConfigAllot;
 import com.byd.bms.order.service.IOrderService;
 import com.byd.bms.util.ExcelModel;
 import com.byd.bms.util.ExcelTool;
 import com.byd.bms.util.controller.BaseController;
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -412,7 +415,53 @@ public class OrderController extends BaseController{
 	public ModelMap getConfigListByOrder(){
 		model=new ModelMap();
 		Map<String,Object> condMap=new HashMap<String,Object>();
-		
+		condMap.put("order_id", request.getParameter("order_id"));
+		condMap.put("factory_id", request.getParameter("factory_id"));
+		List datalist=orderService.getConfigListByOrder(condMap);
+		model.put("data", datalist);
 		return model;
+	}
+	
+	/**
+	 * 配置产地分配
+	 * @return
+	 */
+	@RequestMapping("/updateConfigAllot")
+	@ResponseBody
+	public ModelMap updateConfigAllot(){
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		int userid=(int) session.getAttribute("user_id");
+		String paramstr=request.getParameter("allot_config_list");
+		JsonArray jsa= new JsonArray();
+		JsonParser parser=new JsonParser();
+		JsonElement jel=parser.parse(paramstr);	
+		Gson gson=new Gson();
+		
+		if(jel.isJsonArray()){
+			jsa=jel.getAsJsonArray();
+		}
+		Iterator it=jsa.iterator();
+		List detail_list=new ArrayList();
+		/**
+		 * 封装需要保存的数据
+		 */
+		while(it.hasNext()){
+			JsonElement el=(JsonElement)it.next();
+			BmsOrderConfigAllot allotBean=new BmsOrderConfigAllot();
+			allotBean=gson.fromJson(el, BmsOrderConfigAllot.class);
+			allotBean.setEditor_id(userid);
+			allotBean.setEdit_date(curTime);
+			
+			detail_list.add(allotBean);
+		}
+		//调用service保存数据
+		try{
+			orderService.saveOrderConfigAllot(detail_list);
+			initModel(true,"分配成功！",null);
+		}catch(Exception e){
+			initModel(false,"分配失败!",null);
+		}
+		return mv.getModelMap();
 	}
 }

@@ -285,7 +285,7 @@
 	
 	<select id="queryConfigAllotList" parameterType="Map" resultType="Map">
 		SELECT fo.id factory_order_id,o.id order_id,c.id config_id,o.order_no,CONCAT(o.order_name,t.bus_type_code,o.order_qty,'台') AS order_name_str,
-		f.factory_name,fo.production_qty,c.order_config_name,fc.product_qty,c.config_qty,fc.sequence,c.customer
+		f.factory_name,fo.production_qty,c.order_config_name,fc.product_qty,c.config_qty,fc.sequence,c.customer,f.id factory_id
 		FROM BMS_OR_ORDER_CONFIG c
 		LEFT JOIN BMS_OR_FACTORY_ORDER fo ON c.order_id=fo.order_id
 		LEFT JOIN BMS_OR_ORDER o ON o.id=fo.order_id
@@ -333,4 +333,32 @@
 			and fo.factory_id=#{factory}
 		</if>
 	</select>
+	
+	<select id="queryConfigListByOrder" parameterType="Map" resultType="Map">
+		select c.id,c.order_config_name,c.config_qty,fc.product_qty,ifnull(sum(fc.product_qty),0) already_qty,fc.sequence,fc.id allot_config_id,c.id order_config_id
+		from BMS_OR_ORDER_CONFIG c
+		left join BMS_OR_FACTORY_ORDER_CONFIG fc on c.id=fc.order_config_id
+		where 1=1
+		<if test="order_id !=null ">
+			and c.order_id=#{order_id}
+		</if>
+	<!-- 	<if test="factory_id !=null ">
+			and fc.factory_id=#{factory_id}
+		</if> -->
+		group by c.id
+		order by fc.sequence
+	</select>
+	
+	<update id="batchSaveFactoryOrderConfig" parameterType="List">
+		<foreach collection="list"  item="detail"  index="index" separator=";">
+			<if test="detail.id !=0 and detail.id !=null">
+				update BMS_OR_FACTORY_ORDER_CONFIG set product_qty=#{detail.product_qty},sequence=#{detail.sequence}
+				,editor_id=#{detail.editor_id},edit_date=#{detail.edit_date} where id=#{detail.id}
+			</if>
+			<if test="detail.id==0 or detail.id ==null">
+				insert into BMS_OR_FACTORY_ORDER_CONFIG(order_id,factory_id,order_config_id,product_qty,sequence,editor_id,edit_date)
+				values (#{detail.order_id},#{detail.factory_id},#{detail.order_config_id},#{detail.product_qty},#{detail.sequence},#{detail.editor_id},#{detail.edit_date})
+			</if>
+		</foreach>
+	</update>
 </mapper>

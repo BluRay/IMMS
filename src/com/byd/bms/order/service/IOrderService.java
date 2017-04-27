@@ -23,4 +23,6 @@ public interface IOrderService {
 	public List getConfigDetailList(String configId);
 	public void saveOrderConfigDetail(Map<String, Object> configDetail);
 	public Map<String, Object> getConfigAllotListPage(Map<String, Object> condMap);
+	public List getConfigListByOrder(Map<String, Object> condMap);
+	public void saveOrderConfigAllot(List detail_list);
 }

@@ -250,7 +250,9 @@ public class OrderServiceImpl implements IOrderService {
 		}
 		
 	}
-
+	/**
+	 * 分页查询配置分配列表数据
+	 */
 	@Override
 	public Map<String, Object> getConfigAllotListPage(
 			Map<String, Object> condMap) {
@@ -263,6 +265,18 @@ public class OrderServiceImpl implements IOrderService {
 		result.put("recordsFiltered", totalCount);
 		result.put("data", datalist);
 		return result;
+	}
+
+	@Override
+	public List getConfigListByOrder(Map<String, Object> condMap) {
+		List datalist=new ArrayList();
+		datalist=orderDao.queryConfigListByOrder(condMap);
+		return datalist;
+	}
+
+	@Override
+	public void saveOrderConfigAllot(List detail_list) {
+		orderDao.batchSaveFactoryOrderConfig(detail_list);
 	}
 
 }

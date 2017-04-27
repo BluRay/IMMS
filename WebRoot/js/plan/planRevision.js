@@ -7,7 +7,7 @@ $(document).ready(function () {
 	function initPage(){
 		$("#btnSave").attr("disabled","disabled");
 		getOrderNoSelect("#search_order_no","#orderId");
-		getFactorySelect();
+		getFactorySelect("plan/planRevision","#search_factory");
 		cur_year = new Date().getFullYear();
 		$("#search_year").html('<option value="'+cur_year+'">'+cur_year+'</option><option value="'+(cur_year-1)+'">'+(cur_year-1)+'</option><option value="'+(cur_year+1)+'">'+(cur_year+1)+'</option><option value="'+(cur_year+2)+'">'+(cur_year+2)+'</option>');	
 		if(new Date().getMonth()+1 <10){
@@ -195,20 +195,5 @@ function ajaxQuery(){
 			});
 			return false;
 	    }
-	});
-}
-
-function getFactorySelect(){
-	$.ajax({
-		url : "/IMMS/common/getFactorySelect",
-		dataType : "json",
-		data : {},
-		async : false,
-		error : function(response) {
-			alert(response.message)
-		},
-		success : function(response) {
-			getSelects_noall(response.data, "", "#search_factory");
-		}
 	});
 }

@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import com.byd.bms.util.controller.BaseController;
 import com.byd.bms.util.ExcelTool;
+import com.byd.bms.plan.model.PlanIssuance;
 import com.byd.bms.plan.model.PlanMasterPlan;
 import com.byd.bms.plan.service.IPlanService;
 import com.byd.bms.util.ExcelModel;
@@ -247,6 +248,30 @@ public class PlanController extends BaseController{
 				if(cerMap.get("product_qty") == null){
 					msg = cerMap.get("order_no") + "没有发布工厂配置！";
 				}
+			}
+		}
+		
+		List datalist=new ArrayList();
+		List resultlist=new ArrayList();
+		datalist = planService.getPlanIssuanceList(conditionMap);
+		int cur_order_id = 0;
+		List total_datalist=new ArrayList();
+		int issed_count_1 = 0;int issed_count_2 = 0;int issed_count_3 = 0;int issed_count_4 = 0;
+		int issed_count_5 = 0;int issed_count_6 = 0;int issed_count_7 = 0;int issed_count_8 = 0;
+		int issed_count_9 = 0;int issed_count_10 = 0;int issed_count_11 = 0;int issed_count_12 = 0;
+		for(int i=0;i<datalist.size(); i++){
+			PlanIssuance cur_planIssuance = (PlanIssuance)datalist.get(i);
+			int this_order_id = cur_planIssuance.getOrder_id();
+			if(cur_order_id == 0 || cur_order_id != this_order_id){
+				PlanIssuance newIssuance = new PlanIssuance();
+				newIssuance.setOrder_config_name(cur_planIssuance.getOrder_no() + "总数");
+				Map<String,Object> conditionMap2=new HashMap<String,Object>();				
+				conditionMap2.put("day",Integer.valueOf(request.getParameter("issuance_date").substring(6, 8)));		
+				conditionMap2.put("month",request.getParameter("issuance_date").substring(0, 6));		
+				conditionMap2.put("factory_id", request.getParameter("factory_id"));
+				conditionMap2.put("order_id",this_order_id);
+				total_datalist = planService.getPlanIssuanceTotal(conditionMap2);
+				
 			}
 		}
 		

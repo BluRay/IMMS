@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.byd.bms.plan.dao.IPlanDao;
 import com.byd.bms.plan.model.PlanMasterPlan;
+import com.byd.bms.plan.model.PlanIssuance;
+import com.byd.bms.plan.model.PlanIssuanceTotal;
 import com.byd.bms.plan.model.PlanMasterIndex;
 import com.byd.bms.plan.service.IPlanService;
 import com.byd.bms.util.ExcelModel;
@@ -206,6 +208,16 @@ public class PlanServiceImpl implements IPlanService {
 		List<Map<String, String>> checkdatalist=new ArrayList<Map<String, String>>();
 		checkdatalist = planDao.checkPlanIssuanceList(queryMap);
 		return checkdatalist;
+	}
+
+	@Override
+	public List<PlanIssuance> getPlanIssuanceList(Map<String, Object> queryMap) {
+		return planDao.getPlanIssuanceList(queryMap);
+	}
+
+	@Override
+	public List<PlanIssuanceTotal> getPlanIssuanceTotal(Map<String, Object> queryMap) {
+		return planDao.getPlanIssuanceTotal(queryMap);
 	}
 	
 	

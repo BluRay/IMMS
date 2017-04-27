@@ -246,20 +246,21 @@ function getKeysSelect(keyCode, selectval, element,selectType,valueItem) {
  * selectType:下拉框组件类型：==全部==、==请选择==、== ==
  * valName:option value值:id/name
  */
-function getFactorySelect(auth,url,selectval,selectId,selectType,valName) {
+
+function getFactorySelect(function_url,selectId){
 	$.ajax({
 		url : "/IMMS/common/getFactorySelect",
 		dataType : "json",
-		data : {
-			auth:auth,
-			url:url
-		},
+		data : {"function_url":function_url},
 		async : false,
 		error : function(response) {
 			alert(response.message)
 		},
 		success : function(response) {
-			getSelects(response.data,selectval,selectId,selectType, valName);		
+			getSelects_noall(response.data, "", selectId);
 		}
 	});
 }
+
+function getHeight() {return $(window).height() - 135;}
+function getWidth() {return $(window).width()-220;}

@@ -230,6 +230,11 @@ function drawConfigListTable(data){
 			infoEmpty:"",
 			zeroRecords:"请导入配置明细！"
 		},
+		columnDefs: [{
+            "searchable": false,
+            "orderable": false,
+            "targets": 0
+        }],
 		data:data.data,
 		columns: [
 		            {"title":"零部件类别","class":"center","data":"parts_type","defaultContent": ""},

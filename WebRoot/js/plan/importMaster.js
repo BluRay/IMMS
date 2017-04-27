@@ -6,7 +6,7 @@ $(document).ready(function () {
 	
 	function initPage(){
 		$("#file").val("");
-		getFactorySelect();
+		getFactorySelect("plan/importMaster","#search_factory");
 		ajaxQuery();
 	}
 	
@@ -93,20 +93,5 @@ function ajaxQuery(){
 		                },
 		            }
 		          ],
-	});
-}
-
-function getFactorySelect(){
-	$.ajax({
-		url : "/IMMS/common/getFactorySelect",
-		dataType : "json",
-		data : {},
-		async : false,
-		error : function(response) {
-			alert(response.message)
-		},
-		success : function(response) {
-			getSelects_noall(response.data, "", "#search_factory");
-		}
 	});
 }

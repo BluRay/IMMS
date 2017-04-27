@@ -133,4 +133,42 @@
 		LEFT JOIN BMS_OR_ORDER o ON a.order_id = o.id
 	</select>
 	
+	<select id="getPlanIssuanceList" parameterType="Map" resultType="com.byd.bms.plan.model.PlanIssuance">
+	SELECT
+	f.order_config_name,a.order_id,a.order_config_id,a.product_qty,a.sequence,sum(IFNULL(p.plan_qty,0))
+	AS issed_qty,  concat(o.order_no,' ',o.order_name,t.internal_name,' ',ifnull(fo.production_qty,0),'台') as order_no 
+	FROM BMS_OR_FACTORY_ORDER_CONFIG a
+	LEFT JOIN BMS_OR_ORDER_CONFIG f ON a.order_config_id = f.id
+	LEFT JOIN BMS_PLAN_PRODUCTION_PLAN p ON a.order_config_id = p.order_config_id
+	LEFT JOIN BMS_OR_ORDER o ON a.order_id = o.id
+ 	LEFT JOIN BMS_OR_FACTORY_ORDER fo on fo.order_id=o.id and fo.factory_id=a.factory_id
+	LEFT JOIN BMS_BASE_BUS_TYPE t ON t.id = o.bus_type_id 
+	WHERE a.factory_id = #{factory_id}
+		<if test="order_no!=''">
+		AND a.order_id = (SELECT id FROM BMS_OR_ORDER WHERE order_no=#{order_no})
+		</if>
+		<if test="order_no==''">
+		AND a.order_id IN
+		(SELECT a.order_id FROM (
+		SELECT pp.order_id,COUNT(pp.D#{day}) AS count_num FROM BMS_PLAN_MASTER_PLAN pp WHERE pp.factory_id = #{factory_id}
+		AND pp.plan_month = #{issuance_month}' GROUP BY pp.order_id) a
+		WHERE a.count_num >0)
+		</if>
+		GROUP BY
+		order_config_name,order_id
+		ORDER BY a.order_id,a.sequence 
+	</select>
+	
+	<select id="getPlanIssuanceTotal" parameterType="Map" resultType="com.byd.bms.plan.model.PlanIssuanceTotal">
+		SELECT k.value AS key_value, k.key_name, d#{day} AS num from BMS_PLAN_MASTER_PLAN m
+		LEFT JOIN BMS_BASE_KEY k ON m.plan_code_id = k.id
+		WHERE m.plan_month = #{month} AND m.order_id = #{order_id}
+		AND m.factory_id = #{factory_id}
+		AND m.flag = (SELECT MAX(flag+0) FROM BMS_PLAN_MASTER_PLAN n WHERE
+		n.plan_month = #{month} AND n.order_id = #{order_id} AND n.factory_id = #{factory_id})		
+		AND version = (SELECT max(version) FROM BMS_PLAN_MASTER_PLAN WHERE factory_id = #{factory_id} 
+		and order_id =#{order_id}
+		and plan_month = #{month})
+	</select>
+	
 </mapper>
