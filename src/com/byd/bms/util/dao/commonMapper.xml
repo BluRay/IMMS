@@ -23,6 +23,7 @@
 
 	<select id="queryFactoryList" parameterType="Map" resultType="Map">			
 		SELECT id,factory_name AS name FROM BMS_BASE_FACTORY WHERE delete_flag='0'
+		<if test="staff_number !=null and  staff_number !=''">
 		AND (locate(FACTORY_CODE,
 		(SELECT GROUP_CONCAT(R.permission_value) FROM BMS_BASE_USER_ROLE R WHERE R.staff_number = #{staff_number} AND R.permission_key = '1'
 		AND R.role_id IN 
@@ -34,6 +35,7 @@
 		(SELECT RP.role_id FROM BMS_BASE_ROLE_PERMISSION RP WHERE 
 		RP.function_id = (SELECT ID FROM BMS_BASE_FUNCTION F WHERE F.function_url = #{function_url}))) = '')
 		)
+		</if>
 	</select>
 	
 	<select id="queryBusTypeList" parameterType="String" resultType="Map">
