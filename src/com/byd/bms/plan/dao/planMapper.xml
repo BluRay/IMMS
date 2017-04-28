@@ -168,7 +168,7 @@
 		n.plan_month = #{month} AND n.order_id = #{order_id} AND n.factory_id = #{factory_id})		
 		AND version = (SELECT max(version) FROM BMS_PLAN_MASTER_PLAN WHERE factory_id = #{factory_id} 
 		and order_id =#{order_id}
-		and plan_month = #{month})
+		and plan_month = #{month}) order by (key_value + 0)
 	</select>
 	
 </mapper>

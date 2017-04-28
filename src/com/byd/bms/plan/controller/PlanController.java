@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.byd.bms.util.controller.BaseController;
 import com.byd.bms.util.ExcelTool;
 import com.byd.bms.plan.model.PlanIssuance;
+import com.byd.bms.plan.model.PlanIssuanceTotal;
 import com.byd.bms.plan.model.PlanMasterPlan;
 import com.byd.bms.plan.service.IPlanService;
 import com.byd.bms.util.ExcelModel;
@@ -252,7 +253,7 @@ public class PlanController extends BaseController{
 		}
 		
 		List datalist=new ArrayList();
-		List resultlist=new ArrayList();
+		List<PlanIssuance> resultlist=new ArrayList<PlanIssuance>();
 		datalist = planService.getPlanIssuanceList(conditionMap);
 		int cur_order_id = 0;
 		List total_datalist=new ArrayList();
@@ -271,8 +272,40 @@ public class PlanController extends BaseController{
 				conditionMap2.put("factory_id", request.getParameter("factory_id"));
 				conditionMap2.put("order_id",this_order_id);
 				total_datalist = planService.getPlanIssuanceTotal(conditionMap2);
-				
+				//判断当前订单是否有调整后的计划
+				if(total_datalist.size() != 0){
+					newIssuance.setPlan_code_1(((PlanIssuanceTotal)total_datalist.get(0)).getNum());
+					newIssuance.setPlan_code_2(((PlanIssuanceTotal)total_datalist.get(1)).getNum());
+					newIssuance.setPlan_code_3(((PlanIssuanceTotal)total_datalist.get(2)).getNum());
+					newIssuance.setPlan_code_4(((PlanIssuanceTotal)total_datalist.get(3)).getNum());
+					newIssuance.setPlan_code_5(((PlanIssuanceTotal)total_datalist.get(4)).getNum());
+					newIssuance.setPlan_code_6(((PlanIssuanceTotal)total_datalist.get(5)).getNum());
+					newIssuance.setPlan_code_7(((PlanIssuanceTotal)total_datalist.get(6)).getNum());
+					newIssuance.setPlan_code_8(((PlanIssuanceTotal)total_datalist.get(7)).getNum());
+					newIssuance.setPlan_code_9(((PlanIssuanceTotal)total_datalist.get(8)).getNum());
+					newIssuance.setPlan_code_10(((PlanIssuanceTotal)total_datalist.get(9)).getNum());
+					newIssuance.setPlan_code_11(((PlanIssuanceTotal)total_datalist.get(10)).getNum());
+					newIssuance.setPlan_code_12(((PlanIssuanceTotal)total_datalist.get(11)).getNum());
+				}
+				issed_count_1 = 0;issed_count_2 = 0;issed_count_3 = 0;issed_count_4 = 0;
+				issed_count_5 = 0;issed_count_6 = 0;issed_count_7 = 0;issed_count_8 = 0;
+				issed_count_9 = 0;issed_count_10 = 0;issed_count_11 = 0;issed_count_12 = 0;
+				resultlist.add(newIssuance);
 			}
+			cur_order_id = cur_planIssuance.getOrder_id();
+			//计算配置发布数的推荐值  获取当前配置的总计划数及已发布数量
+			PlanIssuance planIssuance = (PlanIssuance)datalist.get(i);
+			
+			//STEP 01 判断planIssuance的生产节点是否已经发布
+			//planIssuance.setPlan_code_issed_20_done();
+			
+			//STEP 02 查询已分配数 planIssuance.setPlan_code_issed_X
+			
+			//STEP 03 获取当前工厂  当前配置  当前月份  总计划数  及 已发布数之和 planIssuance.setPlan_config_qty_X_done
+			
+			//STEP 04 推荐发布值 根据 当前配置总计划数 - 当前配置已发布部 < 当天计划数 
+			
+			//STEP 05 resultlist.add(planIssuance);
 		}
 		
 		

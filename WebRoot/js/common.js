@@ -262,5 +262,24 @@ function getFactorySelect(function_url,selectId){
 	});
 }
 
+//----------START Bootstrap Script ----------
+var scripts = [
+        'js/bootstrap-table.js','js/bootstrap-table-fixed-columns.js',
+        'js/bootstrap-table-export.js','js/tableExport.js',
+        'js/bootstrap-table-editable.js','js/bootstrap-editable.js'
+    ],
+    eachSeries = function (arr, iterator, callback) {
+    	//console.log("---->arr.length=" + arr.length);
+        callback = callback || function () {};
+        if (!arr.length) {return callback();}
+        var completed = 0;
+        var iterate = function () {
+            iterator(arr[completed], function (err) {
+                if (err) {callback(err);callback = function () {};}
+                else {completed += 1;if (completed >= arr.length) {callback(null);}else {iterate();}}
+            });
+        };
+        iterate();
+    };
 function getHeight() {return $(window).height() - 135;}
 function getWidth() {return $(window).width()-220;}
