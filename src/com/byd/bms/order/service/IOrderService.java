@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.ModelMap;
 
 import com.byd.bms.order.model.BmsOrder;
 import com.google.gson.JsonArray;
@@ -25,4 +26,5 @@ public interface IOrderService {
 	public Map<String, Object> getConfigAllotListPage(Map<String, Object> condMap);
 	public List getConfigListByOrder(Map<String, Object> condMap);
 	public void saveOrderConfigAllot(List detail_list);
+	public ModelMap getOrderQueryData(Map<String, Object> condMap);
 }

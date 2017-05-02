@@ -11,6 +11,7 @@ import javax.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.ModelMap;
 
 import com.byd.bms.order.dao.IOrderDao;
 import com.byd.bms.order.model.BmsFactoryOrderDetail;
@@ -277,6 +278,17 @@ public class OrderServiceImpl implements IOrderService {
 	@Override
 	public void saveOrderConfigAllot(List detail_list) {
 		orderDao.batchSaveFactoryOrderConfig(detail_list);
+	}
+
+	@Override
+	public ModelMap getOrderQueryData(Map<String, Object> condMap) {
+		List datalist=new ArrayList();
+		datalist=orderDao.queryOrderQueryList(condMap);
+		int totalCount=orderDao.queryOrderQueryListCount(condMap);
+		ModelMap model=new ModelMap();
+		model.put("rows", datalist);
+		model.put("total", totalCount);
+		return model;
 	}
 
 }

@@ -32,6 +32,7 @@ public interface IOrderDao {
 	public int queryConfigAllotTotalCount(Map<String, Object> condMap);
 	public List queryConfigListByOrder(Map<String, Object> condMap);
 	public void batchSaveFactoryOrderConfig(List detail_list);
-	
+	public List queryOrderQueryList(Map<String, Object> condMap);
+	public int queryOrderQueryListCount(Map<String, Object> condMap);
 	
 }

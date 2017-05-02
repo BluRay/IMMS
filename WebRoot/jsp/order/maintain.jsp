@@ -105,26 +105,6 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td>K8-CS-2017-10027</td>
-							<td>长沙工厂</td>
-							<td>焊装上线</td>
-						</tr>
-						<tr>
-							<td>K8-CS-2017-10028</td>
-							<td>长沙工厂</td>
-							<td>焊装上线</td>
-						</tr>
-						<tr>
-							<td>K8-CS-2017-10029</td>
-							<td>长沙工厂</td>
-							<td>焊装上线</td>
-						</tr>
-						<tr>
-							<td>K8-CS-2017-10030</td>
-							<td>长沙工厂</td>
-							<td>焊装上线</td>
-						</tr>
 					</tbody>
 				</table>
 			</div>

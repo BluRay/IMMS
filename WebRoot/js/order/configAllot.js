@@ -21,7 +21,7 @@ function initPage(){
 	cur_year = new Date().getFullYear();
 	$("#search_productive_year").html('<option value="'+cur_year+'">'+cur_year+'</option><option value="'+(cur_year-1)+'">'+(cur_year-1)+'</option><option value="'+(cur_year+1)+'">'+(cur_year+1)+'</option><option value="'+(cur_year+2)+'">'+(cur_year+2)+'</option>');	
 	getOrderNoSelect("#search_order_no","#orderId");
-	getFactorySelect(false,"","","#search_factory","全部","id")
+	getFactorySelect("order/configAllot","","#search_factory","全部","id")
 	ajaxQuery();
 	
 }

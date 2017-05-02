@@ -464,4 +464,33 @@ public class OrderController extends BaseController{
 		}
 		return mv.getModelMap();
 	}
+	
+	@RequestMapping("/orderQuery")
+	public ModelAndView orderQuery(){ 
+		mv.setViewName("order/orderQuery");
+        return mv;  
+    } 
+	
+	/**
+	 * 订单查询，获取订单明细列表
+	 * @return
+	 */
+	@RequestMapping("/getOrderDetailList")
+	@ResponseBody
+	public ModelMap getOrderDetailList(){
+		model=new ModelMap();
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("order_no", request.getParameter("order_no"));
+		condMap.put("factory", request.getParameter("factory"));
+		condMap.put("actYear", request.getParameter("actYear"));
+		condMap.put("status", request.getParameter("status"));		
+		if(request.getParameter("offset")!=null)condMap.put("offset", Integer.valueOf(request.getParameter("offset")));
+		if(request.getParameter("limit")!=null)condMap.put("pageSize", Integer.valueOf(request.getParameter("limit")));
+		condMap.put("sort", request.getParameter("sort"));
+		condMap.put("order", request.getParameter("order"));
+		
+		model=orderService.getOrderQueryData(condMap);
+
+		return model;
+	}
 }
