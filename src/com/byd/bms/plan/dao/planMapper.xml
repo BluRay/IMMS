@@ -129,7 +129,7 @@
 	SELECT a.*,o.order_no,c.product_qty FROM (SELECT pp.factory_id,pp.order_id,COUNT(pp.D#{day}) AS count_num 
 	FROM BMS_PLAN_MASTER_PLAN pp WHERE pp.factory_id = #{factory_id} 
 		AND pp.plan_month =#{issuance_month} GROUP BY pp.order_id ORDER BY order_id) a
-		LEFT JOIN BMS_ALLOT_FACTORY_ORDER_CONFIG c ON a.order_id = c.order_id AND a.factory_id = c.factory_id
+		LEFT JOIN BMS_OR_FACTORY_ORDER_CONFIG c ON a.order_id = c.order_id AND a.factory_id = c.factory_id
 		LEFT JOIN BMS_OR_ORDER o ON a.order_id = o.id
 	</select>
 	
@@ -179,7 +179,7 @@
 	<select id="getPlanIssuanceCount" parameterType="Map" resultType="com.byd.bms.plan.model.PlanIssuanceCount">
 		SELECT k.value AS plan_code_value,p.order_id,p.factory_id,p.order_config_id,sum(IFNULL(p.plan_qty,0)) AS
 		issed_qty FROM BMS_BASE_KEY k
-		LEFT JOIN BMS_PLAN_PRODUCTION_PLAN p ON p.plan_code_id = k.id
+		LEFT JOIN BMS_PLAN_PRODUCTION_PLAN p ON p.plan_code_value = k.value
 		WHERE k.key_code = 'PLAN_CODE' AND k.delete_flag='0'
 		AND (p.order_id = #{order_id} OR ISNULL(p.order_id))
 		AND (p.factory_id = #{factory_id} OR ISNULL(p.factory_id))
