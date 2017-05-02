@@ -6,7 +6,7 @@ $(document).ready(function () {
 	
 	function initPage(){
 		$("#file").val("");
-		getFactorySelect("plan/importMaster","#search_factory");
+		getFactorySelect("plan/planRevision",'',"#search_factory",null,'id');
 		ajaxQuery();
 	}
 	

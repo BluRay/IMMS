@@ -4,10 +4,13 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.stereotype.Repository;
 
+import com.byd.bms.plan.model.PlanConfigIssedQty;
 import com.byd.bms.plan.model.PlanIssuance;
+import com.byd.bms.plan.model.PlanIssuanceCount;
 import com.byd.bms.plan.model.PlanIssuanceTotal;
 import com.byd.bms.plan.model.PlanMasterIndex;
 import com.byd.bms.plan.model.PlanMasterPlan;
+import com.byd.bms.plan.model.PlanProductionPlan;
 import com.byd.bms.util.model.BmsBaseOperateChangeLog;
 
 @Repository(value="planDao")
@@ -24,4 +27,8 @@ public interface IPlanDao {
 	public List<Map<String,String>> checkPlanIssuanceList(Map<String,Object> queryMap);
 	public List<PlanIssuance> getPlanIssuanceList(Map<String,Object> queryMap);
 	public List<PlanIssuanceTotal> getPlanIssuanceTotal(Map<String,Object> queryMap);
+	public List<PlanProductionPlan> getProductionPlanIssuanceList(Map<String,Object> queryMap);
+	public List<PlanIssuanceCount> getPlanIssuanceCount(Map<String,Object> queryMap);
+	public int getPlanConfigQty(int order_config_id);
+	public List<PlanConfigIssedQty> getPlanConfigIssedQty(Map<String,Object> queryMap);//获取当前配置已发布数量
 }

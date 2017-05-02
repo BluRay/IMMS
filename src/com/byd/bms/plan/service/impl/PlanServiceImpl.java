@@ -11,7 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.byd.bms.plan.dao.IPlanDao;
 import com.byd.bms.plan.model.PlanMasterPlan;
+import com.byd.bms.plan.model.PlanProductionPlan;
+import com.byd.bms.plan.model.PlanConfigIssedQty;
 import com.byd.bms.plan.model.PlanIssuance;
+import com.byd.bms.plan.model.PlanIssuanceCount;
 import com.byd.bms.plan.model.PlanIssuanceTotal;
 import com.byd.bms.plan.model.PlanMasterIndex;
 import com.byd.bms.plan.service.IPlanService;
@@ -218,6 +221,26 @@ public class PlanServiceImpl implements IPlanService {
 	@Override
 	public List<PlanIssuanceTotal> getPlanIssuanceTotal(Map<String, Object> queryMap) {
 		return planDao.getPlanIssuanceTotal(queryMap);
+	}
+
+	@Override
+	public List<PlanProductionPlan> getProductionPlanIssuanceList(Map<String, Object> queryMap) {
+		return planDao.getProductionPlanIssuanceList(queryMap);
+	}
+
+	@Override
+	public List<PlanIssuanceCount> getPlanIssuanceCount(Map<String, Object> queryMap) {
+		return planDao.getPlanIssuanceCount(queryMap);
+	}
+
+	@Override
+	public int getPlanConfigQty(int order_config_id) {
+		return planDao.getPlanConfigQty(order_config_id);
+	}
+
+	@Override
+	public List<PlanConfigIssedQty> getPlanConfigIssedQty(Map<String, Object> queryMap) {
+		return planDao.getPlanConfigIssedQty(queryMap);
 	}
 	
 	

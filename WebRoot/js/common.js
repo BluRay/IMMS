@@ -1,9 +1,11 @@
 /*
  * 填充下拉列表 with id=>value;包括全部选项
  */
-function getSelects(data, selectval, element,defaultVal,valName) {
-	defaultVal=defaultVal||"";	
-	var strs = "<option value="+defaultVal+">"+defaultVal+"</option>";
+function getSelects(data, selectval, element,defaultVal,valName) {	
+	var strs ="";
+	if(defaultVal!=undefined){
+		 strs = "<option value="+defaultVal+"></option>";
+	}
 	$(element).html("");
 	$.each(data, function(index, value) {
 		if(valName=="name"){
@@ -263,9 +265,9 @@ function getFactorySelect(url,selectval,selectId,selectType,valName){
 
 //----------START Bootstrap Script ----------
 var scripts = [
-        '/IMMS/js/bootstrap-table.js','/IMMS/js/bootstrap-table-fixed-columns.js',
-        '/IMMS/js/bootstrap-table-export.js','/IMMS/js/tableExport.js',
-        '/IMMS/js/bootstrap-table-editable.js','/IMMS/js/bootstrap-editable.js'
+        '../js/bootstrap-table.js','../js/bootstrap-table-fixed-columns.js',
+        '../js/bootstrap-table-export.js','../js/tableExport.js',
+        '../js/bootstrap-table-editable.js','../js/bootstrap-editable.js'
     ],
     eachSeries = function (arr, iterator, callback) {
     	//console.log("---->arr.length=" + arr.length);

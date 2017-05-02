@@ -171,4 +171,32 @@
 		and plan_month = #{month}) order by (key_value + 0)
 	</select>
 	
+	<select id="getProductionPlanIssuanceList" parameterType="Map" resultType="com.byd.bms.plan.model.PlanProductionPlan">
+		SELECT * FROM BMS_PLAN_PRODUCTION_PLAN WHERE factory_id = #{factory_id} AND
+		plan_date = #{plan_date} AND order_id = #{order_id}
+	</select>
+	
+	<select id="getPlanIssuanceCount" parameterType="Map" resultType="com.byd.bms.plan.model.PlanIssuanceCount">
+		SELECT k.value AS plan_code_value,p.order_id,p.factory_id,p.order_config_id,sum(IFNULL(p.plan_qty,0)) AS
+		issed_qty FROM BMS_BASE_KEY k
+		LEFT JOIN BMS_PLAN_PRODUCTION_PLAN p ON p.plan_code_id = k.id
+		WHERE k.key_code = 'PLAN_CODE' AND k.delete_flag='0'
+		AND (p.order_id = #{order_id} OR ISNULL(p.order_id))
+		AND (p.factory_id = #{factory_id} OR ISNULL(p.factory_id))
+		AND p.order_config_id = #{order_config_id} AND p.plan_date = #{plan_date}
+		GROUP BY k.id
+	</select>
+	
+	<select id="getPlanConfigQty" parameterType="int" resultType="int">
+		SELECT config_qty FROM BMS_OR_ORDER_CONFIG WHERE id = #{order_config_id}
+	</select>
+	
+	<select id="getPlanConfigIssedQty" parameterType="Map" resultType="com.byd.bms.plan.model.PlanConfigIssedQty">
+		SELECT plan_code_value,SUM(plan_qty) AS sum_plan_qty FROM
+		BMS_PLAN_PRODUCTION_PLAN
+		WHERE factory_id = #{factory_id} AND order_id = #{order_id} AND
+		order_config_id = #{order_config_id}
+		GROUP BY plan_code_value
+	</select>
+	
 </mapper>

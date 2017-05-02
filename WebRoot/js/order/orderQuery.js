@@ -23,6 +23,7 @@ function initPage(){
 }
 
 function ajaxQuery(){
+	$table.bootstrapTable('refresh', {url: 'getOrderDetailList'});
 	$("#btnQuery").removeAttr("disabled");
 }
 
@@ -208,7 +209,7 @@ function initTable() {
     	$("#btnQuery").removeAttr("disabled");
     });
     $table.on('page-change.bs.table',function(){
-    	$("#btnQuery").attr("disabled","disabled");
+    	//$("#btnQuery").attr("disabled","disabled");
     });
 /*    $(window).resize(function () {
         $table.bootstrapTable('resetView', {height: getHeight()});

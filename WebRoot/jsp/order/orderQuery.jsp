@@ -31,7 +31,7 @@
 						<li><i class="ace-icon fa fa-home home-icon"></i><a
 							href="<%=request.getContextPath()%>/index">首页</a></li>
 						<li><a href="#">订单导入</a></li>
-						<li class="active">配置产地分配</li>
+						<li class="active">订单查询</li>
 					</ul>
 					<!-- /.breadcrumb -->
 
@@ -131,17 +131,20 @@
 			</div>
 			<!-- /.main-container -->
 		</div>
+		
+		<script>
+			var $table = $('#table'),$remove = $('#remove'),selections = [];
+		</script>
 		<script src="../assets/js/jquery-ui.min.js"></script>
 		<script src="../assets/js/jquery.gritter.min.js"></script>
 		<script src="../assets/js/ace/elements.onpage-help.js"></script>
 		<script src="../assets/js/ace/ace.onpage-help.js"></script>
 		<script src="../assets/js/bootstrap3-typeahead.js"></script>
 		<script src="../js/jquery.form.js"></script>
-		<script src="../js/common.js"></script>
+		<script src="../js/bootstrap-table.js"></script>
+		<script src="../js/common.js"></script>	
 		<script src="../js/order/orderQuery.js"></script>
-		<script>
-			var $table = $('#table'),$remove = $('#remove'),selections = [];
-		</script>
+
 <style type="text/css">
 .table{
     table-layout: fixed;

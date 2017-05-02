@@ -6,7 +6,7 @@ $(document).ready(function () {
 	
 	function initPage(){
 		$("#search_plan_version").val(GetQueryString("version"));
-		getFactorySelect("plan/planPreview","#search_factory");
+		getFactorySelect("plan/planRevision",'',"#search_factory",null,'id');
 		ajaxQuery();
 	}
 	

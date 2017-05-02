@@ -1,16 +1,16 @@
 package com.byd.bms.plan.model;
 
 public class PlanIssuanceCount {
-	private int plan_code_id;
+	private int plan_code_value;
 	private int order_id;
 	private int factory_id;
 	private int order_config_id;
 	private int issed_qty;
-	public int getPlan_code_id() {
-		return plan_code_id;
+	public int getPlan_code_value() {
+		return plan_code_value;
 	}
-	public void setPlan_code_id(int plan_code_id) {
-		this.plan_code_id = plan_code_id;
+	public void setPlan_code_value(int plan_code_value) {
+		this.plan_code_value = plan_code_value;
 	}
 	public int getOrder_id() {
 		return order_id;

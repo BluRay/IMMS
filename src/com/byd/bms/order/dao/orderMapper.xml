@@ -385,6 +385,23 @@
 		left join BMS_BASE_FACTORY f on fo.factory_id=f.id
 		left join BMS_OR_FACTORY_ORDER_CONFIG fc on fc.order_id=o.id and fc.factory_id=fo.factory_id
 		left join BMS_OR_ORDER_CONFIG c on fc.order_config_id=c.id
+		where 1=1
+		<if test="order_no !=null and order_no !=''">
+			and o.order_no=#{order_no}
+		</if>
+		<if test="factory !=null and factory !='全部'">
+			and fo.factory_id=#{factory}
+		</if>
+		<if test="actYear !=null and actYear !=''">
+			and o.productive_year=#{actYear}
+		</if>
+		<if test="status !=null and status !=''">
+			and fo.status=#{status}
+		</if>
+		 order by o.id desc
+		<if test="offset !=null">
+			limit #{offset},#{pageSize}
+		</if>
 	</select>
 	
 	<select id="queryOrderQueryListCount" parameterType="Map" resultType="int">
@@ -395,5 +412,18 @@
 		left join BMS_BASE_FACTORY f on fo.factory_id=f.id
 		left join BMS_OR_FACTORY_ORDER_CONFIG fc on fc.order_id=o.id and fc.factory_id=fo.factory_id
 		left join BMS_OR_ORDER_CONFIG c on fc.order_config_id=c.id
+		where 1=1
+		<if test="order_no !=null and order_no !=''">
+			and o.order_no=#{order_no}
+		</if>
+		<if test="factory !=null and factory !='全部'">
+			and fo.factory_id=#{factory}
+		</if>
+		<if test="actYear !=null and actYear !=''">
+			and o.productive_year=#{actYear}
+		</if>
+		<if test="status !=null and status !=''">
+			and fo.status=#{status}
+		</if>
 	</select>
 </mapper>

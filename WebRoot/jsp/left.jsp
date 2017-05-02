@@ -177,7 +177,7 @@ $(document).ready(function () {
 
 function getRealPath(url){
 	var str = url;
-	var index2 = str.lastIndexOf("\/");
+	var index2 = str.lastIndexOf("<%= path %>");
 	if(index2===-1){
 		//do nothing
 	}else{
