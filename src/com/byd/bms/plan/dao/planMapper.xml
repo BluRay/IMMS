@@ -219,14 +219,29 @@
 		]]>
 	</insert>
 	
-	<select id="getFactoryOrderDetail" parameterType="Map" resultType="Map">
-		SELECT o.id,d.id AS detail_id,o.factory_id,o.order_id,o.production_qty,d.busnum_start,d.busnum_end,d.bus_number_start,(d.busnum_end - d.busnum_start + 1) AS qty, d.bus_number_count,
-		(SELECT ifnull(max(cast(reverse(substr(reverse(bus_number),1,instr(reverse(bus_number),'-')-1)) as signed)),0) FROM BMS_PLAN_BUS where order_id=o.order_id and factory_id=o.factory_id and factory_order_detail_id=d.id) as maxbusnum,
-		(SELECT ifnull(min(cast(reverse(substr(reverse(bus_number),1,instr(reverse(bus_number),'-')-1)) as signed)),0) FROM BMS_PLAN_BUS where order_id=o.order_id and factory_id=o.factory_id and factory_order_detail_id=d.id) as minbusnum
-		FROM BMS_FACTORY_ORDER o 
-		LEFT JOIN BMS_FACTORY_ORDER_DETAIL d ON d.factory_order_id = o.id
+	<select id="getFactoryOrderDetail" parameterType="Map" resultType="Map">		
+		SELECT o.id,o.factory_id,o.order_id,o.production_qty,o.busnum_start,o.busnum_end,o.bus_number_start,(o.busnum_end - o.busnum_start + 1) AS qty, o.bus_number_count,
+		(SELECT ifnull(max(cast(reverse(substr(reverse(bus_number),1,instr(reverse(bus_number),'-')-1)) as signed)),0) FROM BMS_PLAN_BUS where order_id=o.order_id and factory_id=o.factory_id and factory_order_id=o.id) as maxbusnum,
+		(SELECT ifnull(min(cast(reverse(substr(reverse(bus_number),1,instr(reverse(bus_number),'-')-1)) as signed)),0) FROM BMS_PLAN_BUS where order_id=o.order_id and factory_id=o.factory_id and factory_order_id=o.id) as minbusnum
+		FROM BMS_OR_FACTORY_ORDER o 
 		WHERE o.order_id = (SELECT id FROM BMS_ORDER WHERE order_no=#{order_no})
-		AND o.factory_id =#{factory_id}
+		AND o.factory_id = #{factory_id}
 	</select>
+	
+	<insert id="insertPlanBusNumber" useGeneratedKeys="true" keyProperty="id" parameterType="com.byd.bms.plan.model.PlanBusNumber">
+		<![CDATA[
+		insert into BMS_PLAN_BUS_NUMBER (bus_serial_number,bus_number,creator_id,creat_date,print_sign,printer_id,print_date,print_times)
+		VALUES(
+		(select a.sn from (SELECT IFNULL(max(cast(bus_serial_number as unsigned)) +1,CONCAT(#{year},'00001')) AS sn FROM BMS_PLAN_BUS_NUMBER WHERE left(bus_serial_number,4) = #{year}) a),
+		(CONCAT(#{bus_code},'-',#{order_code},'-',#{year},'-',LPAD(#{num},5,'0') )),
+		#{creator_id},#{creat_date},#{print_sign},#{printer_id},#{print_date},#{print_times})
+		]]>
+	</insert>
+	
+	<update id="updateFactoryOrder" parameterType="int">
+		<![CDATA[
+		UPDATE BMS_OR_FACTORY_ORDER SET bus_number_count = bus_number_count + 1 WHERE id = #{factory_order_id}
+		]]>
+	</update>
 	
 </mapper>

@@ -5,6 +5,8 @@ import java.util.Map;
 import org.springframework.stereotype.Repository;
 
 import com.byd.bms.order.model.BmsOrder;
+import com.byd.bms.plan.model.PlanBus;
+import com.byd.bms.plan.model.PlanBusNumber;
 import com.byd.bms.plan.model.PlanConfigIssedQty;
 import com.byd.bms.plan.model.PlanIssuance;
 import com.byd.bms.plan.model.PlanIssuanceCount;
@@ -36,4 +38,7 @@ public interface IPlanDao {
 	public BmsOrder getOrderInfoByOrderID(String order_id);
 	public int insertPlanIssuance(PlanProductionPlan productionPlan);
 	public List<Map<String, Object>> getFactoryOrderDetail(Map<String,Object> queryMap);
+	public int insertPlanBusNumber(PlanBusNumber busNumber);
+	public int insertPlanBus(PlanBus bus);
+	public int updateFactoryOrder(int factory_order_id);
 }

@@ -21,7 +21,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import com.byd.bms.util.controller.BaseController;
 import com.byd.bms.util.ExcelTool;
-import com.byd.bms.order.model.BmsOrder;
 import com.byd.bms.plan.model.PlanConfigIssedQty;
 import com.byd.bms.plan.model.PlanIssuance;
 import com.byd.bms.plan.model.PlanIssuanceCount;
@@ -715,8 +714,9 @@ public class PlanController extends BaseController{
 		int factory_id = Integer.valueOf(request.getParameter("factory_id"));
 		String issuance_str = request.getParameter("issuance_str");
 		
-		int result = planService.issuancePlanSubmit(curTime, edit_user, issuance_date, factory_id, issuance_str);
+		int bus_count = planService.issuancePlanSubmit(curTime, edit_user, issuance_date, factory_id, issuance_str);
 		
+		initModel(true,String.valueOf(bus_count),null);
 		model = mv.getModelMap();
 		return model;
 	}
