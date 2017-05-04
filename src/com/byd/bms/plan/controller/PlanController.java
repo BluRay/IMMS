@@ -61,6 +61,18 @@ public class PlanController extends BaseController{
         return mv;  
     }
 	
+	@RequestMapping("/sapOrderManager")
+	public ModelAndView sapOrderManager(){ 		//SAP生产订单维护
+		mv.setViewName("plan/sapOrderManager");
+        return mv;  
+    }
+	
+	@RequestMapping("/pauseManager")
+	public ModelAndView pauseManager(){ 		//计划停线
+		mv.setViewName("plan/pauseManager");
+        return mv;  
+    }
+	
 	@RequestMapping(value="/uploadMasterPlan",method=RequestMethod.POST)
 	@ResponseBody
 	public ModelMap uploadMasterPlan(@RequestParam(value="file",required=false) MultipartFile file){
