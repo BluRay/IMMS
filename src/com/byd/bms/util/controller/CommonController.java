@@ -53,6 +53,26 @@ public class CommonController extends BaseController {
 
 		return model;
 	}
+	
+	/**
+	 * added by xjw for 查询工厂下拉列表(权限控制 ORG表获取)
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/getFactorySelectAuth")
+	@ResponseBody
+	public ModelMap getFactorySelectAuth(){
+		String staff_number = request.getSession().getAttribute("staff_number") + "";
+		String function_url = request.getParameter("function_url");
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("staff_number", staff_number);
+		condMap.put("function_url", function_url);
+		model=new ModelMap();
+		model.put("data", commonService.getFactorySelectAuth(condMap));
+
+		return model;
+	}
+	
 	/**
 	 * added by xjw for 查询车型列表
 	 * 
@@ -85,6 +105,27 @@ public class CommonController extends BaseController {
 	public ModelMap getDepartmentByFactory(String factory_id){
 		model=new ModelMap();
 		model.put("data", commonService.getDepartmentByFactory(factory_id));
+		return model;
+	}
+	
+	/**
+	 * added by xjw for 查询车间下拉列表(权限控制，ORG表获取)
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/getWorkshopSelectAuth")
+	@ResponseBody
+	public ModelMap getWorkshopSelectAuth(){
+		String staff_number = request.getSession().getAttribute("staff_number") + "";
+		String function_url = request.getParameter("function_url");
+		String factory = request.getParameter("factory");
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("staff_number", staff_number);
+		condMap.put("function_url", function_url);
+		condMap.put("factory", factory);
+		model=new ModelMap();
+		model.put("data", commonService.getWorkshopSelectAuth(condMap));
+
 		return model;
 	}
 	

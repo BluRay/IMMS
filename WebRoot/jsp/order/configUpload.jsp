@@ -87,7 +87,7 @@
 						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="order">*&nbsp;订单：</label>
 						<div class="col-sm-3">
 							<!-- <p style="width:98%;margin-bottom: 4px;font-size: 14px;margin-top: 4px;"id="order" >D2017003 K7 200台</p> -->
-							<input type="text"  class="input-medium" style="width:100%"  id="order" />
+							<input type="text"  class="input-medium" style="width:100%"  id="order"  placeholder="订单编号.." />
 							<input type="text" style="display:none" id="order_id" />
 						</div>
 					</div>

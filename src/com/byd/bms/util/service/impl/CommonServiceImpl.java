@@ -53,5 +53,15 @@ public class CommonServiceImpl implements ICommonService {
 		List<Map<String, Object>> workshopList=commonDao.queryWorkshopList(condMap);
 		return workshopList;
 	}
+	@Override
+	public List<Map<String, Object>> getFactorySelectAuth(Map<String, Object> condMap) {
+		List<Map<String, Object>> factoryList=commonDao.queryFactoryListAuth(condMap);
+		return factoryList;
+	}
+	@Override
+	public List<Map<String, Object>> getWorkshopSelectAuth(Map<String, Object> condMap) {
+		List<Map<String, Object>> workshopList=commonDao.queryWorkshopListAuth(condMap);
+		return workshopList;
+	}
 
 }

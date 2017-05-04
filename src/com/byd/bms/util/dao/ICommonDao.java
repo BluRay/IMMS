@@ -11,6 +11,8 @@ public interface ICommonDao {
 	List<Map<String, Object>> queryOrderList(Map<String,Object> condMap);
 
 	List<Map<String, Object>> queryFactoryList(Map<String, Object> condMap);
+	
+	List<Map<String,Object>> queryFactoryListAuth(Map<String, Object> condMap);
 
 	List<Map<String, Object>> queryBusTypeList();
 	
@@ -23,5 +25,7 @@ public interface ICommonDao {
 	List<String> getRoleAuthority(String staff_number);
 	
 	List<Map<String, Object>> queryWorkshopList(Map<String,Object>condMap);
+	
+	List<Map<String, Object>> queryWorkshopListAuth(Map<String,Object>condMap);
 
 }

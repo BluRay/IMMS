@@ -9,7 +9,7 @@ $(document).ready(function(){
 	}); 
 	
 	$("#btnAdd").on("click",function(){
-		getOrderNoSelect("#order","#order_id");
+		
 		showCreatePage();
 	})
 });
@@ -19,6 +19,7 @@ function initPage(){
 	cur_year = new Date().getFullYear();
 	$("#search_productive_year").html('<option value="'+cur_year+'">'+cur_year+'</option><option value="'+(cur_year-1)+'">'+(cur_year-1)+'</option><option value="'+(cur_year+1)+'">'+(cur_year+1)+'</option><option value="'+(cur_year+2)+'">'+(cur_year+2)+'</option>');	
 	getOrderNoSelect("#search_order_no","#orderId");
+	getOrderNoSelect("#order","#order_id");
 	ajaxQuery();
 }
 
@@ -170,6 +171,7 @@ function showEditPage(row){
 function showCreatePage(){
 	//显示订单配置数据
 	$("#order").attr("disabled",false);
+	$("#order").val("");
 	$("#order_id").val('0');
 	$("#configName").val("").attr("disabled",false);;
 	$("#configQty").val("").attr("disabled",false);;

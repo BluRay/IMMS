@@ -8,6 +8,8 @@ public interface ICommonService {
 	List<Map<String,Object>> getOrderFuzzySelect(Map<String, Object> condMap);
 
 	List<Map<String,Object>> getFactorySelect(Map<String, Object> condMap);
+	
+	List<Map<String,Object>> getFactorySelectAuth(Map<String, Object> condMap);
 
 	List<Map<String,Object>> getBusTypeSelect();
 
@@ -20,4 +22,6 @@ public interface ICommonService {
 	List<String> getRoleAuthority(String staff_number);
 	
 	List<Map<String,Object>> getWorkshopSelect(Map<String,Object> condMap);
+	
+	List<Map<String,Object>> getWorkshopSelectAuth(Map<String,Object> condMap);
 }

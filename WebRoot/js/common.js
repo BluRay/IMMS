@@ -277,7 +277,7 @@ function generatekeys(keyCode, list) {
 
 function getFactorySelect(url,selectval,selectId,selectType,valName){
 	$.ajax({
-		url : "/IMMS/common/getFactorySelect",
+		url : "/IMMS/common/getFactorySelectAuth",
 		dataType : "json",
 		data : {"function_url":url},
 		async : false,
@@ -299,11 +299,11 @@ function getFactorySelect(url,selectval,selectId,selectType,valName){
  * valName:option value值:id/name
  */
 
-function getWorkshopSelect(url,selectval,selectId,selectType,valName){
+function getWorkshopSelect(url,factory,selectval,selectId,selectType,valName){
 	$.ajax({
-		url : "/IMMS/common/getWorkshopSelect",
+		url : "/IMMS/common/getWorkshopSelectAuth",
 		dataType : "json",
-		data : {"function_url":url},
+		data : {"function_url":url,"factory":factory},
 		async : false,
 		error : function(response) {
 			alert(response.message)
