@@ -290,6 +290,30 @@ function getFactorySelect(url,selectval,selectId,selectType,valName){
 	});
 }
 
+/**
+ * 车间选择下拉列表（包括权限控制）
+ * url:权限控制url
+ * selectval:选中的值
+ * selectId:下拉框组件id
+ * selectType:下拉框组件类型：==全部==、==请选择==、== ==
+ * valName:option value值:id/name
+ */
+
+function getWorkshopSelect(url,selectval,selectId,selectType,valName){
+	$.ajax({
+		url : "/IMMS/common/getWorkshopSelect",
+		dataType : "json",
+		data : {"function_url":url},
+		async : false,
+		error : function(response) {
+			alert(response.message)
+		},
+		success : function(response) {
+			getSelects(response.data,selectval,selectId,selectType, valName);	
+		}
+	});
+}
+
 function getQueryString(name) { 
 	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"); 
 	var r = window.location.search.substr(1).match(reg); 

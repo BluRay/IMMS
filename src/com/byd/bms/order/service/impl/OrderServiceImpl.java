@@ -8,6 +8,9 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,7 +59,7 @@ public class OrderServiceImpl implements IOrderService {
 
 	@Override
 	@Transactional
-	public void editOrder(JsonArray jsar_del, JsonArray jsar, Map<String,String> ordermap) {
+	public void editOrder(JSONArray jsar_del, JSONArray jsar, Map<String,String> ordermap) {
 		/**
 		 * 修改BMS_ORDER表的订单数据
 		 */
@@ -75,10 +78,10 @@ public class OrderServiceImpl implements IOrderService {
 		 */
 		
 		Iterator it_del=jsar_del.iterator();
-		Gson gson = new Gson();
+		//Gson gson = new Gson();
 		while(it_del.hasNext()){
-			JsonElement jel=(JsonElement) it_del.next();
-			BmsFactoryOrderDetail del_map=gson.fromJson(jel, BmsFactoryOrderDetail.class);
+			JSONObject jel=(JSONObject) it_del.next();
+			BmsFactoryOrderDetail del_map=(BmsFactoryOrderDetail) JSONObject.toBean(jel, BmsFactoryOrderDetail.class);
 			int factory_order_id=del_map.getFactory_order_id();
 			
 			orderDao.deleteFactoryOrderById(factory_order_id);
@@ -91,8 +94,8 @@ public class OrderServiceImpl implements IOrderService {
 		
 		Iterator it_order=jsar.iterator();
 		while(it_order.hasNext()){
-			JsonElement jel=(JsonElement) it_order.next();
-			BmsFactoryOrderDetail omap=gson.fromJson(jel, BmsFactoryOrderDetail.class);
+			JSONObject jel=(JSONObject) it_order.next();
+			BmsFactoryOrderDetail omap=(BmsFactoryOrderDetail) JSONObject.toBean(jel, BmsFactoryOrderDetail.class);
 			int factory_order_id=omap.getFactory_order_id();
 			int production_qty=omap.getProduction_qty();
 			int busnum_start=omap.getBusnum_start();
@@ -213,17 +216,18 @@ public class OrderServiceImpl implements IOrderService {
 		int config_id=(int)configDetail.get("config_id");
 		String config_detail=(String)configDetail.get("config_detail");
 		List detail_list=new ArrayList();
-		JsonArray jsa=new JsonArray();
+	/*	JsonArray jsa=new JsonArray();
 		JsonParser parser=new JsonParser();
 		JsonElement jel=parser.parse(config_detail);
 		Gson gson = new Gson();
 		if (jel.isJsonArray()) {
 			jsa=jel.getAsJsonArray();
-		}
+		}*/
+		JSONArray jsa=JSONArray.fromObject(config_detail);
 		Iterator it=jsa.iterator();
 		while(it.hasNext()){
-			JsonElement el= (JsonElement) it.next();
-			BmsOrderConfigDetail detail=gson.fromJson(el, BmsOrderConfigDetail.class);
+			JSONObject el= (JSONObject) it.next();
+			BmsOrderConfigDetail detail=(BmsOrderConfigDetail) JSONObject.toBean(el, BmsOrderConfigDetail.class);
 			detail_list.add(detail);
 		}
 		

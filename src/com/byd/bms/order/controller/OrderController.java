@@ -11,6 +11,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -145,7 +148,7 @@ public class OrderController extends BaseController{
 		ordermap.put("curTime", curTime);
 		ordermap.put("userid", userid);
 		
-		JsonArray jsar_del=new JsonArray();
+/*		JsonArray jsar_del=new JsonArray();
 		JsonParser parser = new JsonParser();
 		JsonElement jel=parser.parse(factoryOrderDetail);
 		JsonArray jsonArray = null;
@@ -157,7 +160,9 @@ public class OrderController extends BaseController{
 		JsonElement jel_del=parser.parse(delOrderList);
 		if(jel_del.isJsonArray()){
 			jsar_del = jel_del.getAsJsonArray();
-		}
+		}*/
+		JSONArray jsonArray=JSONArray.fromObject(factoryOrderDetail);
+		JSONArray jsar_del=JSONArray.fromObject(delOrderList);
 		try{
 			orderService.editOrder(jsar_del,jsonArray,ordermap);
 			initModel(true,"修改成功！",null);
@@ -433,23 +438,26 @@ public class OrderController extends BaseController{
 		String curTime = df.format(new Date());
 		int userid=(int) session.getAttribute("user_id");
 		String paramstr=request.getParameter("allot_config_list");
-		JsonArray jsa= new JsonArray();
+/*		JsonArray jsa= new JsonArray();
 		JsonParser parser=new JsonParser();
 		JsonElement jel=parser.parse(paramstr);	
 		Gson gson=new Gson();
 		
 		if(jel.isJsonArray()){
 			jsa=jel.getAsJsonArray();
-		}
+		}*/
+		JSONArray jsa=JSONArray.fromObject(paramstr);
 		Iterator it=jsa.iterator();
 		List detail_list=new ArrayList();
 		/**
 		 * 封装需要保存的数据
 		 */
 		while(it.hasNext()){
-			JsonElement el=(JsonElement)it.next();
+			/*JsonElement el=(JsonElement)it.next();*/
+			JSONObject el=(JSONObject) it.next();
 			BmsOrderConfigAllot allotBean=new BmsOrderConfigAllot();
-			allotBean=gson.fromJson(el, BmsOrderConfigAllot.class);
+			/*allotBean=gson.fromJson(el, BmsOrderConfigAllot.class);*/
+			allotBean=(BmsOrderConfigAllot) JSONObject.toBean(el, BmsOrderConfigAllot.class);
 			allotBean.setEditor_id(userid);
 			allotBean.setEdit_date(curTime);
 			

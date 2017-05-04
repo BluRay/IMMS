@@ -9,7 +9,7 @@ public class PlanBus {
 	private String bus_number;
 	private String status;
 	private int order_id;
-	private int order_cofig_id;
+	private int order_config_id;
 	private int sequence;
 	private String vin;
 	private String customer_number;
@@ -45,7 +45,6 @@ public class PlanBus {
 	private String zcgg_date;
 	private String dp_production_date;
 	private String zc_production_date;
-	private String factory_order_detail_id;
 	private String dp_zzd;
 	private String zc_zzd;
 	private String hgz_note;
@@ -99,11 +98,11 @@ public class PlanBus {
 	public void setOrder_id(int order_id) {
 		this.order_id = order_id;
 	}
-	public int getOrder_cofig_id() {
-		return order_cofig_id;
+	public int getOrder_config_id() {
+		return order_config_id;
 	}
-	public void setOrder_cofig_id(int order_cofig_id) {
-		this.order_cofig_id = order_cofig_id;
+	public void setOrder_config_id(int order_config_id) {
+		this.order_config_id = order_config_id;
 	}
 	public int getSequence() {
 		return sequence;
@@ -314,12 +313,6 @@ public class PlanBus {
 	}
 	public void setZc_production_date(String zc_production_date) {
 		this.zc_production_date = zc_production_date;
-	}
-	public String getFactory_order_detail_id() {
-		return factory_order_detail_id;
-	}
-	public void setFactory_order_detail_id(String factory_order_detail_id) {
-		this.factory_order_detail_id = factory_order_detail_id;
 	}
 	public String getDp_zzd() {
 		return dp_zzd;

@@ -4,7 +4,7 @@
 
 	<select id="checkImportPlanFactory" parameterType="Map" resultType="String">
 		SELECT id FROM BMS_FACTORY_ORDER WHERE order_id = (SELECT
-		id FROM BMS_ORDER WHERE order_no=#{order_no})
+		id FROM BMS_OR_ORDER WHERE order_no=#{order_no})
 		AND factory_id = (SELECT
 		id FROM BMS_BASE_FACTORY WHERE factory_name = #{factory_name})
 		limit 1
@@ -224,7 +224,7 @@
 		(SELECT ifnull(max(cast(reverse(substr(reverse(bus_number),1,instr(reverse(bus_number),'-')-1)) as signed)),0) FROM BMS_PLAN_BUS where order_id=o.order_id and factory_id=o.factory_id and factory_order_id=o.id) as maxbusnum,
 		(SELECT ifnull(min(cast(reverse(substr(reverse(bus_number),1,instr(reverse(bus_number),'-')-1)) as signed)),0) FROM BMS_PLAN_BUS where order_id=o.order_id and factory_id=o.factory_id and factory_order_id=o.id) as minbusnum
 		FROM BMS_OR_FACTORY_ORDER o 
-		WHERE o.order_id = (SELECT id FROM BMS_ORDER WHERE order_no=#{order_no})
+		WHERE o.order_id = (SELECT id FROM BMS_OR_ORDER WHERE order_no=#{order_no})
 		AND o.factory_id = #{factory_id}
 	</select>
 	
@@ -235,6 +235,18 @@
 		(select a.sn from (SELECT IFNULL(max(cast(bus_serial_number as unsigned)) +1,CONCAT(#{year},'00001')) AS sn FROM BMS_PLAN_BUS_NUMBER WHERE left(bus_serial_number,4) = #{year}) a),
 		(CONCAT(#{bus_code},'-',#{order_code},'-',#{year},'-',LPAD(#{num},5,'0') )),
 		#{creator_id},#{creat_date},#{print_sign},#{printer_id},#{print_date},#{print_times})
+		]]>
+	</insert>
+	
+	<insert id="insertPlanBus" useGeneratedKeys="true" keyProperty="id" parameterType="com.byd.bms.plan.model.PlanBus">
+		<![CDATA[
+		insert into BMS_PLAN_BUS (
+		factory_id,production_plan_id,bus_number,status,order_id,order_config_id,sequence,vin,customer_number,left_motor_number,right_motor_number,
+		bus_color,bus_seats,factory_order_id)
+		VALUES(#{factory_id},#{production_plan_id},
+		(SELECT bus_number FROM BMS_PLAN_BUS_NUMBER WHERE id=#{bus_number_id}),
+		#{status},(SELECT id FROM BMS_OR_ORDER WHERE order_no=#{order_no}),#{order_config_id},#{sequence},#{vin},#{customer_number},
+		#{left_motor_number},#{right_motor_number},#{bus_color},#{bus_seats},#{factory_order_id})
 		]]>
 	</insert>
 	

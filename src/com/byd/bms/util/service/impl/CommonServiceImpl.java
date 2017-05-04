@@ -48,5 +48,10 @@ public class CommonServiceImpl implements ICommonService {
 		List<String> datalist = commonDao.getRoleAuthority(staff_number);
 		return datalist;
 	}
+	@Override
+	public List<Map<String, Object>> getWorkshopSelect( Map<String, Object> condMap) {
+		List<Map<String, Object>> workshopList=commonDao.queryWorkshopList(condMap);
+		return workshopList;
+	}
 
 }

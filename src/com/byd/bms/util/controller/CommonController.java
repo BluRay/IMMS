@@ -87,4 +87,23 @@ public class CommonController extends BaseController {
 		model.put("data", commonService.getDepartmentByFactory(factory_id));
 		return model;
 	}
+	
+	/**
+	 * added by xjw for 查询车间下拉列表
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/getWorkshopSelect")
+	@ResponseBody
+	public ModelMap getWorkshopSelect(){
+		String staff_number = request.getSession().getAttribute("staff_number") + "";
+		String function_url = request.getParameter("function_url");
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("staff_number", staff_number);
+		condMap.put("function_url", function_url);
+		model=new ModelMap();
+		model.put("data", commonService.getWorkshopSelect(condMap));
+
+		return model;
+	}
 }

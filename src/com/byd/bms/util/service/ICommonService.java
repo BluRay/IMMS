@@ -19,4 +19,5 @@ public interface ICommonService {
 	
 	List<String> getRoleAuthority(String staff_number);
 	
+	List<Map<String,Object>> getWorkshopSelect(Map<String,Object> condMap);
 }

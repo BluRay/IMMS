@@ -3,6 +3,8 @@ package com.byd.bms.order.service;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.json.JSONArray;
+
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 
@@ -14,7 +16,7 @@ public interface IOrderService {
 	public int getBusNumberStart(Map<String, Object> conditionMap);
 	public List getOrderDetailList(Map<String, Object> conditionMap);
 	@Transactional
-	public void editOrder(JsonArray jel_del, JsonArray jel, Map<String,String> odermap);
+	public void editOrder(JSONArray jel_del, JSONArray jel, Map<String,String> odermap);
 	
 	public String getOrderSerial(String year);
 	@Transactional

@@ -7971,7 +7971,7 @@ select option[value=""], select.form-control option[value=""] {
 
 input[disabled] {
 	color: #848484 !important;
-	background-color: #eee !important
+	/*background-color: #eee !important*/
 }
 
 input[disabled]:hover {

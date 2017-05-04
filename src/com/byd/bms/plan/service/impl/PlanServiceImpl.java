@@ -345,7 +345,7 @@ public class PlanServiceImpl implements IPlanService {
 									bus.setFactory_id(factory_id);
 									bus.setStatus("0");
 									bus.setOrder_no(order_no);
-									bus.setOrder_cofig_id(Integer.valueOf(issuanceArray[0].substring(0, issuanceArray[0].length()-1)));
+									bus.setOrder_config_id(Integer.valueOf(issuanceArray[0].substring(0, issuanceArray[0].length()-1)));
 									bus.setSequence(i+1);
 									bus.setProduction_plan_id(production_plan_id);
 									bus.setFactory_order_id(factory_order_id);

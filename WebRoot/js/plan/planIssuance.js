@@ -30,7 +30,7 @@ $(document).ready(function () {
 		$("#btnSave").attr("disabled","disabled");
 		var sum_plan = 0; var sum_iss = 0; var tableData=new Array();
 		var plan_count = 0; var check = 0;
-		$("#tablePlan tr").each(function(trindex,tritem){
+		$("#tableData tr").each(function(trindex,tritem){
 			if(trindex >0){
 				tableData[trindex]=new Array();
                 if($(tritem).text().substring(1,2)=='D'){
@@ -71,9 +71,24 @@ $(document).ready(function () {
         	$("#btnSave").removeAttr("disabled");
 			return false;
 		}
-        
-        
-		
+        $.ajax({
+		    url: "issuancePlanSubmit",
+    	    dataType: "json",
+			type: "get",
+		    data: {
+		    	"factory_id": $('#search_factory').val(),
+		    	"order_no": $('#search_order_no').val(),
+		    	"issuance_date": $('#issuance_date').val(),
+		    	"issuance_str": $('#issuance_str').val(),
+		    },
+		    success:function(response){
+		    	alert("发布成功，生成车号数量：" + response.message);
+		    	ajaxQuery();
+				return false;
+		    }
+		});
+        $("#btnSave").removeAttr("disabled");
+		return false;
 	});
 	
 	function ajaxQuery(targetPage){

@@ -47,7 +47,8 @@
 						<td>&nbsp;订单编号：</td>
 						<td><input id="search_order_no" placeholder="请输入订单编号..." style="width:120px" class="col-sm-10" type="text"></td>
 						<td>&nbsp;生产日期：</td>
-						<td><input id="issuance_date" placeholder="请输入生产日期..." style="width:120px" class="col-sm-10" type="text"></td>
+						<td><input type="text" style="width:120px" class="col-sm-10" placeholder="请输入生产日期..." id="issuance_date" onClick="WdatePicker({el:'issuance_date',dateFmt:'yyyyMMdd'});" />
+						</td>
 						<td><input type="button" class="btn btn-sm btn-success" id="btnQuery" value="查询" style="margin-left: 2px;"></input>&nbsp;</td>
 						<td><input type="button" class="btn btn-sm btn-info" id="btnSave" value="发布" style="margin-left: 2px;"></input>&nbsp;</td>
 						<td>
@@ -87,6 +88,7 @@
 		</div><!-- /.main-container -->
 	</div>
 	</body>
+	<script src="../js/datePicker/WdatePicker.js"></script>
 	<script src="../assets/js/bootstrap3-typeahead.js"></script>
 	<script src="../js/common.js"></script>
 	<script src="../js/plan/planIssuance.js"></script>

@@ -21,5 +21,7 @@ public interface ICommonDao {
 	List<String> getAllRoleAuthority();
 	
 	List<String> getRoleAuthority(String staff_number);
+	
+	List<Map<String, Object>> queryWorkshopList(Map<String,Object>condMap);
 
 }

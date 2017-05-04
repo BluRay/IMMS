@@ -42,6 +42,7 @@
 		SELECT count(o.id) FROM BMS_OR_ORDER o
 		LEFT JOIN BMS_OR_FACTORY_ORDER f on o.id=f.order_id
 		LEFT JOIN BMS_BASE_FACTORY a ON f.factory_id = a.id 
+		where 1=1
 		<if test="orderNo !=null and orderNo !=''">
 			and o.order_no like CONCAT('%',#{orderNo},'%')   
 		</if>
@@ -60,13 +61,18 @@
 	</select>
 	
 	<select id="getBusNumberStart" parameterType="Map" resultType="int">
-		select ifnull(max(bus_number_start+busnum_end-busnum_start),0)
+		select max(cast(od.busnum_end as signed))
+		from BMS_OR_FACTORY_ORDER od
+		left join BMS_OR_ORDER o on od.order_id=o.id
+		where o.productive_year = #{productive_year} and o.order_type='标准订单'
+		
+		<!-- select ifnull(max(bus_number_start+busnum_end-busnum_start),0)
 		from BMS_OR_FACTORY_ORDER
 		where bus_number_start=(
 		select max(od.bus_number_start)
 		from BMS_OR_FACTORY_ORDER od
 		left join BMS_OR_ORDER o on od.order_id=o.id
-		where o.productive_year = #{productive_year} and o.order_type='标准订单')
+		where o.productive_year = #{productive_year} and o.order_type='标准订单') -->
 	</select>
 	
 	<select id="getOrderDetailList" parameterType="Map" resultType="com.byd.bms.order.model.BmsFactoryOrderDetail">

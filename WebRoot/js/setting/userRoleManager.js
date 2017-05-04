@@ -45,7 +45,7 @@ $(document).ready(function () {
 		$.ajax({
 		    url: "getUserList",
 		    dataType: "json",
-			type: "get",
+			type: "get",async:false,
 		    data: {"search_key":$("#search_key").val()},
 		    success:function(response){
 		    	var users = response.data;
@@ -91,7 +91,7 @@ $(document).ready(function () {
 		$.ajax({
 		    url: "getUserRoleList",
 		    dataType: "json",
-			type: "get",
+			type: "get",async:false,
 		    data: {"staff_number":staff_number},
 		    success:function(response){
 		    	var permissions = response.data[1];
@@ -160,7 +160,7 @@ $(document).ready(function () {
 		$.ajax({
 		    url: "getRoleList",
 		    dataType: "json",
-			type: "get",
+			type: "get",async:false,
 		    data: {},
 		    success:function(response){
 		    	var role_str = '{';
@@ -210,7 +210,7 @@ $(document).ready(function () {
 		$.ajax({
 		    url: "getFunctionList",
 		    dataType: "json",
-			type: "get",
+			type: "get",async:false,
 		    data: {"role_id":role_id,"staff_number":this_staff_number},
 		    success:function(response){
 		    	var contents = response.data[2];
@@ -248,7 +248,7 @@ $(document).ready(function () {
 		$.ajax({
 		    url: "getFunctionList",
 		    dataType: "json",
-			type: "get",
+			type: "get",async:false,
 		    data: {"role_id":role_id},
 		    success:function(response){
 		    	var funs = response.data[0];
