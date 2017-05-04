@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.stereotype.Repository;
 
+import com.byd.bms.order.model.BmsOrder;
 import com.byd.bms.plan.model.PlanConfigIssedQty;
 import com.byd.bms.plan.model.PlanIssuance;
 import com.byd.bms.plan.model.PlanIssuanceCount;
@@ -31,4 +32,8 @@ public interface IPlanDao {
 	public List<PlanIssuanceCount> getPlanIssuanceCount(Map<String,Object> queryMap);
 	public int getPlanConfigQty(int order_config_id);
 	public List<PlanConfigIssedQty> getPlanConfigIssedQty(Map<String,Object> queryMap);//获取当前配置已发布数量
+	public String getOrderIdByConfigId(String config_id);
+	public BmsOrder getOrderInfoByOrderID(String order_id);
+	public int insertPlanIssuance(PlanProductionPlan productionPlan);
+	public List<Map<String, Object>> getFactoryOrderDetail(Map<String,Object> queryMap);
 }

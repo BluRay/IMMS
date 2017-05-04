@@ -3,7 +3,9 @@ package com.byd.bms.plan.controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import com.byd.bms.util.controller.BaseController;
 import com.byd.bms.util.ExcelTool;
+import com.byd.bms.order.model.BmsOrder;
 import com.byd.bms.plan.model.PlanConfigIssedQty;
 import com.byd.bms.plan.model.PlanIssuance;
 import com.byd.bms.plan.model.PlanIssuanceCount;
@@ -702,5 +705,20 @@ public class PlanController extends BaseController{
 		return model;
 	}
 	
+	@RequestMapping("/issuancePlanSubmit")
+	@ResponseBody
+	public ModelMap issuancePlanSubmit(){
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String edit_user = request.getSession().getAttribute("staff_number") + "";
+		String issuance_date = request.getParameter("issuance_date");
+		int factory_id = Integer.valueOf(request.getParameter("factory_id"));
+		String issuance_str = request.getParameter("issuance_str");
+		
+		int result = planService.issuancePlanSubmit(curTime, edit_user, issuance_date, factory_id, issuance_str);
+		
+		model = mv.getModelMap();
+		return model;
+	}
 
 }

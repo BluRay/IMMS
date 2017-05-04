@@ -205,7 +205,7 @@ function getKeysSelect(keyCode, selectval, element,selectType,valueItem) {
 		data : {
 			keyCode : keyCode
 		},
-		//async : false,
+		async : false,
 		error : function(response) {
 			alert(response.message)
 		},
@@ -239,6 +239,33 @@ function getKeysSelect(keyCode, selectval, element,selectType,valueItem) {
 		}
 	})
 }
+
+function generatekeys(keyCode, list) {
+	$.ajax({
+		url : "/IMMS/common/getKeysSelect",
+		dataType : "json",
+		data : {
+			keyCode : keyCode
+		},
+		async : false,
+		error : function(response) {
+			alert(response.message)
+		},
+		success : function(response) {
+			$.each(response.data, function(index, value) {
+				/*
+				 * if (input == value.id) { returnValue = value.key_name }
+				 */
+				var obj = {
+					"id" : value.id,
+					"key_name" : value.key_name
+				};
+				list.push(obj);
+			});
+		}
+	});
+}
+
 /**
  * 工厂选择下拉列表（包括权限控制）
  * url:权限控制url
@@ -262,6 +289,12 @@ function getFactorySelect(url,selectval,selectId,selectType,valName){
 		}
 	});
 }
+
+function getQueryString(name) { 
+	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"); 
+	var r = window.location.search.substr(1).match(reg); 
+	if (r != null) return decodeURI(r[2]); return null; 
+} 
 
 //----------START Bootstrap Script ----------
 var scripts = [

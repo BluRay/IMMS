@@ -50,6 +50,10 @@
 						<td><input id="issuance_date" placeholder="请输入生产日期..." style="width:120px" class="col-sm-10" type="text"></td>
 						<td><input type="button" class="btn btn-sm btn-success" id="btnQuery" value="查询" style="margin-left: 2px;"></input>&nbsp;</td>
 						<td><input type="button" class="btn btn-sm btn-info" id="btnSave" value="发布" style="margin-left: 2px;"></input>&nbsp;</td>
+						<td>
+						<input type="text" style="display:none" class="input-small revise" id="configs"></input>
+						<input type="text" style="display:none;width:400px" class="input-large revise" id="issuance_str"></input>
+						</td>
 						</tr>
 					</table>
 					</div>		
@@ -72,6 +76,7 @@
 	                    <th style="text-align:center;">入库</th>
 					</tr>
 					</thead>
+					<tbody></tbody>
 					</table>
 					</div>
 			</div><!-- /.main-content -->

@@ -9,6 +9,8 @@ import javax.annotation.Resource;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.byd.bms.order.model.BmsOrder;
 import com.byd.bms.plan.dao.IPlanDao;
 import com.byd.bms.plan.model.PlanMasterPlan;
 import com.byd.bms.plan.model.PlanProductionPlan;
@@ -241,6 +243,55 @@ public class PlanServiceImpl implements IPlanService {
 	@Override
 	public List<PlanConfigIssedQty> getPlanConfigIssedQty(Map<String, Object> queryMap) {
 		return planDao.getPlanConfigIssedQty(queryMap);
+	}
+
+	@Override
+	@Transactional
+	public int issuancePlanSubmit(String curTime, String edit_user, String issuance_date, int factory_id, String issuance_str) {
+		int result = 0;
+		String[] issuanceStrArray=issuance_str.split(";");
+		int plan_code_value[]={0,1,2,3,4,5,6,7,8,9,10,11,12};
+		//当前车号的生成规则是通过SQL自动产生，产生规则见planDao::insertPlanBusNumber		
+		int bus_count = 0;				//【BMS_FACTORY_ORDER】 已发布数计数
+		for(int i = 0; i < issuanceStrArray.length; i++){
+			String[] issuanceArray = issuanceStrArray[i].split(",");
+			String order_id = planDao.getOrderIdByConfigId(issuanceArray[0].substring(0, issuanceArray[0].length()-1));
+			BmsOrder order_info = planDao.getOrderInfoByOrderID(order_id);
+			String order_no = order_info.getOrder_no();
+			String bus_type = order_info.getBus_type();
+			String order_code = order_info.getOrder_code();
+			String year = order_info.getProductive_year();
+			String order_type = order_info.getOrder_type();		//订单类型，KD件不产生车号
+			for(int j=1;j<issuanceArray.length;j++){
+				if (Integer.valueOf(issuanceArray[j])>0){
+					PlanProductionPlan productionPlan = new PlanProductionPlan();
+					productionPlan.setOrder_no(order_no);
+					productionPlan.setFactory_id(factory_id);
+					productionPlan.setPlan_code_value(plan_code_value[j]);
+					productionPlan.setPlan_date(issuance_date);
+					productionPlan.setOrder_config_id(Integer.valueOf(issuanceArray[0].substring(0, issuanceArray[0].length()-1)));
+					productionPlan.setPlan_qty(Integer.valueOf(issuanceArray[j]));
+					productionPlan.setCreator_id(Integer.valueOf(edit_user));
+					productionPlan.setCreat_date(curTime);				
+					int production_plan_id = 0;
+					result += planDao.insertPlanIssuance(productionPlan);
+					production_plan_id = productionPlan.getId();
+					//焊装上线节点 开始生成车号
+					if(plan_code_value[j]==4){
+						if(order_type.equals("KD件")){
+							//logger.info("---->当前订单为KD件，不产生车号");
+						}else{
+							int busPlanQty=Integer.valueOf(issuanceArray[j]);	//发布数量
+							
+						}
+						
+					}
+					
+				}
+			}
+			
+		}
+		return 0;
 	}
 	
 	

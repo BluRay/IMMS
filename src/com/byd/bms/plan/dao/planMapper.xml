@@ -151,7 +151,7 @@
 		AND a.order_id IN
 		(SELECT a.order_id FROM (
 		SELECT pp.order_id,COUNT(pp.D#{day}) AS count_num FROM BMS_PLAN_MASTER_PLAN pp WHERE pp.factory_id = #{factory_id}
-		AND pp.plan_month = #{issuance_month}' GROUP BY pp.order_id) a
+		AND pp.plan_month = #{issuance_month} GROUP BY pp.order_id) a
 		WHERE a.count_num >0)
 		</if>
 		GROUP BY
@@ -197,6 +197,36 @@
 		WHERE factory_id = #{factory_id} AND order_id = #{order_id} AND
 		order_config_id = #{order_config_id}
 		GROUP BY plan_code_value
+	</select>
+	
+	<select id="getOrderIdByConfigId" parameterType="String" resultType="String">
+		SELECT order_id FROM BMS_OR_ORDER_CONFIG WHERE id = #{config_id}
+	</select>
+	
+	<select id="getOrderInfoByOrderID" parameterType="Map" resultType="com.byd.bms.order.model.BmsOrder">
+		SELECT o.*,t.bus_type_code AS 'bus_type' FROM BMS_OR_ORDER o
+		LEFT OUTER JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id = t.id
+		WHERE o.id = #{order_id}
+	</select>
+	
+	<insert id="insertPlanIssuance" useGeneratedKeys="true" keyProperty="id" parameterType="com.byd.bms.plan.model.PlanProductionPlan">
+		<![CDATA[
+		insert into BMS_PLAN_PRODUCTION_PLAN (
+		order_id,factory_id,plan_code_value,plan_date,order_config_id,plan_qty,plan_status,creator_id,creat_date,releaser_id,release_date)
+		VALUES(
+		(SELECT id FROM BMS_OR_ORDER WHERE order_no=#{order_no}),#{factory_id},#{plan_code_value},#{plan_date},#{order_config_id},#{plan_qty},#{plan_status},#{creator_id},
+		#{creat_date},#{releaser_id},#{release_date})
+		]]>
+	</insert>
+	
+	<select id="getFactoryOrderDetail" parameterType="Map" resultType="Map">
+		SELECT o.id,d.id AS detail_id,o.factory_id,o.order_id,o.production_qty,d.busnum_start,d.busnum_end,d.bus_number_start,(d.busnum_end - d.busnum_start + 1) AS qty, d.bus_number_count,
+		(SELECT ifnull(max(cast(reverse(substr(reverse(bus_number),1,instr(reverse(bus_number),'-')-1)) as signed)),0) FROM BMS_PLAN_BUS where order_id=o.order_id and factory_id=o.factory_id and factory_order_detail_id=d.id) as maxbusnum,
+		(SELECT ifnull(min(cast(reverse(substr(reverse(bus_number),1,instr(reverse(bus_number),'-')-1)) as signed)),0) FROM BMS_PLAN_BUS where order_id=o.order_id and factory_id=o.factory_id and factory_order_detail_id=d.id) as minbusnum
+		FROM BMS_FACTORY_ORDER o 
+		LEFT JOIN BMS_FACTORY_ORDER_DETAIL d ON d.factory_order_id = o.id
+		WHERE o.order_id = (SELECT id FROM BMS_ORDER WHERE order_no=#{order_no})
+		AND o.factory_id =#{factory_id}
 	</select>
 	
 </mapper>

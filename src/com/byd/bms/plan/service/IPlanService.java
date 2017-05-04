@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.byd.bms.util.ExcelModel;
+import com.byd.bms.order.model.BmsOrder;
 import com.byd.bms.plan.model.PlanConfigIssedQty;
 import com.byd.bms.plan.model.PlanIssuance;
 import com.byd.bms.plan.model.PlanIssuanceCount;
@@ -25,4 +26,5 @@ public interface IPlanService {
 	public List<PlanIssuanceCount> getPlanIssuanceCount(Map<String,Object> queryMap);
 	public int getPlanConfigQty(int order_config_id);
 	public List<PlanConfigIssedQty> getPlanConfigIssedQty(Map<String,Object> queryMap);//获取当前配置已发布数量
+	public int issuancePlanSubmit(String curTime,String edit_user,String issuance_date,int factory_id,String issuance_str);
 }
