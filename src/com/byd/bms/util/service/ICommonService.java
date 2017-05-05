@@ -24,4 +24,6 @@ public interface ICommonService {
 	List<Map<String,Object>> getWorkshopSelect(Map<String,Object> condMap);
 	
 	List<Map<String,Object>> getWorkshopSelectAuth(Map<String,Object> condMap);
+	
+	public List<Map<String,String>> getAllReasonType();
 }

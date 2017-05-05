@@ -2,14 +2,13 @@ package com.byd.bms.util.controller;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.byd.bms.util.service.ICommonService;
+
 @Controller
 @RequestMapping("/common")
 public class CommonController extends BaseController {
@@ -147,4 +146,13 @@ public class CommonController extends BaseController {
 
 		return model;
 	}
+	
+	@RequestMapping("/getReasonTypeSelect")
+	@ResponseBody
+	public ModelMap getReasonTypeSelect(){
+		model=new ModelMap();
+		model.put("data", commonService.getAllReasonType());
+		return model;
+	}
+	
 }

@@ -106,4 +106,8 @@
 		</if>
 	</select>
 	
+	<select id="getAllReasonType" parameterType="int" resultType="Map">
+		SELECT * FROM BMS_BASE_KEY WHERE key_code = 'ABNORMAL_REASON'
+	</select>
+	
 </mapper>

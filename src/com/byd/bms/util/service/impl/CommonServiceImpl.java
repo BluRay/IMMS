@@ -63,5 +63,9 @@ public class CommonServiceImpl implements ICommonService {
 		List<Map<String, Object>> workshopList=commonDao.queryWorkshopListAuth(condMap);
 		return workshopList;
 	}
+	@Override
+	public List<Map<String, String>> getAllReasonType() {
+		return commonDao.getAllReasonType();
+	}
 
 }
