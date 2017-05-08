@@ -13,6 +13,7 @@ import com.byd.bms.plan.model.PlanIssuanceCount;
 import com.byd.bms.plan.model.PlanIssuanceTotal;
 import com.byd.bms.plan.model.PlanMasterIndex;
 import com.byd.bms.plan.model.PlanMasterPlan;
+import com.byd.bms.plan.model.PlanPause;
 import com.byd.bms.plan.model.PlanProductionPlan;
 import com.byd.bms.util.model.BmsBaseOperateChangeLog;
 
@@ -41,4 +42,6 @@ public interface IPlanDao {
 	public int insertPlanBusNumber(PlanBusNumber busNumber);
 	public int insertPlanBus(PlanBus bus);
 	public int updateFactoryOrder(int factory_order_id);
+	public int addPause(PlanPause pause);
+	public List<PlanPause> getPauseList(Map<String,Object> queryMap);
 }

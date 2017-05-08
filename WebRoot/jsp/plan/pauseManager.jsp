@@ -48,7 +48,7 @@
 								<td>&nbsp;车间：</td>
 								<td><select id="search_workshop" class="form-control" style="width:80px"></select></td>
 								<td>&nbsp;线别：</td>
-								<td><select id="search_line" class="form-control" style="width:60px"><option value='1'>I线</option><option value='2'>II线</option></select></td>
+								<td><select id="search_line" class="form-control" style="width:60px"><option value='A'>A线</option><option value='B'>B线</option></select></td>
 								<td>&nbsp;订单：</td>
 								<td><input id="search_order_no" placeholder="请输入订单编号..." style="width:110px" type="text"></td>
 								<td>&nbsp;原因：</td>
@@ -58,9 +58,9 @@
 							</tr>
 							<tr>
 								<td>停线时间：</td>
-								<td colspan=3><input id="pause_date_start" placeholder="开始时间..." style="width:100px" type="text" onClick="WdatePicker({el:'pause_date_start',dateFmt:'yyyy-MM-dd'});"> - <input id="pause_date_end" placeholder="结束时间..." style="width:110px" type="text" onClick="WdatePicker({el:'pause_date_end',dateFmt:'yyyy-MM-dd'});"></td>
+								<td colspan=3><input id="pause_date_start" placeholder="开始时间..." style="width:125px" type="text" onClick="WdatePicker({el:'pause_date_start',dateFmt:'yyyy-MM-dd HH:mm'});"> - <input id="pause_date_end" placeholder="结束时间..." style="width:125px" type="text" onClick="WdatePicker({el:'pause_date_end',dateFmt:'yyyy-MM-dd HH:mm'});"></td>
 								<td>&nbsp;恢复时间：</td>
-								<td colspan=3><input id="resume_date_start" placeholder="开始时间..." style="width:100px" type="text" onClick="WdatePicker({el:'resume_date_start',dateFmt:'yyyy-MM-dd'});"> - <input id="resume_date_end" placeholder="结束时间..." style="width:100px" type="text" onClick="WdatePicker({el:'resume_date_end',dateFmt:'yyyy-MM-dd'});"></td>								
+								<td colspan=3><input id="resume_date_start" placeholder="开始时间..." style="width:125px" type="text" onClick="WdatePicker({el:'resume_date_start',dateFmt:'yyyy-MM-dd HH:mm'});"> - <input id="resume_date_end" placeholder="结束时间..." style="width:125px" type="text" onClick="WdatePicker({el:'resume_date_end',dateFmt:'yyyy-MM-dd HH:mm'});"></td>								
 								<td></td>
 								<td><input id="btnQuery" type="button" class="btn btn-sm btn-success" value="查询" style="margin-left: 2px;"></input>&nbsp;&nbsp;<input id="btnAdd" class="btn btn-sm btn-info" value="增加" type="button">&nbsp;</td>
 								<td></td>
@@ -68,6 +68,8 @@
 						</table>
 					</div>	
 					<table id="tableData" class="table table-striped table-bordered table-hover" style="font-size: 12px;">
+					</table>
+					<!-- <table id="tableData" class="table table-striped table-bordered table-hover" style="font-size: 12px;">
 					<thead>
 					<tr>
 						<th style="text-align:center;">生产工厂</th>
@@ -90,7 +92,7 @@
 						
 					</tr>
 					</thead>
-					</table>
+					</table> -->
 					</div>
 			</div><!-- /.main-content -->
 			<div id="dialog-add" class="hide" style="align:center;width:700px;height:500px">
@@ -101,7 +103,7 @@
 						<td align="right" style="width:100px">生产车间：</td><td style="width:150px"><select id="new_workshop" class="form-control" style="width:120px"></select></td>
 					</tr>
 					<tr style="height:40px">
-						<td align="right">生产线别：</td><td colspan=3><label><input id="new_line_a" class="ace" type="checkbox"><span class="lbl"> A线</span></label>&nbsp;&nbsp;<label><input id="new_line_b" class="ace" type="checkbox"><span class="lbl"> B线</span></label></td>
+						<td align="right">生产线别：</td><td colspan=3><label><input id="A" class="ace" onclick='checkLine(this)' type="checkbox"><span class="lbl"> A线</span></label>&nbsp;&nbsp;<label><input id="B" class="ace" onclick='checkLine(this)' type="checkbox"><span class="lbl"> B线</span></label><input style="height: 30px;display:none" id="line_str" type="text" class="input-small revise"/></td>
 					</tr>
 					<tr style="height:40px">
 						<td align="right">订单范围：</td><td><input id="new_order_list" placeholder="请输入订单范围..." style="width:150px" type="text"></td>
@@ -112,11 +114,11 @@
 						<td align="right">责任部门：</td><td><select id="new_dep_id" class="form-control" style="width:120px"></select></td>
 					</tr>
 					<tr style="height:40px">
-						<td align="right">停线时间：</td><td colspan=3><input id="new_pause_date_start" placeholder="请输入开始时间..." style="width:150px" type="text" onClick="WdatePicker({el:'new_pause_date_start',dateFmt:'yyyy-MM-dd HH:mm:ss'});"> - <input id="new_pause_date_end" placeholder="请输入结束时间..." style="width:150px" type="text" onClick="WdatePicker({el:'new_pause_date_end',dateFmt:'yyyy-MM-dd HH:mm:ss'});"></td>
+						<td align="right">停线时间：</td><td colspan=3><input id="new_pause_date_start" placeholder="请输入开始时间..." style="width:150px" type="text" onClick="WdatePicker({el:'new_pause_date_start',dateFmt:'yyyy-MM-dd HH:mm'});"> - <input id="new_pause_date_end" placeholder="请输入结束时间..." style="width:150px" type="text" onClick="WdatePicker({el:'new_pause_date_end',dateFmt:'yyyy-MM-dd HH:mm'});"></td>
 					</tr>
 					<tr style="height:40px">
-						<td align="right">停线时长：</td><td><input id="new_hours" placeholder="停线时长..." style="width:100px" type="text">H</td>
-						<td align="right">损失人数：</td><td><input id="new_human_lossed" placeholder="浪费人数..." style="width:100px" type="text">人</td>
+						<td align="right">停线时长：</td><td><input id="new_pause_hours" placeholder="停线时长..." style="width:100px" type="text">H</td>
+						<td align="right">浪费人数：</td><td><input id="new_human_lossed" placeholder="浪费人数..." style="width:100px" type="text">人</td>
 					</tr>
 					<tr style="height:40px">
 						<td align="right">损失产能：</td><td><input id="new_capacity" placeholder="损失产能..." style="width:100px" type="text">台</td>
@@ -129,10 +131,10 @@
 						<td align="right">备注：</td><td colspan=3><input id="new_memo" placeholder="备注..." style="width:350px" type="text"></td>
 					</tr>
 					<tr style="height:40px">
-						<td align="right">邮件收件人：</td><td colspan=3><input id="new_mail" placeholder="邮件收件人..." style="width:350px" type="text"></td>
+						<td align="right">邮件收件人：</td><td colspan=3><input id="new_pause_email_send" placeholder="邮件收件人..." style="width:350px" type="text"></td>
 					</tr>
 					<tr style="height:40px">
-						<td align="right">邮件抄送人：</td><td colspan=3><input id="new_cc" placeholder="邮件抄送人..." style="width:350px" type="text"></td>
+						<td align="right">邮件抄送人：</td><td colspan=3><input id="new_pause_email_cc" placeholder="邮件抄送人..." style="width:350px" type="text"></td>
 					</tr>
 					
 					</table>

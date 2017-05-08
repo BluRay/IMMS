@@ -8,6 +8,7 @@ import com.byd.bms.plan.model.PlanIssuance;
 import com.byd.bms.plan.model.PlanIssuanceCount;
 import com.byd.bms.plan.model.PlanIssuanceTotal;
 import com.byd.bms.plan.model.PlanMasterPlan;
+import com.byd.bms.plan.model.PlanPause;
 import com.byd.bms.plan.model.PlanProductionPlan;
 
 public interface IPlanService {
@@ -25,4 +26,6 @@ public interface IPlanService {
 	public int getPlanConfigQty(int order_config_id);
 	public List<PlanConfigIssedQty> getPlanConfigIssedQty(Map<String,Object> queryMap);//获取当前配置已发布数量
 	public int issuancePlanSubmit(String curTime,String edit_user,String issuance_date,int factory_id,String issuance_str);
+	public int addPause(List<PlanPause> pauseList);
+	public List<PlanPause> getPauseList(Map<String,Object> queryMap);
 }

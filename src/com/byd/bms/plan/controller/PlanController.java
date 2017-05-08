@@ -26,6 +26,7 @@ import com.byd.bms.plan.model.PlanIssuance;
 import com.byd.bms.plan.model.PlanIssuanceCount;
 import com.byd.bms.plan.model.PlanIssuanceTotal;
 import com.byd.bms.plan.model.PlanMasterPlan;
+import com.byd.bms.plan.model.PlanPause;
 import com.byd.bms.plan.model.PlanProductionPlan;
 import com.byd.bms.plan.service.IPlanService;
 import com.byd.bms.util.ExcelModel;
@@ -729,6 +730,73 @@ public class PlanController extends BaseController{
 		int bus_count = planService.issuancePlanSubmit(curTime, edit_user, issuance_date, factory_id, issuance_str);
 		
 		initModel(true,String.valueOf(bus_count),null);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/addPause")
+	@ResponseBody
+	public ModelMap addPause(){
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String create_user = request.getSession().getAttribute("staff_number") + "";
+		List<PlanPause> pauseList = new ArrayList<PlanPause>();
+		String[] staffArray=request.getParameter("lines").toString().split(",");
+		for(int i=0;i<staffArray.length;i++){
+			PlanPause pause = new PlanPause();
+			pause.setFactory_id(request.getParameter("factory_id"));
+			pause.setWorkshop_id(request.getParameter("workshop_id"));
+			pause.setLine(staffArray[i]);
+			pause.setStart_time(request.getParameter("pause_date_start"));
+			pause.setEnd_time(request.getParameter("pause_date_end"));
+			pause.setReason_type_id(Integer.parseInt(request.getParameter("reason_type_id")));
+			pause.setBus_type(request.getParameter("bus_type_id"));
+			pause.setOrder_list(request.getParameter("order_list"));
+			pause.setDetailed_reason(request.getParameter("detailed_reason"));
+			pause.setHuman_lossed(request.getParameter("waste_num"));
+			pause.setCapacity_lossed(request.getParameter("capacity"));
+			pause.setHours(request.getParameter("pause_hours"));
+			pause.setMemo(request.getParameter("memo"));
+			pause.setCreate_user(create_user);
+			pause.setCreate_time(curTime);
+			pauseList.add(pause);
+		}
+		int result = planService.addPause(pauseList);
+		initModel(true,String.valueOf(result),null);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/getPauseList")
+	@ResponseBody
+	public ModelMap getPauseList(){
+		String factory_id=request.getParameter("factory_id");
+		String order_no=request.getParameter("order_no");
+		String workshop_id = request.getParameter("workshop_id");
+		String line = request.getParameter("line");
+		String reason_type = request.getParameter("reason_type");
+		String pause_date_start = request.getParameter("pause_date_end");
+		String pause_date_end = request.getParameter("pause_date_start");
+		String resume_date_start = request.getParameter("resume_date_end");
+		String resume_date_end = request.getParameter("resume_date_start");
+		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
+		int start=(request.getParameter("start")!=null)?Integer.parseInt(request.getParameter("start")):0;		//分页数据起始数
+		int length=(request.getParameter("length")!=null)?Integer.parseInt(request.getParameter("length")):500;	//每一页数据条数
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("draw", draw);
+		condMap.put("start", start);
+		condMap.put("length", length);
+		condMap.put("factory_id", factory_id);
+		condMap.put("order_no", order_no);
+		condMap.put("workshop_id", workshop_id);
+		condMap.put("line", line);
+		condMap.put("reason_type_id", reason_type);
+		condMap.put("start_time", pause_date_start);
+		condMap.put("end_time", pause_date_end);
+		condMap.put("start_time2", resume_date_start);
+		condMap.put("end_time2", resume_date_end);
+		List<PlanPause> list = planService.getPauseList(condMap);
+		initModel(true,"SUCCESS",list);
 		model = mv.getModelMap();
 		return model;
 	}

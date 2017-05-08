@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.byd.bms.order.model.BmsOrder;
 import com.byd.bms.plan.dao.IPlanDao;
 import com.byd.bms.plan.model.PlanMasterPlan;
+import com.byd.bms.plan.model.PlanPause;
 import com.byd.bms.plan.model.PlanProductionPlan;
 import com.byd.bms.plan.model.PlanBus;
 import com.byd.bms.plan.model.PlanBusNumber;
@@ -361,6 +362,21 @@ public class PlanServiceImpl implements IPlanService {
 			}
 		}
 		return bus_count;
+	}
+
+	@Override
+	@Transactional
+	public int addPause(List<PlanPause> pauseList) {
+		int result = 0;
+		for(PlanPause pause:pauseList) {
+			result += planDao.addPause(pause);
+		}
+		return result;
+	}
+
+	@Override
+	public List<PlanPause> getPauseList(Map<String, Object> queryMap) {
+		return planDao.getPauseList(queryMap);
 	}
 	
 	

@@ -1,3 +1,5 @@
+
+var const_email_validate=/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 /*
  * 填充下拉列表 with id=>value;包括全部选项
  */
