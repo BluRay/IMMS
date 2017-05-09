@@ -59,7 +59,7 @@
 							<tr>
 								<td><input id="file" type="file" name="file" accept="*.xlsx"/></td>
 								<td><input id="btn_upload" type="button" class="btn btn-sm btn-primary" value="上传并导入" onclick="javascript:return LimitAttach(this.form, this.form.file.value)"/></td>
-								<td></td><td><a href="download/masterPlan.csv">下载批导模板</a></td>
+								<td></td><td><a href="../docs/masterPlan.xls">下载批导模板</a></td>
 							</tr>
 						</table>
 						</form>

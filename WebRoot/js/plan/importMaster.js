@@ -29,6 +29,7 @@ $(document).ready(function () {
 			dataType:"json",
 			success:function(response){
 				alert(response.message);
+				ajaxQuery();
 				if(response.success){					
 					//window.open("materialAbnormal!index.action","_self");
 				}else{

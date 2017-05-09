@@ -7,11 +7,9 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.Resource;
 import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.byd.bms.order.model.BmsOrder;
 import com.byd.bms.plan.dao.IPlanDao;
 import com.byd.bms.plan.model.PlanMasterPlan;
@@ -375,8 +373,16 @@ public class PlanServiceImpl implements IPlanService {
 	}
 
 	@Override
-	public List<PlanPause> getPauseList(Map<String, Object> queryMap) {
-		return planDao.getPauseList(queryMap);
+	public Map<String,Object> getPauseList(Map<String, Object> queryMap) {
+		int totalCount=0;
+		List<PlanPause> datalist = planDao.getPauseList(queryMap);
+		totalCount = planDao.getPauseTotalCount(queryMap);
+		Map<String, Object> result = new HashMap<String,Object>();
+		result.put("draw", queryMap.get("draw"));
+		result.put("recordsTotal", totalCount);
+		result.put("recordsFiltered", totalCount);
+		result.put("data", datalist);
+		return result;
 	}
 	
 	

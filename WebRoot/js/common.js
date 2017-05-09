@@ -6,7 +6,7 @@ var const_email_validate=/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9
 function getSelects(data, selectval, element,defaultVal,valName) {	
 	var strs ="";
 	if(defaultVal!=undefined){
-		 strs = "<option value="+defaultVal+"></option>";
+		strs = "<option value=''>"+defaultVal+"</option>";
 	}
 	$(element).html("");
 	$.each(data, function(index, value) {
@@ -37,7 +37,7 @@ function getSelects_noall(data, selectval, element,defaultVal,valName) {
 	//defaultVal=defaultVal||"";
 	var strs ="";
 	if(defaultVal!=undefined){
-		 strs = "<option value="+defaultVal+"></option>";
+		 strs = "<option value=''>"+defaultVal+"</option>";
 	}
 	
 	$(element).html("");
@@ -68,7 +68,7 @@ function getSelects_noall(data, selectval, element,defaultVal,valName) {
 function getSelects_empty(data, selectval, element,defaultVal,valName) {
 	//var strs = "<option value=''>请选择</option>";
 	defaultVal=defaultVal||"";	
-	var strs = "<option value="+defaultVal+">请选择</option>";
+	var strs = "<option value=''>请选择</option>";
 	$(element).html("");
 	$.each(data, function(index, value) {
 		if(valName=="name"){

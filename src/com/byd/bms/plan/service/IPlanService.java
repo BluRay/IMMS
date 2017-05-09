@@ -27,5 +27,5 @@ public interface IPlanService {
 	public List<PlanConfigIssedQty> getPlanConfigIssedQty(Map<String,Object> queryMap);//获取当前配置已发布数量
 	public int issuancePlanSubmit(String curTime,String edit_user,String issuance_date,int factory_id,String issuance_str);
 	public int addPause(List<PlanPause> pauseList);
-	public List<PlanPause> getPauseList(Map<String,Object> queryMap);
+	public Map<String,Object> getPauseList(Map<String,Object> queryMap);
 }

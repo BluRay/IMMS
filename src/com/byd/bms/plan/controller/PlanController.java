@@ -160,7 +160,7 @@ public class PlanController extends BaseController{
 				}
 			}
 			//上传的文件验证完成
-			String userid=request.getSession().getAttribute("user_name") + "";;
+			String userid=request.getSession().getAttribute("staff_number") + "";;
 			result = planService.savePlanMaster(excelModel,userid);			
 			
 		} catch (Exception e) {
@@ -795,8 +795,9 @@ public class PlanController extends BaseController{
 		condMap.put("end_time", pause_date_end);
 		condMap.put("start_time2", resume_date_start);
 		condMap.put("end_time2", resume_date_end);
-		List<PlanPause> list = planService.getPauseList(condMap);
-		initModel(true,"SUCCESS",list);
+		Map<String,Object> list = planService.getPauseList(condMap);
+		//initModel(true,"SUCCESS",list);
+		model.addAllAttributes(list);
 		model = mv.getModelMap();
 		return model;
 	}

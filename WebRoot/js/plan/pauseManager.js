@@ -1,7 +1,7 @@
 var lineStr = '';
 var pageSize=1;
 var table;
-var table_height = $(window).height()-240;
+var table_height = $(window).height()-270;
 $(document).ready(function () {	
 	initPage();
 	
