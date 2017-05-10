@@ -48,11 +48,31 @@
 								<td><input id="search_order_no" placeholder="请输入订单编号..." style="width:110px" type="text"></td>
 								<td>&nbsp;生产日期：</td>
 								<td><input id="start_date" placeholder="开始时间..." style="width:125px" type="text" onClick="WdatePicker({el:'start_date',dateFmt:'yyyy-MM-dd'});"> - <input id="end_date" placeholder="结束时间..." style="width:125px" type="text" onClick="WdatePicker({el:'end_date',dateFmt:'yyyy-MM-dd'});"></td>
-								<td></td>
+								<td><input id="btnQuery" type="button" class="btn btn-sm btn-success" value="查询" style="margin-left: 2px;"></td>
 								<td></td>
 							</tr>
 						</table>
 					</div>	
+					
+					<div class="tabbable">
+						<ul class="nav nav-tabs" id="myTab">
+							<li id="div1" class="active">
+								<a data-toggle="tab" href="#home">计划达成数据</a>
+							</li>
+							<li id="div2">
+								<a data-toggle="tab" href="#messages">计划达成明细</a>
+							</li>
+						</ul>
+
+						<div class="tab-content">
+							<div id="home" class="tab-pane fade in active">
+								<p>Raw denim you probably haven't heard of them jean shorts Austin.</p>
+							</div>
+							<div id="messages" class="tab-pane fade">
+								<p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid.</p>
+							</div>
+						</div>
+					</div>
 					
 					</div>
 			</div><!-- /.main-content -->
