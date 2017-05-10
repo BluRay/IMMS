@@ -66,7 +66,8 @@
 								</td>
 								<td>生产年份：</td>
 								<td>
-									<select name="" id="search_productive_year" class="input-small"></select>
+									<!-- <select name="" id="search_productive_year" class="input-small"></select> -->
+										<input class="input-small"  style="height: 30px;" id="search_productive_year" onclick="WdatePicker({el:'search_productive_year',dateFmt:'yyyy'});" type="text">
 								</td>
 								<td>生产工厂：</td>
 								<td>
@@ -135,10 +136,11 @@
 		<script>
 			var $table = $('#table'),$remove = $('#remove'),selections = [];
 		</script>
+		<script src="../js/datePicker/WdatePicker.js"></script>
 		<script src="../assets/js/jquery-ui.min.js"></script>
 		<script src="../assets/js/jquery.gritter.min.js"></script>
-		<script src="../assets/js/ace/elements.onpage-help.js"></script>
-		<script src="../assets/js/ace/ace.onpage-help.js"></script>
+<!-- 		<script src="../assets/js/ace/elements.onpage-help.js"></script>
+		<script src="../assets/js/ace/ace.onpage-help.js"></script> -->
 		<script src="../assets/js/bootstrap3-typeahead.js"></script>
 		<script src="../js/jquery.form.js"></script>
 		<script src="../js/bootstrap-table.js"></script>

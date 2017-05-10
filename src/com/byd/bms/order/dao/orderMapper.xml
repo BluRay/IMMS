@@ -61,10 +61,10 @@
 	</select>
 	
 	<select id="getBusNumberStart" parameterType="Map" resultType="int">
-		select max(cast(od.busnum_end as signed))
+		select ifnull(max(cast(od.busnum_end as signed)),0)
 		from BMS_OR_FACTORY_ORDER od
 		left join BMS_OR_ORDER o on od.order_id=o.id
-		where o.productive_year = #{productive_year} and o.order_type='标准订单'
+		where o.productive_year = #{productive_year} and o.order_type != 'KD件'
 		
 		<!-- select ifnull(max(bus_number_start+busnum_end-busnum_start),0)
 		from BMS_OR_FACTORY_ORDER
@@ -92,7 +92,7 @@
 		<if test="search_order_name!=null">
 			and o.order_name like CONCAT('%',#{search_order_name},'%')   
 		</if>
-		<if test="search_productive_year!=null">
+		<if test="search_productive_year!=null and search_productive_year !=''">
 			and o.productive_year = #{search_productive_year} 
 		</if>
 		<if test="search_factory!=null">
@@ -172,7 +172,8 @@
 	<select id="getOrderConfigList" parameterType="Map" resultType="Map">
 		select o.id,c.id config_id,o.order_no,CONCAT(o.order_name,t.bus_type_code,o.order_qty,'台') AS order_name_str,
 		o.productive_year,o.delivery_date,c.battery_capacity,c.rated_voltage,c.spring_num,c.tire_type,c.passenger_num,
-		o.order_qty,c.order_config_name,c.sap_materialNo,c.material,c.config_file,c.config_qty,c.customer,c.bus_seats
+		o.order_qty,c.order_config_name,c.sap_materialNo,c.material,c.config_file,c.config_qty,c.customer,c.bus_seats,
+		(select ifnull(sum(fc.product_qty),0) from BMS_OR_FACTORY_ORDER_CONFIG fc where fc.order_config_id=c.id) allot_qty
 		from BMS_OR_ORDER o
 		left join BMS_OR_ORDER_CONFIG c on o.id=c.order_id
 		left join BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id
@@ -183,7 +184,7 @@
 		<if test="orderName !=null and orderName !=''">
 			and o.order_name like concat('%',#{orderName},'%')
 		</if>
-		<if test="actYear !=null">
+		<if test="actYear !=null and actYear !='' ">
 			and o.productive_year=#{actYear}
 		</if>
 			order by o.order_no desc
@@ -204,7 +205,7 @@
 		<if test="orderName !=null and orderName !=''">
 			and o.order_name like concat('%',#{orderName},'%')
 		</if>
-		<if test="actYear !=null">
+		<if test="actYear !=null and actYear !='' ">
 			and o.productive_year=#{actYear}
 		</if>
 	</select>
@@ -292,12 +293,14 @@
 	<select id="queryConfigAllotList" parameterType="Map" resultType="Map">
 		SELECT fo.id factory_order_id,o.id order_id,c.id config_id,o.order_no,CONCAT(o.order_name,t.bus_type_code,o.order_qty,'台') AS order_name_str,
 		f.factory_name,fo.production_qty,c.order_config_name,fc.product_qty,c.config_qty,fc.sequence,c.customer,f.id factory_id
-		FROM BMS_OR_ORDER_CONFIG c
-		LEFT JOIN BMS_OR_FACTORY_ORDER fo ON c.order_id=fo.order_id
-		LEFT JOIN BMS_OR_ORDER o ON o.id=fo.order_id
+		FROM BMS_OR_ORDER o
+		LEFT JOIN BMS_OR_ORDER_CONFIG c ON o.id=c.order_id
+		LEFT JOIN (select fo.id,fo.order_id,fo.factory_id,sum(fo.production_qty) production_qty 
+		from BMS_OR_FACTORY_ORDER fo 
+		group by fo.order_id,fo.factory_id) fo on fo.order_id=o.id
 		LEFT JOIN BMS_BASE_FACTORY f on fo.factory_id=f.id
 		LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id=t.id
-		LEFT JOIN BMS_OR_FACTORY_ORDER_CONFIG fc ON fc.order_config_id=c.id
+		LEFT JOIN BMS_OR_FACTORY_ORDER_CONFIG fc ON fc.order_config_id=c.id and fo.order_id=fc.order_id and fo.factory_id=fc.factory_id
 		WHERE 1=1
 		<if test="orderNo !=null and orderNo !=''">
 			and o.order_no=#{orderNo}
@@ -305,26 +308,28 @@
 		<if test="orderName !=null and orderName !=''">
 			and o.order_name like concat('%',#{orderName},'%')
 		</if>
-		<if test="actYear !=null">
+		<if test="actYear !=null and actYear !=''">
 			and o.productive_year=#{actYear}
 		</if>
-		<if test="factory !=null and factory !='全部'">
+		<if test="factory !=null and factory !=''">
 			and fo.factory_id=#{factory}
 		</if>
-			order by o.order_no desc
+			order by o.order_no,fo.id desc
 		<if test="start !=null">
 			limit #{start},#{length}
 		</if>
 	</select>
 	
 	<select id="queryConfigAllotTotalCount" parameterType="Map" resultType="int">
-		SELECT count(c.id)
-		FROM BMS_OR_ORDER_CONFIG c
-		LEFT JOIN BMS_OR_FACTORY_ORDER fo ON c.order_id=fo.order_id
-		LEFT JOIN BMS_OR_ORDER o ON o.id=fo.order_id
+		SELECT count(o.id)
+		FROM BMS_OR_ORDER o
+		LEFT JOIN BMS_OR_ORDER_CONFIG c ON o.id=c.order_id
+		LEFT JOIN (select fo.id,fo.order_id,fo.factory_id,sum(fo.production_qty) production_qty 
+		from BMS_OR_FACTORY_ORDER fo 
+		group by fo.order_id,fo.factory_id) fo on fo.order_id=o.id
 		LEFT JOIN BMS_BASE_FACTORY f on fo.factory_id=f.id
 		LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id=t.id
-		LEFT JOIN BMS_OR_FACTORY_ORDER_CONFIG fc ON fc.order_config_id=c.id
+		LEFT JOIN BMS_OR_FACTORY_ORDER_CONFIG fc ON fc.order_config_id=c.id and fo.order_id=fc.order_id and fo.factory_id=fc.factory_id
 		WHERE 1=1
 		<if test="orderNo !=null and orderNo !=''">
 			and o.order_no=#{orderNo}
@@ -332,27 +337,45 @@
 		<if test="orderName !=null and orderName !=''">
 			and o.order_name like concat('%',#{orderName},'%')
 		</if>
-		<if test="actYear !=null">
+		<if test="actYear !=null and actYear !=''">
 			and o.productive_year=#{actYear}
 		</if>
-		<if test="factory !=null and factory !='全部'">
+		<if test="factory !=null and factory !=''">
 			and fo.factory_id=#{factory}
 		</if>
 	</select>
 	
 	<select id="queryConfigListByOrder" parameterType="Map" resultType="Map">
-		select c.id,c.order_config_name,c.config_qty,fc.product_qty,ifnull(sum(fc.product_qty),0) already_qty,fc.sequence,fc.id allot_config_id,c.id order_config_id
+		<!-- select c.id,c.order_config_name,c.config_qty,fc.product_qty,ifnull(sum(fc.product_qty),0) already_qty,fc.sequence,fc.id allot_config_id,c.id order_config_id
 		from BMS_OR_ORDER_CONFIG c
-		left join BMS_OR_FACTORY_ORDER_CONFIG fc on c.id=fc.order_config_id
+		left join BMS_OR_FACTORY_ORDER_CONFIG fc on c.id=fc.order_config_id  and fc.factory_id=#{factory_id}
 		where 1=1
 		<if test="order_id !=null ">
 			and c.order_id=#{order_id}
 		</if>
-	<!-- 	<if test="factory_id !=null ">
-			and fc.factory_id=#{factory_id}
-		</if> -->
 		group by c.id
-		order by fc.sequence
+		order by fc.sequence -->
+		select a.*,ifnull(b.already_qty,0) already_qty from
+		(select c.id,c.order_config_name,c.config_qty,fc.product_qty,fc.sequence,fc.id allot_config_id,c.id order_config_id,
+		(select count(b.bus_number) from BMS_PLAN_BUS b where b.order_id=c.order_id and b.order_config_id=c.id and b.factory_id=#{factory_id}) allot_bus_qty
+		from BMS_OR_ORDER_CONFIG c
+		left join BMS_OR_FACTORY_ORDER_CONFIG fc on c.id=fc.order_config_id  and fc.factory_id=#{factory_id}
+		where 1=1 
+		<if test="order_id !=null ">
+			and c.order_id=#{order_id}
+		</if>
+		) a
+		left join 
+		(select c.id,sum(fc.product_qty) already_qty
+		from BMS_OR_ORDER_CONFIG c
+		left join BMS_OR_FACTORY_ORDER_CONFIG fc on c.id=fc.order_config_id 
+		where 1=1 
+		<if test="order_id !=null ">
+			and c.order_id=#{order_id}
+		</if>
+		group by c.id
+		) b on a.id=b.id
+		order by a.sequence
 	</select>
 	
 	<update id="batchSaveFactoryOrderConfig" parameterType="List">
@@ -395,7 +418,7 @@
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no=#{order_no}
 		</if>
-		<if test="factory !=null and factory !='全部'">
+		<if test="factory !=null and factory !=''">
 			and fo.factory_id=#{factory}
 		</if>
 		<if test="actYear !=null and actYear !=''">
@@ -422,7 +445,7 @@
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no=#{order_no}
 		</if>
-		<if test="factory !=null and factory !='全部'">
+		<if test="factory !=null and factory !=''">
 			and fo.factory_id=#{factory}
 		</if>
 		<if test="actYear !=null and actYear !=''">

@@ -14,6 +14,7 @@ public class PlanPause {
 	private String reason_type;
 	private String detailed_reason;
 	private int duty_department_id;
+	private String duty_department;
 	private String human_lossed;
 	private String capacity_lossed;
 	private String start_time;
@@ -175,6 +176,12 @@ public class PlanPause {
 	}
 	public void setConfirm_time(String confirm_time) {
 		this.confirm_time = confirm_time;
+	}
+	public String getDuty_department() {
+		return duty_department;
+	}
+	public void setDuty_department(String duty_department) {
+		this.duty_department = duty_department;
 	}
 	
 	

@@ -9,12 +9,18 @@ var reduce_series_list=new Array();
 var max_num = 0;		var sum_num = 0;
 var edit_max_num = 0;	var edit_sum_num = 0;
 var del_order_list=new Array();
+var dt;
+/*$.extend( true, $.fn.dataTable.defaults, {
+    "searching": false,
+    "ordering": false,
+    "rowsGroup":[0,1,2,3,4,5]
+} );*/
 $(document).ready(function(){
 	cur_year = new Date().getFullYear();
-	cur_year = new Date().getFullYear();
+	/*cur_year = new Date().getFullYear();
 	$("#search_productive_year").html('<option value="'+cur_year+'">'+cur_year+'</option><option value="'+(cur_year-1)+'">'+(cur_year-1)+'</option><option value="'+(cur_year+1)+'">'+(cur_year+1)+'</option><option value="'+(cur_year+2)+'">'+(cur_year+2)+'</option>');	
 	$("#new_productive_year").html('<option value="'+cur_year+'">'+cur_year+'</option><option value="'+(cur_year-1)+'">'+(cur_year-1)+'</option><option value="'+(cur_year+1)+'">'+(cur_year+1)+'</option><option value="'+(cur_year+2)+'">'+(cur_year+2)+'</option>');	
-	$("#edit_productive_year").html('<option value="'+cur_year+'">'+cur_year+'</option><option value="'+(cur_year-1)+'">'+(cur_year-1)+'</option><option value="'+(cur_year+1)+'">'+(cur_year+1)+'</option><option value="'+(cur_year+2)+'">'+(cur_year+2)+'</option>');	
+	$("#edit_productive_year").html('<option value="'+cur_year+'">'+cur_year+'</option><option value="'+(cur_year-1)+'">'+(cur_year-1)+'</option><option value="'+(cur_year+1)+'">'+(cur_year+1)+'</option><option value="'+(cur_year+2)+'">'+(cur_year+2)+'</option>');	*/
 	getOrderNoSelect("#search_order_no","#orderId");
 	getFactorySelect();
 	getBusType();
@@ -63,13 +69,14 @@ $(document).ready(function(){
 
 	
 	$(document).on("click",".close.add",function(e){
+		prod_year=$("#new_productive_year").val();
 		$(e.target).closest("tr").remove();		
 		//var latest_num_start=Number($("#newModal").data("bus_num_start"));
 		//获取cur_year下的最新流水起始号（最大流水号+1）
 		var order_type=$("#newOrderType").val();
 		var latest_num_start=0;
-		if(order_type=='标准订单'){
-			latest_num_start=getLatestSeris(cur_year);
+		if(order_type !='KD件'){
+			latest_num_start=getLatestSeris(prod_year);
 		}
 		$("#dialog-order_new").data("bus_num_start",latest_num_start);
 		//alert(latest_num_start);
@@ -87,7 +94,7 @@ $(document).ready(function(){
 	$(document).on("click",".close.edit",function(e){
 		var order_type=$("#editOrderType").val();
 		var tr=$(e.target).closest("tr");
-		if(order_type=='标准订单'){
+		if(order_type !='KD件'){
 			/**判断该工厂订单下是否已经产生了车号，是则不能删除
 			 */
 			if($(tr).data("min_busnum")!='0'&&$(tr).data("min_busnum")!=undefined){
@@ -151,11 +158,12 @@ $(document).ready(function(){
 	
 	$(document).on("keyup",".orderNum.add",function(e){
 		//alert($(e.target).val());
+		prod_year=$("#new_productive_year").val();
 		//获取cur_year下的最新流水起始号（最大流水号+1）
 		var order_type=$("#newOrderType").val();
 		var latest_num_start=0;
-		if(order_type=='标准订单'){
-			latest_num_start=getLatestSeris(cur_year);
+		if(order_type !='KD件'){
+			latest_num_start=getLatestSeris(prod_year);
 		}		
 		//alert(latest_num_start);
 		$("#dialog-order_new").data("bus_num_start",latest_num_start);
@@ -174,7 +182,7 @@ $(document).ready(function(){
 	
 	$(document).on("change",".orderNum.edit",function(e){
 		var order_type=$("#editOrderType").val();
-		if(order_type=='标准订单'){
+		if(order_type !='KD件'){
 			var tr=$(e.target).closest("tr");
 			var production_qty=parseInt($(e.target).attr("old_value"))||0;
 			var cur_factory=$(tr).find("td").eq(1).find("select").val();
@@ -352,42 +360,67 @@ $(document).ready(function(){
 	/**
 	 * 改变生产年份后重新获取起始流水号，重新分配
 	 */
-	$("#new_productive_year").change(function(){
-		var latest_num_start=getLatestSeris($(this).val());
-		$("#newModal").data("bus_num_start",latest_num_start);
-		//更新流水号
-		var maxOrderNo = latest_num_start;	
-		var factoryOrder_parameters=$("#new_factoryOrder_parameters").find("tr");
-		$.each(factoryOrder_parameters,function(index,param){
-			var tds=$(param).children("td");
-			//$(tds[1]).find("select");
-			//alert($(tds[2]).find("input").val());
-			//maxOrderNo = $(tds[2]).find("input").val();
-			$(tds[3]).find("input").val(maxOrderNo);
-			$(tds[4]).find("input").val(Number(maxOrderNo) + Number($(tds[2]).find("input").val()) - 1);
-			maxOrderNo = Number(maxOrderNo) + Number($(tds[2]).find("input").val());
+/*	$(document).on("change","#new_productive_year",function(e){
+	alert("aa");
+	var latest_num_start=getLatestSeris($(this).val());	
+	$("#newModal").data("bus_num_start",latest_num_start);
+	//更新流水号
+	var maxOrderNo = latest_num_start;	
+	var factoryOrder_parameters=$("#new_factoryOrder_parameters").find("tr");
+	$.each(factoryOrder_parameters,function(index,param){
+		var tds=$(param).children("td");
+		//$(tds[1]).find("select");
+		//alert($(tds[2]).find("input").val());
+		//maxOrderNo = $(tds[2]).find("input").val();
+		$(tds[3]).find("input").val(maxOrderNo);
+		$(tds[4]).find("input").val(Number(maxOrderNo) + Number($(tds[2]).find("input").val()) - 1);
+		maxOrderNo = Number(maxOrderNo) + Number($(tds[2]).find("input").val());
 		});
 	});
-	
-	
+	*/
 });
+/**
+ * 改变生产年份后重新获取起始流水号，重新分配
+ */
+function changeProductionYear(e){
+	//alert("aa");
+	var element_id=$(e).attr("id");
+	var dialog_type=element_id.substring(0,element_id.indexOf("_"));
+	//alert(dialog_type);
+	var latest_num_start=getLatestSeris($(e).val());	
+	//$("#newModal").data("bus_num_start",latest_num_start);
+	//更新流水号
+	var maxOrderNo = latest_num_start;	
+	var factoryOrder_parameters=$("#"+dialog_type+"_factoryOrder_parameters").find("tr");
+	$.each(factoryOrder_parameters,function(index,param){
+		var tds=$(param).children("td");
+		//$(tds[1]).find("select");
+		//alert($(tds[2]).find("input").val());
+		//maxOrderNo = $(tds[2]).find("input").val();
+		$(tds[3]).find("input").val(maxOrderNo);
+		$(tds[4]).find("input").val(Number(maxOrderNo) + Number($(tds[2]).find("input").val()) - 1);
+		maxOrderNo = Number(maxOrderNo) + Number($(tds[2]).find("input").val());
+	});
+}
 
 function ajaxQuery(){
-	$("#tableOrder").dataTable({
+	//alert("调用");
+	dt=$("#tableOrder").DataTable({
 		serverSide: true,
 		fixedColumns:   {
             leftColumns: 2,
             rightColumns:1
         },
+        rowsGroup:[0,1,2,3,4,5],
 		paiging:true,
 		ordering:false,
 		searching: false,
-		bAutoWidth:false,
+		autoWidth:false,
 		destroy: true,
-		sScrollY: $(window).height()-250,
-		scrollX: "1500px",
+		scrollY: $(window).height()-245,
+		scrollX: true,
 		/*scrollCollapse: true,*/
-		pageLength: 10,
+		pageLength: 20,
 		pagingType:"full_numbers",
 		lengthChange:false,
 		orderMulti:false,
@@ -419,7 +452,7 @@ function ajaxQuery(){
             $.ajax({
                 type: "post",
                 url: "showOrderList",
-                cache: false,  //禁用缓存
+                cache: true,  //禁用缓存
                 data: param,  //传入组装的参数
                 dataType: "json",
                 success: function (result) {
@@ -433,6 +466,8 @@ function ajaxQuery(){
                     //console.log(returnData);
                     //调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
                     //此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
+                 // settings.rowsGroup=[0,1,2,3,4,5];
+                   //alert("分页调用");
                     callback(returnData);
                 }
             });
@@ -464,9 +499,10 @@ function ajaxQuery(){
 		            	"defaultContent": "<i class=\"ace-icon fa fa-pencil bigger-110 editorder\" style='color:green;cursor: pointer;'></i>"}
 		          ],
 		
-		
 	});
-
+/*	dt.on('page.dt', function ( e, settings) {
+		new $.fn.dataTable.RowsGroup( dt.datatable, [0,1,2,3,4,5] );
+	})*/
 }
 function setInput(value){
 	var input="<input type='text' value='"+value+"' />";
@@ -483,7 +519,7 @@ function getFactorySelect() {
 			alert(response.message)
 		},
 		success : function(response) {
-			getSelects(response.data, "", "#search_factory");
+			getSelects(response.data, "", "#search_factory","全部");
 			getSelects_noall(response.data, "", "#factory_id1");
 			
 			select_str = "<select name='' id='factory_id1' class='input-small'>";

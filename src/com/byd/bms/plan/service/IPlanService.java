@@ -28,4 +28,5 @@ public interface IPlanService {
 	public int issuancePlanSubmit(String curTime,String edit_user,String issuance_date,int factory_id,String issuance_str);
 	public int addPause(List<PlanPause> pauseList);
 	public Map<String,Object> getPauseList(Map<String,Object> queryMap);
+	public int updatePauseInfo(PlanPause pause);
 }

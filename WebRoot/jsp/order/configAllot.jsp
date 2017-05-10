@@ -60,8 +60,9 @@
 									class="input-medium revise" placeholder="请输入订单名称..." value=""
 									id="search_order_name" /></td>
 								<td>生产年份：</td>
-								<td><select name="" id="search_productive_year"
-									class="input-small">
+								<td><!-- <select name="" id="search_productive_year"
+									class="input-small"> -->
+									<input class="input-small"  style="height: 30px;" id="search_productive_year" onclick="WdatePicker({el:'search_productive_year',dateFmt:'yyyy'});" type="text">
 								</select></td>
 								<td>生产工厂：</td>
 								<td><select name="" id="search_factory" class="input-small">
@@ -127,14 +128,14 @@
 			</div>
 			<!-- /.main-container -->
 		</div>
+		<script src="../js/datePicker/WdatePicker.js"></script>
 		<script src="../assets/js/jquery-ui.min.js"></script>
 		<script src="../assets/js/jquery.gritter.min.js"></script>
 		<script src="../assets/js/jquery.dataTables.min.js"></script>
 		<script src="../assets/js/jquery.dataTables.bootstrap.js"></script>
 		<script src="../assets/js/dataTables.fixedColumns.min.js"></script>
 		<script src="../assets/js/dataTables.rowGroup.js"></script>
-		<script src="../assets/js/ace/elements.onpage-help.js"></script>
-		<script src="../assets/js/ace/ace.onpage-help.js"></script>
+
 		<script src="../assets/js/bootstrap3-typeahead.js"></script>
 		<script src="../js/jquery.form.js"></script>
 		<script src="../js/common.js"></script>

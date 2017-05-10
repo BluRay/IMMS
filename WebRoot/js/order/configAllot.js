@@ -33,10 +33,10 @@ function ajaxQuery(){
             "targets": 0
         }],
 		serverSide: true,
-		fixedColumns:   {
+/*		fixedColumns:   {
             leftColumns: 1,
             rightColumns:1
-        },
+        },*/
 		paiging:true,
 		ordering:false,
 		searching: false,
@@ -198,7 +198,8 @@ function drawConfigListTable(data){
 		            	return "<input style='border:0;width:50px;text-align:center' class='product_qty' old_val='"+data+"'value='"+(data||"")+"'/>";
 		            }},
 		            {"title":"配置数量","class":"center","data":"config_qty","defaultContent": ""},		            
-		            {"title":"已分配数量","class":"center","data":"already_qty","defaultContent": ""}          
+		            {"title":"已分配数量","class":"center","data":"already_qty","defaultContent": ""},
+		            {"title":"已生成车号数","class":"center","data":"allot_bus_qty","defaultContent": "0"}  
 		          ]	      
 	});
 }
@@ -208,11 +209,12 @@ function ajaxEdit(order_id,factory_id){
 	var arr_config_allot=[];
 	var total_allot_qty=0;
 	var save_flag=true;
+	var sequence_arr=[];
 	$.each(trs,function(index,tr){
 		var tds=$(tr).children("td");
 		var config_qty=Number($(tds[3]).html());//配置数量
 		var already_qty=Number($(tds[4]).html());//已配置分配的数量
-		
+		var allot_bus_qty=Number($(tds[5]).html());//已生成车号数量
 		var seq_input=$(tds[1]).find("input");
 		var product_qty_input=$(tds[2]).find("input");
 		var allot_config_id=$(seq_input).data("allot_config_id");
@@ -230,6 +232,11 @@ function ajaxEdit(order_id,factory_id){
 			save_flag=false;
 			return false;
 		}
+		if(product_qty<allot_bus_qty){
+			alert("生产数量必须大于等于已生成的车号数量！");
+			save_flag=false;
+			return false;
+		}
 		
 		var obj={};
 		obj.id=allot_config_id;
@@ -242,7 +249,15 @@ function ajaxEdit(order_id,factory_id){
 		arr_config_allot.push(obj);	
 		
 		total_allot_qty+=product_qty;//所有配置分配数量之和
-		//alert($(seq_input).data("allot_config_id"))		
+		//alert($(seq_input).data("allot_config_id"))	
+		
+		//判断生产序号是否重复
+		if(Array.indexOf(sequence_arr,sequence)>=0){
+			alert("生产序号不能重复！");
+			save_flag=false;
+			return false;
+		}
+		sequence_arr.push(sequence);
 	});
 	if(total_allot_qty>Number($("#productionQty").val())){
 		alert("各配置生产数量之和不能超过订单生产数量！");

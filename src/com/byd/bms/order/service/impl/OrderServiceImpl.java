@@ -223,7 +223,10 @@ public class OrderServiceImpl implements IOrderService {
 		if (jel.isJsonArray()) {
 			jsa=jel.getAsJsonArray();
 		}*/
-		JSONArray jsa=JSONArray.fromObject(config_detail);
+		JSONArray jsa=new JSONArray();
+		if(config_detail.contains("[")){
+			jsa=JSONArray.fromObject(config_detail);
+		}
 		Iterator it=jsa.iterator();
 		while(it.hasNext()){
 			JSONObject el= (JSONObject) it.next();

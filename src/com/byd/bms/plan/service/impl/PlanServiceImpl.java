@@ -384,6 +384,11 @@ public class PlanServiceImpl implements IPlanService {
 		result.put("data", datalist);
 		return result;
 	}
+
+	@Override
+	public int updatePauseInfo(PlanPause pause) {
+		return planDao.updatePauseInfo(pause);
+	}
 	
 	
 

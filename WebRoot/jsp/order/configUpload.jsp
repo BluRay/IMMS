@@ -57,9 +57,9 @@
 								class="input-medium revise" placeholder="请输入订单名称..." value=""
 								id="search_order_name" /></td>
 							<td>生产年份：</td>
-							<td><select name="" id="search_productive_year"
-								class="input-small">
-							</select></td>
+							<td>
+								<input class="input-small"  style="height: 30px;" id="search_productive_year" onclick="WdatePicker({el:'search_productive_year',dateFmt:'yyyy'});" type="text">
+							</td>
 							<td><input type="button"
 								class="btn btn-sm btn-primary btnQuery" id="btnQuery" value="查询"
 								style="margin-left: 2px;"></input>
@@ -178,7 +178,7 @@
 
 					<div class="form-group">					
 						<div class="col-sm-12">			
-							<table class="table table-striped table-bordered table-hover" id="orderConfigTable">
+							<table class="table table-striped table-bordered table-hover" style="width:1000px;overflow-x:auto" id="orderConfigTable">
 							</table>
 						</div>
 					</div>
@@ -189,11 +189,13 @@
 	</div>	
 		<!-- /.main-container -->
 	</div>
+	<script src="../js/datePicker/WdatePicker.js"></script>
 	<script src="../assets/js/jquery-ui.min.js"></script>
 	<script src="../assets/js/jquery.gritter.min.js"></script>
 	<script src="../assets/js/jquery.dataTables.min.js"></script>
 	<script src="../assets/js/jquery.dataTables.bootstrap.js"></script>
 	<script src="../assets/js/dataTables.fixedColumns.min.js"></script>
+	<script src="../assets/js/dataTables.rowGroup.js"></script>
 	<script src="../assets/js/ace/elements.onpage-help.js"></script>
 	<script src="../assets/js/ace/ace.onpage-help.js"></script>
 	<script src="../assets/js/bootstrap3-typeahead.js"></script>

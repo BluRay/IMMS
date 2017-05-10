@@ -45,4 +45,5 @@ public interface IPlanDao {
 	public int addPause(PlanPause pause);
 	public List<PlanPause> getPauseList(Map<String,Object> queryMap);
 	public int getPauseTotalCount(Map<String,Object> queryMap);
+	public int updatePauseInfo(PlanPause pause);
 }

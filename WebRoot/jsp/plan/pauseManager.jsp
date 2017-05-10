@@ -58,41 +58,17 @@
 							</tr>
 							<tr>
 								<td>停线时间：</td>
-								<td colspan=3><input id="pause_date_start" placeholder="开始时间..." style="width:125px" type="text" onClick="WdatePicker({el:'pause_date_start',dateFmt:'yyyy-MM-dd HH:mm'});"> - <input id="pause_date_end" placeholder="结束时间..." style="width:125px" type="text" onClick="WdatePicker({el:'pause_date_end',dateFmt:'yyyy-MM-dd HH:mm'});"></td>
+								<td colspan=3><input id="pause_date_start" placeholder="开始时间..." style="width:125px" type="text" onClick="WdatePicker({el:'pause_date_start',dateFmt:'yyyy-MM-dd'});"> - <input id="pause_date_end" placeholder="结束时间..." style="width:125px" type="text" onClick="WdatePicker({el:'pause_date_end',dateFmt:'yyyy-MM-dd'});"></td>
 								<td>&nbsp;恢复时间：</td>
-								<td colspan=3><input id="resume_date_start" placeholder="开始时间..." style="width:125px" type="text" onClick="WdatePicker({el:'resume_date_start',dateFmt:'yyyy-MM-dd HH:mm'});"> - <input id="resume_date_end" placeholder="结束时间..." style="width:125px" type="text" onClick="WdatePicker({el:'resume_date_end',dateFmt:'yyyy-MM-dd HH:mm'});"></td>								
+								<td colspan=3><input id="resume_date_start" placeholder="开始时间..." style="width:125px" type="text" onClick="WdatePicker({el:'resume_date_start',dateFmt:'yyyy-MM-dd'});"> - <input id="resume_date_end" placeholder="结束时间..." style="width:125px" type="text" onClick="WdatePicker({el:'resume_date_end',dateFmt:'yyyy-MM-dd'});"></td>								
 								<td></td>
 								<td><input id="btnQuery" type="button" class="btn btn-sm btn-success" value="查询" style="margin-left: 2px;"></input>&nbsp;&nbsp;<input id="btnAdd" class="btn btn-sm btn-info" value="增加" type="button">&nbsp;</td>
 								<td></td>
 							</tr>
 						</table>
 					</div>	
-					<table id="tableData" class="table table-striped table-bordered table-hover" style="font-size: 12px;">
+					<table id="tableData" class="table table-striped table-bordered table-hover" style="width:1800px;overflow-x:auto;font-size: 12px;">
 					</table>
-					<!-- <table id="tableData" class="table table-striped table-bordered table-hover" style="font-size: 12px;">
-					<thead>
-					<tr>
-						<th style="text-align:center;">生产工厂</th>
-						<th style="text-align:center;">车间</th>
-						<th style="text-align:center;">线别</th>
-						<th style="text-align:center;">订单</th>
-						<th style="text-align:center;">停线时间</th>
-						<th style="text-align:center;">预计恢复时间</th>
-						<th style="text-align:center;">实际恢复时间</th>
-						<th style="text-align:center;">累计时长</th>
-						<th style="text-align:center;">停线原因</th>
-						<th style="text-align:center;">详细原因</th>
-						<th style="text-align:center;">责任部门</th>
-						<th style="text-align:center;">损失人数</th>
-						<th style="text-align:center;">损失工时</th>
-						<th style="text-align:center;">损失产能</th>
-						<th style="text-align:center;">状态</th>
-						<th style="text-align:center;">录入人</th>
-						<th style="text-align:center;">操作</th>
-						
-					</tr>
-					</thead>
-					</table> -->
 					</div>
 			</div><!-- /.main-content -->
 			<div id="dialog-add" class="hide" style="align:center;width:700px;height:500px">
@@ -135,6 +111,39 @@
 					</tr>
 					<tr style="height:40px">
 						<td align="right">邮件抄送人：</td><td colspan=3><input id="new_pause_email_cc" placeholder="邮件抄送人..." style="width:350px" type="text"></td>
+					</tr>
+					
+					</table>
+				</form>
+			</div>
+			
+			<div id="dialog-edit" class="hide" style="align:center;width:700px;height:500px">
+				<form>
+					<table>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">订单范围：</td><td style="width:150px"><input id="edit_order_list" disabled="disabled" placeholder="请输入订单范围..." style="width:150px" type="text"><input type="text" style="display:none" id="pause_id" class="input-small" /></td>
+						<td align="right" style="width:100px">车辆型号：</td><td style="width:150px"><select id="edit_bus_type" class="form-control" style="width:120px"></select></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right">停线原因：</td><td><select id="edit_reason_type" class="form-control" style="width:150px"></select></td>
+						<td align="right">责任部门：</td><td><select id="edit_dep_id" class="form-control" style="width:120px"></select></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right">停线时间：</td><td colspan=3><input id="edit_pause_date_start" placeholder="请输入开始时间..." style="width:150px" type="text" onClick="WdatePicker({el:'edit_pause_date_start',dateFmt:'yyyy-MM-dd HH:mm'});"> - <input id="edit_pause_date_end" placeholder="请输入结束时间..." style="width:150px" type="text" onClick="WdatePicker({el:'edit_pause_date_end',dateFmt:'yyyy-MM-dd HH:mm'});"></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right">停线时长：</td><td><input id="edit_pause_hours" placeholder="停线时长..." style="width:100px" type="text">H</td>
+						<td align="right">浪费人数：</td><td><input id="edit_human_lossed" placeholder="浪费人数..." style="width:100px" type="text">人</td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right">损失产能：</td><td><input id="edit_capacity" placeholder="损失产能..." style="width:100px" type="text">台</td>
+						<td></td><td></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right">详细原因：</td><td colspan=3><input id="edit_reason_detailed" placeholder="详细原因..." style="width:350px" type="text"></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right">备注：</td><td colspan=3><input id="edit_memo" placeholder="备注..." style="width:350px" type="text"></td>
 					</tr>
 					
 					</table>

@@ -10,6 +10,7 @@ $(document).ready(function () {
 		getOrderNoSelect("#search_order_no","#orderId");
 		getWorkshopSelect("plan/pauseManager",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
 		getReasonTypeSelect();
+		getKeysSelect("EXCEPTION_RESPONSIBILITY_DEPARTMENT", "", "#edit_dep_id","noall","value");
 	}
 	
 	$('#search_factory').change(function(){ 
@@ -23,7 +24,7 @@ $(document).ready(function () {
 	
 	$("#btnAdd").on('click', function(e) {
 		lineStr = '';$('#line_str').val(lineStr);
-		$("#new_line_a").removeAttr("checked");$("#new_line_b").removeAttr("checked");
+		$("#A").removeAttr("checked");$("#B").removeAttr("checked");
 		getFactorySelect("plan/pauseManager",'',"#new_factory",null,'id');
 		getWorkshopSelect("plan/pauseManager",$("#new_factory :selected").text(),"","#new_workshop",null,"id");
 		getKeysSelect("EXCEPTION_RESPONSIBILITY_DEPARTMENT", "", "#new_dep_id","noall","value");
@@ -46,6 +47,8 @@ $(document).ready(function () {
 						"class" : "btn btn-success btn-minier",
 						click: function() {
 							btnNewPauseConfirm();
+							$( this ).dialog( "close" );
+							ajaxQuery();
 						} 
 					}
 				]
@@ -105,7 +108,7 @@ $(document).ready(function () {
 				"detailed_reason" : $('#new_reason_detailed').val(),
 				"reason_type_id":$('#new_reason_type').val(),
 				"bus_type_id" : $("#new_bus_type").val(),
-				"duty_department_id" : $("#new_dep_id").val(),
+				"duty_department_id" : $("#new_dep_id :selected").attr('keyvalue'),
 				"waste_num" : $("#new_human_lossed").val(),
 				"capacity" : $("#new_capacity").val(),
 				"memo" : $("#new_memo").val(),
@@ -122,33 +125,16 @@ $(document).ready(function () {
 					text: '<h5>增加成功！</h5>',
 					class_name: 'gritter-info'
 				});
-				$( this ).dialog( "close" );
 			}
 		});
 		
 		
 	}
 	
-	function getBusType(){
-		$.ajax({
-			url: "../common/getBusType",
-			dataType: "json",
-			data: {},
-			async: false,
-			error: function () {alertError();},
-			success: function (response) {
-				var strs = "";
-			    $.each(response.data, function(index, value) {
-			    	strs += "<option value=" + value.code + ">" + value.name + "</option>";
-			    });
-			    $("#new_bus_type").append(strs);
-			}
-		})
-	}
-	
 	function getReasonTypeSelect() {
 		$("#search_reason_type").empty();
 		$("#new_reason_type").empty();
+		$("#edit_reason_type").empty();
 		$.ajax({
 			url : "../common/getReasonTypeSelect",
 			dataType : "json",
@@ -165,6 +151,7 @@ $(document).ready(function () {
 			    });
 			    $("#search_reason").append(strs);
 			    $("#new_reason_type").append(strs);
+			    $("#edit_reason_type").append(strs);
 			}
 		});
 	}
@@ -193,6 +180,23 @@ function validateEmail(maillist){
 	return mailaddr;
 }
 
+function getBusType(){
+	$("#new_bus_type").empty();$("#edit_bus_type").empty();
+	$.ajax({
+		url: "../common/getBusType",
+		dataType: "json",
+		data: {},
+		async: false,
+		error: function () {alertError();},
+		success: function (response) {
+			var strs = "";
+		    $.each(response.data, function(index, value) {
+		    	strs += "<option value=" + value.code + ">" + value.name + "</option>";
+		    });
+		    $("#new_bus_type").append(strs);$("#edit_bus_type").append(strs);
+		}
+	})
+}
 function getPauseMin(start_time,end_time,unit){
 	if((start_time == "")||(start_time == null)) return 0;
 	var data2;
@@ -212,34 +216,9 @@ function getPauseMin(start_time,end_time,unit){
 }
 
 function ajaxQuery(){
-	/**
-	$.ajax({
-		url : "getPauseList",
-		dataType : "json",
-		data : {
-			"factory_id": $('#search_factory').val(),
-	    	"workshop_id": $('#search_workshop').val(),
-	    	"line": $('#search_line').val(),
-	    	"order_no": $('#search_order_no').val(),
-	    	"reason_type": $('#search_reason').val(),
-	    	"pause_date_start": $('#pause_date_start').val(),
-	    	"pause_date_end": $('#pause_date_end').val(),
-	    	"resume_date_start": $('#resume_date_start').val(),
-	    	"resume_date_end": $('#resume_date_end').val()
-		},
-		async : false,
-		error : function(response) {
-			alert(response.message)
-		},
-		success : function(response) {
-			
-			
-		}
-	});
-	**/
 	$("#tableData").dataTable({
 		serverSide: true,paiging:true,ordering:false,searching: false,bAutoWidth:false,
-		destroy: true,sScrollY: table_height,scrollX: "100%",orderMulti:false,
+		destroy: true,sScrollY: table_height,sScrollX:true,orderMulti:false,
 		pageLength: 25,pagingType:"full_numbers",lengthChange:false,
 		language: {
 			emptyTable:"抱歉，未查询到数据！",
@@ -287,9 +266,113 @@ function ajaxQuery(){
             });
 		},
 		columns: [
-		            {"title":"生产工厂","class":"center","data":"factory_name","defaultContent": ""},
-		            {"title":"生产车间","class":"center","data":"workshop_name","defaultContent": ""},
-		            {"title":"生产线别","class":"center","data":"line","defaultContent": ""}
+		            {"title":"生产工厂",width:'80',"class":"center","data":"factory_name","defaultContent": ""},
+		            {"title":"生产车间",width:'80',"class":"center","data":"workshop_name","defaultContent": ""},
+		            {"title":"生产线别",width:'80',"class":"center","data":"line","defaultContent": ""},
+		            {"title":"生产订单",width:'80',"class":"center","data":"order_list","defaultContent": ""},
+		            {"title":"停线时间",width:'120',"class":"center","data":"start_time","defaultContent": ""},
+		            {"title":"预计恢复时间",width:'120',"class":"center","data":"pend_time","defaultContent": ""},
+		            {"title":"实际恢复时间",width:'120',"class":"center","data":"end_time","defaultContent": ""},
+		            {"title":"累计停线时间",width:'120',"class":"center","data":"hours","defaultContent": ""},
+		            {"title":"停线原因",width:'80',"class":"center","data":"reason_type","defaultContent": ""},
+		            {"title":"详细原因",width:'120',"class":"center","data":"detailed_reason","defaultContent": ""},
+		            {"title":"责任部门",width:'80',"class":"center","data":"duty_department","defaultContent": ""},
+		            {"title":"损失人数",width:'80',"class":"center","data":"human_lossed","defaultContent": ""},
+		            {"title":"损失产能",width:'80',"class":"center","data":"capacity_lossed","defaultContent": ""},
+		            {"title":"状态",width:'40',"class":"center","data":"","defaultContent": ""},
+		            {"title":"录入人",width:'60',"class":"center","data":"create_user","defaultContent": ""},
+		            {"title":"操作",width:'60',"class":"center","data":null,"defaultContent": "",
+		            	"render": function ( data, type, row ) {
+		            		return "<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"编辑\" onclick='editPause(" + row['id'] + ")' style='color:blue;cursor: pointer;'></i>"
+		            	},
+		            }
 		          ],
+	});
+}
+
+function editPause(pause_id){
+	getBusType();
+	$("#dialog-edit").removeClass('hide').dialog({
+		resizable: false,
+		title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 编辑停线</h4></div>',
+		title_html: true,
+		width:'550px',
+		modal: true,
+		buttons: [{
+					text: "取消",
+					"class" : "btn btn-minier",
+					click: function() {$( this ).dialog( "close" );} 
+				},
+				{
+					text: "保存",
+					id:"btn_ok",
+					"class" : "btn btn-success btn-minier",
+					click: function() {
+						btnEditPauseConfirm();
+						$( this ).dialog( "close" );
+						ajaxQuery();
+					} 
+				}
+			]
+	});
+	
+	$.ajax({
+		url : "getPauseList",
+		dataType : "json",
+		data : {"pause_id":pause_id},
+		async : false,
+		error : function(response) {
+			alert(response.message)
+		},
+		success : function(response) {
+			$.each(response.data,function(index,value){
+				if(index == 0){
+					$("#pause_id").val(value.id);
+					$("#edit_order_list").val(value.order_list);
+					$("#edit_bus_type").val(value.bus_type);
+					$("#edit_reason_type").val(value.reason_type_id);
+					$("#edit_dep_id").find("option[keyvalue='"+value.duty_department_id+"']").attr("selected", true);
+					$("#edit_pause_date_start").val(value.start_time);
+					$("#edit_pause_date_end").val(value.pend_time);
+					$("#edit_pause_hours").val(value.hours);
+					$("#edit_human_lossed").val(value.human_lossed);
+					$("#edit_capacity").val(value.capacity_lossed);
+					$("#edit_reason_detailed").val(value.detailed_reason);
+					$("#edit_memo").val(value.memo);
+					
+				}
+			});
+		}
+	});
+}
+
+function btnEditPauseConfirm(){
+	$.ajax({
+		url : "editPauseInfo",
+		dataType : "json",
+		data : {
+			"pause_id":$('#pause_id').val(),
+			"edit_bus_type":$('#edit_bus_type').val(),
+			"edit_reason_type":$('#edit_reason_type').val(),
+			"edit_dep_id":$("#edit_dep_id :selected").attr('keyvalue'),
+			"edit_pause_date_start":$('#edit_pause_date_start').val(),
+			"edit_pause_date_end":$('#edit_pause_date_end').val(),
+			"edit_pause_hours":$('#edit_pause_hours').val(),
+			"edit_human_lossed":$('#edit_human_lossed').val(),
+			"edit_capacity":$('#edit_capacity').val(),
+			"edit_reason_detailed":$('#edit_reason_detailed').val(),
+			"edit_memo":$('#edit_memo').val(),
+		},
+		async : false,
+		error : function(response) {
+			alert(response.message)
+		},
+		success : function(response) {
+			$.gritter.add({
+				title: '系统提示：',
+				text: '<h5>保存成功！</h5>',
+				class_name: 'gritter-info'
+			});
+		}
 	});
 }

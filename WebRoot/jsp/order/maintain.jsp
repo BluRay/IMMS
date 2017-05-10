@@ -10,7 +10,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 <link rel="stylesheet" href="../assets/css/fixedColumns.bootstrap.min.css" />
 <link rel="stylesheet" href="../assets/css/fixedColumns.dataTables.min.css" />
-<link rel="stylesheet" href="../assets/css/jquery-ui.min.css" />
+<link rel="stylesheet" href="../assets/css/jquery-ui.min.css" /> 
 </head>
 <body class="no-skin" style="font-family: 'Microsoft YaHei';">
 	<!-- 头 -->
@@ -64,9 +64,11 @@
 								</select>
 							</td> -->
 							<td>生产年份：</td>
-							<td><select name="" id="search_productive_year"
+							<td><!-- <select name="" id="search_productive_year"
 								class="input-small">
-							</select></td>
+							</select> -->
+								<input class="input-small"  style="height: 30px;" id="search_productive_year" onclick="WdatePicker({el:'search_productive_year',dateFmt:'yyyy'});" type="text">
+							</td>
 							<td>生产工厂：</td>
 							<td><select name="" id="search_factory" class="input-small">
 							</select>
@@ -82,11 +84,11 @@
 					</table>
 				</div>
 
-				<div class="row">
-					<div class="col-xs-12">
-						<table id="tableOrder"
+				<div class="row"  >
+					<div class="col-xs-12"  style="width:100%">
+						<table id="tableOrder" 
 							class="table table-striped table-bordered table-hover"
-							style="font-size: 12px;">
+							style="font-size: 12px; width:1500px;overflow-x:auto" >
 						</table>
 					</div>
 				</div>
@@ -169,9 +171,11 @@
 					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="edit_productive_year">*&nbsp;生产年份</label>
 						<div class="col-sm-9">
-							<select name="" disabled="disabled" id="edit_productive_year"
+							<!-- <select name="" disabled="disabled" id="edit_productive_year"
 								class="input-medium">
-							</select>
+							</select> -->
+							<input class="input-medium" style="height: 30px;" placeholder="生产年份.." id="edit_productive_year" 
+							onclick="WdatePicker({el:'edit_productive_year',dateFmt:'yyyy'});" onchange="changeProductionYear(this)"  type="text">
 						</div>
 					</div>
 					<div class="form-group">
@@ -263,9 +267,11 @@
 					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="new_productive_year">*&nbsp;生产年份</label>
 						<div class="col-sm-9">
-							<select name="" id="new_productive_year"
+							<!-- <select name="" id="new_productive_year"
 								class="input-medium">
-							</select>
+							</select> -->
+							<input class="input-medium"  style="height: 30px;" placeholder="生产年份.." id="new_productive_year" 
+							onclick="WdatePicker({el:'new_productive_year',dateFmt:'yyyy'});" onchange="changeProductionYear(this)" type="text">
 						</div>
 					</div>
 					<div class="form-group">
@@ -318,6 +324,7 @@
 	<script src="../assets/js/jquery.dataTables.min.js"></script>
 	<script src="../assets/js/jquery.dataTables.bootstrap.js"></script>
 	<script src="../assets/js/dataTables.fixedColumns.min.js"></script>
+	<script src="../assets/js/dataTables.rowGroup.js"></script>
 	<script src="../assets/js/ace/elements.onpage-help.js"></script>
 	<script src="../assets/js/ace/ace.onpage-help.js"></script>
 	<script src="../assets/js/bootstrap3-typeahead.js"></script>

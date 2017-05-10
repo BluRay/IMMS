@@ -5,7 +5,7 @@ public class PlanMasterPlan {
 	private String version;
 	private int order_id;
 	private int factory_id;
-	private int plan_code_id;
+	private int plan_code_value;
 	private String plan_month;
 	private String flag;
 	private int D1;
@@ -70,11 +70,11 @@ public class PlanMasterPlan {
 	public void setFactory_id(int factory_id) {
 		this.factory_id = factory_id;
 	}
-	public int getPlan_code_id() {
-		return plan_code_id;
+	public int getPlan_code_value() {
+		return plan_code_value;
 	}
-	public void setPlan_code_id(int plan_code_id) {
-		this.plan_code_id = plan_code_id;
+	public void setPlan_code_value(int plan_code_value) {
+		this.plan_code_value = plan_code_value;
 	}
 	public String getPlan_month() {
 		return plan_month;

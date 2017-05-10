@@ -62,6 +62,12 @@ public class PlanController extends BaseController{
         return mv;  
     }
 	
+	@RequestMapping("/planSearch")
+	public ModelAndView planSearch(){
+		mv.setViewName("plan/planSearch");
+        return mv;
+	}
+	
 	@RequestMapping("/sapOrderManager")
 	public ModelAndView sapOrderManager(){ 		//SAP生产订单维护
 		mv.setViewName("plan/sapOrderManager");
@@ -748,9 +754,10 @@ public class PlanController extends BaseController{
 			pause.setWorkshop_id(request.getParameter("workshop_id"));
 			pause.setLine(staffArray[i]);
 			pause.setStart_time(request.getParameter("pause_date_start"));
-			pause.setEnd_time(request.getParameter("pause_date_end"));
+			pause.setPend_time(request.getParameter("pause_date_end"));
 			pause.setReason_type_id(Integer.parseInt(request.getParameter("reason_type_id")));
 			pause.setBus_type(request.getParameter("bus_type_id"));
+			pause.setDuty_department_id(Integer.parseInt(request.getParameter("duty_department_id")));
 			pause.setOrder_list(request.getParameter("order_list"));
 			pause.setDetailed_reason(request.getParameter("detailed_reason"));
 			pause.setHuman_lossed(request.getParameter("waste_num"));
@@ -775,10 +782,11 @@ public class PlanController extends BaseController{
 		String workshop_id = request.getParameter("workshop_id");
 		String line = request.getParameter("line");
 		String reason_type = request.getParameter("reason_type");
-		String pause_date_start = request.getParameter("pause_date_end");
-		String pause_date_end = request.getParameter("pause_date_start");
-		String resume_date_start = request.getParameter("resume_date_end");
-		String resume_date_end = request.getParameter("resume_date_start");
+		String pause_date_start = request.getParameter("pause_date_start");
+		String pause_date_end = request.getParameter("pause_date_end");
+		String resume_date_start = request.getParameter("resume_date_start");
+		String resume_date_end = request.getParameter("resume_date_end");
+		String pause_id = request.getParameter("pause_id");
 		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
 		int start=(request.getParameter("start")!=null)?Integer.parseInt(request.getParameter("start")):0;		//分页数据起始数
 		int length=(request.getParameter("length")!=null)?Integer.parseInt(request.getParameter("length")):500;	//每一页数据条数
@@ -795,9 +803,32 @@ public class PlanController extends BaseController{
 		condMap.put("end_time", pause_date_end);
 		condMap.put("start_time2", resume_date_start);
 		condMap.put("end_time2", resume_date_end);
+		condMap.put("pause_id", pause_id);
 		Map<String,Object> list = planService.getPauseList(condMap);
 		//initModel(true,"SUCCESS",list);
 		model.addAllAttributes(list);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/editPauseInfo")
+	@ResponseBody
+	public ModelMap editPauseInfo(){
+		PlanPause pause = new PlanPause();
+		pause.setId(Integer.parseInt(request.getParameter("pause_id")));
+		pause.setBus_type(request.getParameter("edit_bus_type"));
+		pause.setReason_type_id(Integer.parseInt(request.getParameter("edit_reason_type")));
+		pause.setDuty_department_id(Integer.parseInt(request.getParameter("edit_dep_id")));
+		pause.setStart_time(request.getParameter("edit_pause_date_start"));
+		pause.setPend_time(request.getParameter("edit_pause_date_end"));
+		pause.setHours(request.getParameter("edit_pause_hours"));
+		pause.setHuman_lossed(request.getParameter("edit_human_lossed"));
+		pause.setCapacity_lossed(request.getParameter("edit_capacity"));
+		pause.setDetailed_reason(request.getParameter("edit_reason_detailed"));
+		pause.setMemo(request.getParameter("edit_memo"));	
+		
+		int result = planService.updatePauseInfo(pause);
+		initModel(true,String.valueOf(result),null);
 		model = mv.getModelMap();
 		return model;
 	}

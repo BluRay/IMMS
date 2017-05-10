@@ -8,10 +8,19 @@ $(document).ready(function(){
 		ajaxQuery();
 	}); 
 	
-	$("#btnAdd").on("click",function(){
-		
+	$("#btnAdd").on("click",function(){		
 		showCreatePage();
 	})
+	
+	$("#configQty").change(function(){
+		//alert($(this).data("allot_qty"));
+		if($(this).val()<$(this).data("allot_qty")){
+			alert("该配置的配置数量不能小于产地分配数量，配置产地已分配"+$(this).data("allot_qty")+"台！");
+			$("#configQty").focus();
+			$(this).val($(this).data("allot_qty"));
+		}
+	});
+	
 });
 
 function initPage(){
@@ -26,10 +35,11 @@ function initPage(){
 function ajaxQuery(){
 	$("#tableOrder").dataTable({
 		serverSide: true,
-		fixedColumns:   {
+/*		fixedColumns:   {
             leftColumns: 1,
             rightColumns:1
-        },
+        },*/
+        rowsGroup:[0,1,2,3,4],
 		paiging:true,
 		ordering:false,
 		searching: false,
@@ -110,11 +120,12 @@ function ajaxQuery(){
 }
 
 function showEditPage(row){
+	var allot_qty=row.allot_qty;
 	//显示订单配置数据
 	$("#order").val(row.order_no).attr("disabled",true);
 	$("#order_id").val(row.id)
 	$("#configName").val(row.order_config_name).attr("disabled",false);
-	$("#configQty").val(row.config_qty).attr("disabled",false);
+	$("#configQty").val(row.config_qty).attr("disabled",false).data("allot_qty",allot_qty);
 	$("#materialNo").val(row.sap_materialNo).attr("disabled",false);
 	$("#customer").val(row.customer).attr("disabled",false);
 	$("#material").val(row.material).attr("disabled",false);
@@ -138,7 +149,7 @@ function showEditPage(row){
         data: param,  //传入组装的参数
         dataType: "json",
         success: function (result) {
-        	drawConfigListTable(result)
+        	drawConfigListTable(result);
         }
 	});
 	
@@ -185,6 +196,7 @@ function showCreatePage(){
 	$("#battery_capacity").val("").attr("disabled",false);;
 	$("#passenger_num").val("").attr("disabled",false);;
 	$("#upload_div").show();
+	$("#orderConfigTable").html("");
 	json_configList=null;
 	
 	var dialog = $( "#dialog-config" ).removeClass('hide').dialog({
@@ -207,6 +219,12 @@ function showCreatePage(){
 				click: function() {
 					ajaxEdit('0'); 
 				} 
+			},{
+				text: "保存&新增",
+				"class" : "btn btn-success btn-minier",
+				click: function() {
+					ajaxEdit(row.config_id||"0",true); 
+				} 
 			}
 		]
 	});
@@ -218,11 +236,11 @@ function drawConfigListTable(data){
 		paiging:false,
 		ordering:false,
 		searching: false,
-		bAutoWidth:false,
+		autoWidth:false,
 		destroy: true,
 		paginate:false,
 		//sScrollY: $(window).height()-250,
-		scrollX: "1200px",
+		scrollX: true,
 		scrollCollapse: true,
 		lengthChange:false,
 		orderMulti:false,
@@ -289,7 +307,7 @@ function upload(form,file){
 	
 }
 
-function ajaxEdit(config_id){
+function ajaxEdit(config_id,saveAdd){
 	var order_id=$("#order_id").val();
 	var config_name=$("#configName").val();
 	var config_qty=$("#configQty").val();
@@ -377,8 +395,11 @@ function ajaxEdit(config_id){
         dataType: "json",
         success: function (result) {
         	if(result.success){
-        		$( "#dialog-config" ).dialog( "close" );
-        		ajaxQuery();
+        		alert("保存成功！");
+        		if(!saveAdd){
+        			$( "#dialog-config" ).dialog( "close" );
+        		}
+        		ajaxQuery();    		
         	}else{
         		alert(result.message);
         	}
