@@ -67,5 +67,22 @@ public class CommonServiceImpl implements ICommonService {
 	public List<Map<String, String>> getAllReasonType() {
 		return commonDao.getAllReasonType();
 	}
+	@Override
+	public List<Map<String, Object>> getLineSelect() {
+		
+		return commonDao.queryLineList();
+	}
+	@Override
+	public List<Map<String, Object>> getLineSelectAuth(
+			Map<String, Object> condMap) {
+		
+		return commonDao.queryLineListAuth(condMap);
+	}
+	@Override
+	public List<Map<String, Object>> getProcessMonitorSelect(
+			Map<String, Object> condMap) {
+		
+		return commonDao.queryProcessMonitorList(condMap);
+	}
 
 }

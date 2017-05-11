@@ -21,7 +21,7 @@
 					<list>
 						<value>.png</value><value>.jpg</value><value>.gif</value><value>.js</value>
 						<value>.css</value><value>.json</value><value>.pdf</value><value>.rar</value>
-						<value>.zip</value><value>.ico</value><value>.woff</value><value>.less</value>
+						<value>.zip</value><value>.ico</value><value>.woff</value><value>.less</value><value>.ttf</value>
 					</list>
 				</property>
 			</bean>
@@ -63,6 +63,7 @@
 	<!-- add by wuxiao test! -->
 	<mvc:resources location="/assets/" mapping="/assets/**" />
 	<mvc:resources location="/snaker/" mapping="/snaker/**" />
+	<mvc:resources location="/fonts/" mapping="/fonts/**" />
 	<!-- end -->
 	<mvc:interceptors>
 		<!-- 切换语言拦截器 -->

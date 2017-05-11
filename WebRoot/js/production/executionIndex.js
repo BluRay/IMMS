@@ -31,9 +31,9 @@ $(document).ready(
 					//alert(rect.x+"/"+rect.y);
 					//alert(rect.name);
 					if(rect.code&&rect.monitorFlag=='1'){
-						//alert(rect.name);
-						window.location.href="production!execution.action?factory_id="+rect.factoryId+
-						"&workshop_id="+rect.workshopId+"&line_id="+rect.lineId+"&process_id="+rect.processId
+						//alert(rect.lineName);
+						window.location.href="execution?factory_id="+rect.factoryId+
+						"&workshop_id="+rect.workshopId+"&line="+rect.lineName+"&process_id="+rect.processId
 					}else{
 						alert("该节点未配置为扫描节点！");
 					}
@@ -107,12 +107,12 @@ $(document).ready(
 					$.each(line_process,function(index,value){
 						var lineId=value.line_id;
 						var lineName=value.line_name;
-						var factoryId=value.factory_id;
-						var workshopId=value.workshop_id;					
+						var factoryId=$("#search_factory").val();
+						var workshopId=$("#search_workshop").val();				
 						var processlist=JSON.parse(value.process_list);						
 						$.each(processlist,function(index,process){
 							//var obj=process;
-							process.lineId=lineId;
+							//process.lineId=lineId;
 							process.lineName=lineName;
 							process.factoryId=factoryId;
 							process.workshopId=workshopId;
@@ -188,7 +188,8 @@ $(document).ready(
 					rect.name=process.name;
 					rect.processId=process.id;
 					rect.workshopId=process.workshopId;
-					rect.lineId=process.lineId;
+					//rect.lineId=process.lineId;
+					rect.lineName=process.lineName;
 					rect.factoryId=process.factoryId;
 					rect.monitorFlag=process.monitor_flag;
 					rect_list.push(rect);

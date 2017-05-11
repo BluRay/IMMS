@@ -56,4 +56,10 @@ public class ProductionController extends BaseController {
 		
 		return model;
 	}
+	
+	@RequestMapping("/execution")
+	public ModelAndView execution(){
+		mv.setViewName("production/productionExecution");
+		return mv;
+	}
 }

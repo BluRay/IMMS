@@ -155,4 +155,50 @@ public class CommonController extends BaseController {
 		return model;
 	}
 	
+	/**
+	 * 查询线别下拉列表（BMS_BASE_LINE表获取，无权限控制）
+	 * @return
+	 */
+	@RequestMapping("/getLineSelect")
+	@ResponseBody
+	public ModelMap getLineSelect(){
+		model=new ModelMap();
+		model.put("data", commonService.getLineSelect());
+		return model;
+	}
+	
+	/**
+	 * 查询线别下拉列表（BMS_BASE_PROCESS表获取，权限控制）
+	 * @return
+	 */
+	@RequestMapping("/getLineSelectAuth")
+	@ResponseBody
+	public ModelMap getLineSelectAuth(){
+		String staff_number = request.getSession().getAttribute("staff_number") + "";
+		String function_url = request.getParameter("function_url");
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("staff_number", staff_number);
+		condMap.put("function_url", function_url);
+		condMap.put("factory", request.getParameter("factory"));
+		condMap.put("workshop", request.getParameter("workshop"));
+		model=new ModelMap();
+		model.put("data", commonService.getLineSelectAuth(condMap));
+		return model;
+	}
+	
+	/**
+	 * 查询监控工序下拉列表
+	 * @return
+	 */
+	@RequestMapping("/getProcessMonitorSelect")
+	@ResponseBody
+	public ModelMap getProcessMonitorSelect(){
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("factory", request.getParameter("factory"));
+		condMap.put("workshop", request.getParameter("workshop"));
+		condMap.put("line", request.getParameter("line"));
+		model=new ModelMap();
+		model.put("data", commonService.getProcessMonitorSelect(condMap));
+		return model;
+	}
 }

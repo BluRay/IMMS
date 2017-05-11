@@ -30,4 +30,10 @@ public interface ICommonDao {
 	
 	public List<Map<String,String>> getAllReasonType();
 
+	List<Map<String, Object>> queryLineList();
+
+	List<Map<String, Object>> queryLineListAuth(Map<String, Object> condMap);
+
+	List<Map<String, Object>> queryProcessMonitorList(Map<String, Object> condMap);
+
 }

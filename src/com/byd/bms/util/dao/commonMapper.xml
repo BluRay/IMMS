@@ -39,7 +39,7 @@
 	</select>
 	
 	<select id="queryFactoryListAuth" parameterType="Map" resultType="Map">			
-		SELECT o.id,o.name 
+		SELECT o.foreign_id id,o.name 
 		FROM BMS_BASE_ORG o
 		WHERE o.org_type='2'  and o.deleted='0'
 		<if test="function_url !=null and  function_url !=''">
@@ -87,7 +87,7 @@
 	</select>
 	
 	<select id="queryWorkshopListAuth" parameterType="Map" resultType="Map">			
-		SELECT o.id,o.name 
+		SELECT o.foreign_id id,o.name 
 		FROM BMS_BASE_ORG o
 		LEFT JOIN BMS_BASE_ORG o1 ON o.parent_id=o1.id
 		WHERE o.org_type='5' and o1.name=#{factory} and o.deleted='0'
@@ -110,4 +110,36 @@
 		SELECT * FROM BMS_BASE_KEY WHERE key_code = 'ABNORMAL_REASON'
 	</select>
 	
+	<select id="queryLineList" parameterType="Map" resultType="Map">			
+		SELECT id,line AS name FROM BMS_BASE_LINE WHERE delete_flag='0'
+	</select>
+	
+	<select id="queryLineListAuth" parameterType="Map" resultType="Map">			
+		select distinct p.line as name
+		from BMS_BASE_PROCESS p
+		where p.factory=#{factory} and p.workshop=#{workshop}
+		<if test="function_url !=null and  function_url !=''">
+		AND (locate(o.org_code,
+		(SELECT GROUP_CONCAT(R.permission_value) FROM BMS_BASE_USER_ROLE R WHERE R.staff_number = #{staff_number} AND R.permission_key = '2'
+		AND R.role_id IN 
+		(SELECT RP.role_id FROM BMS_BASE_ROLE_PERMISSION RP WHERE 
+		RP.function_id = (SELECT ID FROM BMS_BASE_FUNCTION F WHERE F.function_url = #{function_url})))
+		)>0 OR
+		((SELECT IFNULL(GROUP_CONCAT(R.permission_value),'') FROM BMS_BASE_USER_ROLE R WHERE R.staff_number = #{staff_number} AND R.permission_key = '2'
+		AND R.role_id IN 
+		(SELECT RP.role_id FROM BMS_BASE_ROLE_PERMISSION RP WHERE 
+		RP.function_id = (SELECT ID FROM BMS_BASE_FUNCTION F WHERE F.function_url = #{function_url}))) = '')
+		)
+		</if>
+	</select>
+	
+	<select id="queryProcessMonitorList" parameterType="Map" resultType="Map">
+		select p.id,p.process_code,r.process_name
+		from BMS_PD_SCAN_RULE r
+		left join BMS_BASE_PROCESS p on r.factory=p.factory and r.workshop=p.workshop 
+		and p.line=#{line} and p.process_name=r.process_name 
+		where p.monitory_point_flag='1' and p.delete_flag='0' 
+		and p.factory=#{factory} and p.workshop=#{workshop} and p.line=#{line} 
+		order by r.sequence asc
+	</select>
 </mapper>

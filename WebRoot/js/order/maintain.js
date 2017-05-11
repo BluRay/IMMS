@@ -511,9 +511,9 @@ function setInput(value){
 
 function getFactorySelect() {
 	$.ajax({
-		url : "/IMMS/common/getFactorySelect",
+		url : "/IMMS/common/getFactorySelectAuth",
 		dataType : "json",
-		data : {},
+		data : {"function_url":"order/maintain"},
 		async : false,
 		error : function(response) {
 			alert(response.message)

@@ -66,10 +66,116 @@
 
 						<div class="tab-content">
 							<div id="home" class="tab-pane fade in active">
-								<p>Raw denim you probably haven't heard of them jean shorts Austin.</p>
+								<p style="font-weight:bold">车间计划达成：</p>
+								<table id="tablePlan_total" style="table-layout:fixed;font-size:12px;text-align:center" class="table table-bordered table-striped">
+									<thead>
+								         <tr id='0'>
+								        	<th style="text-align:center;">生产车间</th>
+								            <th style="text-align:center;">自制件下线</th>
+								            <th style="text-align:center;">部件下线</th>
+								            <th style="text-align:center;">焊装上线</th>
+								            <th style="text-align:center;">涂装上线</th>
+								            <th style="text-align:center;">底盘上线</th>
+								            <th style="text-align:center;">总装下线</th>
+								            <th style="text-align:center;">入库</th>
+								        </tr>
+								    </thead>
+									<tbody>
+										<tr id="tr_plan">
+											<td>计划数量</td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+										</tr>
+										<tr id="tr_realDone">
+											<td>实际完成量</td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+										</tr>
+										<tr id="tr_doneRate">
+											<td>实际达成率</td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+										</tr>
+									</tbody>
+								</table>
+								
+								<p style="font-weight:bold">订单计划达成：</p>
+								<table id="tablePlan" style="table-layout:fixed;font-size:12px" class="table table-bordered table-striped">
+									<thead>
+								         <tr id='0'>
+								         	<th style="text-align:center;width:250px">生产订单</th>
+								        	<th style="text-align:center;">生产车间</th>
+								            <th style="text-align:center;">计划数量</th>
+								            <th style="text-align:center;">实际完成量</th>
+								            <th style="text-align:center;">实际达成率</th>
+								            <th style="text-align:center;">累计完成量</th>
+								        </tr>
+								    </thead>
+								<tbody>
+								</tbody>
+								</table>
+								
 							</div>
 							<div id="messages" class="tab-pane fade">
-								<p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid.</p>
+								<table id="tablePlanDetail" style="font-size:12px;"  class="table table-bordered table-striped">
+									<thead>
+								         <tr id='0'>
+								         	<th style="width:80px;text-align:center;">生产订单</th>
+								        	<th style="width:105px;text-align:center;">生产车间</th>
+								            <th id="D1" style="text-align:center; width:55px;"> </th>
+								            <th id="D2" style="text-align:center; width:55px;"> </th>
+								            <th id="D3" style="text-align:center; width:55px;"> </th>
+								            <th id="D4" style="text-align:center; width:55px;"> </th>
+								            <th id="D5" style="text-align:center; width:55px;"> </th>
+								            <th id="D6" style="text-align:center; width:55px;"> </th>
+								            <th id="D7" style="text-align:center; width:55px;"> </th>
+								            <th id="D8" style="text-align:center; width:55px;"> </th>
+								            <th id="D9" style="text-align:center; width:55px;"> </th>
+								            <th id="D10" style="text-align:center; width:55px;"> </th>          
+								            <th id="D11" style="text-align:center; width:55px;"> </th>
+								            <th id="D12" style="text-align:center; width:55px;"> </th>
+								            <th id="D13" style="text-align:center; width:55px;"> </th>
+								            <th id="D14" style="text-align:center; width:55px;"> </th>
+								            <th id="D15" style="text-align:center; width:55px;"> </th>
+								            <th id="D16" style="text-align:center; width:55px;"> </th>
+								            <th id="D17" style="text-align:center; width:55px;"> </th>
+								            <th id="D18" style="text-align:center; width:55px;"> </th>
+								            <th id="D19" style="text-align:center; width:55px;"> </th>
+								            <th id="D20" style="text-align:center; width:55px;"> </th>
+								            <th id="D21" style="text-align:center; width:55px;"> </th>
+								            <th id="D22" style="text-align:center; width:55px;"> </th>
+								            <th id="D23" style="text-align:center; width:55px;"> </th>
+								            <th id="D24" style="text-align:center; width:55px;"> </th>
+								            <th id="D25" style="text-align:center; width:55px;"> </th>
+								            <th id="D26" style="text-align:center; width:55px;"> </th>
+								            <th id="D27" style="text-align:center; width:55px;"> </th>
+								            <th id="D28" style="text-align:center; width:55px;"> </th>
+								            <th id="D29" style="text-align:center; width:55px;"> </th>
+								            <th id="D30" style="text-align:center; width:55px;"> </th>
+								            <th id="D31" style="text-align:center; width:55px;"> </th>
+								            <th id="Total" style="width:65px;text-align:center;">合计</th>
+								            <th id="TotalMonth" style="width:70px;text-align:center;">本月合计</th>
+								            <th id="TotalOrder" style="width:70px;text-align:center;">订单合计</th>
+								        </tr>
+								    </thead>
+								<tbody>
+								</tbody>
+								</table>
 							</div>
 						</div>
 					</div>

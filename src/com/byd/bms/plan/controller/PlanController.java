@@ -63,7 +63,7 @@ public class PlanController extends BaseController{
     }
 	
 	@RequestMapping("/planSearch")
-	public ModelAndView planSearch(){
+	public ModelAndView planSearch(){			//计划查询 计划达成情况
 		mv.setViewName("plan/planSearch");
         return mv;
 	}
@@ -77,6 +77,12 @@ public class PlanController extends BaseController{
 	@RequestMapping("/pauseManager")
 	public ModelAndView pauseManager(){ 		//计划停线
 		mv.setViewName("plan/pauseManager");
+        return mv;  
+    }
+	
+	@RequestMapping("/exceptionManager")
+	public ModelAndView exceptionManager(){ 	//生产异常处理
+		mv.setViewName("plan/exceptionManager");
         return mv;  
     }
 	
@@ -829,6 +835,14 @@ public class PlanController extends BaseController{
 		
 		int result = planService.updatePauseInfo(pause);
 		initModel(true,String.valueOf(result),null);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/getExceptionList")
+	@ResponseBody
+	public ModelMap getExceptionList(){
+		
 		model = mv.getModelMap();
 		return model;
 	}

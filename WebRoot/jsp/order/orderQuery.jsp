@@ -144,7 +144,8 @@
 		<script src="../assets/js/bootstrap3-typeahead.js"></script>
 		<script src="../js/jquery.form.js"></script>
 		<script src="../js/bootstrap-table.js"></script>
-		<script src="../js/common.js"></script>	
+		<script src="../js/common.js"></script>
+		<script src="../js/bootstrapInit.js"></script>	
 		<script src="../js/order/orderQuery.js"></script>
 
 <style type="text/css">

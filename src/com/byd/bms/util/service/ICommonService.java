@@ -26,4 +26,10 @@ public interface ICommonService {
 	List<Map<String,Object>> getWorkshopSelectAuth(Map<String,Object> condMap);
 	
 	public List<Map<String,String>> getAllReasonType();
+
+	List<Map<String,Object>> getLineSelect();
+	
+	List<Map<String,Object>> getLineSelectAuth(Map<String, Object> condMap);
+
+	List<Map<String,Object>> getProcessMonitorSelect(Map<String, Object> condMap);
 }
