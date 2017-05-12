@@ -538,7 +538,8 @@ public class PlanController extends BaseController{
 				}
 			}else{
 				planIssuance.setPlan_code_1(planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_1() - issed_count_1);
-				issed_count_1 += plan_qty_1;
+				////issed_count_1 += plan_qty_1;
+				issed_count_1 += (planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_1() - issed_count_1);
 			}
 
 			int plan_qty_2 = ((PlanIssuanceTotal)total_datalist.get(1)).getNum();
@@ -555,7 +556,8 @@ public class PlanController extends BaseController{
 				}
 			}else{
 				planIssuance.setPlan_code_2(planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_2() - issed_count_2);
-				issed_count_2 += plan_qty_2;
+				////issed_count_2 += plan_qty_2;
+				issed_count_2 += (planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_2() - issed_count_2);
 			}
 			
 			int plan_qty_3 = ((PlanIssuanceTotal)total_datalist.get(2)).getNum();
@@ -572,7 +574,8 @@ public class PlanController extends BaseController{
 				}
 			}else{
 				planIssuance.setPlan_code_3(planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_3() - issed_count_3);
-				issed_count_3 += plan_qty_3;
+				////issed_count_3 += plan_qty_3;
+				issed_count_3 += (planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_3() - issed_count_3);
 			}
 			
 			int plan_qty_4 = ((PlanIssuanceTotal)total_datalist.get(3)).getNum();
@@ -589,7 +592,8 @@ public class PlanController extends BaseController{
 				}
 			}else{
 				planIssuance.setPlan_code_4(planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_4() - issed_count_4);
-				issed_count_4 += plan_qty_4;
+				////issed_count_4 += plan_qty_4;
+				issed_count_4 += (planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_4() - issed_count_4);
 			}
 			
 			int plan_qty_5 = ((PlanIssuanceTotal)total_datalist.get(4)).getNum();
@@ -606,7 +610,8 @@ public class PlanController extends BaseController{
 				}
 			}else{
 				planIssuance.setPlan_code_5(planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_5() - issed_count_5);
-				issed_count_5 += plan_qty_5;
+				////issed_count_5 += plan_qty_5;
+				issed_count_5 += (planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_5() - issed_count_5);
 			}
 			
 			int plan_qty_6 = ((PlanIssuanceTotal)total_datalist.get(5)).getNum();
@@ -623,7 +628,8 @@ public class PlanController extends BaseController{
 				}
 			}else{
 				planIssuance.setPlan_code_6(planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_6() - issed_count_6);
-				issed_count_6 += plan_qty_6;
+				////issed_count_6 += plan_qty_6;
+				issed_count_6 += (planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_6() - issed_count_6);
 			}
 			
 			int plan_qty_7 = ((PlanIssuanceTotal)total_datalist.get(6)).getNum();
@@ -640,7 +646,9 @@ public class PlanController extends BaseController{
 				}
 			}else{
 				planIssuance.setPlan_code_7(planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_7() - issed_count_7);
-				issed_count_7 += plan_qty_7;
+				////issed_count_7 += plan_qty_7;
+				issed_count_7 += (planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_7() - issed_count_7);
+				
 			}
 			
 			int plan_qty_8 = ((PlanIssuanceTotal)total_datalist.get(7)).getNum();
@@ -657,7 +665,8 @@ public class PlanController extends BaseController{
 				}
 			}else{
 				planIssuance.setPlan_code_8(planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_8() - issed_count_8);
-				issed_count_8 += plan_qty_8;
+				////issed_count_8 += plan_qty_8;
+				issed_count_8 += (planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_8() - issed_count_8);
 			}
 			
 			int plan_qty_9 = ((PlanIssuanceTotal)total_datalist.get(8)).getNum();
@@ -674,7 +683,8 @@ public class PlanController extends BaseController{
 				}
 			}else{
 				planIssuance.setPlan_code_9(planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_9() - issed_count_9);
-				issed_count_9 += plan_qty_9;
+				////issed_count_9 += plan_qty_9;
+				issed_count_9 += (planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_9() - issed_count_9);
 			}
 			
 			int plan_qty_10 = ((PlanIssuanceTotal)total_datalist.get(9)).getNum();
@@ -691,7 +701,8 @@ public class PlanController extends BaseController{
 				}
 			}else{
 				planIssuance.setPlan_code_10(planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_10() - issed_count_10);
-				issed_count_10 += plan_qty_10;
+				////issed_count_10 += plan_qty_10;
+				issed_count_10 += (planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_10() - issed_count_10);
 			}
 			
 			int plan_qty_11 = ((PlanIssuanceTotal)total_datalist.get(10)).getNum();
@@ -708,7 +719,8 @@ public class PlanController extends BaseController{
 				}
 			}else{
 				planIssuance.setPlan_code_11(planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_11() - issed_count_11);
-				issed_count_11 += plan_qty_11;
+				////issed_count_11 += plan_qty_11;
+				issed_count_11 += (planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_11() - issed_count_11);
 			}
 			
 			int plan_qty_12 = ((PlanIssuanceTotal)total_datalist.get(11)).getNum();
@@ -725,7 +737,8 @@ public class PlanController extends BaseController{
 				}
 			}else{
 				planIssuance.setPlan_code_12(planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_12() - issed_count_12);
-				issed_count_12 += plan_qty_12;
+				////issed_count_12 += plan_qty_12;
+				issed_count_12 += (planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_12() - issed_count_12);
 			}
 			//STEP 05 resultlist.add(planIssuance);
 			resultlist.add(planIssuance);

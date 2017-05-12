@@ -349,7 +349,7 @@
 		SET bus_type=#{bus_type}, reason_type_id=#{reason_type_id}, detailed_reason=#{detailed_reason}, duty_department_id=#{duty_department_id}, 
 		human_lossed=#{human_lossed}, capacity_lossed=#{capacity_lossed}, start_time=#{start_time}, pend_time=#{pend_time}, end_time=#{end_time}, 
 		hours=#{hours}, solution=#{solution}, memo=#{memo} 
-		WHERE id=#{id};
+		WHERE id=#{id}
 		]]>
 	</update>
 	
@@ -357,9 +357,69 @@
 		SELECT E.*,K.key_name AS duty_department FROM BMS_PD_PRODUCTION_EXCEPTION E
 		LEFT JOIN BMS_BASE_KEY K ON E.duty_department_id = K.value AND K.key_code='EXCEPTION_RESPONSIBILITY_DEPARTMENT'
 		WHERE 1=1
+		<if test="id !='' and id !=null">
+		AND E.id=#{id}
+		</if>
+		<if test="factory !='' and factory !=null">
+		AND E.factory=#{factory}
+		</if>
+		<if test="workshop !='' and workshop !=null">
+		AND E.workshop=#{workshop}
+		</if>
+		<if test="line !='' and line !=null">
+		AND E.line=#{line}
+		</if>
+		<if test="bus_number !='' and bus_number !=null">
+		AND E.bus_number=#{bus_number}
+		</if>
+		<if test="severity_level_id !='' and severity_level_id !=null">
+		AND E.severity_level_id=#{severity_level_id}
+		</if>
+		<if test="measures_id !='' and measures_id !=null">
+		AND E.measures_id=#{measures_id}
+		</if>
+		<if test="status !='' and status !=null">
+		AND E.status=#{status}
+		</if>
+		<if test="start_time !='' and start_time !=null">
+		AND E.start_time>=#{start_time}
+		</if>
+		<if test="finish_time !='' and finish_time !=null">
+		AND E.finish_time &lt;= #{finish_time}
+		</if>
 	</select>
 	<select id="getExceptionCount" parameterType="Map" resultType="int">
 		SELECT COUNT(id) FROM BMS_PD_PRODUCTION_EXCEPTION WHERE 1=1
+		<if test="id !='' and id !=null">
+		AND E.id=#{id}
+		</if>
+		<if test="factory !='' and factory !=null">
+		AND E.factory=#{factory}
+		</if>
+		<if test="workshop !='' and workshop !=null">
+		AND E.workshop=#{workshop}
+		</if>
+		<if test="line !='' and line !=null">
+		AND E.line=#{line}
+		</if>
+		<if test="bus_number !='' and bus_number !=null">
+		AND E.bus_number=#{bus_number}
+		</if>
+		<if test="severity_level_id !='' and severity_level_id !=null">
+		AND E.severity_level_id=#{severity_level_id}
+		</if>
+		<if test="measures_id !='' and measures_id !=null">
+		AND E.measures_id=#{measures_id}
+		</if>
+		<if test="status !='' and status !=null">
+		AND E.status=#{status}
+		</if>
+		<if test="start_time !='' and start_time !=null">
+		AND E.start_time>=#{start_time}
+		</if>
+		<if test="finish_time !='' and finish_time !=null">
+		AND E.finish_time &lt;= #{finish_time}
+		</if>
 	</select>
 	
 	<update id="updateExceptionInfo" parameterType="com.byd.bms.production.model.ProductionException">
@@ -367,7 +427,7 @@
 		UPDATE BMS_PD_PRODUCTION_EXCEPTION
 		SET factory=#{factory}, workshop=#{workshop}, line=#{line}, process=#{process}, reason_type_id=#{reason_type_id}, 
 		detailed_reasons=#{detailed_reasons},severity_level_id=#{severity_level_id}, duty_department_id=#{duty_department_id},
-		measures_id=#{measures_id}, solution=#{solution} WHERE id=#{id};
+		measures_id=#{measures_id}, solution=#{solution} WHERE id=#{id}
 		]]>
 	</update>
 </mapper>
