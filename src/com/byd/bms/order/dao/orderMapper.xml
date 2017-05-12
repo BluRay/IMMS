@@ -3,12 +3,12 @@
 <mapper namespace="com.byd.bms.order.dao.IOrderDao">
 
 	<select id="getOrderList" parameterType="Map" resultType="Map">
-		SELECT f.production_qty,f.busnum_start,f.busnum_end,a.name area,a.id AS 'factory_id',a.name factory_name,f.edit_date,u.display_name as 'user_name',
+		SELECT f.production_qty,f.busnum_start,f.busnum_end,a.area,a.id AS 'factory_id',a.factory_name,f.edit_date,u.display_name as 'user_name',
 		t.bus_type_code,o.*,CONCAT(o.order_name,t.bus_type_code,o.order_qty,'台') AS 'order_name_str',f.status,
 		f.bus_number_start,(f.bus_number_start+f.busnum_end-f.busnum_start) bus_number_end
 		FROM BMS_OR_ORDER o			
 		LEFT JOIN BMS_OR_FACTORY_ORDER f ON f.order_id = o.id
-		LEFT JOIN BMS_BASE_ORG a ON f.factory_id = a.id 
+		LEFT JOIN BMS_BASE_FACTORY a ON f.factory_id = a.id 
 		LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id = t.id 
 		left join BMS_BASE_USER u on f.editor_id = u.id 
 		where 1=1
@@ -25,7 +25,7 @@
 			and o.productive_year = #{actYear} 
 		</if>
 		<if test="factory !=null and factory !=''">
-			and f.factory_id = #{factory} 
+			and LOCATE(f.factory_id ,#{factory} )>0
 		</if>
 		<if test="orderColumn==null">
 			ORDER BY id DESC,d.busnum_start ASC
@@ -56,7 +56,7 @@
 			and o.productive_year = #{actYear} 
 		</if>
 		<if test="factory !=null and factory !=''">
-			and f.factory_id = #{factory} 
+			and LOCATE(f.factory_id ,#{factory} )>0 
 		</if>
 	</select>
 	
@@ -80,9 +80,9 @@
 		o.order_code order_code,o.order_type order_type,o.order_qty order_qty,o.productive_year productive_year,t.bus_type_code bus_type_code,
 		(SELECT ifnull(max(cast(reverse(substr(reverse(bus_number),1,instr(reverse(bus_number),'-')-1)) as signed)),0) FROM BMS_PLAN_BUS where order_id=d.order_id and factory_id=d.factory_id and factory_order_id=d.id) maxbusnum,
 		(SELECT ifnull(min(cast(reverse(substr(reverse(bus_number),1,instr(reverse(bus_number),'-')-1)) as signed)),0) FROM BMS_PLAN_BUS where order_id=d.order_id and factory_id=d.factory_id and factory_order_id=d.id) minbusnum,
-		d.order_id order_id,o.delivery_date delivery_date,f.name factory_name,d.editor_id editor_id,d.edit_date edit_date,d.bus_number_count bus_number_count,d.bus_number_start bus_number_start
+		d.order_id order_id,o.delivery_date delivery_date,f.factory_name,d.editor_id editor_id,d.edit_date edit_date,d.bus_number_count bus_number_count,d.bus_number_start bus_number_start
 		from BMS_OR_FACTORY_ORDER d
-		left join BMS_BASE_ORG f on f.id=d.factory_id
+		left join BMS_BASE_FACTORY f on f.id=d.factory_id
 		left join BMS_OR_ORDER o on o.id=d.order_id
 		left join BMS_BASE_BUS_TYPE t on o.bus_type_id = t.id
 		where 1=1
@@ -96,7 +96,7 @@
 			and o.productive_year = #{search_productive_year} 
 		</if>
 		<if test="search_factory!=null">
-			and d.factory_id = #{search_factory} 
+			and LOCATE(d.factory_id ,#{search_factory} )>0
 		</if>
 		<if test="order_id!=null">
 			and d.order_id = #{order_id} 
@@ -157,9 +157,9 @@
 	</insert>
 	
 	<select id="queryBusNumberByOrder" parameterType="Map" resultType="Map">
-		SELECT b.id,b.factory_id,f.name factory_name,b.order_id,b.bus_number,b.vin,b.latest_process_id,p.process_name,
+		SELECT b.id,b.factory_id,f.factory_name,b.order_id,b.bus_number,b.vin,b.latest_process_id,p.process_name,
 		o.order_no,o.order_name,o.order_qty FROM BMS_PLAN_BUS b
-		LEFT OUTER JOIN BMS_BASE_ORG f ON b.factory_id = f.id
+		LEFT OUTER JOIN BMS_BASE_FACTORY f ON b.factory_id = f.id
 		LEFT OUTER JOIN BMS_OR_ORDER o ON b.order_id = o.id
 		LEFT OUTER JOIN BMS_BASE_PROCESS p ON b.latest_process_id = p.id
 		WHERE b.order_id = #{order_id} 
@@ -292,13 +292,13 @@
 	
 	<select id="queryConfigAllotList" parameterType="Map" resultType="Map">
 		SELECT fo.id factory_order_id,o.id order_id,c.id config_id,o.order_no,CONCAT(o.order_name,t.bus_type_code,o.order_qty,'台') AS order_name_str,
-		f.name factory_name,fo.production_qty,c.order_config_name,fc.product_qty,c.config_qty,fc.sequence,c.customer,f.id factory_id
+		f.factory_name,fo.production_qty,c.order_config_name,fc.product_qty,c.config_qty,fc.sequence,c.customer,f.id factory_id
 		FROM BMS_OR_ORDER o
 		LEFT JOIN BMS_OR_ORDER_CONFIG c ON o.id=c.order_id
 		LEFT JOIN (select fo.id,fo.order_id,fo.factory_id,sum(fo.production_qty) production_qty 
 		from BMS_OR_FACTORY_ORDER fo 
 		group by fo.order_id,fo.factory_id) fo on fo.order_id=o.id
-		LEFT JOIN BMS_BASE_ORG f on fo.factory_id=f.id
+		LEFT JOIN BMS_BASE_FACTORY f on fo.factory_id=f.id
 		LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id=t.id
 		LEFT JOIN BMS_OR_FACTORY_ORDER_CONFIG fc ON fc.order_config_id=c.id and fo.order_id=fc.order_id and fo.factory_id=fc.factory_id
 		WHERE 1=1
@@ -327,7 +327,7 @@
 		LEFT JOIN (select fo.id,fo.order_id,fo.factory_id,sum(fo.production_qty) production_qty 
 		from BMS_OR_FACTORY_ORDER fo 
 		group by fo.order_id,fo.factory_id) fo on fo.order_id=o.id
-		LEFT JOIN BMS_BASE_ORG f on fo.factory_id=f.id
+		LEFT JOIN BMS_BASE_FACTORY f on fo.factory_id=f.id
 		LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id=t.id
 		LEFT JOIN BMS_OR_FACTORY_ORDER_CONFIG fc ON fc.order_config_id=c.id and fo.order_id=fc.order_id and fo.factory_id=fc.factory_id
 		WHERE 1=1
@@ -393,7 +393,7 @@
 	
 	<select id="queryOrderQueryList" parameterType="Map" resultType="Map">
 		select o.id,CONCAT(o.order_no,' ',o.order_name,t.bus_type_code,' ',o.order_qty,'台') AS order_desc,o.order_type,o.delivery_date,
-		f.name factory_name,fo.production_qty,c.order_config_name,fc.product_qty,fc.sequence,
+		f.factory_name,fo.production_qty,c.order_config_name,fc.product_qty,fc.sequence,
 		(SELECT ifnull(SUM(p.quantity),0) FROM BMS_PD_WORKSHOP_SUPPLY p WHERE p.order_id = o.id AND p.factory_id = fo.factory_id AND supply_workshop ='自制件' AND receive_workshop ='部件') as zzj_offline_count,
 		(SELECT ifnull(SUM(p.online_real_qty),0) FROM BMS_PD_PARTS_PLAN_FINISH p WHERE p.order_id = o.id AND p.factory_id = fo.factory_id AND p.parts_id=194) as parts_online_count,
 		(SELECT ifnull(SUM(p.offline_real_qty),0) FROM BMS_PD_PARTS_PLAN_FINISH p WHERE p.order_id = o.id AND p.factory_id = fo.factory_id AND p.parts_id=194) as parts_offline_count,
@@ -411,7 +411,7 @@
 		from BMS_OR_ORDER o
 		left join BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id
 		left join BMS_OR_FACTORY_ORDER fo on fo.order_id=o.id
-		left join BMS_BASE_ORG f on fo.factory_id=f.id
+		left join BMS_BASE_FACTORY f on fo.factory_id=f.id
 		left join BMS_OR_FACTORY_ORDER_CONFIG fc on fc.order_id=o.id and fc.factory_id=fo.factory_id
 		left join BMS_OR_ORDER_CONFIG c on fc.order_config_id=c.id
 		where 1=1

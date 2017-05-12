@@ -83,9 +83,9 @@
 	</update>
 	
 	<select id="getUserList" parameterType="Map" resultType="com.byd.bms.util.model.BmsBaseUser">
-		SELECT U.*,F.factory_name,D.department FROM BMS_BASE_USER U
+		SELECT U.*,F.factory_name FROM BMS_BASE_USER U
 		LEFT JOIN BMS_BASE_FACTORY F ON U.factory_id = F.id
-		LEFT JOIN BMS_BASE_DEPARTMENT D ON U.department_id = D.id where isdelete = 0 
+		where isdelete = 0 
 		<if test="search_key!=''">
 		<![CDATA[
 		AND (U.staff_number LIKE '%${search_key}%' OR U.username LIKE '%${search_key}%' OR U.display_name LIKE '%${search_key}%' OR U.email LIKE '%${search_key}%' 

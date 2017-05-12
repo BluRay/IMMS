@@ -5,14 +5,14 @@
 	<select id="checkImportPlanFactory" parameterType="Map" resultType="String">
 		SELECT id FROM BMS_FACTORY_ORDER WHERE order_id = (SELECT
 		id FROM BMS_OR_ORDER WHERE order_no=#{order_no})
-		AND factory_id = (SELECT id FROM BMS_BASE_ORG WHERE name = #{factory_name} AND org_type = '2')
+		AND factory_id = (SELECT foreign_id FROM BMS_BASE_ORG WHERE name = #{factory_name} AND org_type = '2')
 		limit 1
 	</select>
 	
 	<insert id="insertPlanMaster" useGeneratedKeys="true" keyProperty="id" parameterType="com.byd.bms.plan.model.PlanMasterPlan">
 		INSERT INTO BMS_PLAN_MASTER_PLAN
 		(version, order_id, factory_id, plan_code_value, plan_month, flag, D1, D2, D3, D4, D5, D6, D7, D8, D9, D10, D11, D12, D13, D14, D15, D16, D17, D18, D19, D20, D21, D22, D23, D24, D25, D26, D27, D28, D29, D30, D31, creator_id, create_date)
-		VALUES(#{version}, (SELECT id FROM BMS_OR_ORDER WHERE order_no = #{order_no}), (SELECT id FROM BMS_BASE_ORG WHERE name = #{factory_name} AND org_type = '2'),
+		VALUES(#{version}, (SELECT id FROM BMS_OR_ORDER WHERE order_no = #{order_no}), (SELECT foreign_id FROM BMS_BASE_ORG WHERE name = #{factory_name} AND org_type = '2'),
 		(SELECT value FROM BMS_BASE_KEY WHERE key_code = 'PLAN_CODE' AND key_name = #{plan_code_keyname}),
 		#{plan_month}, #{flag}, #{D1}, #{D2}, #{D3}, #{D4}, #{D5}, #{D6}, #{D7}, #{D8}, #{D9}, #{D10}, 
 		#{D11}, #{D12}, #{D13}, #{D14}, #{D15}, #{D16}, #{D17}, #{D18}, #{D19}, #{D20}, 
@@ -25,7 +25,7 @@
 		m.version,o.order_no,f.name,u.display_name,create_date FROM
 		BMS_PLAN_MASTER_PLAN m
 		LEFT JOIN BMS_OR_ORDER o ON m.order_id = o.id
-		LEFT JOIN BMS_BASE_ORG f ON m.factory_id = f.id
+		LEFT JOIN BMS_BASE_ORG f ON m.factory_id = f.foreign_id AND f.org_type = 2 
 		LEFT JOIN BMS_BASE_USER u ON m.creator_id = u.id where 1=1
 		<if test="factory_id!=''">
 			and m.factory_id = #{factory_id}
@@ -47,7 +47,7 @@
 		sumQty, k.key_name AS plan_code_keyname, m.*,o.order_no,f.name AS factory_name
 		FROM BMS_PLAN_MASTER_PLAN m
 		LEFT JOIN BMS_OR_ORDER o ON m.order_id = o.id
-		LEFT JOIN BMS_BASE_ORG f ON m.factory_id = f.id
+		LEFT JOIN BMS_BASE_ORG f ON m.factory_id = f.foreign_id  AND f.org_type = 2 
 		LEFT JOIN
 		BMS_BASE_KEY k ON m.plan_code_value=k.value AND key_code = 'PLAN_CODE' 
 		where 1=1
@@ -96,7 +96,7 @@
 		version,order_id,factory_id,plan_code_value,plan_month,flag,D1,D2,D3,D4,D5,D6,D7,D8,D9,D10,D11,D12,D13,D14,D15,D16,D17,
 		D18,D19,D20,D21,D22,D23,D24,D25,D26,D27,D28,D29,D30,D31,creator_id,create_date)
 		values(
-		#{version},(SELECT id FROM BMS_OR_ORDER WHERE order_no=#{order_no}),(SELECT id FROM BMS_BASE_ORG WHERE name = #{factory_name} AND org_type = '2'),
+		#{version},(SELECT id FROM BMS_OR_ORDER WHERE order_no=#{order_no}),(SELECT foreign_id FROM BMS_BASE_ORG WHERE name = #{factory_name} AND org_type = '2'),
 		(SELECT value FROM BMS_BASE_KEY WHERE key_code = 'PLAN_CODE' AND key_name = #{plan_code_keyname}),#{plan_month},#{flag},#{D1},#{D2},#{D3},#{D4},#{D5},#{D6},#{D7},
 		#{D8},#{D9},#{D10},#{D11},#{D12},#{D13},#{D14},#{D15},#{D16},#{D17},#{D18},#{D19},#{D20},#{D21},#{D22},#{D23},#{D24},
 		#{D25},#{D26},#{D27},#{D28},#{D29},#{D30},#{D31},#{creator_id},#{create_date})
@@ -268,8 +268,8 @@
 	SELECT P.*,O1.name AS factory_name,O2.name AS workshop_name,K.key_name as reason_type,
 	K2.key_name AS duty_department 
 	FROM BMS_PLAN_STOPLINE P
-	LEFT JOIN BMS_BASE_ORG O1 ON P.factory_id = O1.id
-	LEFT JOIN BMS_BASE_ORG O2 ON P.workshop_id = O2.id
+	LEFT JOIN BMS_BASE_ORG O1 ON P.factory_id = O1.foreign_id AND O1.org_type = 2 
+	LEFT JOIN BMS_BASE_ORG O2 ON P.workshop_id = O2.foreign_id AND O2.org_type = 5 
 	LEFT JOIN BMS_BASE_KEY K ON P.reason_type_id = K.value AND K.key_code='ABNORMAL_REASON'
 	LEFT JOIN BMS_BASE_KEY K2 ON P.duty_department_id = K2.value AND K2.key_code='EXCEPTION_RESPONSIBILITY_DEPARTMENT'
 	WHERE 1=1 
@@ -310,8 +310,8 @@
 	<select id="getPauseTotalCount" parameterType="Map" resultType="int">
 	SELECT COUNT(P.id)
 	FROM BMS_PLAN_STOPLINE P
-	LEFT JOIN BMS_BASE_ORG O1 ON P.factory_id = O1.id
-	LEFT JOIN BMS_BASE_ORG O2 ON P.workshop_id = O2.id
+	LEFT JOIN BMS_BASE_ORG O1 ON P.factory_id = O1.foreign_id AND O1.org_type = 2 
+	LEFT JOIN BMS_BASE_ORG O2 ON P.workshop_id = O2.foreign_id AND O2.org_type = 5 
 	LEFT JOIN BMS_BASE_KEY K ON P.reason_type_id = K.value AND K.key_code='ABNORMAL_REASON'
 	WHERE 1=1 
 	<if test="factory_id!='' and factory_id!=null">
@@ -352,5 +352,12 @@
 		WHERE id=#{id};
 		]]>
 	</update>
+	
+	<select id="getExceptionList" parameterType="Map" resultType="com.byd.bms.production.model.ProductionException">
+		SELECT * FROM BMS_PD_PRODUCTION_EXCEPTION WHERE 1=1
+	</select>
+	<select id="getExceptionCount" parameterType="Map" resultType="int">
+		SELECT COUNT(id) FROM BMS_PD_PRODUCTION_EXCEPTION WHERE 1=1
+	</select>
 	
 </mapper>

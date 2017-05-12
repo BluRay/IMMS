@@ -28,12 +28,20 @@ public class ProductionController extends BaseController {
 	@Autowired
 	protected IProductionService productionService;
 	
+	/**
+	 * 生产模块首页
+	 * @return
+	 */
 	@RequestMapping("/index")
 	public ModelAndView index(){
 		mv.setViewName("production/productionIndex");
 		return mv;
 	}
 	
+	/**
+	 * 车间工序页面
+	 * @return
+	 */
 	@RequestMapping("/executionindex")
 	public ModelAndView executionindex(){
 		mv.getModelMap().addAttribute("workshop", request.getParameter("workshop"));
@@ -41,6 +49,10 @@ public class ProductionController extends BaseController {
 		return mv;
 	}
 	
+	/**
+	 * 获取线别工序列表
+	 * @return
+	 */
 	@RequestMapping("/getLineProcessList")
 	@ResponseBody
 	public ModelMap getLineProcessList(){
@@ -57,9 +69,33 @@ public class ProductionController extends BaseController {
 		return model;
 	}
 	
+	/**
+	 * 生产扫描页面
+	 * @return
+	 */
 	@RequestMapping("/execution")
 	public ModelAndView execution(){
 		mv.setViewName("production/productionExecution");
 		return mv;
+	}
+	
+	/**
+	 * 车辆扫描后获取车辆信息（订单、车间、线别、当前工序、状态、颜色、关键零部件信息、订单配置信息）
+	 * @return
+	 */
+	@RequestMapping("/getBusInfo")
+	@ResponseBody
+	public ModelMap getBusInfo(){
+		//封装查询条件
+		String bus_number=request.getParameter("bus_number");
+		
+		//查询车辆基本信息
+		
+		//查询关键零部件信息列表
+		
+		//查询订单配置信息
+		
+		
+		return model;
 	}
 }

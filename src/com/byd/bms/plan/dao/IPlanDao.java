@@ -15,6 +15,7 @@ import com.byd.bms.plan.model.PlanMasterIndex;
 import com.byd.bms.plan.model.PlanMasterPlan;
 import com.byd.bms.plan.model.PlanPause;
 import com.byd.bms.plan.model.PlanProductionPlan;
+import com.byd.bms.production.model.ProductionException;
 import com.byd.bms.util.model.BmsBaseOperateChangeLog;
 
 @Repository(value="planDao")
@@ -46,4 +47,6 @@ public interface IPlanDao {
 	public List<PlanPause> getPauseList(Map<String,Object> queryMap);
 	public int getPauseTotalCount(Map<String,Object> queryMap);
 	public int updatePauseInfo(PlanPause pause);
+	public List<ProductionException> getExceptionList(Map<String,Object> queryMap);
+	public int getExceptionCount(Map<String,Object> queryMap);
 }

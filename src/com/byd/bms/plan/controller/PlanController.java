@@ -86,6 +86,12 @@ public class PlanController extends BaseController{
         return mv;  
     }
 	
+	@RequestMapping("/busTransfer")
+	public ModelAndView busTransfer(){			//车辆调动
+		mv.setViewName("plan/busTransfer");
+        return mv;
+	}
+	
 	@RequestMapping(value="/uploadMasterPlan",method=RequestMethod.POST)
 	@ResponseBody
 	public ModelMap uploadMasterPlan(@RequestParam(value="file",required=false) MultipartFile file){
@@ -842,7 +848,16 @@ public class PlanController extends BaseController{
 	@RequestMapping("/getExceptionList")
 	@ResponseBody
 	public ModelMap getExceptionList(){
+		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
+		int start=(request.getParameter("start")!=null)?Integer.parseInt(request.getParameter("start")):0;		//分页数据起始数
+		int length=(request.getParameter("length")!=null)?Integer.parseInt(request.getParameter("length")):500;	//每一页数据条数
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("draw", draw);
+		condMap.put("start", start);
+		condMap.put("length", length);
 		
+		Map<String,Object> list = planService.getExceptionList(condMap);
+		model.addAllAttributes(list);
 		model = mv.getModelMap();
 		return model;
 	}

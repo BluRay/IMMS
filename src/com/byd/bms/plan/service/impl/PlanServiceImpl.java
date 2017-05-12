@@ -23,6 +23,7 @@ import com.byd.bms.plan.model.PlanIssuanceCount;
 import com.byd.bms.plan.model.PlanIssuanceTotal;
 import com.byd.bms.plan.model.PlanMasterIndex;
 import com.byd.bms.plan.service.IPlanService;
+import com.byd.bms.production.model.ProductionException;
 import com.byd.bms.util.ExcelModel;
 import com.byd.bms.util.model.BmsBaseOperateChangeLog;
 
@@ -388,6 +389,17 @@ public class PlanServiceImpl implements IPlanService {
 	@Override
 	public int updatePauseInfo(PlanPause pause) {
 		return planDao.updatePauseInfo(pause);
+	}
+
+	@Override
+	public Map<String, Object> getExceptionList(Map<String, Object> queryMap) {
+		int totalCount=0;
+		List<ProductionException> datalist = planDao.getExceptionList(queryMap);
+		totalCount = planDao.getExceptionCount(queryMap);
+		Map<String, Object> result = new HashMap<String,Object>();
+		result.put("total", totalCount);
+		result.put("rows", datalist);
+		return result;
 	}
 	
 	

@@ -212,9 +212,9 @@ $(document).ready(function () {
 	
 	function ajaxValidate (){
 		$.ajax({
-            type: "get",
+            type: "post",
             dataType: "json",
-            url : "production!validateBusInfo.action",
+            url : "getBusInfo",
             data: {
             	"bus_number": $('#vinText').attr("value"),
                 "factory_id":$("#exec_factory").val(),
@@ -486,9 +486,10 @@ $(document).ready(function () {
 	
 	$("#exec_process").change(function(){
 		$("#exec_processname").val('');
-		alert($(this).find("").attr("process"));
+		var process_code=$("#exec_process :selected").text();
+		var process_name=$(this).find("option:contains('"+process_code+"')").attr("process");
 		if($("#exec_line").val() !=''){
-			$("#exec_processname").val($(this).attr("process"));
+			$("#exec_processname").val(process_name);
 			ajaxGetPartsList();
 		}
 	});
@@ -516,9 +517,7 @@ $(document).ready(function () {
 			}
 		});
 	}
-	
-	   
-	
+
 })
 
 
@@ -586,24 +585,6 @@ function getAllProcessSelect() {
 		}
 	});
 }
-
-/*function getProcessInfo(processID){
-	$.ajax({
-		url : "common!getProcessInfo.action",
-		dataType : "json",
-		data : {processID:processID},
-		async : false,
-		error : function(response) {
-			alert(response.message);
-		},
-		success : function(response) {
-			var list = response.data;
-			//alert(list[0].process_name);
-			$("#exec_processname").val(list[0].process_name);
-			cur_key_name = list[0].cur_key_name;
-		}
-	});
-}*/
 
 function toggleVinHint (showVinHint) {
     if(showVinHint){

@@ -336,4 +336,27 @@ function formatDate(date) {
 	return (myyear+"-"+mymonth + "-" + myweekday); 
 }
 
+/**
+ * 权限控制的下拉组件，当选择全部选项时，获取该组件下所有的选项以逗号分隔返回,否则返回选择的选项
+ * elementId:下拉组件id
+ * valName:name表示获取下拉选项text，val表示获取下拉选项value值
+ * return 
+ */
+function getAllFromOptions(elementId,valName){
+	var selectVal="";
+	var selectVal_ALL="";
+	$(elementId+" option").each(function(){
+		if(valName=="name"){
+			selectVal_ALL+=$(this).text()+",";
+		}else
+			selectVal_ALL+=$(this).val()+",";		
+	});
+	if(valName=="name"){
+		selectVal=$(elementId+" :selected").text()=="全部"?selectVal_ALL:$(elementId+" :selected").text();
+	}else
+		selectVal=$(elementId+" :selected").text()=="全部"?selectVal_ALL:$(elementId).val();
+	
+	return selectVal;
+	
+}
 

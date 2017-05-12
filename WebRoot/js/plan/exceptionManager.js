@@ -2,9 +2,9 @@ $(document).ready(function () {
 	initPage();
 	
 	function initPage(){
-		//getFactorySelect("plan/pauseManager",'',"#search_factory",null,'id');
-		//getWorkshopSelect("plan/pauseManager",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
-		//setSelects();
+		getFactorySelect("plan/pauseManager",'',"#search_factory",null,'id');
+		getWorkshopSelect("plan/pauseManager",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
+		setSelects();
 	};
 	
 	$("#btnQuery").click(function () {
@@ -23,7 +23,7 @@ $(document).ready(function () {
 });
 
 function ajaxQuery(){
-	$table.bootstrapTable('refresh', {url: '../order/getOrderDetailList'});
+	$table.bootstrapTable('refresh', {url: 'getExceptionList'});
 	$("#btnQuery").removeAttr("disabled");
 }
 
@@ -33,12 +33,12 @@ function ajaxQuery(){
 function initTable() {
     $table.bootstrapTable({
         height: getHeight(),
-        url:'../order/getOrderDetailList',
+        url:'getExceptionList',
         striped:true,
         paginationVAlign:'bottom',
         searchOnEnterKey:true,
-        fixedColumns: false,			//冻结列
-        fixedNumber: 0,					//冻结列数
+        fixedColumns: false,				//冻结列
+        fixedNumber: 0,		//冻结列数
         queryParams:function(params) {
         	var workshopAll="";
         	$("#workshop option").each(function(){
@@ -51,17 +51,105 @@ function initTable() {
         columns: [
         [
             {
-            	field: 'id',title: '&nbsp;&nbsp;&nbsp;月份&nbsp;&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
+            	field: 'factory',title: '&nbsp;&nbsp;&nbsp;生产工厂&nbsp;&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
                 sortable: true,visible: true,footerFormatter: totalTextFormatter,
                 cellStyle:function cellStyle(value, row, index, field) {
 	        	return {css: {"padding-left": "3px", "padding-right": "2px","font-size":"13px"}};
 	        	}
             },{
-            	field: 'id',title: '&nbsp;&nbsp;工号&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
+            	field: 'workshop',title: '&nbsp;&nbsp;生产车间&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
                 sortable: false,visible: true,footerFormatter: totalTextFormatter,
                 cellStyle:function cellStyle(value, row, index, field) {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
     	        	}
+            },{
+            	field: 'line',title: '&nbsp;&nbsp;线别&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
+                sortable: false,visible: true,footerFormatter: totalTextFormatter,
+                cellStyle:function cellStyle(value, row, index, field) {
+    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
+    	        	}
+            },{
+            	field: 'process',title: '&nbsp;&nbsp;工序&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
+                sortable: false,visible: true,footerFormatter: totalTextFormatter,
+                cellStyle:function cellStyle(value, row, index, field) {
+    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
+    	        	}
+            },{
+            	field: 'bus_number',title: '&nbsp;&nbsp;车号&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
+                sortable: false,visible: true,footerFormatter: totalTextFormatter,
+                cellStyle:function cellStyle(value, row, index, field) {
+    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
+    	        	}
+            },{
+            	field: 'reason_type_id',title: '&nbsp;&nbsp;异常类型 &nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
+                sortable: false,visible: true,footerFormatter: totalTextFormatter,
+                cellStyle:function cellStyle(value, row, index, field) {
+    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
+    	        	}
+            },{
+            	field: 'detailed_reasons',title: '&nbsp;&nbsp;详细原因&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
+                sortable: false,visible: true,footerFormatter: totalTextFormatter,
+                cellStyle:function cellStyle(value, row, index, field) {
+    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
+    	        	}
+            },{
+            	field: 'editor_id',title: '&nbsp;&nbsp;维护人&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
+                sortable: false,visible: true,footerFormatter: totalTextFormatter,
+                cellStyle:function cellStyle(value, row, index, field) {
+    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
+    	        	}
+            },{
+            	field: 'edit_date',title: '&nbsp;&nbsp;维护时间&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
+                sortable: false,visible: true,footerFormatter: totalTextFormatter,
+                cellStyle:function cellStyle(value, row, index, field) {
+    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
+    	        	}
+            },{
+            	field: 'start_time',title: '&nbsp;&nbsp;开始时间&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
+                sortable: false,visible: true,footerFormatter: totalTextFormatter,
+                cellStyle:function cellStyle(value, row, index, field) {
+    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
+    	        	}
+            },{
+            	field: 'pfinish_time',title: '&nbsp;&nbsp;预计结束时间&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
+                sortable: false,visible: true,footerFormatter: totalTextFormatter,
+                cellStyle:function cellStyle(value, row, index, field) {
+    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
+    	        	}
+            },{
+            	field: 'severity_level_id',title: '&nbsp;&nbsp;严重等级&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
+                sortable: false,visible: true,footerFormatter: totalTextFormatter,
+                cellStyle:function cellStyle(value, row, index, field) {
+    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
+    	        	}
+            },{
+            	field: 'duty_department_id',title: '&nbsp;&nbsp;责任部门&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
+                sortable: false,visible: true,footerFormatter: totalTextFormatter,
+                cellStyle:function cellStyle(value, row, index, field) {
+    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
+    	        	}
+            },{
+            	field: 'measures_id',title: '&nbsp;&nbsp;处理措施&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
+                sortable: false,visible: true,footerFormatter: totalTextFormatter,
+                cellStyle:function cellStyle(value, row, index, field) {
+    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
+    	        	}
+            },{
+            	field: 'status',title: '&nbsp;&nbsp;状态&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
+                sortable: false,visible: true,footerFormatter: totalTextFormatter,
+                cellStyle:function cellStyle(value, row, index, field) {
+    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
+    	        	}
+            },{
+            	field: 'status',title: '&nbsp;&nbsp;操作&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
+                sortable: false,visible: true,footerFormatter: totalTextFormatter,
+                cellStyle:function cellStyle(value, row, index, field) {
+    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};},
+    	        formatter:function(value, row, index){
+    	        	return "<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"修改\" onclick='edit(" + row['staff_number'] + 
+		                    ")' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;<i class=\"glyphicon glyphicon-ok bigger-130 showbus\" title=\"修改\" onclick='edit(" + row['staff_number'] + 
+		                    ")' style='color:blue;cursor: pointer;'></i>";
+    	        }
             }
         ]
     ]

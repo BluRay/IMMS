@@ -69,7 +69,7 @@
 						</table>
 					</div>
 					<div id="toolbar"></div>
-					<table style="font-weight:normal" id="table" data-toolbar="#toolbar" data-search="false" data-show-refresh="true"
+					<table  style="font-weight:normal;width:1500px;" id="table" data-toolbar="#toolbar" data-search="false" data-show-refresh="true"
 				           data-show-toggle="false" data-show-columns="true" data-show-export="true" data-detail-view="false"
 				           data-detail-formatter="detailFormatter" data-minimum-count-columns="2" data-show-pagination-switch="true"
 				           data-pagination="true" data-id-field="id" data-page-list="[50, 100, 200, 500, ALL]"
@@ -106,7 +106,6 @@
 	<script type="text/javascript" src="../assets/js/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="../assets/js/bootstrap3-typeahead.js"></script>
 	<script type="text/javascript" src="../js/jquery.form.js"></script>
-	<script type="text/javascript" src="../js/bootstrap-table.js"></script>
 	
 	<script type="text/javascript" src="../js/datePicker/WdatePicker.js"></script>
 	<script type="text/javascript" src="../js/common.js"></script>

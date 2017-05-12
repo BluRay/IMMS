@@ -24,9 +24,8 @@
 	</resultMap>
 
 	<select id="getUser" parameterType="String" resultMap="userMap">
-		select u.*,d.department,f.factory_name,s.workshop_org,s.workgroup_org,s.team_org
-		from BMS_BASE_USER u left join
-		BMS_BASE_DEPARTMENT d on u.department_id=d.id
+		select u.*,f.factory_name,s.workshop_org,s.workgroup_org,s.team_org
+		from BMS_BASE_USER u 
 		left join BMS_BASE_FACTORY f on u.factory_id=f.id 
 		left join BMS_HR_STAFF s on s.staff_number=u.staff_number
 		where u.staff_number=#{userName} and u.isdelete='0'
