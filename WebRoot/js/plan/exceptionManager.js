@@ -2,14 +2,20 @@ $(document).ready(function () {
 	initPage();
 	
 	function initPage(){
-		getFactorySelect("plan/pauseManager",'',"#search_factory",null,'id');
-		getWorkshopSelect("plan/pauseManager",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
+		getFactorySelect("plan/exceptionManager",'',"#search_factory",null,'id');
+		getWorkshopSelect("plan/exceptionManager",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
 		setSelects();
 	};
 	
+	$('#search_factory').change(function(){ 
+		getWorkshopSelect("plan/exceptionManager",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
+	})
+	
+	$('#edit_factory').change(function(){ 
+		getWorkshopSelect("plan/exceptionManager",$("#edit_factory :selected").text(),"","#edit_workshop",null,"id");
+	})
+	
 	$("#btnQuery").click(function () {
-		console.log("---->btnQuery");
-		$("#btnQuery").attr("disabled","disabled");
 		eachSeries(scripts, getScript, initTable);
 		ajaxQuery();
     });
@@ -18,16 +24,148 @@ $(document).ready(function () {
 		$("#search_severity_level").append("<option value=''>全部</option><option value='0'>不影响</option><option value='1'>普通</option><option value='2'>严重</option>");
 		$("#search_status").append("<option value=''>全部</option><option value='0'>处理中</option><option value='1'>处理完成</option>");
 		$("#search_measures").append("<option value=''>全部</option><option value='0'>忽略</option><option value='1'>异常</option><option value='2'>停线</option>");
-		
+		$("#edit_severity_level").append("<option value='0'>不影响</option><option value='1'>普通</option><option value='2'>严重</option>");
+		$("#edit_measures").append("<option value='0'>忽略</option><option value='1'>异常</option><option value='2'>停线</option>");
+		getKeysSelect("EXCEPTION_RESPONSIBILITY_DEPARTMENT", "", "#edit_duty_department","noall","value");
 	}
 });
 
 function ajaxQuery(){
 	$table.bootstrapTable('refresh', {url: 'getExceptionList'});
-	$("#btnQuery").removeAttr("disabled");
 }
 
+function edit(id){
+	getFactorySelect("plan/exceptionManager",'',"#edit_factory",null,'id');
+	getWorkshopSelect("plan/exceptionManager",$("#edit_factory :selected").text(),"","#edit_workshop",null,"id");
+	getReasonTypeSelect();
+	$("#dialog-edit").removeClass('hide').dialog({
+		resizable: false,
+		title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 编辑异常信息</h4></div>',
+		title_html: true,
+		width:'550px',
+		modal: true,
+		buttons: [{
+					text: "取消",
+					"class" : "btn btn-minier",
+					click: function() {$( this ).dialog( "close" );} 
+				},
+				{
+					text: "保存",
+					id:"btn_ok",
+					"class" : "btn btn-success btn-minier",
+					click: function() {
+						btnEditConfirm();
+						$( this ).dialog( "close" );
+						ajaxQuery();
+					} 
+				}
+			]
+	});
+	
+	$.ajax({
+		url : "getExceptionList",
+		dataType : "json",
+		data : {"id":id},
+		async : false,
+		error : function(response) {
+			alert(response.message)
+		},
+		success : function(response) {
+			$.each(response.rows,function(index,value){
+				if(index == 0){
+					$("#exception_id").val(value.id);
+					$("#edit_factory").find("option[text='"+value.factory+"']").attr("selected", true);
+					$("#edit_workshop").find("option[text='"+value.workshop+"']").attr("selected", true);
+					$("#edit_line").val(value.line);
+					getProcessList(value.factory,value.workshop,value.line)
+					$("#edit_busNumber").val(value.bus_number);
+					$("#edit_reason_type").val(value.reason_type_id);
+					$("#edit_detailed_reason").val(value.detailed_reasons);
+					$("#edit_severity_level").val(value.severity_level_id);
+					$("#edit_duty_department").find("option[keyvalue='"+value.duty_department_id+"']").attr("selected", true);
+					$("#edit_measures").val(value.measures_id);
+					
+				}
+			});
+		}
+	});
+	
+}
 
+function getProcessList(factory,workshop,line){
+	$("#edit_process").empty();
+	$.ajax({
+		url : "../common/queryProcessList",
+		dataType : "json",
+		data : {
+			"factory":factory,
+			"workshop":workshop,
+			"line":line
+		},
+		async : false,
+		error : function(response) {
+			alert(response.message)
+		},
+		success : function(response) {
+			var strs = "";
+		    $.each(response.data, function(index, value) {
+		    	strs += "<option value=" + value.id + ">" + value.process_name + "</option>";
+		    });
+		    $("#edit_process").append(strs);
+		}
+	});
+}
+
+function getReasonTypeSelect() {
+	$("#edit_reason_type").empty();
+	$.ajax({
+		url : "../common/getReasonTypeSelect",
+		dataType : "json",
+		data : {},
+		async : false,
+		error : function(response) {
+			alert(response.message)
+		},
+		success : function(response) {
+			var strs = "";
+		    $.each(response.data, function(index, value) {
+		    	strs += "<option value=" + value.value + ">" + value.key_name + "</option>";
+		    });
+		    $("#edit_reason_type").append(strs);
+		}
+	});
+}
+
+function btnEditConfirm(){
+	$.ajax({
+		url : "editExceptionInfo",
+		dataType : "json",
+		data : {
+			"id":$('#exception_id').val(),
+			"factory":$('#edit_factory').find("option:selected").text(),
+			"workshop":$('#edit_workshop').find("option:selected").text(),
+			"line":$('#edit_line').val(),
+			"process":$('#edit_process').find("option:selected").text(),
+			"reason_type_id":$('#edit_reason_type').val(),
+			"detailed_reasons":$('#edit_detailed_reason').val(),
+			"severity_level_id":$('#edit_severity_level').val(),
+			"duty_department_id":$("#edit_duty_department :selected").attr('keyvalue'),
+			"measures_id":$('#edit_measures').val(),
+		},
+		async : false,
+		error : function(response) {
+			alert(response.message)
+		},
+		success : function(response) {
+			$.gritter.add({
+				title: '系统提示：',
+				text: '<h5>保存成功！</h5>',
+				class_name: 'gritter-info'
+			});
+		}
+	});
+	
+}
 
 //----------START bootstrap initTable ----------
 function initTable() {
@@ -121,9 +259,15 @@ function initTable() {
                 sortable: false,visible: true,footerFormatter: totalTextFormatter,
                 cellStyle:function cellStyle(value, row, index, field) {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
-    	        	}
+    	        	},
+	        	 formatter:function(value, row, index){
+	        		 if(value === "1"){str = "普通"}
+	        		 if(value === "2"){str = "严重"}
+	        		 if(value === "0"){str = "不影响"}
+	        		 return  str;
+	        	 }
             },{
-            	field: 'duty_department_id',title: '&nbsp;&nbsp;责任部门&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
+            	field: 'duty_department',title: '&nbsp;&nbsp;责任部门&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
                 sortable: false,visible: true,footerFormatter: totalTextFormatter,
                 cellStyle:function cellStyle(value, row, index, field) {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
@@ -133,7 +277,13 @@ function initTable() {
                 sortable: false,visible: true,footerFormatter: totalTextFormatter,
                 cellStyle:function cellStyle(value, row, index, field) {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
-    	        	}
+    	        	},
+	        	 formatter:function(value, row, index){
+	        		 if(value === "1"){str = "异常"}
+	        		 if(value === "2"){str = "停线"}
+	        		 if(value === "0"){str = "忽略"}
+	        		 return  str;
+	        	 }
             },{
             	field: 'status',title: '&nbsp;&nbsp;状态&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
                 sortable: false,visible: true,footerFormatter: totalTextFormatter,
@@ -146,8 +296,8 @@ function initTable() {
                 cellStyle:function cellStyle(value, row, index, field) {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};},
     	        formatter:function(value, row, index){
-    	        	return "<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"修改\" onclick='edit(" + row['staff_number'] + 
-		                    ")' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;<i class=\"glyphicon glyphicon-ok bigger-130 showbus\" title=\"修改\" onclick='edit(" + row['staff_number'] + 
+    	        	return "<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"修改\" onclick='edit(" + row['id'] + 
+		                    ")' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;<i class=\"glyphicon glyphicon-ok bigger-130 showbus\" title=\"修改\" onclick='confirm(" + row['id'] + 
 		                    ")' style='color:blue;cursor: pointer;'></i>";
     	        }
             }

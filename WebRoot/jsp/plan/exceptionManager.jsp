@@ -8,6 +8,9 @@
 		
 		<link rel="stylesheet" href="../css/bootstrap-table.css">
 		<link rel="stylesheet" href="../css/bootstrap-editable.css">
+		<link rel="stylesheet" href="../assets/css/jquery-ui.min.css" />
+		<link rel="stylesheet" href="../assets/css/jquery-ui.custom.min.css" />
+		<link rel="stylesheet" href="../assets/css/jquery.gritter.css" />
 		<meta name="description" content="Common Buttons &amp; Icons" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 	</head>
@@ -76,6 +79,38 @@
 				           data-show-footer="false" data-side-pagination="server" data-response-handler="responseHandler">
 				    </table>
 			</div><!-- /.main-content -->
+			
+			<div id="dialog-edit" class="hide" style="align:center;width:700px;height:500px">
+				<form>
+					<table>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">生产工厂：</td><td style="width:150px"><select id="edit_factory" class="form-control" style="width:150px"></select><input type="text" style="display:none" id="exception_id" class="input-small" /></td>
+						<td align="right" style="width:100px">生产车间：</td><td style="width:150px"><select id="edit_workshop" class="form-control" style="width:120px"></select></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">生产线别：</td><td style="width:150px"><select id="edit_line" class="form-control" style="width:150px"><option value='A'>A线</option><option value='B'>B线</option></select></td>
+						<td align="right" style="width:100px">生产工序：</td><td style="width:150px"><select id="edit_process" class="form-control" style="width:120px"></select></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">车号：</td><td style="width:150px"><input id="edit_busNumber" disabled="disabled" placeholder="车号..." style="width:150px" type="text"></td>
+						<td align="right" style="width:100px">原因：</td><td style="width:150px"><select id="edit_reason_type" class="form-control" style="width:120px"></select></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right">详细原因：</td><td colspan=3><input id="edit_detailed_reason" placeholder="详细原因..." style="width:370px" type="text"></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">严重等级：</td><td style="width:150px"><select id="edit_severity_level" class="form-control" style="width:150px"></select></td>
+						<td align="right" style="width:100px">责任部门：</td><td style="width:150px"><select id="edit_duty_department" class="form-control" style="width:120px"></select></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">处理措施：</td><td style="width:150px"><select id="edit_measures" class="form-control" style="width:150px"></select></td>
+						<td align="right" style="width:100px"></td><td style="width:150px"></td>
+					</tr>
+					
+					</table>
+				</form>
+			</div>
+			
 		</div>
 			<!-- 脚 -->
 			<%-- <jsp:include page="footer.jsp" flush="true"/> --%>
@@ -103,6 +138,10 @@
 	}
 	
 </style>
+	<script src="../assets/js/fuelux/fuelux.tree.min.js"></script>
+	<script src="../assets/js/jquery.ui.touch-punch.min.js"></script>
+	<script src="../assets/js/jquery.gritter.min.js"></script>
+	
 	<script type="text/javascript" src="../assets/js/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="../assets/js/bootstrap3-typeahead.js"></script>
 	<script type="text/javascript" src="../js/jquery.form.js"></script>

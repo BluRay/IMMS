@@ -49,4 +49,5 @@ public interface IPlanDao {
 	public int updatePauseInfo(PlanPause pause);
 	public List<ProductionException> getExceptionList(Map<String,Object> queryMap);
 	public int getExceptionCount(Map<String,Object> queryMap);
+	public int updateExceptionInfo(ProductionException exception);
 }

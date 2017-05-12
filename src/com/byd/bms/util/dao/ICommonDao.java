@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
+import com.byd.bms.util.model.BmsBaseProcess;
+
 @Repository(value="commonDao")
 public interface ICommonDao {
 
@@ -35,5 +37,6 @@ public interface ICommonDao {
 	List<Map<String, Object>> queryLineListAuth(Map<String, Object> condMap);
 
 	List<Map<String, Object>> queryProcessMonitorList(Map<String, Object> condMap);
-
+	
+	List<BmsBaseProcess> queryProcessList(Map<String, Object> condMap);
 }

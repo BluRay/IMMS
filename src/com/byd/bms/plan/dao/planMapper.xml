@@ -354,10 +354,20 @@
 	</update>
 	
 	<select id="getExceptionList" parameterType="Map" resultType="com.byd.bms.production.model.ProductionException">
-		SELECT * FROM BMS_PD_PRODUCTION_EXCEPTION WHERE 1=1
+		SELECT E.*,K.key_name AS duty_department FROM BMS_PD_PRODUCTION_EXCEPTION E
+		LEFT JOIN BMS_BASE_KEY K ON E.duty_department_id = K.value AND K.key_code='EXCEPTION_RESPONSIBILITY_DEPARTMENT'
+		WHERE 1=1
 	</select>
 	<select id="getExceptionCount" parameterType="Map" resultType="int">
 		SELECT COUNT(id) FROM BMS_PD_PRODUCTION_EXCEPTION WHERE 1=1
 	</select>
 	
+	<update id="updateExceptionInfo" parameterType="com.byd.bms.production.model.ProductionException">
+		<![CDATA[
+		UPDATE BMS_PD_PRODUCTION_EXCEPTION
+		SET factory=#{factory}, workshop=#{workshop}, line=#{line}, process=#{process}, reason_type_id=#{reason_type_id}, 
+		detailed_reasons=#{detailed_reasons},severity_level_id=#{severity_level_id}, duty_department_id=#{duty_department_id},
+		measures_id=#{measures_id}, solution=#{solution} WHERE id=#{id};
+		]]>
+	</update>
 </mapper>

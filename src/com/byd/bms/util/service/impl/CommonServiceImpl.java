@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.byd.bms.util.dao.ICommonDao;
+import com.byd.bms.util.model.BmsBaseProcess;
 import com.byd.bms.util.service.ICommonService;
 @Service
 public class CommonServiceImpl implements ICommonService {
@@ -79,10 +80,8 @@ public class CommonServiceImpl implements ICommonService {
 		return commonDao.queryLineListAuth(condMap);
 	}
 	@Override
-	public List<Map<String, Object>> getProcessMonitorSelect(
-			Map<String, Object> condMap) {
-		
-		return commonDao.queryProcessMonitorList(condMap);
+	public List<BmsBaseProcess> queryProcessList(Map<String, Object> condMap) {
+		return commonDao.queryProcessList(condMap);
 	}
 
 }

@@ -78,6 +78,22 @@ public class ProductionController extends BaseController {
 		mv.setViewName("production/productionExecution");
 		return mv;
 	}
+	/**
+	 * 查询监控工序下拉列表
+	 * @return
+	 */
+	@RequestMapping("/getProcessMonitorSelect")
+	@ResponseBody
+	public ModelMap getProcessMonitorSelect(){
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("factory", request.getParameter("factory"));
+		condMap.put("workshop", request.getParameter("workshop"));
+		condMap.put("line", request.getParameter("line"));
+		condMap.put("order_type", request.getParameter("order_type"));
+		model=new ModelMap();
+		model.put("data", productionService.getProcessMonitorSelect(condMap));
+		return model;
+	}
 	
 	/**
 	 * 车辆扫描后获取车辆信息（订单、车间、线别、当前工序、状态、颜色、关键零部件信息、订单配置信息）

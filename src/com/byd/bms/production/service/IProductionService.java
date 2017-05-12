@@ -5,4 +5,6 @@ import java.util.Map;
 
 public interface IProductionService {
 	public List getLineProcessList(Map<String,Object> condMap);
+	
+	List<Map<String,Object>> getProcessMonitorSelect(Map<String, Object> condMap);
 }

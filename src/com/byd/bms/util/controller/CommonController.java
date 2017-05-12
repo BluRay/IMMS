@@ -186,19 +186,17 @@ public class CommonController extends BaseController {
 		return model;
 	}
 	
-	/**
-	 * 查询监控工序下拉列表
-	 * @return
-	 */
-	@RequestMapping("/getProcessMonitorSelect")
+	
+	@RequestMapping("/queryProcessList")
 	@ResponseBody
-	public ModelMap getProcessMonitorSelect(){
+	public ModelMap queryProcessList(){
 		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("id", request.getParameter("id"));
 		condMap.put("factory", request.getParameter("factory"));
 		condMap.put("workshop", request.getParameter("workshop"));
-		condMap.put("line", request.getParameter("line"));
+		condMap.put("line", request.getParameter("line") + "线");
 		model=new ModelMap();
-		model.put("data", commonService.getProcessMonitorSelect(condMap));
+		model.put("data", commonService.queryProcessList(condMap));
 		return model;
 	}
 }

@@ -401,6 +401,11 @@ public class PlanServiceImpl implements IPlanService {
 		result.put("rows", datalist);
 		return result;
 	}
+
+	@Override
+	public int updateExceptionInfo(ProductionException exception) {
+		return planDao.updateExceptionInfo(exception);
+	}
 	
 	
 

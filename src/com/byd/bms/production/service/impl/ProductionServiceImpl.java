@@ -32,4 +32,10 @@ public class ProductionServiceImpl implements IProductionService {
 		return datalist;
 	}
 
+	@Override
+	public List<Map<String, Object>> getProcessMonitorSelect(
+			Map<String, Object> condMap) {
+		
+		return productionDao.queryProcessMonitorList(condMap);
+	}
 }

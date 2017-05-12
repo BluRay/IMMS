@@ -10,4 +10,15 @@
 		group by p.line
 	</select>
 	
+	<select id="queryProcessMonitorList" parameterType="Map" resultType="Map">
+		select p.id,p.process_code,r.process_name
+		from BMS_PD_SCAN_RULE r
+		left join BMS_BASE_PROCESS p on r.factory=p.factory and r.workshop=p.workshop 
+		and p.line=#{line} and p.process_name=r.process_name 
+		where p.monitory_point_flag='1' and p.delete_flag='0' 
+		and r.factory=#{factory} and r.workshop=#{workshop} and p.line=#{line} 
+		and r.order_type=#{order_type}
+		order by r.sequence asc
+	</select>
+	
 </mapper>

@@ -562,12 +562,13 @@ function getAllLineSelect() {
 function getAllProcessSelect() {
 	$("#exec_process").empty();
 	$.ajax({
-		url : "/IMMS/common/getProcessMonitorSelect",
+		url : "getProcessMonitorSelect",
 		dataType : "json",
 		data : {
 			factory:$("#exec_factory :selected").text(),
 			workshop:$("#exec_workshop :selected").text(),
-			line:$("#exec_line").val()
+			line:$("#exec_line").val(),
+			order_type:'标准订单'
 			},
 		async : false,
 		error : function(response) {

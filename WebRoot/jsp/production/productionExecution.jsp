@@ -89,11 +89,11 @@
 										placeholder="请扫描/输入车号..." id="vinText"> <input
 										type="text" style="display: none" class="input-medium"
 										style="height: 30px;" placeholder="请扫描/输入车号..." id="vinText2">
-									<select name="exec_type" id="exec_type" class="input-small">
+									<select name="exec_type" id="exec_type" class="input-small" >
 										<option value="正常">正常</option>
 										<option value="返修">返修</option>
 										<option value="技改">技改</option>
-									</select> <select name="exec_onoff" id="exec_onoff" class="input-small">
+									</select> <select name="exec_onoff" id="exec_onoff" class="input-small" style="display:none">
 										<option value="上线">上线</option>
 										<option value="下线">下线</option>
 									</select> <input type="button" class="btn btn-sm btn-primary"
@@ -233,7 +233,7 @@
 							</div>
 
 							<div class="col-xs-4">
-								<table id="configListTalbe" style="max-width: 110%; width: 105%; margin-left: -12px;" class="table  table-bordered">
+								<table id="configListTable" style="max-width: 110%; width: 107%; margin-left: -12px;" class="table  table-bordered">
 									<thead>
 										<tr>
 											<td align="left" width="30%">零部件类别</td>

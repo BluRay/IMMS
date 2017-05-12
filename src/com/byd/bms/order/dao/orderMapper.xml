@@ -25,7 +25,7 @@
 			and o.productive_year = #{actYear} 
 		</if>
 		<if test="factory !=null and factory !=''">
-			and LOCATE(f.factory_id ,#{factory} )>0
+			and find_in_set(f.factory_id ,#{factory} )
 		</if>
 		<if test="orderColumn==null">
 			ORDER BY id DESC,d.busnum_start ASC
@@ -56,7 +56,7 @@
 			and o.productive_year = #{actYear} 
 		</if>
 		<if test="factory !=null and factory !=''">
-			and LOCATE(f.factory_id ,#{factory} )>0 
+			and find_in_set(f.factory_id ,#{factory} )
 		</if>
 	</select>
 	
@@ -96,7 +96,7 @@
 			and o.productive_year = #{search_productive_year} 
 		</if>
 		<if test="search_factory!=null">
-			and LOCATE(d.factory_id ,#{search_factory} )>0
+			and find_in_set(d.factory_id ,#{search_factory} )
 		</if>
 		<if test="order_id!=null">
 			and d.order_id = #{order_id} 
@@ -312,7 +312,7 @@
 			and o.productive_year=#{actYear}
 		</if>
 		<if test="factory !=null and factory !=''">
-			and fo.factory_id=#{factory}
+			and find_in_set(fo.factory_id,#{factory})
 		</if>
 			order by o.order_no,fo.id desc
 		<if test="start !=null">
@@ -341,7 +341,7 @@
 			and o.productive_year=#{actYear}
 		</if>
 		<if test="factory !=null and factory !=''">
-			and fo.factory_id=#{factory}
+			and find_in_set(fo.factory_id,#{factory})
 		</if>
 	</select>
 	
@@ -419,7 +419,7 @@
 			and o.order_no=#{order_no}
 		</if>
 		<if test="factory !=null and factory !=''">
-			and fo.factory_id=#{factory}
+			and find_in_set(fo.factory_id,#{factory})
 		</if>
 		<if test="actYear !=null and actYear !=''">
 			and o.productive_year=#{actYear}
@@ -446,7 +446,7 @@
 			and o.order_no=#{order_no}
 		</if>
 		<if test="factory !=null and factory !=''">
-			and fo.factory_id=#{factory}
+			and find_in_set(fo.factory_id,#{factory})
 		</if>
 		<if test="actYear !=null and actYear !=''">
 			and o.productive_year=#{actYear}

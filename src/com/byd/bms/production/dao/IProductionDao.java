@@ -8,5 +8,7 @@ import org.springframework.stereotype.Repository;
 public interface IProductionDao {
 
 	List queryLineProcessList(Map<String, Object> condMap);
+
+	List<Map<String, Object>> queryProcessMonitorList(Map<String, Object> condMap);
 	
 }

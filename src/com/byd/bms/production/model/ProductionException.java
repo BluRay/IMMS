@@ -25,6 +25,7 @@ public class ProductionException {
 	private String closer_id;
 	private String close_date;
 	private String memo;
+	private String duty_department;
 	public int getId() {
 		return id;
 	}
@@ -168,6 +169,12 @@ public class ProductionException {
 	}
 	public void setMemo(String memo) {
 		this.memo = memo;
+	}
+	public String getDuty_department() {
+		return duty_department;
+	}
+	public void setDuty_department(String duty_department) {
+		this.duty_department = duty_department;
 	}
 	
 }

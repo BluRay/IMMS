@@ -191,7 +191,7 @@ function initTable() {
         	
         	var conditions={};
         	conditions.order_no=$("#search_order_no").val();
-        	conditions.factory=$("#search_factory").val();
+        	conditions.factory=/*$("#search_factory").val();*/getAllFromOptions("#search_factory","val")
         	conditions.actYear=$("#search_productive_year").val();
         	conditions.status=$("#search_status").val();        
 /*        	params["conditions"] = JSON.stringify(conditions); */

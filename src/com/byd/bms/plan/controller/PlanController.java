@@ -29,6 +29,7 @@ import com.byd.bms.plan.model.PlanMasterPlan;
 import com.byd.bms.plan.model.PlanPause;
 import com.byd.bms.plan.model.PlanProductionPlan;
 import com.byd.bms.plan.service.IPlanService;
+import com.byd.bms.production.model.ProductionException;
 import com.byd.bms.util.ExcelModel;
 
 @Controller
@@ -855,9 +856,30 @@ public class PlanController extends BaseController{
 		condMap.put("draw", draw);
 		condMap.put("start", start);
 		condMap.put("length", length);
+		condMap.put("id", request.getParameter("id"));
 		
 		Map<String,Object> list = planService.getExceptionList(condMap);
 		model.addAllAttributes(list);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/editExceptionInfo")
+	@ResponseBody
+	public ModelMap editExceptionInfo(){
+		ProductionException exception = new ProductionException();
+		exception.setId(Integer.parseInt(request.getParameter("id")));
+		exception.setFactory(request.getParameter("factory"));
+		exception.setWorkshop(request.getParameter("workshop"));
+		exception.setLine(request.getParameter("line"));
+		exception.setProcess(request.getParameter("process"));
+		exception.setReason_type_id(request.getParameter("reason_type_id"));
+		exception.setDetailed_reasons(request.getParameter("detailed_reasons"));
+		exception.setSeverity_level_id(request.getParameter("severity_level_id"));
+		exception.setDuty_department_id(request.getParameter("duty_department_id"));
+		exception.setMeasures_id(request.getParameter("measures_id"));
+		int result = planService.updateExceptionInfo(exception);
+		initModel(true,String.valueOf(result),null);
 		model = mv.getModelMap();
 		return model;
 	}

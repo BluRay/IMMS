@@ -3,6 +3,8 @@ package com.byd.bms.util.service;
 import java.util.List;
 import java.util.Map;
 
+import com.byd.bms.util.model.BmsBaseProcess;
+
 public interface ICommonService {
 
 	List<Map<String,Object>> getOrderFuzzySelect(Map<String, Object> condMap);
@@ -31,5 +33,6 @@ public interface ICommonService {
 	
 	List<Map<String,Object>> getLineSelectAuth(Map<String, Object> condMap);
 
-	List<Map<String,Object>> getProcessMonitorSelect(Map<String, Object> condMap);
+	
+	List<BmsBaseProcess> queryProcessList(Map<String, Object> condMap);
 }

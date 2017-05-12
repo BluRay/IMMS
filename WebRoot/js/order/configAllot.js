@@ -67,7 +67,7 @@ function ajaxQuery(){
 					"orderNo":$("#search_order_no").val(),
 					"orderName":$("#search_order_name").val(),
 					"actYear":$("#search_productive_year").val(),
-					"factory":$("#search_factory").val(),
+					"factory":/*$("#search_factory").val(),*/getAllFromOptions("#search_factory","val"),
 					"orderColumn":"order_no"
 				};
             param.length = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
