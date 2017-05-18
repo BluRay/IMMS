@@ -34,7 +34,11 @@ $(document).ready(function () {
 	
 	function resetPage () {
         $("#vinText").removeAttr("disabled");
-        $("#vinText").attr("value","");
+        $("#vinText").val("");
+       	$('#vinText').data("vin","");
+    	$('#vinText').data("order_id","");
+    	$('#vinText').data("order_config_id","");
+    	$('#vinText').data("bus_type_id","");
         $("#vinText").focus();
         toggleVinHint(true);
         $("#btnSubmit").attr("disabled","disabled");
@@ -43,113 +47,49 @@ $(document).ready(function () {
     }
 	
 	function ajaxEnter(){
-		var repair = "0";	//返修
-		var ecn = "0";		//技改
-		var onlineflag = "0";
-		var offlineflag = "0";
 		var enterflag=true;
-		if($('#exec_type').val() == "返修"){
-			repair = "1";
-			if($('#exec_onoff').val() == "上线")onlineflag ="1";
-			if($('#exec_onoff').val() == "下线")offlineflag ="1";
-		}else if($('#exec_type').val() == "技改"){
-			ecn = "1";
-			if($('#exec_onoff').val() == "上线")onlineflag ="1";
-			if($('#exec_onoff').val() == "下线")offlineflag ="1";
-		}else{
-			onlineflag = "0";
-			offlineflag = "0";
-		}
-		//alert("onlineflag = " + onlineflag + "\n offlineflag = " + offlineflag + 
-		//		"\n repair = " + repair + "\n ecn = " + ecn);
+		cur_key_name=$("#exec_processname").val();
+		var plan_node=$('#exec_process').find("option:selected").attr("plan_node");
+		var field_name=$('#exec_process').find("option:selected").attr("field_name");
 		
-		
-		/**
-		 * 增加校验逻辑：总装下线校验VIN与车载终端是否绑定成功
-		 */
-		if(cur_key_name.indexOf("下线")>=0&&$('#exec_workshop :selected').text()=='总装'){
-			//alert(cur_key_name);
-			var conditions={};
-			conditions.vin=$('#vinText').data("vin");
-			//conditions.flag=Number($('#clientFlag').val());
-			$("#gpsModal").modal("hide");
-			 $.ajax({
-				 type:"post",
-				 dataType:"json",
-				 async:false,
-				 url:"production!gpsValidate.action",
-				 data:{
-					 "conditions":JSON.stringify(conditions)
-				 },
-				 success: function(response){
-					 //alert(JSON.parse(response.data).rebackResut);
-					 var reback_data=JSON.parse(response.data);
-					 var reabck_msg="";
-					 reabck_msg+="企标绑定结果："+reback_data.rebackDesc+"\n";
-					 reabck_msg+="国标绑定结果："+reback_data.rebackDesc_gb+"\n";
-					 if(!reback_data.rebackResut){
-						 enterflag=false;
-						// reabck_msg+=reback_data.rebackDesc+"\n";
-						 //alert(reback_data.rebackDesc);
-					 }
-					 if(!reback_data.rebackResut_gb){
-						 enterflag=false;						 
-						 //alert(reback_data.rebackDesc);
-						 //reabck_msg+=reback_data.rebackDesc_gb+"\n";
-					 }
-				/*	 if(enterflag){
-						 reabck_msg="成功！";
-					 }*/
-					 alert(reabck_msg);
-					 
-				 },
-				 error:function(){
-					 enterflag=false;
-				 }
-			 });
-			 if(!enterflag){
-				 $("#btnSubmit").attr("disabled",false);
-				 return false;
-			 }
-		}
-		
-		if(/*cur_key_name.indexOf("下线")>=0&&*/$('#exec_workshop :selected').text()=='底盘'){
-			//alert(cur_key_name);
+		if($('#exec_workshop :selected').text()=='底盘'){
+
 			$.each(parts_list,function(i,parts){
-				if(parts.id !==0&&parts.process_name==$("#exec_processname").val()&&(parts.parts=='VIN编码'||parts.parts=='左电机号'||parts.parts=='右电机号')){
-					if((parts.parts_num==undefined||parts.parts_num.trim().length==0)&&(parts.batch==undefined||parts.batch.trim().length==0)){
+				if(parts.parts_id !=undefined&&parts.process_name==$("#exec_processname").val()&&(parts.parts_name=='VIN编码'||parts.parts_name=='左电机号'||parts.parts_name=='右电机号')){
+					if(parts.batch==undefined||parts.batch.trim().length==0){
 						enterflag=false;
+						alert(plan_node+"扫描前，请将零部件信息录入完整！");
 						return false;
 					}
 				}
-				if(parts.parts=='VIN编码'&&parts.parts_num!=vin&&parts.process_name==$("#exec_processname").val()){
+				if(parts.parts=='VIN编码'&&parts.batch!=vin&&parts.process_name==$("#exec_processname").val()){
 					alert("VIN编码校验失败，请核对该车的VIN编码！");
 					enterflag=false;
 					return false;
 				}
-				if(parts.parts=='左电机号'&&parts.parts_num!=left_motor_number&&parts.process_name==$("#exec_processname").val()){
+				if(parts.parts=='左电机号'&&parts.batch!=left_motor_number&&parts.process_name==$("#exec_processname").val()){
 					alert("左电机号校验失败，请核对该车的左电机号！");
 					enterflag=false;
 					return false;
 				}
-				if(parts.parts=='右电机号'&&parts.parts_num!=right_motor_number&&parts.process_name==$("#exec_processname").val()){
+				if(parts.parts=='右电机号'&&parts.batch!=right_motor_number&&parts.process_name==$("#exec_processname").val()){
 					alert("右电机号校验失败，请核对该车的右电机号！");
 					enterflag=false;
 					return false;
 				}
 			});
 			if(!enterflag){
-				alert(cur_key_name+"扫描前，请将零部件信息录入完整！");
+				//alert(cur_key_name+"扫描前，请将零部件信息录入完整！");
 				$("#btnSubmit").attr("disabled",false);
 				 return false;
 			 }
 		}
 		
-		if(cur_key_name.indexOf("下线")>=0&&$('#exec_workshop :selected').text()=='检测线'){
+		if(plan_node.indexOf("下线")>=0&&$('#exec_workshop :selected').text()=='检测线'){
 			//alert(cur_key_name);
 			$.each(parts_list,function(i,parts){
-				if(parts.id !==0){
-					if((parts.parts_num==undefined||parts.parts_num.trim().length==0)&&(parts.batch==undefined||parts.batch.trim().length==0)){
+				if(parts.parts_id !=undefined&&parts.parts_id!=0){
+					if(parts.batch==undefined||parts.batch.trim().length==0){
 						enterflag=false;
 						return false;
 					}
@@ -166,45 +106,38 @@ $(document).ready(function () {
 			 $.ajax({
 		            type: "post",
 		            dataType: "json",
-		            url : "production!enterExecution.action",
+		            url : "enterExecution",
 		            data: {
 		            	"factory_id" : $('#exec_factory').val(),
-		            	"workshop_id":$('#exec_workshop').val(),
 		                "bus_number":$('#vinText').val(),
 		                "process_id":$('#exec_process').val(),
 		                "factory_name":$('#exec_factory').find("option:selected").text(),
 		                "workshop_name":$('#exec_workshop').find("option:selected").text(),
 		                "line_name":$('#exec_line').find("option:selected").text(),
-		                "line_id":$('#exec_line').val(),
-		                "process_name":$('#exec_process').find("option:selected").text(),
+		                "process_id":$('#exec_process').val(),
+		                "process_number":$('#exec_process :selected').text(),
+		                "process_name":$('#exec_processname').val(),
 		                "scanner_id":$('#exec_user').val(),
-		                "repair":repair,
-		                "ecn":ecn,
-		                "onlineflag":onlineflag,
-		                "offlineflag":offlineflag,
-		                "cur_key_name":cur_key_name,
-		                "bus_production_status":bus_production_status,
-		                "orderType":orderType,
-		                "exec_process_name":$("#exec_processname").val(),
-		                "parts_list":cur_key_name.indexOf("上线")>0?JSON.stringify(parts_list):JSON.stringify(parts_update_list)
+		                "field_name":field_name,
+		                "order_type":orderType,
+		                "plan_node_name":plan_node,
+		                "parts_list":JSON.stringify(parts_list)
 		            },
 		            success: function(response){
 		                resetPage();
 		                if(response.success){ 
-		                    fadeMessageAlert(response.message,"alert-success");
-		                    resetPage();
+		                	fadeMessageAlert(null,response.message,'gritter-info');
 		                }
 		                else{
-		                    fadeMessageAlert(response.message,"alert-error");
+		                	fadeMessageAlert(null,response.message,'gritter-error');
 		                }
 
 		                setTimeout(function() {
 		                    $("#vinHint").hide().html("未输入车号");
 		                    toggleVinHint(true);
 		                },60000);
-		                $("#partsListDiv").hide();
 		            },
-		            error:function(){alertError();$("#partsListDiv").hide();}
+		            error:function(){alertError(); resetPage();}
 		        });
 		}
        
@@ -215,68 +148,94 @@ $(document).ready(function () {
             type: "post",
             dataType: "json",
             url : "getBusInfo",
+            async:false,
             data: {
-            	"bus_number": $('#vinText').attr("value"),
+            	"bus_number": $('#vinText').val(),
                 "factory_id":$("#exec_factory").val(),
                 "exec_process_name":$("#exec_processname").val(),
                 "workshop_name":$('#exec_workshop').find("option:selected").text()
             },
             success: function(response){
-                if(response.success){
                     $("#vinText").attr("disabled","disabled");
                     //show car infomation
-                    if(response.data == ""){
-                    	fadeMessageAlert("没有对应车号的车辆信息！","alert-error");
-                    }else{
-                    	
-                    	var bus = response.data[0];
+                    if(response.businfo == ""||response.businfo==null){
+                    	fadeMessageAlert(null,'没有对应车号的车辆信息！','gritter-error');
+                    	return false;
+                    }else{                	
+                    	var bus = response.businfo;
                     	$('#vinText').data("vin",bus.vin);
+                    	$('#vinText').data("order_id",bus.order_id);
+                    	$('#vinText').data("order_config_id",bus.order_config_id);
+                    	$('#vinText').data("bus_type_id",bus.bus_type_id);
+                    	
+                    	var configList=response.configList;
+                    	if(configList.length>0){
+                    		$.each(configList,function(index,config){
+                    			var tr=$("<tr />");
+                    			$("<td />").html(config.parts_type).appendTo(tr);
+                    			$("<td />").html(config.vendor).appendTo(tr);
+                    			$("#configListTable tbody").append(tr);
+                    		});
+                    	}           	
+                    	
                     	bus_production_status=bus.production_status;
                     	orderType=bus.order_type;
                     	vin=bus.vin;
                 		left_motor_number=bus.left_motor_number;
                 		right_motor_number=bus.right_motor_number;
+                		
+                		toggleVinHint(false);
+                		$("#infoColor").html(bus.bus_color);
+                		$("#infoSeats").html(bus.bus_seats);
+                		$("#infoWorkShop").html(bus.workshop);
+                		$("#infoLine").html(bus.line);
+                		$("#infoProcess").html(bus.process_name);
+                		$("#infoOrder").html(bus.order_desc);
+                		$("#infoStatus").html(bus.status=='0'?'正常':'冻结');
+                		$("#btnSubmit").removeAttr("disabled");
                     	
-                    	if('检测线上线'==$("#exec_processname").val()){
-                    		bus_color=bus.bus_color;
-                    		bus_seats=bus.bus_seats;
-                    		workshop_name=bus.workshop_name;
-                    		process_name=bus.process_name;
-                    		order_name=bus.order_name;
-                    		bus_type_code=bus.bus_type_code;
-                    		order_qty=bus.order_qty;
-                    		status=bus.status;                   		
-                    		initEditModel();
-                    		$("#newModal").modal("show");
+                    	if('检测线上线'==$("#exec_processname").val()&&(bus.testline_online_date.trim().length==0||!bus.testline_online_date)){
+                    		var dialog = $( "#dialog-config" ).removeClass('hide').dialog({
+                				width:600,
+                				height:400,
+                				modal: true,
+                				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i> 校验</h4></div>",
+                				title_html: true,
+                				buttons: [ 
+                					{
+                						text: "取消",
+                						"class" : "btn btn-minier",
+                						click: function() {
+                							$( this ).dialog( "close" ); 
+                						} 
+                					},
+                					{
+                						text: "确定",
+                						"class" : "btn btn-primary btn-minier",
+                						click: function() {
+                							checkVinMotor(); 
+                						} 
+                					}
+                				]
+                			});
                     	}else{
-                    		toggleVinHint(false);
-                    		$("#infoColor").html(bus.bus_color);
-                    		$("#infoSeats").html(bus.bus_seats);
-                    		$("#infoWorkShop").html(bus.workshop_name);
-                    		$("#infoLine").html(bus.line);
-                    		$("#infoProcess").html(bus.process_name);
-                    		$("#infoOrder").html(bus.order_name + bus.bus_type_code + " " + bus.order_qty + "台");
-                    		$("#infoStatus").html((bus.status=="0")?"正常":"冻结");
-                    		$("#btnSubmit").removeAttr("disabled");
+       
                     		var cur_line=$("#exec_line option:selected").text();
+                    		if(bus.order_type!='标准订单'){
+                    			getAllProcessSelect(bus.order_type);
+                    		}
                     		//alert(cur_line);
-                    		if(bus.line !=$("#exec_line option:selected").text()&&bus.workshop_name==$("#exec_workshop option:selected").text()){
-                    			fadeMessageAlert("该车辆已在"+bus.line+"扫描，不能跨线扫描！","alert-error");
+                    		if(bus.line !=$("#exec_line option:selected").text()&&bus.workshop==$("#exec_workshop option:selected").text()){
+                    			fadeMessageAlert(null,'该车辆已在'+bus.line+'扫描，不能跨线扫描！','gritter-error');
                     			//added by xjw 20160513 根据车号查出当前线别锁定线别，不允许跨线扫描,带出相应工序
-                        		getSelects_noall(line_selects_data, bus.line, "#exec_line"); 
-                        		getAllProcessSelect();
+                        		getSelects(line_selects_data, bus.line, "#exec_line",null,"name"); 
+                        		getAllProcessSelect(bus.order_type);
                     		}   
                     		//added by xjw 20160513 根据车号查出当前线别锁定线别，不允许跨线扫描                    		
                     		$("#exec_line").attr("disabled",true);
                     		
                     	}
                     }
-
-                }
-                else{
-                    resetPage();
-                    fadeMessageAlert(response.message,"alert-error");
-                }
             },
             error:function(){alertError();}
        });
@@ -286,125 +245,46 @@ $(document).ready(function () {
 		$.ajax({
             type: "get",
             dataType: "json",
-            url : "getPartsList",
+            url : "getKeyParts",
             data: {
-                "bus_number": $('#vinText').attr("value"),
-                "exec_process_name":$("#exec_processname").val(),
-                "workshop_name":$('#exec_workshop').find("option:selected").text()
+            	"factory_id":$("#exec_factory").val(),
+                "bus_number": $('#vinText').val(),
+                "process_name":$("#exec_processname").val(),
+                "workshop":$('#exec_workshop').find("option:selected").text(),
+                "order_id":$('#vinText').data("order_id")||0,
+                "order_config_id":$('#vinText').data("order_config_id")||0,
+                "bus_type_id":$('#vinText').data("bus_type_id")||0
             },
             success: function(response){
             	$("#partsListTable tbody").html("");
-            	parts_update_list=[];
-            	parts_list=response.data;
-            	$.each(response.data,function(index,parts){
-            		//if(parts.id !== 0){
-            			if((parts.process_name==$("#exec_processname").val()||$("#exec_processname").val()=='检测线下线')&&parts.parts){
-	            			var tr=$("<tr />");
-	            			if(parts.parts==''||parts.parts==null){
-	            				$(tr).css('display','none');
-	            			}
-	            			
-	                		$("<td align=\"left\" height=36px style=\"padding-left:5px\">"+parts.parts+"</td>").appendTo(tr);
-	                		if(parts.parts_num){
-	                			$("<td align=\"left\" height=36px style=\"padding-left:5px\"><input class='partsNum' style=\"border:0px;width:90%;font-size:14px\" disabled value='"+parts.parts_num+"' /></td>").appendTo(tr);
-	                		}else
-	                		$("<td align=\"left\" height=36px style=\"padding-left:5px\"><input class='partsNum' placeholder=\"请扫描零部件编号\" style=\"border:0px;width:90%;font-size:14px\" /></td>").appendTo(tr);
-	                		if(parts.batch){
-	                			$("<td align=\"left\" height=36px style=\"padding-left:5px\"><input class='batch' style=\"border:0px;width:90%;font-size:14px\" disabled value='"+parts.batch+"' /></td>").appendTo(tr);
-	                		}else if(parts.parts=='VIN编码'||parts.parts=='左电机号'||parts.parts=='右电机号'){
-	                			$("<td align=\"left\" height=36px style=\"padding-left:5px\"><input class='batch' placeholder=\"请填写厂商零部件批次\" style=\"border:0px;width:90%;font-size:14px\" disabled /></td>").appendTo(tr);
-	                		}else
-	                		$("<td align=\"left\" height=36px style=\"padding-left:5px\"><input class='batch' placeholder=\"请填写厂商零部件批次\" style=\"border:0px;width:90%;font-size:14px\" /></td>").appendTo(tr);
-	                		if(parts.parts_num||parts.batch){
-	                			$("<td align=\"left\" style=\"width:36px;padding-left:10px\"><i class=\"fa fa-2x fa-check-circle-o\" style=\"color:green\" aria-hidden=\"true\"></i></td>").appendTo(tr);
-	                		}else{
-	                			$("<td align=\"left\" style=\"width:36px;padding-left:10px\"></td>").appendTo(tr);
-	                		}
-	                		$("#partsListTable tbody").append(tr);
-	                		$(tr).data("parts_index",index);
-	            		}  	
-            		//}
-
+            	parts_list=response.partsList;
+            	$.each(parts_list,function(index,parts){
+            		var tr=$("<tr />");
+            		$("<td />").html(parts.sap_mat).appendTo(tr);
+            		$("<td />").html(parts.parts_no).appendTo(tr);
+            		$("<td />").html(parts.parts_name).appendTo(tr);
+            		$("<td />").html(parts.size).appendTo(tr);
+            		$("<td />").html(parts.vendor).appendTo(tr);
+            		if(parts['3C_components']=='Y'){
+            			$("<td />").html(parts['3C_no']).appendTo(tr);
+            		}else{
+            			$("<td />").html("<input class='batch' style='border:0;background:transparent;text-align:center;width:100%' value='"+(parts.batch||'')+"'>").appendTo(tr);
+            		}
+            		$(tr).data("parts_index",index);
+            		$("#partsListTable tbody").append(tr);
             	});
             }
 		}) 
 	}
 	
-	$(".partsNum,.batch").on("input",function(e){
-		var patsNumInput=$(e.target).parent("td").parent("tr").find(".partsNum");
-		var batchInput=$(e.target).parent("td").parent("tr").find(".batch");
-		if($(patsNumInput).val()||$(batchInput).val()){
-			$(e.target).parent("td").parent("tr").find("td").eq(3).html("<i class=\"fa fa-2x fa-check-circle-o\" style=\"color:green\" aria-hidden=\"true\"></i>");
-		}else{
-			$(e.target).parent("td").parent("tr").find("td").eq(3).html("");
-		}
-		
-	});
 	
-	$(".partsNum,.partsHide,.batch").on("change",function(e){
+	$(document).on("change",".batch",function(e){
+		$(this).focus();
 		var tr=$(e.target).parent("td").parent("tr");
-		var patsNumInput=$(tr).find(".partsNum");
 		var batchInput=$(tr).find(".batch");
 		var parts_index=$(tr).data("parts_index");
-		parts_list[parts_index].parts_num=$(patsNumInput).val();
-		parts_list[parts_index].batch=$(batchInput).val();
-		parts_update_list.push(parts_list[parts_index]);
-		
-	});
-	
-	
-/*	$(".partsNum").live("focus",function(event){
-		var tds=$(this).parent("td").siblings();
-		var parts_name=$(tds[0]).html();
-		if(parts_name=='VIN编码'||parts_name=='左电机号'||parts_name=='右电机号'){
-			 //alert("aaa")
-			$(this).val("");
-			$(this).parent("td").find(".partsHide").val("");
-			$(this).css("border","1px solid");
-			$(this).blur();
-			$(this).parent("td").find(".partsHide").focus();
-		}
-		
-	});*/
-	
-	
-	$(".partsNum").on("keydown",function(event){	
-		if (event.keyCode == "13") {
-			var nxinput=$(event.target).parent("td").parent("tr").find(".batch");
-			//alert($(nxinput).attr("class"));
-			$(nxinput).focus();
-		}
-		
-	});
-	
-/*	$(".partsHide").live("keydown",function(event){
-		if (event.keyCode == "13") {
-			$(this).parent("td").find(".partsNum").css("border","0px").val($(this).val());
-			var nxinput=$(event.target).parent("td").parent("tr").find(".batch");
-			//$(nxinput).focus();
-			$(event.target).parent("td").parent("tr").find("td").eq(3).html("<i class=\"fa fa-2x fa-check-circle-o\" style=\"color:green\" aria-hidden=\"true\"></i>");
-		}
-		
-	});*/
-	
-	
-	$("#btnAddConfirm").click( function (argument) {
-		if(vin===$("#vin").val() && left_motor_number===$("#left_motor_number").val() && right_motor_number===$("#right_motor_number").val()){
-			toggleVinHint(false);
-			$("#infoColor").html(bus_color);
-    		$("#infoSeats").html(bus_seats);
-    		$("#infoWorkShop").html(workshop_name);
-    		$("#infoProcess").html(process_name);
-    		$("#infoOrder").html(order_name + bus_type_code + " " + order_qty + "台");
-    		$("#infoStatus").html((status=="0")?"正常":"冻结");
-    		$("#btnSubmit").removeAttr("disabled");
-			
-    		$('#newModal').modal('hide');
-		}else{
-			
-			alert("校验失败！");
-		}
-		return false;
+		parts_list[parts_index].batch=$(batchInput).val();	
+		//alert(JSON.stringify(parts_list))
 	});
 	
 	//输入回车，发ajax进行校验；成功则显示并更新车辆信息
@@ -412,14 +292,18 @@ $(document).ready(function () {
         //if vinText disable,stop propogation
         if($(this).attr("disabled") == "disabled")
             return false;
+        if($("#exec_processname").val().trim().length==0){
+        	$("#btnSubmit").attr("disabled","disabled");
+        	  return false;
+        }
         if (event.keyCode == "13"){	
             if(jQuery.trim($('#vinText').val()) != ""){
                 ajaxValidate();
                 ajaxGetPartsList();
-                $("#partsListDiv").show();
             }
             return false;
         }
+      
     });
     //输入车号后，切换监控点，当选择的为J01时弹出vin校验
     $("#exec_process").on("change",function(){
@@ -435,13 +319,7 @@ $(document).ready(function () {
     $("#btnSubmit").click(function() {
         if(!($("#btnSubmit").hasClass("disabled"))){
             $("#btnSubmit").attr("disabled","disabled");
-            if(cur_key_name.indexOf("下线")>=0&&$('#exec_workshop :selected').text()=='总装'){
-        		$("#clientVin").val($('#vinText').data("vin"));
-        		$("#gpsModal").modal("show");
-        	}else{
-        		ajaxEnter();
-        	}            
-            //$("#gpsModal").modal("hide");
+            ajaxEnter();          
         }
         return false;
     });
@@ -488,8 +366,8 @@ $(document).ready(function () {
 		$("#exec_processname").val('');
 		var process_code=$("#exec_process :selected").text();
 		var process_name=$(this).find("option:contains('"+process_code+"')").attr("process");
-		if($("#exec_line").val() !=''){
-			$("#exec_processname").val(process_name);
+		$("#exec_processname").val(process_name);
+		if($("#exec_line").val() !=''&&$("#vinText").data("order_id")!=0){		
 			ajaxGetPartsList();
 		}
 	});
@@ -512,8 +390,8 @@ $(document).ready(function () {
 				getAllLineSelect();
 				$("#exec_line").val(getQueryString("line"));		
 				getAllProcessSelect();
-				$("#exec_process").val(getQueryString("process_id"));
-				getProcessInfo($("#exec_process").val());
+				//$("#exec_process").val(getQueryString("process_id"));
+				//getProcessInfo($("#exec_process").val());
 			}
 		});
 	}
@@ -559,7 +437,8 @@ function getAllLineSelect() {
 	});
 }
 
-function getAllProcessSelect() {
+function getAllProcessSelect(order_type) {
+	order_type=order_type||'标准订单';
 	$("#exec_process").empty();
 	$.ajax({
 		url : "getProcessMonitorSelect",
@@ -568,21 +447,38 @@ function getAllProcessSelect() {
 			factory:$("#exec_factory :selected").text(),
 			workshop:$("#exec_workshop :selected").text(),
 			line:$("#exec_line").val(),
-			order_type:'标准订单'
+			order_type:order_type
 			},
 		async : false,
 		error : function(response) {
 			alert(response.message)
 		},
 		success : function(response) {
-			//getSelects_noall(response, "", "#exec_process"); 
+			//getSelects_noall(response.data, "", "#exec_process"); 
 			var strs = "";
 		    $("#exec_process").html("");
+		    var process_id_default="";
+		    var process_name_default="";
 		    $.each(response.data, function(index, value) {
-		    	if (index == 0) $("#exec_processname").val(value.process_name);
-		    	strs += "<option value=" + value.id + " process='"+value.process_name+"'>" + value.process_code + "</option>";
+		    	if (index == 0) {
+		    		process_id_default=value.id;
+			    	process_name_default=value.process_name;
+		    	}
+		    	
+		    	if(getQueryString("process_id")==value.id){
+		    	 	process_id_default=value.id;
+			    	process_name_default=value.process_name;
+		    	}
+/*		    	if (index == 0) {
+		    		$("#exec_processname").val(value.process_name);
+		    	}*/
+		    	strs += "<option value=" + value.id + " process='"+value.process_name+"' plan_node='"+(value.plan_node_name||"")
+		    	+"' field_name='" +(value.field_name||"")+ "'>" + value.process_code + "</option>";
 		    });
+		  //  alert(process_id_default);
 		    $("#exec_process").append(strs);
+		    $("#exec_process").val(process_id_default+"");
+		    $("#exec_processname").val(process_name_default);
 		}
 	});
 }
@@ -602,4 +498,17 @@ function initEditModel() {
     $('#vin').val('');
     $('#left_motor_number').val('');
     $('#right_motor_number').val('');
+}
+
+function checkVinMotor(){
+	if(vin===$("#vin").val() && left_motor_number===$("#left_motor_number").val() && right_motor_number===$("#right_motor_number").val()){
+		toggleVinHint(false);
+		$("#btnSubmit").removeAttr("disabled");
+		
+		$( "#dialog-config" ).dialog("close");
+	}else{
+		
+		alert("校验失败！");
+	}
+	return false;
 }

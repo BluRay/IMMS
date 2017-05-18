@@ -920,6 +920,7 @@ public class PlanController extends BaseController{
 			excelTool.readExcel(is, excelModel);
 			//数据校验
 			int lineCount = excelModel.getData().size();
+			String vin_str = "";
 			for(int i=0;i<lineCount;i++){
 				String factory_name = excelModel.getData().get(i)[0].toString().trim();
 				String order_no = excelModel.getData().get(i)[1].toString().trim();
@@ -927,6 +928,13 @@ public class PlanController extends BaseController{
 				String left_motor_number = excelModel.getData().get(i)[3].toString().trim();
 				String right_motor_number = excelModel.getData().get(i)[4].toString().trim();
 				String bus_number = excelModel.getData().get(i)[5].toString().trim();
+				if(vin_str.indexOf(vin)>=0){
+					mv.clear();
+					initModel(false,"导入文件的VIN号" + vin + "重复,请确认后重新导入。",null);
+					model = mv.getModelMap();
+					return model;
+				}
+				vin_str += vin;
 				//校验工厂与订单是否正确
 				Map<String,Object> condMap=new HashMap<String,Object>();
 				condMap.put("factory_name", factory_name);
@@ -951,9 +959,43 @@ public class PlanController extends BaseController{
 					model = mv.getModelMap();
 					return model;
 				}
+				//checkBingingVin
+				Map<String,Object> condMap2=new HashMap<String,Object>();
+				condMap2.put("vin", request.getParameter("vin"));
+				condMap2.put("update_val", left_motor_number);
+				condMap2.put("update", "left_motor");
+				check_result = planService.checkBingingVin(condMap2);
+				if(check_result != 0){
+					mv.clear();
+					initModel(false,"此左电机号"+left_motor_number+"已经绑定了，请确认后重新导入。",null);
+					model = mv.getModelMap();
+					return model;
+				}
+				condMap2.put("vin", request.getParameter("vin"));
+				condMap2.put("update_val", right_motor_number);
+				condMap2.put("update", "right_motor");
+				check_result = planService.checkBingingVin(condMap2);
+				if(check_result != 0){
+					mv.clear();
+					initModel(false,"此右电机号"+left_motor_number+"已经绑定了，请确认后重新导入。",null);
+					model = mv.getModelMap();
+					return model;
+				}
+				if(!bus_number.equals("")){
+					condMap2.put("vin", request.getParameter("vin"));
+					condMap2.put("update_val", bus_number);
+					condMap2.put("update", "bus_number");
+					check_result = planService.checkBusNumber(condMap2);
+					if(check_result == 0){
+						mv.clear();
+						initModel(false,"此车号"+bus_number+"已经绑定了或不存在，请确认后重新导入。",null);
+						model = mv.getModelMap();
+						return model;
+					}
+				}
 				
 				List<String> busList = planService.selectBusByMotorVin(condMap);
-				if(busList!=null){
+				if(busList.size()>0){
 					mv.clear();
 					initModel(false,"导入文件的VIN号/电机号("+ vin + "/" + left_motor_number + "/" +right_motor_number + ")与系统中的数据重复。",null);
 					model = mv.getModelMap();

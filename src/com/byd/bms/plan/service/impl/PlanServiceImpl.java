@@ -548,6 +548,7 @@ public class PlanServiceImpl implements IPlanService {
 			planVIN.setRight_motor_number(vin_list.get(i).get("right_motor_number").toString());
 			planVIN.setCreator_id(Integer.valueOf(vin_list.get(i).get("staff_number").toString()));
 			planVIN.setCreat_date(vin_list.get(i).get("curTime").toString());
+			planVIN.setSource("1");
 			result += planDao.insertPlanVin2(planVIN);
 			if(!(vin_list.get(i).get("bus_number").toString().equals(""))){
 				result += planDao.updatePlanBus(planVIN);
@@ -559,6 +560,16 @@ public class PlanServiceImpl implements IPlanService {
 	@Override
 	public List<String> selectBusByMotorVin(Map<String,Object> queryMap) {
 		return planDao.selectBusByMotorVin(queryMap);
+	}
+	
+	@Override
+	public int checkBusNumber(Map<String,Object> queryMap){
+		return planDao.checkBusNumber(queryMap);
+	}
+	
+	@Override
+	public int checkBingingVin(Map<String,Object> queryMap){
+		return planDao.checkBingingVin(queryMap);
 	}
 
 	@Override

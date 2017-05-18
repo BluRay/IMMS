@@ -315,6 +315,28 @@ function getWorkshopSelect(url,factory,selectval,selectId,selectType,valName){
 		}
 	});
 }
+/**
+ * 根据工厂、车间获取线别下拉列表
+ * @param factory
+ * @param workshop
+ */
+function getLineSelect(factory,workshop,selectval,selectId,selectType,valName) {
+	$.ajax({
+		url : "/IMMS/common/getLineSelectAuth",
+		dataType : "json",
+		data : {
+				factory:factory,
+				workshop:workshop
+			},
+		async : false,
+		error : function(response) {
+			alert(response.message)
+		},
+		success : function(response) {
+			getSelects(response.data,selectval,selectId,selectType, valName);	
+		}
+	});
+}
 
 function getQueryString(name) { 
 	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"); 
@@ -361,13 +383,20 @@ function getAllFromOptions(elementId,valName){
 }
 
 //自动隐藏的信息提示框
-function fadeMessageAlert(message, alertClass) {
-	$("#messageAlert").removeClass("alert-error alert-success").addClass(
+function fadeMessageAlert(title,message, alertClass) {
+	alertClass=alertClass|| 'gritter-info';
+	title=title||'系统提示：';
+	/*$("#messageAlert").removeClass("alert-error alert-success").addClass(
 			alertClass);
 	$("#messageAlert").html(message);
 	$("#messageAlert").show(500, function() {
 		setTimeout(function() {
 			$("#messageAlert").hide(1000);
 		}, 5000);
+	});*/
+	$.gritter.add({
+		title: title,
+		text: '<h5>'+message+'</h5>',
+		class_name: alertClass
 	});
 }

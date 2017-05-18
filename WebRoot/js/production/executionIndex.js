@@ -65,7 +65,7 @@ $(document).ready(
 					workshop_p=getQueryString("workshop")||"";
 					//alert(workshop_p);
 					getFactorySelect("production/executionindex","","#search_factory",null,"id");
-					getWorkshopSelect("production/executionindex", $("#search_factory :selected").text(),"","#search_workshop",null,"id")
+					getWorkshopSelect("production/executionindex", $("#search_factory :selected").text(),getQueryString("workshop"),"#search_workshop",null,"id")
 					//getWorkshopSelect("#search_workshop", workshop_p, $("#search_factory :selected").text(), "noall","");
 					line_process=ajaxGetLineProcess();
 					drawCanvas(line_process);
@@ -87,13 +87,6 @@ $(document).ready(
 							_line_process=response.dataList
 						}
 					})
-					/*var obj={};
-					obj.line_id='1';
-					obj.line_name='A线';
-					obj.factory_id='16';
-					obj.workshop_id='20';
-					obj.process_list='[{"id":"300","code":"HA0","name":"车架密封"},{"id":"301","code":"HA1","name":"顶蒙皮低位安装"}]';
-					_line_process.push(obj);*/
 					return _line_process;
 					
 				}
@@ -118,8 +111,7 @@ $(document).ready(
 							process.workshopId=workshopId;
 							line_height+=(rech+bh);
 						});
-						//alert(line_height);						
-						//alert($(canvas).attr("height"));
+
 						var line={};
 						line.name=lineName;
 						line.processlist=processlist;
@@ -130,8 +122,7 @@ $(document).ready(
 					$(canvas).attr("height",cvs_height+Math.ceil(line_height/6)+bgY);
 					$.each(lineList,function(index,line){
 						drawLineProcess(line.name, line.processlist);
-					})
-					
+					})				
 				}
 				
 				function drawLineProcess(line_name, processlist) {
@@ -232,13 +223,7 @@ $(document).ready(
 				//得到点击的坐标  
 				function getEventPosition(event){  
 				    var x, y;  
-				   /* if (ev.layerX || ev.layerX == 0) {  
-				        x = ev.layerX;  
-				        y = ev.layerY;  
-				    }else if (ev.offsetX || ev.offsetX == 0) { // Opera  
-				        x = ev.offsetX;  
-				        y = ev.offsetY;  
-				    }  */
+
 				    var e = event || window.event;
 		            var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
 		            var scrollY = document.documentElement.scrollTop || document.body.scrollTop;

@@ -16,6 +16,7 @@
 	<select id="getMenu" parameterType="String" resultMap="menuMap">
 		select *
 		from BMS_BASE_MODEL
+		where isDeleted='0'
 		order by priority
 	</select>
 	

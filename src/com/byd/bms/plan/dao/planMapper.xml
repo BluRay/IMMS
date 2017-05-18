@@ -528,9 +528,9 @@
 	</insert>
 	<insert id="insertPlanVin2" useGeneratedKeys="true" keyProperty="id" parameterType="com.byd.bms.plan.model.PlanVIN">
 		<![CDATA[
-		insert into BMS_PD_VIN (vin,factory_id,order_id,left_motor_number,right_motor_number,creator_id,creat_date)
+		insert into BMS_PD_VIN (vin,factory_id,order_id,left_motor_number,right_motor_number,creator_id,creat_date,source)
 		VALUES(#{vin},(SELECT id FROM BMS_BASE_FACTORY WHERE factory_name = #{factory_name}),
-		(SELECT id FROM BMS_OR_ORDER WHERE order_no=#{order_no}),#{left_motor_number},#{right_motor_number},#{creator_id},#{creat_date})
+		(SELECT id FROM BMS_OR_ORDER WHERE order_no=#{order_no}),#{left_motor_number},#{right_motor_number},#{creator_id},#{creat_date},#{source})
 		]]>
 	</insert>
 	<update id="updatePlanBus" parameterType="com.byd.bms.plan.model.PlanVIN">

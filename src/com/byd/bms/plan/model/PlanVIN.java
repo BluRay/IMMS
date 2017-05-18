@@ -23,6 +23,7 @@ public class PlanVIN {
 	private String factory_name;
 	private String order_name;
 	private String print_name;
+	private String source;
 	public int getId() {
 		return id;
 	}
@@ -154,6 +155,12 @@ public class PlanVIN {
 	}
 	public void setPrint_name(String print_name) {
 		this.print_name = print_name;
+	}
+	public String getSource() {
+		return source;
+	}
+	public void setSource(String source) {
+		this.source = source;
 	}
 	
 	

@@ -1,4 +1,4 @@
-var user_staff={'workshops':'焊装'};// 当前用户员工信息 
+var workshopAuthList=[];// 当前用户员工信息 
 $(document).ready(function () {
 	initPage();
 	setInterval(function () {
@@ -10,8 +10,8 @@ $(document).ready(function () {
 	});
 	
 	function initPage(){
-		getFactorySelect("","","#search_factory",null,"id")
-		user_staff = getStaffInfo1();		// 获取当前用户员工信息 
+		getFactorySelect("","","#search_factory",null,"id");
+		getWorkshopAuthList();
 		ajaxQuery();
 	}
 	
@@ -22,9 +22,26 @@ $(document).ready(function () {
 	 * 点击车间判断是否有该车间的扫描权限，有就跳转到对应车间生产执行页面
 	 */
 	function executionFoward(workshop){
-		if(user_staff.workshops!=null && user_staff.workshops.indexOf(workshop)>=0){
+		if(workshopAuthList!=null && workshopAuthList.indexOf(workshop)>=0){
 			window.location.href='executionindex?workshop='+workshop;
 		}else{
 			alert("对不起，您没有该车间扫描权限！");
 		}
+	}
+
+	function getWorkshopAuthList(){
+		$.ajax({
+			url : "/IMMS/common/getWorkshopSelectAuth",
+			dataType : "json",
+			data : {"function_url":'production/index',"factory":$("#search_factory :selected").text()},
+			async : false,
+			error : function(response) {
+				alert(response.message)
+			},
+			success : function(response) {
+				$.each(response.data,function(index,workshop){
+					workshopAuthList.push(workshop.name);
+				});
+			}
+		});
 	}

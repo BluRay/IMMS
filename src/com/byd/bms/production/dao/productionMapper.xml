@@ -11,14 +11,121 @@
 	</select>
 	
 	<select id="queryProcessMonitorList" parameterType="Map" resultType="Map">
-		select p.id,p.process_code,r.process_name
+		select p.id,p.process_code,r.process_name,k.key_name plan_node_name,k.key_name_en field_name
 		from BMS_PD_SCAN_RULE r
 		left join BMS_BASE_PROCESS p on r.factory=p.factory and r.workshop=p.workshop 
 		and p.line=#{line} and p.process_name=r.process_name 
+		left join BMS_BASE_KEY k on k.id=p.plan_node_id 
 		where p.monitory_point_flag='1' and p.delete_flag='0' 
 		and r.factory=#{factory} and r.workshop=#{workshop} and p.line=#{line} 
 		and r.order_type=#{order_type}
 		order by r.sequence asc
 	</select>
 	
+	<select id="queryBusInfo" parameterType="String" resultType="Map">
+		select b.*,f.factory_name,CONCAT(o.order_name,t.bus_type_code,' ',o.order_qty,'台') AS order_desc,
+		case b.status when '0' then '正常' else '冻结' end as status,p.factory,p.workshop,p.line,p.process_name,o.order_type,o.bus_type_id
+		from BMS_PLAN_BUS b
+		left join BMS_BASE_FACTORY f on b.factory_id=f.id
+		left join BMS_OR_ORDER o on b.order_id=o.id
+		left join BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id
+		left join BMS_BASE_PROCESS p on p.id=b.latest_process_id
+		where b.bus_number=#{bus_number}
+	</select>
+	
+	<select id="queryKeyParts" parameterType="Map" resultType="Map">
+		select ptd.*,p.batch,p.id parts_id,p.bus_number
+		from BMS_QM_KEY_PARTS_TEMPLATE_DETAILS ptd
+		left join BMS_QM_KEY_PARTS_TEMPLATE_HEADER pth on pth.id=ptd.key_components_template_id
+		left join BMS_QM_KEY_PARTS p on p.key_parts_template_details_id=ptd.id 
+		and p.bus_number=#{bus_number} and p.factory_id=#{factory_id} and p.workshop=#{workshop}
+		where pth.bus_type_id=#{bus_type_id} and pth.order_id=#{order_id} and pth.order_config_id=#{order_config_id} 
+		and ptd.workshop=#{workshop} and ptd.process=#{process_name}
+	</select>
+	
+	<select id="queryOrderConfigList" parameterType="String" resultType="Map">
+		select *
+		from BMS_OR_ORDER_CONFIG_DETAIL cd
+		where cd.order_config_id=#{order_config_id}
+	</select>
+	
+	<select id="queryScanLastPlanNode" parameterType="Map" resultType="Map">		
+		<!-- SELECT s.id,s.process_name,s.scan_time
+		FROM BMS_PD_SCAN s where s.process_id=(
+		SELECT p.id process_id,p.process_name
+		FROM BMS_PD_SCAN_RULE r
+		LEFT JOIN BMS_BASE_PROCESS p on r.factory=p.factory and r.workshop=p.workshop 
+		and p.process_name=r.process_name and p.line=#{line}
+		where p.plan_node_id !=0 and r.factory=#{factory} and r.workshop=#{workshop} and r.sequence=(
+			select r1.sequence-1 from BMS_PD_SCAN_RULE r1 where r1.factory=#{factory} and r1.workshop=#{workshop}
+			and r1.process_name=#{process_name} and r1.order_type=#{order_type}
+		) and r.order_type=#{order_type} ) and s.bus_number=#{bus_number} -->
+		SELECT s.id,s.process_name,s.scan_time
+		FROM BMS_PD_SCAN s where s.process_id=#{last_process_id} and s.bus_number=#{bus_number}
+	</select>
+	
+	<select id="queryLastPlanNode" parameterType="Map" resultType="Map">
+		SELECT p.id process_id,p.process_name,r.sequence
+		FROM BMS_PD_SCAN_RULE r
+		LEFT JOIN BMS_BASE_PROCESS p on r.factory=p.factory and r.workshop=p.workshop 
+		and p.process_name=r.process_name and p.line=#{line_name}
+		where p.plan_node_id !=0 and r.factory=#{factory_name} and r.workshop=#{workshop_name} and r.sequence&lt;=(
+			select r1.sequence-1 from BMS_PD_SCAN_RULE r1 where r1.factory=#{factory_name} and r1.workshop=#{workshop_name}
+			and r1.process_name=#{process_name} and r1.order_type=#{order_type})
+		and r.order_type=#{order_type} 
+		order by r.sequence desc
+		limit 1
+	</select>
+	
+	<select id="queryScanRecord" parameterType="Map" resultType="int">
+		select count(id)
+		from BMS_PD_SCAN
+		where bus_number=#{bus_number} and process_id=#{process_id}
+	</select>
+	
+	<insert id="saveParts" parameterType="List"  useGeneratedKeys="true" keyProperty="id">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into BMS_QM_KEY_PARTS
+		(bus_number,factory_id,key_parts_template_details_id,workshop,process_number,process_name,parts_no,parts_name,vendor,batch,editor_id,edit_date)
+		values
+		<foreach  collection="parts_list" item="detail" index="index" separator=",">
+		(#{detail.bus_number},#{detail.factory_id},#{detail.id},#{detail.workshop},#{detail.process_number},#{detail.process_name},
+		#{detail.parts_no} ,#{detail.parts_name},#{detail.vendor},#{detail.batch},#{detail.editor_id},#{detail.edit_date}
+		)
+		</foreach>
+	</insert>
+	
+	<update id="updateParts" parameterType="List" >
+		update BMS_QM_KEY_PARTS set
+		batch=
+		<foreach collection="parts_list" item="detail" index="index" separator="" open=" case id" close="end">
+			when #{detail.parts_id} then #{detail.batch}
+		</foreach>
+		where id in
+		<foreach collection="parts_list" item="detail" index="index" separator="," open=" (" close=")">
+			#{detail.parts_id}
+		</foreach>
+	
+	</update>
+	
+	<insert id="saveScanRecord" parameterType="Map"  useGeneratedKeys="true" keyProperty="id">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into BMS_PD_SCAN (bus_number,process_id,factory_name,workshop_name,line_name,process_name,scanner_id,scan_time)
+		values
+		(#{bus_number},#{process_id},#{factory_name},#{workshop_name},#{line_name},#{process_name},#{editor_id},#{edit_date})
+	</insert>
+	
+	<update id="updateBusProcess" parameterType="Map">
+		update BMS_PLAN_BUS set latest_process_id=#{process_id}
+		<if test="field_name !=null and field_name !=''">
+			,${field_name}=#{edit_date}
+		</if>
+		where bus_number=#{bus_number}
+	</update>
 </mapper>

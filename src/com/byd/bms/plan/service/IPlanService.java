@@ -41,4 +41,7 @@ public interface IPlanService {
 	public List<String> selectBusByMotorVin(Map<String,Object> queryMap); 			//根据VIN/左右电机查询车号，校验是否重复绑定
 	public int importVin(List<Map<String,Object>> vin_list);
 	public int BingingVinMotor(Map<String,Object> queryMap);
+	public int checkBusNumber(Map<String,Object> queryMap);
+	public int checkBingingVin(Map<String,Object> queryMap);
+	
 }

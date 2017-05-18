@@ -14,6 +14,7 @@
 	href="../assets/css/fixedColumns.bootstrap.min.css" />
 <link rel="stylesheet" href="../css/bootstrap-table.css">
 <link rel="stylesheet" href="../css/bootstrap-editable.css">
+<link rel="stylesheet" href="../assets/css/jquery.gritter.css" />
 <link rel="stylesheet" href="../css/common.css">
 <style type="text/css" media="screen">
 .myselect {
@@ -54,15 +55,8 @@
 					<ul class="breadcrumb">
 						<li><i class="ace-icon fa fa-home home-icon"></i><a
 							href="<%=request.getContextPath()%>/index">首页</a></li>
-						<li><a href="#">生产扫描</a></li>
-						<!-- <li class="active">
-						<select name="" id="search_factory" class="myselect">
-						</select>
-						</li>
-						<li class="active">
-						<select name="" id="search_workshop" class="myselect">
-						</select>
-						</li> -->
+						<li><a href="executionindex">车间工序</a></li>
+						<li><a href="#">车辆扫描</a></li>
 					</ul>
 					<!-- /.breadcrumb -->
 
@@ -91,9 +85,10 @@
 										style="height: 30px;" placeholder="请扫描/输入车号..." id="vinText2">
 									<select name="exec_type" id="exec_type" class="input-small" >
 										<option value="正常">正常</option>
-										<option value="返修">返修</option>
-										<option value="技改">技改</option>
-									</select> <select name="exec_onoff" id="exec_onoff" class="input-small" style="display:none">
+										<!-- <option value="返修">返修</option>
+										<option value="技改">技改</option> -->
+									</select> 
+									<select name="exec_onoff" id="exec_onoff" class="input-small" style="display:none">
 										<option value="上线">上线</option>
 										<option value="下线">下线</option>
 									</select> <input type="button" class="btn btn-sm btn-primary"
@@ -106,7 +101,7 @@
 										value='涂装工厂I线'></input> <span class="help-inline" id="vinHint">请输入车号后回车</span>
 									<!-- 	<label><b>关键零部件：</b></label><input type="text" placeholder="请扫描关键零部件" style="padding-top:5px;" /> -->
 
-									<div class="help-inline" id="carInfo">
+									<div class="help-inline" id="carInfo" style="display: inline-block;">
 										<span class="label label-info" rel="tooltip" title="VIN"
 											id="infoVIN"></span> <span class="label label-info"
 											rel="tooltip" title="订单" id="infoOrder"></span> <span
@@ -201,33 +196,7 @@
 										</tr>
 									</thead>
 									<tbody>
-										<tr>
-											<td>11770641-00</td>
-											<td>KB-8100010C</td>
-											<td>一体化空调总成-单冷</td>
-											<td>JLD-IGF-D</td>
-											<td>上海加冷松芝汽车空调股份有限公司</td>
-											<td><input type="text"
-												style="border: 0; heigth: 30px; width: 100%"></td>
-										</tr>
-										<tr>
-											<td>11770641-00</td>
-											<td>KB-8100010C</td>
-											<td>一体化空调总成-单冷</td>
-											<td>JLD-IGF-D</td>
-											<td>上海加冷松芝汽车空调股份有限公司</td>
-											<td><input type="text"
-												style="border: 0; heigth: 30px; width: 100%"></td>
-										</tr>
-										<tr>
-											<td>11770641-00</td>
-											<td>KB-8100010C</td>
-											<td>高压配电箱总成</td>
-											<td></td>
-											<td>第十四事业部电动车研究所</td>
-											<td><input type="text"
-												style="border: 0; heigth: 30px; width: 100%"></td>
-										</tr>
+							
 									</tbody>
 								</table>
 							</div>
@@ -241,14 +210,7 @@
 										</tr>
 									</thead>
 									<tbody>
-										<tr>
-											<td>空调</td>
-											<td>松芝</td>
-										</tr>
-										<tr>
-											<td>扶手</td>
-											<td>xx供应商</td>
-										</tr>
+									
 									</tbody>
 								</table>
 							</div>
@@ -305,6 +267,7 @@
 		
 		<script src="../assets/js/jquery.dataTables.min.js"></script>
 		<script src="../assets/js/jquery.dataTables.bootstrap.js"></script>
+		<script src="../assets/js/jquery.gritter.min.js"></script>
 		<script src="../js/common.js"></script>
 		<script src="../js/production/productionExecution.js"></script>
 </div>
