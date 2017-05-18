@@ -43,5 +43,6 @@ public interface IPlanService {
 	public int BingingVinMotor(Map<String,Object> queryMap);
 	public int checkBusNumber(Map<String,Object> queryMap);
 	public int checkBingingVin(Map<String,Object> queryMap);
-	
+	public List<Map<String,String>> getBusTransferOutList(Map<String,Object> queryMap);
+	public List<Map<String,String>> getBusTransferInList(Map<String,Object> queryMap);
 }

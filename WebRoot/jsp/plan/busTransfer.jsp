@@ -5,6 +5,9 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta charset="utf-8" />
 		<title>车辆调动</title>
+		<link rel="stylesheet" href="../assets/css/jquery-ui.min.css" />
+		<link rel="stylesheet" href="../assets/css/jquery-ui.custom.min.css" />
+		<link rel="stylesheet" href="../assets/css/jquery.gritter.css" />
 		<meta name="description" content="Common Buttons &amp; Icons" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 	</head>
@@ -51,7 +54,44 @@
 					</ul>
 					<div class="tab-content">
 						<div id="out" class="tab-pane fade in active">
-							<p>out</p>
+							<div class="well">
+								<table>
+									<tr>
+									<td>车号：</td>
+									<td><textarea style="width: 450px;" placeholder="车号,每行一个车号..."  class="input-xlarge" onkeyup="this.value = this.value.slice(0, 1000)" id="transfer_out_busnumber" rows="3"></textarea></td>
+									</tr>
+								<tr>
+									<td>调入工厂：</td>
+									<td><select id="transfer_in_factory" class="form-control" style="width:120px"></select></td>
+									<td>
+									<input id="btnTransferOutQuery" type="button" class="btn btn-sm btn-primary" value="查询" style="margin-left: 2px;"></input>
+									<input id="btnTransferOut" type="button" class="btn btn-sm btn-info" value="调出" style="margin-left: 2px;"></input>
+									</td>
+								</tr>
+								</table>
+							</div>
+							<table id="tableBusInfoOut" class="table table-striped table-bordered table-hover" style="font-size: 12px;">
+							<thead>
+							<tr>
+								<tr id="0">
+								<th style="text-align:center;" width="15px"><input type="checkbox" id="checkall"></th>			
+								<th style="text-align:center;" width="50px">车号</th>					
+								<th style="text-align:center;" width="35px">订单</th>					
+								<th style="text-align:center;" width="15px">车型</th>					
+								<th style="text-align:center;" width="25px">年份</th>					
+								<th style="text-align:center;" width="35px">客户</th>					
+								<th style="text-align:center;" width="35px">配置</th>					
+								<th style="text-align:center;" width="50px">VIN</th>					
+								<th style="text-align:center;" width="35px">生产工厂</th>					
+								<th style="text-align:center;" width="35px">当前工序</th>					
+								<th style="text-align:center;" width="15px">状态</th>
+							</tr>
+							</thead>
+							<tbody></tbody>
+							</table>
+						
+						
+						
 						</div>
 						<div id="in" class="tab-pane fade in">
 							<p>in</p>
@@ -71,4 +111,11 @@
 		</div><!-- /.main-container -->
 	</div>
 	</body>
+	<script src="../assets/js/fuelux/fuelux.tree.min.js"></script>
+	<script src="../assets/js/jquery.ui.touch-punch.min.js"></script>
+	<script src="../assets/js/jquery.gritter.min.js"></script>
+	<script src="../js/datePicker/WdatePicker.js"></script>
+	<script src="../assets/js/bootstrap3-typeahead.js"></script>
+	<script src="../js/common.js"></script>
+	<script src="../js/plan/busTransfer.js"></script>
 </html>

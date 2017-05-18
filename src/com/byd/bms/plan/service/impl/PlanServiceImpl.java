@@ -137,7 +137,7 @@ public class PlanServiceImpl implements IPlanService {
 	public Map<String, Object> getPlanMasterIndex(Map<String, Object> queryMap) {
 		int totalCount=0;
 		List<PlanMasterIndex> datalist = planDao.getPlanMasterIndex(queryMap);
-		totalCount = 0;
+		totalCount = planDao.getPlanMasterCount(queryMap);
 		Map<String, Object> result = new HashMap<String,Object>();
 		result.put("draw", queryMap.get("draw"));
 		result.put("recordsTotal", totalCount);
@@ -595,6 +595,17 @@ public class PlanServiceImpl implements IPlanService {
 			}
 		}
 		return 0;
+	}
+
+	@Override
+	public List<Map<String,String>> getBusTransferOutList(Map<String, Object> queryMap) {
+		return planDao.getBusTransferOutList(queryMap);
+	}
+	
+	@Override
+	public List<Map<String,String>> getBusTransferInList(Map<String, Object> queryMap) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

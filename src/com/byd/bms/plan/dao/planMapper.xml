@@ -39,6 +39,21 @@
 			LIMIT #{start} ,#{length} 
 		</if>
 	</select>
+	<select id="getPlanMasterCount" parameterType="Map" resultType="int">
+		SELECT COUNT(DISTINCT m.version) FROM
+		BMS_PLAN_MASTER_PLAN m
+		LEFT JOIN BMS_OR_ORDER o ON m.order_id = o.id
+		LEFT JOIN BMS_BASE_FACTORY f ON m.factory_id = f.id
+		LEFT JOIN BMS_BASE_USER u ON m.creator_id = u.staff_number where 1=1
+		<if test="factory_id!=''">
+			and m.factory_id = #{factory_id}
+		</if>
+		<if test="order_no!=''">
+			and o.order_no like CONCAT('%',#{order_no},'%')
+		</if>
+		AND flag = '0'
+		ORDER BY m.version DESC
+	</select>
 	
 	<select id="getPlanMasterList" parameterType="Map" resultType="com.byd.bms.plan.model.PlanMasterPlan">
 		SELECT
@@ -583,5 +598,16 @@
 		right_motor_number=(SELECT left_motor_number FROM BMS_PD_VIN WHERE vin = #{vin})
 		WHERE bus_number = #{update_val}
 	</update>
+	
+	<select id="getBusTransferOutList" parameterType="Map" resultType="Map">
+		<![CDATA[
+		SELECT b.bus_number,b.vin,b.status,o.order_name,c.order_config_name,c.customer,f.factory_name
+		FROM BMS_PLAN_BUS b
+		LEFT OUTER JOIN BMS_OR_ORDER o ON b.order_id = o.id
+		LEFT OUTER JOIN BMS_OR_ORDER_CONFIG c ON b.order_config_id = c.id
+		LEFT OUTER JOIN BMS_BASE_FACTORY f ON b.factory_id = f.id
+		WHERE b.bus_number IN (${busNumbers})
+		]]>
+	</select>
 	
 </mapper>

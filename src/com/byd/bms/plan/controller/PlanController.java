@@ -1032,5 +1032,30 @@ public class PlanController extends BaseController{
 		model = mv.getModelMap();
 		return model;
 	}
+	
+	@RequestMapping("/busTransferOutQuery")
+	@ResponseBody
+	public ModelMap busTransferOutQuery(){
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("busNumbers", request.getParameter("busNumbers"));
+		//condMap.put("busNumbers", "'K8-SZ-2017-00001','K8-SZ-2017-00002'");
+		List<Map<String,String>> list = planService.getBusTransferOutList(condMap);
+		initModel(true,null,list);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/busTransferInQuery")
+	@ResponseBody
+	public ModelMap busTransferInQuery(){
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("bus_number", request.getParameter("bus_number"));
+		condMap.put("factory_id", request.getParameter("factory_id"));
+		condMap.put("factory_id_in", request.getParameter("factory_id_in"));
+		List<Map<String,String>> list = planService.getBusTransferInList(condMap);
+		initModel(true,null,list);
+		model = mv.getModelMap();
+		return model;
+	}
 
 }
