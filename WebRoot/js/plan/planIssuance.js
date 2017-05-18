@@ -106,7 +106,7 @@ $(document).ready(function () {
 		    	if(response.success){
 		    		if(response.message != '查询成功')alert(response.message);
 		    		$("#btnSave").removeAttr("disabled");
-		    		var input_disable_total = "<input name = 'total' title=\"总计划\" class=\"cell\" style=\"border:0;width:45px;background-color:#f9f9f9\" onclick=\"javascript:$(this).blur();\" value=";
+		    		var input_disable_total = "<input name = 'total' title=\"总计划\" class=\"cell\" style=\"border:0;width:45px;background-color:#f9f9f9\" disabled=\"disabled\" onclick=\"javascript:$(this).blur();\" value=";
 		    		var input_disable = "<input title=\"计划已发布\" disabled=\"disabled\" class=\"cell\" style=\"border:0;width:45px;BACKGROUND: none transparent scroll repeat 0% 0%;\" onclick=\"javascript:$(this).select();\" value=";
 		    		var issStr = "";var configsStr = "";
 		    		$.each(response.data,function (index,value) {

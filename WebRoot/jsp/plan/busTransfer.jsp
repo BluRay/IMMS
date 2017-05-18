@@ -37,9 +37,31 @@
 				
 			<div class="page-content">
 					<div class="page-content-area">
+					<div class="tabbable">
+					<ul class="nav nav-tabs" id="myTab">
+						<li id="div1" class="active">
+							<a data-toggle="tab" href="#out">调出</a>
+						</li>
+						<li id="div2">
+							<a data-toggle="tab" href="#in">调入</a>
+						</li>
+						<li id="div3">
+							<a data-toggle="tab" href="#his">调动记录</a>
+						</li>
+					</ul>
+					<div class="tab-content">
+						<div id="out" class="tab-pane fade in active">
+							<p>out</p>
+						</div>
+						<div id="in" class="tab-pane fade in">
+							<p>in</p>
+						</div>
+						<div id="his" class="tab-pane fade in">
+							<p>his</p>
+						</div>
+					</div>
 					
-					<!-- 东西放这里！ -->		
-					
+					</div>
 					</div>
 			</div><!-- /.main-content -->
 

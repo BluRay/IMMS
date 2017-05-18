@@ -51,6 +51,7 @@ public class BaseController {
      } 
 
 	 public void initModel(boolean status,String message,Object data){
+		 mv.clear();
 		 Map<String, Object> map = new HashMap<String, Object>();  
 	     map.put( "success", status);  
 	     map.put( "message", message); 

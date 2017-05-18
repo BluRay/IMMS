@@ -39,11 +39,10 @@
 	</select>
 	
 	<select id="queryFactoryListAuth" parameterType="Map" resultType="Map">			
-		SELECT o.foreign_id id,o.name 
-		FROM BMS_BASE_ORG o
-		WHERE o.org_type='2'  and o.deleted='0'
+		SELECT o.id,o.factory_name name 
+		FROM BMS_BASE_FACTORY o WHERE o.delete_flag = '0'
 		<if test="function_url !=null and  function_url !=''">
-		AND (locate(o.org_code,
+		AND (locate(o.factory_code,
 		(SELECT GROUP_CONCAT(R.permission_value) FROM BMS_BASE_USER_ROLE R WHERE R.staff_number = #{staff_number} AND R.permission_key = '1'
 		AND R.role_id IN 
 		(SELECT RP.role_id FROM BMS_BASE_ROLE_PERMISSION RP WHERE 

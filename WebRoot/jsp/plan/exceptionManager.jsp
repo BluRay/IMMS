@@ -111,6 +111,28 @@
 				</form>
 			</div>
 			
+			<div id="dialog-confirm" class="hide" style="align:center;width:700px;height:500px">
+				<form>
+					<table>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">车号：</td><td style="width:150px"><input id="confirm_busNumber" disabled="disabled" placeholder="车号..." style="width:150px" type="text"><input type="text" style="display:none" id="confirm_exception_id" class="input-small" /></td>
+						<td align="right" style="width:100px">处理时间：</td><td style="width:150px"><input id="confirm_process_date" placeholder="处理时间..." style="width:150px" type="text" onClick="WdatePicker({el:'confirm_process_date',dateFmt:'yyyy-MM-dd HH:mm:ss'});"></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">异常原因：</td><td style="width:150px"><select id="confirm_reason_type" class="form-control" style="width:120px"></select></td>
+						<td align="right" style="width:100px">责任部门：</td><td style="width:150px"><select id="confirm_duty_department" class="form-control" style="width:150px"></select></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right">处理方案：</td><td colspan=3><input id="confirm_solution" placeholder="处理方案..." style="width:370px" type="text"></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right">详细原因：</td><td colspan=3><input id="confirm_detailed_reason" placeholder="详细原因..." style="width:370px" type="text"></td>
+					</tr>
+					
+					</table>
+				</form>
+			</div>
+			
 		</div>
 			<!-- 脚 -->
 			<%-- <jsp:include page="footer.jsp" flush="true"/> --%>

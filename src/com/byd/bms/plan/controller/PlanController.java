@@ -87,6 +87,12 @@ public class PlanController extends BaseController{
         return mv;  
     }
 	
+	@RequestMapping("/generateVin")
+	public ModelAndView generateVin(){			//生成VIN号
+		mv.setViewName("plan/generateVin");
+        return mv;
+	}
+	
 	@RequestMapping("/busTransfer")
 	public ModelAndView busTransfer(){			//车辆调动
 		mv.setViewName("plan/busTransfer");
@@ -482,7 +488,12 @@ public class PlanController extends BaseController{
 			
 			//STEP 03 获取当前工厂  当前配置  当前月份  总计划数  及 已发布数之和 planIssuance.setPlan_config_qty_X_done
 			int order_config_Qty = 0;
-			order_config_Qty = planService.getPlanConfigQty(((PlanIssuance)datalist.get(i)).getOrder_config_id());
+			Map<String,Object> conditionMap_1=new HashMap<String,Object>();
+			conditionMap_1.put("order_id", ((PlanIssuance)datalist.get(i)).getOrder_id());
+			conditionMap_1.put("factory_id", request.getParameter("factory_id"));
+			conditionMap_1.put("order_config_id", ((PlanIssuance)datalist.get(i)).getOrder_config_id());
+			order_config_Qty = planService.getPlanConfigQty(conditionMap_1);
+			
 			planIssuance.setPlan_config_qty(order_config_Qty);
 			
 			Map<String,Object> conditionMap4=new HashMap<String,Object>();
@@ -524,222 +535,114 @@ public class PlanController extends BaseController{
 			}
 			
 			//STEP 04 推荐发布值 根据 当前配置总计划数 - 当前配置已发布部 < 当天计划数 
-			int plan_qty_1 = ((PlanIssuanceTotal)total_datalist.get(0)).getNum();
-			if((planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_1()) < plan_qty_1){
-				planIssuance.setPlan_code_1(0);
-			}else if((planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_1()) > plan_qty_1){
-				if(planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_1_done() < plan_qty_1){
-					//当前配置总计划数 - 当前配置已发布部 < 当天计划数
-					planIssuance.setPlan_code_1((planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_1_done()>=0)?planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_1_done():0);
-					issed_count_1 += planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_1_done();
-				}else{
-					planIssuance.setPlan_code_1((plan_qty_1 - issed_count_1>=0)?plan_qty_1 - issed_count_1:0);
-					issed_count_1 += plan_qty_1;
-				}
+			int plan_qty_1 = ((PlanIssuanceTotal)total_datalist.get(0)).getNum();int plan_code_1 = 0;
+			if((planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_1_done()) < plan_qty_1 - issed_count_1){
+				plan_code_1 = (planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_1_done()>=0)?(planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_1_done()):0;
 			}else{
-				planIssuance.setPlan_code_1(planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_1() - issed_count_1);
-				////issed_count_1 += plan_qty_1;
-				issed_count_1 += (planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_1() - issed_count_1);
+				plan_code_1 = (plan_qty_1 - issed_count_1>=0)?plan_qty_1 - issed_count_1:0;
 			}
-
-			int plan_qty_2 = ((PlanIssuanceTotal)total_datalist.get(1)).getNum();
-			if((planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_2()) < plan_qty_2){
-				planIssuance.setPlan_code_2(0);
-			}else if((planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_2()) > plan_qty_2){
-				if(planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_2_done() < plan_qty_2){
-					//当前配置总计划数 - 当前配置已发布部 < 当天计划数
-					planIssuance.setPlan_code_2((planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_2_done()>=0)?planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_2_done():0);
-					issed_count_2 += planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_2_done();
-				}else{
-					planIssuance.setPlan_code_2((plan_qty_2 - issed_count_2>=0)?plan_qty_2 - issed_count_2:0);
-					issed_count_2 += plan_qty_2;
-				}
-			}else{
-				planIssuance.setPlan_code_2(planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_2() - issed_count_2);
-				////issed_count_2 += plan_qty_2;
-				issed_count_2 += (planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_2() - issed_count_2);
-			}
+			planIssuance.setPlan_code_1(plan_code_1);
+			issed_count_1 += plan_code_1;
 			
-			int plan_qty_3 = ((PlanIssuanceTotal)total_datalist.get(2)).getNum();
-			if((planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_3()) < plan_qty_3){
-				planIssuance.setPlan_code_3(0);
-			}else if((planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_3()) > plan_qty_3){
-				if(planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_3_done() < plan_qty_3){
-					//当前配置总计划数 - 当前配置已发布部 < 当天计划数
-					planIssuance.setPlan_code_3((planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_3_done()>=0)?planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_3_done():0);
-					issed_count_3 += planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_3_done();
-				}else{
-					planIssuance.setPlan_code_3((plan_qty_3 - issed_count_3>=0)?plan_qty_3 - issed_count_3:0);
-					issed_count_3 += plan_qty_3;
-				}
+			int plan_qty_2 = ((PlanIssuanceTotal)total_datalist.get(1)).getNum();int plan_code_2 = 0;
+			if((planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_2_done()) < plan_qty_2 - issed_count_2){
+				plan_code_2 = (planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_2_done()>=0)?(planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_2_done()):0;
 			}else{
-				planIssuance.setPlan_code_3(planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_3() - issed_count_3);
-				////issed_count_3 += plan_qty_3;
-				issed_count_3 += (planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_3() - issed_count_3);
+				plan_code_2 = (plan_qty_2 - issed_count_2>=0)?plan_qty_2 - issed_count_2:0;
 			}
+			planIssuance.setPlan_code_2(plan_code_2);
+			issed_count_2 += plan_code_2;
 			
-			int plan_qty_4 = ((PlanIssuanceTotal)total_datalist.get(3)).getNum();
-			if((planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_4()) < plan_qty_4){
-				planIssuance.setPlan_code_4(0);
-			}else if((planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_4()) > plan_qty_4){
-				if(planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_4_done() < plan_qty_4){
-					//当前配置总计划数 - 当前配置已发布部 < 当天计划数
-					planIssuance.setPlan_code_4((planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_4_done()>=0)?planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_4_done():0);
-					issed_count_4 += planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_4_done();
-				}else{
-					planIssuance.setPlan_code_4((plan_qty_4 - issed_count_4>=0)?plan_qty_4 - issed_count_4:0);
-					issed_count_4 += plan_qty_4;
-				}
+			int plan_qty_3 = ((PlanIssuanceTotal)total_datalist.get(2)).getNum();int plan_code_3 = 0;
+			if((planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_3_done()) < plan_qty_3 - issed_count_3){
+				plan_code_3 = (planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_3_done()>=0)?(planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_3_done()):0;
 			}else{
-				planIssuance.setPlan_code_4(planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_4() - issed_count_4);
-				////issed_count_4 += plan_qty_4;
-				issed_count_4 += (planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_4() - issed_count_4);
+				plan_code_3 = (plan_qty_3 - issed_count_3>=0)?plan_qty_3 - issed_count_3:0;
 			}
+			planIssuance.setPlan_code_3(plan_code_3);		
+			issed_count_3 += plan_code_3;
 			
-			int plan_qty_5 = ((PlanIssuanceTotal)total_datalist.get(4)).getNum();
-			if((planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_5()) < plan_qty_5){
-				planIssuance.setPlan_code_5(0);
-			}else if((planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_5()) > plan_qty_5){
-				if(planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_5_done() < plan_qty_5){
-					//当前配置总计划数 - 当前配置已发布部 < 当天计划数
-					planIssuance.setPlan_code_5((planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_5_done()>=0)?planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_5_done():0);
-					issed_count_5 += planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_5_done();
-				}else{
-					planIssuance.setPlan_code_5((plan_qty_5 - issed_count_5>=0)?plan_qty_5 - issed_count_5:0);
-					issed_count_5 += plan_qty_5;
-				}
+			int plan_qty_4 = ((PlanIssuanceTotal)total_datalist.get(3)).getNum();int plan_code_4 = 0;
+			if((planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_4_done()) < plan_qty_4 - issed_count_4){
+				plan_code_4 = (planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_4_done() >=0)?(planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_4_done() ):0;
 			}else{
-				planIssuance.setPlan_code_5(planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_5() - issed_count_5);
-				////issed_count_5 += plan_qty_5;
-				issed_count_5 += (planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_5() - issed_count_5);
+				plan_code_4 = (plan_qty_4 - issed_count_4>=0)?plan_qty_4 - issed_count_4:0;
 			}
+			planIssuance.setPlan_code_4(plan_code_4);
+			issed_count_4 += plan_code_4;
 			
-			int plan_qty_6 = ((PlanIssuanceTotal)total_datalist.get(5)).getNum();
-			if((planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_6()) < plan_qty_6){
-				planIssuance.setPlan_code_6(0);
-			}else if((planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_6()) > plan_qty_6){
-				if(planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_6_done() < plan_qty_6){
-					//当前配置总计划数 - 当前配置已发布部 < 当天计划数
-					planIssuance.setPlan_code_6((planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_6_done()>=0)?planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_6_done():0);
-					issed_count_6 += planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_6_done();
-				}else{
-					planIssuance.setPlan_code_6((plan_qty_6 - issed_count_6>=0)?plan_qty_6 - issed_count_6:0);
-					issed_count_6 += plan_qty_6;
-				}
+			int plan_qty_5 = ((PlanIssuanceTotal)total_datalist.get(4)).getNum();int plan_code_5 = 0;
+			if((planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_5_done()) < plan_qty_5 - issed_count_5){
+				plan_code_5 = (planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_5_done()>=0)?(planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_5_done()):0;
 			}else{
-				planIssuance.setPlan_code_6(planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_6() - issed_count_6);
-				////issed_count_6 += plan_qty_6;
-				issed_count_6 += (planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_6() - issed_count_6);
+				plan_code_5 = (plan_qty_5 - issed_count_5>=0)?plan_qty_5 - issed_count_5:0;
 			}
+			planIssuance.setPlan_code_5(plan_code_5);
+			issed_count_5 += plan_code_5;
 			
-			int plan_qty_7 = ((PlanIssuanceTotal)total_datalist.get(6)).getNum();
-			if((planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_7()) < plan_qty_7){
-				planIssuance.setPlan_code_7(0);
-			}else if((planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_7()) > plan_qty_7){
-				if(planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_7_done() < plan_qty_7){
-					//当前配置总计划数 - 当前配置已发布部 < 当天计划数
-					planIssuance.setPlan_code_7((planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_7_done()>=0)?planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_7_done():0);
-					issed_count_7 += planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_7_done();
-				}else{
-					planIssuance.setPlan_code_7((plan_qty_7 - issed_count_7>=0)?plan_qty_7 - issed_count_7:0);
-					issed_count_7 += plan_qty_7;
-				}
+			int plan_qty_6 = ((PlanIssuanceTotal)total_datalist.get(5)).getNum();int plan_code_6 = 0;
+			if((planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_6_done()) < plan_qty_6 - issed_count_6){
+				plan_code_6 = (planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_6_done()>=0)?(planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_6_done()):0;
 			}else{
-				planIssuance.setPlan_code_7(planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_7() - issed_count_7);
-				////issed_count_7 += plan_qty_7;
-				issed_count_7 += (planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_7() - issed_count_7);
-				
+				plan_code_6 = (plan_qty_6 - issed_count_6>=0)?plan_qty_6 - issed_count_6:0;
 			}
+			planIssuance.setPlan_code_6(plan_code_6);
+			issed_count_6 += plan_code_6;
 			
-			int plan_qty_8 = ((PlanIssuanceTotal)total_datalist.get(7)).getNum();
-			if((planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_8()) < plan_qty_8){
-				planIssuance.setPlan_code_8(0);
-			}else if((planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_8()) > plan_qty_8){
-				if(planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_8_done() < plan_qty_8){
-					//当前配置总计划数 - 当前配置已发布部 < 当天计划数
-					planIssuance.setPlan_code_8((planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_8_done()>=0)?planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_8_done():0);
-					issed_count_8 += planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_8_done();
-				}else{
-					planIssuance.setPlan_code_8((plan_qty_8 - issed_count_8>=0)?plan_qty_8 - issed_count_8:0);
-					issed_count_8 += plan_qty_8;
-				}
+			int plan_qty_7 = ((PlanIssuanceTotal)total_datalist.get(6)).getNum();int plan_code_7 = 0;
+			if((planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_7_done()) < plan_qty_7 - issed_count_7){
+				plan_code_7 = (planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_7_done()>=0)?(planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_7_done()):0;
 			}else{
-				planIssuance.setPlan_code_8(planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_8() - issed_count_8);
-				////issed_count_8 += plan_qty_8;
-				issed_count_8 += (planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_8() - issed_count_8);
+				plan_code_7 = (plan_qty_7 - issed_count_7>=0)?plan_qty_7 - issed_count_7:0;
 			}
+			planIssuance.setPlan_code_7(plan_code_7);
+			issed_count_7 += plan_code_7;
 			
-			int plan_qty_9 = ((PlanIssuanceTotal)total_datalist.get(8)).getNum();
-			if((planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_9()) < plan_qty_9){
-				planIssuance.setPlan_code_9(0);
-			}else if((planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_9()) > plan_qty_9){
-				if(planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_9_done() < plan_qty_9){
-					//当前配置总计划数 - 当前配置已发布部 < 当天计划数
-					planIssuance.setPlan_code_9((planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_9_done()>=0)?planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_9_done():0);
-					issed_count_9 += planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_9_done();
-				}else{
-					planIssuance.setPlan_code_9((plan_qty_9 - issed_count_9>=0)?plan_qty_9 - issed_count_9:0);
-					issed_count_9 += plan_qty_9;
-				}
+			int plan_qty_8 = ((PlanIssuanceTotal)total_datalist.get(7)).getNum();int plan_code_8 = 0;
+			if((planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_8_done()) < plan_qty_8 - issed_count_8){
+				plan_code_8 = (planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_8_done()>=0)?(planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_8_done()):0;
 			}else{
-				planIssuance.setPlan_code_9(planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_9() - issed_count_9);
-				////issed_count_9 += plan_qty_9;
-				issed_count_9 += (planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_9() - issed_count_9);
+				plan_code_8 = (plan_qty_8 - issed_count_8>=0)?plan_qty_8 - issed_count_8:0;
 			}
+			planIssuance.setPlan_code_8(plan_code_8);
+			issed_count_8 += plan_code_8;
 			
-			int plan_qty_10 = ((PlanIssuanceTotal)total_datalist.get(9)).getNum();
-			if((planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_10()) < plan_qty_10){
-				planIssuance.setPlan_code_10(0);
-			}else if((planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_10()) > plan_qty_10){
-				if(planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_10_done() < plan_qty_10){
-					//当前配置总计划数 - 当前配置已发布部 < 当天计划数
-					planIssuance.setPlan_code_10((planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_10_done()>=0)?planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_10_done():0);
-					issed_count_10 += planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_10_done();
-				}else{
-					planIssuance.setPlan_code_10((plan_qty_10 - issed_count_10>=0)?plan_qty_10 - issed_count_10:0);
-					issed_count_10 += plan_qty_10;
-				}
+			int plan_qty_9 = ((PlanIssuanceTotal)total_datalist.get(8)).getNum();int plan_code_9 = 0;
+			if((planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_9_done()) < plan_qty_9 - issed_count_9){
+				plan_code_9 = (planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_9_done()>=0)?(planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_9_done()):0;
 			}else{
-				planIssuance.setPlan_code_10(planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_10() - issed_count_10);
-				////issed_count_10 += plan_qty_10;
-				issed_count_10 += (planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_10() - issed_count_10);
+				plan_code_9 = (plan_qty_9 - issed_count_9>=0)?plan_qty_9 - issed_count_9:0;
 			}
+			planIssuance.setPlan_code_9(plan_code_9);
+			issed_count_9 += plan_code_9;
 			
-			int plan_qty_11 = ((PlanIssuanceTotal)total_datalist.get(10)).getNum();
-			if((planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_11()) < plan_qty_11){
-				planIssuance.setPlan_code_11(0);
-			}else if((planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_11()) > plan_qty_11){
-				if(planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_11_done() < plan_qty_11){
-					//当前配置总计划数 - 当前配置已发布部 < 当天计划数
-					planIssuance.setPlan_code_11((planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_11_done()>=0)?planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_11_done():0);
-					issed_count_11 += planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_11_done();
-				}else{
-					planIssuance.setPlan_code_11((plan_qty_11 - issed_count_11>=0)?plan_qty_11 - issed_count_11:0);
-					issed_count_11 += plan_qty_11;
-				}
+			int plan_qty_10 = ((PlanIssuanceTotal)total_datalist.get(9)).getNum();int plan_code_10 = 0;
+			if((planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_10_done()) < plan_qty_10 - issed_count_10){
+				plan_code_10 = (planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_10_done()>=0)?(planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_10_done()):0;
 			}else{
-				planIssuance.setPlan_code_11(planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_11() - issed_count_11);
-				////issed_count_11 += plan_qty_11;
-				issed_count_11 += (planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_11() - issed_count_11);
+				plan_code_10 = (plan_qty_10 - issed_count_10>=0)?plan_qty_10 - issed_count_10:0;
 			}
+			planIssuance.setPlan_code_10(plan_code_10);
+			issed_count_10 += plan_code_10;
 			
-			int plan_qty_12 = ((PlanIssuanceTotal)total_datalist.get(11)).getNum();
-			if((planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_12()) < plan_qty_12){
-				planIssuance.setPlan_code_12(0);
-			}else if((planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_12()) > plan_qty_12){
-				if(planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_12_done() < plan_qty_12){
-					//当前配置总计划数 - 当前配置已发布部 < 当天计划数
-					planIssuance.setPlan_code_12((planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_12_done()>=0)?planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_12_done():0);
-					issed_count_12 += planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_12_done();
-				}else{
-					planIssuance.setPlan_code_12((plan_qty_12 - issed_count_12>=0)?plan_qty_12 - issed_count_12:0);
-					issed_count_12 += plan_qty_12;
-				}
+			int plan_qty_11 = ((PlanIssuanceTotal)total_datalist.get(10)).getNum();int plan_code_11 = 0;
+			if((planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_11_done()) < plan_qty_11 - issed_count_11){
+				plan_code_11 = (planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_11_done()>=0)?(planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_11_done()):0;
 			}else{
-				planIssuance.setPlan_code_12(planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_12() - issed_count_12);
-				////issed_count_12 += plan_qty_12;
-				issed_count_12 += (planIssuance.getProduct_qty() - planIssuance.getPlan_code_issed_12() - issed_count_12);
+				plan_code_11 = (plan_qty_11 - issed_count_11>=0)?plan_qty_11 - issed_count_11:0;
 			}
+			planIssuance.setPlan_code_11(plan_code_11);
+			issed_count_11 += plan_code_11;
+			
+			int plan_qty_12 = ((PlanIssuanceTotal)total_datalist.get(11)).getNum();int plan_code_12 = 0;
+			if((planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_12_done()) < plan_qty_12 - issed_count_12){
+				plan_code_12 = (planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_12_done()>=0)?(planIssuance.getProduct_qty() - planIssuance.getPlan_config_qty_12_done()):0;
+			}else{
+				plan_code_12 = (plan_qty_12 - issed_count_12>=0)?plan_qty_12 - issed_count_12:0;
+			}
+			planIssuance.setPlan_code_12(plan_code_12);
+			issed_count_12 += plan_code_12;
+			
 			//STEP 05 resultlist.add(planIssuance);
 			resultlist.add(planIssuance);
 		}
@@ -795,6 +698,7 @@ public class PlanController extends BaseController{
 			pauseList.add(pause);
 		}
 		int result = planService.addPause(pauseList);
+		mv.clear();
 		initModel(true,String.valueOf(result),null);
 		model = mv.getModelMap();
 		return model;
@@ -832,6 +736,7 @@ public class PlanController extends BaseController{
 		condMap.put("pause_id", pause_id);
 		Map<String,Object> list = planService.getPauseList(condMap);
 		//initModel(true,"SUCCESS",list);
+		mv.clear();
 		model.addAllAttributes(list);
 		model = mv.getModelMap();
 		return model;
@@ -870,9 +775,18 @@ public class PlanController extends BaseController{
 		condMap.put("start", start);
 		condMap.put("length", length);
 		condMap.put("id", request.getParameter("id"));
+		condMap.put("factory", request.getParameter("factory"));
+		condMap.put("line", request.getParameter("line"));
+		condMap.put("bus_number", request.getParameter("bus_number"));
+		condMap.put("severity_level_id", request.getParameter("severity_level_id"));
+		condMap.put("measures_id", request.getParameter("measures_id"));
+		condMap.put("status", request.getParameter("status"));
+		condMap.put("start_time", request.getParameter("start_time"));
+		condMap.put("finish_time", request.getParameter("finish_time"));
 		
 		Map<String,Object> list = planService.getExceptionList(condMap);
-		model.addAllAttributes(list);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(list);
 		model = mv.getModelMap();
 		return model;
 	}
@@ -892,6 +806,186 @@ public class PlanController extends BaseController{
 		exception.setDuty_department_id(request.getParameter("duty_department_id"));
 		exception.setMeasures_id(request.getParameter("measures_id"));
 		int result = planService.updateExceptionInfo(exception);
+		initModel(true,String.valueOf(result),null);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/confirmException")
+	@ResponseBody
+	public ModelMap confirmException(){
+		ProductionException exception = new ProductionException();
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String staff_number = request.getSession().getAttribute("staff_number") + "";
+		exception.setId(Integer.parseInt(request.getParameter("id")));
+		exception.setProcess_date(request.getParameter("process_date"));
+		exception.setReason_type_id(request.getParameter("reason_type_id"));
+		exception.setDuty_department_id(request.getParameter("duty_department_id"));
+		exception.setDetailed_reasons(request.getParameter("detailed_reasons"));
+		exception.setSolution(request.getParameter("solution"));
+		exception.setProcessor(staff_number);
+		exception.setProcess_date(curTime);
+		
+		int result = planService.confirmException(exception);
+		initModel(true,String.valueOf(result),null);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/showPlanVinList")
+	@ResponseBody
+	public ModelMap showPlanVinList(){
+		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
+		int start=(request.getParameter("start")!=null)?Integer.parseInt(request.getParameter("start")):0;		//分页数据起始数
+		int length=(request.getParameter("length")!=null)?Integer.parseInt(request.getParameter("length")):500;	//每一页数据条数
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("draw", draw);
+		condMap.put("start", start);
+		condMap.put("length", length);
+		condMap.put("factory_id", request.getParameter("factory_id"));
+		condMap.put("order_no", request.getParameter("order_no"));
+		condMap.put("bus_vin", request.getParameter("bus_vin"));
+		condMap.put("bus_number", request.getParameter("bus_number"));
+		
+		Map<String,Object> list = planService.getPlanVinList(condMap);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(list);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/getGenerateVin")
+	@ResponseBody
+	public ModelMap getGenerateVin(){
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String staff_number = request.getSession().getAttribute("staff_number") + "";
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("factory_id", request.getParameter("factory_id"));
+		condMap.put("order_no", request.getParameter("order_no"));
+		condMap.put("vinCount", request.getParameter("vinCount"));
+		condMap.put("year", request.getParameter("year"));
+		condMap.put("vin_prefix", request.getParameter("vin_prefix"));
+		condMap.put("WMI_extension", request.getParameter("WMI_extension"));
+		condMap.put("curTime", curTime);
+		condMap.put("staff_number", staff_number);
+		Map<String,Object> list = planService.getGenerateVin(condMap);
+		initModel(true,null,list);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/getVinPrefix")
+	@ResponseBody
+	public ModelMap getVinPrefix(){
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("area", request.getParameter("area"));
+		condMap.put("order_no", request.getParameter("order_no"));
+		Map<String,Object> list = planService.getVinPrefix(condMap);
+		//model.addAllAttributes(list);
+		initModel(true,null,list);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping(value="/uploadVin",method=RequestMethod.POST)
+	@ResponseBody
+	public ModelMap uploadVin(@RequestParam(value="file",required=false) MultipartFile file){
+		logger.info("---->uploadVin");
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String staff_number = request.getSession().getAttribute("staff_number") + "";
+		String fileFileName = "vin.xls";
+		int result = 0;
+		ExcelModel excelModel =new ExcelModel();
+		excelModel.setReadSheets(1);
+		excelModel.setStart(1);
+		Map<String,Integer> dataType = new HashMap<String,Integer>();
+		dataType.put("0", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("1", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("2", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("3", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("4", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("5", ExcelModel.CELL_TYPE_STRING);
+		excelModel.setDataType(dataType);
+		excelModel.setPath(fileFileName);
+
+        File vinFile = new File(fileFileName);
+        List<Map<String,Object>> vin_list = new ArrayList<Map<String,Object>>();
+		try{
+	        file.transferTo(vinFile);
+			InputStream is = new FileInputStream(vinFile);
+			ExcelTool excelTool = new ExcelTool();
+			excelTool.readExcel(is, excelModel);
+			//数据校验
+			int lineCount = excelModel.getData().size();
+			for(int i=0;i<lineCount;i++){
+				String factory_name = excelModel.getData().get(i)[0].toString().trim();
+				String order_no = excelModel.getData().get(i)[1].toString().trim();
+				String vin = excelModel.getData().get(i)[2].toString().trim();
+				String left_motor_number = excelModel.getData().get(i)[3].toString().trim();
+				String right_motor_number = excelModel.getData().get(i)[4].toString().trim();
+				String bus_number = excelModel.getData().get(i)[5].toString().trim();
+				//校验工厂与订单是否正确
+				Map<String,Object> condMap=new HashMap<String,Object>();
+				condMap.put("factory_name", factory_name);
+				condMap.put("order_no", order_no);
+				condMap.put("vin", vin);
+				condMap.put("left_motor_number", left_motor_number);
+				condMap.put("right_motor_number", right_motor_number);
+				condMap.put("bus_number", bus_number);
+				condMap.put("curTime", curTime);
+				condMap.put("staff_number", staff_number);
+				int check_result = planService.checkFactoryOrder(condMap);
+				logger.info("---->uploadVin factory_name = " + factory_name + ";order_no = " + order_no + ";check_result = " + check_result);
+				if (check_result == 0){
+					mv.clear();
+					initModel(false,"导入文件的" + factory_name + "没有配置订单" + order_no + ",请确认后重新导入。",null);
+					model = mv.getModelMap();
+					return model;
+				}
+				if(vin.equals("")){
+					mv.clear();
+					initModel(false,"导入文件的VIN号不能为空，请确认后重新导入。",null);
+					model = mv.getModelMap();
+					return model;
+				}
+				
+				List<String> busList = planService.selectBusByMotorVin(condMap);
+				if(busList!=null){
+					mv.clear();
+					initModel(false,"导入文件的VIN号/电机号("+ vin + "/" + left_motor_number + "/" +right_motor_number + ")与系统中的数据重复。",null);
+					model = mv.getModelMap();
+					return model;
+				}
+				
+				vin_list.add(condMap);
+			}
+			result = planService.importVin(vin_list);
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			initModel(false,"导入文件的格式有误！",null);
+			model = mv.getModelMap();
+			return model;
+		}
+		mv.clear();
+		initModel(true,String.valueOf(result),null);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/BingingVinMotor")
+	@ResponseBody
+	public ModelMap BingingVinMotor(){
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("vin", request.getParameter("vin"));
+		condMap.put("update_val", request.getParameter("update_val"));
+		condMap.put("update", request.getParameter("update"));
+		
+		int result = planService.BingingVinMotor(condMap);
+		mv.clear();
 		initModel(true,String.valueOf(result),null);
 		model = mv.getModelMap();
 		return model;

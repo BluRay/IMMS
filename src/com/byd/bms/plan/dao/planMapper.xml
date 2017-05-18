@@ -22,11 +22,11 @@
 	
 	<select id="getPlanMasterIndex" parameterType="Map" resultType="com.byd.bms.plan.model.PlanMasterIndex">
 		SELECT DISTINCT
-		m.version,o.order_no,f.name,u.display_name,create_date FROM
+		m.version,o.order_no,f.factory_name,u.display_name,create_date FROM
 		BMS_PLAN_MASTER_PLAN m
 		LEFT JOIN BMS_OR_ORDER o ON m.order_id = o.id
-		LEFT JOIN BMS_BASE_ORG f ON m.factory_id = f.foreign_id AND f.org_type = 2 
-		LEFT JOIN BMS_BASE_USER u ON m.creator_id = u.id where 1=1
+		LEFT JOIN BMS_BASE_FACTORY f ON m.factory_id = f.id
+		LEFT JOIN BMS_BASE_USER u ON m.creator_id = u.staff_number where 1=1
 		<if test="factory_id!=''">
 			and m.factory_id = #{factory_id}
 		</if>
@@ -181,12 +181,23 @@
 		WHERE k.key_code = 'PLAN_CODE' AND k.delete_flag='0'
 		AND (p.order_id = #{order_id} OR ISNULL(p.order_id))
 		AND (p.factory_id = #{factory_id} OR ISNULL(p.factory_id))
-		AND p.order_config_id = #{order_config_id} AND p.plan_date = #{plan_date}
+		AND p.order_config_id = #{order_config_id}  AND plan_date = #{plan_date}
+		GROUP BY k.id
+	</select>
+	<select id="getDatePlanIssuanceCount" parameterType="Map" resultType="com.byd.bms.plan.model.PlanIssuanceCount">
+		SELECT k.value AS plan_code_value,p.order_id,p.factory_id,p.order_config_id,sum(IFNULL(p.plan_qty,0)) AS
+		issed_qty FROM BMS_BASE_KEY k
+		LEFT JOIN BMS_PLAN_PRODUCTION_PLAN p ON p.plan_code_value = k.value
+		WHERE k.key_code = 'PLAN_CODE' AND k.delete_flag='0'
+		AND (p.order_id = #{order_id} OR ISNULL(p.order_id))
+		AND (p.factory_id = #{factory_id} OR ISNULL(p.factory_id))
+		AND p.order_config_id = #{order_config_id}  AND plan_date = #{plan_date}
 		GROUP BY k.id
 	</select>
 	
-	<select id="getPlanConfigQty" parameterType="int" resultType="int">
-		SELECT config_qty FROM BMS_OR_ORDER_CONFIG WHERE id = #{order_config_id}
+	<select id="getPlanConfigQty" parameterType="Map" resultType="int">
+		SELECT product_qty FROM BMS_OR_FACTORY_ORDER_CONFIG C WHERE 
+		C.order_config_id = #{order_config_id} AND factory_id = #{factory_id} AND order_id = #{order_id}
 	</select>
 	
 	<select id="getPlanConfigIssedQty" parameterType="Map" resultType="com.byd.bms.plan.model.PlanConfigIssedQty">
@@ -387,9 +398,12 @@
 		<if test="finish_time !='' and finish_time !=null">
 		AND E.finish_time &lt;= #{finish_time}
 		</if>
+		<if test="start !=null">
+			LIMIT #{start} ,#{length} 
+		</if>	
 	</select>
 	<select id="getExceptionCount" parameterType="Map" resultType="int">
-		SELECT COUNT(id) FROM BMS_PD_PRODUCTION_EXCEPTION WHERE 1=1
+		SELECT COUNT(E.id) FROM BMS_PD_PRODUCTION_EXCEPTION E WHERE 1=1
 		<if test="id !='' and id !=null">
 		AND E.id=#{id}
 		</if>
@@ -430,4 +444,144 @@
 		measures_id=#{measures_id}, solution=#{solution} WHERE id=#{id}
 		]]>
 	</update>
+	
+	<update id="confirmException" parameterType="com.byd.bms.production.model.ProductionException">
+		UPDATE BMS_PD_PRODUCTION_EXCEPTION SET processor=#{processor}, process_date = #{process_date},reason_type_id=#{reason_type_id}, 
+		duty_department_id=#{duty_department_id},detailed_reasons=#{detailed_reasons},solution=#{solution}, 
+		status='1'
+		WHERE id=#{id}
+	</update>
+	
+	<select id="getPlanVin" parameterType="Map" resultType="com.byd.bms.plan.model.PlanVIN">
+		SELECT v.*,b.bus_number,b.productive_date,u.display_name AS
+		creator_name, u1.display_name as print_name,
+		o.order_code,t.bus_type_code,o.order_qty,o.order_name,o.order_no,f.factory_name
+		FROM BMS_PD_VIN v
+		LEFT JOIN BMS_BASE_FACTORY f on f.id=v.factory_id
+		LEFT JOIN BMS_BASE_USER u ON v.creator_id = u.staff_number
+		LEFT JOIN BMS_BASE_USER u1 on v.printer_id=u1.staff_number
+		LEFT JOIN BMS_PLAN_BUS b ON v.vin = b.vin and b.vin is not null and b.vin !='' 
+		LEFT JOIN BMS_OR_ORDER o on v.order_id=o.id
+		LEFT JOIN BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id
+		where 1=1
+		<if test="factory_id!=null and factory_id !=''">
+			and v.factory_id = #{factory_id}
+		</if>
+		<if test="order_no!=null and order_no!=''">
+			and v.order_id = (SELECT id FROM BMS_OR_ORDER WHERE order_no=#{order_no})
+		</if>
+		<if test="bus_vin!=null and bus_vin!=''">
+			and v.vin = #{bus_vin}
+		</if>
+		<if test="bus_number!=null and bus_number!=''">
+			and b.bus_number = #{bus_number}
+		</if>
+		<if test="start !=null">
+			LIMIT #{start} ,#{length} 
+		</if>	
+	</select>
+	
+	<select id="getPlanVinCount" parameterType="Map" resultType="int">
+		SELECT count(v.vin) FROM BMS_PD_VIN v
+		LEFT OUTER JOIN BMS_PLAN_BUS b ON
+		v.vin = b.vin and b.vin !=null where 1=1 
+		<if test="factory_id!=null and factory_id !=''">
+			and v.factory_id = #{factory_id}
+		</if>
+		<if test="order_no!=null and order_no!=''">
+			and v.order_id = (SELECT id FROM BMS_OR_ORDER WHERE order_no=#{order_no})
+		</if>
+		<if test="bus_vin!=null and bus_vin!=''">
+			and v.vin = #{bus_vin}
+		</if>
+		<if test="bus_number!=null and bus_number!=''">
+			and b.bus_number = #{bus_number}
+		</if>
+	</select>
+	
+	<select id="getFactoryOrderInfo" parameterType="Map" resultType="int">
+		SELECT sum(production_qty) FROM BMS_OR_FACTORY_ORDER WHERE
+		order_id = (SELECT id FROM BMS_OR_ORDER WHERE order_no=#{order_no})
+		AND factory_id = #{factory_id}
+	</select>
+	
+	<select id="getVinPrefix" parameterType="Map" resultType="Map">
+		SELECT R.VIN_prefix, R.WMI_extension, R.number_size FROM BMS_BASE_VIN_RULE R
+		WHERE R.bustype_id = (SELECT O.bus_type_id FROM BMS_OR_ORDER O WHERE O.order_no = #{order_no})
+		AND R.area = #{area}
+	</select>
+	
+	<select id="GetFactoryVinPrefix" parameterType="int" resultType="String">
+		SELECT vin_assembly_code FROM BMS_BASE_FACTORY WHERE id = #{factory_id}
+	</select>
+	
+	<select id="getVinCountByYear" parameterType="String" resultType="int">
+		SELECT IFNULL(max(RIGHT(vin,6)),0) AS max_vin_count FROM
+		BMS_PD_VIN WHERE SUBSTRING(vin,10,1) = #{year_code}
+	</select>
+	
+	<insert id="insertPlanVin" useGeneratedKeys="true" keyProperty="id" parameterType="com.byd.bms.plan.model.PlanVIN">
+		<![CDATA[
+		insert into BMS_PD_VIN (vin,factory_id,order_id,creator_id,creat_date)
+		VALUES(#{vin},#{factory_id},(SELECT id FROM BMS_OR_ORDER WHERE order_no=#{order_no}),#{creator_id},#{creat_date})
+		]]>
+	</insert>
+	<insert id="insertPlanVin2" useGeneratedKeys="true" keyProperty="id" parameterType="com.byd.bms.plan.model.PlanVIN">
+		<![CDATA[
+		insert into BMS_PD_VIN (vin,factory_id,order_id,left_motor_number,right_motor_number,creator_id,creat_date)
+		VALUES(#{vin},(SELECT id FROM BMS_BASE_FACTORY WHERE factory_name = #{factory_name}),
+		(SELECT id FROM BMS_OR_ORDER WHERE order_no=#{order_no}),#{left_motor_number},#{right_motor_number},#{creator_id},#{creat_date})
+		]]>
+	</insert>
+	<update id="updatePlanBus" parameterType="com.byd.bms.plan.model.PlanVIN">
+		UPDATE BMS_PLAN_BUS SET left_motor_number=#{left_motor_number},right_motor_number=#{right_motor_number},
+		vin=#{vin} WHERE bus_number=#{bus_number}
+	</update>
+	
+	<select id="checkFactoryOrder" parameterType="Map" resultType="int">
+		SELECT IFNULL(SUM(id),0) AS id FROM BMS_OR_FACTORY_ORDER WHERE factory_id = (SELECT id FROM BMS_BASE_FACTORY WHERE factory_name = #{factory_name}) 
+		AND order_id = (SELECT id FROM BMS_OR_ORDER WHERE order_no = #{order_no});
+	</select>
+	<select id="selectBusByMotorVin" parameterType="Map" resultType="String">
+		select distinct vin from BMS_PD_VIN where vin=#{vin} 
+		<if test="left_motor_number!=null and left_motor_number!=''">
+		or left_motor_number=#{left_motor_number} 
+		</if>
+		<if test="right_motor_number!=null and right_motor_number!=''">
+		or right_motor_number=#{right_motor_number}
+		</if>
+	</select>
+	
+	<select id="checkBingingVin" parameterType="Map" resultType="int">
+		SELECT IFNULL(SUM(id),0) AS id FROM BMS_PD_VIN WHERE 1=1 
+		<if test="update == 'left_motor'">
+			AND left_motor_number = #{update_val} 
+		</if>
+		<if test="update == 'right_motor'">
+			AND right_motor_number = #{update_val} 
+		</if>
+	</select>
+	
+	<update id="bingingVin" parameterType="Map">
+		UPDATE BMS_PD_VIN SET
+		<if test="update == 'left_motor'">
+		left_motor_number=#{update_val}
+		</if>
+		<if test="update == 'right_motor'">
+		right_motor_number=#{update_val}
+		</if>
+		WHERE vin=#{vin}
+	</update>
+	
+	<select id="checkBusNumber" parameterType="Map" resultType="int">
+		SELECT IFNULL(SUM(id),0) AS id FROM BMS_PLAN_BUS WHERE 
+		bus_number = #{update_val} AND (vin is NULL OR vin = '')
+	</select>
+	<update id="bingingBusNumber" parameterType="Map">
+		UPDATE BMS_PLAN_BUS SET vin = #{vin},
+		left_motor_number=(SELECT left_motor_number FROM BMS_PD_VIN WHERE vin = #{vin}),
+		right_motor_number=(SELECT left_motor_number FROM BMS_PD_VIN WHERE vin = #{vin})
+		WHERE bus_number = #{update_val}
+	</update>
+	
 </mapper>

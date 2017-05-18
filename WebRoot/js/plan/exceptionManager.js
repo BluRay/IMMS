@@ -34,13 +34,62 @@ function ajaxQuery(){
 	$table.bootstrapTable('refresh', {url: 'getExceptionList'});
 }
 
+function confirm(exception_id){
+	getKeysSelect("EXCEPTION_RESPONSIBILITY_DEPARTMENT", "", "#confirm_duty_department","noall","value");
+	getReasonTypeSelect();
+	$("#dialog-confirm").removeClass('hide').dialog({
+		resizable: false,
+		title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-flag green"></i> 处理生产异常</h4></div>',
+		title_html: true,
+		width:'550px',
+		modal: true,
+		buttons: [{
+					text: "取消",
+					"class" : "btn btn-minier",
+					click: function() {$( this ).dialog( "close" );} 
+				},
+				{
+					text: "保存",
+					id:"btn_ok",
+					"class" : "btn btn-success btn-minier",
+					click: function() {
+						btnConfirm();
+					} 
+				}
+			]
+	});
+	
+	$.ajax({
+		url : "getExceptionList",
+		dataType : "json",
+		data : {"id":exception_id},
+		async : false,
+		error : function(response) {
+		},
+		success : function(response) {
+			$.each(response.rows,function(index,value){
+				if(index == 0){
+					$("#confirm_exception_id").val(value.id);
+					$("#confirm_busNumber").val(value.bus_number);
+					$("#confirm_process_date").val(value.process_date);
+					$("#confirm_reason_type").val(value.reason_type_id);
+					$("#confirm_duty_department").find("option[keyvalue='"+value.duty_department_id+"']").attr("selected", true);
+					$("#confirm_solution").val(value.solution);
+					$("#confirm_detailed_reason").val(value.detailed_reasons);
+				}
+			});
+		}
+	});
+	
+}
+
 function edit(id){
 	getFactorySelect("plan/exceptionManager",'',"#edit_factory",null,'id');
 	getWorkshopSelect("plan/exceptionManager",$("#edit_factory :selected").text(),"","#edit_workshop",null,"id");
 	getReasonTypeSelect();
 	$("#dialog-edit").removeClass('hide').dialog({
 		resizable: false,
-		title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 编辑异常信息</h4></div>',
+		title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-flag green"></i> 编辑异常信息</h4></div>',
 		title_html: true,
 		width:'550px',
 		modal: true,
@@ -118,6 +167,7 @@ function getProcessList(factory,workshop,line){
 
 function getReasonTypeSelect() {
 	$("#edit_reason_type").empty();
+	$("#confirm_reason_type").empty();
 	$.ajax({
 		url : "../common/getReasonTypeSelect",
 		dataType : "json",
@@ -132,6 +182,46 @@ function getReasonTypeSelect() {
 		    	strs += "<option value=" + value.value + ">" + value.key_name + "</option>";
 		    });
 		    $("#edit_reason_type").append(strs);
+		    $("#confirm_reason_type").append(strs);
+		}
+	});
+}
+
+function btnConfirm(){
+	if($('#confirm_process_date').val() == ""){
+		alert("处理时间不能为空！");
+		$('#confirm_process_date').focus();
+		return false;
+	}
+	if($('#confirm_process_date').val() == ""){
+		alert("处理时间不能为空！");
+		$('#confirm_process_date').focus();
+		return false;
+	}
+
+	$("#dialog-confirm").dialog( "close" );
+	ajaxQuery();
+	$.ajax({
+		url : "confirmException",
+		dataType : "json",
+		data : {
+			"id":$('#confirm_exception_id').val(),
+			"process_date":$('#confirm_process_date').val(),
+			"reason_type_id":$('#confirm_reason_type').val(),
+			"duty_department_id":$("#confirm_duty_department :selected").attr('keyvalue'),
+			"detailed_reasons":$('#confirm_detailed_reason').val(),
+			"solution":$('#confirm_solution').val(),
+		},
+		async : false,
+		error : function(response) {
+			alert(response.message)
+		},
+		success : function(response) {
+			$.gritter.add({
+				title: '系统提示：',
+				text: '<h5>处理成功！</h5>',
+				class_name: 'gritter-info'
+			});
 		}
 	});
 }
@@ -182,8 +272,16 @@ function initTable() {
         	$("#workshop option").each(function(){
         		workshopAll+=$(this).text()+",";
         	});
-        	var conditions="{factory:'"+$("#search_factory :selected").text()+"'}";
-        	params["conditions"] = conditions; 
+        	params["factory"] = $("#search_factory :selected").text(); 
+        	params["workshop"] = $("#search_workshop :selected").text(); 
+        	params["line"] = $("#search_line").val(); 
+        	params["bus_number"] = $("#search_busnumber").val(); 
+        	params["severity_level_id"] = $("#search_severity_level").val(); 
+        	params["measures_id"] = $("#search_measures").val(); 
+        	params["status"] = $("#search_status").val(); 
+        	params["start_time"] = $("#date_start").val(); 
+        	params["finish_time"] = $("#date_end").val(); 
+        	
         	return params;
         },
         columns: [
@@ -214,12 +312,6 @@ function initTable() {
     	        	}
             },{
             	field: 'bus_number',title: '&nbsp;&nbsp;车号&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
-                sortable: false,visible: true,footerFormatter: totalTextFormatter,
-                cellStyle:function cellStyle(value, row, index, field) {
-    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
-    	        	}
-            },{
-            	field: 'reason_type_id',title: '&nbsp;&nbsp;异常类型 &nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
                 sortable: false,visible: true,footerFormatter: totalTextFormatter,
                 cellStyle:function cellStyle(value, row, index, field) {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
@@ -297,7 +389,7 @@ function initTable() {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};},
     	        formatter:function(value, row, index){
     	        	return "<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"修改\" onclick='edit(" + row['id'] + 
-		                    ")' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;<i class=\"glyphicon glyphicon-ok bigger-130 showbus\" title=\"修改\" onclick='confirm(" + row['id'] + 
+		                    ")' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;<i class=\"glyphicon glyphicon-ok bigger-130 showbus\" title=\"处理\" onclick='confirm(" + row['id'] + 
 		                    ")' style='color:blue;cursor: pointer;'></i>";
     	        }
             }

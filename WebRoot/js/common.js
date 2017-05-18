@@ -360,3 +360,14 @@ function getAllFromOptions(elementId,valName){
 	
 }
 
+//自动隐藏的信息提示框
+function fadeMessageAlert(message, alertClass) {
+	$("#messageAlert").removeClass("alert-error alert-success").addClass(
+			alertClass);
+	$("#messageAlert").html(message);
+	$("#messageAlert").show(500, function() {
+		setTimeout(function() {
+			$("#messageAlert").hide(1000);
+		}, 5000);
+	});
+}

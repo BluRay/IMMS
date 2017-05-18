@@ -15,6 +15,7 @@ import com.byd.bms.plan.dao.IPlanDao;
 import com.byd.bms.plan.model.PlanMasterPlan;
 import com.byd.bms.plan.model.PlanPause;
 import com.byd.bms.plan.model.PlanProductionPlan;
+import com.byd.bms.plan.model.PlanVIN;
 import com.byd.bms.plan.model.PlanBus;
 import com.byd.bms.plan.model.PlanBusNumber;
 import com.byd.bms.plan.model.PlanConfigIssedQty;
@@ -30,6 +31,33 @@ import com.byd.bms.util.model.BmsBaseOperateChangeLog;
 @Service
 public class PlanServiceImpl implements IPlanService {
 	static Logger logger = Logger.getLogger("PLAN");
+	private static final Map<String,String> vinYearMap=new HashMap<String,String>();
+	private static final Map<String,Integer> vinCharMap=new HashMap<String,Integer>();
+	private static final Map<Integer,Integer> weightMap=new HashMap<Integer,Integer>();
+	static{
+		vinYearMap.put("2015", "F");vinYearMap.put("2016", "G");vinYearMap.put("2017", "H");
+		vinYearMap.put("2018", "J");vinYearMap.put("2019", "K");vinYearMap.put("2020", "L");
+		vinYearMap.put("2021", "M");vinYearMap.put("2022", "N");vinYearMap.put("2023", "P");
+		vinYearMap.put("2024", "R");vinYearMap.put("2025", "S");vinYearMap.put("2026", "T");
+		
+		vinCharMap.put("A", 1);vinCharMap.put("B", 2);vinCharMap.put("C", 3);
+		vinCharMap.put("D", 4);vinCharMap.put("E", 5);vinCharMap.put("F", 6);
+		vinCharMap.put("G", 7);vinCharMap.put("H", 8);vinCharMap.put("J", 1);
+		vinCharMap.put("K", 2);vinCharMap.put("L", 3);vinCharMap.put("M", 4);
+		vinCharMap.put("N", 5);vinCharMap.put("P", 7);vinCharMap.put("R", 9);
+		vinCharMap.put("S", 2);vinCharMap.put("T", 3);vinCharMap.put("U", 4);
+		vinCharMap.put("V", 5);vinCharMap.put("W", 6);vinCharMap.put("X", 7);
+		vinCharMap.put("Y", 8);vinCharMap.put("Z", 9);vinCharMap.put("0", 0);
+		vinCharMap.put("1", 1);vinCharMap.put("2", 2);vinCharMap.put("3", 3);
+		vinCharMap.put("4", 4);vinCharMap.put("5", 5);vinCharMap.put("6", 6);
+		vinCharMap.put("7", 7);vinCharMap.put("8", 8);vinCharMap.put("9", 9);
+		
+		weightMap.put(1, 8);weightMap.put(2, 7);weightMap.put(3, 6);weightMap.put(4, 5);
+		weightMap.put(5, 4);weightMap.put(6, 3);weightMap.put(7, 2);weightMap.put(8, 10);
+		weightMap.put(10, 9);weightMap.put(11, 8);weightMap.put(12, 7);weightMap.put(13, 6);
+		weightMap.put(14, 5);weightMap.put(15, 4);weightMap.put(16, 3);weightMap.put(17, 2);
+		
+	}
 	@Resource(name="planDao")
 	private IPlanDao planDao;
 	
@@ -241,8 +269,13 @@ public class PlanServiceImpl implements IPlanService {
 	}
 
 	@Override
-	public int getPlanConfigQty(int order_config_id) {
-		return planDao.getPlanConfigQty(order_config_id);
+	public List<PlanIssuanceCount> getDatePlanIssuanceCount(Map<String, Object> queryMap) {
+		return planDao.getDatePlanIssuanceCount(queryMap);
+	}
+	
+	@Override
+	public int getPlanConfigQty(Map<String, Object> queryMap) {
+		return planDao.getPlanConfigQty(queryMap);
 	}
 
 	@Override
@@ -406,7 +439,151 @@ public class PlanServiceImpl implements IPlanService {
 	public int updateExceptionInfo(ProductionException exception) {
 		return planDao.updateExceptionInfo(exception);
 	}
+
+	@Override
+	public int confirmException(ProductionException exception) {
+		return planDao.confirmException(exception);
+	}
+
+	@Override
+	public Map<String, Object> getPlanVinList(Map<String, Object> queryMap) {
+		int totalCount=0;
+		List<PlanVIN> datalist = planDao.getPlanVin(queryMap);
+		totalCount = planDao.getPlanVinCount(queryMap);
+		Map<String, Object> result = new HashMap<String,Object>();
+		result.put("total", totalCount);
+		result.put("rows", datalist);
+		return result;
+	}
+
+	@Override
+	@Transactional
+	public Map<String, Object> getGenerateVin(Map<String, Object> queryMap) {
+		int vinCount = Integer.valueOf(queryMap.get("vinCount").toString());
+		int factoryOrderQty = planDao.getFactoryOrderInfo(queryMap);
+		int totalCount=planDao.getPlanVinCount(queryMap);
+		int genVinCount = factoryOrderQty - totalCount;
+		Map<String, Object> result = new HashMap<String,Object>();
+		if(genVinCount <= 0){
+			result.put("message", "该订单的VIN号已经全部生成！");
+			result.put("success", false);
+			return result;
+		}
+		if(vinCount > genVinCount){
+			result.put("message", "生成数大于剩余车辆数！");
+			result.put("success", false);
+			return result;
+		}
+		//获取VIN前8位
+		//String order_no = queryMap.get("order_no").toString();
+		String vin_prefix = queryMap.get("vin_prefix").toString();
+		
+		String factory_prefix = planDao.GetFactoryVinPrefix(Integer.valueOf(queryMap.get("factory_id").toString()));
+		String year = queryMap.get("year").toString();
+		String WMI_extension = queryMap.get("WMI_extension").toString();
+		//获取当前年份最大的VIN流水号
+		int vin_count = 0;
+		vin_count = planDao.getVinCountByYear(vinYearMap.get(year));
+		for(int i=0;i<genVinCount;i++){
+			if (vinCount >0){
+				vin_count++;
+				String vin_count_str = "";
+				if(WMI_extension == ""){
+					vin_count_str = String.format("%06d", vin_count);
+				}else{
+					vin_count_str = WMI_extension + String.format("%03d", vin_count);
+				}
+				String vin = vin_prefix + "-" + vinYearMap.get(year) + factory_prefix + vin_count_str;
+				logger.info("---->vin = " + vin);
+				logger.info("---->verifyVin " + i + " = " + verifyVin(vin));
+				PlanVIN planVIN = new PlanVIN();
+				planVIN.setVin(verifyVin(vin));
+				planVIN.setFactory_id(Integer.valueOf(queryMap.get("factory_id").toString()));
+				planVIN.setOrder_no(queryMap.get("order_no").toString());
+				planVIN.setCreator_id(Integer.valueOf(queryMap.get("staff_number").toString()));
+				planVIN.setCreat_date(queryMap.get("curTime").toString());
+				planDao.insertPlanVin(planVIN);
+				vinCount--;
+			}
+		}
+		result.put("message", "VIN号已生成！");
+		result.put("success", true);
+		return null;
+	}
+
+	@Override
+	public Map<String,Object>  getVinPrefix(Map<String, Object> queryMap) {
+		return planDao.getVinPrefix(queryMap);
+	}
 	
-	
+	public String verifyVin(String vin){
+		int vin_sum = 0;
+		for(int i=0;i<17;i++){
+			if (i!=8){
+				vin_sum += vinCharMap.get(vin.substring(i, i+1)) * weightMap.get(i+1);
+			}
+		}
+		if (vin_sum%11 == 10){
+			return vin.substring(0, 8) + "X" + vin.substring(9,17);
+		}else{
+			return vin.substring(0, 8) + vin_sum%11 + vin.substring(9,17);
+		}
+	}
+
+	@Override
+	public int checkFactoryOrder(Map<String, Object> queryMap) {
+		return planDao.checkFactoryOrder(queryMap);
+	}
+
+	@Override
+	@Transactional
+	public int importVin(List<Map<String, Object>> vin_list) {
+		int result = 0;
+		for(int i=0;i<vin_list.size();i++){
+			PlanVIN planVIN = new PlanVIN();
+			planVIN.setVin(vin_list.get(i).get("vin").toString());
+			planVIN.setOrder_no(vin_list.get(i).get("order_no").toString());
+			planVIN.setFactory_name(vin_list.get(i).get("factory_name").toString());
+			planVIN.setLeft_motor_number(vin_list.get(i).get("left_motor_number").toString());
+			planVIN.setRight_motor_number(vin_list.get(i).get("right_motor_number").toString());
+			planVIN.setCreator_id(Integer.valueOf(vin_list.get(i).get("staff_number").toString()));
+			planVIN.setCreat_date(vin_list.get(i).get("curTime").toString());
+			result += planDao.insertPlanVin2(planVIN);
+			if(!(vin_list.get(i).get("bus_number").toString().equals(""))){
+				result += planDao.updatePlanBus(planVIN);
+			}
+		}
+		return result;
+	}
+
+	@Override
+	public List<String> selectBusByMotorVin(Map<String,Object> queryMap) {
+		return planDao.selectBusByMotorVin(queryMap);
+	}
+
+	@Override
+	@Transactional
+	public int BingingVinMotor(Map<String, Object> queryMap) {
+		String update = queryMap.get("update").toString();	//left_motor_number right_motor_number bus_number
+		//判断是否重复绑定
+		if(update.equals("bus_number")){
+			int check = planDao.checkBusNumber(queryMap);
+			if(check == 0){
+				//此车号已经绑定了或不存在
+				return -1;
+			}else{
+				planDao.bingingBusNumber(queryMap);
+			}
+		}else{
+			int check = planDao.checkBingingVin(queryMap);
+			if(check != 0){
+				//此电机号已经绑定了
+				return -2;
+			}else{
+				planDao.bingingVin(queryMap);
+			}
+		}
+		return 0;
+	}
 
 }

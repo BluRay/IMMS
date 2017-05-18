@@ -24,7 +24,8 @@ public interface IPlanService {
 	public List<PlanIssuanceTotal> getPlanIssuanceTotal(Map<String,Object> queryMap);
 	public List<PlanProductionPlan> getProductionPlanIssuanceList(Map<String,Object> queryMap);
 	public List<PlanIssuanceCount> getPlanIssuanceCount(Map<String,Object> queryMap);
-	public int getPlanConfigQty(int order_config_id);
+	public List<PlanIssuanceCount> getDatePlanIssuanceCount(Map<String,Object> queryMap);
+	public int getPlanConfigQty(Map<String,Object> queryMap);
 	public List<PlanConfigIssedQty> getPlanConfigIssedQty(Map<String,Object> queryMap);//获取当前配置已发布数量
 	public int issuancePlanSubmit(String curTime,String edit_user,String issuance_date,int factory_id,String issuance_str);
 	public int addPause(List<PlanPause> pauseList);
@@ -32,4 +33,12 @@ public interface IPlanService {
 	public int updatePauseInfo(PlanPause pause);
 	public Map<String, Object> getExceptionList(Map<String,Object> queryMap);
 	public int updateExceptionInfo(ProductionException exception);
+	public int confirmException(ProductionException exception);
+	public Map<String,Object> getPlanVinList(Map<String,Object> queryMap);
+	public Map<String,Object> getGenerateVin(Map<String,Object> queryMap);
+	public Map<String,Object> getVinPrefix(Map<String,Object> queryMap);
+	public int checkFactoryOrder(Map<String,Object> queryMap);
+	public List<String> selectBusByMotorVin(Map<String,Object> queryMap); 			//根据VIN/左右电机查询车号，校验是否重复绑定
+	public int importVin(List<Map<String,Object>> vin_list);
+	public int BingingVinMotor(Map<String,Object> queryMap);
 }

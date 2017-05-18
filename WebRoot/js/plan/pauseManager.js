@@ -47,8 +47,6 @@ $(document).ready(function () {
 						"class" : "btn btn-success btn-minier",
 						click: function() {
 							btnNewPauseConfirm();
-							$( this ).dialog( "close" );
-							ajaxQuery();
 						} 
 					}
 				]
@@ -127,7 +125,9 @@ $(document).ready(function () {
 				});
 			}
 		});
-		
+
+		$("#dialog-add").dialog( "close" );
+		ajaxQuery();
 		
 	}
 	

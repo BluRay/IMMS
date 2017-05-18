@@ -6,6 +6,7 @@ $(document).ready(function () {
 	
 	function initPage(){
 		$("#file").val("");
+		getOrderNoSelect("#search_order_name","#orderId");
 		getFactorySelect("plan/planRevision",'',"#search_factory",null,'id');
 		ajaxQuery();
 	}

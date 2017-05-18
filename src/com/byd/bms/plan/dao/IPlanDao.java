@@ -15,6 +15,7 @@ import com.byd.bms.plan.model.PlanMasterIndex;
 import com.byd.bms.plan.model.PlanMasterPlan;
 import com.byd.bms.plan.model.PlanPause;
 import com.byd.bms.plan.model.PlanProductionPlan;
+import com.byd.bms.plan.model.PlanVIN;
 import com.byd.bms.production.model.ProductionException;
 import com.byd.bms.util.model.BmsBaseOperateChangeLog;
 
@@ -34,7 +35,8 @@ public interface IPlanDao {
 	public List<PlanIssuanceTotal> getPlanIssuanceTotal(Map<String,Object> queryMap);
 	public List<PlanProductionPlan> getProductionPlanIssuanceList(Map<String,Object> queryMap);
 	public List<PlanIssuanceCount> getPlanIssuanceCount(Map<String,Object> queryMap);
-	public int getPlanConfigQty(int order_config_id);
+	public List<PlanIssuanceCount> getDatePlanIssuanceCount(Map<String,Object> queryMap);
+	public int getPlanConfigQty(Map<String,Object> queryMap);
 	public List<PlanConfigIssedQty> getPlanConfigIssedQty(Map<String,Object> queryMap);//获取当前配置已发布数量
 	public String getOrderIdByConfigId(String config_id);
 	public BmsOrder getOrderInfoByOrderID(String order_id);
@@ -50,4 +52,20 @@ public interface IPlanDao {
 	public List<ProductionException> getExceptionList(Map<String,Object> queryMap);
 	public int getExceptionCount(Map<String,Object> queryMap);
 	public int updateExceptionInfo(ProductionException exception);
+	public int confirmException(ProductionException exception);
+	public List<PlanVIN> getPlanVin(Map<String,Object> queryMap);
+	public int getPlanVinCount(Map<String,Object> queryMap);
+	public int getFactoryOrderInfo(Map<String,Object> queryMap);
+	public Map<String,Object> getVinPrefix(Map<String,Object> queryMap);
+	public String GetFactoryVinPrefix(int factory_id);			//vin_assembly_code
+	public int getVinCountByYear(String year_code);
+	public int insertPlanVin(PlanVIN vin);
+	public int insertPlanVin2(PlanVIN vin);
+	public int updatePlanBus(PlanVIN vin);
+	public int checkFactoryOrder(Map<String,Object> queryMap);
+	public List<String> selectBusByMotorVin(Map<String,Object> queryMap); //根据VIN/左右电机查询车号，校验是否重复绑定
+	public int checkBingingVin(Map<String,Object> queryMap);
+	public int bingingVin(Map<String,Object> queryMap);
+	public int checkBusNumber(Map<String,Object> queryMap);
+	public int bingingBusNumber(Map<String,Object> queryMap);
 }
