@@ -610,4 +610,23 @@
 		]]>
 	</select>
 	
+	<select id="getBusInfo" parameterType="String" resultType="Map">
+		SELECT b.factory_id,b.status,b.order_id FROM BMS_PLAN_BUS b WHERE b.bus_number = #{bus_number}
+	</select>
+	<update id="updatePlanBusStatus" parameterType="map">
+		UPDATE BMS_PLAN_BUS SET status=#{status} WHERE bus_number=#{bus_number}
+	</update>
+	<insert id="insertBusTransferLog" useGeneratedKeys="true" keyProperty="id" parameterType="com.byd.bms.plan.model.PlanBusTransfer">
+		<![CDATA[
+		insert into BMS_PLAN_BUS_TRANSFER_LOG (bus_number,tfrom_factory_id,current_workshop_id,current_process_id,tfrom_date,tfrom_people_id,
+		tto_factory_id,tto_date,tto_people_id)
+		VALUES(#{bus_number},#{tfrom_factory_id},#{current_workshop_id},#{current_process_id},#{tfrom_date},
+		#{tfrom_people_id},#{tto_factory_id},#{tto_date},#{tto_people_id})
+		]]>
+	</insert>
+	<update id="updateFactoryOrderProQty" parameterType="Map">
+		
+	
+	</update>
+	
 </mapper>

@@ -892,7 +892,6 @@ public class PlanController extends BaseController{
 	@RequestMapping(value="/uploadVin",method=RequestMethod.POST)
 	@ResponseBody
 	public ModelMap uploadVin(@RequestParam(value="file",required=false) MultipartFile file){
-		logger.info("---->uploadVin");
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String curTime = df.format(new Date());
 		String staff_number = request.getSession().getAttribute("staff_number") + "";
@@ -1055,6 +1054,22 @@ public class PlanController extends BaseController{
 		List<Map<String,String>> list = planService.getBusTransferInList(condMap);
 		initModel(true,null,list);
 		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/busTransferInQuery")
+	@ResponseBody
+	public ModelMap busTransferOut(){
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String staff_number = request.getSession().getAttribute("staff_number") + "";
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("bus_numbers", request.getParameter("bus_number"));
+		condMap.put("factory_out_id", request.getParameter("transfer_out_factory"));
+		condMap.put("curTime", curTime);
+		condMap.put("staff_number", staff_number);
+		
+		
 		return model;
 	}
 

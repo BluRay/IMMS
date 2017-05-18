@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import com.byd.bms.order.model.BmsOrder;
 import com.byd.bms.plan.model.PlanBus;
 import com.byd.bms.plan.model.PlanBusNumber;
+import com.byd.bms.plan.model.PlanBusTransfer;
 import com.byd.bms.plan.model.PlanConfigIssedQty;
 import com.byd.bms.plan.model.PlanIssuance;
 import com.byd.bms.plan.model.PlanIssuanceCount;
@@ -70,4 +71,8 @@ public interface IPlanDao {
 	public int bingingBusNumber(Map<String,Object> queryMap);
 	public List<Map<String,String>> getBusTransferOutList(Map<String,Object> queryMap);
 	public List<Map<String,String>> getBusTransferInList(Map<String,Object> queryMap);
+	public List<Map<String,String>> getBusInfo(String busNumber);
+	public int updatePlanBusStatus(Map<String,Object> queryMap);
+	public int insertBusTransferLog(PlanBusTransfer busTransfer);
+	public void updateFactoryOrderProQty(Map<String, Object> condmap);
 }

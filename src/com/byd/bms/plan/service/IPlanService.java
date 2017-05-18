@@ -45,4 +45,5 @@ public interface IPlanService {
 	public int checkBingingVin(Map<String,Object> queryMap);
 	public List<Map<String,String>> getBusTransferOutList(Map<String,Object> queryMap);
 	public List<Map<String,String>> getBusTransferInList(Map<String,Object> queryMap);
+	public int busTransferOut(Map<String,Object> queryMap);
 }

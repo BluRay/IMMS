@@ -1,5 +1,5 @@
 var div_height = $(window).height()-180;
-
+var li_flag = "1";
 $(document).ready(function () {	
 	initPage();
 	
@@ -10,6 +10,16 @@ $(document).ready(function () {
 		$("#in").css("height",div_height);
 		$("#his").css("height",div_height);
 	}
+	
+	$("li").click(function(e){
+		if(this.id == "div1"){
+			li_flag = "1";
+		}else if(this.id == "div2"){
+			li_flag = "2";
+		}else{
+			li_flag = "3";
+		}
+	});
 	
 	$("#btnTransferOutQuery").click (function () {
 		if($("#transfer_out_busnumber").val() == ""){

@@ -18,6 +18,7 @@ import com.byd.bms.plan.model.PlanProductionPlan;
 import com.byd.bms.plan.model.PlanVIN;
 import com.byd.bms.plan.model.PlanBus;
 import com.byd.bms.plan.model.PlanBusNumber;
+import com.byd.bms.plan.model.PlanBusTransfer;
 import com.byd.bms.plan.model.PlanConfigIssedQty;
 import com.byd.bms.plan.model.PlanIssuance;
 import com.byd.bms.plan.model.PlanIssuanceCount;
@@ -606,6 +607,55 @@ public class PlanServiceImpl implements IPlanService {
 	public List<Map<String,String>> getBusTransferInList(Map<String, Object> queryMap) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	@Transactional
+	public int busTransferOut(Map<String, Object> queryMap) {
+		String bus_numbers = queryMap.get("bus_numbers").toString();
+		String factory_out_id = queryMap.get("factory_out_id").toString();
+		String[] busNumberList = bus_numbers.split(",");
+		for(int i=0;i<busNumberList.length;i++){
+			Map<String,Object> conditionMap=new HashMap<String,Object>();
+			conditionMap.put("factory_id", factory_out_id);
+			conditionMap.put("bus_number", busNumberList[i]);
+			conditionMap.put("status", "1");
+			//校验，不能调出到自己工厂
+			List<Map<String,String>> busInfo=new ArrayList<Map<String, String>>();
+			busInfo = planDao.getBusInfo(busNumberList[i]);
+			Map<String,String> busInfoMap=new HashMap<String,String>();
+			busInfoMap = (Map<String, String>) busInfo.get(0);
+			if(factory_out_id.equals(busInfoMap.get("factory_id").toString())){
+				return -1;	//调出工厂有误，车号"+busNumberList[i]+"已经在调出工厂，请重新选择！
+			}
+		}
+		for(int i=0;i<busNumberList.length;i++){
+			Map<String,Object> conditionMap=new HashMap<String,Object>();
+			conditionMap.put("factory_id", factory_out_id);
+			conditionMap.put("bus_number", busNumberList[i]);
+			conditionMap.put("status", "1");
+			List<Map<String,String>> busInfo=new ArrayList<Map<String, String>>();
+			busInfo = planDao.getBusInfo(busNumberList[i]);
+
+			Map<String,String> busInfoMap=new HashMap<String,String>();
+			busInfoMap = (Map<String, String>) busInfo.get(0);
+			int fromFactoryId = Integer.valueOf(busInfoMap.get("factory_id").toString());
+			planDao.updatePlanBusStatus(conditionMap);
+			//记录调出记录【BMS_PLAN_BUS_TRANSFER_LOG】
+			PlanBusTransfer busTransfer = new PlanBusTransfer();
+			busTransfer.setBus_number(busNumberList[i]);
+			busTransfer.setTto_factory_id(Integer.valueOf(factory_out_id));
+			busTransfer.setTfrom_factory_id(fromFactoryId);
+			busTransfer.setTfrom_date(queryMap.get("curTime").toString());
+			busTransfer.setTfrom_people_id(Integer.valueOf(queryMap.get("staff_number").toString()));
+			planDao.insertBusTransferLog(busTransfer);
+			
+			//车辆调出后需调整调出工厂车号流水对应的工厂订单生产数量
+			
+			
+		}
+		
+		return 0;
 	}
 
 }
