@@ -62,7 +62,7 @@
 									</tr>
 								<tr>
 									<td>调入工厂：</td>
-									<td><select id="transfer_in_factory" class="form-control" style="width:120px"></select></td>
+									<td><select id="transfer_out_factory" class="form-control" style="width:150px"></select></td>
 									<td>
 									<input id="btnTransferOutQuery" type="button" class="btn btn-sm btn-primary" value="查询" style="margin-left: 2px;"></input>
 									<input id="btnTransferOut" type="button" class="btn btn-sm btn-info" value="调出" style="margin-left: 2px;"></input>
@@ -89,15 +89,90 @@
 							</thead>
 							<tbody></tbody>
 							</table>
-						
-						
-						
 						</div>
 						<div id="in" class="tab-pane fade in">
-							<p>in</p>
+							<div class="well">
+								<table>
+									<tr>
+									<td>车号：</td>
+									<td colspan=3><textarea style="width: 450px;" placeholder="车号,每行一个车号..."  class="input-xlarge" onkeyup="this.value = this.value.slice(0, 1000)" id="transfer_in_busnumber" rows="3"></textarea></td>
+									</tr>
+								<tr>
+									<td>调出工厂：</td>
+									<td><select id="transfer_in_factory" class="form-control" style="width:150px"></select></td>
+									<td>调入工厂：</td>
+									<td><select id="transfer_in_factory2" class="form-control" style="width:150px"></select></td>
+									<td>
+									<input id="btnTransferInQuery" type="button" class="btn btn-sm btn-primary" value="查询" style="margin-left: 2px;"></input>
+									<input id="btnTransferIn" type="button" class="btn btn-sm btn-info" value="调入" style="margin-left: 2px;"></input>
+									</td>
+								</tr>
+								</table>
+							</div>
+							<table id="tableBusInfoIn" class="table table-striped table-bordered table-hover" style="font-size: 12px;">
+							<thead>
+							<tr>
+								<tr id="0">
+								<th style="text-align:center;" width="15px"><input type="checkbox" id="checkall_in"></th>			
+								<th style="text-align:center;" width="50px">车号</th>					
+								<th style="text-align:center;" width="35px">订单</th>					
+								<th style="text-align:center;" width="15px">车型</th>					
+								<th style="text-align:center;" width="25px">年份</th>					
+								<th style="text-align:center;" width="35px">客户</th>					
+								<th style="text-align:center;" width="35px">配置</th>					
+								<th style="text-align:center;" width="50px">VIN</th>					
+								<th style="text-align:center;" width="35px">生产工厂</th>					
+								<th style="text-align:center;" width="35px">当前工序</th>					
+								<th style="text-align:center;" width="15px">状态</th>
+							</tr>
+							</thead>
+							<tbody></tbody>
+							</table>
+							
 						</div>
 						<div id="his" class="tab-pane fade in">
-							<p>his</p>
+							<div class="well">
+								<table>
+									<tr>
+									<td>车号：</td>
+									<td><input id="transfer_his_busnumber" placeholder="请输入车号..." style="width:150px" type="text"></td>
+									<td>VIN号：</td>
+									<td><input id="transfer_his_vin" placeholder="请输入VIN号..." style="width:150px" type="text"></td>
+									<td>&nbsp;订单编号：</td>
+									<td><input style="height: 30px;" type="text" class="input-medium revise" placeholder="订单编号..." id="transfer_his_orderno" /></td>
+									</tr>
+									<tr>
+									<td>调出工厂：</td>
+									<td colspan=3><select id="transfer_his_out_factory" style="width:100px;height:32px"></select>
+									<input id="start_date" placeholder="开始时间..." style="width:85px" type="text" onClick="WdatePicker({el:'start_date',dateFmt:'yyyy-MM-dd'});"> - <input id="end_date" placeholder="结束时间..." style="width:85px" type="text" onClick="WdatePicker({el:'end_date',dateFmt:'yyyy-MM-dd'});"></td>
+									<td>&nbsp;调入工厂：</td>
+									<td colspan=3><select id="transfer_his_in_factory" style="width:100px;height:32px"></select>
+									<input id="start_date2" placeholder="开始时间..." style="width:85px" type="text" onClick="WdatePicker({el:'start_date2',dateFmt:'yyyy-MM-dd'});"> - <input id="end_date2" placeholder="结束时间..." style="width:85px" type="text" onClick="WdatePicker({el:'end_date2',dateFmt:'yyyy-MM-dd'});">
+									<input id="btnTransferHisQuery" type="button" class="btn btn-sm btn-primary" value="查询" style="margin-left: 2px;"></input>
+									</td>
+									</tr>
+								</table>
+							</div>
+							<table id="tableBusHisInfo" class="table table-striped table-bordered table-hover" style="font-size: 12px;">
+							<thead>
+							<tr id="0">
+							<th style="text-align:center;" width="50px">车号</th>					
+							<th style="text-align:center;" width="20px">订单</th>					
+							<th style="text-align:center;" width="20px">车型</th>					
+							<th style="text-align:center;" width="20px">年份</th>					
+							<th style="text-align:center;" width="30px">客户</th>					
+							<th style="text-align:center;" width="30px">配置</th>					
+							<th style="text-align:center;" width="50px">VIN</th>
+							<th style="text-align:center;" width="30px">调出工厂</th>					
+							<th style="text-align:center;" width="30px">调入工厂</th>			
+							<th style="text-align:center;" width="40px">调出时间</th>			
+							<th style="text-align:center;" width="25px">调出人</th>			
+							<th style="text-align:center;" width="40px">接收时间</th>			
+							<th style="text-align:center;" width="25px">调收人</th>
+							</tr>
+							</thead>
+							<tbody></tbody>
+							</table>
 						</div>
 					</div>
 					

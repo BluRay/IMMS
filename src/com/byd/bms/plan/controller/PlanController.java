@@ -1048,7 +1048,11 @@ public class PlanController extends BaseController{
 	@ResponseBody
 	public ModelMap busTransferInQuery(){
 		Map<String,Object> condMap=new HashMap<String,Object>();
-		condMap.put("bus_number", request.getParameter("bus_number"));
+		if(request.getParameter("bus_numbers").length()>2){
+			condMap.put("bus_numbers", request.getParameter("bus_numbers"));
+		}else{
+			condMap.put("bus_numbers", null);
+		}
 		condMap.put("factory_id", request.getParameter("factory_id"));
 		condMap.put("factory_id_in", request.getParameter("factory_id_in"));
 		List<Map<String,String>> list = planService.getBusTransferInList(condMap);
@@ -1057,7 +1061,7 @@ public class PlanController extends BaseController{
 		return model;
 	}
 	
-	@RequestMapping("/busTransferInQuery")
+	@RequestMapping("/busTransferOut")
 	@ResponseBody
 	public ModelMap busTransferOut(){
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -1068,8 +1072,46 @@ public class PlanController extends BaseController{
 		condMap.put("factory_out_id", request.getParameter("transfer_out_factory"));
 		condMap.put("curTime", curTime);
 		condMap.put("staff_number", staff_number);
-		
-		
+		int result = planService.busTransferOut(condMap);
+		initModel(true,String.valueOf(result),null);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/busTransferIn")
+	@ResponseBody
+	public ModelMap busTransferIn(){
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String staff_number = request.getSession().getAttribute("staff_number") + "";
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("bus_numbers", request.getParameter("bus_number"));
+		condMap.put("transfer_in_factory", request.getParameter("transfer_in_factory"));
+		condMap.put("curTime", curTime);
+		condMap.put("staff_number", staff_number);
+		int result = planService.busTransferIn(condMap);
+		initModel(true,String.valueOf(result),null);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/busTransferHisQuery")
+	@ResponseBody
+	public ModelMap busTransferHisQuery(){
+		Map<String,Object> conditionMap=new HashMap<String,Object>();
+		conditionMap.put("transfer_his_busnumber", request.getParameter("transfer_his_busnumber"));
+		conditionMap.put("transfer_his_vin", request.getParameter("transfer_his_vin"));
+		conditionMap.put("transfer_his_orderno", request.getParameter("transfer_his_orderno"));
+		conditionMap.put("transfer_his_out_factory", request.getParameter("transfer_his_out_factory"));
+		conditionMap.put("transfer_his_out_date_start", request.getParameter("transfer_his_out_date_start"));
+		conditionMap.put("transfer_his_out_date_end", request.getParameter("transfer_his_out_date_end"));		
+		conditionMap.put("transfer_his_in_factory", request.getParameter("transfer_his_in_factory"));
+		conditionMap.put("transfer_his_in_date_start", request.getParameter("transfer_his_in_date_start"));
+		conditionMap.put("transfer_his_in_date_end", request.getParameter("transfer_his_in_date_end"));
+		List<Map<String, String>> busTransferHisInfo=new ArrayList<Map<String, String>>();
+		busTransferHisInfo = planService.getBusTransferHisList(conditionMap);
+		initModel(true,null,busTransferHisInfo);
+		model = mv.getModelMap();
 		return model;
 	}
 

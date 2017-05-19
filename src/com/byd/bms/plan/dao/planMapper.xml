@@ -609,6 +609,23 @@
 		WHERE b.bus_number IN (${busNumbers})
 		]]>
 	</select>
+	<select id="getBusTransferInList" parameterType="Map" resultType="Map">
+		SELECT t.bus_number,t.tfrom_factory_id,b.vin,b.status,o.id order_id,o.order_no,o.order_name,c.order_config_name,c.customer,f.factory_name
+		FROM BMS_PLAN_BUS_TRANSFER_LOG t
+		LEFT OUTER JOIN BMS_PLAN_BUS b ON
+		t.bus_number = b.bus_number
+		LEFT OUTER JOIN BMS_OR_ORDER o ON b.order_id =
+		o.id LEFT OUTER JOIN BMS_OR_ORDER_CONFIG c ON b.order_config_id = c.id
+		LEFT OUTER JOIN BMS_BASE_FACTORY f ON b.factory_id = f.id
+		WHERE
+		tto_factory_id = #{factory_id_in} AND b.status = 1 and tto_people_id=0
+		<if test="bus_numbers != null ">
+		AND t.bus_number IN (${bus_numbers})
+		</if>
+		<if test="tfrom_factory_id!=''">
+		AND t.tfrom_factory_id = #{factory_id}
+		</if>
+	</select>
 	
 	<select id="getBusInfo" parameterType="String" resultType="Map">
 		SELECT b.factory_id,b.status,b.order_id FROM BMS_PLAN_BUS b WHERE b.bus_number = #{bus_number}
@@ -625,8 +642,84 @@
 		]]>
 	</insert>
 	<update id="updateFactoryOrderProQty" parameterType="Map">
-		
-	
+		UPDATE BMS_OR_FACTORY_ORDER o 
+		SET o.production_qty=o.production_qty-1
+		WHERE o.id=
+		(SELECT id FROM (SELECT O.id,'1' as sort FROM BMS_OR_FACTORY_ORDER O 
+		WHERE O.factory_id = #{factory_id} AND O.order_id = #{order_id}
+		and (O.busnum_start &lt;= cast(#{bus_series} as signed) and O.busnum_end >= cast(#{bus_series} as signed))
+		union all 
+		select id,'2' as sort from BMS_OR_FACTORY_ORDER o
+		where  o.factory_id= #{factory_id} and o.order_id = #{order_id}
+		order by sort limit 1) tmp)
 	</update>
+	<update id="updatePlanBusTranIn" parameterType="map">
+		<![CDATA[
+		UPDATE BMS_PLAN_BUS SET status=#{status},factory_id=#{factory_id} WHERE bus_number=#{bus_number}
+		]]>
+	</update>
+	<update id="updateBusTransferLog" parameterType="map">
+		<![CDATA[
+		UPDATE BMS_PLAN_BUS_TRANSFER_LOG SET tto_date=#{tto_date},tto_people_id=#{tto_people_id} WHERE bus_number=#{bus_number}
+		]]>
+	</update>
+	<select id="queryFactoryOrderId" parameterType="Map" resultType="Map">
+		SELECT id FROM (SELECT O.id,'1' as sort FROM BMS_OR_FACTORY_ORDER O 
+		WHERE O.factory_id = #{factory_id} AND O.order_id = #{order_id}
+		and (O.busnum_start &lt;= cast(#{bus_series} as signed) and O.busnum_end >= cast(#{bus_series} as signed))
+		union all 
+		select id,'2' as sort from BMS_OR_FACTORY_ORDER o
+		where  o.factory_id= #{factory_id} and o.order_id = #{order_id}
+		order by sort limit 1) tmp
+	</select>
+	<update id="insertFactoryOrder" parameterType="Map">
+		insert into BMS_OR_FACTORY_ORDER (order_id,factory_id,production_qty) values(#{order_id},#{factory_id},1)
+	</update>
+	<update id="updateFactoryOrderQty" parameterType="String">
+		update BMS_OR_FACTORY_ORDER set production_qty=production_qty+1 where id=#{factory_order_id}
+	</update>
+	
+	<select id="getBusTransferHisList" parameterType="Map" resultType="Map">
+		SELECT t.bus_number,b.vin,o.order_name,c.order_config_name,c.customer,f.factory_name AS factory_name_out,
+		y.factory_name AS factory_name_in,t.tfrom_date,t.tto_date,u.display_name AS name_out,r.display_name AS name_in
+		FROM BMS_PLAN_BUS_TRANSFER_LOG t LEFT OUTER JOIN BMS_PLAN_BUS b ON t.bus_number = b.bus_number
+		LEFT OUTER JOIN BMS_OR_ORDER o ON b.order_id = o.id 
+		LEFT OUTER JOIN BMS_OR_ORDER_CONFIG c ON b.order_config_id = c.id
+		LEFT OUTER JOIN BMS_BASE_FACTORY f ON t.tfrom_factory_id = f.id 
+		LEFT OUTER JOIN BMS_BASE_FACTORY y ON t.tto_factory_id = y.id
+		LEFT OUTER JOIN BMS_BASE_USER u ON t.tfrom_people_id = u.staff_number
+		LEFT OUTER JOIN BMS_BASE_USER r ON t.tto_people_id = r.staff_number
+		WHERE 1=1
+		<if test="transfer_his_busnumber !=''">
+			AND t.bus_number LIKE
+			CONCAT('%',#{transfer_his_busnumber},'%')
+		</if>
+		<if test="transfer_his_vin !=''">
+			AND b.vin LIKE CONCAT('%',#{transfer_his_vin},'%')
+		</if>
+		<if test="transfer_his_orderno !=''">
+			AND o.order_no LIKE
+			CONCAT('%',#{transfer_his_orderno},'%')
+		</if>
+		<if test="transfer_his_out_factory !=''">
+			AND t.tfrom_factory_id = #{transfer_his_out_factory}
+		</if>
+		<if test="transfer_his_out_date_start !=''">
+			AND t.tfrom_date >= #{transfer_his_out_date_start}
+		</if>
+		<if test="transfer_his_out_date_end !=''">
+			AND t.tfrom_date &lt;= #{transfer_his_out_date_end}
+		</if>
+		<if test="transfer_his_in_factory !=''">
+			AND t.tto_factory_id = #{transfer_his_in_factory}
+		</if>
+		<if test="transfer_his_in_date_start !=''">
+			AND t.tto_date >= #{transfer_his_in_date_start}
+		</if>
+		<if test="transfer_his_in_date_end !=''">
+			AND t.tto_date &lt;= #{transfer_his_in_date_end}
+		</if>
+
+	</select>
 	
 </mapper>

@@ -75,4 +75,10 @@ public interface IPlanDao {
 	public int updatePlanBusStatus(Map<String,Object> queryMap);
 	public int insertBusTransferLog(PlanBusTransfer busTransfer);
 	public void updateFactoryOrderProQty(Map<String, Object> condmap);
+	public int updatePlanBusTranIn(Map<String,Object> queryMap);
+	public int updateBusTransferLog(PlanBusTransfer busTransfer);
+	public List<Map<String, String>> queryFactoryOrderId(Map<String, Object> queryMap);
+	public void insertFactoryOrder(Map<String, Object> queryMap);
+	public void updateFactoryOrderQty(String factory_order_id);
+	public List<Map<String,String>> getBusTransferHisList(Map<String,Object> queryMap);
 }
