@@ -63,7 +63,7 @@ public class AccountController extends BaseController{
 		String password=request.getParameter("password");
 		String display_name=request.getParameter("display_name");
 		String factory_id=request.getParameter("factory_id");
-		String department_id=request.getParameter("department_id");
+		//String department_id=request.getParameter("department_id");
 		String admin=request.getParameter("admin");
 		String edit_user = request.getSession().getAttribute("user_name") + "";
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -78,7 +78,7 @@ public class AccountController extends BaseController{
 		user.setPassword(MD5Util.getEncryptedPwd(password));
 		user.setDisplay_name(display_name);
 		user.setFactory_id(Integer.valueOf(factory_id));
-		user.setDepartment_id(Integer.valueOf(department_id));
+		//user.setDepartment_id(Integer.valueOf(department_id));
 		user.setAdmin(admin);
 		user.setCreate_user(edit_user);
 		user.setCreate_time(edit_time);

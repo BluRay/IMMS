@@ -31,6 +31,9 @@ import com.byd.bms.tech.service.ITechService;
 import com.byd.bms.util.ExcelModel;
 import com.byd.bms.util.ExcelTool;
 import com.byd.bms.util.controller.BaseController;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 /**
  * 工程变更Controller
  * @author thw 2017-04-21
@@ -47,10 +50,16 @@ public class TechController extends BaseController{
 	 * @return mv
 	 */
 	@RequestMapping("/techTaskMaintain")
-	public ModelAndView taskMaintain(){ 
+	public ModelAndView taskMaintain(){ 		//技改任务维护
 		mv.setViewName("tech/techTaskMaintain");
         return mv;  
     }
+	
+	@RequestMapping("/taskAssignPage")
+	public ModelAndView taskAssignPage(){		//技改任务分配
+		mv.setViewName("tech/taskAssignPage");
+        return mv;  
+	}
 	
 	/**
 	 * ajax 获取订单列表数据
@@ -60,15 +69,15 @@ public class TechController extends BaseController{
 	@ResponseBody
 	public ModelMap getTaskMaintainList(){
 		Map<String,Object> condMap=new HashMap<String,Object>();
-		int draw=Integer.parseInt(request.getParameter("draw"));//jquerydatatables 
-		int start=Integer.parseInt(request.getParameter("start"));//分页数据起始数
-		int length=Integer.parseInt(request.getParameter("length"));//每一页数据条数
+		int draw=Integer.parseInt(request.getParameter("draw"));		//jquerydatatables 
+		int start=Integer.parseInt(request.getParameter("start"));		//分页数据起始数
+		int length=Integer.parseInt(request.getParameter("length"));	//每一页数据条数
 		
-		String tech_order_no=request.getParameter("tech_order_no");//技改单号
-		String task_content=request.getParameter("task_content");//技改任务内容
-		String tech_date_start=request.getParameter("tech_date_start");//技改单日期-开始
-		String tech_date_end=request.getParameter("tech_date_end");//技改单日期-结束
-		String status=request.getParameter("status");//技改任务状态
+		String tech_order_no=request.getParameter("tech_order_no");		//技改单号
+		String task_content=request.getParameter("task_content");		//技改任务内容
+		String tech_date_start=request.getParameter("tech_date_start");	//技改单日期-开始
+		String tech_date_end=request.getParameter("tech_date_end");		//技改单日期-结束
+		String status=request.getParameter("status");					//技改任务状态
 		
 		condMap.put("draw", draw);
 		condMap.put("start", start);
@@ -230,7 +239,7 @@ public class TechController extends BaseController{
 		Map<String, Object> conditionMap = new HashMap<String, Object>();
 		conditionMap.put("id", request.getParameter("id"));
 		try{
-			List list = techService.querySingleTechTaskMaintain(conditionMap);
+			List<Map<String,Object>> list = techService.querySingleTechTaskMaintain(conditionMap);
 			initModel(true,"查询成功！",list);
 		}catch(Exception e){
 			logger.error(e.getMessage());
@@ -269,4 +278,103 @@ public class TechController extends BaseController{
 
 		return filepath;
 	}
+
+	@RequestMapping("/techTaskMaintain/getChangedMaterialList")
+	@ResponseBody
+	public ModelMap getChangedMaterialList(){
+		Map<String, Object> conditionMap = new HashMap<String, Object>();
+		conditionMap.put("tech_task_id", request.getParameter("tech_task_id"));
+		List<Map<String, Object>> list = techService.queryChangedMaterialList(conditionMap);
+		initModel(true,"查询成功！",list);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping(value="/techTaskMaintain/editTechTaskMaintain",method=RequestMethod.POST)
+	@ResponseBody
+	public ModelMap editTechTaskMaintain(){
+		int userid=(int) session.getAttribute("user_id");
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		List<Map<String, Object>> editList = new ArrayList<Map<String, Object>>();
+		Map<String, Object> infomap = new HashMap<String, Object>();
+		infomap.put("task_content", request.getParameter("edit_task_content"));
+		infomap.put("tech_order_no", request.getParameter("edit_tech_order_no"));
+		infomap.put("tech_point_num", request.getParameter("edit_tech_point_num"));
+		infomap.put("tech_order_type", request.getParameter("edit_tech_order_type"));
+		infomap.put("tech_type", request.getParameter("edit_tech_type"));
+		infomap.put("tech_date", request.getParameter("edit_tech_date"));
+		infomap.put("duty_unit", request.getParameter("edit_duty_unit"));
+		infomap.put("major_change", request.getParameter("edit_major_change") == null ? "N" : "Y");
+		infomap.put("repeat_change", request.getParameter("edit_repeat_change") == null ? "N" : "Y");
+		infomap.put("custom_change", request.getParameter("edit_custom_change") == null ? "N" : "Y");
+		infomap.put("custom_change_no", request.getParameter("edit_custom_change_no"));
+		
+		//创建一个通用的多部分解析器  
+        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());  
+        //判断 request 是否有文件上传,即多部分请求  
+        if(multipartResolver.isMultipart(request)){  
+            //转换成多部分request    
+            MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest)request;  
+            //取得request中的所有文件名  
+            Iterator<String> iter = multiRequest.getFileNames();  
+            if(iter.hasNext()){  
+                //取得第一个上传文件  
+                MultipartFile file = multiRequest.getFile(iter.next());  
+                if(file != null){
+                	infomap.put("tech_order_file", saveFileMethod(file));
+                }  
+            }
+            if(iter.hasNext()){  
+                //取得第二个上传文件  
+                MultipartFile file = multiRequest.getFile(iter.next());  
+                if(file != null){  
+                	infomap.put("custom_change_file", saveFileMethod(file));
+                }  
+            }
+              
+        }
+
+		infomap.put("editor_id", userid);
+		infomap.put("edit_date", curTime);
+		infomap.put("id", request.getParameter("tech_task_id"));
+		editList.add(infomap);
+		String selectedrows = request.getParameter("selectedrows");
+		techService.updateTechTaskMaintain(editList);
+		// 删除原来的变更物料清单
+		Map<String, Object> deletemap = new HashMap<String, Object>();
+		deletemap.put("tech_task_id", request.getParameter("tech_task_id"));
+		techService.deleteChangedMaterialList(deletemap);
+		List<Map<String, Object>> changeMaterialList = new ArrayList<Map<String, Object>>();
+		JSONArray jsonArray = JSONArray.fromObject(selectedrows);
+		JSONObject obj = null;
+		for (int i = 0; i < jsonArray.size(); i++) {
+			Map<String, Object> changeMaterialMap = new HashMap<String, Object>();
+			obj = jsonArray.getJSONObject(i);
+			changeMaterialMap.put("tech_task_id", request.getParameter("tech_task_id"));
+			changeMaterialMap.put("sap_no", obj.getString("sap_no"));
+			changeMaterialMap.put("material_desc", obj.getString("material_desc"));
+			changeMaterialMap.put("material_type", obj.getString("material_type"));
+			changeMaterialMap.put("material_spec", obj.getString("material_spec"));
+			changeMaterialMap.put("unit", obj.getString("unit"));
+			changeMaterialMap.put("supplier_code", obj.getString("supplier_code"));
+			changeMaterialMap.put("single_loss", obj.getString("single_loss"));
+			changeMaterialMap.put("level_usage", obj.getString("level_usage"));
+			changeMaterialMap.put("single_weight", obj.getString("single_weight"));
+			changeMaterialMap.put("single_usage", obj.getString("single_usage"));
+			changeMaterialMap.put("workshop", obj.getString("workshop"));
+			changeMaterialMap.put("process", obj.getString("process"));
+			changeMaterialMap.put("assemb_site", obj.getString("assemb_site"));
+			changeMaterialMap.put("remark", obj.getString("remark"));
+			changeMaterialList.add(changeMaterialMap);
+		}
+		if (changeMaterialList.size() > 0) {
+			techService.addChangedMaterialList(changeMaterialList);
+		}
+
+		initModel(true,"SUCCESS",null);
+		model = mv.getModelMap();
+		return model;
+	}
+	
 }

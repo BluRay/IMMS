@@ -2,23 +2,16 @@ package com.byd.bms.tech.service.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import javax.annotation.Resource;
-
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.byd.bms.tech.dao.ITechDao;
 import com.byd.bms.tech.service.ITechService;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
+
 @Service
 public class TechServiceImpl implements ITechService {
 	@Resource(name="techDao")
@@ -77,11 +70,35 @@ public class TechServiceImpl implements ITechService {
 	}
 
 	@Override
-	public List<Map<String, Object>> querySingleTechTaskMaintain(
-			Map<String, Object> conditionMap) {
-		
-		
-		return null;
+	public List<Map<String, Object>> querySingleTechTaskMaintain(Map<String, Object> conditionMap) {
+		List<Map<String,Object>> list = techDao.querySingleTechTaskMaintain(conditionMap);		
+		return list;
+	}
+
+	@Override
+	public List<Map<String, Object>> queryChangedMaterialList(Map<String, Object> conditionMap) {
+		List<Map<String,Object>> list = techDao.queryChangedMaterialList(conditionMap);	
+		return list;
+	}
+
+	@Override
+	public int addTechTaskMaintain(Map<String, Object> conditionMap) {
+		return techDao.addTechTaskMaintain(conditionMap);	
+	}
+
+	@Override
+	public int addChangedMaterialList(List<Map<String, Object>> conditionMap) {
+		return techDao.addChangedMaterialList(conditionMap);	
+	}
+
+	@Override
+	public int updateTechTaskMaintain(List<Map<String, Object>> conditionList) {
+		return techDao.updateTechTaskMaintain(conditionList);	
+	}
+
+	@Override
+	public int deleteChangedMaterialList(Map<String, Object> conditionMap) {
+		return techDao.deleteChangedMaterialList(conditionMap);	
 	}
 	
 	

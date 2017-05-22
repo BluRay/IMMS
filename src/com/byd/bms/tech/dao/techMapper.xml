@@ -1739,5 +1739,18 @@ LEFT JOIN BMS_BASE_USER AS u ON u.id = f.confirmor_id
 		</foreach>
 	</update>
 <!--  ###################  by wx  end  ###############  -->
+
+<!--技改任务维护-新增 -->
+	<insert id="addTechTaskMaintain" useGeneratedKeys="true" parameterType="map">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID() as id
+		</selectKey>
+		<![CDATA[
+			INSERT INTO
+			BMS_TECH_TASK(task_content,tech_order_no,tech_point_num,tech_order_type,tech_type,tech_date,duty_unit,major_change,repeat_change,custom_change,custom_change_no,tech_order_file,custom_change_file,editor_id,edit_date)
+			VALUES(#{task_content},#{tech_order_no},#{tech_point_num},#{tech_order_type},#{tech_type},#{tech_date},#{duty_unit},#{major_change},#{repeat_change},#{custom_change},#{custom_change_no},#{tech_order_file},#{custom_change_file},#{editor_id},#{edit_date})
+		]]>
+	</insert>
 	
 </mapper>

@@ -484,7 +484,11 @@ public class PlanServiceImpl implements IPlanService {
 		String WMI_extension = queryMap.get("WMI_extension").toString();
 		//获取当前年份最大的VIN流水号
 		int vin_count = 0;
-		vin_count = planDao.getVinCountByYear(vinYearMap.get(year));
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("year_code", vinYearMap.get(year));
+		condMap.put("vin_prefix", vin_prefix);
+		condMap.put("WMI_extension", WMI_extension);
+		vin_count = planDao.getVinCountByYear(condMap);
 		for(int i=0;i<genVinCount;i++){
 			if (vinCount >0){
 				vin_count++;

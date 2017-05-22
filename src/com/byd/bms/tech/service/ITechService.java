@@ -3,11 +3,6 @@ package com.byd.bms.tech.service;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.transaction.annotation.Transactional;
-
-import com.byd.bms.order.model.BmsOrder;
-import com.google.gson.JsonArray;
-
 public interface ITechService {
 	
 	/**
@@ -22,5 +17,14 @@ public interface ITechService {
 	public void addTechTask(Map<String, Object> conditionMap);
 	
 	public List<Map<String,Object>> querySingleTechTaskMaintain(Map<String,Object> conditionMap);
+
+	public List<Map<String,Object>> queryChangedMaterialList(Map<String,Object> conditionMap);
 	
+	public int addTechTaskMaintain(Map<String, Object> conditionMap);
+	
+	public int  addChangedMaterialList(List<Map<String, Object>> conditionMap);
+	
+	public int updateTechTaskMaintain(List<Map<String, Object>> conditionList);
+
+	public int deleteChangedMaterialList(Map<String,Object> conditionMap);
 }

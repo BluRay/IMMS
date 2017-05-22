@@ -98,6 +98,7 @@ $(document).ready(function(){
 		});
 	});
 
+
 	
 	$(document).on("click",".close.add",function(e){
 		$(e.target).closest("tr").remove();		
@@ -167,6 +168,10 @@ $(document).ready(function(){
 	
 });
 
+// 删除
+$(document).on("click",".close",function(e){
+	$(e.target).closest("tr").remove();
+});
 
 function ajaxQuery(){
 	$("#tableTechTask").dataTable({
@@ -262,7 +267,7 @@ function ajaxQuery(){
 		            	return data=="0"?"未开始":(data=="1"?"生产中":"已完成")},"defaultContent":""
 		            },	            
 		            {"title":"操作","class":"center","data":null,"render":function(data,type,row){
-		            	return "<i class=\"ace-icon fa fa-pencil bigger-110 editorder\" onclick = 'ajaxEdit(" + row.id+ ");' style='color:green;cursor: pointer;'></i>"},
+		            	return "<i class=\"ace-icon fa fa-pencil bigger-110 editorder\" onclick = 'showEditModal(" + row.id+ ");' style='color:green;cursor: pointer;'></i>"},
 		            	"defaultContent": "<i class=\"ace-icon fa fa-pencil bigger-110 editorder\" style='color:green;cursor: pointer;'></i>"} 
 		          ],
 	});
@@ -280,79 +285,53 @@ function getKeys(keys, input) {
 	return returnValue;
 }
 
-function ajaxEditConfirm (argument){
-	//alert(original);
-	
-	$("#btnEditConfirm").attr("disabled","disabled");
-	//数据验证
-	var factoryOrder_parameters=$("#edit_factoryOrder_parameters").find("tr");
-	var totleNum = $("#edit_order_qty").val();
-	var factoryNum = 0;
-	var factoryOrderDetail = [];
-	var factoryOrderNum="";
-	var arrStart = new Array();
-	var arrEnd = new Array();
-	$.each(factoryOrder_parameters,function(index,param){
-		var tds=$(param).children("td");
-		//$(tds[1]).find("select");
-		arrStart[index] = Number($(tds[3]).find("input").val());
-		arrEnd[index]   = Number($(tds[4]).find("input").val());
-		var fod={};
-		fod.factory_id=$(tds[1]).find("select").val();
-		//fod.order_id=$("#editModal").data("order_id");
-		fod.factory_order_id=$(param).data("factory_order_id")||"0";
-		//fod.order_detail_id=$(param).data("order_detail_id")||"0";
-		fod.production_qty=$(tds[2]).find("input").val()||0;
-		fod.old_production_qty=$(param).data("production_qty")||"0";
-		fod.busnum_start=$(tds[3]).find("input").val();
-		fod.busnum_end=$(tds[4]).find("input").val();
-		if(Number(fod.production_qty)>0){
-			factoryOrderDetail.push(fod);
+function getSelectRowDatas(tableID) {
+	var trs = $("#" + tableID).find("tr");
+	var propertyValue;
+	var selectData = new Array();
+	for (var i = 1; i < trs.length; i++) { // 第二行开始为数据
+		var obj = new Object();
+		var objTr = trs[i];
+		var tdArray = objTr.childNodes;
+
+		if (tdArray[0].innerHTML == "" && tdArray[0].children.length == 0) {
+			continue;
 		}
-	
-		factoryOrderNum += $(tds[1]).find("select").val() + ":" + $(tds[2]).find("input").val() + "_" + $(tds[3]).find("input").val() + "|" + $(tds[4]).find("input").val() + "," ;
-		factoryNum += Number($(tds[2]).find("input").val());
-		
-	});
-	if(original==factoryOrderNum){
-		factoryOrderNum = "";
+
+		for (var j = 0; j < tdArray.length; j++) {
+			var propertyName = tdArray[j].id;
+			propertyValue = tdArray[j].innerHTML;
+			var childTag = tdArray[j].children;
+			if (childTag.length > 0) {
+				var inputType = childTag[0].tagName;
+				var inputName = childTag[0].type;
+				if (inputName == "checkbox") {
+					if (childTag[0].checked == false) { // 判断为没有选中的数据行直接跳出不做处理
+						break;
+					}
+					continue;
+				}
+				if ((inputType == "INPUT" && inputName == "hidden") || (inputType == "INPUT" && inputName == "text") || inputType == "SELECT") {
+					propertyValue = childTag[0].value;
+				} else if (inputType === "A") {
+					propertyValue = childTag[0].innerHTML;
+				}
+			}
+			obj[propertyName] = propertyValue;
+		}
+		if (!isEmptyObject(obj)) {
+			selectData.push(obj);
+		}
+
 	}
-	if (factoryNum != totleNum){
-		alert("产地分配数量之和与订单总数量不相等！");
-		$("#btnEditConfirm").removeAttr("disabled");
+	return selectData;
+}
+
+function isEmptyObject(obj) {
+	for ( var n in obj) {
 		return false;
 	}
-
-	$.ajax({
-		type: "get",
-		dataType: "json",
-		url: "/IMMS/order/editOrder",
-	    data: {
-			"data_order_id":$("#dialog-order").data("order_id"),
-			"color":$("#edit_color").val(),
-			"seats":$("#edit_seats").val(),
-			"delivery_date":$("#edit_delivery_date").val(),
-			"memo":$("#edit_memo").val(),
-			"factoryOrderDetail":JSON.stringify(factoryOrderDetail),
-			"productive_year":$("#edit_productive_year").val(),
-			"del_order_list":JSON.stringify(del_order_list)
-		},
-		async: false,
-	    success:function (response) {
-	    	$("#btnEditConfirm").removeAttr("disabled");
-	    	
-    		if(factoryOrderDetail==""){
-    			alert("订单数据编辑成功！");
-    		}else{
-    			alert("订单数据编辑成功，请重新发布该订单今天及以后的计划！");
-    		}
-    		$( "#dialog-order" ).dialog( "close" );
-    		ajaxQuery();
-	     
-	    },
-	    error:function(){alertError();$("#btnEditConfirm").removeAttr("disabled");}
-	});
-	
+	return true;
 }
 
 function ajaxAdd (argument) {
@@ -428,8 +407,14 @@ function ajaxAdd (argument) {
 	
 }
 
-function ajaxEdit(techTaskId){
+function showEditModal(techTaskId){
+	getKeysSelect("ECN_CHANGE_TYPE", "变更单类型", "#edit_tech_order_type");
+	getKeysSelect("ECN_TYPE", "技改类型", "#edit_tech_type");
+	getKeysSelect("ECN_DUTY_UNIT", "技改责任单位", "#edit_duty_unit");
 	//查询技改任务信息 url: "techTaskMaintain/addTechTask",
+	$("#edit_tech_order_file").next("a").remove();
+	$("#edit_custom_change_file").next("a").remove();
+	$("#tech_task_id").val(techTaskId);
 	$.ajax({
 		url: "techTaskMaintain/getSingleTaskMaintain",
 		dataType: "json",
@@ -437,90 +422,143 @@ function ajaxEdit(techTaskId){
 		async: false,
 		error: function () {alertError();},
 		success: function (response) {			
-				$("#edit_factoryOrder_parameters").html("");
-				$.each(response.data,function(index,value){
-					if(index == 0){
-						//填充订单基本信息
-						$("#editOrderID").val(value.id);
-						$("#editOrderNo").val(value.order_no);
-						$("#editOrderName").val(value.order_name);
-						$("#editOrderCode").val(value.order_code);
-						$("#editOrderType").val(value.order_type);
-						//$("#editBusType").val(value.bus_type_code);
-						select_selectOption("#editBusType",value.bus_type_code)
-						$("#edit_order_qty").val(value.order_qty);
-						$("#edit_order_descriptive").val(value.order_name + value.bus_type_code + " " + value.order_qty + "台");
-						$("#edit_productive_year").val(value.productive_year);
-						$("#edit_delivery_date").val(value.delivery_date);
-						$("#edit_memo").val(value.memo);
-						$("#dialog-order").data("bus_num_start",value.busnum_start);
+			$.each(response.data, function(index, value) {
+				$("#edit_task_content").val(value.task_content);
+				$("#edit_tech_order_type").val(value.tech_order_type);
+				$("#edit_tech_order_no").val(value.tech_order_no);
+				$("#edit_tech_order_file").after("<a href='#' onclick='window.open(\"" + value.tech_order_file + "\")'>" + (value.tech_order_file == "" ? "" : "查看") + "</a>");
+				$("#edit_tech_date").val(value.tech_date);
+				$("#edit_duty_unit").val(value.duty_unit);
+				value.major_change == "Y" ? $("#edit_major_change").attr('checked', true) : $("#edit_major_change").removeAttr('checked');
+				value.custom_change == "Y" ? $("#edit_custom_change").attr('checked', true) : $("#edit_custom_change").removeAttr('checked');
+				value.repeat_change == "Y" ? $("#edit_repeat_change").attr('checked', true) : $("#edit_repeat_change").removeAttr('checked');
+
+				$("#edit_custom_change_file").after("<a href='#' onclick='window.open(\"" + value.custom_change_file + "\")'>" + (value.custom_change_file == "" ? "" : "查看") + "</a>");
+				$("#edit_tech_type").val(value.tech_type);
+
+				$("#edit_tech_point_num").val(value.tech_point_num);
+				$("#edit_custom_change_no").val(value.custom_change_no);
+			});
+			
+			var dialog = $( "#dialog-teckTask_moidfy" ).removeClass('hide').dialog({
+				width:1080,
+				height:560,
+				modal: true,
+				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i> 订单分配</h4></div>",
+				title_html: true,
+				buttons: [ 
+					{
+						text: "取消",
+						"class" : "btn btn-minier",
+						click: function() {
+							$( this ).dialog( "close" ); 
+						} 
+					},
+					{
+						text: "确定",
+						"class" : "btn btn-primary btn-minier",
+						click: function() {
+							ajaxEdit();
+						} 
 					}
-					if(index==response.data.length-1){
-						$("#dialog-order").data("bus_num_end",value.busnum_end);
-					}
-					//填充生产工厂信息
-					var close_btn = "";
-					var factory_selectable=false;
-					if(value.minbusnum == 0) {
-						close_btn = "<button type=\"button\" class=\"close edit\" aria-label=\"Close\" ><span aria-hidden=\"true\">&times;</span></button>";
-						factory_selectable=true;
-					}
-					
-					var tr=$("<tr/>");
-					var paramHtml="<td>"+close_btn+"</td>" +
-					//"<td>" + select_str + "</td>" +
-					"<td>" + select_str1 + "<option value='"+ value.factory_id + "'> "+ value.factory_name + "</option>" + select_str2 + "</td>" +
-					"<td><input type='text' style='width:60px' class='input-small orderNum edit' value='"+value.production_qty+"' old_value="+value.production_qty+" id='production_qty2'/></td>" +
-					"<td><input type='text' style='width:60px' disabled='disabled' class='input-small busNum' value='"+value.busnum_start+"' id='busnum_start2'/></td>" +
-					"<td><input type='text' style='width:60px' disabled='disabled' class='input-small busNum' value='"+value.busnum_end+"' id='busnum_end2'/></td>" +
-					/*"<td ><input type='text' style='width:0px;display:none' class='input-small' value='"+value.minbusnum+"' id='minbusnum'/></td>" +
-					"<td ><input type='text' style='width:0px;display:none' class='input-small' value='"+value.maxbusnum+"' id='maxbusnum'/></td>" +*/
-					"";
-					$(tr).html(paramHtml).appendTo("#edit_factoryOrder_parameters");
-					$(tr).data("min_busnum",value.minbusnum);
-					$(tr).data("max_busnum",value.maxbusnum);
-					$(tr).data("production_qty",value.production_qty);
-					$(tr).data("factory_order_id",value.factory_order_id);
-					//$(tr).data("order_detail_id",value.id);
-					$(tr).data("busnum_start",value.busnum_start);
-					$(tr).data("busnum_end",value.busnum_end);
-					
-					if(!factory_selectable){
-						$(tr).find("select").attr("disabled",true);
-					}
-	
-					original += value.factory_id + ":" + value.production_qty + "_" + value.busnum_start + "|" + value.busnum_end + "," ;
-					
-				})
-				$("#dialog-order").data("order_id",order_id);				
-				
-				var dialog = $( "#dialog-order" ).removeClass('hide').dialog({
-					width:600,
-					height:500,
-					modal: true,
-					title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i>订单分配</h4></div>",
-					title_html: true,
-					buttons: [ 
-						{
-							text: "取消",
-							"class" : "btn btn-minier",
-							click: function() {
-								$( this ).dialog( "close" ); 
-							} 
-						},
-						{
-							text: "确定",
-							"class" : "btn btn-primary btn-minier",
-							click: function() {
-								//$( this ).dialog( "close" );
-								ajaxEditConfirm();
-							} 
-						}
-					]
-				});
-				$("#editOrderNo").focus();
+				]
+			});
 		}
 	})
+	
+	ajaxQueryChangedMaterialList(techTaskId);
+	
+}
+
+function ajaxEdit() {
+	if ($("#edit_task_content").val().trim() == "") {
+		alert("技改任务 值不能为空！");
+		$("#edit_task_content").focus();
+		return false;
+	}
+	if ($("#edit_tech_order_no").val().trim() == "") {
+		alert("技改单号 值不能为空！");
+		$("#edit_tech_order_no").focus();
+		return false;
+	}
+	if ($("#edit_tech_point_num").val().trim() == "") {
+		alert("技改点数 值不能为空！");
+		$("#edit_tech_point_num").focus();
+		return false;
+	}
+	if ($("#edit_tech_order_type").val().trim() == "") {
+		alert("变更单类型 值不能为空！");
+		$("#edit_tech_order_type").focus();
+		return false;
+	}
+	if ($("#edit_tech_type").val().trim() == "") {
+		alert("技改类型 值不能为空！");
+		$("#new_tech_type").focus();
+		return false;
+	}
+	if ($("#edit_tech_date").val().trim() == "") {
+		alert("技改单日期 值不能为空！");
+		$("#edit_tech_date").focus();
+		return false;
+	}
+	if ($("#edit_duty_unit").val().trim() == "") {
+		alert("责任单位 值不能为空！");
+		$("#edit_duty_unit").focus();
+		return false;
+	}
+	var trs = getSelectRowDatas("table2");
+
+	$('#teckTaskForm_moidfy').ajaxSubmit({
+		url : "techTaskMaintain/editTechTaskMaintain",
+		dataType : "json",
+		type : "post",
+		data : {
+			"selectedrows" : JSON.stringify(trs)
+		},
+		success : function(response) {
+			$.gritter.add({
+				title: '系统提示：',
+				text: '<h5>保存成功！</h5>',
+				class_name: 'gritter-info'
+			});
+			$("#dialog-teckTask_moidfy").dialog( "close" );
+			ajaxQuery();
+		}
+	});
+}
+
+function ajaxQueryChangedMaterialList(tech_task_id){
+	$.ajax({
+		url : "techTaskMaintain/getChangedMaterialList",
+		dataType : "json",
+		type : "post",
+		data : {
+			"tech_task_id" : tech_task_id
+		},
+		success : function(response) {
+			$("#table2 tbody").html("");
+			$.each(response.data, function(index, value) {
+				var tr = $("<tr />");
+				$("<td id=\"\" />").html('<button type="button" class="close" aria-label="Close"><span aria-hidden="true">×</span></button>').appendTo(tr);
+				$("<td id=\"sap_no\" contentEditable=\"true\"/>").html(value.sap_no).appendTo(tr);
+				$("<td id=\"material_desc\" contentEditable=\"true\"/>").html(value.material_desc).appendTo(tr);
+				$("<td id=\"material_type\" contentEditable=\"true\"/>").html(value.material_type).appendTo(tr);
+				$("<td id=\"material_spec\" contentEditable=\"true\"/>").html(value.material_spec).appendTo(tr);
+				$("<td id=\"unit\" contentEditable=\"true\"/>").html(value.unit).appendTo(tr);
+				$("<td id=\"supplier_code\" contentEditable=\"true\"/>").html(value.supplier_code).appendTo(tr);
+				$("<td id=\"single_loss\" contentEditable=\"true\"/>").html(value.single_loss).appendTo(tr);
+				$("<td id=\"level_usage\" contentEditable=\"true\"/>").html(value.level_usage).appendTo(tr);
+				$("<td id=\"single_weight\" contentEditable=\"true\"/>").html(value.single_weight).appendTo(tr);
+				$("<td id=\"single_usage\" contentEditable=\"true\"/>").html(value.single_usage).appendTo(tr);
+				$("<td id=\"workshop\" contentEditable=\"true\"/>").html(value.workshop).appendTo(tr);
+				$("<td id=\"process\" contentEditable=\"true\"/>").html(value.process).appendTo(tr);
+				$("<td id=\"assemb_site\" contentEditable=\"true\"/>").html(value.assemb_site).appendTo(tr);
+				$("<td id=\"remark\" contentEditable=\"true\"/>").html(value.remark).appendTo(tr);
+				$("#table2 tbody").append(tr);
+			});
+		}
+	});
+	
 }
 
 function upload(form,file,table){

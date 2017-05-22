@@ -5,12 +5,14 @@
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <meta charset="utf-8" />
-<title>BMS 标题</title>
+<title>技改任务维护</title>
 <meta name="description" content="Common Buttons &amp; Icons" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 <link rel="stylesheet" href="../assets/css/fixedColumns.bootstrap.min.css" />
 <link rel="stylesheet" href="../assets/css/fixedColumns.dataTables.min.css" />
 <link rel="stylesheet" href="../assets/css/jquery-ui.min.css" />
+<link rel="stylesheet" href="../assets/css/jquery-ui.custom.min.css" />
+<link rel="stylesheet" href="../assets/css/jquery.gritter.css" />
 </head>
 <body class="no-skin" style="font-family: 'Microsoft YaHei';">
 	<!-- 头 -->
@@ -211,51 +213,48 @@
 			
 			<div id="dialog-teckTask_moidfy" class="hide">
 				<form id="teckTaskForm_moidfy" enctype="multipart/form-data" method="post" class="form-horizontal">
+					<input type="hidden" name="tech_task_id" id="tech_task_id" value="" />
 					<div class="form-group">
-						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="modify_task_content">*&nbsp;技改任务：</label>
+						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="edit_task_content">*&nbsp;技改任务：</label>
 						<div class="col-sm-9">
-							<textarea class="form-control" placeholder="" id="modify_task_content" name="modify_task_content" ></textarea>
+							<textarea class="form-control" placeholder="" id="edit_task_content" name="edit_task_content" ></textarea>
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="modify_tech_order_no">*&nbsp;技改单号：</label>
+						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="edit_tech_order_no">*&nbsp;技改单号：</label>
 						<div class="col-sm-4">
-							<input type="text" class="input-medium" style="width:100%;"
-								placeholder="" id="modify_tech_order_no" name="modify_tech_order_no" />
+							<input type="text" class="input-medium" style="width:100%;" id="edit_tech_order_no" name="edit_tech_order_no" />
 						</div>
-						<label class="col-sm-2 col-sm-2 control-label no-padding-right no-padding-right" for="modify_tech_point_num">*&nbsp;技改点数：</label>
+						<label class="col-sm-2 col-sm-2 control-label no-padding-right no-padding-right" for="edit_tech_point_num">*&nbsp;技改点数：</label>
 						<div class="col-sm-3">
-							<input type="text" class="input-medium" style="width:100%;"
-								placeholder="" id="modify_tech_point_num" name="modify_tech_point_num" onkeyup="value=value.replace(/[^\d]/g,'')" onpaste="return false;" />
+							<input type="text" class="input-medium" style="width:100%;" id="edit_tech_point_num" name="edit_tech_point_num" onkeyup="value=value.replace(/[^\d]/g,'')" onpaste="return false;" />
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-2 col-sm-2 control-label no-padding-right no-padding-right" for="modify_tech_order_type">*&nbsp;变更单类型：</label>
+						<label class="col-sm-2 col-sm-2 control-label no-padding-right no-padding-right" for="edit_tech_order_type">*&nbsp;变更单类型：</label>
 						<div class="col-sm-3">
-							<select name="modify_tech_order_type" id="modify_tech_order_type" style="width:100%;" class="input-medium" >
+							<select name="edit_tech_order_type" id="edit_tech_order_type" style="width:100%;" class="input-medium" >
 								<option>请选择</option>
 							</select>
 						</div>
-						<label class="col-sm-3 control-label no-padding-right" for="modify_tech_type">*&nbsp;技改类型：</label>
+						<label class="col-sm-3 control-label no-padding-right" for="edit_tech_type">*&nbsp;技改类型：</label>
 						<div class="col-sm-3">
-							<select name="modify_tech_type" id="modify_tech_type" style="width:100%;"
-								class="input-medium">
-							</select>
+							<select name="edit_tech_type" id="edit_tech_type" style="width:100%;" class="input-medium"></select>
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-2 control-label no-padding-right" for="modify_tech_date">*&nbsp;技改单日期：</label>
+						<label class="col-sm-2 control-label no-padding-right" for="edit_tech_date">*&nbsp;技改单日期：</label>
 						<div class="col-sm-3">
 							<div class="input-group">
-							  <input class="form-control date-picker" id="modify_tech_date" name="modify_tech_date" type="text" data-date-format="yyyy-mm-dd">
+							  <input class="form-control date-picker" id="edit_tech_date" name="edit_tech_date" type="text" data-date-format="yyyy-mm-dd">
 								<span class="input-group-addon">
 									<i class="fa fa-calendar bigger-110"></i>
 								</span>
 							</div>
 						</div>
-						<label class="col-sm-3 control-label no-padding-right" for="modify_duty_unit">*&nbsp;责任单位：</label>
+						<label class="col-sm-3 control-label no-padding-right" for="edit_duty_unit">*&nbsp;责任单位：</label>
 						<div class="col-sm-3">
-							<select name="modify_duty_unit" id="modify_duty_unit" style="width:100%;"
+							<select name="edit_duty_unit" id="edit_duty_unit" style="width:100%;"
 								class="input-medium">
 							</select>
 						</div>
@@ -263,33 +262,32 @@
  					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right" for="">&nbsp;重大变更：</label>
 						<div class="col-sm-3">
-							<input value='重大变更' type="checkbox" name="modify_major_change" title="" id="modify_major_change"/>&nbsp;是
+							<input value='重大变更' type="checkbox" name="edit_major_change" title="" id="edit_major_change"/>&nbsp;是
 						</div>
-						<label class="col-sm-3 control-label no-padding-right" for="modify_productive_year">*&nbsp;重复变更：</label>
+						<label class="col-sm-3 control-label no-padding-right" for="edit_repeat_change">*&nbsp;重复变更：</label>
 						<div class="col-sm-3">
-							<input value='重复变更' type="checkbox" name="modify_repeat_change" title="" id="modify_repeat_change"/>&nbsp;是
+							<input value='重复变更' type="checkbox" name="edit_repeat_change" title="" id="edit_repeat_change"/>&nbsp;是
 						</div>
 					</div> 
  					<div class="form-group">
-						<label class="col-sm-2 control-label no-padding-right" for="modify_custom_change">&nbsp;顾客变更：</label>
+						<label class="col-sm-2 control-label no-padding-right" for="edit_custom_change">&nbsp;顾客变更：</label>
 						<div class="col-sm-3">
-							<input value='重大变更' type="checkbox" name="modify_custom_change" title="" id="modify_custom_change"/>&nbsp;是
+							<input value='重大变更' type="checkbox" name="edit_custom_change" title="" id="edit_custom_change"/>&nbsp;是
 						</div>
-						<label class="col-sm-3 control-label no-padding-right" for="modify_custom_change_no">*&nbsp;顾客变更单号：</label>
+						<label class="col-sm-3 control-label no-padding-right" for="edit_custom_change_no">*&nbsp;顾客变更单号：</label>
 						<div class="col-sm-3">
-							<input type="text" class="input-medium" style="width:100%;"
-								placeholder="" id="modify_custom_change_no" name="modify_custom_change_no" />
+							<input type="text" class="input-medium" style="width:100%;" id="edit_custom_change_no" name="edit_custom_change_no" />
 						</div>
 					</div>
 					
 					<div class="form-group">
-						<label class="col-sm-2 control-label no-padding-right" for="modify_tech_order_file">&nbsp;技改单附件：</label>
+						<label class="col-sm-2 control-label no-padding-right" for="edit_tech_order_file">&nbsp;技改单附件：</label>
 						<div class="col-sm-4">
-							<input multiple="" name="modify_tech_order_file" type="file" id="modify_tech_order_file" />
+							<input type="file" accept="application/pdf" name="edit_tech_order_file" id="edit_tech_order_file" style="height: 30px; width: 180px">
 						</div>
-						<label class="col-sm-2 control-label no-padding-right" for="modify_custom_change_no">*&nbsp;顾客变更单附件：</label>
+						<label class="col-sm-2 control-label no-padding-right" for="edit_custom_change_file">*&nbsp;顾客变更单附件：</label>
 						<div class="col-sm-4">
-							<input multiple="" name="modify_custom_change_no" type="file" id="modify_custom_change_file" />
+							<input multiple="" name="edit_custom_change_file" type="file" id="edit_custom_change_file" />
 						</div>
 					</div>
 
@@ -314,6 +312,31 @@
 						</div>
 					</div>
 				</form>
+				
+				<table id="table2" class="table table-bordered table-striped" style="font-size: 12px;">
+						<thead>
+							<tr>
+								<th> </th>
+								<th>SAP料号</th>
+								<th>物料描述</th>
+								<th>物料类型</th>
+								<th>材料/规格</th>
+								<th>单位</th>
+								<th>供应商代码</th>
+								<th>单车损耗%</th>
+								<th>层级用量</th>
+								<th>单重</th>
+								<th>单车用量含损耗</th>
+								<th>使用车间</th>
+								<th>工序</th>
+								<th>装配位置</th>
+								<th>备注</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				
 			</div>
 			
 		</div>
@@ -336,6 +359,8 @@
 	<script src="../js/common.js"></script>
 	<script src="../js/jquery.form.js"></script>
 	<script src="../js/tech/techTaskMaintain.js"></script>
+	<script src="../assets/js/jquery.ui.touch-punch.min.js"></script>
+	<script src="../assets/js/jquery.gritter.min.js"></script>
 </body>
 
 </html>

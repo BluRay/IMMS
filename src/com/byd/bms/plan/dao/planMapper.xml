@@ -530,9 +530,17 @@
 		SELECT vin_assembly_code FROM BMS_BASE_FACTORY WHERE id = #{factory_id}
 	</select>
 	
-	<select id="getVinCountByYear" parameterType="String" resultType="int">
-		SELECT IFNULL(max(RIGHT(vin,6)),0) AS max_vin_count FROM
+	<select id="getVinCountByYear" parameterType="Map" resultType="int">		
+		SELECT 
+		<if test="WMI_extension != ''">
+			IFNULL(max(RIGHT(vin,3)),0) AS max_vin_count 
+		</if>
+		<if test="WMI_extension == ''">
+			IFNULL(max(RIGHT(vin,6)),0) AS max_vin_count 
+		</if>
+		FROM
 		BMS_PD_VIN WHERE SUBSTRING(vin,10,1) = #{year_code}
+		AND LEFT(vin,8) = #{vin_prefix}
 	</select>
 	
 	<insert id="insertPlanVin" useGeneratedKeys="true" keyProperty="id" parameterType="com.byd.bms.plan.model.PlanVIN">

@@ -59,7 +59,7 @@ public interface IPlanDao {
 	public int getFactoryOrderInfo(Map<String,Object> queryMap);
 	public Map<String,Object> getVinPrefix(Map<String,Object> queryMap);
 	public String GetFactoryVinPrefix(int factory_id);			//vin_assembly_code
-	public int getVinCountByYear(String year_code);
+	public int getVinCountByYear(Map<String,Object> queryMap);
 	public int insertPlanVin(PlanVIN vin);
 	public int insertPlanVin2(PlanVIN vin);
 	public int updatePlanBus(PlanVIN vin);
