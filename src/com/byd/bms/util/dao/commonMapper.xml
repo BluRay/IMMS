@@ -111,7 +111,7 @@
 	</select>
 	
 	<select id="queryLineList" parameterType="Map" resultType="Map">			
-		SELECT id,line AS name FROM BMS_BASE_LINE WHERE delete_flag='0'
+		SELECT id,line AS name FROM BMS_BASE_LINE WHERE delete_flag='0' order by line 
 	</select>
 	
 	<select id="queryLineListAuth" parameterType="Map" resultType="Map">			
