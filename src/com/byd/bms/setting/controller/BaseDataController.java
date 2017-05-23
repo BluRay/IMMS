@@ -2,6 +2,7 @@ package com.byd.bms.setting.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -11,12 +12,15 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.byd.bms.setting.model.BmsBaseFactory;
 import com.byd.bms.setting.model.BmsBaseLine;
+import com.byd.bms.setting.model.BmsBaseProcess;
 import com.byd.bms.setting.model.BmsBaseWorkshop;
 import com.byd.bms.setting.service.IBaseDataService;
 import com.byd.bms.util.controller.BaseController;
@@ -26,7 +30,7 @@ import com.byd.bms.util.controller.BaseController;
 public class BaseDataController extends BaseController {
 	static Logger logger = Logger.getLogger("SETTING");
 	@Autowired
-	protected IBaseDataService baseDateService;
+	protected IBaseDataService baseDataService;
 
 	// 工厂
 	@RequestMapping("/factory")
@@ -91,7 +95,7 @@ public class BaseDataController extends BaseController {
 		queryMap.put("length", length);
 		queryMap.put("factory", factory);
 		queryMap.put("assembcode", assembcode);
-		Map<String, Object> result = baseDateService.getFactoryList(queryMap);
+		Map<String, Object> result = baseDataService.getFactoryList(queryMap);
 		model.addAllAttributes(result);
 
 		return model;
@@ -125,7 +129,7 @@ public class BaseDataController extends BaseController {
 			factory.setEditorId(editor_id);
 			factory.setEditDate(edit_date);
 
-			int reuslt = baseDateService.addFactory(factory);
+			int reuslt = baseDataService.addFactory(factory);
 			initModel(true, "success", reuslt);
 		} catch (Exception e) {
 			initModel(false, e.getMessage(), e.toString());
@@ -166,7 +170,7 @@ public class BaseDataController extends BaseController {
 			factory.setEditorId(editor_id);
 			factory.setEditDate(edit_date);
 
-			baseDateService.updateFactory(factory);
+			baseDataService.updateFactory(factory);
 			initModel(true, "success", "");
 		} catch (Exception e) {
 			initModel(false, e.getMessage(), e.toString());
@@ -184,7 +188,7 @@ public class BaseDataController extends BaseController {
 			for(String id : ids.split(",")){
 				idlist.add(id);
 			}
-			baseDateService.deleteFactory(idlist);
+			baseDataService.deleteFactory(idlist);
 			initModel(true, "success", "");
 		} catch (Exception e) {
 			initModel(false, e.getMessage(), e.toString());
@@ -212,7 +216,7 @@ public class BaseDataController extends BaseController {
 		queryMap.put("start", start);
 		queryMap.put("length", length);
 		queryMap.put("workshopName", workshopName);
-		Map<String, Object> result = baseDateService.getWorkshopList(queryMap);
+		Map<String, Object> result = baseDataService.getWorkshopList(queryMap);
 		model.addAllAttributes(result);
 
 		return model;
@@ -238,7 +242,7 @@ public class BaseDataController extends BaseController {
 			workshop.setEditorId(editor_id);
 			workshop.setEditDate(edit_date);
 
-			int reuslt = baseDateService.addWorkshop(workshop);
+			int reuslt = baseDataService.addWorkshop(workshop);
 			initModel(true, "success", reuslt);
 		} catch (Exception e) {
 			initModel(false, e.getMessage(), e.toString());
@@ -271,7 +275,7 @@ public class BaseDataController extends BaseController {
 			workshop.setEditorId(editor_id);
 			workshop.setEditDate(edit_date);
 
-			baseDateService.updateWorkshop(workshop);
+			baseDataService.updateWorkshop(workshop);
 			initModel(true, "success", "");
 		} catch (Exception e) {
 			initModel(false, e.getMessage(), e.toString());
@@ -289,7 +293,7 @@ public class BaseDataController extends BaseController {
 			for(String id : ids.split(",")){
 				idlist.add(id);
 			}
-			baseDateService.deleteWorkshop(idlist);
+			baseDataService.deleteWorkshop(idlist);
 			initModel(true, "success", "");
 		} catch (Exception e) {
 			initModel(false, e.getMessage(), e.toString());
@@ -317,7 +321,7 @@ public class BaseDataController extends BaseController {
 		queryMap.put("start", start);
 		queryMap.put("length", length);
 		queryMap.put("lineName", lineName);
-		Map<String, Object> result = baseDateService.getLineList(queryMap);
+		Map<String, Object> result = baseDataService.getLineList(queryMap);
 		model.addAllAttributes(result);
 
 		return model;
@@ -342,7 +346,7 @@ public class BaseDataController extends BaseController {
 			line.setEditorId(editor_id);
 			line.setEditDate(edit_date);
 
-			int reuslt = baseDateService.addLine(line);
+			int reuslt = baseDataService.addLine(line);
 			initModel(true, "success", reuslt);
 		} catch (Exception e) {
 			initModel(false, e.getMessage(), e.toString());
@@ -373,7 +377,7 @@ public class BaseDataController extends BaseController {
 			line.setEditorId(editor_id);
 			line.setEditDate(edit_date);
 
-			baseDateService.updateLine(line);
+			baseDataService.updateLine(line);
 			initModel(true, "success", "");
 		} catch (Exception e) {
 			initModel(false, e.getMessage(), e.toString());
@@ -391,12 +395,93 @@ public class BaseDataController extends BaseController {
 			for(String id : ids.split(",")){
 				idlist.add(id);
 			}
-			baseDateService.deleteLine(idlist);
+			baseDataService.deleteLine(idlist);
 			initModel(true, "success", "");
 		} catch (Exception e) {
 			initModel(false, e.getMessage(), e.toString());
 		}
 		model = mv.getModelMap();
 		return model;
+	}
+	
+	/**
+	 * 获取标准工序列表
+	 * @return
+	 */
+	@RequestMapping("/getProcessList")
+	@ResponseBody
+	public ModelMap getProcessList(){
+		model.clear();
+		String draw=request.getParameter("draw");
+		int start=Integer.parseInt(request.getParameter("start"));//分页数据起始数
+		int length=Integer.parseInt(request.getParameter("length"));//每一页数据条数
+		String factory=request.getParameter("factory");
+		String workshop=request.getParameter("workshop");
+		String line=request.getParameter("line");
+		String monitoryPoint_flag=request.getParameter("monitoryPoint_flag");
+		String keyProcess_flag=request.getParameter("keyProcess_flag");
+		String planNode_flag=request.getParameter("planNode_flag");
+		
+		
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("factory", factory);
+		condMap.put("workshop", workshop);
+		condMap.put("line", line);
+		condMap.put("monitoryPoint_flag", monitoryPoint_flag);
+		condMap.put("keyProcess_flag", keyProcess_flag);
+		condMap.put("planNode_flag", planNode_flag);
+		condMap.put("start", start);
+		condMap.put("length", length);
+		condMap.put("draw", draw);
+		
+		model.addAllAttributes(baseDataService.getProcessList(condMap));
+		
+		return model;
+	}
+	
+	/**
+	 * 编辑标准工序
+	 * @return
+	 */
+	@RequestMapping("/editProcess")
+	@ResponseBody
+	public ModelMap editProcess(@ModelAttribute("process")  BmsBaseProcess process){
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		int userid=(int)session.getAttribute("user_id");
+		process.setEditor_id(userid);
+		process.setEdit_date(curTime);
+		baseDataService.updateProcess(process);
+		initModel(true, "编辑成功！", null);
+		return mv.getModelMap();
+	}
+	
+	/**
+	 * 新增标准工序
+	 */
+	@RequestMapping("/addProcess")
+	@ResponseBody
+	public ModelMap addProcess(@ModelAttribute("process")  BmsBaseProcess process){
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		int userid=(int)session.getAttribute("user_id");
+		process.setEditor_id(userid);
+		process.setEdit_date(curTime);
+		baseDataService.addProcess(process);
+		initModel(true, "新增成功！", null);
+		return mv.getModelMap();
+	}
+	
+	/**
+	 * 软删除标准工序
+	 */
+	@RequestMapping("/deleteProcess")
+	@ResponseBody
+	public ModelMap deleteProcess( ){
+		String ids=request.getParameter("ids");
+		List idlist=Arrays.asList(ids.split(","));
+		baseDataService.deleteProcess(idlist);
+		initModel(true, "删除成功！", null);
+		return mv.getModelMap();
 	}
 }

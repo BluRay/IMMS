@@ -117,22 +117,35 @@ public class BaseDataServiceImpl implements IBaseDataService {
 	//工序
 	@Override
 	public Map<String, Object> getProcessList(Map<String, Object> queryMap) {
-		// TODO Auto-generated method stub
-		return null;
+		Map<String,Object> result=new HashMap<String,Object>();
+		int totalCount=0;
+		List<BmsBaseProcess> datalist=baseDataDao.getProcessList(queryMap);
+		totalCount=baseDataDao.getProcessTotalCount(queryMap);
+		result.put("recordsTotal", totalCount);
+		result.put("recordsFiltered", totalCount);
+		result.put("draw", queryMap.get("draw"));
+		result.put("data", datalist);
+		
+		return result;
 	}
 	@Override
 	public int addProcess(BmsBaseProcess process) {
-		// TODO Auto-generated method stub
-		return 0;
+		if(process!=null){
+			baseDataDao.addProcess(process);
+		}	
+		return process.getId();
 	}
 	@Override
 	public void updateProcess(BmsBaseProcess process) {
-		// TODO Auto-generated method stub
-		
+		if(process.getId()!=0){
+			baseDataDao.updateProcess(process);
+		}	
 	}
 	@Override
 	public void deleteProcess(List ids) {
-		// TODO Auto-generated method stub
+		if(ids.size()>0){
+			baseDataDao.deleteProcess(ids);
+		}
 		
 	}
 	

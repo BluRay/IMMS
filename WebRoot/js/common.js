@@ -212,11 +212,10 @@ function getKeysSelect(keyCode, selectval, element,selectType,valueItem) {
 			alert(response.message)
 		},
 		success : function(response) {
-			var strs ;
-			if (selectType == 'noall') {
-				strs="";
-			}else
-				strs="<option value=''>请选择</option>";
+			var strs ="";
+			if(selectType!=undefined){
+				strs = "<option value=''>"+selectType+"</option>";
+			}
 			$(element).html("");
 			$.each(response.data, function(index, value) {
 				if (selectval == value.id || selectval == value.key_name) {
@@ -337,6 +336,28 @@ function getLineSelect(factory,workshop,selectval,selectId,selectType,valName) {
 		}
 	});
 }
+
+/**
+ * 
+ * @param name
+ * @returns
+ */
+function getLineSelectStandard(selectval,selectId,selectType,valName){
+	$.ajax({
+		url : "/IMMS/common/getLineSelect",
+		dataType : "json",
+		data : {
+			},
+		async : false,
+		error : function(response) {
+			alert(response.message)
+		},
+		success : function(response) {
+			getSelects(response.data,selectval,selectId,selectType, valName);	
+		}
+	});
+}
+
 
 function getQueryString(name) { 
 	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"); 

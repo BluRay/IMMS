@@ -50,4 +50,5 @@ public interface IBaseDataService {
 		//public int getBusTypeTotalCount(Map<String,Object> queryMap);
 		public int addBusType(BmsBaseBusType busType);
 		public void updateBusType(BmsBaseBusType busType);
+		
 }

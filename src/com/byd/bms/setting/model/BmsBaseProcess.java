@@ -2,109 +2,86 @@ package com.byd.bms.setting.model;
 
 public class BmsBaseProcess {
 	private int id;
-	private int factoryId;
-	private String factoryName;
-	private int workshopId;
-	private String workshopName;
-	private int lineId;
-	private String lineName;
-	private String processCode;
-	private String processName;
-	private String keyProcessFlag;
-	private String monitoryPointFlag;
-	private String qualityMonitoryFlag;
-	private String planNodeId;
-	private String planNodeName;
+	private String factory;
+	private String workshop;
+	private String line;
+	private String process_code;
+	private String process_name;
+	private String key_process_flag;
+	private String monitory_point_flag;
+	private String quality_monitory_flag;
+	private String plan_node_id;
+	private String plan_node_name;
 	private String deleteFlag;
 	private String memo;
-	private int editorId;
+	private int editor_id;
 	private String editor;
-	private String editDate;
-	
-	public String getPlanNodeId() {
-		return planNodeId;
-	}
-	public void setPlanNodeId(String planNodeId) {
-		this.planNodeId = planNodeId;
-	}
-	public String getPlanNodeName() {
-		return planNodeName;
-	}
-	public void setPlanNodeName(String planNodeName) {
-		this.planNodeName = planNodeName;
-	}
-
+	private String edit_date;
 	public int getId() {
 		return id;
 	}
 	public void setId(int id) {
 		this.id = id;
 	}
-	public int getFactoryId() {
-		return factoryId;
+	public String getFactory() {
+		return factory;
 	}
-	public void setFactoryId(int factoryId) {
-		this.factoryId = factoryId;
+	public void setFactory(String factory) {
+		this.factory = factory;
 	}
-	public String getFactoryName() {
-		return factoryName;
+	public String getWorkshop() {
+		return workshop;
 	}
-	public void setFactoryName(String factoryName) {
-		this.factoryName = factoryName;
+	public void setWorkshop(String workshop) {
+		this.workshop = workshop;
 	}
-	public int getWorkshopId() {
-		return workshopId;
+	public String getLine() {
+		return line;
 	}
-	public void setWorkshopId(int workshopId) {
-		this.workshopId = workshopId;
+	public void setLine(String line) {
+		this.line = line;
 	}
-	public String getWorkshopName() {
-		return workshopName;
+	public String getProcess_code() {
+		return process_code;
 	}
-	public void setWorkshopName(String workshopName) {
-		this.workshopName = workshopName;
+	public void setProcess_code(String process_code) {
+		this.process_code = process_code;
 	}
-	public int getLineId() {
-		return lineId;
+	public String getProcess_name() {
+		return process_name;
 	}
-	public void setLineId(int lineId) {
-		this.lineId = lineId;
+	public void setProcess_name(String process_name) {
+		this.process_name = process_name;
 	}
-	public String getLineName() {
-		return lineName;
+	public String getKey_process_flag() {
+		return key_process_flag;
 	}
-	public void setLineName(String lineName) {
-		this.lineName = lineName;
+	public void setKey_process_flag(String key_process_flag) {
+		this.key_process_flag = key_process_flag;
 	}
-	public String getProcessCode() {
-		return processCode;
+	public String getMonitory_point_flag() {
+		return monitory_point_flag;
 	}
-	public void setProcessCode(String processCode) {
-		this.processCode = processCode;
+	public void setMonitory_point_flag(String monitory_point_flag) {
+		this.monitory_point_flag = monitory_point_flag;
 	}
-	public String getProcessName() {
-		return processName;
+	public String getQuality_monitory_flag() {
+		return quality_monitory_flag;
 	}
-	public void setProcessName(String processName) {
-		this.processName = processName;
+	public void setQuality_monitory_flag(String quality_monitory_flag) {
+		this.quality_monitory_flag = quality_monitory_flag;
 	}
-	public String getKeyProcessFlag() {
-		return keyProcessFlag;
+	public String getPlan_node_id() {
+		return plan_node_id;
 	}
-	public void setKeyProcessFlag(String keyProcessFlag) {
-		this.keyProcessFlag = keyProcessFlag;
+	public void setPlan_node_id(String plan_node_id) {
+		this.plan_node_id = plan_node_id;
 	}
-	public String getMonitoryPointFlag() {
-		return monitoryPointFlag;
+	public String getPlan_node_name() {
+		return plan_node_name;
 	}
-	public void setMonitoryPointFlag(String monitoryPointFlag) {
-		this.monitoryPointFlag = monitoryPointFlag;
-	}
-	public String getQualityMonitoryFlag() {
-		return qualityMonitoryFlag;
-	}
-	public void setQualityMonitoryFlag(String qualityMonitoryFlag) {
-		this.qualityMonitoryFlag = qualityMonitoryFlag;
+	public void setPlan_node_name(String plan_node_name) {
+		this.plan_node_name = plan_node_name;
 	}
 	public String getDeleteFlag() {
 		return deleteFlag;
@@ -118,11 +95,11 @@ public class BmsBaseProcess {
 	public void setMemo(String memo) {
 		this.memo = memo;
 	}
-	public int getEditorId() {
-		return editorId;
+	public int getEditor_id() {
+		return editor_id;
 	}
-	public void setEditorId(int editorId) {
-		this.editorId = editorId;
+	public void setEditor_id(int editor_id) {
+		this.editor_id = editor_id;
 	}
 	public String getEditor() {
 		return editor;
@@ -130,11 +107,11 @@ public class BmsBaseProcess {
 	public void setEditor(String editor) {
 		this.editor = editor;
 	}
-	public String getEditDate() {
-		return editDate;
+	public String getEdit_date() {
+		return edit_date;
 	}
-	public void setEditDate(String editDate) {
-		this.editDate = editDate;
+	public void setEdit_date(String edit_date) {
+		this.edit_date = edit_date;
 	}
 
 }
