@@ -27,4 +27,8 @@ public interface ITechService {
 	public int updateTechTaskMaintain(List<Map<String, Object>> conditionList);
 
 	public int deleteChangedMaterialList(Map<String,Object> conditionMap);
+	
+	public Map<String, Object> getTaskList(Map<String, Object> queryMap);
+	
+	public List<Map<String, Object>> queryTechList( Map<String, Object> conditionMap);
 }

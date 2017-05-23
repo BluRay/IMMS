@@ -20,4 +20,8 @@ public interface ITechDao {
 	public List<Map<String,Object>> queryChangedMaterialList(Map<String,Object> conditionMap);
 	public int addTechTaskMaintain(Map<String, Object> conditionMap);
 	
+	public int queryTechTaskListCount(Map<String,Object> conditionMap);
+	public List<Map<String,Object>> queryTechList( Map<String, Object> conditionMap);
+	public List<Map<String,Object>> queryTechTaskList(Map<String,Object> conditionMap);
+	
 }

@@ -37,6 +37,7 @@ function ajaxQuery(){
 function confirm(exception_id){
 	getKeysSelect("EXCEPTION_RESPONSIBILITY_DEPARTMENT", "", "#confirm_duty_department","noall","value");
 	getReasonTypeSelect();
+	
 	$("#dialog-confirm").removeClass('hide').dialog({
 		resizable: false,
 		title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-flag green"></i> 处理生产异常</h4></div>',

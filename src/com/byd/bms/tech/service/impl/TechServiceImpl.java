@@ -100,6 +100,21 @@ public class TechServiceImpl implements ITechService {
 	public int deleteChangedMaterialList(Map<String, Object> conditionMap) {
 		return techDao.deleteChangedMaterialList(conditionMap);	
 	}
+
+	@Override
+	public Map<String, Object> getTaskList(Map<String, Object> queryMap) {
+		int totalCount=techDao.queryTechTaskListCount(queryMap);
+		List<Map<String,Object>> datalist=techDao.queryTechTaskList(queryMap);		
+		Map<String, Object> result = new HashMap<String,Object>();
+		result.put("total", totalCount);
+		result.put("rows", datalist);
+		return result;
+	}
+
+	@Override
+	public List<Map<String, Object>> queryTechList(Map<String, Object> conditionMap) {
+		return techDao.queryTechList(conditionMap);
+	}
 	
 	
 	

@@ -56,7 +56,7 @@
 		LEFT JOIN BMS_BASE_KEY k1 on t.tech_order_type=k1.id and k1.key_code='ECN_CHANGE_TYPE'
 		LEFT JOIN BMS_BASE_KEY k2 on t.duty_unit=k2.id and k2.key_code='ECN_DUTY_UNIT'
 		LEFT JOIN BMS_TECH_TASK_DETAIL d ON t.id=d.tech_task_id
-		LEFT JOIN BMS_ORDER o ON o.order_no=d.order_no
+		LEFT JOIN BMS_OR_ORDER o ON o.order_no=d.order_no
 		LEFT JOIN BMS_BASE_BUS_TYPE bt on bt.id=o.bus_type_id
 		WHERE 1=1 
 
@@ -349,7 +349,7 @@
 		group_concat(d.factory_id,'_',d.factory,'||',d.tech_list separator ';') tech_detail_list,
 		group_concat(d.factory_id,'_',d.factory,'||',(select count(f.bus_number) from BMS_TECH_TASK_FOLLOW f where f.confirmor_date is not null and f.confirmor_date !='' and f.factory=d.factory and f.order_no=d.order_no)  separator ';') follow_detail
 		FROM BMS_TECH_TASK_DETAIL d 
-		LEFT JOIN BMS_ORDER o ON o.order_no=d.order_no
+		LEFT JOIN BMS_OR_ORDER o ON o.order_no=d.order_no
 		LEFT JOIN BMS_BASE_BUS_TYPE bt on bt.id=o.bus_type_id
 		WHERE d.tech_task_id=#{task_id} 
 		group by d.order_no

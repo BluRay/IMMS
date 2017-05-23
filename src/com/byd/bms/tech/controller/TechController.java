@@ -377,4 +377,48 @@ public class TechController extends BaseController{
 		return model;
 	}
 	
+	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping("/taskAssignPage/getTaskList")
+	@ResponseBody
+	public ModelMap getTaskList(){
+		String conditions = request.getParameter("conditions");
+		JSONObject jo=JSONObject.fromObject(conditions);
+		Map<String,Object> conditionMap=new HashMap<String,Object>();
+		for(Iterator it=jo.keys();it.hasNext();){
+			String key=(String) it.next();
+			if(!"".equals(jo.get(key))){
+				conditionMap.put(key, jo.get(key));
+			}else{
+				conditionMap.put(key, null);
+			}
+		}
+		conditionMap.put("task_content", null);
+		conditionMap.put("tech_order_no", null);
+		conditionMap.put("order_no", null);
+		Map<String,Object> list = techService.getTaskList(conditionMap);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(list);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping("/taskAssignPage/getTechList")
+	@ResponseBody
+	public ModelMap getTechList(){
+		String conditions = request.getParameter("conditions");
+		JSONObject jo=JSONObject.fromObject(conditions);
+		Map<String,Object> conditionMap=new HashMap<String,Object>();
+		for(Iterator it=jo.keys();it.hasNext();){
+			String key=(String) it.next();
+			conditionMap.put(key, jo.get(key));
+		}
+		List<Map<String,Object>> list = techService.queryTechList(conditionMap);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(list);
+		model = mv.getModelMap();
+		return model;
+	}
+	
 }
