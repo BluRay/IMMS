@@ -359,8 +359,8 @@
 	<select id="queryFactoryOrderList" parameterType="Map" resultType="Map">
 		SELECT concat(o.order_no,' ',o.order_name,bt.bus_type_code,' ',o.order_qty,'台') order_desc,
 		group_concat(f.id,'_',f.factory_name,'||','' separator ';') tech_detail_list
-		FROM BMS_ORDER o
-		LEFT JOIN BMS_FACTORY_ORDER fo ON o.id=fo.order_id
+		FROM BMS_OR_ORDER o
+		LEFT JOIN BMS_OR_FACTORY_ORDER fo ON o.id=fo.order_id
 		LEFT JOIN BMS_BASE_BUS_TYPE bt ON bt.id=o.bus_type_id
 		LEFT JOIN BMS_BASE_FACTORY f ON f.id=fo.factory_id
 		WHERE o.order_no=#{order_no}
@@ -620,42 +620,42 @@
 	<select id="queryTechBusList_All" parameterType="Map" resultType="Map">
 		SELECT #{tech_task_id} tech_task_id,b.bus_number,o.order_no,f.factory_name factory,'焊装' workshop
 		FROM BMS_PLAN_BUS b
-		LEFT JOIN BMS_ORDER o on b.order_id=o.id
+		LEFT JOIN BMS_OR_ORDER o on b.order_id=o.id
 		LEFT JOIN BMS_BASE_FACTORY f on f.id=b.factory_id
 		WHERE substring(b.welding_online_date,1,10)&lt;#{tech_date} and b.dispatch_date is null and b.welding_online_date is not null and b.welding_online_date !=''
 		and o.order_no=#{order_no} 	and f.factory_name in (#{factory_list})
 		union all
 		SELECT #{tech_task_id} tech_task_id,b.bus_number,o.order_no,f.factory_name factory,'玻璃钢' workshop
 		FROM BMS_PLAN_BUS b
-		LEFT JOIN BMS_ORDER o on b.order_id=o.id
+		LEFT JOIN BMS_OR_ORDER o on b.order_id=o.id
 		LEFT JOIN BMS_BASE_FACTORY f on f.id=b.factory_id
 		WHERE substring(b.welding_offline_date,1,10)&lt;#{tech_date} and b.dispatch_date is null and b.welding_offline_date is not null and b.welding_offline_date !=''
 		and o.order_no=#{order_no} and f.factory_name in (#{factory_list})
 		union all
 		SELECT #{tech_task_id} tech_task_id,b.bus_number,o.order_no,f.factory_name factory,'涂装' workshop
 		FROM BMS_PLAN_BUS b
-		LEFT JOIN BMS_ORDER o on b.order_id=o.id
+		LEFT JOIN BMS_OR_ORDER o on b.order_id=o.id
 		LEFT JOIN BMS_BASE_FACTORY f on f.id=b.factory_id
 		WHERE substring(b.painting_offline_date,1,10)&lt;#{tech_date} and b.dispatch_date is null and b.painting_offline_date is not null and b.painting_offline_date !=''
 		and o.order_no=#{order_no} and f.factory_name in (#{factory_list})
 		union all
 		SELECT #{tech_task_id} tech_task_id,b.bus_number,o.order_no,f.factory_name factory,'底盘' workshop
 		FROM BMS_PLAN_BUS b
-		LEFT JOIN BMS_ORDER o on b.order_id=o.id
+		LEFT JOIN BMS_OR_ORDER o on b.order_id=o.id
 		LEFT JOIN BMS_BASE_FACTORY f on f.id=b.factory_id
 		WHERE substring(b.chassis_online_date,1,10)&lt;#{tech_date} and b.dispatch_date is null and b.chassis_online_date is not null and b.chassis_online_date !=''
 		and o.order_no=#{order_no} and f.factory_name in (#{factory_list})
 		union all
 		SELECT #{tech_task_id} tech_task_id,b.bus_number,o.order_no,f.factory_name factory,'总装' workshop
 		FROM BMS_PLAN_BUS b
-		LEFT JOIN BMS_ORDER o on b.order_id=o.id
+		LEFT JOIN BMS_OR_ORDER o on b.order_id=o.id
 		LEFT JOIN BMS_BASE_FACTORY f on f.id=b.factory_id
 		WHERE substring(b.assembly_online_date,1,10)&lt;#{tech_date} and b.dispatch_date is null and b.assembly_online_date is not null and b.assembly_online_date !=''
 		and o.order_no=#{order_no} and f.factory_name in (#{factory_list})
 		union all
 		SELECT #{tech_task_id} tech_task_id,b.bus_number,o.order_no,f.factory_name factory,'检测线' workshop
 		FROM BMS_PLAN_BUS b
-		LEFT JOIN BMS_ORDER o on b.order_id=o.id
+		LEFT JOIN BMS_OR_ORDER o on b.order_id=o.id
 		LEFT JOIN BMS_BASE_FACTORY f on f.id=b.factory_id
 		WHERE substring(b.testline_online_date,1,10)&lt;#{tech_date} and b.dispatch_date is null and b.testline_online_date is not null and b.testline_online_date !=''
 		and o.order_no=#{order_no} and f.factory_name in (#{factory_list})
@@ -666,42 +666,42 @@
 		FROM(
 		SELECT #{tech_task_id} tech_task_id,b.bus_number,o.order_no,f.factory_name factory, '焊装' workshop
 		FROM BMS_PLAN_BUS b
-		LEFT JOIN BMS_ORDER o on b.order_id=o.id
+		LEFT JOIN BMS_OR_ORDER o on b.order_id=o.id
 		LEFT JOIN BMS_BASE_FACTORY f on f.id=b.factory_id
 		WHERE substring(b.welding_online_date,1,10)&lt;#{tech_date} and b.dispatch_date is null and b.welding_online_date is not null and b.welding_online_date !=''
 		and o.order_no=#{order_no} and f.factory_name in (#{factory_list})
 		union all
 		SELECT #{tech_task_id} tech_task_id,b.bus_number,o.order_no,f.factory_name factory,'玻璃钢' workshop
 		FROM BMS_PLAN_BUS b
-		LEFT JOIN BMS_ORDER o on b.order_id=o.id
+		LEFT JOIN BMS_OR_ORDER o on b.order_id=o.id
 		LEFT JOIN BMS_BASE_FACTORY f on f.id=b.factory_id
 		WHERE substring(b.welding_offline_date,1,10)&lt;#{tech_date} and b.dispatch_date is null and b.welding_offline_date is not null and b.welding_offline_date !=''
 		and o.order_no=#{order_no} and f.factory_name in (#{factory_list})
 		union all
 		SELECT #{tech_task_id} tech_task_id,b.bus_number,o.order_no,f.factory_name factory,'涂装' workshop
 		FROM BMS_PLAN_BUS b
-		LEFT JOIN BMS_ORDER o on b.order_id=o.id
+		LEFT JOIN BMS_OR_ORDER o on b.order_id=o.id
 		LEFT JOIN BMS_BASE_FACTORY f on f.id=b.factory_id
 		WHERE substring(b.painting_offline_date,1,10)&lt;#{tech_date} and b.dispatch_date is null and b.painting_offline_date is not null and b.painting_offline_date !=''
 		and o.order_no=#{order_no} and f.factory_name in (#{factory_list})
 		union all
 		SELECT #{tech_task_id} tech_task_id,b.bus_number,o.order_no,f.factory_name factory,'底盘' workshop
 		FROM BMS_PLAN_BUS b
-		LEFT JOIN BMS_ORDER o on b.order_id=o.id
+		LEFT JOIN BMS_OR_ORDER o on b.order_id=o.id
 		LEFT JOIN BMS_BASE_FACTORY f on f.id=b.factory_id
 		WHERE substring(b.chassis_online_date,1,10)&lt;#{tech_date} and b.dispatch_date is null and b.chassis_online_date is not null and b.chassis_online_date !=''
 		and o.order_no=#{order_no} and f.factory_name in (#{factory_list})
 		union all
 		SELECT  #{tech_task_id} tech_task_id,b.bus_number,o.order_no,f.factory_name factory,'总装' workshop
 		FROM BMS_PLAN_BUS b
-		LEFT JOIN BMS_ORDER o on b.order_id=o.id
+		LEFT JOIN BMS_OR_ORDER o on b.order_id=o.id
 		LEFT JOIN BMS_BASE_FACTORY f on f.id=b.factory_id
 		WHERE substring(b.assembly_online_date,1,10)&lt;#{tech_date} and b.dispatch_date is null and b.assembly_online_date is not null and b.assembly_online_date !=''
 		and o.order_no=#{order_no} and f.factory_name in (#{factory_list})
 		union all
 		SELECT  #{tech_task_id} tech_task_id,b.bus_number,o.order_no,f.factory_name factory,'检测线' workshop
 		FROM BMS_PLAN_BUS b
-		LEFT JOIN BMS_ORDER o on b.order_id=o.id
+		LEFT JOIN BMS_OR_ORDER o on b.order_id=o.id
 		LEFT JOIN BMS_BASE_FACTORY f on f.id=b.factory_id
 		WHERE substring(b.testline_online_date,1,10)&lt;#{tech_date} and b.dispatch_date is null and b.testline_online_date is not null and b.testline_online_date !=''
 		and o.order_no=#{order_no} and f.factory_name in (#{factory_list})
@@ -720,7 +720,7 @@
 			<if test="item=='焊装'">			
 			SELECT #{tech_task_id} tech_task_id,b.bus_number,o.order_no,f.factory_name factory, '焊装' workshop
 			FROM BMS_PLAN_BUS b
-			LEFT JOIN BMS_ORDER o on b.order_id=o.id
+			LEFT JOIN BMS_OR_ORDER o on b.order_id=o.id
 			LEFT JOIN BMS_BASE_FACTORY f on f.id=b.factory_id
 			WHERE substring(b.welding_online_date,1,10)&lt;=#{tech_date} and b.dispatch_date is null and b.welding_online_date is not null and b.welding_online_date !=''
 			<if test="switch_node=='玻璃钢'">
@@ -744,7 +744,7 @@
 			<if test="item=='玻璃钢'">			
 			SELECT #{tech_task_id} tech_task_id,b.bus_number,o.order_no,f.factory_name factory, '玻璃钢' workshop
 			FROM BMS_PLAN_BUS b
-			LEFT JOIN BMS_ORDER o on b.order_id=o.id
+			LEFT JOIN BMS_OR_ORDER o on b.order_id=o.id
 			LEFT JOIN BMS_BASE_FACTORY f on f.id=b.factory_id
 			WHERE substring(b.welding_offline_date,1,10)&lt;=#{tech_date} and b.dispatch_date is null and b.welding_offline_date is not null and b.welding_offline_date !=''
 			<if test="switch_node=='玻璃钢'">
@@ -768,7 +768,7 @@
 			<if test="item=='涂装'">			
 			SELECT #{tech_task_id} tech_task_id,b.bus_number,o.order_no,f.factory_name factory, '涂装' workshop
 			FROM BMS_PLAN_BUS b
-			LEFT JOIN BMS_ORDER o on b.order_id=o.id
+			LEFT JOIN BMS_OR_ORDER o on b.order_id=o.id
 			LEFT JOIN BMS_BASE_FACTORY f on f.id=b.factory_id
 			WHERE substring(b.painting_online_date,1,10)&lt;=#{tech_date} and b.dispatch_date is null and b.painting_online_date is not null and b.painting_online_date !=''
 			<if test="switch_node=='玻璃钢'">
@@ -792,7 +792,7 @@
 			<if test="item=='底盘'">			
 			SELECT #{tech_task_id} tech_task_id,b.bus_number,o.order_no,f.factory_name factory, '底盘' workshop
 			FROM BMS_PLAN_BUS b
-			LEFT JOIN BMS_ORDER o on b.order_id=o.id
+			LEFT JOIN BMS_OR_ORDER o on b.order_id=o.id
 			LEFT JOIN BMS_BASE_FACTORY f on f.id=b.factory_id
 			WHERE substring(b.chassis_online_date,1,10)&lt;=#{tech_date} and b.dispatch_date is null and b.chassis_online_date is not null and b.chassis_online_date !=''
 			<if test="switch_node=='玻璃钢'">
@@ -816,7 +816,7 @@
 			<if test="item=='总装'">			
 			SELECT #{tech_task_id} tech_task_id,b.bus_number,o.order_no,f.factory_name factory, '总装' workshop
 			FROM BMS_PLAN_BUS b
-			LEFT JOIN BMS_ORDER o on b.order_id=o.id
+			LEFT JOIN BMS_OR_ORDER o on b.order_id=o.id
 			LEFT JOIN BMS_BASE_FACTORY f on f.id=b.factory_id
 			WHERE substring(b.assembly_online_date,1,10)&lt;=#{tech_date} and b.dispatch_date is null and b.assembly_online_date is not null and b.assembly_online_date !=''
 			<if test="switch_node=='玻璃钢'">
@@ -840,7 +840,7 @@
 			<if test="item=='检测线'">			
 			SELECT #{tech_task_id} tech_task_id,b.bus_number,o.order_no,f.factory_name factory, '检测线' workshop
 			FROM BMS_PLAN_BUS b
-			LEFT JOIN BMS_ORDER o on b.order_id=o.id
+			LEFT JOIN BMS_OR_ORDER o on b.order_id=o.id
 			LEFT JOIN BMS_BASE_FACTORY f on f.id=b.factory_id
 			WHERE substring(b.testline_online_date,1,10)&lt;=#{tech_date} and b.dispatch_date is null and b.testline_online_date is not null and b.testline_online_date !=''
 			<if test="switch_node=='玻璃钢'">

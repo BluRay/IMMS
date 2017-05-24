@@ -1,7 +1,9 @@
 package com.byd.bms.tech.service.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Resource;
@@ -114,6 +116,72 @@ public class TechServiceImpl implements ITechService {
 	@Override
 	public List<Map<String, Object>> queryTechList(Map<String, Object> conditionMap) {
 		return techDao.queryTechList(conditionMap);
+	}
+
+	@Override
+	public List<Map<String, Object>> queryFactoryOrderList(Map<String, Object> conditionMap) {
+		return techDao.queryFactoryOrderList(conditionMap);
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	@Transactional
+	public int assignTechTask(String conditions,String edit_user,String curTime) {
+		JSONArray jsa=JSONArray.fromObject(conditions);
+		Map<String,Object> cdmap=new HashMap<String,Object>();
+		JSONObject jo=(JSONObject)jsa.get(0);
+		Map<String,Object> conditionMap=new HashMap<String,Object>();
+		for(Iterator it=jo.keys();it.hasNext();){
+			String key=(String) it.next();
+			conditionMap.put(key, jo.get(key));
+		}
+		//删除技改跟进表中（BMS_TECH_TASK_FOLLOW）未跟进工厂的技改车辆
+		techDao.deleteTechFollowBus(conditionMap);
+		//删除技改明细中（BMS_TECH_TASK_DETAIL）技改明细
+		techDao.deleteTechTaskDetail(conditionMap);
+		for(Object o:jsa){
+			jo=(JSONObject)o;
+			conditionMap=new HashMap<String,Object>();
+			for(Iterator it=jo.keys();it.hasNext();){
+				String key=(String) it.next();
+				conditionMap.put(key, jo.get(key));
+			}
+			String switch_mode=(String) conditionMap.get("switch_mode");
+			String switch_node=(String) conditionMap.get("switch_node");
+			int tech_task_id=Integer.valueOf(conditionMap.get("tech_task_id").toString());
+			cdmap.put("switch_mode", switch_mode);
+			cdmap.put("switch_node", switch_node);
+			cdmap.put("tech_task_id", tech_task_id);
+			
+			List<String> node_list=new ArrayList<String>();
+			String nodes=(String) conditionMap.get("node_list");
+			node_list=Arrays.asList(nodes.split(","));
+			conditionMap.put("node_list", node_list);
+			List<Map<String,Object>> followList=new ArrayList<Map<String,Object>>();
+			
+			//查询需要技改的车辆信息
+			if("全部切换".equals(switch_mode)){
+				followList=techDao.queryTechBusList_All(conditionMap);
+			}
+			if("节点前切换".equals(switch_mode)){
+				followList=techDao.queryTechBusList_Pre(conditionMap);
+			}
+			if("节点后切换".equals(switch_mode)){
+				followList=techDao.queryTechBusList_After(conditionMap);
+			}
+			//往技改跟进表中（BMS_TECH_TASK_FOLLOW）插入查询到的技改车辆信息
+			if(followList.size()>0){
+				techDao.insertTechFollowBus(followList);
+			}
+			//插入技改明细
+			techDao.insertTechTaskDetail(conditionMap);										
+		}	
+		cdmap.put("editor_id", edit_user);
+		cdmap.put("edit_date", curTime);
+		//修改技改任务相关内容
+		techDao.updateTechTaskInfo(cdmap);
+		return 0;
+		
 	}
 	
 	

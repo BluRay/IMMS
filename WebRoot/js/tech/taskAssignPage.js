@@ -1,3 +1,4 @@
+var switch_node_arr="焊装,玻璃钢,涂装,底盘,总装,检测线";
 $(document).ready(function (){
 	initPage();
 	
@@ -32,7 +33,7 @@ function ajaxQuery(){
 
 function ajaxEdit(task_id,task_detail_id,task_content,tech_order_no,switch_mode,switch_node,tech_date){
 	
-	//$("#new_accordion").html("");// 清空之前的div
+	$("#new_accordion").html("");// 清空之前的div
 	
 	//$("#tr_switch_node").css("display","");
 	var mode_index=0;
@@ -49,8 +50,25 @@ function ajaxEdit(task_id,task_detail_id,task_content,tech_order_no,switch_mode,
 	var is_follow=false;
 	var tech_list=getTechList(task_id);
 	if(tech_list.length==0){
-		//addTechDetail();
+		addTechDetail();
 	}
+	
+	$.each(tech_list,function(i,tech_detail){
+		var order_desc=tech_detail.order_desc;
+		var tech_detail_list=tech_detail.tech_detail_list;
+		var follow_detail=tech_detail.follow_detail;
+		var prod_factory_id=tech_detail.prod_factory_id;
+		var prod_factory=tech_detail.prod_factory;
+		addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id,prod_factory);
+		console.log(tech_detail);
+		$.each(follow_detail.split(";"),function(i,follow){
+			//alert(follow.split("||")[1]);
+			if(follow.split("||")[1]>0){
+				is_follow=true;
+				return false;
+			}
+		})
+	});	
 	
 	if(switch_mode=='节点前切换'){
 		mode_index=1;
@@ -62,10 +80,15 @@ function ajaxEdit(task_id,task_detail_id,task_content,tech_order_no,switch_mode,
 		$("#tr_switch_node").css("display","");
 		$("#switch_node").val(switch_node);
 	}
-	$("[name=switch_mode]").eq(mode_index).attr('checked',true);
+	$("[name=switch_mode]").eq(mode_index).prop('checked',true);
 	if(is_follow){
-		$("[name=switch_mode]").attr("disabled",true);
+		$("[name=switch_mode]").prop("disabled",true);
 	}
+	$("#v_task_content").val(task_content);
+	$("#v_tech_order_no").val(tech_order_no);
+	$("#dialog-assessModal").data("tech_date",tech_date);
+	$("#dialog-assessModal").data("tech_task_id",task_id);
+	$("#dialog-assessModal").data("task_detail_id",task_detail_id);
 	
 	$("#dialog-assessModal").removeClass('hide').dialog({
 		resizable: false,
@@ -83,12 +106,92 @@ function ajaxEdit(task_id,task_detail_id,task_content,tech_order_no,switch_mode,
 					id:"btn_ok",
 					"class" : "btn btn-success btn-minier",
 					click: function() {
-						//btnConfirm();
+						assignTechTask();
 					} 
 				}
 			]
 	});
 }
+
+function assignTechTask(){
+	var factory_cboxs=$("input[name='new_tecn_flag']");
+	var tech_task_id=$("#dialog-assessModal").data("tech_task_id");
+	var task_detail_id=$("#dialog-assessModal").data("task_detail_id");
+	var switch_mode=$("input[name='switch_mode']:checked").val();
+	var tech_date=$("#dialog-assessModal").data("tech_date");
+	var switch_node=switch_mode=='全部切换'?"":$("#switch_node").val();
+	var node_list="";
+	var node_index=switch_node_arr.indexOf(switch_node);
+	if(switch_mode=='节点前切换'){
+		node_list=switch_node_arr.substring(0,node_index-1)
+	}
+	if(switch_mode=='节点后切换'){				
+		node_list=switch_node_arr.substring(node_index,switch_node_arr.length)
+	}
+	var conditions=new Array();
+	//console.log('---->factory_cboxs = ',factory_cboxs);
+	$.each(factory_cboxs,function(i,cbox){
+		var factory=$(cbox).parent("div").find("span").html();
+		console.log('---->conditions factory= ' + factory);
+		var factory_id=$(cbox).parent("div").find("span").prop("factory_id");
+		var tech_factory=$(cbox).parent("div").find(".tech_factory :selected").text();
+		var tech_factory_id=$(cbox).parent("div").find(".tech_factory").val();
+		var order_no=$(cbox).parent("div").parent("div").parent("div").find(".assess_order_no").val();
+		if($(cbox).prop('checked')==true && !$(cbox).prop("disabled")==true){
+			var tech_detail_list=[];
+			var tb=$(cbox).parent("div").next("table");
+			var tr_body=$(tb).find("tr").eq(1);
+			var tr_head=$(tb).find("tr").eq(0);
+			$.each(tr_body.children("td"),function(i,td){
+				if(Number($(td).html())>0){
+					var detail="";
+					var workshop=$(tr_head).find("td").eq(i).html();
+					detail=workshop+":"+$(td).html();
+					tech_detail_list.push(detail);
+				}
+			});		
+			var obj={};
+			obj.tech_task_id=tech_task_id;
+			obj.factory_list=factory;
+			obj.factory_id=factory_id;
+			obj.order_no=order_no;
+			obj.switch_mode=switch_mode;
+			obj.switch_node=switch_node;
+			obj.tech_date=tech_date;
+			obj.tech_list=tech_detail_list.toString();
+			obj.node_list=node_list;
+			obj.tech_factory_id=tech_factory_id;
+			obj.tech_factory=tech_factory;
+			conditions.push(obj);
+		}
+	});
+	if(conditions.length>0){
+		$.ajax({
+			url:"assignTechTask",
+			dataType:"json",
+			type:"post",
+			async:false,
+			data:{
+				"conditions":JSON.stringify(conditions)
+				},
+			success:function(response){
+				$("#dialog-assessModal").dialog( "close" );
+				$.gritter.add({
+					title: '系统提示：',
+					text: '<h5>分配成功！</h5>',
+					class_name: 'gritter-info'
+				});
+			    }
+			});
+	}else{
+		$("#assessModal").modal("hide");
+	}
+	
+}
+
+$("body").on("click","#add_tech_detail",function(e){
+	addTechDetail();
+});
 
 //根据技改任务ID查询技改实施范围信息
 function getTechList(task_id){
@@ -101,11 +204,216 @@ function getTechList(task_id){
 		async:false,
 		data:{"conditions":conditions},
 		success:function(response){
-			tech_list=response.hashMap;
+			tech_list=response;
 		}
 	});
 	return tech_list;
 }
+
+function addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id,prod_factory){
+	follow_detail=follow_detail||"";
+	var is_follow=false;
+	$.each(follow_detail.split(";"),function(i,follow){
+		var factory_id=follow.split("||")[0].split("_")[0];
+		var factory=follow.split("||")[0].split("_")[1];
+		var follow_num=follow.split("||")[1];
+		if(follow.split("||")[1]>0){
+			is_follow=true;
+			return false;
+		}
+	})
+	var order_disabled="";
+	if(is_follow){
+		order_disabled="disabled";
+	}
+	
+	order_desc=order_desc||"";
+	//factory=factory||"";
+	tech_detail_list=tech_detail_list||"";
+	var i=order_desc.indexOf("<br>");
+	var order_no=order_desc.substring(0,i);
+	var order_detail=order_desc.substring(i+4,order_desc.length);
+	var tasklist=($("#new_tab").find("li"));
+	var taskNum=tasklist.length;
+	var index=taskNum-1;
+	
+	$("#new_tab").find("li").removeClass("active");
+	$("#new_accordion").find("div").removeClass("active");
+	
+	var tabli="<li class='active'><a href='#new_task"+taskNum+"' data-toggle='tab' style='font-size: 14px; color: #333;display:inline-block'><span>订单"+taskNum+"</span>"
+	+"&nbsp;&nbsp;"+(order_disabled==""?"<i class='fa fa-remove' style='cursor: pointer;color: rgb(218, 208, 208);display:inline-block' onclick='javascript:{if (confirm(\"确认删除？\"))removeTechDetail(this)}'></i>":"")
+	+"</a></li>";
+	
+	$("#new_tab li:eq("+index+")").before(tabli);
+	
+	var tabContent="<div class=\"tab-pane active\" role=\"tabpanel\" id=\"new_task"+taskNum+"\">";
+	tabContent+="<div class=\"panel panel-default\"><div class=\"panel-collapse in\" role=\"tabpanel\">";
+	tabContent+="<div class=\"panel-body\"><div><span>订单：</span><input type=\"text\" data-provide=\"typeahead\" class=\"assess_order_no\" id=\"order_"+taskNum+"\" class=\"input-medium\"" +order_disabled+" value=\""+order_no+"\"><span class=\"order_desc\">"+order_detail+"</span></div>";
+	tabContent+="</div></div></div>";
+	
+	$(tabContent).appendTo($("#new_accordion"));
+	addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factory_id,prod_factory);
+	getFuzzyOrder("#order_"+taskNum);
+}
+
+function addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factory_id,prod_factory){
+	var factory_select_options=$("#search_factory").html().replace("全部","请选择");
+	//alert(factory_select_options)	
+	var factory_disable_obj={};
+	follow_detail=follow_detail||"";
+	$.each(follow_detail.split(";"),function(i,follow){
+		var factory_id=follow.split("||")[0].split("_")[0];
+		var factory=follow.split("||")[0].split("_")[1];
+		var follow_num=Number(follow.split("||")[1]);
+		//alert(follow_num);
+		factory_disable_obj[factory]="";
+		if(follow_num>0){
+			factory_disable_obj[factory]="disabled";
+			return false;
+		}
+	})
+	
+	
+	taskElement="#new_task"+taskNum;
+	tech_detail_list=tech_detail_list||"";
+	if(tech_detail_list.trim().length>0){
+		var tech_detail_arr=tech_detail_list.split(";");
+		var content=$("<div id=\"tech_factory_"+taskNum+"\" class=\"tech_factory\"/>");
+		$.each(tech_detail_arr,function(i,tech_detail){
+			var factory_id=tech_detail.split("||")[0].split("_")[0];
+			var factory=tech_detail.split("||")[0].split("_")[1];
+			var tech_info=tech_detail.split("||")[1];
+			var tech_obj=new Array();
+			$.each(tech_info.split(","),function(i,data){
+				var workshop=data.split(":")[0];
+				var tech_num=data.split(":")[1];
+				tech_obj[workshop]=tech_num;
+			})
+			var checked="";
+			if(tech_info.trim().length>0){
+				checked="checked";
+			}
+			//prod_factory_id=prod_factory_id||factory_id;
+			//prod_factory=prod_factory||factory;
+			var facotory_div=$("<div style='margin-top:10px'><b>生产工厂：</b><span factory_id='"+(prod_factory_id||factory_id)+"'>"+(prod_factory||factory)+"</span></div>");
+			var ckbox=$("<input style=\"height:15px\" name=\"new_tecn_flag\""+
+					" class=\"input-medium\" type=\"checkbox\""+checked+" "+factory_disable_obj[prod_factory]+">");
+			var tech_factory="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>技改工厂：</b><select style='width:100px;height:28px' class='tech_factory' >"+factory_select_options+"</select>";
+			var tech_table=$("<table class=\"table table-bordered table-striped\" style=\"margin-bottom: 0px;\"></table>");
+			var tr_head=$("<tr><td>自制件</td><td>部件</td><td>焊装</td><td>玻璃钢</td><td>涂装</td><td>底盘</td><td>总装</td><td>检测线</td></tr>");
+			var tr_body=$("<tr height='31px'><td>"+(tech_obj['自制件']||'')+"</td><td>"+(tech_obj['部件']||'')+"</td><td>"+
+					(tech_obj['焊装']||'')+"</td><td>"+(tech_obj['玻璃钢']||'')+"</td><td>"+(tech_obj['涂装']||'')+"</td><td>"+
+					(tech_obj['底盘']||'')+"</td><td>"+(tech_obj['总装']||'')+"</td><td>"+(tech_obj['检测线']||'')+"</td></tr>");
+			$(tech_table).append(tr_head).append(tr_body);	
+			$(facotory_div).append(ckbox);
+			$(facotory_div).append(tech_factory);			
+			$(ckbox).data("tech_detail",tech_detail);			
+			$(content).append(facotory_div);
+			$(content).append(tech_table);
+			$(facotory_div).find(".tech_factory").val(factory_id);
+		})
+		$(taskElement).append(content);
+		
+	}	
+}
+
+function getFactoryOrderList(order_no){
+	var conditions="{'order_no':'"+order_no+"'}";
+	var order_list=[];
+	$.ajax({
+		url:"getOrderList",
+		dataType:"json",
+		type:"post",
+		async:false,
+		data:{"conditions":conditions},
+		success:function(response){
+			order_list=response;
+			}
+		});
+		return order_list;
+}
+
+function getFuzzyOrder(elmentId){
+	var orderList=new Array();
+	$(elmentId).typeahead({
+		source : function(input,process){
+			var data={"orderNo":input};		
+			return $.ajax({
+				url:"../common/getOrderFuzzySelect",
+				dataType : "json",
+				type : "get",
+				data : data,
+				success: function (response) { 
+					orderList = response.data;
+					var results = new Array();
+					$.each(response.data, function(index, value) {
+						results.push(value.orderNo);
+					});
+					return process(results);
+				}
+			});
+		},
+		items : 30,
+		highlighter : function(item) {
+			var order_name = "";
+			var bus_type = "";
+			var order_qty = "";
+			$.each( orderList, function(index, value) {
+				//alert(value.orderNo);
+				if (value.orderNo == item) {
+					order_name = value.name;
+					bus_type = value.busType;
+					order_qty = value.orderQty + "台";
+				}
+			})
+			return item + "  " + order_name + " " + bus_type + order_qty;
+		},
+		matcher : function(item) {
+			return true;
+		},
+		updater : function(item) {
+			var order_name = "";
+			var bus_type = "";
+			var order_qty = "";
+			$.each(orderList, function(index, value) {
+				if (value.orderNo == item) {
+					order_name = value.name;
+					bus_type = value.busType;
+					order_qty = value.orderQty + "台";
+				}
+			})
+			//alert($(elmentId).closest(".order_desc").html());
+			$(elmentId).parent("div").find(".order_desc").html(item + "  " + order_name + " " + bus_type + order_qty);
+			var order_list=getFactoryOrderList(item);
+			var taskNum=$(".tab-pane.active").prop("id").replace("new_task","");
+			$("#tech_factory_"+taskNum).remove();
+			
+			//alert(taskNum);
+			$.each(order_list,function(i,order_detail){
+				var order_desc=order_detail.order_desc;
+				var tech_detail_list=order_detail.tech_detail_list;
+				addTechFactoryDetail(taskNum,tech_detail_list);
+			});
+			var order_inputs=$(".assess_order_no");
+			var return_order=item;
+			var tech_factoryId="";
+			$.each(order_inputs,function(i,order_input){
+				if($(order_input).val()==item&&elmentId!=("#"+$(order_input).prop("id"))){
+					//$(elmentId).val("");
+					alert("该订单技改范围已经存在，不能重复维护！");
+					return_order=null;
+					tech_factoryId="#tech_factory_"+elmentId.replace("#order_","");
+					$(tech_factoryId).remove();
+					$(elmentId).parent("div").find(".order_desc").html("");
+					return null;
+				}
+			})
+			
+			return return_order;
+		}
+	});
+}
+
 
 
 //----------START bootstrap initTable ----------
@@ -188,7 +496,8 @@ function initTable() {
                 cellStyle:function cellStyle(value, row, index, field) {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};},
     	        formatter:function(value, row, index){
-    	        	if(row['assess_date']==undefined||row['assess_date']==null||row['assess_date'].trim().length==0){
+    	        	console.log('---->assess_date = ' + row['assess_date'])
+    	        	if(row['assess_date']==undefined||row['assess_date']==''||row['assess_date'].trim().length==0){
     	        		//task_id,task_detail_id,task_content,tech_order_no,switch_mode,switch_node,tech_date
     	        		return "<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"分配\" onclick='ajaxEdit(\"" + 
     	        		row['id'] + "\",\"" + row['task_detail_id'] + "\",\"" + row['task_content'] + "\",\"" + row['tech_order_no'] + "\",\"" + 
@@ -203,7 +512,7 @@ function initTable() {
     	$("#btnQuery").removeAttr("disabled");
     });
     $table.on('page-change.bs.table',function(){
-    	$("#btnQuery").attr("disabled","disabled");
+    	$("#btnQuery").prop("disabled","disabled");
     });
     $(window).resize(function () {
         $table.bootstrapTable('resetView', {height: getHeight()});

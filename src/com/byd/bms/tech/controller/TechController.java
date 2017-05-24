@@ -421,4 +421,36 @@ public class TechController extends BaseController{
 		return model;
 	}
 	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping("/getOrderList")
+	@ResponseBody
+	public ModelMap getOrderList(){
+		String conditions = request.getParameter("conditions");
+		JSONObject jo=JSONObject.fromObject(conditions);
+		Map<String,Object> conditionMap=new HashMap<String,Object>();
+		for(Iterator it=jo.keys();it.hasNext();){
+			String key=(String) it.next();
+			conditionMap.put(key, jo.get(key));
+		}
+		List<Map<String,Object>> list = techService.queryFactoryOrderList(conditionMap);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(list);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/assignTechTask")
+	@ResponseBody
+	public ModelMap assignTechTask(){
+		String conditions = request.getParameter("conditions");
+		int result = 0;
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String edit_user = request.getSession().getAttribute("staff_number") + "";
+		result = techService.assignTechTask(conditions,edit_user,curTime);
+		initModel(true,String.valueOf(result),null);
+		model = mv.getModelMap();
+		return model;
+	}
+	
 }

@@ -23,5 +23,14 @@ public interface ITechDao {
 	public int queryTechTaskListCount(Map<String,Object> conditionMap);
 	public List<Map<String,Object>> queryTechList( Map<String, Object> conditionMap);
 	public List<Map<String,Object>> queryTechTaskList(Map<String,Object> conditionMap);
+	public List<Map<String, Object>> queryFactoryOrderList(Map<String, Object> conditionMap);
+	public int deleteTechFollowBus(Map<String, Object> conditionMap);
+	public int deleteTechTaskDetail(Map<String, Object> conditionMap);
+	public List<Map<String,Object>> queryTechBusList_All(Map<String, Object> conditionMap);
+	public List<Map<String,Object>> queryTechBusList_Pre(Map<String, Object> conditionMap);
+	public List<Map<String,Object>> queryTechBusList_After(Map<String, Object> conditionMap);
+	public int insertTechFollowBus(List<Map<String, Object>> followList);
+	public void insertTechTaskDetail(Map<String, Object> conditionMap);
+	public void updateTechTaskInfo(Map<String, Object> cdmap);
 	
 }

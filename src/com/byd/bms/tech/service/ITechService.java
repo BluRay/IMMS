@@ -31,4 +31,8 @@ public interface ITechService {
 	public Map<String, Object> getTaskList(Map<String, Object> queryMap);
 	
 	public List<Map<String, Object>> queryTechList( Map<String, Object> conditionMap);
+	
+	public List<Map<String, Object>> queryFactoryOrderList(Map<String, Object> conditionMap);
+	
+	public int assignTechTask(String conditions,String edit_user,String curTime);
 }
