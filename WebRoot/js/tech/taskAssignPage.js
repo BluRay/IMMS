@@ -184,7 +184,7 @@ function assignTechTask(){
 			    }
 			});
 	}else{
-		$("#assessModal").modal("hide");
+		$("#dialog-assessModal").dialog( "close" );
 	}
 	
 }

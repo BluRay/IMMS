@@ -5,6 +5,11 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta charset="utf-8" />
 		<title>技改任务分配-前段</title>
+		<link rel="stylesheet" href="../css/bootstrap-table.css">
+		<link rel="stylesheet" href="../css/bootstrap-editable.css">
+		<link rel="stylesheet" href="../assets/css/jquery-ui.min.css" />
+		<link rel="stylesheet" href="../assets/css/jquery-ui.custom.min.css" />
+		<link rel="stylesheet" href="../assets/css/jquery.gritter.css" />
 		<meta name="description" content="Common Buttons &amp; Icons" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 	</head>
@@ -67,8 +72,104 @@
 						</table>
 					</div>
 
+					<div id="toolbar"></div>
+					<table  style="font-weight:normal;" id="table" data-toolbar="#toolbar" data-search="false" data-show-refresh="true"
+				           data-show-toggle="false" data-show-columns="true" data-show-export="true" data-detail-view="false"
+				           data-detail-formatter="detailFormatter" data-minimum-count-columns="2" data-show-pagination-switch="true"
+				           data-pagination="true" data-id-field="id" data-page-list="[50, 100, 200, 500, ALL]"
+				           data-show-footer="false" data-side-pagination="server" data-response-handler="responseHandler">
+				    </table>
+					</div>
 					
+					<div id="dialog-assessModal" class="hide" style="align:center;width:700px;height:500px">
+					<form id="task_assess">
+					<table>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">技改任务：</td><td style="width:250px"><input type="text" style="width:250px" disabled="disabled" id="v_task_content" class="input-small" /></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">技改单编号：</td><td style="width:250px"><input type="text" style="width:250px" disabled="disabled" id="v_tech_order_no" class="input-small" /></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">切换方式：</td>
+						<td>
+							<input checked name="switch_mode" value="全部切换" type="radio"><span>全部切换&nbsp;&nbsp;</span>
+							<input name="switch_mode" value="节点前切换" type="radio"><span>节点前切换&nbsp;&nbsp;</span>
+							<input name="switch_mode" value="节点后切换" type="radio"><span>节点后切换&nbsp;&nbsp;</span>
+						</td>
+					</tr>
+					<tr id="tr_switch_node" style="display:none;height:40px">
+						<td align="right" style="width:100px">切换节点：</td>
+						<td style="width:250px">
+							<select id="switch_node" class="input-medium">
+								<option value='焊装'>焊装</option>
+								<option value='玻璃钢'>玻璃钢</option>
+								<option value='涂装'>涂装</option>
+								<option value='底盘'>底盘</option>
+								<option value='总装'>总装</option>
+								<option value='检测线'>检测线</option>
+							</select>
+						</td>
+					</tr>
+					</table>
+					<div class="control-group">
+						<label class="control-label" for="" style="font-weight:bold">技改实施范围：</label>
+						<div class="controls">
+							<div style="width: 100%">
+							<ul class="nav nav-tabs" id="new_tab" role="tablist">
+								<li class="active"><a href="#new_task1" data-toggle="tab"
+								style="font-size: 14px; color: #333">订单1</a></li>
+								<li><i id="add_tech_detail" class="fa fa-plus"
+								style="cursor: pointer; padding-top: 12px; color: blue;"></i></li>							
+							</ul>
+							</div>
+							<div class="tab-content" id="new_accordion">
+								<div class="tab-pane active" role="tabpanel" id="new_task1">
+								<div class="panel panel-default">
+								<div id="collapseTask1" class="panel-collapse collapse in" role="tabpanel">
+									<div class="panel-body">
+									<div>
+										<span>订单：</span>
+										<input type="text" class="assess_order_no" class="input-medium">
+									</div>
+									<div>
+										<span>长沙工厂</span>
+										<input style="height:30px" name="new_tecn_flag" class="input-medium" id="new_tecn_flag" type="checkbox">
+									</div>
+									<div>
+									<table id="tb_factory_1" class="table table-bordered table-striped" style="margin-bottom: 0px;">
+										<tr>
+										<td>自制件</td>
+										<td>部件</td>
+										<td>焊装</td>
+										<td>玻璃钢</td>
+										<td>涂装</td>
+										<td>底盘</td>
+										<td>总装</td>
+										<td>检测线</td>
+										</tr>									
+										<tr>
+										<td></td>
+										<td></td>
+										<td>100</td>
+										<td>80</td>
+										<td>50</td>
+										<td>50</td>
+										<td>50</td>
+										<td>20</td>
+										</tr>	
+									</table>
+									</div>
+									
+									</div>									
+								</div>	
+								</div>
+								</div>
+							</div>
+						</div>
+					</div>
 					
+					</form>
 					</div>
 			</div><!-- /.main-content -->
 
@@ -78,4 +179,34 @@
 		</div><!-- /.main-container -->
 	</div>
 	</body>
+	<script>
+		var $table = $('#table'),$remove = $('#remove'),selections = [];
+	</script>
+	<style type="text/css">
+	.fixed-table-toolbar .bs-bars, .fixed-table-toolbar .search, .fixed-table-toolbar .columns {
+		position: absolute;
+		margin-top: 102px;
+		right: 20px;
+		top: -45px;
+	}
+	.btn-default {
+		color: #333;
+		background-color: #fff;
+		border-color: #ccc;
+		height: 40px;
+		color: #fff;
+		background-color: #333;
+	}
+</style>
+	<script src="../assets/js/fuelux/fuelux.tree.min.js"></script>
+	<script src="../assets/js/jquery.ui.touch-punch.min.js"></script>
+	<script src="../assets/js/jquery.gritter.min.js"></script>
+	
+	<script type="text/javascript" src="../assets/js/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="../assets/js/bootstrap3-typeahead.js"></script>
+	<script type="text/javascript" src="../js/jquery.form.js"></script>
+	
+	<script type="text/javascript" src="../js/datePicker/WdatePicker.js"></script>
+	<script type="text/javascript" src="../js/common.js"></script>
+	<script type="text/javascript" src="../js/tech/taskAssignPrePage.js"></script>
 </html>

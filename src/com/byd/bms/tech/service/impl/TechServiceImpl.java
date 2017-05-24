@@ -128,6 +128,9 @@ public class TechServiceImpl implements ITechService {
 	@Transactional
 	public int assignTechTask(String conditions,String edit_user,String curTime) {
 		JSONArray jsa=JSONArray.fromObject(conditions);
+		if(jsa.size()==0){
+			return -1;
+		}
 		Map<String,Object> cdmap=new HashMap<String,Object>();
 		JSONObject jo=(JSONObject)jsa.get(0);
 		Map<String,Object> conditionMap=new HashMap<String,Object>();
