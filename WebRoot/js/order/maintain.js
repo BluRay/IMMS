@@ -495,8 +495,8 @@ function ajaxQuery(){
 		            {"title":"编辑者","class":"center","data": "user_name","defaultContent": ""},
 		            {"title":"编辑时间","class":"center","data":"edit_date","defaultContent": ""},
 		            {"title":"分配","class":"center","data":null,"render":function(data,type,row){
-		            	return "<i class=\"ace-icon fa fa-pencil bigger-110 editorder\" onclick = 'ajaxEdit(" + row.id+ ");' style='color:green;cursor: pointer;'></i>"},
-		            	"defaultContent": "<i class=\"ace-icon fa fa-pencil bigger-110 editorder\" style='color:green;cursor: pointer;'></i>"}
+		            	return "<i class=\"ace-icon fa fa-pencil bigger-130 editorder\" onclick = 'ajaxEdit(" + row.id+ ");' style='color:green;cursor: pointer;'></i>"},
+		            	"defaultContent": "<i class=\"ace-icon fa fa-pencil bigger-130 editorder\" style='color:green;cursor: pointer;'></i>"}
 		          ],
 		
 	});

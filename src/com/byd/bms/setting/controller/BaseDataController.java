@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -484,4 +487,159 @@ public class BaseDataController extends BaseController {
 		initModel(true, "删除成功！", null);
 		return mv.getModelMap();
 	}
+	
+	/**
+	 * 工序配置页面
+	 * @return
+	 */
+	@RequestMapping("/processConfig")
+	public ModelAndView processConfig(){
+		mv.setViewName("setting/processConfig");
+		return mv;
+	}
+	
+	/**
+	 * 获取工序配置列表
+	 */
+	@RequestMapping("/getProcessConfigList")
+	@ResponseBody
+	public ModelMap getProcessConfigList(){
+		model.clear();
+		String draw=request.getParameter("draw");
+		int start=Integer.parseInt(request.getParameter("start"));//分页数据起始数
+		int length=Integer.parseInt(request.getParameter("length"));//每一页数据条数
+		String factory=request.getParameter("factory");
+		String order_type=request.getParameter("order_type");
+		
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("factory", factory);
+		condMap.put("order_type", order_type);
+		condMap.put("start", start);
+		condMap.put("length", length);
+		condMap.put("draw", draw);
+		
+		model.addAllAttributes(baseDataService.getProcessConfigList(condMap));
+		return model;
+	}
+	
+	/**
+	 * 根据工厂、车间获取工序列表（不区分线别）
+	 */
+	@RequestMapping("/getProcessListNoLine")
+	@ResponseBody
+	public ModelMap getProcessListNoLine(){
+		model.clear();
+		String factory=request.getParameter("factory");
+		String workshop=request.getParameter("workshop");
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("factory", factory);
+		condMap.put("workshop", workshop);
+		
+		model.put("data", baseDataService.getProcessListNoLine(condMap));
+		return model;
+	}
+	
+	/**
+	 * 根据工厂、订单类型获取工序配置明细列表
+	 */
+	@RequestMapping("/getProcessConfigDetailList")
+	@ResponseBody
+	public ModelMap getProcessConfigDetailList(){
+		model.clear();
+		String factory=request.getParameter("factory");
+		String order_type=request.getParameter("order_type");
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("factory", factory);
+		condMap.put("order_type", order_type);
+		
+		model.put("data", baseDataService.getProcessConfigDetailList(condMap));
+		return model;
+	}
+	
+	/**
+	 * 根据工厂获取该工厂下所有车间的标准工序列表
+	 */
+	@RequestMapping("/getProcessListByFactory")
+	@ResponseBody
+	public ModelMap getProcessListByFactory(){
+		model.clear();
+		String factory=request.getParameter("factory");
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("factory", factory);
+		
+		model.put("data", baseDataService.getProcessListByFactory(condMap));
+		return model;
+	}
+	
+	/**
+	 * 新增工序配置
+	 */
+	@RequestMapping("/addProcessConfig")
+	@ResponseBody
+	public ModelMap addProcessConfig(){
+		model.clear();
+		String process_list_str=request.getParameter("process_list");
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		int userid=(int)session.getAttribute("user_id");
+		
+		JSONArray jsar=JSONArray.fromObject(process_list_str);
+		List<Map<String,Object>> process_list=new ArrayList<Map<String,Object>>();
+		if(process_list_str.contains("{")){
+			process_list=JSONArray.toList(jsar,Map.class);
+		}
+
+		process_list.forEach(e->{
+			e.put("editor_id", userid);
+			e.put("edit_date", curTime);
+		});
+		baseDataService.addProcessConfig(process_list,model);
+		
+		return model;
+	}
+	
+	/**
+	 * 编辑工序配置
+	 */
+	@RequestMapping("/editProcessConfig")
+	@ResponseBody
+	public ModelMap editProcessConfig(){
+		model.clear();
+		String process_list_str=request.getParameter("process_list");
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		int userid=(int)session.getAttribute("user_id");
+		
+		JSONArray jsar=JSONArray.fromObject(process_list_str);
+		List<Map<String,Object>> process_list=new ArrayList<Map<String,Object>>();
+		if(process_list_str.contains("{")){
+			process_list=JSONArray.toList(jsar,Map.class);
+		}
+
+		process_list.forEach(e->{
+			e.put("editor_id", userid);
+			e.put("edit_date", curTime);
+		});
+		baseDataService.editProcessConfig(process_list,model);
+		
+		return model;
+	}
+	/**
+	 * 编辑工序配置
+	 */
+	@RequestMapping("/deleteProcessConfig")
+	@ResponseBody
+	public ModelMap deleteProcessConfig(){
+		model.clear();
+		String factory=request.getParameter("factory");
+		String order_type=request.getParameter("order_type");
+		
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("factory", factory);
+		condMap.put("order_type", order_type);
+		baseDataService.deleteProcessConfig(condMap,model);
+		return model;
+	}
+	
+	
 }

@@ -106,7 +106,7 @@ function ajaxQuery(){
 		            {"title":"生产顺序","class":"center","data":"sequence","defaultContent": ""},		            
 		            {"title":"客户","class":"center","data": "customer","defaultContent": ""},
 		            {"title":"操作","class":"center","data":"order_id","render":function(data,type,row){
-		            	return "<i class=\"ace-icon fa fa-pencil bigger-110 editorder\" title='编辑' onclick = 'showEditPage(" + JSON.stringify(row)+ ");' style='color:green;cursor: pointer;'></i>";		            		
+		            	return "<i class=\"ace-icon fa fa-pencil bigger-130 editorder\" title='编辑' onclick = 'showEditPage(" + JSON.stringify(row)+ ");' style='color:green;cursor: pointer;'></i>";		            		
 		            	}
 		            }
 		          ],

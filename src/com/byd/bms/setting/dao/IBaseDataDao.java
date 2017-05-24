@@ -29,6 +29,7 @@ public interface IBaseDataDao {
 	public void updateWorkshop(BmsBaseWorkshop workshop);
 	public void deleteWorkshop(List ids);
 	public int checkDeleteWorkshop(List ids);
+	
 	//线别
 	public List<BmsBaseLine> getLineList(Map<String,Object> queryMap);
 	public int getLineTotalCount(Map<String,Object> queryMap);
@@ -36,21 +37,32 @@ public interface IBaseDataDao {
 	public void updateLine(BmsBaseLine line);
 	public void deleteLine(List ids);
 	public int checkDeleteLine(List ids);
+	
 	//工序
 	public List<BmsBaseProcess> getProcessList(Map<String,Object> queryMap);
 	public int getProcessTotalCount(Map<String,Object> queryMap);
 	public int addProcess(BmsBaseProcess process);
 	public void updateProcess(BmsBaseProcess process);
 	public void deleteProcess(List ids);
+	public List<Map<String,Object>> queryProcessConfigList(Map<String, Object> condMap);
+	public int queryProcessConfigCount(Map<String, Object> condMap);
+	public List<Map<String, Object>> queryProcessListNoLine(Map<String, Object> condMap);
+	public List<Map<String, Object>> queryProcessConfigDetailList( Map<String, Object> condMap);
+	public List<Map<String, Object>> queryProcessListByFactory(Map<String, Object> condMap);
+	public int insertProcessConfig(List<Map<String, Object>> process_list);
+	public void deleteProcessConfig(Map<String, Object> condMap);
+	
 	//车间班组
 	public List<BmsBaseStandardWorkgroup> getWorkgroupList(Map<String,Object> queryMap);
 	public int getWorkgroupTotalCount(Map<String,Object> queryMap);
 	public int addWorkgroup(BmsBaseStandardWorkgroup workgroup);
 	public void updateWorkgroup(BmsBaseStandardWorkgroup workgroup);
 	public void deleteWorkgroup(List ids);
+	
 	//车型
 	public List<BmsBaseBusType> getBusTypeList(Map<String,Object> queryMap);
 	public int getBusTypeTotalCount(Map<String,Object> queryMap);
 	public int addBusType(BmsBaseBusType busType);
 	public void updateBusType(BmsBaseBusType busType);
+
 }

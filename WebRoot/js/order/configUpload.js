@@ -108,8 +108,8 @@ function ajaxQuery(){
 		            {"title":"总成料号","class":"center","data":"sap_materialNo","defaultContent":""},
 		            {"title":"物料描述","class":"center","data":"material","defaultContent": ""},
 		            {"title":"操作","class":"center","data":null,"render":function(data,type,row){
-		            	return "<i class=\"glyphicon glyphicon-search bigger-110 showbus\" title='查看' onclick = 'showInfoPage(" + JSON.stringify(row)+");' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;&nbsp;"+ 
-		            	"<i class=\"ace-icon fa fa-pencil bigger-110 editorder\" title='导入' onclick = 'showEditPage(" + JSON.stringify(row)+ ");' style='color:green;cursor: pointer;'></i>";
+		            	return "<i class=\"glyphicon glyphicon-search bigger-130 showbus\" title='查看' onclick = 'showInfoPage(" + JSON.stringify(row)+");' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;&nbsp;"+ 
+		            	"<i class=\"ace-icon fa fa-pencil bigger-130 editorder\" title='导入' onclick = 'showEditPage(" + JSON.stringify(row)+ ");' style='color:green;cursor: pointer;'></i>";
 		            		
 		            	},
 		            }

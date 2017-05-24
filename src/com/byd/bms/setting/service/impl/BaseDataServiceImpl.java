@@ -7,6 +7,8 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.ModelMap;
 
 import com.byd.bms.order.model.BmsOrder;
 import com.byd.bms.setting.dao.IBaseDataDao;
@@ -145,8 +147,103 @@ public class BaseDataServiceImpl implements IBaseDataService {
 	public void deleteProcess(List ids) {
 		if(ids.size()>0){
 			baseDataDao.deleteProcess(ids);
+		}		
+	}
+	@Override
+	public Map<String, Object> getProcessConfigList(Map<String, Object> condMap) {
+		Map<String,Object> result=new HashMap<String,Object>();
+		int totalCount=0;
+		List<Map<String,Object>> datalist=baseDataDao.queryProcessConfigList(condMap);
+		totalCount=baseDataDao.queryProcessConfigCount(condMap);
+		result.put("recordsTotal", totalCount);
+		result.put("recordsFiltered", totalCount);
+		result.put("draw", condMap.get("draw"));
+		result.put("data", datalist);
+		return result;
+	}
+	@Override
+	public List<Map<String, Object>> getProcessListNoLine(
+			Map<String, Object> condMap) {
+		List<Map<String,Object>> datalist=baseDataDao.queryProcessListNoLine(condMap);
+		return datalist;
+	}
+	@Override
+	public List<Map<String,Object>> getProcessConfigDetailList(Map<String, Object> condMap) {
+		List<Map<String,Object>> datalist=baseDataDao.queryProcessConfigDetailList(condMap);
+		return datalist;
+	}
+	/**
+	 * 根据工厂获取该工厂下所有车间的标准工序列表
+	 */
+	@Override
+	public List<Map<String,Object>> getProcessListByFactory(Map<String, Object> condMap) {
+		List<Map<String,Object>> datalist=baseDataDao.queryProcessListByFactory(condMap);
+		return datalist;
+	}
+	/**
+	 * 新增工序配置，同一工厂同一订单类型只允许保存一个工序配置
+	 */
+	@Override
+	public void addProcessConfig(List<Map<String, Object>> process_list,
+			ModelMap model) {
+		String factory=(String) process_list.get(0).get("factory");
+		String order_type=(String) process_list.get(0).get("order_type");
+		Map<String,Object>condMap=new HashMap<String,Object>();
+		condMap.put("factory", factory);
+		condMap.put("order_type", order_type);
+		//根据工厂、订单类型查询是否已经存在工序配置
+		List<Map<String, Object>> list=baseDataDao.queryProcessConfigList(condMap);
+		if(list.size()>0){
+			model.put("message", factory+" "+order_type+" 已存在工序配置，不能重复添加！");
+			model.put("success", false);
+			return;
 		}
+		try{
+			int i=baseDataDao.insertProcessConfig(process_list);
+			model.put("message","保存成功！");
+			model.put("success", true);
+		}catch(Exception e){
+			model.put("message",e.getMessage());
+			model.put("success", false);
+		}	
+	}
+	
+	/**
+	 * 编辑工序配置，先删除该工厂该订单类型下的工序配置，再插入修改后的工序配置
+	 */
+	@Override
+	@Transactional
+	public void editProcessConfig(List<Map<String, Object>> process_list,
+			ModelMap model) {
+		String factory=(String) process_list.get(0).get("factory");
+		String order_type=(String) process_list.get(0).get("order_type");
+		Map<String,Object>condMap=new HashMap<String,Object>();
+		condMap.put("factory", factory);
+		condMap.put("order_type", order_type);
+		//删除该工厂订单类型下的工序配置
+		try{
+			baseDataDao.deleteProcessConfig(condMap);
+			baseDataDao.insertProcessConfig(process_list);
+			model.put("message","保存成功！");
+			model.put("success", true);
+		}catch(Exception e){
+			model.put("message",e.getMessage());
+			model.put("success", false);
+			throw new RuntimeException("系统异常！");			
+		}	
 		
+	}
+	
+	@Override
+	public void deleteProcessConfig(Map<String, Object> condMap, ModelMap model) {
+		try{
+			baseDataDao.deleteProcessConfig(condMap);
+			model.put("message","删除成功！");
+			model.put("success", true);
+		}catch(Exception e){
+			model.put("message",e.getMessage());
+			model.put("success", false);
+		}	
 	}
 	
 	//班组

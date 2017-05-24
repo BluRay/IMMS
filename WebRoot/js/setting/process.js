@@ -99,7 +99,7 @@ function initPage(){
 	getFactorySelect('','','#search_factory','全部','id');
 	ajaxQuery();
 	getFactorySelect('','','#factory','请选择','id');
-	getKeysSelect("PLAN_CODE", '', '#plan_node','','id');
+	getKeysSelect("PLAN_CODE", '', '#plan_node','请选择','id');
 	getLineSelectStandard('','#line','请选择','id');
 	//getWorkshopSelect('',$("#factory :selected").text(),'','#search_workshop','请选择','id');
 }
@@ -186,7 +186,7 @@ function ajaxQuery(){
 		            {"title":"计划节点","class":"center","data": "plan_node_name","defaultContent": ""},
 		            {"title":"备注","class":"center","data": "memo","defaultContent": ""},
 		            {"title":"操作","class":"center","data":"","render":function(data,type,row){
-		            	return "<i class=\"ace-icon fa fa-pencil bigger-110 editorder\" title='编辑' onclick = 'showEditPage(" + JSON.stringify(row)+ ");' style='color:green;cursor: pointer;'></i>";		            		
+		            	return "<i class=\"ace-icon fa fa-pencil bigger-130 editorder\" title='编辑' onclick = 'showEditPage(" + JSON.stringify(row)+ ");' style='color:green;cursor: pointer;'></i>";		            		
 		            	}
 		            }
 		          ]	

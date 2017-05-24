@@ -10,9 +10,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.ServletContext;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,12 +24,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.byd.bms.tech.service.ITechService;
 import com.byd.bms.util.ExcelModel;
 import com.byd.bms.util.ExcelTool;
 import com.byd.bms.util.controller.BaseController;
-
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 /**
@@ -52,13 +48,25 @@ public class TechController extends BaseController{
 	@RequestMapping("/techTaskMaintain")
 	public ModelAndView taskMaintain(){ 		//技改任务维护
 		mv.setViewName("tech/techTaskMaintain");
-        return mv;  
+        return mv; 
     }
 	
 	@RequestMapping("/taskAssignPage")
 	public ModelAndView taskAssignPage(){		//技改任务分配
 		mv.setViewName("tech/taskAssignPage");
-        return mv;  
+        return mv;
+	}
+	
+	@RequestMapping("/taskAssignPrePage")
+	public ModelAndView taskAssignPrePage(){	//技改任务分配-前段
+		mv.setViewName("tech/taskAssignPrePage");
+        return mv;
+	}
+	
+	@RequestMapping("/techTaskMaterialCheck")	//技改物料确认
+	public ModelAndView techTaskMaterialCheck(){
+		mv.setViewName("tech/techTaskMaterialCheck");
+        return mv;
 	}
 	
 	/**

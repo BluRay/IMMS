@@ -256,4 +256,91 @@
 			#{id}
 		</foreach>
 	</update>
+	
+	<select id="queryProcessConfigList" parameterType="Map" resultType="Map">
+		select distinct r.factory,r.order_type,u.username editor,r.edit_date
+		from BMS_PD_SCAN_RULE r
+		left join BMS_BASE_USER u on r.editor_id=u.id
+		where 1=1
+		<if test="factory !=null and factory !='全部'">
+			and r.factory=#{factory}
+		</if>
+		<if test="order_type !=null and order_type !='全部'">
+			and r.order_type=#{order_type}
+		</if>
+		<if test="start !=null and length!=-1">
+			LIMIT #{start} ,#{length} 
+		</if>
+	</select>
+	
+	<select id="queryProcessConfigCount" parameterType="Map" resultType="int">
+		select count(distinct r.factory,r.order_type)
+		from BMS_PD_SCAN_RULE r
+		left join BMS_BASE_USER u on r.editor_id=u.id
+		where 1=1
+		<if test="factory !=null and factory !='全部'">
+			and r.factory=#{factory}
+		</if>
+		<if test="order_type !=null and order_type !='全部'">
+			and r.order_type=#{order_type}
+		</if>
+	</select>
+	
+	<select id="queryProcessListNoLine" parameterType="Map" resultType="Map">
+		select distinct p.workshop,p.process_name ,case  p.monitory_point_flag when '0' then 'N' else 'Y' end as monitory_point_flag,
+		case p.key_process_flag when '0' then 'N' else 'Y' end as key_process_flag, ifnull(k.key_name,'') plan_node
+		from BMS_BASE_PROCESS p 
+		left join BMS_BASE_KEY k on p.plan_node_id=k.id
+		where p.delete_flag !='1'
+		<if test="factory !=null and factory !=''">
+			and p.factory=#{factory}
+		</if>
+		<if test="workshop !=null and workshop !=''">
+			and p.workshop=#{workshop}
+		</if>
+		order by cast(substring(p.process_code,3) as signed)
+	</select>
+	
+	<select id="queryProcessConfigDetailList"  parameterType="Map" resultType="Map">
+		select r.*,p.monitory_point_flag,p.key_process_flag,p.plan_node
+		from BMS_PD_SCAN_RULE r
+		left join (
+		select distinct p.factory,p.workshop,p.process_name ,case  p.monitory_point_flag when '0' then 'N' else 'Y' end as monitory_point_flag,
+				case p.key_process_flag when '0' then 'N' else 'Y' end as key_process_flag, ifnull(k.key_name,'') plan_node
+				from BMS_BASE_PROCESS p 
+				left join BMS_BASE_KEY k on p.plan_node_id=k.id
+				where p.delete_flag !='1' and p.factory=#{factory}
+		) p on r.factory=p.factory and p.workshop=r.workshop and r.process_name=p.process_name
+		where r.factory=#{factory} and r.order_type=#{order_type}
+		order by r.sequence
+	</select>
+	
+	<select id="queryProcessListByFactory" parameterType="Map" resultType="Map">
+		select concat('{"process_list":[',group_concat('{"process_name":"',p.process_name,'","monitory_point_flag":"',p.monitory_point_flag,'","key_process_flag":"',p.key_process_flag,'","plan_node":"',p.plan_node,'"}' order by p.seq),']}') as process_list,
+		p.workshop
+		from(
+		select distinct p.workshop,p.process_name ,case  p.monitory_point_flag when '0' then 'N' else 'Y' end as monitory_point_flag,
+		case p.key_process_flag when '0' then 'N' else 'Y' end as key_process_flag, ifnull(k.key_name,'') plan_node,cast(substring(p.process_code,3) as signed) seq
+		from BMS_BASE_PROCESS p 
+		left join BMS_BASE_KEY k on p.plan_node_id=k.id
+		where p.delete_flag !='1' and p.factory=#{factory}) p
+		group by p.workshop
+	</select>
+	
+	<insert id="insertProcessConfig" parameterType="List">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT LAST_INSERT_ID() AS id
+		</selectKey>
+		insert into BMS_PD_SCAN_RULE (sequence,factory,workshop,order_type,process_name,editor_id,edit_date)
+		values
+		<foreach collection="list" item="detail" index="index" separator=",">
+			(#{detail.sequence},#{detail.factory},#{detail.workshop},#{detail.order_type},#{detail.process_name},
+			#{detail.editor_id},#{detail.edit_date})
+		</foreach>		
+	</insert>
+	
+	<update id="deleteProcessConfig" parameterType="Map">
+		delete from BMS_PD_SCAN_RULE where factory=#{factory} and order_type=#{order_type}
+	</update>
+	
 </mapper>
