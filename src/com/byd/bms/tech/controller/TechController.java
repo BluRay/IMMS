@@ -153,8 +153,7 @@ public class TechController extends BaseController{
 	@RequestMapping(value="/techTaskMaintain/uploadChangedMaterialListFile",method=RequestMethod.POST)
 	@ResponseBody
 	public ModelMap uploadChangedMaterialListFile(@RequestParam(value="file",required=false) MultipartFile file){
-		logger.info("uploading.....");
-		String fileName="Tech_ChangedMaterialList.xlsx";
+		String fileName="Tech_ChangedMaterialList.xls";
 		try{
 		ExcelModel excelModel = new ExcelModel();
 		excelModel.setReadSheets(1);

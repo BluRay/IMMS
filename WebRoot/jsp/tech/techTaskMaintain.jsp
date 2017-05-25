@@ -194,17 +194,36 @@
 						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="editOrderCode">*&nbsp;配置信息：</label>
 						<div class="col-sm-9">
 								<div class="col-sm-4">
-									<input id="file" style="margin-left: -10px;padding:0px 0px;font-size: 12px" class="btn btn-info btn-small" name="file" accept=".xlsx" type="file"> 				
+									<input id="file" style="margin-left: -10px;padding:0px 0px;font-size: 12px" class="btn btn-info btn-small" name="file" accept=".xls" type="file"> 				
 								</div>
 								<div class="col-sm-4">
-									<input id="btn_upload" style="margin-left: 20px;padding:0px 0px;font-size: 12px;height:32px;" class="btn btn-primary" value="上传并导入" onclick="javascript:return upload(this.form, this.form.file.value)" type="button"> 
-									<a style="padding-left: 25px;" href="../docs/Tech_ChangedMaterialList.xlsx">下载批导模板</a>
+									<input id="btn_upload" style="margin-left: 20px;padding:0px 0px;font-size: 12px;height:32px;" class="btn btn-primary" value="上传并导入" onclick="javascript:return upload(this.form, this.form.file.value,'Tech_ChangedMaterialTable')" type="button"> 
+									<a style="padding-left: 25px;" href="../docs/Tech_ChangedMaterialList.xls">下载批导模板</a>
 								</div>							
 						</div>
 					</div>
 					<div class="form-group">					
 						<div class="col-sm-12">			
 							<table class="table table-striped table-bordered table-hover" id="Tech_ChangedMaterialTable">
+							<thead>
+								<tr>
+				                	<th style="text-align:center;">SAP料号</th>
+				                    <th style="text-align:center;">物料描述</th>
+				                    <th style="text-align:center;">物料类型</th>
+				                    <th style="text-align:center;">材料/规格</th>
+				                    <th style="text-align:center;">单位</th>
+				                    <th style="text-align:center;">供应商代码</th>
+				                    <th style="text-align:center;">单车损耗%</th>
+				                    <th style="text-align:center;">层级用量</th>
+				                    <th style="text-align:center;">单重</th>
+				                    <th style="text-align:center;">单车用量含损耗</th>
+				                    <th style="text-align:center;">使用车间</th>
+				                    <th style="text-align:center;">工序</th>
+				                    <th style="text-align:center;">装配位置</th>
+				                    <th style="text-align:center;">备注</th>
+								</tr>
+							</thead>
+							<tbody></tbody>
 							</table>
 						</div>
 					</div>
@@ -297,11 +316,11 @@
 						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="editOrderCode">*&nbsp;配置信息：</label>
 						<div class="col-sm-9">
 								<div class="col-sm-4">
-									<input id="file" style="margin-left: -10px;padding:0px 0px;font-size: 12px" class="btn btn-info btn-small" name="file" accept=".xlsx" type="file"> 				
+									<input id="file" style="margin-left: -10px;padding:0px 0px;font-size: 12px" class="btn btn-info btn-small" name="file" accept=".xls" type="file"> 				
 								</div>
 								<div class="col-sm-4">
-									<input id="btn_upload_moidfy" style="margin-left: 20px;padding:0px 0px;font-size: 12px;height:32px;" class="btn btn-primary" value="上传并导入" onclick="javascript:return upload(this.form, this.form.file.value,this.parent().parent().parent().siblings(1).children().children()" type="button"> 
-									<a style="padding-left: 25px;" href="../docs/Tech_ChangedMaterialList.xlsx">下载批导模板</a>
+									<input id="btn_upload_moidfy" style="margin-left: 20px;padding:0px 0px;font-size: 12px;height:32px;" class="btn btn-primary" value="上传并导入" onclick="javascript:return upload(this.form, this.form.file.value,'table2')" type="button"> 
+									<a style="padding-left: 25px;" href="../docs/Tech_ChangedMaterialList.xls">下载批导模板</a>
 								</div>							
 						</div>
 					</div>
@@ -316,7 +335,6 @@
 				<table id="table2" class="table table-bordered table-striped" style="font-size: 12px;">
 						<thead>
 							<tr>
-								<th> </th>
 								<th>SAP料号</th>
 								<th>物料描述</th>
 								<th>物料类型</th>

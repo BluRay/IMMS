@@ -3,7 +3,7 @@ $(document).ready(function (){
 	initPage();
 	
 	function initPage(){
-		getFactorySelect("tech/taskAssignPage",'',"#search_factory",null,'id');
+		getFactorySelect("tech/taskAssignPage",'',"#search_factory","全部",'id');
 		getOrderNoSelect("#search_order_no","#orderId");
 		var d = new Date();
 		var vYear = d.getFullYear();

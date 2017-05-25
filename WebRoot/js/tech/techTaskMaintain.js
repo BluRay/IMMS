@@ -1,7 +1,7 @@
 var pageSize=1;
 var table;
 
-var extArray = new Array(".xlsx");
+var extArray = new Array(".xls");
 var ECN_TYPE = [];
 var ECN_CHANGE_TYPE = [];
 var ECN_DUTY_UNIT = [];
@@ -76,7 +76,7 @@ $(document).ready(function(){
 			width:1080,
 			height:560,
 			modal: true,
-			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i>新增技改任务</h4></div>",
+			title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-flag green"></i> 新增技改任务</h4></div>',
 			title_html: true,
 			buttons: [ 
 				{
@@ -600,54 +600,24 @@ function upload(form,file,table){
 }
 
 function drawConfigListTable(data,table){
-	$(table).dataTable({
-		paiging:false,
-		ordering:false,
-		searching: false,
-		bAutoWidth:false,
-		destroy: true,
-		paginate:false,
-		//sScrollY: $(window).height()-250,
-		scrollX: "1200px",
-		scrollCollapse: true,
-		lengthChange:false,
-		orderMulti:false,
-		info:false,
-		language: {
-			emptyTable:"",					     
-			infoEmpty:"",
-			zeroRecords:"请导入物料明细！"
-		},
-		data:data.data,
-		columns: [
-		            {"title":"SAP料号","class":"center","data":"sap_no","width":"90px"
-		            },
-		            {"title":"物料描述","class":"center","data":"material_spec","width":"140px"
-		            },	
-		            {"title":"物料类型","class":"center","data":"material_type","width":"90px"
-		            },
-		            {"title":"材料/规格","class":"center","data":"material_spec","width":"90px"
-		            },
-		            {"title":"单位","class":"center","data":"unit","width":"70px"
-		            },
-		            {"title":"供应商代码","class":"center","data":"supplier_code","width":"90px"
-		            },
-		            {"title":"单车损耗%","class":"center","data":"single_loss","width":"100px"
-		            },
-		            {"title":"层级用量","class":"center","data":"level_usage","width":"90px"
-		            },
-		            {"title":"单重","class":"center","data":"single_weight","width":"70px"
-		            },
-		            {"title":"单车用量含损耗","class":"center","data":"single_usage","width":"120px"
-		            },
-		            {"title":"使用车间","class":"center","data":"workshop","width":"80px"
-		            },
-		            {"title":"工序","class":"center","data":"process","width":"140px"
-		            },
-		            {"title":"装配位置","class":"center","data":"assemb_site","width":"140px"
-		            },
-		            {"title":"备注","class":"center","data":"remark"}
-		          ]	
+	$("#"+table+" tbody").html("");
+	$.each(data.data,function (index,value) {
+		var tr = $("<tr />");
+		$("<td />").html(value.sap_no).appendTo(tr);
+		$("<td />").html(value.material_spec).appendTo(tr);
+		$("<td />").html(value.material_type).appendTo(tr);
+		$("<td />").html(value.material_spec).appendTo(tr);
+		$("<td />").html(value.unit).appendTo(tr);
+		$("<td />").html(value.supplier_code).appendTo(tr);
+		$("<td />").html(value.single_loss).appendTo(tr);
+		$("<td />").html(value.level_usage).appendTo(tr);
+		$("<td />").html(value.single_weight).appendTo(tr);
+		$("<td />").html(value.single_usage).appendTo(tr);
+		$("<td />").html(value.workshop).appendTo(tr);
+		$("<td />").html(value.process).appendTo(tr);
+		$("<td />").html(value.assemb_site).appendTo(tr);
+		$("<td />").html(value.remark).appendTo(tr);
+		$("#"+table+" tbody").append(tr);
 	});
 }
 
