@@ -69,6 +69,54 @@ public class TechController extends BaseController{
         return mv;
 	}
 	
+	@RequestMapping("/workHourEstimatePage")	//工时评估
+	public ModelAndView workHourEstimatePage(){
+		mv.setViewName("tech/workHourEstimatePage");
+        return mv;
+	}
+	
+	@RequestMapping("/followingUpPage")			//技改跟进
+	public ModelAndView followingUpPage(){
+		mv.setViewName("tech/followingUpPage");
+        return mv;
+	}
+	
+	@RequestMapping("/worktimeMaintain")		//技改工时维护
+	public ModelAndView worktimeMaintain(){
+		mv.setViewName("tech/worktimeMaintain");
+        return mv;
+	}
+	
+	@RequestMapping("/worktimeVerify")			//技改工时审核
+	public ModelAndView worktimeVerify(){
+		mv.setViewName("tech/worktimeVerify");
+        return mv;
+	}
+	
+	@RequestMapping("/taskSearch")				//技改查询
+	public ModelAndView taskSearch(){
+		mv.setViewName("tech/taskSearch");
+        return mv;
+	}
+	
+	@RequestMapping("/techTaskReport")			//技改成本
+	public ModelAndView techTaskReport(){
+		mv.setViewName("tech/techTaskReport");
+        return mv;
+	}
+	
+	@RequestMapping("/techCollectReport")		//技改情况汇总
+	public ModelAndView techCollectReport(){
+		mv.setViewName("tech/techCollectReport");
+        return mv;
+	}
+	
+	@RequestMapping("/changeTypeReport")		//分类型变更汇总
+	public ModelAndView changeTypeReport(){
+		mv.setViewName("tech/changeTypeReport");
+        return mv;
+	}
+	
 	/**
 	 * ajax 获取订单列表数据
 	 * @return model
