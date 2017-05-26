@@ -186,6 +186,49 @@ public class TechServiceImpl implements ITechService {
 		return 0;
 		
 	}
+
+	@Override
+	public Map<String, Object> getTaskInfo(Map<String, Object> conditionMap) {
+		Map<String, Object> result =new HashMap<String,Object>();
+		List<Map<String, String>> dataBaseInfo = techDao.queryTaskBaseInfo(conditionMap);
+		List<Map<String, String>> dataMaterielInfo = techDao.queryTaskMaterielInfo(conditionMap);
+		List<Map<String, String>> dataOrderInfo = techDao.queryTaskOrderInfo(conditionMap);
+		Map<String, Object> m = new HashMap<String, Object>();
+		m.put("ecnTaskId",conditionMap.get("taskid").toString());
+
+		result.put("dataBaseInfo", dataBaseInfo);
+		result.put("dataMaterielInfo", dataMaterielInfo);
+		result.put("dataOrderInfo", dataOrderInfo);
+		result.put("whList", techDao.queryStaffWorkHours(m));
+		result.put("assignList", techDao.queryAssignList(conditionMap.get("taskid").toString()));
+		
+		return result;
+	}
+
+	@Override
+	@Transactional
+	public int checkTaskMaterial(String taskid, String check_id, String curTime, String edit_user) {
+		String[] check = check_id.split(",");
+		// 更新物料确认信息
+		for (int i = 0; i < check.length; i++) {
+			Map<String, Object> conditionMap = new HashMap<String, Object>();
+			conditionMap.put("id", check[i]);
+			conditionMap.put("userid", edit_user);
+			conditionMap.put("curTime", curTime);
+			techDao.checkTaskMaterial(conditionMap);
+		}
+		Map<String, Object> conditionMap = new HashMap<String, Object>();
+		conditionMap.put("taskid", taskid);
+		int checkCount = techDao.queryTaskMaterialCheckCount(conditionMap);
+		if (checkCount == 0) {
+			Map<String, Object> conditionMap2 = new HashMap<String, Object>();
+			conditionMap2.put("id", taskid);
+			conditionMap2.put("userid", edit_user);
+			conditionMap2.put("curTime", curTime);
+			techDao.checkTask(conditionMap2);
+		}
+		return 0;
+	}
 	
 	
 	

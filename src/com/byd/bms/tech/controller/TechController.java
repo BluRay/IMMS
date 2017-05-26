@@ -69,6 +69,12 @@ public class TechController extends BaseController{
         return mv;
 	}
 	
+	@RequestMapping("/techTaskMaterialCheckPage")//技改物料确认-确认
+	public ModelAndView techTaskMaterialCheckPage(){
+		mv.setViewName("tech/techTaskMaterialCheckPage");
+        return mv;
+	}
+	
 	@RequestMapping("/workHourEstimatePage")	//工时评估
 	public ModelAndView workHourEstimatePage(){
 		mv.setViewName("tech/workHourEstimatePage");
@@ -505,6 +511,31 @@ public class TechController extends BaseController{
 		result = techService.assignTechTask(conditions,edit_user,curTime);
 		initModel(true,String.valueOf(result),null);
 		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/getTaskInfo")
+	@ResponseBody
+	public ModelMap getTaskInfo(){
+		String taskid = request.getParameter("taskid");
+		Map<String, Object> conditionMap = new HashMap<String, Object>();
+		conditionMap.put("taskid", taskid);		
+		Map<String, Object> result = techService.getTaskInfo(conditionMap);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(result);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/checkTaskMaterial")
+	@ResponseBody
+	public ModelMap checkTaskMaterial(){
+		String taskid = request.getParameter("taskid");
+		String check_id = request.getParameter("check_id");
+		String curTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+		String edit_user = request.getSession().getAttribute("staff_number") + "";
+		int result = techService.checkTaskMaterial(taskid,check_id,curTime,edit_user);
+		initModel(true,String.valueOf(result),null);
 		return model;
 	}
 	
