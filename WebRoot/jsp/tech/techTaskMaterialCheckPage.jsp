@@ -123,9 +123,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<center>
 				<input type="button" class="btn btn-primary" id="btnCheck" value="确认" style="margin-left: 2px;"></input>
 				</center>
-				<input id="check_id"  type="text" style="display: none;width:410px;height:18px"></input>
-				
-				
+				<input id="check_id"  type="text" style="display:none;width:410px;height:18px"></input>
 			</div>
 
 			<!-- 脚 -->

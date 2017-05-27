@@ -20,9 +20,7 @@ public class TechServiceImpl implements ITechService {
 	private ITechDao techDao;
 
 	@Override
-	public Map<String, Object> queryTechTaskMaintainList(
-			Map<String, Object> conditionMap) {
-		
+	public Map<String, Object> queryTechTaskMaintainList(Map<String, Object> conditionMap) {
 		int totalCount=0;
 		List<Map<String, Object>> datalist=techDao.queryTechTaskMaintainList(conditionMap);
 		totalCount=techDao.queryTechTaskMaintainListTotalCount(conditionMap);
@@ -30,6 +28,8 @@ public class TechServiceImpl implements ITechService {
 		result.put("draw", conditionMap.get("draw"));
 		result.put("recordsTotal", totalCount);
 		result.put("recordsFiltered", totalCount);
+		result.put("total", totalCount);
+		result.put("rows", datalist);
 		result.put("data", datalist);
 		return result;
 	}
@@ -41,6 +41,7 @@ public class TechServiceImpl implements ITechService {
 		 * 新增技改技改任务
 		 */
 		int tech_task_id = techDao.addTechTask(conditionMap);
+		tech_task_id = Integer.valueOf(conditionMap.get("id").toString());
 		List<Map<String, Object>> changeMaterialList = new ArrayList<Map<String, Object>>();
 		JSONArray jsonArray = JSONArray.fromObject(conditionMap.get("selectedrows").toString());
 		JSONObject obj = null;
@@ -228,6 +229,14 @@ public class TechServiceImpl implements ITechService {
 			techDao.checkTask(conditionMap2);
 		}
 		return 0;
+	}
+
+	@Override
+	public Map<String, Object> getTaskOrderFinishInfo(Map<String, Object> conditionMap) {
+		Map<String, Object> result =new HashMap<String,Object>();
+		List<Map<String, Object>> list = techDao.queryTaskOrderFinishInfo(conditionMap);
+		result.put("dataOrderFinishInfo", list);
+		return result;
 	}
 	
 	

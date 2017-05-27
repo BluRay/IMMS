@@ -1127,7 +1127,7 @@
 	</select>
 	
 	<select id="queryTaskOrderFinishInfo" parameterType="Map" resultType="Map">
-		SELECT GROUP_CONCAT(S.finish) AS FINISH_STR FROM (
+		SELECT GROUP_CONCAT(S.finish) AS finish_str FROM (
 		SELECT (CONCAT(t.workshop,':',COUNT(t.id))) AS finish FROM BMS_TECH_TASK_FOLLOW t 
 		WHERE t.tech_task_id = #{taskid} AND t.order_no = #{order_no} GROUP BY workshop
 		) S
@@ -1313,7 +1313,7 @@
 		</if>
 		order by t.id desc 
 		<if test="start !=null">
-			LIMIT #{start} ,#{length} 
+			LIMIT ${start} ,${length} 
 		</if>	
 	</select>
 	

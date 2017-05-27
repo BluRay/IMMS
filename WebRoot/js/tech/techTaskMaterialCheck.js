@@ -23,24 +23,22 @@ function ajaxQuery(){
 function initTable() {
     $table.bootstrapTable({
         height: getHeight(),
-        url:'taskAssignPage/getTaskList',
+        //url:'taskAssignPage/getTaskList',
+        url:'techTaskMaintain/getTaskMaintainList',
         striped:true,
         paginationVAlign:'bottom',
         searchOnEnterKey:true,
         fixedColumns: false,				//冻结列
         fixedNumber: 0,		//冻结列数
         queryParams:function(params) {
-        	var conditions={};
-        	conditions.task_content=$("#search_tech_task_content").val();
-        	conditions.tech_order_no=$("#search_tech_order_no").val();
-        	conditions.order_no="";
-        	conditions.factory="";
-        	conditions.tech_date_start=$("#search_date_start").val();
-        	conditions.tech_date_end=$("#search_date_end").val();
-        	conditions.status=$("#status").val();
         	
-        	params["conditions"] = JSON.stringify(conditions);
-        	
+        	params["tech_order_no"] = $("#search_tech_order_no").val();
+        	params["task_content"] = $("#search_tech_task_content").val();
+        	params["tech_date_start"] = $("#search_date_start").val();
+        	params["tech_date_end"] = $("#search_date_end").val();
+        	params["status"] = $("#status").val();
+        	params["draw"] = 1;
+        	return params;
         	return params;
         },
         columns: [

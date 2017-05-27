@@ -539,7 +539,6 @@ function ajaxQueryChangedMaterialList(tech_task_id){
 			$("#table2 tbody").html("");
 			$.each(response.data, function(index, value) {
 				var tr = $("<tr />");
-				$("<td id=\"\" />").html('<button type="button" class="close" aria-label="Close"><span aria-hidden="true">×</span></button>').appendTo(tr);
 				$("<td id=\"sap_no\" contentEditable=\"true\"/>").html(value.sap_no).appendTo(tr);
 				$("<td id=\"material_desc\" contentEditable=\"true\"/>").html(value.material_desc).appendTo(tr);
 				$("<td id=\"material_type\" contentEditable=\"true\"/>").html(value.material_type).appendTo(tr);

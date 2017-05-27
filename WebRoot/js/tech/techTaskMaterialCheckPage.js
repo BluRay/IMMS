@@ -67,9 +67,9 @@ function getBaseInfo(ecnTaskId){
         	$.each(response.dataMaterielInfo,function (index,value) {
         		var tr = $("<tr id= '"+value.ID+"'/>");
         		if(value.material_checker_id!='0'){
-        			$("<td />").html('<input type="checkbox" disabled="disabled" id="check_'+value.ID+'" onclick="mat_check('+value.ID+')">').appendTo(tr);
+        			$("<td />").html('<input type="checkbox" disabled="disabled" id="check_'+value.id+'" onclick="mat_check('+value.id+')">').appendTo(tr);
         		}else{
-        			$("<td />").html('<input type="checkbox" id="check_'+value.ID+'" onclick="mat_check('+value.ID+')">').appendTo(tr);
+        			$("<td />").html('<input type="checkbox" id="check_'+value.id+'" onclick="mat_check('+value.id+')">').appendTo(tr);
         		}       		
         		$("<td />").html(value.sap_no).appendTo(tr);
         		$("<td />").html(value.material_desc).appendTo(tr);
@@ -122,6 +122,74 @@ function getBaseInfo(ecnTaskId){
 	});
 }
 
+function mat_check(mat_id){
+	console.log('----mat_check:' + mat_id);
+	if ($('#check_'+mat_id).prop('checked')) {
+		$("#check_id").val($("#check_id").val() + mat_id + ",")
+	}else{
+		$("#check_id").val($("#check_id").val().replace(mat_id + ",",''))
+	}
+}
+
+function showOrderInfo(index){
+	//alert(dataOrderInfo[index].TECH_LIST);
+	//var tech_str = '{"自制件":"11","部件":"12","焊装":"13","玻璃钢":"14","涂装":"15","底盘":"16","总装":"17"}';
+	var tech_str = dataOrderInfo[index].tech_list;
+	$("#tech_zzj").html("");$("#tech_bj").html("");$("#tech_hz").html("");
+	$("#tech_blg").html("");$("#tech_tz").html("");
+	$("#tech_dp").html("");$("#tech_zz").html("");
+	if(tech_str != ""){
+		tech_str = tech_str.replace(/:/g,'":"');
+		tech_str = tech_str.replace(/,/g,'","');
+		tech_str = '{"' + tech_str + '"}';
+		var obj = JSON.parse(tech_str);
+		$("#tech_zzj").html(obj.自制件);$("#tech_bj").html(obj.部件);$("#tech_hz").html(obj.焊装);
+		$("#tech_blg").html(obj.玻璃钢);$("#tech_tz").html(obj.涂装);
+		$("#tech_dp").html(obj.底盘);$("#tech_zz").html(obj.总装);
+	}
+	var tech_str = dataOrderInfo[index].time_list;
+	$("#time_zzj").html("");$("#time_bj").html("");$("#time_hz").html("");
+	$("#time_blg").html("");$("#time_tz").html("");
+	$("#time_dp").html("");$("#time_zz").html("");
+	if(tech_str != ""){
+		tech_str = tech_str.replace(/:/g,'":"');
+		tech_str = tech_str.replace(/,/g,'","');
+		tech_str = '{"' + tech_str + '"}';
+		var obj = JSON.parse(tech_str);
+		$("#time_zzj").html(obj.自制件);$("#time_bj").html(obj.部件);$("#time_hz").html(obj.焊装);
+		$("#time_blg").html(obj.玻璃钢);$("#time_tz").html(obj.涂装);
+		$("#time_dp").html(obj.底盘);$("#time_zz").html(obj.总装);
+	}
+	
+	//获取订单完成数量
+	$.ajax({
+        url: "getTaskOrderFinishInfo",
+        dataType: "json",
+        type: "get",
+        data: {
+        	"taskid":dataOrderInfo[index].tech_task_id,
+        	"order_no":dataOrderInfo[index].order_no
+        },
+        success: function(response) {
+        	//alert(response.dataOrderFinishInfo[0].FINISH_STR);
+        	var tech_str = response.dataOrderFinishInfo[0].finish_str;
+        	$("#finish_zzj").html("");$("#finish_bj").html("");$("#finish_hz").html("");
+        	$("#finish_blg").html("");$("#finish_tz").html("");
+        	$("#finish_dp").html("");$("#finish_zz").html("");
+        	if(tech_str != ""){
+	        	tech_str = tech_str.replace(/:/g,'":"');
+	        	tech_str = tech_str.replace(/,/g,'","');
+	        	tech_str = '{"' + tech_str + '"}';
+	        	//alert(tech_str);
+	        	var obj = JSON.parse(tech_str);
+	        	
+	        	$("#finish_zzj").html(obj.自制件);$("#finish_bj").html(obj.部件);$("#finish_hz").html(obj.焊装);
+	        	$("#finish_blg").html(obj.玻璃钢);$("#finish_tz").html(obj.涂装);
+	        	$("#finish_dp").html(obj.底盘);$("#finish_zz").html(obj.总装);
+        	}
+        }
+	});
+}
 
 function GetQueryString(name) {
 	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
@@ -130,10 +198,10 @@ function GetQueryString(name) {
 	return null;
 }
 function selectAll() {
-	if ($("#selectAll").attr("checked")) {
-		$(":checkbox").attr("checked", true);
-		$(":disabled").attr("checked", false);
+	if ($("#selectAll").prop("checked")) {
+		$(":checkbox").prop("checked", true);
+		$(":disabled").prop("checked", false);
 	} else {
-		$(":checkbox").attr("checked", false);
+		$(":checkbox").prop("checked", false);
 	}
 }

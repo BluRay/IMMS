@@ -131,26 +131,21 @@ public class TechController extends BaseController{
 	@ResponseBody
 	public ModelMap getTaskMaintainList(){
 		Map<String,Object> condMap=new HashMap<String,Object>();
-		int draw=Integer.parseInt(request.getParameter("draw"));		//jquerydatatables 
-		int start=Integer.parseInt(request.getParameter("start"));		//分页数据起始数
-		int length=Integer.parseInt(request.getParameter("length"));	//每一页数据条数
-		
 		String tech_order_no=request.getParameter("tech_order_no");		//技改单号
 		String task_content=request.getParameter("task_content");		//技改任务内容
 		String tech_date_start=request.getParameter("tech_date_start");	//技改单日期-开始
 		String tech_date_end=request.getParameter("tech_date_end");		//技改单日期-结束
 		String status=request.getParameter("status");					//技改任务状态
-		
-		condMap.put("draw", draw);
-		condMap.put("start", start);
-		condMap.put("length", length);
+		condMap.put("draw", request.getParameter("draw"));
+		condMap.put("start", request.getParameter("start"));
+		condMap.put("length", request.getParameter("length"));
 		condMap.put("tech_order_no", tech_order_no);
 		condMap.put("task_content", task_content);
 		condMap.put("tech_date_start",tech_date_start);
 		condMap.put("tech_date_end", tech_date_end);
 		condMap.put("status", status);
-		
-		Map<String,Object> result=techService.queryTechTaskMaintainList(condMap);
+		Map<String,Object> result = new HashMap<String,Object>();
+		result=techService.queryTechTaskMaintainList(condMap);
 		model.addAllAttributes(result);
 		
 		return model;
@@ -536,6 +531,21 @@ public class TechController extends BaseController{
 		String edit_user = request.getSession().getAttribute("staff_number") + "";
 		int result = techService.checkTaskMaterial(taskid,check_id,curTime,edit_user);
 		initModel(true,String.valueOf(result),null);
+		return model;
+	}
+	
+	@RequestMapping("/getTaskOrderFinishInfo")
+	@ResponseBody
+	public ModelMap getTaskOrderFinishInfo(){
+		String taskid = request.getParameter("taskid");
+		String order_no = request.getParameter("order_no");
+		Map<String, Object> conditionMap = new HashMap<String, Object>();
+		conditionMap.put("taskid", taskid);
+		conditionMap.put("order_no", order_no);
+		Map<String, Object> result = techService.getTaskOrderFinishInfo(conditionMap);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(result);
+		model = mv.getModelMap();
 		return model;
 	}
 	

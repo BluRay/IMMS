@@ -40,5 +40,6 @@ public interface ITechDao {
 	public int checkTaskMaterial(Map<String, Object> conditionMap);
 	public int queryTaskMaterialCheckCount(Map<String, Object> conditionMap);
 	public int checkTask(Map<String, Object> conditionMap);
+	public List<Map<String,Object>> queryTaskOrderFinishInfo(Map<String, Object> conditionMap);
 	
 }
