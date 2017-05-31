@@ -41,4 +41,8 @@ public interface ITechService {
 	public int checkTaskMaterial(String taskid,String check_id,String curTime,String edit_user);
 	
 	public Map<String, Object> getTaskOrderFinishInfo(Map<String, Object> conditionMap);
+	
+	public Map<String, Object> getWorkHourEstimateList(Map<String, Object> conditionMap);
+	
+	public int editTechWorkHourEstimate(List<Map<String, Object>> conditionList);
 }

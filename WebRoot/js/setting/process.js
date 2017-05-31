@@ -244,7 +244,7 @@ function ajaxAdd(){
 	param.factory=$("#factory :selected").text();
 	param.workshop=$("#workshop :selected").text();
 	param.line=$("#line :selected").text();
-	param.plan_node_id=$("#plan_node").val();
+	param.plan_node_id=$("#plan_node").val()==''?0:$("#plan_node").val();
 	param.process_code=$("#process_code").val();
 	param.process_name=$("#process_name").val();
 	param.monitory_point_flag=$("#monitory_point_flag").is(":checked")?'1':'0';

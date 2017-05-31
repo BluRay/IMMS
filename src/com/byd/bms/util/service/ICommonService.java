@@ -35,4 +35,6 @@ public interface ICommonService {
 
 	
 	List<BmsBaseProcess> queryProcessList(Map<String, Object> condMap);
+	
+	List<Map<String,String>> getWorkshopSelect_Key();
 }

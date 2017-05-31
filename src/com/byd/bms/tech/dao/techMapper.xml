@@ -1428,19 +1428,11 @@
 	
 	<!--技改工时评估-查询 -->
 	<select id="queryTechWorkHourEstimateList" parameterType="Map" resultType="Map">
-		SELECT
-			d.*,
-			t.task_content,
-			t.tech_order_type,
-			t.tech_order_no,
-			t.tech_date,
-			t.edit_date,
-			t.assign_date,
-			t.assess_date,
-			t.finish_date
-		FROM
-			BMS_TECH_TASK_DETAIL AS d
+		SELECT d.*,t.task_content,t.tech_order_type,t.tech_order_no,t.tech_date,
+		t.edit_date,t.assign_date,t.assess_date,t.finish_date,k.key_name AS tech_order_type_name
+		FROM BMS_TECH_TASK_DETAIL AS d
 		LEFT JOIN BMS_TECH_TASK AS t ON t.id = d.tech_task_id
+		LEFT JOIN BMS_BASE_KEY k ON t.tech_order_type = k.id
 		WHERE 1=1
 		<if test="factory !=null and factory !='全部'">
 			and d.factory = #{factory}
@@ -1479,9 +1471,7 @@
 	
 	<!--技改工时评估-查询totalcount -->
 	<select id="queryTechWorkHourEstimateListTotalCount" parameterType="Map" resultType="int">
-		SELECT count(d.id)
-		FROM
-			BMS_TECH_TASK_DETAIL AS d
+		SELECT count(d.id) FROM BMS_TECH_TASK_DETAIL AS d
 		LEFT JOIN BMS_TECH_TASK AS t ON t.id = d.tech_task_id
 		WHERE 1=1
 		<if test="factory !=null and factory !=''">

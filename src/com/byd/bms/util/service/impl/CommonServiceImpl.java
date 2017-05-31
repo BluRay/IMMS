@@ -83,5 +83,9 @@ public class CommonServiceImpl implements ICommonService {
 	public List<BmsBaseProcess> queryProcessList(Map<String, Object> condMap) {
 		return commonDao.queryProcessList(condMap);
 	}
+	@Override
+	public List<Map<String, String>> getWorkshopSelect_Key() {
+		return commonDao.getWorkshopSelect_Key();
+	}
 
 }

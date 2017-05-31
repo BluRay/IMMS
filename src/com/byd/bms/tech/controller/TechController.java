@@ -549,4 +549,56 @@ public class TechController extends BaseController{
 		return model;
 	}
 	
+	@RequestMapping("/getWorkHourEstimateList")
+	@ResponseBody
+	public ModelMap getWorkHourEstimateList(){
+		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
+		int start=(request.getParameter("start")!=null)?Integer.parseInt(request.getParameter("start")):0;		//分页数据起始数
+		int length=(request.getParameter("length")!=null)?Integer.parseInt(request.getParameter("length")):500;	//每一页数据条数
+		Map<String, Object> conditionMap = new HashMap<String, Object>();
+		conditionMap.put("factory", request.getParameter("factory"));
+		conditionMap.put("order_no", request.getParameter("order_no"));
+		conditionMap.put("task_content", request.getParameter("task_content"));
+		conditionMap.put("tech_order_no", request.getParameter("tech_order_no"));
+		conditionMap.put("tech_date_start", request.getParameter("tech_date_start"));
+		conditionMap.put("tech_date_end", request.getParameter("tech_date_end"));
+		conditionMap.put("status", request.getParameter("status"));
+		conditionMap.put("draw", draw);
+		conditionMap.put("start", start);
+		conditionMap.put("length", length);
+		
+		Map<String, Object> result = techService.getWorkHourEstimateList(conditionMap);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(result);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/editTechWorkHourEstimate")
+	@ResponseBody
+	public ModelMap editTechWorkHourEstimate(){
+		String curTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+		String edit_user = request.getSession().getAttribute("staff_number") + "";
+		List<Map<String, Object>> editList = new ArrayList<Map<String, Object>>();
+		Map<String, Object> infomap = new HashMap<String, Object>();
+		infomap.put("time_list", request.getParameter("time_list"));
+		infomap.put("single_time_total", request.getParameter("single_time_total"));
+		infomap.put("time_total", request.getParameter("total_hour"));
+		infomap.put("assesor_id", edit_user);
+		if ("1".equals(request.getParameter("flg"))) {
+			infomap.put("assess_date", "");
+		} else {
+			infomap.put("assess_date", curTime);
+		}
+		infomap.put("id", request.getParameter("id"));
+		infomap.put("tech_task_id", request.getParameter("tech_task_id"));
+		editList.add(infomap);
+		
+		int result = techService.editTechWorkHourEstimate(editList);
+		
+		initModel(true,String.valueOf(result),null);
+		return model;
+	}
+	
+	
 }

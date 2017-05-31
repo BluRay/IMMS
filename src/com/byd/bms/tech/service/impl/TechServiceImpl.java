@@ -238,6 +238,24 @@ public class TechServiceImpl implements ITechService {
 		result.put("dataOrderFinishInfo", list);
 		return result;
 	}
+
+	@Override
+	public Map<String, Object> getWorkHourEstimateList(Map<String, Object> conditionMap) {
+		List<Map<String,Object>> datalist = techDao.queryTechWorkHourEstimateList(conditionMap);
+		int totalCount = techDao.queryTechWorkHourEstimateListTotalCount(conditionMap);
+		
+		Map<String, Object> result = new HashMap<String,Object>();
+		result.put("draw", conditionMap.get("draw"));
+		result.put("recordsTotal", totalCount);
+		result.put("recordsFiltered", totalCount);
+		result.put("data", datalist);
+		return result;
+	}
+
+	@Override
+	public int editTechWorkHourEstimate(List<Map<String, Object>> conditionList) {
+		return techDao.updateTechWorkHourEstimate(conditionList);
+	}
 	
 	
 	

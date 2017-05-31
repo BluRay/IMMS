@@ -199,4 +199,13 @@ public class CommonController extends BaseController {
 		model.put("data", commonService.queryProcessList(condMap));
 		return model;
 	}
+	
+	@RequestMapping("/getWorkshopSelect_Key")
+	@ResponseBody
+	public ModelMap getWorkshopSelect_Key() {
+		model=new ModelMap();
+		model.put("data", commonService.getWorkshopSelect_Key());
+		return model;
+	}
+	
 }

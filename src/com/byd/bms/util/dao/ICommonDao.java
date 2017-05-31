@@ -39,4 +39,6 @@ public interface ICommonDao {
 	List<Map<String, Object>> queryProcessMonitorList(Map<String, Object> condMap);
 	
 	List<BmsBaseProcess> queryProcessList(Map<String, Object> condMap);
+	
+	public List<Map<String,String>> getWorkshopSelect_Key();
 }

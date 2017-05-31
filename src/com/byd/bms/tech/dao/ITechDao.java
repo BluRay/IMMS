@@ -41,5 +41,8 @@ public interface ITechDao {
 	public int queryTaskMaterialCheckCount(Map<String, Object> conditionMap);
 	public int checkTask(Map<String, Object> conditionMap);
 	public List<Map<String,Object>> queryTaskOrderFinishInfo(Map<String, Object> conditionMap);
-	
+
+	public List<Map<String,Object>> queryTechWorkHourEstimateList(Map<String,Object> conditionMap);
+	public int queryTechWorkHourEstimateListTotalCount(Map<String,Object> conditionMap);
+	public int updateTechWorkHourEstimate(List<Map<String, Object>> conditionList);
 }

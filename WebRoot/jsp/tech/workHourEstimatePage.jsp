@@ -7,6 +7,9 @@
 		<title>工时评估</title>
 		<meta name="description" content="Common Buttons &amp; Icons" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+		<link rel="stylesheet" href="../assets/css/jquery-ui.min.css" />
+		<link rel="stylesheet" href="../assets/css/jquery-ui.custom.min.css" />
+		<link rel="stylesheet" href="../assets/css/jquery.gritter.css" />
 	</head>
 	<body class="no-skin" style="font-family: 'Microsoft YaHei';">
 		<!-- 头 -->
@@ -42,17 +45,17 @@
 							<tr>
 								<td>工厂：</td>
 								<td><select id="search_factory" class="form-control" style="width:120px"></select></td>
-								<td>&nbsp;订单：</td>
+								<td>&nbsp;订单编号：</td>
 								<td><input id="search_order_no" placeholder="请输入订单编号..." style="width:110px" type="text"></td>
 								<td>&nbsp;技改单编号：</td>
 								<td><input id="search_tech_order_no" placeholder="技改单编号..." style="width:110px" type="text"></td>
-								<td>&nbsp;技改任务：</td>
-								<td><input id="search_tech_task_content" placeholder="技改任务..." style="width:110px" type="text"></td>
+								<td>&nbsp;任务内容：</td>
+								<td><input id="search_task_content" placeholder="技改任务..." style="width:110px" type="text"></td>
 							</tr>
 							<tr>
-								<td>&nbsp;状态：</td>
+								<td>状态：</td>
 								<td>
-									<select class="form-control" id="status" style="width:120px">
+									<select class="form-control" id="search_status" style="width:120px">
 										<option value="全部">全部</option>
 										<option value="已创建" selected>已创建</option>
 										<option value="已分配">已分配</option>
@@ -67,9 +70,27 @@
 						</table>
 					</div>
 
-					
+					<table id="tableData" class="table table-striped table-bordered table-hover" style="font-size: 12px;">
+					</table>
 					
 					</div>
+					
+					<div id="configModal" class="hide" style="align:center;width:700px;height:500px">
+					<form id="configForm">
+						<table id="tableDepartment" class="table table-condensed" >
+				            <thead>
+				                <tr><th>车间</th><th align="center">单车工时</th><th>单位</th></tr>
+				            </thead>
+				            <tbody id="techTimeConfig_parameters">
+				            </tbody>
+				        </table>
+					</form>
+					总工时：<span id="config_totalhour"></span><span>H</span>
+					<input type="text" style="display:none;" id="id" name="id"></input>
+			        <input type="text" style="display:none;" id="tech_task_id" name="tech_task_id"></input>
+			        <input type="text" style="display:none;" id="tech_list" name="tech_list"></input>
+					</div>
+					
 			</div><!-- /.main-content -->
 
 			<!-- 脚 -->
@@ -78,4 +99,15 @@
 		</div><!-- /.main-container -->
 	</div>
 	</body>
+	<script src="../assets/js/jquery-ui.min.js"></script>
+	<script src="../assets/js/jquery.ui.touch-punch.min.js"></script>
+	<script src="../assets/js/jquery.gritter.min.js"></script>
+	<script src="../assets/js/jquery.dataTables.min.js"></script>
+	<script src="../assets/js/jquery.dataTables.bootstrap.js"></script>
+	<script src="../assets/js/dataTables.fixedColumns.min.js"></script>
+	<script type="text/javascript" src="../js/datePicker/WdatePicker.js"></script>
+	<script type="text/javascript" src="../assets/js/bootstrap3-typeahead.js"></script>
+	<script type="text/javascript" src="../js/common.js"></script>
+	<script type="text/javascript" src="../js/jquery.form.js"></script>
+	<script type="text/javascript" src="../js/tech/workHourEstimatePage.js"></script>
 </html>

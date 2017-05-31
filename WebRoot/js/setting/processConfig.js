@@ -459,7 +459,7 @@ function showInfoPage(row){
 function showEditPage(row){
 	$("#factory_edit").find("option:contains('"+row.factory+"')").attr("selected",true);
 	$("#factory_edit").prop("disabled",true);
-	$("#order_type_edit").find("option:contains('"+row.factory+"')").attr("selected",true);	
+	$("#order_type_edit").find("option:contains('"+row.order_type+"')").attr("selected",true);	
 	$("#order_type_edit").prop("disabled",true);
 	$("#import_edit").prop("checked",false);
 	

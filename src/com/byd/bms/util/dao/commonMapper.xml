@@ -151,4 +151,8 @@
 		</if>
 	</select>
 	
+	<select id="getWorkshopSelect_Key" parameterType="String" resultType="Map">
+		SELECT id,workshop_name AS name FROM BMS_BASE_WORKSHOP 
+	</select>
+	
 </mapper>
