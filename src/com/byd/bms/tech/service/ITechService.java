@@ -45,4 +45,14 @@ public interface ITechService {
 	public Map<String, Object> getWorkHourEstimateList(Map<String, Object> conditionMap);
 	
 	public int editTechWorkHourEstimate(List<Map<String, Object>> conditionList);
+	
+	public Map<String, Object> getFollowingUpList(Map<String, Object> conditionMap);
+	
+	public List<Map<String,Object>> getFollowingUpDetailList(Map<String, Object> conditionMap);
+	
+	public List<Map<String,Object>> getFollowingUpDetailList1(Map<String, Object> conditionMap);
+	
+	public int editFollowingUp(String curTime,String edit_user,String ids,String task_detail_id,String update_status,String workshop);
+
+	public int editFollowingUp1(String curTime,String edit_user,String tech_task_id,String factory,String workshop,String follow_num,String order_no,String task_detail_id,String update_status);
 }

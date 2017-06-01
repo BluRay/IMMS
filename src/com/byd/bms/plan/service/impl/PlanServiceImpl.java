@@ -693,9 +693,9 @@ public class PlanServiceImpl implements IPlanService {
 			queryMap2.put("order_id", order_id);
 			queryMap2.put("factory_id", transfer_in_factory);
 			queryMap2.put("bus_series", bus_info[3]);
-			List<Map<String, String>> facOrderList=planDao.queryFactoryOrderId(queryMap);
+			List<Map<String, String>> facOrderList=planDao.queryFactoryOrderId(queryMap2);
 			if(facOrderList==null ||facOrderList.size()==0){//不存在新增一行工厂订单记录
-				planDao.insertFactoryOrder(queryMap);
+				planDao.insertFactoryOrder(queryMap2);
 			}
 			if(facOrderList.size()>0){//存在则将该记录的生产数量加一
 				String factory_order_id=String.valueOf(facOrderList.get(0).get("id"));

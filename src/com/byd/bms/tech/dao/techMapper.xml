@@ -1464,9 +1464,9 @@
 		<if test="status=='已完成'">
 			and t.finish_date !=''
 		</if>
-		<if test="offset!=null">
-			LIMIT #{offset} ,#{pageSize} 
-		</if>
+		<if test="start !=null">
+			LIMIT #{start} ,#{length} 
+		</if>	
 	</select>
 	
 	<!--技改工时评估-查询totalcount -->
@@ -1581,9 +1581,9 @@ where 1=1
 				and instr(tmp.status_list,#{workshop})&lt;0
 			</if>
 		</if>
-		<if test="offset!=null">
-			LIMIT #{offset} ,#{pageSize} 
-		</if>
+		<if test="start !=null">
+			LIMIT #{start} ,#{length} 
+		</if>	
 	</select>
 	
 	<!--技改跟进-查询totalcount -->

@@ -256,6 +256,77 @@ public class TechServiceImpl implements ITechService {
 	public int editTechWorkHourEstimate(List<Map<String, Object>> conditionList) {
 		return techDao.updateTechWorkHourEstimate(conditionList);
 	}
+
+	@Override
+	public Map<String, Object> getFollowingUpList(Map<String, Object> conditionMap) {
+		List<Map<String,Object>> datalist = techDao.queryTechFollowingUpList(conditionMap);
+		int totalCount = techDao.queryTechFollowingUpListTotalCount(conditionMap);
+		Map<String, Object> result = new HashMap<String,Object>();
+		result.put("draw", conditionMap.get("draw"));
+		result.put("recordsTotal", totalCount);
+		result.put("recordsFiltered", totalCount);
+		result.put("data", datalist);
+		return result;
+	}
+
+	@Override
+	public List<Map<String, Object>> getFollowingUpDetailList(Map<String, Object> conditionMap) {
+		return techDao.queryFollowingUpDetailList(conditionMap);
+	}
+
+	@Override
+	@Transactional
+	public int editFollowingUp(String curTime, String edit_user, String ids, String task_detail_id,String update_status, String workshop) {
+		JSONArray jsonArray = JSONArray.fromObject(ids);
+		List<Map<String, Object>> editList = new ArrayList<Map<String, Object>>();
+		for (int i = 0; i < jsonArray.size(); i++) {
+			Map<String, Object> infomap = new HashMap<String, Object>();
+			infomap.put("id", jsonArray.getString(i).toString());
+			infomap.put("confirmor_id", edit_user);
+			infomap.put("confirmor_date", curTime);
+			infomap.put("task_detail_id", task_detail_id);
+			editList.add(infomap);
+		}
+		techDao.updateFollowingUp(editList);
+		if("1".equals(update_status)){
+			List<Map<String, Object>> conditionList = new ArrayList<Map<String, Object>>();
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("workshop", workshop);
+			map.put("task_detail_id", task_detail_id);
+			conditionList.add(map);
+			techDao.updateWorkshopStatus2(conditionList);
+		}
+		return 0;
+	}
+
+	@Override
+	public List<Map<String, Object>> getFollowingUpDetailList1(Map<String, Object> conditionMap) {
+		return techDao.queryFollowingUpDetailList1(conditionMap);
+	}
+
+	@Override
+	@Transactional
+	public int editFollowingUp1(String curTime, String edit_user, String tech_task_id, String factory, String workshop,String follow_num, String order_no, String task_detail_id, String update_status) {
+		Map<String, Object> infomap = new HashMap<String, Object>();
+		infomap.put("tech_task_id", tech_task_id);
+		infomap.put("factory", factory);
+		infomap.put("workshop", workshop);
+		infomap.put("follow_num", follow_num);
+		infomap.put("confirmor_id", edit_user);
+		infomap.put("confirmor_date", curTime);
+		infomap.put("order_no", order_no);
+		infomap.put("task_detail_id", task_detail_id);		
+		techDao.addFollowingUp1(infomap);
+		if("1".equals(update_status)){
+			List<Map<String, Object>> conditionList = new ArrayList<Map<String, Object>>();
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("workshop", workshop);
+			map.put("task_detail_id", task_detail_id);
+			conditionList.add(map);
+			techDao.updateWorkshopStatus2(conditionList);
+		}
+		return 0;
+	}
 	
 	
 	

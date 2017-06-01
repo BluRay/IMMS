@@ -438,6 +438,9 @@ public class TechController extends BaseController{
 	@RequestMapping("/taskAssignPage/getTaskList")
 	@ResponseBody
 	public ModelMap getTaskList(){
+		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
+		int start=(request.getParameter("start")!=null)?Integer.parseInt(request.getParameter("start")):0;		//分页数据起始数
+		int length=(request.getParameter("length")!=null)?Integer.parseInt(request.getParameter("length")):500;	//每一页数据条数
 		String conditions = request.getParameter("conditions");
 		JSONObject jo=JSONObject.fromObject(conditions);
 		Map<String,Object> conditionMap=new HashMap<String,Object>();
@@ -449,6 +452,9 @@ public class TechController extends BaseController{
 				conditionMap.put(key, null);
 			}
 		}
+		conditionMap.put("draw", draw);
+		conditionMap.put("start", start);
+		conditionMap.put("length", length);
 		conditionMap.put("task_content", null);
 		conditionMap.put("tech_order_no", null);
 		conditionMap.put("order_no", null);
@@ -600,5 +606,101 @@ public class TechController extends BaseController{
 		return model;
 	}
 	
+	@RequestMapping("/getFollowingUpList")
+	@ResponseBody
+	public ModelMap getFollowingUpList(){
+		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
+		int start=(request.getParameter("start")!=null)?Integer.parseInt(request.getParameter("start")):0;		//分页数据起始数
+		int length=(request.getParameter("length")!=null)?Integer.parseInt(request.getParameter("length")):500;	//每一页数据条数
+		Map<String, Object> conditionMap = new HashMap<String, Object>();
+		conditionMap.put("factory", request.getParameter("factory"));
+		conditionMap.put("workshop", request.getParameter("workshop"));
+		conditionMap.put("order_no", request.getParameter("order_no"));
+		conditionMap.put("task_content", request.getParameter("task_content"));
+		conditionMap.put("tech_order_no", request.getParameter("tech_order_no"));
+		conditionMap.put("tech_date_start", request.getParameter("tech_date_start"));
+		conditionMap.put("tech_date_end", request.getParameter("tech_date_end"));
+		conditionMap.put("status", request.getParameter("status"));
+		conditionMap.put("draw", draw);
+		conditionMap.put("start", start);
+		conditionMap.put("length", length);
+		
+		Map<String, Object> result = techService.getFollowingUpList(conditionMap);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(result);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/getFollowingUpDetailList")
+	@ResponseBody
+	public ModelMap getFollowingUpDetailList(){
+		Map<String, Object> conditionMap = new HashMap<String, Object>();
+		conditionMap.put("factory", request.getParameter("factory"));
+		conditionMap.put("workshop", request.getParameter("workshop"));
+		conditionMap.put("order_no", request.getParameter("order_no"));
+		conditionMap.put("tech_task_id", request.getParameter("tech_task_id"));
+		if ("view".equals(request.getParameter("view"))) {
+			conditionMap.put("view", request.getParameter("view"));
+		}
+		conditionMap.put("bus_num_start", request.getParameter("bus_num_start"));
+		conditionMap.put("bus_num_end", request.getParameter("bus_num_end"));
+		
+		List<Map<String, Object>> list = techService.getFollowingUpDetailList(conditionMap);
+		
+		mv.clear();
+		mv.getModelMap().addAllAttributes(list);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/getFollowingUpDetailList1")
+	@ResponseBody
+	public ModelMap getFollowingUpDetailList1(){
+		Map<String, Object> conditionMap = new HashMap<String, Object>();
+		conditionMap.put("factory", request.getParameter("factory"));
+		conditionMap.put("workshop", request.getParameter("workshop"));
+		conditionMap.put("order_no", request.getParameter("order_no"));
+		conditionMap.put("tech_task_id", request.getParameter("tech_task_id"));
+		
+		List<Map<String, Object>> list = techService.getFollowingUpDetailList1(conditionMap);
+		
+		mv.clear();
+		mv.getModelMap().addAllAttributes(list);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/editFollowingUp")
+	@ResponseBody
+	public ModelMap editFollowingUp(){
+		String curTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+		String edit_user = request.getSession().getAttribute("staff_number") + "";
+		String ids = request.getParameter("ids");
+		String task_detail_id = request.getParameter("task_detail_id");
+		String update_status = request.getParameter("update_status");
+		String workshop = request.getParameter("workshop");
+		
+		int result = techService.editFollowingUp(curTime, edit_user, ids, task_detail_id, update_status, workshop);
+		initModel(true,String.valueOf(result),null);
+		return model;
+	}
+	
+	@RequestMapping("/editFollowingUp1")
+	@ResponseBody
+	public ModelMap editFollowingUp1(){
+		String curTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+		String edit_user = request.getSession().getAttribute("staff_number") + "";
+		String tech_task_id = request.getParameter("tech_task_id");
+		String factory = request.getParameter("factory");
+		String workshop = request.getParameter("workshop");
+		String follow_num = request.getParameter("follow_num");
+		String order_no = request.getParameter("order_no");
+		String task_detail_id = request.getParameter("task_detail_id");
+		String update_status = request.getParameter("update_status");
+		int result = techService.editFollowingUp1(curTime, edit_user, tech_task_id, factory, workshop, follow_num, order_no, task_detail_id, update_status);
+		initModel(true,String.valueOf(result),null);
+		return model;
+	}
 	
 }

@@ -45,4 +45,12 @@ public interface ITechDao {
 	public List<Map<String,Object>> queryTechWorkHourEstimateList(Map<String,Object> conditionMap);
 	public int queryTechWorkHourEstimateListTotalCount(Map<String,Object> conditionMap);
 	public int updateTechWorkHourEstimate(List<Map<String, Object>> conditionList);
+
+	public List<Map<String,Object>> queryTechFollowingUpList(Map<String,Object> conditionMap);
+	public int queryTechFollowingUpListTotalCount(Map<String,Object> conditionMap);
+	public List<Map<String,Object>> queryFollowingUpDetailList(Map<String,Object> conditionMap);
+	public int updateFollowingUp(List<Map<String, Object>> conditionList);
+	public int updateWorkshopStatus2(List<Map<String, Object>> conditionList);
+	public List<Map<String,Object>> queryFollowingUpDetailList1(Map<String,Object> conditionMap);
+	public int addFollowingUp1(Map<String, Object> conditionMap);
 }
