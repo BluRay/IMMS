@@ -128,4 +128,19 @@
 		</if>
 		where bus_number=#{bus_number}
 	</update>
+	
+	<insert id="insertProductionException"   parameterType="List"  useGeneratedKeys="true" keyProperty="id">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into BMS_PD_PRODUCTION_EXCEPTION
+		(factory,workshop,line,process,bus_number,reason_type_id,lack_reason_id,detailed_reasons,editor_id,edit_date,start_time,severity_level_id)
+		values
+		<foreach  collection="list" item="detail" index="index" separator=",">
+		(#{detail.factory},#{detail.workshop},#{detail.line},#{detail.process},#{detail.bus_number},#{detail.reason_type_id},#{detail.lack_reason_id},#{detail.detailed_reasons},#{detail.editor_id},#{detail.edit_date},#{detail.start_time},#{detail.severity_level_id})
+		</foreach>
+	</insert>
+	
+	
 </mapper>

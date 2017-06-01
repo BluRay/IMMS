@@ -12,8 +12,10 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.ModelMap;
 
 import com.byd.bms.production.dao.IProductionDao;
+import com.byd.bms.production.model.ProductionException;
 import com.byd.bms.production.service.IProductionService;
 
 /**
@@ -112,5 +114,22 @@ public class ProductionServiceImpl implements IProductionService {
 		}
 		return rMap;
 	}
+
+	@Override
+	@Transactional
+	public void createProductionException(List<ProductionException> exceptionList,
+			ModelMap model) {
+		try{
+			productionDao.insertProductionException(exceptionList);
+			model.put("success", true);
+			model.put("message", "登记成功！");
+		}catch(Exception e){
+			model.put("success", false);
+			model.put("message", "登记失败！");
+			throw new RuntimeException(e.getMessage());
+		}		
+	}
+	
+	
 
 }

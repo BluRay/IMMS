@@ -273,4 +273,22 @@ $(document).ready(function () {
 		
 	}
 	
+	//全选反选
+	$(document).on("click","#checkall_in",function(){
+		if ($('#checkall_in').is(":checked")) {
+			check_All_unAll("#tableBusInfoIn",true);
+		}
+		if($('#checkall_in').is(":checked")==false){
+			check_All_unAll("#tableBusInfoIn",false);
+		}
+	})
+	$(document).on("click","#checkall",function(){
+		if ($('#checkall').is(":checked")) {
+			check_All_unAll("#tableBusInfoOut",true);
+		}
+		if($('#checkall').is(":checked")==false){
+			check_All_unAll("#tableBusInfoOut",false);
+		}
+	})
+	
 });

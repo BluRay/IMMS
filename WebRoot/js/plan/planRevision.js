@@ -26,6 +26,7 @@ $(document).ready(function () {
 			alert("请选择工厂！");
 		}
 		$('#revision_str').val("");
+		$("#th_order_no").html($('#search_order_no').val());
 		ajaxQuery();
 		return false;
 	});

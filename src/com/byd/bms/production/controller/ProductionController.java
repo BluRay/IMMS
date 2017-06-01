@@ -2,16 +2,13 @@ package com.byd.bms.production.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,7 +16,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
+import com.byd.bms.production.model.ProductionException;
 import com.byd.bms.production.service.IProductionService;
 import com.byd.bms.util.controller.BaseController;
 /**
@@ -233,6 +230,58 @@ public class ProductionController extends BaseController {
 		
 		model.addAllAttributes(productionService.scan(condMap,parts_list));
 
+		return model;
+	}
+	
+	/**
+	 * 生产异常登记页面
+	 * @return
+	 */
+	@RequestMapping("/exception")
+	public ModelAndView exception(){
+		mv.setViewName("production/productionException");
+		return mv;
+	}
+	
+	/**
+	 * 生产异常登记
+	 * @return
+	 */
+	@RequestMapping("/enterException")
+	@ResponseBody
+	public ModelMap enterException(){
+		model.clear();
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String userid=String.valueOf(session.getAttribute("user_id"));
+		logger.info("---->enterException " + curTime + " " + userid);
+		
+		String bus_number = request.getParameter("bus_number");
+		//logger.info("---->bus_number = " + bus_number);
+		//String[] bus_numberArray=bus_number.split("\\|");
+		JSONArray busarr=JSONArray.fromObject(request.getParameter("bus_list"));
+		List<ProductionException> exceptionList=new ArrayList<ProductionException>();
+		
+		for(Iterator it=busarr.iterator();it.hasNext();){
+			//logger.info("---->bus_numberArray = " + bus_numberArray[i] + " ");
+			JSONObject bus=(JSONObject) it.next();
+			String cur_bus_number = bus.getString("bus_number");
+			ProductionException exception = new ProductionException();
+			exception.setFactory(request.getParameter("factory"));
+			exception.setWorkshop(request.getParameter("workshop"));
+			exception.setLine(request.getParameter("line"));
+			exception.setProcess(request.getParameter("process"));
+			exception.setBus_number(cur_bus_number);
+			exception.setReason_type_id(request.getParameter("reason_type_id"));
+			if(request.getParameter("lack_reason_id") != "") exception.setLack_reason_id(request.getParameter("lack_reason_id"));
+			exception.setStart_time(request.getParameter("start_time"));
+			exception.setSeverity_level_id(request.getParameter("severity_level"));
+			exception.setDetailed_reasons(request.getParameter("detailed_reasons"));
+			exception.setEditor_id(userid);
+			exception.setEdit_date(curTime);
+			exceptionList.add(exception);
+		}	
+		productionService.createProductionException(exceptionList,model);
 		return model;
 	}
 }

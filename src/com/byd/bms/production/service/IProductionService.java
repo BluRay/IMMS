@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.ModelMap;
+
+import com.byd.bms.production.model.ProductionException;
 
 public interface IProductionService {
 	public List getLineProcessList(Map<String,Object> condMap);
@@ -18,4 +21,7 @@ public interface IProductionService {
 
 	@Transactional
 	public Map<String, Object> scan(Map<String,Object> condMap,List partsList);
+
+	@Transactional
+	public void createProductionException(List<ProductionException> exceptionList,ModelMap model);
 }

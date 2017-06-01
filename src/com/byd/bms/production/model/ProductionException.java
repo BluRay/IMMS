@@ -8,6 +8,7 @@ public class ProductionException {
 	private String process;
 	private String bus_number;
 	private String reason_type_id;
+	private String lack_reason_id;
 	private String detailed_reasons;
 	private String editor_id;
 	private String edit_date;
@@ -175,6 +176,12 @@ public class ProductionException {
 	}
 	public void setDuty_department(String duty_department) {
 		this.duty_department = duty_department;
+	}
+	public String getLack_reason_id() {
+		return lack_reason_id;
+	}
+	public void setLack_reason_id(String lack_reason_id) {
+		this.lack_reason_id = lack_reason_id;
 	}
 	
 }

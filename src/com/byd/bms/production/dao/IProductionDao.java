@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import com.byd.bms.production.model.ProductionException;
 @Repository(value="productionDao")
 public interface IProductionDao {
 
@@ -31,4 +33,6 @@ public interface IProductionDao {
 	void saveScanRecord(Map<String, Object> condMap);//保存扫描记录
 
 	void updateBusProcess(Map<String, Object> condMap);//更新PLAN_BUS表的当前节点信息和节点扫描时间
+
+	int insertProductionException(List<ProductionException> exceptionList);
 }

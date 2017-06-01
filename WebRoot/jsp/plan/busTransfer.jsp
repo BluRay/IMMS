@@ -65,7 +65,7 @@
 									<td><select id="transfer_out_factory" class="form-control" style="width:150px"></select></td>
 									<td>
 									<input id="btnTransferOutQuery" type="button" class="btn btn-sm btn-primary" value="查询" style="margin-left: 2px;"></input>
-									<input id="btnTransferOut" type="button" class="btn btn-sm btn-info" value="调出" style="margin-left: 2px;"></input>
+									<input id="btnTransferOut" type="button" class="btn btn-sm btn-primary" value="调出" style="margin-left: 2px;"></input>
 									</td>
 								</tr>
 								</table>
@@ -104,7 +104,7 @@
 									<td><select id="transfer_in_factory2" class="form-control" style="width:150px"></select></td>
 									<td>
 									<input id="btnTransferInQuery" type="button" class="btn btn-sm btn-primary" value="查询" style="margin-left: 2px;"></input>
-									<input id="btnTransferIn" type="button" class="btn btn-sm btn-info" value="调入" style="margin-left: 2px;"></input>
+									<input id="btnTransferIn" type="button" class="btn btn-sm btn-primary" value="调入" style="margin-left: 2px;"></input>
 									</td>
 								</tr>
 								</table>
