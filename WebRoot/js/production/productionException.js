@@ -77,11 +77,11 @@ $(document).ready(function () {
             success: function(response){
                 resetPage();
                 if(response.success){ 
-                    fadeMessageAlert(response.message,"alert-success");
+                    fadeMessageAlert(null,response.message,"gritter-success");
                     resetPage();
                 }
                 else{
-                    fadeMessageAlert(response.message,"alert-error");
+                    fadeMessageAlert(null,response.message,"agritter-error");
                 }
 
                 setTimeout(function() {

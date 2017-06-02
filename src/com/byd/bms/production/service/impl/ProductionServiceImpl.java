@@ -129,6 +129,19 @@ public class ProductionServiceImpl implements IProductionService {
 			throw new RuntimeException(e.getMessage());
 		}		
 	}
+
+	@Override
+	public Map<String, Object> getBusInfoList(Map<String, Object> condMap) {
+		int totalCount=0;
+		List<Map<String, Object>> datalist=productionDao.queryBusInfoList(condMap);
+		totalCount=productionDao.queryBusInfoCount(condMap);
+		Map<String, Object> result=new HashMap<String,Object>();
+		result.put("draw", condMap.get("draw"));
+		result.put("recordsTotal", totalCount);
+		result.put("recordsFiltered", totalCount);
+		result.put("data", datalist);
+		return result;
+	}
 	
 	
 

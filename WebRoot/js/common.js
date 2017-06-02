@@ -117,6 +117,7 @@ function getOrderNoSelect(elementId, submitId, fn_backcall, bustype,factory,area
 				dataType : "json",
 				type : "post",
 				data : data,
+				async: false,
 				success: function (response) { 
 					orderlist = response.data;
 					var results = new Array();
@@ -430,4 +431,26 @@ function check_All_unAll(tableId, checkall) {
 	} else {
 		$(tableId + " tbody :checkbox").prop("checked",false);
 	}
+}
+
+/**
+ * 车型下拉列表
+ * @param selectval
+ * @param selectId
+ * @param selectType
+ * @param valName
+ */
+function getBusTypeSelect(selectval,selectId,selectType,valName){
+	$.ajax({
+		url : "/IMMS/common/getBusType",
+		dataType : "json",
+		data : {},
+		async : false,
+		error : function(response) {
+			alert(response.message)
+		},
+		success : function(response) {
+			getSelects(response.data,selectval,selectId,selectType, valName);	
+		}
+	});
 }

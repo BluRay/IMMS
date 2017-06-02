@@ -35,4 +35,8 @@ public interface IProductionDao {
 	void updateBusProcess(Map<String, Object> condMap);//更新PLAN_BUS表的当前节点信息和节点扫描时间
 
 	int insertProductionException(List<ProductionException> exceptionList);
+	
+	List<Map<String, Object>> queryBusInfoList(Map<String, Object> condMap);
+	
+	int queryBusInfoCount(Map<String, Object> condMap);
 }

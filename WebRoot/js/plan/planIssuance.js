@@ -106,7 +106,7 @@ $(document).ready(function () {
 		    	if(response.success){
 		    		if(response.message != '查询成功')alert(response.message);
 		    		$("#btnSave").removeAttr("disabled");
-		    		var input_disable_total = "<input name = 'total' title=\"总计划\" class=\"cell\" style=\"border:0;width:45px;background-color:#f9f9f9\" disabled=\"disabled\" onclick=\"javascript:$(this).blur();\" value=";
+		    		var input_disable_total = "<input name = 'total' title=\"总计划\" class=\"cell\" style=\"border:0;width:45px;background-color:#abbac3\" disabled=\"disabled\" onclick=\"javascript:$(this).blur();\" value=";
 		    		var input_disable = "<input title=\"计划已发布\" disabled=\"disabled\" class=\"cell\" style=\"border:0;width:45px;BACKGROUND: none transparent scroll repeat 0% 0%;\" onclick=\"javascript:$(this).select();\" value=";
 		    		var issStr = "";var configsStr = "";
 		    		$.each(response.data,function (index,value) {
@@ -126,18 +126,18 @@ $(document).ready(function () {
 		    			$("<td />").html(index).appendTo(tr);
 		    			$("<td />").html(value.order_config_name).appendTo(tr);
 		    			if(value.order_config_name.substring(0,1)=='D'){
-		    				$("<td />").html(input_disable_total + value.plan_code_1 + ">").appendTo(tr);
-		    				$("<td />").html(input_disable_total + value.plan_code_2 + ">").appendTo(tr);
-		    				$("<td />").html(input_disable_total + value.plan_code_3 + ">").appendTo(tr);
-		    				$("<td />").html(input_disable_total + value.plan_code_4 + ">").appendTo(tr);
-		    				$("<td />").html(input_disable_total + value.plan_code_5 + ">").appendTo(tr);
-		    				$("<td />").html(input_disable_total + value.plan_code_6 + ">").appendTo(tr);
-		    				$("<td />").html(input_disable_total + value.plan_code_7 + ">").appendTo(tr);
-		    				$("<td />").html(input_disable_total + value.plan_code_8 + ">").appendTo(tr);
-		    				$("<td />").html(input_disable_total + value.plan_code_9 + ">").appendTo(tr);
-		    				$("<td />").html(input_disable_total + value.plan_code_10 + ">").appendTo(tr);
-		    				$("<td />").html(input_disable_total + value.plan_code_11 + ">").appendTo(tr);
-		    				$("<td />").html(input_disable_total + value.plan_code_12 + ">").appendTo(tr);
+		    				$("<td style='background-color:#abbac3'/>").html(input_disable_total + value.plan_code_1 + ">").appendTo(tr);
+		    				$("<td style='background-color:#abbac3' />").html(input_disable_total + value.plan_code_2 + ">").appendTo(tr);
+		    				$("<td style='background-color:#abbac3' />").html(input_disable_total + value.plan_code_3 + ">").appendTo(tr);
+		    				$("<td style='background-color:#abbac3' />").html(input_disable_total + value.plan_code_4 + ">").appendTo(tr);
+		    				$("<td style='background-color:#abbac3' />").html(input_disable_total + value.plan_code_5 + ">").appendTo(tr);
+		    				$("<td style='background-color:#abbac3' />").html(input_disable_total + value.plan_code_6 + ">").appendTo(tr);
+		    				$("<td style='background-color:#abbac3' />").html(input_disable_total + value.plan_code_7 + ">").appendTo(tr);
+		    				$("<td style='background-color:#abbac3' />").html(input_disable_total + value.plan_code_8 + ">").appendTo(tr);
+		    				$("<td style='background-color:#abbac3' />").html(input_disable_total + value.plan_code_9 + ">").appendTo(tr);
+		    				$("<td style='background-color:#abbac3' />").html(input_disable_total + value.plan_code_10 + ">").appendTo(tr);
+		    				$("<td style='background-color:#abbac3' />").html(input_disable_total + value.plan_code_11 + ">").appendTo(tr);
+		    				$("<td style='background-color:#abbac3' />").html(input_disable_total + value.plan_code_12 + ">").appendTo(tr);
 		    			}else{
 		    				$("<td />").html((value.plan_code_issed_1_done==0)?"<input id='"+ value.order_config_id + '_1' +"' class=\"cell\" style=\"border:0;width:45px;BACKGROUND: none transparent scroll repeat 0% 0%;\" onclick=\"javascript:$(this).select();\" value=" + value.plan_code_1 + ">":input_disable + value.plan_code_issed_1 + ">").appendTo(tr);
 		    				$("<td />").html((value.plan_code_issed_2_done==0)?"<input id='"+ value.order_config_id + '_2' +"' class=\"cell\" style=\"border:0;width:45px;BACKGROUND: none transparent scroll repeat 0% 0%;\" onclick=\"javascript:$(this).select();\" value=" + value.plan_code_2 + ">":input_disable + value.plan_code_issed_2 + ">").appendTo(tr);

@@ -126,7 +126,7 @@ $(document).ready(function () {
 		            success: function(response){
 		                resetPage();
 		                if(response.success){ 
-		                	fadeMessageAlert(null,response.message,'gritter-info');
+		                	fadeMessageAlert(null,response.message,'gritter-success');
 		                }
 		                else{
 		                	fadeMessageAlert(null,response.message,'gritter-error');

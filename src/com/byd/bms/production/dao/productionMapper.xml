@@ -142,5 +142,50 @@
 		</foreach>
 	</insert>
 	
+	<select id="queryBusInfoList" parameterType="Map" resultType="Map">
+		SELECT b.*,CONCAT(o.order_name,t.bus_type_code,o.order_qty,'台') AS order_desc,f.factory_name
+		FROM BMS_PLAN_BUS b
+		LEFT JOIN BMS_OR_ORDER o on b.order_id=o.id
+		LEFT JOIN BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id
+		LEFT JOIN BMS_BASE_FACTORY f on b.factory_id=f.id
+		WHERE 1=1
+		<if test="order_id !=null and order_id !=''">
+			and b.order_id=#{order_id}
+		</if>
+		<if test="factory_id !=null and factory_id !=''">
+			and b.factory_id=#{factory_id}
+		</if>
+		<if test="bus_number !=null and bus_number !=''">
+			and b.bus_number like concat('%',#{bus_number},'%')
+		</if>
+		<if test="bus_type !=null and bus_type !=''">
+			and t.internal_name =#{bus_type}
+		</if>
+		<if test="start !=null">
+			LIMIT #{start} ,#{length} 
+		</if>		
+	</select>
+	
+	<select id="queryBusInfoCount" parameterType="Map" resultType="int">
+		SELECT count(b.id)
+		FROM BMS_PLAN_BUS b
+		LEFT JOIN BMS_OR_ORDER o on b.order_id=o.id
+		LEFT JOIN BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id
+		LEFT JOIN BMS_BASE_FACTORY f on b.factory_id=f.id
+		WHERE 1=1
+		<if test="order_id !=null and order_id !=''">
+			and b.order_id=#{order_id}
+		</if>
+		<if test="factory_id !=null and factory_id !=''">
+			and b.factory_id=#{factory_id}
+		</if>
+		<if test="bus_number !=null and bus_number !=''">
+			and b.bus_number like concat('%',#{bus_number},'%')
+		</if>
+		<if test="bus_type !=null and bus_type !=''">
+			and t.internal_name =#{bus_type}
+		</if>
+	</select>
+	
 	
 </mapper>

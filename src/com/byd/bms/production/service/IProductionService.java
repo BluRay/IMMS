@@ -24,4 +24,6 @@ public interface IProductionService {
 
 	@Transactional
 	public void createProductionException(List<ProductionException> exceptionList,ModelMap model);
+	
+	public Map<String, Object> getBusInfoList(Map<String, Object> condMap);
 }

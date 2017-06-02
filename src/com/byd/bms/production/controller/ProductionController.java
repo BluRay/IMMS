@@ -7,8 +7,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,6 +18,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
 import com.byd.bms.production.model.ProductionException;
 import com.byd.bms.production.service.IProductionService;
 import com.byd.bms.util.controller.BaseController;
@@ -284,4 +287,40 @@ public class ProductionController extends BaseController {
 		productionService.createProductionException(exceptionList,model);
 		return model;
 	}
+	
+	/**
+	 * 车辆信息维护页面
+	 * @return
+	 */
+	@RequestMapping("/busInfoMtn")
+	public ModelAndView busInfoMtn(){
+		mv.setViewName("production/busInfoMtn");
+		return mv;
+	}
+	
+	/**
+	 * 获取车辆信息列表
+	 * @return
+	 */
+	@RequestMapping("/getBusInfoList")
+	@ResponseBody
+	public ModelMap getBusInfoList(){
+		model.clear();
+		int draw=Integer.parseInt(request.getParameter("draw"));//jquerydatatables 
+		int start=Integer.parseInt(request.getParameter("start"));//分页数据起始数
+		int length=Integer.parseInt(request.getParameter("length"));//每一页数据条数
+		
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("order_id", request.getParameter("order_id"));
+		condMap.put("factory_id", request.getParameter("factory_id"));
+		condMap.put("bus_type", request.getParameter("bus_type"));
+		condMap.put("bus_number", request.getParameter("bus_number"));
+		condMap.put("draw", draw);
+		condMap.put("start", start);
+		condMap.put("length", length);
+		
+		model.addAllAttributes(productionService.getBusInfoList(condMap));
+		return model;
+	}
+	
 }

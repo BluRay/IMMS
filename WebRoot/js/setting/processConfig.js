@@ -719,6 +719,7 @@ function ajaxEdit(){
 	if(flag){
 		$.ajax({
 			url : "editProcessConfig",
+			type:"post",
 			dataType : "json",
 			data : {
 					"process_list":JSON.stringify(process_list)
@@ -740,6 +741,7 @@ function ajaxEdit(){
 function deleteProcessConfig(row){
 	if(confirm("确认删除该工序配置？")){
 		$.ajax({
+			type:"post",
 			url : "deleteProcessConfig",
 			dataType : "json",
 			data : {
