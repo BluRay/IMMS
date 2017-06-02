@@ -327,6 +327,21 @@ public class TechServiceImpl implements ITechService {
 		}
 		return 0;
 	}
+
+	@Override
+	public List<Map<String, Object>> queryTechBusNum_All(Map<String, Object> conditionMap) {
+		return techDao.queryTechBusNum_All(conditionMap);
+	}
+
+	@Override
+	public List<Map<String, Object>> queryTechBusNum_Pre(Map<String, Object> conditionMap) {
+		return techDao.queryTechBusNum_Pre(conditionMap);
+	}
+
+	@Override
+	public List<Map<String, Object>> queryTechBusNum_After(Map<String, Object> conditionMap) {
+		return techDao.queryTechBusNum_After(conditionMap);
+	}
 	
 	
 	

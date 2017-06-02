@@ -55,4 +55,9 @@ public interface ITechService {
 	public int editFollowingUp(String curTime,String edit_user,String ids,String task_detail_id,String update_status,String workshop);
 
 	public int editFollowingUp1(String curTime,String edit_user,String tech_task_id,String factory,String workshop,String follow_num,String order_no,String task_detail_id,String update_status);
+	
+	public List<Map<String,Object>> queryTechBusNum_All(Map<String, Object> conditionMap);
+	public List<Map<String,Object>> queryTechBusNum_Pre(Map<String, Object> conditionMap);
+	public List<Map<String,Object>> queryTechBusNum_After(Map<String, Object> conditionMap);
+	
 }

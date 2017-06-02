@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -342,6 +343,38 @@ public class TechController extends BaseController{
 		conditionMap.put("tech_task_id", request.getParameter("tech_task_id"));
 		List<Map<String, Object>> list = techService.queryChangedMaterialList(conditionMap);
 		initModel(true,"查询成功！",list);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping("/getTechBusNum")
+	@ResponseBody
+	public ModelMap getTechBusNum(){
+		String conditions = request.getParameter("conditions");
+		JSONObject jo=JSONObject.fromObject(conditions);
+		Map<String,Object> conditionMap=new HashMap<String,Object>();
+		for(Iterator it=jo.keys();it.hasNext();){
+			String key=(String) it.next();
+			conditionMap.put(key, jo.get(key));
+		}
+		List<String> node_list=new ArrayList<String>();
+		String nodes=(String) conditionMap.get("node_list");
+		node_list=Arrays.asList(nodes.split(","));
+		conditionMap.put("node_list", node_list);
+		List<Map<String,Object>> data_list=null;
+		if(conditionMap.containsKey("switch_mode")){
+			if("全部切换".equals(conditionMap.get("switch_mode"))){
+				data_list=techService.queryTechBusNum_All(conditionMap);
+			}
+			if("节点前切换".equals(conditionMap.get("switch_mode"))){
+				data_list=techService.queryTechBusNum_Pre(conditionMap);
+			}
+			if("节点后切换".equals(conditionMap.get("switch_mode"))){
+				data_list=techService.queryTechBusNum_After(conditionMap);
+			}
+		}
+		initModel(true,"查询成功！",data_list);
 		model = mv.getModelMap();
 		return model;
 	}

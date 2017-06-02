@@ -30,6 +30,7 @@ public interface IPlanDao {
 	public List<Map<String,String>> getPlanIssed(Map<String,Object> queryMap);
 	public int insertMasterPlan(PlanMasterPlan masterPlan);
 	public int updatePlanMasterInfo(PlanMasterPlan masterPlan);
+	public List<Map<String,String>> checkProductionPlan(Map<String,Object> queryMap);
 	public int insertOperateChangeLog(BmsBaseOperateChangeLog changLog);
 	public List<Map<String,String>> checkPlanIssuanceList(Map<String,Object> queryMap);
 	public List<PlanIssuance> getPlanIssuanceList(Map<String,Object> queryMap);

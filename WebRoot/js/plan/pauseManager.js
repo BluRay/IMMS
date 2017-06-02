@@ -73,7 +73,12 @@ $(document).ready(function () {
 			return false;
 		}
 		var pauseTime=getPauseMin($("#new_pause_date_start").val(),$("#new_pause_date_end").val(),'H');
-		console.log('---->pauseTime = ' + pauseTime);
+		//console.log('---->pauseTime = ' + pauseTime);
+		if(pauseTime < 0){
+			alert("输入的停线结束时间不能小于开始时间！");
+			return false;
+		}
+		
 		if(pauseTime<parseFloat($("#new_ppause_time").val())){
 			alert("输入的停线时长不能超出预计停线时长！");
 			return false;
@@ -347,6 +352,11 @@ function editPause(pause_id){
 }
 
 function btnEditPauseConfirm(){
+	var pauseTime=getPauseMin($("#edit_pause_date_start").val(),$("#edit_pause_date_end").val(),'H');
+	if(pauseTime < 0){
+		alert("输入的停线结束时间不能小于开始时间！");
+		return false;
+	}
 	$.ajax({
 		url : "editPauseInfo",
 		dataType : "json",

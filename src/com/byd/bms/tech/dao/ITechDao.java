@@ -53,4 +53,7 @@ public interface ITechDao {
 	public int updateWorkshopStatus2(List<Map<String, Object>> conditionList);
 	public List<Map<String,Object>> queryFollowingUpDetailList1(Map<String,Object> conditionMap);
 	public int addFollowingUp1(Map<String, Object> conditionMap);
+	public List<Map<String,Object>> queryTechBusNum_All(Map<String, Object> conditionMap);
+	public List<Map<String,Object>> queryTechBusNum_Pre(Map<String, Object> conditionMap);
+	public List<Map<String,Object>> queryTechBusNum_After(Map<String, Object> conditionMap);
 }

@@ -141,31 +141,45 @@ public class PlanController extends BaseController{
 			//数据校验/
 			int lineCount = excelModel.getData().size();
 			//上传的文件行数验证
-			if(((lineCount)%12) != 0){
-				initModel(false,"导入文件的行数有误！",null);
+			//if(((lineCount)%12) != 0){
+			if(lineCount!= 12){
+				initModel(false,"导入文件的行数有误！一次只能导入一个月的计划！",null);
 				model = mv.getModelMap();
 				return model;
 			}
 			for(int i=0;i<lineCount;i++){
 				String plan_no = "";		//订单编号 同一个文件只能导入一个订单
 				String factory_name = "";
-				//String plan_date = "";
+				String plan_date = "";
 				if (i==0){
 					plan_no = excelModel.getData().get(i)[0].toString().trim();
 					factory_name = excelModel.getData().get(i)[1].toString().trim();
-					//plan_date = excelModel.getData().get(i)[2].toString().trim();
+					plan_date = excelModel.getData().get(i)[3].toString().trim();
 				}
 				//判断上传计划的工厂是否属于这些订单
 				Map<String,Object> importPlanMap=new HashMap<String,Object>();
 				importPlanMap.put("order_no", plan_no);
 				importPlanMap.put("factory_name", factory_name);
-				//TODO
-				/**
-				String factory_order_id = planDao.checkImportPlanFactory(importPlanMap);
+				String factory_order_id = planService.checkImportPlanFactory(importPlanMap);
 				if (factory_order_id == null){
-					out.print(plan_no + " 订单没有 "+factory_name+"的计划，不能上传！<a href=\"javascript:history.back();\">返回</a>");
-					return null;
-				}**/
+					//out.print(plan_no + " 订单没有 "+factory_name+"的计划，不能上传！<a href=\"javascript:history.back();\">返回</a>");
+					initModel(false,plan_no + "订单没有 "+factory_name+"的计划，不能上传！",null);
+					model = mv.getModelMap();
+					return model;
+				}
+				//判断plan_no在plan_date月份内是否有发布，发布后不能重复导入
+				Map<String,Object> conditionMap=new HashMap<String,Object>();
+				conditionMap.put("order_no", plan_no);
+				conditionMap.put("factory_name", factory_name);
+				conditionMap.put("plan_date", plan_date);
+				List<Map<String,String>> datalist = planService.checkProductionPlan(conditionMap);
+				
+				if(datalist.size()>0){
+					//out.print(plan_no + " 订单已有发布数据,不能重复导入！<a href=\"javascript:history.back();\">返回</a>");
+					initModel(false,plan_no + "订单已有发布数据,不能重复导入！",null);
+					model = mv.getModelMap();
+					return model;
+				}
 				
 				String node = excelModel.getData().get(i)[2].toString().trim();
 				int lineCountSwitch = i % 12;
@@ -735,9 +749,9 @@ public class PlanController extends BaseController{
 		condMap.put("end_time2", resume_date_end);
 		condMap.put("pause_id", pause_id);
 		Map<String,Object> list = planService.getPauseList(condMap);
-		//initModel(true,"SUCCESS",list);
+		//initModel(true,"SUCCESS",list);	
 		mv.clear();
-		model.addAllAttributes(list);
+		mv.getModelMap().addAllAttributes(list);
 		model = mv.getModelMap();
 		return model;
 	}

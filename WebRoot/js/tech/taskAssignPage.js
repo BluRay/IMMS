@@ -31,6 +31,67 @@ function ajaxQuery(){
 	$table.bootstrapTable('refresh', {url: 'taskAssignPage/getTaskList'});
 }
 
+$(document).on("click","input[name='new_tecn_flag']",function(e){
+//$("input[name='new_tecn_flag']").live("click",function(e){
+	var tb=$(e.target).parent("div").next("table");
+	var tr_body=$(tb).find("tr").eq(1);
+	if($(this).prop("checked")){
+		//alert("选中:"+$(this).data("tech_detail"));
+		var order_no=$(e.target).parent("div").parent("div").parent("div").find(".assess_order_no").val();
+		var factory=$(e.target).parent("div").find("span").html();
+		var tech_date=$("#assessModal").data("tech_date");
+		var switch_mode=$("input[name='switch_mode']:checked").val();
+		var switch_node=$("#switch_node").val()||"";
+		var node_list="";
+		var node_index=switch_node_arr.indexOf(switch_node);
+		if(switch_mode=='节点前切换'){
+			node_list=switch_node_arr.substring(0,node_index-1)
+		}
+		if(switch_mode=='节点后切换'){				
+			node_list=switch_node_arr.substring(node_index,switch_node_arr.length)
+		}
+		var datalist=getTechBusNum(order_no,factory,tech_date,switch_mode,switch_node,node_list);
+		//alert($(tr_body).html());
+		//var tech_info=JSON.parse(datalist.data[0].tech_bus_info);
+		var tech_info;
+		$.each(datalist, function(index, value) {
+			//tech_info = value.tech_bus_info;
+			tech_info = JSON.parse(value.tech_bus_info);
+		});
+		
+		$(tr_body).html("<td>"+((tech_info['自制件']==undefined)?"":tech_info['自制件'])+"</td><td>"+((tech_info['部件']==undefined)?"":tech_info['部件'])+"</td><td>"+
+				((tech_info['焊装']==undefined)?"":tech_info['焊装'])+"</td><td>"+((tech_info['玻璃钢']==undefined)?"":tech_info['玻璃钢'])+"</td><td>"+((tech_info['涂装']==undefined)?"":tech_info['涂装'])+"</td><td>"+
+				((tech_info['底盘']==undefined)?"":tech_info['底盘'])+"</td><td>"+((tech_info['总装']==undefined)?"":tech_info['总装'])+"</td><td>"+((tech_info['检测线']==undefined)?"":tech_info['检测线'])+"</td>");
+
+	}else{
+		$(tr_body).html("<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>");
+	}
+});
+
+function getTechBusNum(order_no,factory,tech_date,switch_mode,switch_node,node_list){
+	var conditions={};
+	conditions.order_no=order_no;
+	conditions.factory_list=factory;
+	conditions.tech_date=tech_date;
+	conditions.switch_mode=switch_mode;
+	conditions.switch_node=switch_node||"";
+	conditions.node_list=node_list||"";
+	var data_list=[];
+	$.ajax({
+		url:"getTechBusNum",
+		dataType:"json",
+		type:"post",
+		async:false,
+		data:{
+			"conditions":JSON.stringify(conditions)
+			},
+		success:function(response){
+			data_list=response.data;
+			}
+		});
+		return data_list;
+}
+
 function ajaxEdit(task_id,task_detail_id,task_content,tech_order_no,switch_mode,switch_node,tech_date){
 	
 	$("#new_accordion").html("");// 清空之前的div
@@ -60,7 +121,7 @@ function ajaxEdit(task_id,task_detail_id,task_content,tech_order_no,switch_mode,
 		var prod_factory_id=tech_detail.prod_factory_id;
 		var prod_factory=tech_detail.prod_factory;
 		addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id,prod_factory);
-		console.log(tech_detail);
+		console.log("follow_detail = " + follow_detail);
 		$.each(follow_detail.split(";"),function(i,follow){
 			//alert(follow.split("||")[1]);
 			if(follow.split("||")[1]>0){

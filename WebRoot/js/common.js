@@ -94,19 +94,25 @@ function getSelects_empty(data, selectval, element,defaultVal,valName) {
 /*
  * 订单编号模糊查询 submitId： 用于提交的元素的id
  */
-function getOrderNoSelect(elementId, submitId, fn_backcall, bustype,factory,areaflg) {
+function getOrderNoSelect(elementId, submitId, fn_backcall, bustype,factoryElement,areaflg) {
 	areaflg=areaflg||"";
+	
 	if (!bustype) {
 		bustype = "";
 	}
-	if(!factory){
-		factory="";
-	}
+
 	var orderlist;
 	//alert($(elementId).next().html())
-	//alert(factory);
 	$(elementId).typeahead({		
 		source : function(input, process) {
+			var factory="";
+			if(factoryElement){
+				if($(factoryElement).find("option:selected").text()=="全部"||$(factoryElement).find("option:selected").text()=="请选择"){
+					factory="";
+				}else
+					factory=$(factoryElement).find("option:selected").text();			
+			}
+			//alert(factory);
 			var data={
 					"busType":bustype,
 					"orderNo":input,
@@ -147,7 +153,7 @@ function getOrderNoSelect(elementId, submitId, fn_backcall, bustype,factory,area
 			if(areaflg!="copy"){//复制粘贴，非选择默认列表第一个项
 				return true;
 			}
-			// alert(this.query);
+			 //alert(this.query);
 			$.each(orderlist, function(index, value) {
 				if (value.orderNo == item) {
 					selectId = value.id;

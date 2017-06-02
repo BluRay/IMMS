@@ -64,8 +64,7 @@ public class PlanServiceImpl implements IPlanService {
 	
 	@Override
 	public String checkImportPlanFactory(Map<String, Object> queryMap) {
-		// TODO Auto-generated method stub
-		return null;
+		return planDao.checkImportPlanFactory(queryMap);
 	}
 
 	@Override
@@ -708,6 +707,11 @@ public class PlanServiceImpl implements IPlanService {
 	@Override
 	public List<Map<String, String>> getBusTransferHisList(Map<String, Object> queryMap) {
 		return planDao.getBusTransferHisList(queryMap);
+	}
+
+	@Override
+	public List<Map<String, String>> checkProductionPlan(Map<String, Object> queryMap) {
+		return planDao.checkProductionPlan(queryMap);
 	}
 
 }
