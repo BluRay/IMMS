@@ -31,6 +31,7 @@ import com.byd.bms.util.ExcelTool;
 import com.byd.bms.util.controller.BaseController;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 /**
  * 工程变更Controller
  * @author thw 2017-04-21
@@ -733,6 +734,53 @@ public class TechController extends BaseController{
 		String update_status = request.getParameter("update_status");
 		int result = techService.editFollowingUp1(curTime, edit_user, tech_task_id, factory, workshop, follow_num, order_no, task_detail_id, update_status);
 		initModel(true,String.valueOf(result),null);
+		return model;
+	}
+	
+	@RequestMapping("/searchTaskList")
+	@ResponseBody
+	public ModelMap searchTaskList(){
+		String conditions = request.getParameter("conditions");		
+		Map<String, Object> list = techService.searchTaskList(conditions);	
+		mv.clear();
+		mv.getModelMap().addAllAttributes(list);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/getTaskBusNumber")
+	@ResponseBody
+	public ModelMap getTaskBusNumber(){
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		// 获取参数
+		String order_no = request.getParameter("order_no");
+		map.put("order_no", order_no);
+		int tech_task_id = Integer.parseInt(request.getParameter("tech_task_id"));
+		map.put("tech_task_id", tech_task_id);
+		String factory=request.getParameter("factory");
+		map.put("factory", factory);
+		String workshop=request.getParameter("workshop");
+		map.put("workshop", workshop);
+		String bus_num_start = request.getParameter("bus_num_start");
+		if (bus_num_start != null && bus_num_start.trim() != "") {
+			bus_num_start = StringUtils.leftPad(bus_num_start, 5, "0");
+			map.put("bus_num_start", bus_num_start);
+		}
+		String bus_num_end = request.getParameter("bus_num_end");
+		if (bus_num_end != null && bus_num_end.trim() != "") {
+			bus_num_end = StringUtils.leftPad(bus_num_end, 5, "0");
+			map.put("bus_num_end", bus_num_end);
+		}
+		if (request.getParameter("task_detail_status") != null
+				&& request.getParameter("task_detail_status").trim() != "") {
+			map.put("task_detail_status",
+					request.getParameter("task_detail_status"));
+		}
+		List<Map<String,Object>> datalist = techService.queryTaskBusNumber(map);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(datalist);
+		model = mv.getModelMap();
 		return model;
 	}
 	
