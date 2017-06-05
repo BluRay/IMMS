@@ -26,4 +26,6 @@ public interface IProductionService {
 	public void createProductionException(List<ProductionException> exceptionList,ModelMap model);
 	
 	public Map<String, Object> getBusInfoList(Map<String, Object> condMap);
+
+	public void updateBusInfo(Map<String, Object> condMap, ModelMap model);
 }

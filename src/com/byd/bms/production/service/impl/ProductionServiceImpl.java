@@ -142,6 +142,19 @@ public class ProductionServiceImpl implements IProductionService {
 		result.put("data", datalist);
 		return result;
 	}
+
+	@Override
+	public void updateBusInfo(Map<String, Object> condMap, ModelMap model) {
+		try{
+			productionDao.updateBusInfo(condMap);
+			model.put("success", true);
+			model.put("message", "保存成功！");
+		}catch(Exception e){
+			model.put("success", false);
+			model.put("message", "保存失败！");
+			throw new RuntimeException(e.getMessage());
+		}			
+	}
 	
 	
 

@@ -39,7 +39,7 @@ $(document).on("click","input[name='new_tecn_flag']",function(e){
 		//alert("选中:"+$(this).data("tech_detail"));
 		var order_no=$(e.target).parent("div").parent("div").parent("div").find(".assess_order_no").val();
 		var factory=$(e.target).parent("div").find("span").html();
-		var tech_date=$("#assessModal").data("tech_date");
+		var tech_date=$("#dialog-assessModal").data("tech_date");
 		var switch_mode=$("input[name='switch_mode']:checked").val();
 		var switch_node=$("#switch_node").val()||"";
 		var node_list="";
@@ -77,6 +77,7 @@ function getTechBusNum(order_no,factory,tech_date,switch_mode,switch_node,node_l
 	conditions.switch_node=switch_node||"";
 	conditions.node_list=node_list||"";
 	var data_list=[];
+	console.log("tech_date = " + tech_date);
 	$.ajax({
 		url:"getTechBusNum",
 		dataType:"json",

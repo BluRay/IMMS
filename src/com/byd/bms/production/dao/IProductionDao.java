@@ -39,4 +39,6 @@ public interface IProductionDao {
 	List<Map<String, Object>> queryBusInfoList(Map<String, Object> condMap);
 	
 	int queryBusInfoCount(Map<String, Object> condMap);
+
+	int updateBusInfo(Map<String, Object> condMap);
 }

@@ -4,13 +4,17 @@ $(document).ready(function(){
 	//新增
 	$("#btnAdd").click(function(e){
 		$("#create_form")[0].reset();
-		
+		$("#factory").prop("disabled",false);
+		$("#order").prop("disabled",false);
+		$("#specify_order_lable").show();
 		getFactorySelect("production/busInfoMtn","","#factory","请选择","id");
+		getOrderNoSelect("#order","#order_id",null,null,"#factory","copy");
+		
 		var dialog = $( "#dialog-config" ).removeClass('hide').dialog({
 			width:750,
 			height:500,
 			modal: true,
-			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i> 新增车辆信息</h4></div>",
+			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i> 批量编辑</h4></div>",
 			title_html: true,
 			buttons: [ 
 				{
@@ -41,7 +45,7 @@ $(document).ready(function(){
 function initPage(){
 	getFactorySelect("production/busInfoMtn","","#search_factory","全部","id");
 	getBusTypeSelect("","#search_bus_type","全部","id");
-	getOrderNoSelect("#search_order_no","#orderId");
+	getOrderNoSelect("#search_order_no","",null,null,"#search_factory");
 }
 
 function ajaxQuery(){
@@ -58,7 +62,7 @@ function ajaxQuery(){
 		destroy: true,
 		sScrollY: $(window).height()-250,
 		scrollX: true,
-		pageLength: 10,
+		pageLength: 20,
 		pagingType:"full_numbers",
 		lengthChange:false,
 		orderMulti:false,
@@ -77,10 +81,10 @@ function ajaxQuery(){
 		ajax:function (data, callback, settings) {
 			var param ={
 					"draw":1,
-					"orderNo":$("#search_order_no").val(),
-					"orderName":$("#search_order_name").val(),
-					"actYear":$("#search_productive_year").val(),
-					"factory":/*$("#search_factory").val(),*/getAllFromOptions("#search_factory","val"),
+					"order_no":$("#search_order_no").val(),
+					"bus_type":$("#search_bus_type :selected").text(),
+					"bus_number":$("#search_bus_number").val(),
+					"factory_id":getAllFromOptions("#search_factory","val"),
 					"orderColumn":"order_no"
 				};
             param.length = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
@@ -134,4 +138,163 @@ function ajaxQuery(){
 		            }
 		          ]
 	});
+}
+
+function specifyBus(){
+	$("#bus_list").val("");
+	
+	var dialog = $( "#dialog-config-bus" ).removeClass('hide').dialog({
+		width:400,
+		height:250,
+		modal: true,
+		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i> 指定车号</h4></div>",
+		title_html: true,
+		buttons: [ 
+			{
+				text: "取消",
+				"class" : "btn btn-minier",
+				click: function() {
+					$( this ).dialog( "close" ); 
+				} 
+			},
+			{
+				text: "确定",
+				"class" : "btn btn-primary btn-minier",
+				click: function() {
+					//alert($("#bus_list").val().replace(/\n/g,','))
+					$( this ).dialog( "close" ); 
+				} 
+			}
+		]
+	});
+}
+
+function showEditPage(row){
+	$("#create_form")[0].reset();
+	getFactorySelect("",row.factory_id,"#factory","","id");
+	$("#factory").prop("disabled",true);
+	$("#order").val(row.order_no).prop("disabled",true);
+	$("#specify_order_lable").hide();
+	$("#bus_color").val(row.bus_color);
+	$("#bus_seats").val(row.bus_seats);
+	$("#passenger_num").val(row.passenger_num);
+	$("#tire_type").val(row.tire_type);
+	$("#battery_capacity").val(row.battery_capacity);
+	$("#rated_voltage").val(row.rated_voltage);
+	$("#spring_num").val(row.spring_num);
+	$("#dp_production_date").val(row.dp_production_date);
+	$("#dp_zzd").val(row.dp_zzd);
+	$("#zc_production_date").val(row.zc_production_date);
+	$("#zc_zzd").val(row.zc_zzd);
+	$("#hgz_note").val(row.hgz_note);
+	$("#ccczs_date").val(row.ccczs_date);
+	$("#dpgg_date").val(row.dpgg_date);
+	$("#zcgg_date").val(row.zcgg_date);
+	
+	var dialog = $( "#dialog-config" ).removeClass('hide').dialog({
+		width:750,
+		height:500,
+		modal: true,
+		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i> 修改—"+row.bus_number+"</h4></div>",
+		title_html: true,
+		buttons: [ 
+			{
+				text: "取消",
+				"class" : "btn btn-minier",
+				click: function() {
+					$( this ).dialog( "close" ); 
+				} 
+			},
+			{
+				text: "确定",
+				"class" : "btn btn-primary btn-minier",
+				click: function() {
+					ajaxEdit(row.bus_number); 
+				} 
+			}
+		]
+	});
+}
+/**
+ * 批量编辑
+ */
+function ajaxAdd(){
+	if($("#factory").val()==""){
+		alert("请选择生产工厂！");
+		return false;
+	}
+	if(($("#order_id").val()==undefined||$("#order_id").val()=="")&&$("#bus_list").val()==""){
+		alert("请输入有效订单编号！");
+		return false;
+	}
+	$.ajax({
+		type:"post",
+		url:"updateBusInfo",
+		dataType:"json",
+		data:{
+			factory_id:$("#factory").val(),
+			order_id:$("#order_id").val(),
+			bus_list:$("#bus_list").val().replace(/\n/g,','),
+			bus_color:$("#bus_color").val(),
+			bus_seats:$("#bus_seats").val(),
+			passenger_num:$("#passenger_num").val(),
+			tire_type:$("#tire_type").val(),
+			battery_capacity:$("#battery_capacity").val(),
+			rated_voltage:$("#rated_voltage").val(),
+			spring_num:$("#spring_num").val(),
+			dp_production_date:$("#dp_production_date").val(),
+			dp_zzd:$("#dp_zzd").val(),
+			zc_production_date:$("#zc_production_date").val(),
+			zc_zzd:$("#zc_zzd").val(),
+			hgz_note:$("#hgz_note").val(),
+			ccczs_date:$("#ccczs_date").val(),
+			dpgg_date:$("#dpgg_date").val(),
+			zcgg_date:$("#zcgg_date").val(),
+		},
+		success:function(response){
+			alert(response.message);
+			$("#dialog-config" ).dialog( "close" ); 
+			ajaxQuery();
+		},
+		error:function(response){
+			alert(response.message);
+		}
+	})
+}
+/**
+ * 单车编辑
+ * @param bus_number
+ */
+function ajaxEdit(bus_number){
+	$.ajax({
+		type:"post",
+		url:"updateBusInfo",
+		dataType:"json",
+		data:{
+			bus_number:bus_number,
+			bus_color:$("#bus_color").val(),
+			bus_seats:$("#bus_seats").val(),
+			passenger_num:$("#passenger_num").val(),
+			tire_type:$("#tire_type").val(),
+			battery_capacity:$("#battery_capacity").val(),
+			rated_voltage:$("#rated_voltage").val(),
+			spring_num:$("#spring_num").val(),
+			dp_production_date:$("#dp_production_date").val(),
+			dp_zzd:$("#dp_zzd").val(),
+			zc_production_date:$("#zc_production_date").val(),
+			zc_zzd:$("#zc_zzd").val(),
+			hgz_note:$("#hgz_note").val(),
+			ccczs_date:$("#ccczs_date").val(),
+			dpgg_date:$("#dpgg_date").val(),
+			zcgg_date:$("#zcgg_date").val(),
+		},
+		success:function(response){
+			alert(response.message);
+			$("#dialog-config" ).dialog( "close" ); 
+			ajaxQuery();
+		},
+		error:function(response){
+			alert(response.message);
+		}
+	})
 }

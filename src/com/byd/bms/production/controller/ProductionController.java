@@ -311,7 +311,7 @@ public class ProductionController extends BaseController {
 		int length=Integer.parseInt(request.getParameter("length"));//每一页数据条数
 		
 		Map<String,Object> condMap=new HashMap<String,Object>();
-		condMap.put("order_id", request.getParameter("order_id"));
+		condMap.put("order_no", request.getParameter("order_no"));
 		condMap.put("factory_id", request.getParameter("factory_id"));
 		condMap.put("bus_type", request.getParameter("bus_type"));
 		condMap.put("bus_number", request.getParameter("bus_number"));
@@ -321,6 +321,41 @@ public class ProductionController extends BaseController {
 		
 		model.addAllAttributes(productionService.getBusInfoList(condMap));
 		return model;
+	}
+	
+	/**
+	 * 车辆信息维护
+	 * @return
+	 */
+	@RequestMapping("/updateBusInfo")
+	@ResponseBody
+	public ModelMap updateBusInfo(){
+		model.clear();
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("factory_id",request.getParameter("factory_id")) ;
+		condMap.put("order_id",request.getParameter("order_id")) ;
+		condMap.put("bus_list",request.getParameter("bus_list")) ;
+		condMap.put("bus_number",request.getParameter("bus_number")) ;
+		condMap.put("bus_color",request.getParameter("bus_color")) ;
+		condMap.put("bus_seats",request.getParameter("bus_seats")) ;
+		condMap.put("passenger_num",request.getParameter("passenger_num")) ;
+		condMap.put("tire_type",request.getParameter("tire_type")) ;
+		condMap.put("battery_capacity",request.getParameter("battery_capacity")) ;
+		condMap.put("rated_voltage",request.getParameter("rated_voltage")) ;
+		condMap.put("spring_num",request.getParameter("spring_num")) ;
+		condMap.put("dp_production_date",request.getParameter("dp_production_date")) ;
+		condMap.put("dp_zzd",request.getParameter("dp_zzd")) ;
+		condMap.put("zc_production_date",request.getParameter("zc_production_date")) ;
+		condMap.put("zc_zzd",request.getParameter("zc_zzd")) ;
+		condMap.put("hgz_note",request.getParameter("hgz_note")) ;
+		condMap.put("ccczs_date",request.getParameter("ccczs_date")) ;
+		condMap.put("dpgg_date",request.getParameter("dpgg_date")) ;
+		condMap.put("zcgg_date",request.getParameter("zcgg_date")) ;
+		
+		productionService.updateBusInfo(condMap,model);
+		
+		return model;
+		
 	}
 	
 }
