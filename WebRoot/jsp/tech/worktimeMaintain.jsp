@@ -41,7 +41,7 @@
 						<table>
 							<tr>
 								<td>工厂：</td>
-								<td><select id="search_factory" class="form-control" style="width:120px"></select></td>
+								<td><select id="search_factory" class="input-small" style="width:120px"></select></td>
 								<td>&nbsp;订单：</td>
 								<td><input id="search_order_no" placeholder="请输入订单编号..." style="width:110px" type="text"></td>
 								<td>&nbsp;技改单编号：</td>
@@ -52,7 +52,7 @@
 							<tr>
 								<td>&nbsp;状态：</td>
 								<td>
-									<select class="form-control" id="status" style="width:120px">
+									<select class="input-small" id="status" style="width:120px">
 										<option value="全部">全部</option>
 										<option value="已创建" selected>已创建</option>
 										<option value="已分配">已分配</option>

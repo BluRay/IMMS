@@ -46,7 +46,7 @@
 						<table>
 						<tr>
 							<td>生产工厂：</td>
-							<td><select id="search_factory" class="form-control" style="width:150px"></select></td>
+							<td><select id="search_factory" class="input-small" style="width:150px"></select></td>
 							<td>&nbsp;订单编号：</td>
 							<td><input style="height: 30px;" type="text" class="input-medium revise" placeholder="订单编号..." id="search_order_no" /></td>
 							<td></td>

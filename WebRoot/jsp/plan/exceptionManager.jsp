@@ -47,23 +47,23 @@
 						<table>
 							<tr>
 								<td>工厂：</td>
-								<td><select id="search_factory" class="form-control" style="width:100px"></select></td>
+								<td><select id="search_factory" class="input-small" style="width:100px"></select></td>
 								<td>&nbsp;车间：</td>
-								<td><select id="search_workshop" class="form-control" style="width:80px"></select></td>
+								<td><select id="search_workshop" class="input-small" style="width:80px"></select></td>
 								<td>&nbsp;线别：</td>
-								<td><select id="search_line" class="form-control" style="width:60px"><option value='A'>A线</option><option value='B'>B线</option></select></td>
+								<td><select id="search_line" class="input-small" style="width:60px"><option value='A'>A线</option><option value='B'>B线</option></select></td>
 								<td>&nbsp;车号：</td>
 								<td><input id="search_busnumber" placeholder="请输入车号..." style="width:110px" type="text"></td>
 								<td>&nbsp;严重等级：</td>
-								<td><select id="search_severity_level" class="form-control" style="width:120px"></select></td>
+								<td><select id="search_severity_level" class="input-small" style="width:120px"></select></td>
 								<td></td>
 								<td></td>
 							</tr>
 							<tr>
 								<td>&nbsp;措施：</td>
-								<td><select id="search_measures" class="form-control" style="width:100px"></select></td>
+								<td><select id="search_measures" class="input-small" style="width:100px"></select></td>
 								<td>&nbsp;状态：</td>
-								<td><select id="search_status" class="form-control" style="width:80px"></select></td>
+								<td><select id="search_status" class="input-small" style="width:80px"></select></td>
 								<td>异常日期：</td>
 								<td colspan=3><input id="date_start" placeholder="开始时间..." style="width:125px" type="text" onClick="WdatePicker({el:'date_start',dateFmt:'yyyy-MM-dd'});"> - <input id="date_end" placeholder="结束时间..." style="width:125px" type="text" onClick="WdatePicker({el:'date_end',dateFmt:'yyyy-MM-dd'});"></td>
 								<td></td>

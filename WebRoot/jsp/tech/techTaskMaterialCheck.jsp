@@ -51,7 +51,7 @@
 								<td><input id="search_tech_task_content" placeholder="技改任务..." style="width:110px" type="text"></td>
 								<td>&nbsp;状态：</td>
 								<td>
-									<select class="form-control" id="status" style="width:80px">
+									<select class="input-small" id="status" style="width:80px">
 										<option value="全部">全部</option>
 										<option value="已创建" selected>已创建</option>
 										<option value="已分配">已分配</option>

@@ -511,8 +511,10 @@ public class TechController extends BaseController{
 			conditionMap.put(key, jo.get(key));
 		}
 		List<Map<String,Object>> list = techService.queryTechList(conditionMap);
+		Map<String, Object> result = new HashMap<String,Object>();
+		result.put("data", list);
 		mv.clear();
-		mv.getModelMap().addAllAttributes(list);
+		mv.getModelMap().addAllAttributes(result);
 		model = mv.getModelMap();
 		return model;
 	}

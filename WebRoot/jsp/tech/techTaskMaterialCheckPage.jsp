@@ -98,7 +98,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<table id="MaterielInfoTable" class="table table-bordered table-striped" style="text-align: center;margin-left:17px; font-size: 12px;width:96%;max-width:96%">
 						<thead>
 							<tr>
-							<th style="vertical-align:middle"><input type="checkbox" onclick="selectAll()" id="selectAll"></th>
+							<th style="vertical-align:middle"><!-- <input type="checkbox" onclick="selectAll()" id="selectAll"> --></th>
 							<th style="vertical-align:middle">SAP料号</th>
 							<th style="vertical-align:middle">物料描述</th>
 							<th style="vertical-align:middle">物料类型</th>

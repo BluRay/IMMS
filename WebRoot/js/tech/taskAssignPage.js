@@ -266,7 +266,7 @@ function getTechList(task_id){
 		async:false,
 		data:{"conditions":conditions},
 		success:function(response){
-			tech_list=response;
+			tech_list=response.data;
 		}
 	});
 	return tech_list;
