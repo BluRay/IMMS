@@ -62,4 +62,6 @@ public interface ITechService {
 
 	public Map<String,Object> searchTaskList(String conditions);
 	public List<Map<String,Object>> queryTaskBusNumber(Map<String, Object> map);
+	
+	public Map<String,Object> checkTaskReport(Map<String, Object> conditionMap);
 }

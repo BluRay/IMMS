@@ -752,8 +752,6 @@ public class TechController extends BaseController{
 	@ResponseBody
 	public ModelMap getTaskBusNumber(){
 		Map<String, Object> map = new HashMap<String, Object>();
-
-		// 获取参数
 		String order_no = request.getParameter("order_no");
 		map.put("order_no", order_no);
 		int tech_task_id = Integer.parseInt(request.getParameter("tech_task_id"));
@@ -772,14 +770,47 @@ public class TechController extends BaseController{
 			bus_num_end = StringUtils.leftPad(bus_num_end, 5, "0");
 			map.put("bus_num_end", bus_num_end);
 		}
-		if (request.getParameter("task_detail_status") != null
-				&& request.getParameter("task_detail_status").trim() != "") {
+		if (request.getParameter("task_detail_status") != null && request.getParameter("task_detail_status").trim() != "") {
 			map.put("task_detail_status",
-					request.getParameter("task_detail_status"));
+			request.getParameter("task_detail_status"));
 		}
 		List<Map<String,Object>> datalist = techService.queryTaskBusNumber(map);
 		mv.clear();
 		mv.getModelMap().addAllAttributes(datalist);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/checkTaskReport")
+	@ResponseBody
+	public ModelMap checkTaskReport(){
+		String task_content = request.getParameter("task_content");
+		String tech_order_no = request.getParameter("tech_order_no");
+		String order_no = request.getParameter("order_no");
+		String status = request.getParameter("status");
+		String factory = request.getParameter("factory");
+		String workshop = request.getParameter("workshop");
+		String tech_date_start = request.getParameter("tech_date_start");
+		String tech_date_end = request.getParameter("tech_date_end");
+		String tab_index = request.getParameter("tab_index");
+		Map<String, Object> conditionMap = new HashMap<String, Object>();
+		conditionMap.put("task_content", task_content);
+		conditionMap.put("tech_order_no", tech_order_no);
+		conditionMap.put("order_no", order_no);
+		conditionMap.put("status", status);
+		conditionMap.put("factory", factory);
+		conditionMap.put("workshop", workshop);
+		conditionMap.put("tech_date_start", tech_date_start);
+		conditionMap.put("tech_date_end", tech_date_end);		
+		if(request.getParameter("offset")!=null)conditionMap.put("offset", Integer.valueOf(request.getParameter("offset")));
+		if(request.getParameter("limit")!=null)conditionMap.put("pageSize", Integer.valueOf(request.getParameter("limit")));
+		conditionMap.put("sort", request.getParameter("sort"));
+		conditionMap.put("order", request.getParameter("order"));
+		conditionMap.put("tab_index", tab_index);
+		
+		Map<String, Object> result = techService.checkTaskReport(conditionMap);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(result);
 		model = mv.getModelMap();
 		return model;
 	}

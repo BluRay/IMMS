@@ -174,7 +174,7 @@ function ajaxQuery(){
 
     			$("<td style=\"line-height:12px; padding-bottom:0px;padding-left:5px\" />").html((value.d31==0)?input +"'' id='" + value.plan_code_value + "_"+value.plan_month+"31'>":input + value.d31 + " id='" + value.plan_code_value + "_"+value.plan_month+"31'>").appendTo(tr);
     			$("<td style=\"line-height:12px; padding-bottom:0px;padding-left:5px\" />").html(value.sumQty).appendTo(tr);
-    			$("<td style=\"line-height:12px; padding-bottom:0px;padding-left:5px\" />").html(value.sumQty + stock[index%11]).appendTo(tr);
+    			$("<td style=\"line-height:12px; padding-bottom:0px;padding-left:5px\" />").html(value.sumQty + stock[index%12]).appendTo(tr);
     			stock[index]+=value.sumQty;
     			$("#tableData tbody").append(tr);
     		});

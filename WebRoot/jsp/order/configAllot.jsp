@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <meta charset="utf-8" />
-<title>BMS</title>
+<title>配置分配</title>
 <meta name="description" content="Common Buttons &amp; Icons" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />	
@@ -30,8 +30,7 @@
 					<ul class="breadcrumb">
 						<li><i class="ace-icon fa fa-home home-icon"></i><a
 							href="<%=request.getContextPath()%>/index">首页</a></li>
-						<li><a href="#">订单导入</a></li>
-						<li class="active">配置产地分配</li>
+						<li class="active">配置分配</li>
 					</ul>
 					<!-- /.breadcrumb -->
 

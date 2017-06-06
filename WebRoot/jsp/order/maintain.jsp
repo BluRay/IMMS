@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <meta charset="utf-8" />
-<title>BMS 标题</title>
+<title>订单导入</title>
 <meta name="description" content="Common Buttons &amp; Icons" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 <link rel="stylesheet" href="../assets/css/fixedColumns.bootstrap.min.css" />
@@ -27,8 +27,7 @@
 				<ul class="breadcrumb">
 					<li><i class="ace-icon fa fa-home home-icon"></i><a
 						href="<%=request.getContextPath()%>/index">首页</a></li>
-					<li><a href="#">订单导入</a></li>
-					<li class="active">订单产地分配</li>
+					<li class="active">订单导入</li>
 				</ul>
 				<!-- /.breadcrumb -->
 
@@ -101,6 +100,7 @@
 					class="table table-bordered table-striped">
 					<thead>
 						<tr>
+							<th style="text-align: center;">序号</th>
 							<th style="text-align: center;">车号</th>
 							<th style="text-align: center;">生产工厂</th>
 							<th style="text-align: center;">当前工序</th>

@@ -147,10 +147,10 @@ public class PlanController extends BaseController{
 				model = mv.getModelMap();
 				return model;
 			}
+			String plan_no = "";		//订单编号 同一个文件只能导入一个订单
+			String factory_name = "";
+			String plan_date = "";
 			for(int i=0;i<lineCount;i++){
-				String plan_no = "";		//订单编号 同一个文件只能导入一个订单
-				String factory_name = "";
-				String plan_date = "";
 				if (i==0){
 					plan_no = excelModel.getData().get(i)[0].toString().trim();
 					factory_name = excelModel.getData().get(i)[1].toString().trim();

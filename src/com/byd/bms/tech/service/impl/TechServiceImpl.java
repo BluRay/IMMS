@@ -8,17 +8,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import javax.annotation.Resource;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.byd.bms.tech.dao.ITechDao;
 import com.byd.bms.tech.service.ITechService;
-
 
 @Service
 public class TechServiceImpl implements ITechService {
@@ -436,6 +433,24 @@ public class TechServiceImpl implements ITechService {
 	@Override
 	public List<Map<String, Object>> queryTaskBusNumber(Map<String, Object> map) {
 		return techDao.queryTaskBusNumber(map);
+	}
+
+	@Override
+	public Map<String, Object> checkTaskReport(Map<String, Object> conditionMap) {
+		String tab_index = conditionMap.get("tab_index").toString();
+		List<Map<String, String>> dataList = new ArrayList<Map<String, String>>();;
+		int totalCount = 0;
+		if(tab_index.equals("1")){
+			dataList = techDao.queryTechTaskReport(conditionMap);
+			totalCount = techDao.queryTechTaskReportCount(conditionMap);
+		}else{
+			dataList = techDao.queryTechTaskReport2(conditionMap);
+			totalCount = techDao.queryTechTaskReportCount2(conditionMap);
+		}
+		Map<String, Object> result=new HashMap<String,Object>();
+		result.put("rows", dataList);
+		result.put("total", totalCount);
+		return result;
 	}
 	
 	

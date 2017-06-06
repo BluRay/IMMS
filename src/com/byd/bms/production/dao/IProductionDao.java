@@ -41,4 +41,15 @@ public interface IProductionDao {
 	int queryBusInfoCount(Map<String, Object> condMap);
 
 	int updateBusInfo(Map<String, Object> condMap);
+	
+	Map<String,Object> querySupplyTotalCount(Map<String, Object> condMap);
+
+	int saveWorkshopSupply(Map<String, Object> condMap);
+
+	int updateWorkshopSupply(Map<String, Object> condMap);
+
+	List<Map<String, Object>> queryWorkshopSupplyList(
+			Map<String, Object> condMap);
+
+	int queryWorkshopSupplyCount(Map<String, Object> condMap);
 }

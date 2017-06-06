@@ -1,5 +1,6 @@
 package com.byd.bms.production.service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -28,4 +29,11 @@ public interface IProductionService {
 	public Map<String, Object> getBusInfoList(Map<String, Object> condMap);
 
 	public void updateBusInfo(Map<String, Object> condMap, ModelMap model);
+
+	public void getSupplyTotalCount(Map<String, Object> condMap, ModelMap model);
+
+	public void saveUpdateWorkshopSupply(Map<String, Object> condMap,
+			ModelMap model);
+
+	public Map<String, Object> getWorkshopSupplyList(Map<String, Object> condMap);
 }

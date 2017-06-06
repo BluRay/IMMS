@@ -358,4 +358,89 @@ public class ProductionController extends BaseController {
 		
 	}
 	
+	/**
+	 * 车辆信息维护页面
+	 * @return
+	 */
+	@RequestMapping("/workshopSupply")
+	public ModelAndView workshopSupply(){
+		mv.setViewName("production/workshopSupply");
+		return mv;
+	}
+	
+	/**
+	 * 根据工厂、订单、供货车间、接收车间获取供应车付信息
+	 * @return
+	 */
+	@RequestMapping("/getSupplyTotalCount")
+	@ResponseBody
+	public ModelMap getSupplyTotalCount(){
+		model.clear();
+		String factory_id=request.getParameter("factory_id");
+		String order_no=request.getParameter("order_no");
+		String supply_workshop=request.getParameter("supply_workshop");
+		String receive_workshop=request.getParameter("receive_workshop");
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("factory_id", factory_id);
+		condMap.put("order_no", order_no);
+		condMap.put("supply_workshop", supply_workshop);
+		condMap.put("receive_workshop", receive_workshop);
+		
+		productionService.getSupplyTotalCount(condMap,model);
+		return model;
+	}
+	
+	/**
+	 * 根据工厂、订单、供货车间、接收车间获取供应车付信息
+	 * @return
+	 */
+	@RequestMapping("/saveUpdateWorkshopSupply")
+	@ResponseBody
+	public ModelMap saveUpdateWorkshopSupply(){
+		model.clear();
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String userid=String.valueOf(session.getAttribute("user_id"));
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("id", request.getParameter("id"));
+		condMap.put("factory_id", request.getParameter("factory_id"));
+		condMap.put("order_id", request.getParameter("order_id"));
+		condMap.put("supply_workshop", request.getParameter("supply_workshop"));
+		condMap.put("receive_workshop", request.getParameter("receive_workshop"));
+		condMap.put("quantity", request.getParameter("quantity"));
+		condMap.put("supply_date", request.getParameter("supply_date"));
+		condMap.put("editor_id", userid);
+		condMap.put("edit_date", curTime);
+		
+		productionService.saveUpdateWorkshopSupply(condMap,model);
+		return model;
+	}
+	
+	/**
+	 * 查询车间供付记录列表
+	 * @return
+	 */
+	@RequestMapping("/getWorkshopSupplyList")
+	@ResponseBody
+	public ModelMap getWorkshopSupplyList(){
+		model.clear();
+		int draw=Integer.parseInt(request.getParameter("draw"));//jquerydatatables 
+		int start=Integer.parseInt(request.getParameter("start"));//分页数据起始数
+		int length=Integer.parseInt(request.getParameter("length"));//每一页数据条数
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("order_no", request.getParameter("order_no"));
+		condMap.put("factory_id", request.getParameter("factory_id"));
+		condMap.put("search_date_start", request.getParameter("search_date_start"));
+		condMap.put("search_date_end", request.getParameter("search_date_end"));
+		condMap.put("supply_workshop", request.getParameter("supply_workshop"));
+		condMap.put("receive_workshop", request.getParameter("receive_workshop"));
+		condMap.put("orderColumn", request.getParameter("orderColumn"));
+		condMap.put("draw", draw);
+		condMap.put("start", start);
+		condMap.put("length", length);
+		
+		model.addAllAttributes(productionService.getWorkshopSupplyList(condMap));
+		return model;
+	}
+	
 }

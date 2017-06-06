@@ -57,4 +57,9 @@ public interface ITechDao {
 	public List<Map<String,Object>> queryTechBusNum_Pre(Map<String, Object> conditionMap);
 	public List<Map<String,Object>> queryTechBusNum_After(Map<String, Object> conditionMap);
 	public List<Map<String,Object>> queryTaskBusNumber(Map<String, Object> map);
+
+	public List<Map<String, String>> queryTechTaskReport(Map<String, Object> conditionMap);
+	public int queryTechTaskReportCount(Map<String, Object> conditionMap);
+	public List<Map<String, String>> queryTechTaskReport2(Map<String, Object> conditionMap);
+	public int queryTechTaskReportCount2(Map<String, Object> conditionMap);
 }

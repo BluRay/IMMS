@@ -155,6 +155,44 @@ public class ProductionServiceImpl implements IProductionService {
 			throw new RuntimeException(e.getMessage());
 		}			
 	}
+
+	@Override
+	public void getSupplyTotalCount(Map<String, Object> condMap, ModelMap model) {
+			model.put("data",productionDao.querySupplyTotalCount(condMap));		
+	}
+
+	@Override
+	public void saveUpdateWorkshopSupply(Map<String, Object> condMap,
+			ModelMap model) {
+		try{
+			if(condMap.get("id")!=null){
+				productionDao.updateWorkshopSupply(condMap);
+			}else{
+				productionDao.saveWorkshopSupply(condMap);
+			}
+			
+			model.put("success", true);
+			model.put("message", "保存成功！");
+		}catch(Exception e){
+			model.put("success", false);
+			model.put("message", "保存失败！");
+			throw new RuntimeException(e.getMessage());
+		}			
+		
+	}
+
+	@Override
+	public Map<String, Object> getWorkshopSupplyList(Map<String, Object> condMap) {
+		int totalCount=0;
+		List<Map<String, Object>> datalist=productionDao.queryWorkshopSupplyList(condMap);
+		totalCount=productionDao.queryWorkshopSupplyCount(condMap);
+		Map<String, Object> result=new HashMap<String,Object>();
+		result.put("draw", condMap.get("draw"));
+		result.put("recordsTotal", totalCount);
+		result.put("recordsFiltered", totalCount);
+		result.put("data", datalist);
+		return result;
+	}
 	
 	
 

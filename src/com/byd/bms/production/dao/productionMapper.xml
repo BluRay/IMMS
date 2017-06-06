@@ -208,4 +208,100 @@
 		</if>
 	</update>
 	
+	<select id="querySupplyTotalCount" parameterType="Map" resultType="Map">
+		select a.supply_total,(b.order_qty-a.supply_total)left_qty 
+		from
+		(select ifnull(sum(quantity),0) supply_total 
+		from BMS_PD_WORKSHOP_SUPPLY s
+		left join BMS_OR_ORDER o on o.id=s.order_id
+		where s.factory_id=#{factory_id} and o.order_no=#{order_no} and
+		s.supply_workshop=#{supply_workshop} and s.receive_workshop=#{receive_workshop}) a,
+		(select ifnull(sum(fo.production_qty),0) order_qty 
+		from BMS_OR_FACTORY_ORDER fo
+		left join BMS_OR_ORDER o on fo.order_id=o.id
+		where fo.factory_id=#{factory_id} and o.order_no=#{order_no}) b
+	</select>
+	
+	<insert id="saveWorkshopSupply" parameterType="Map" useGeneratedKeys="true" keyProperty="id">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into BMS_PD_WORKSHOP_SUPPLY (factory_id,order_id,supply_workshop,receive_workshop,quantity,supply_date,editor_id,edit_date)
+		values
+		(#{factory_id},#{order_id},#{supply_workshop},#{receive_workshop},#{quantity},#{supply_date},#{editor_id},#{edit_date})	
+	</insert>
+	
+	<update id="updateWorkshopSupply" parameterType="Map">
+		update BMS_PD_WORKSHOP_SUPPLY set factory_id=#{factory_id},order_id=#{order_id},supply_workshop=#{supply_workshop},
+		receive_workshop=#{receive_workshop},quantity=#{quantity},supply_date=#{supply_date},editor_id=#{editor_id},edit_date=#{edit_date}
+		where id=#{id}
+	</update>
+	
+	<select id="queryWorkshopSupplyList" parameterType="Map" resultType="Map">
+		SELECT s.*,f.factory_name,s.supply_workshop workshop_name,s.receive_workshop,o.order_no,
+		CONCAT(o.order_no,' ',o.order_name,t.internal_name,' ',ifnull(fo.production_qty,0)) as order_desc,u.display_name editor,
+		(select sum(quantity) from
+		BMS_PD_WORKSHOP_SUPPLY s1
+		where s1.factory_id=s.factory_id and s1.order_id=s.order_id
+		and s1.supply_workshop=s.supply_workshop
+		and s1.receive_workshop=s.receive_workshop) supply_total
+		FROM BMS_PD_WORKSHOP_SUPPLY s
+		LEFT JOIN BMS_BASE_FACTORY f ON s.factory_id = f.id
+		LEFT JOIN BMS_OR_ORDER o ON s.order_id=o.id
+		LEFT JOIN BMS_OR_FACTORY_ORDER fo on fo.order_id=o.id and fo.factory_id=s.factory_id
+		LEFT JOIN BMS_BASE_BUS_TYPE t ON t.id = o.bus_type_id
+		LEFT JOIN BMS_BASE_USER u on u.id=s.editor_id
+		where 1=1
+		<if test="factory_id!=''">
+			and s.factory_id = #{factory_id}
+		</if>
+		<if test="order_no!=''">
+			and o.order_no = #{order_no}
+		</if>
+		<if test="supply_workshop !='' and supply_workshop !=null">
+			and find_in_set(s.supply_workshop, #{supply_workshop})>0
+		</if>
+		<if test="receive_workshop !='' and receive_workshop !='全部'">
+			and s.receive_workshop = #{receive_workshop}
+		</if>
+		<if test="search_date_start !=''">
+			and s.supply_date >= #{search_date_start}
+		</if>
+		<if test="search_date_end !=''">
+			and s.supply_date &lt;= #{search_date_end}
+		</if>
+		<if test="orderColumn !=null">
+			order by ${orderColumn}
+		</if>
+		<if test="start !=null">
+			LIMIT #{start} ,#{length} 
+		</if>
+	</select>
+	
+	<select id="queryWorkshopSupplyCount" parameterType="Map" resultType="int">
+		SELECT count(s.id)
+		FROM BMS_PD_WORKSHOP_SUPPLY s
+		LEFT JOIN BMS_OR_ORDER o on s.order_id=o.id
+		where 1=1
+		<if test="factory_id!=''">
+			and s.factory_id = #{factory_id}
+		</if>
+		<if test="order_no!=''">
+			and o.order_no = #{order_no}
+		</if>
+		<if test="supply_workshop !='' and supply_workshop !=null">
+			and find_in_set(s.supply_workshop, #{supply_workshop})>0
+		</if>
+		<if test="receive_workshop !='' and receive_workshop !='全部'">
+			and s.receive_workshop = #{receive_workshop}
+		</if>
+		<if test="search_date_start !=''">
+			and s.supply_date >= #{search_date_start}
+		</if>
+		<if test="search_date_end !=''">
+			and s.supply_date &lt;= #{search_date_end}
+		</if>
+	</select>
+	
 </mapper>

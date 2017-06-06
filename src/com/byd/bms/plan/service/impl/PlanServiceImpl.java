@@ -159,7 +159,6 @@ public class PlanServiceImpl implements IPlanService {
 	}
 
 	@Override
-	@Transactional
 	public int reVisionPlan(String factory_id, String order_no, String revision_str, String plan_month,String userId) {
 		List<PlanMasterPlan> datalist=new ArrayList<PlanMasterPlan>();
 		//复制指定工厂ID指定订单编号 最新版本 最大flag 的计划，保存flag+1
@@ -176,7 +175,7 @@ public class PlanServiceImpl implements IPlanService {
 			copyPlanMasterPlan.setFlag(String.valueOf(Integer.parseInt(copyPlanMasterPlan.getFlag())+1));
 			copyPlanMasterPlan.setCreate_date(creatTime);
 			
-			planDao.insertMasterPlan(copyPlanMasterPlan);
+			int ttt = planDao.insertMasterPlan(copyPlanMasterPlan);
 			//更新 新增的 id 到list
 			datalist.set(i, copyPlanMasterPlan);
 		}

@@ -84,11 +84,11 @@
 			#{factory_id} AND plan_month=#{plan_month})
 			AND flag =
 			(SELECT
-			MAX(flag+0) FROM BMS_PLAN_MASTER_PLAN WHERE version =(SELECT
+			MAX(flag+0) FROM BMS_PLAN_MASTER_PLAN WHERE 
+			version =(SELECT
 			MAX(version) FROM BMS_PLAN_MASTER_PLAN WHERE order_id = (SELECT id
-			FROM BMS_OR_ORDER WHERE order_no=#{order_no}) AND factory_id =
-			#{factory_id} AND plan_month=#{plan_month}) AND
-			plan_month=#{plan_month})
+			FROM BMS_OR_ORDER WHERE order_no=#{order_no}) AND factory_id = #{factory_id} AND plan_month=#{plan_month}) AND
+			plan_month=#{plan_month} AND factory_id = #{factory_id})
 			AND plan_month=#{plan_month}
 			ORDER BY version
 			DESC,flag
@@ -111,7 +111,7 @@
 		version,order_id,factory_id,plan_code_value,plan_month,flag,D1,D2,D3,D4,D5,D6,D7,D8,D9,D10,D11,D12,D13,D14,D15,D16,D17,
 		D18,D19,D20,D21,D22,D23,D24,D25,D26,D27,D28,D29,D30,D31,creator_id,create_date)
 		values(
-		#{version},(SELECT id FROM BMS_OR_ORDER WHERE order_no=#{order_no}),(SELECT foreign_id FROM BMS_BASE_ORG WHERE name = #{factory_name} AND org_type = '2'),
+		#{version},(SELECT id FROM BMS_OR_ORDER WHERE order_no=#{order_no}),#{factory_id},
 		(SELECT value FROM BMS_BASE_KEY WHERE key_code = 'PLAN_CODE' AND key_name = #{plan_code_keyname}),#{plan_month},#{flag},#{D1},#{D2},#{D3},#{D4},#{D5},#{D6},#{D7},
 		#{D8},#{D9},#{D10},#{D11},#{D12},#{D13},#{D14},#{D15},#{D16},#{D17},#{D18},#{D19},#{D20},#{D21},#{D22},#{D23},#{D24},
 		#{D25},#{D26},#{D27},#{D28},#{D29},#{D30},#{D31},#{creator_id},#{create_date})
