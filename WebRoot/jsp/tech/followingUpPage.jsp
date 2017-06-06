@@ -77,7 +77,7 @@
 					
 					</div>
 					
-					<div id="selectBusNumberModal" class="hide" style="align:center;width:700px;height:500px">
+					<div id="selectBusNumberModal" class="hide" style="align:center;height:500px">
 						车号：<input type="text" class="input-medium revise" placeholder="车号流水..."  id="bus_num_start" >
 				       	~<input type="text" class="input-medium revise" placeholder="车号流水..."  id="bus_num_end" >
 				       	<input type="button" class="btn btn-sm btn-primary" id="btn_single_bus_num_query" value="查询"></input>
@@ -148,12 +148,12 @@
 				    	<input type="hidden" id="select_order_no_view1" />
 					</div>
 					
-					<div id="selectBusNumberModal_view" class="hide" style="align:center;width:700px;height:500px">
+					<div id="selectBusNumberModal_view" class="hide" style="align:center;width:900px;height:500px">
 					车号：<input type="text" class="input-medium revise" placeholder="车号流水..."  id="bus_num_start_view" >
 			       	~<input type="text" class="input-medium revise" placeholder="车号流水..."  id="bus_num_end_view" >
 			       	<input type="button" class="btn btn-sm btn-primary" id="btn_single_bus_num_query_view" value="查询" style="margin-left: 2px;margin-bottom: 10px;"></input>
 			       	
-			       	<table id="selectBusNumber_table_view" style="table-layout:fixed;font-size:12px" class="table table-bordered table-striped">
+			       	<table id="selectBusNumber_table_view" style="table-layout:fixed;font-size:12px;width:850px" class="table table-bordered table-striped">
 						<thead>
 			                <tr>
 			                	<th style="text-align:center;" width="60px">序号</th>

@@ -1124,7 +1124,7 @@
 			AND T.TECH_ORDER_NO LIKE CONCAT(#{tech_order_no},'%')
 		</if>
 		<if test="order_no !=null and order_no !=''">
-			AND T.ORDER_NO LIKE CONCAT(#{order_no},'%')
+			AND D.ORDER_NO LIKE CONCAT(#{order_no},'%')
 		</if>
 		<if test="factory !=null and factory !=''">
 			AND D.FACTORY_ID = #{factory}
@@ -1154,7 +1154,7 @@
 			AND T.TECH_ORDER_NO LIKE CONCAT(#{tech_order_no},'%')
 		</if>
 		<if test="order_no !=null and order_no !=''">
-			AND T.ORDER_NO LIKE CONCAT(#{order_no},'%')
+			AND D.ORDER_NO LIKE CONCAT(#{order_no},'%')
 		</if>
 		<if test="factory !=null and factory !=''">
 			AND D.FACTORY_ID = #{factory}
@@ -1184,7 +1184,7 @@
 			AND T.TECH_ORDER_NO LIKE CONCAT(#{tech_order_no},'%')
 		</if>
 		<if test="order_no !=null and order_no !=''">
-			AND T.ORDER_NO LIKE CONCAT(#{order_no},'%')
+			AND D.ORDER_NO LIKE CONCAT(#{order_no},'%')
 		</if>
 		<if test="factory !=null and factory !=''">
 			AND D.FACTORY_ID = #{factory}
@@ -1214,7 +1214,7 @@
 			AND T.TECH_ORDER_NO LIKE CONCAT(#{tech_order_no},'%')
 		</if>
 		<if test="order_no !=null and order_no !=''">
-			AND T.ORDER_NO LIKE CONCAT(#{order_no},'%')
+			AND D.ORDER_NO LIKE CONCAT(#{order_no},'%')
 		</if>
 		<if test="factory !=null and factory !=''">
 			AND D.FACTORY_ID = #{factory}

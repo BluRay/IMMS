@@ -684,8 +684,10 @@ public class TechController extends BaseController{
 		
 		List<Map<String, Object>> list = techService.getFollowingUpDetailList(conditionMap);
 		
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("data", list);
 		mv.clear();
-		mv.getModelMap().addAllAttributes(list);
+		mv.getModelMap().addAllAttributes(result);
 		model = mv.getModelMap();
 		return model;
 	}
@@ -814,6 +816,14 @@ public class TechController extends BaseController{
 		mv.clear();
 		mv.getModelMap().addAllAttributes(result);
 		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/getChangeTypeReportData")
+	@ResponseBody
+	public ModelMap getChangeTypeReportData(){
+		
+		
 		return model;
 	}
 	

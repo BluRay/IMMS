@@ -47,8 +47,6 @@
 							<tr>
 								<td>工厂：</td>
 								<td><select id="search_factory" class="input-small" style="width:120px"></select></td>
-								<td>&nbsp;生产车间：</td>
-								<td><select id="search_workshop" class="input-small" style="width:110px"></select></td>
 								<td>&nbsp;订单：</td>
 								<td><input id="search_order_no" placeholder="请输入订单编号..." style="width:110px" type="text"></td>
 								<td>&nbsp;技改单编号：</td>
