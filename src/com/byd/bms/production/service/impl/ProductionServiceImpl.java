@@ -193,6 +193,44 @@ public class ProductionServiceImpl implements IProductionService {
 		result.put("data", datalist);
 		return result;
 	}
+
+	@Override
+	public void getPartsFinishCount(Map<String, Object> condMap, ModelMap model) {
+		model.put("data",productionDao.queryPartsFinishCount(condMap));			
+	}
+
+	@Override
+	public void saveUpdatePartsOnOffRecord(Map<String, Object> condMap,
+			ModelMap model) {
+		try{
+			if(condMap.get("id")!=null){
+				productionDao.updatePartsOnOffRecord(condMap);
+			}else{
+				productionDao.savePartsOnOffRecord(condMap);
+			}
+			
+			model.put("success", true);
+			model.put("message", "保存成功！");
+		}catch(Exception e){
+			model.put("success", false);
+			model.put("message", "保存失败！");
+			throw new RuntimeException(e.getMessage());
+		}			
+	}
+
+	@Override
+	public Map<String, Object> getPartsOnOffList(
+			Map<String, Object> condMap) {
+		int totalCount=0;
+		List<Map<String, Object>> datalist=productionDao.queryPartsOnOffList(condMap);
+		totalCount=productionDao.queryPartsOnOffCount(condMap);
+		Map<String, Object> result=new HashMap<String,Object>();
+		result.put("draw", condMap.get("draw"));
+		result.put("recordsTotal", totalCount);
+		result.put("recordsFiltered", totalCount);
+		result.put("data", datalist);
+		return result;
+	}
 	
 	
 

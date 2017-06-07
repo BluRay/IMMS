@@ -304,4 +304,105 @@
 		</if>
 	</select>
 	
+	<select id="queryPartsFinishCount" parameterType="Map" resultType="Map">
+		select ifnull(sum(f.online_real_qty),0) online_total,ifnull(sum(f.offline_real_qty),0) offline_total,sum(fo.production_qty) production_qty
+		from BMS_OR_FACTORY_ORDER fo
+		left join BMS_PD_PARTS_PLAN_FINISH f on f.order_id=fo.order_id and
+		f.factory_id=fo.factory_id and f.parts_id=#{parts_id}
+		left join BMS_OR_ORDER o on fo.order_id=o.id
+		where o.order_no=#{order_no} and fo.factory_id=#{factory_id}
+		group by fo.order_id,fo.factory_id
+	</select>
+	
+		<insert id="savePartsOnOffRecord" parameterType="Map" useGeneratedKeys="true" keyProperty="id">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into BMS_PD_PARTS_PLAN_FINISH (factory_id,order_id,parts_id,prod_date,online_plan_qty,offline_plan_qty,online_real_qty,offline_real_qty,editor_id,edit_date)
+		values (#{factory_id},#{order_id},#{parts_id},#{prod_date},(SELECT sum(IFNULL(p.plan_qty,0)) as plan_qty FROM BMS_PLAN_PRODUCTION_PLAN p 
+		LEFT JOIN BMS_BASE_KEY k on k.value=p.plan_code_value and k.key_code='PLAN_CODE'
+		WHERE p.plan_date = #{prod_date} AND p.order_id=#{order_id}
+		AND p.factory_id = #{factory_id} AND k.key_name='部件上线'),(SELECT sum(IFNULL(p.plan_qty,0)) as plan_qty FROM BMS_PLAN_PRODUCTION_PLAN p 
+		LEFT JOIN BMS_BASE_KEY k on k.value=p.plan_code_value and k.key_code='PLAN_CODE'
+		WHERE p.plan_date = #{prod_date} AND p.order_id=#{order_id}
+		AND p.factory_id = #{factory_id} AND k.key_name='部件下线'),
+		#{online_num},#{offline_num},#{editor_id},#{edit_date}	
+		)
+	</insert>
+	
+	<update id="updatePartsOnOffRecord" parameterType="Map">
+		update BMS_PD_PARTS_PLAN_FINISH 
+		SET  factory_id=#{factory_id},order_id=#{order_id},parts_id=#{parts_id}, prod_date=#{prod_date},
+		online_real_qty=#{online_num},offline_real_qty=#{offline_num}, editor_id=#{editor_id},edit_date=#{edit_date},
+		online_plan_qty=(SELECT sum(IFNULL(p.plan_qty,0)) as plan_qty FROM BMS_PLAN_PRODUCTION_PLAN p 
+		LEFT JOIN BMS_BASE_KEY k on k.value=p.plan_code_value and k.key_code='PLAN_CODE'
+		WHERE p.plan_date = #{prod_date} AND p.order_id=#{order_id}
+		AND p.factory_id = #{factory_id} AND k.key_name='部件上线'),
+		offline_plan_qty=(SELECT sum(IFNULL(p.plan_qty,0)) as plan_qty FROM BMS_PLAN_PRODUCTION_PLAN p 
+		LEFT JOIN BMS_BASE_KEY k on k.value=p.plan_code_value and k.key_code='PLAN_CODE'
+		WHERE p.plan_date = #{prod_date} AND p.order_id=#{order_id}
+		AND p.factory_id = #{factory_id} AND k.key_name='部件下线')
+		where id=#{id}
+	</update>
+	
+	<select id="queryPartsOnOffList" parameterType="Map" resultType="Map">
+		SELECT p.*,f.factory_name,CONCAT(o.order_no,' ',o.order_name,x.internal_name,' ',o.order_qty) as order_desc,k.key_name parts_name,u.username editor,o.order_no,
+		(select sum(p1.online_real_qty) from BMS_PD_PARTS_PLAN_FINISH p1 where p1.factory_id=p.factory_id and p1.order_id=p.order_id and p1.parts_id=p.parts_id ) online_total,
+		(select sum(p1.offline_real_qty) from BMS_PD_PARTS_PLAN_FINISH p1 where p1.factory_id=p.factory_id and p1.order_id=p.order_id and p1.parts_id=p.parts_id ) offline_total
+		FROM BMS_PD_PARTS_PLAN_FINISH p
+		LEFT JOIN BMS_BASE_FACTORY f ON p.factory_id = f.id
+		LEFT JOIN BMS_OR_ORDER o ON p.order_id = o.id
+		LEFT JOIN BMS_BASE_KEY k ON p.parts_id = k.id
+		LEFT JOIN BMS_BASE_BUS_TYPE x ON x.id = o.bus_type_id
+		LEFT JOIN BMS_BASE_USER u on u.id=p.editor_id
+		where 1=1
+		<if test="factory_id !=''">
+			and p.factory_id = #{factory_id}
+		</if>
+		<if test="order_no !=''">
+			and o.order_no = #{order_no}
+		</if>
+		<if test="parts_id !=''">
+			and p.parts_id=#{parts_id}
+		</if>
+		<if test="search_date_start !=''">
+			and p.prod_date >= #{search_date_start}
+		</if>
+		<if test="search_date_end!=''">
+			and p.prod_date &lt;= #{search_date_end}
+		</if>
+		<if test="orderColumn !=null">
+			order by ${orderColumn}
+		</if>
+		<if test="start !=null">
+			LIMIT #{start} ,#{length} 
+		</if>
+	</select>
+	
+	<select id="queryPartsOnOffCount" parameterType="Map" resultType="int">
+		SELECT count(p.id)
+		FROM BMS_PD_PARTS_PLAN_FINISH p
+		LEFT JOIN BMS_OR_ORDER o ON p.order_id = o.id
+		where 1=1
+		<if test="factory_id !=''">
+			and p.factory_id = #{factory_id}
+		</if>
+		<if test="order_no !=''">
+			and o.order_no = #{order_no}
+		</if>
+		<if test="parts_id !=''">
+			and p.parts_id=#{parts_id}
+		</if>
+		<if test="search_date_start !=''">
+			and p.prod_date >= #{search_date_start}
+		</if>
+		<if test="search_date_end!=''">
+			and p.prod_date &lt;= #{search_date_end}
+		</if>
+	</select>
+	
+	
+	
+	
 </mapper>

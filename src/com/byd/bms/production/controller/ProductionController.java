@@ -359,7 +359,7 @@ public class ProductionController extends BaseController {
 	}
 	
 	/**
-	 * 车辆信息维护页面
+	 *	车间供货页面
 	 * @return
 	 */
 	@RequestMapping("/workshopSupply")
@@ -391,7 +391,7 @@ public class ProductionController extends BaseController {
 	}
 	
 	/**
-	 * 根据工厂、订单、供货车间、接收车间获取供应车付信息
+	 * 保存车间供付信息
 	 * @return
 	 */
 	@RequestMapping("/saveUpdateWorkshopSupply")
@@ -442,5 +442,85 @@ public class ProductionController extends BaseController {
 		model.addAllAttributes(productionService.getWorkshopSupplyList(condMap));
 		return model;
 	}
+	
+	/**
+	 *	车间供货页面
+	 * @return
+	 */
+	@RequestMapping("/partsOnOffline")
+	public ModelAndView partsOnOffline(){
+		mv.setViewName("production/partsOnOffline");
+		return mv;
+	}
+	
+	/**
+	 * 查询部件上下线剩余数量
+	 * @return
+	 */
+	@RequestMapping("/getPartsFinishCount")
+	@ResponseBody
+	public ModelMap getPartsFinishCount(){
+		model.clear();
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("order_no", request.getParameter("order_no"));
+		condMap.put("factory_id", request.getParameter("factory_id"));
+		condMap.put("parts_id", request.getParameter("parts_id"));
+		
+		productionService.getPartsFinishCount(condMap,model);
+		return model;
+	}
+	
+	/**
+	 * 保存部件上下线记录
+	 * @return
+	 */
+	@RequestMapping("/saveUpdatePartsOnOffRecord")
+	@ResponseBody
+	public ModelMap saveUpdatePartsOnOffRecord(){
+		model.clear();
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String userid=String.valueOf(session.getAttribute("user_id"));
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("id", request.getParameter("id"));
+		condMap.put("factory_id", request.getParameter("factory_id"));
+		condMap.put("order_id", request.getParameter("order_id"));
+		condMap.put("parts_id", request.getParameter("parts_id"));
+		condMap.put("online_num", request.getParameter("online_num"));
+		condMap.put("offline_num", request.getParameter("offline_num"));
+		condMap.put("prod_date", request.getParameter("prod_date"));
+		condMap.put("editor_id", userid);
+		condMap.put("edit_date", curTime);
+		
+		productionService.saveUpdatePartsOnOffRecord(condMap,model);
+		return model;
+	}
+	
+	/**
+	 * 查询部件上下线记录列表
+	 * @return
+	 */
+	@RequestMapping("/getPartsOnOffList")
+	@ResponseBody
+	public ModelMap getPartsOnOffList(){
+		model.clear();
+		int draw=Integer.parseInt(request.getParameter("draw"));//jquerydatatables 
+		int start=Integer.parseInt(request.getParameter("start"));//分页数据起始数
+		int length=Integer.parseInt(request.getParameter("length"));//每一页数据条数
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("order_no", request.getParameter("order_no"));
+		condMap.put("factory_id", request.getParameter("factory_id"));
+		condMap.put("search_date_start", request.getParameter("search_date_start"));
+		condMap.put("search_date_end", request.getParameter("search_date_end"));
+		condMap.put("parts_id", request.getParameter("parts_id"));
+		condMap.put("orderColumn", request.getParameter("orderColumn"));
+		condMap.put("draw", draw);
+		condMap.put("start", start);
+		condMap.put("length", length);
+		
+		model.addAllAttributes(productionService.getPartsOnOffList(condMap));
+		return model;
+	}
+	
 	
 }

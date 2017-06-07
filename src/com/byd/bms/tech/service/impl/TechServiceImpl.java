@@ -452,6 +452,16 @@ public class TechServiceImpl implements ITechService {
 		result.put("total", totalCount);
 		return result;
 	}
+
+	@Override
+	public List<Map<String, Object>> queryChangeTypeReport(Map<String, Object> conditionMap) {
+		return techDao.queryChangeTypeReport(conditionMap);
+	}
+
+	@Override
+	public int queryChangeTypeReportCount(Map<String, Object> conditionMap) {
+		return techDao.queryChangeTypeReportCount(conditionMap);
+	}
 	
 	
 	

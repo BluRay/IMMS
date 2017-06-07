@@ -819,11 +819,24 @@ public class TechController extends BaseController{
 		return model;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@RequestMapping("/getChangeTypeReportData")
 	@ResponseBody
 	public ModelMap getChangeTypeReportData(){
-		
-		
+		String conditions = request.getParameter("conditions");
+		JSONObject jo=JSONObject.fromObject(conditions);
+		Map<String,Object> conditionMap=new HashMap<String,Object>();
+		for(Iterator it=jo.keys();it.hasNext();){
+			String key=(String) it.next();
+			conditionMap.put(key, jo.get(key));
+		}
+		List<Map<String, Object>> datalist = techService.queryChangeTypeReport(conditionMap);
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("rows", datalist);
+		result.put("total", techService.queryChangeTypeReportCount(conditionMap));
+		mv.clear();
+		mv.getModelMap().addAllAttributes(result);
+		model = mv.getModelMap();
 		return model;
 	}
 	

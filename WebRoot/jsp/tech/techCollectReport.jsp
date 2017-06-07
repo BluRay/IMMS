@@ -61,6 +61,17 @@
 							</tr>
 						</table>
 					</div>
+					
+					<div class="tabbable">
+						<ul class="nav nav-tabs" id="myTab">
+							<li id="div1" class="active">
+								<a data-toggle="tab" onclick="change_tab('工厂维度');" href="#home">工厂维度</a>
+							</li>
+							<li id="div2">
+								<a data-toggle="tab" onclick="change_tab('订单维度');" href="#messages">订单维度</a>
+							</li>
+						</ul>
+					</div>
 
 					<div id="toolbar"></div>
 					<table  style="font-weight:normal;width:1800px;" id="table" data-toolbar="#toolbar" data-search="false" data-show-refresh="true"
@@ -106,5 +117,5 @@
 	<script type="text/javascript" src="../js/jquery.form.js"></script>
 	<script type="text/javascript" src="../js/datePicker/WdatePicker.js"></script>
 	<script type="text/javascript" src="../js/common.js"></script>
-	<script type="text/javascript" src="../js/tech/techTaskReport.js"></script>
+	<script type="text/javascript" src="../js/tech/techCollectReport.js"></script>
 </html>

@@ -460,3 +460,62 @@ function getBusTypeSelect(selectval,selectId,selectType,valName){
 		}
 	});
 }
+
+/**
+ * 零部件模糊查询
+ * @param elementId
+ * @param submitId  :用于提交的元素的id
+ * @param fn_backcall
+ */
+function getPartsSelect(elementId, submitId, fn_backcall) {
+	var partslist;
+	$(elementId).typeahead({
+		source : function(input, process) {
+			$.get("/IMMS/common/getPartsSelect", {
+				"parts" : input
+			}, function(data) {
+				partslist = data;
+				var results = new Array();
+				$.each(data, function(index, value) {
+					results.push(value.name);
+				})
+				return process(results);
+			}, 'json');
+		},
+		matcher : function(item) {
+			//alert(item)
+			var selectId = "";
+			$.each(partslist, function(index, value) {
+				if (value.name == item) {
+					selectId = value.id;
+					if (typeof (fn_backcall) == "function") {
+						fn_backcall(value);
+					}
+				}
+			})
+
+			// alert(selectId);
+			$(elementId).attr("parts_id", selectId);
+			$(submitId).val(selectId);
+			return true;
+			
+		},
+		items : 30,
+		updater : function(item) {
+			var selectId = "";
+			$.each(partslist, function(index, value) {
+				if (value.name == item) {
+					selectId = value.id;
+					if (typeof (fn_backcall) == "function") {
+						fn_backcall(value);
+					}
+				}
+			})
+
+			// alert(selectId);
+			$(elementId).attr("parts_id", selectId);
+			$(submitId).val(selectId);
+			return item;
+		}
+	});
+}

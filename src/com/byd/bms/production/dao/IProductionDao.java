@@ -52,4 +52,14 @@ public interface IProductionDao {
 			Map<String, Object> condMap);
 
 	int queryWorkshopSupplyCount(Map<String, Object> condMap);
+
+	Map<String,Object> queryPartsFinishCount(Map<String, Object> condMap);
+
+	int updatePartsOnOffRecord(Map<String, Object> condMap);
+
+	int savePartsOnOffRecord(Map<String, Object> condMap);
+
+	List<Map<String, Object>> queryPartsOnOffList(Map<String, Object> condMap);
+
+	int queryPartsOnOffCount(Map<String, Object> condMap);
 }

@@ -36,4 +36,11 @@ public interface IProductionService {
 			ModelMap model);
 
 	public Map<String, Object> getWorkshopSupplyList(Map<String, Object> condMap);
+
+	public void getPartsFinishCount(Map<String, Object> condMap, ModelMap model);
+
+	public void saveUpdatePartsOnOffRecord(Map<String, Object> condMap,
+			ModelMap model);
+
+	public Map<String,Object> getPartsOnOffList(Map<String, Object> condMap);
 }

@@ -62,4 +62,6 @@ public interface ITechDao {
 	public int queryTechTaskReportCount(Map<String, Object> conditionMap);
 	public List<Map<String, String>> queryTechTaskReport2(Map<String, Object> conditionMap);
 	public int queryTechTaskReportCount2(Map<String, Object> conditionMap);
+	public List<Map<String, Object>> queryChangeTypeReport(Map<String, Object> conditionMap);
+	public int queryChangeTypeReportCount(Map<String, Object> conditionMap);
 }

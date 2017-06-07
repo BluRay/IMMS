@@ -1,45 +1,10 @@
 $(document).ready(function(){
 	initPage();
-	//切换工厂、更新车间下拉列表
-	$(document).on("change","#search_factory",function(e){
-		getWorkshopSelect("production/workshopSupply",$("#search_factory :selected").text(),"","#search_supply_workshop",null,"id")
-		getWorkshopSelect("",$("#search_factory :selected").text(),"","#search_receive_workshop","全部","id");
-	});
-	
-	$(document).on("change","#factory",function(e){
-		getWorkshopSelect("production/workshopSupply",$("#factory :selected").text(),"","#supply_workshop","请选择","id")
-		getWorkshopSelect("",$("#factory :selected").text(),"","#receive_workshop","请选择","id")
-		//getSupplyInfo();
-		$("#supply_num").next("span").html("");
-		$("#supply_num").val("");
-	});
-	
-	//车间切换
-	$(document).on("change","#supply_workshop",function(e){
-		//getSupplyInfo();
-		$("#supply_num").next("span").html("");
-		$("#supply_num").val("");
-	})
-	$(document).on("change","#receive_workshop",function(e){
-		//getSupplyInfo();
-		$("#supply_num").next("span").html("");
-		$("#supply_num").val("");
-	})
-	//订单编号切换
-	$(document).on("change","#order",function(e){
-		//getSupplyInfo();
-		$("#supply_num").next("span").html("");
-		$("#supply_num").val("");
-	})
-	
 
-	$("#supply_num").click(function(){
-		getSupplyInfo();
-	});
-	
 	//新增
 	$("#btnAdd").click(function(e){
 		$("#create_form")[0].reset();
+		getKeysSelect("BASE_PARTS", "", "#parts","请选择","id");
 		$("#factory").prop("disabled",false);
 		$("#order").prop("disabled",false);
 		getFactorySelect("production/workshopSupply","","#factory","请选择","id");
@@ -78,10 +43,11 @@ $(document).ready(function(){
 
 function initPage(){
 	getFactorySelect("production/workshopSupply","","#search_factory",null,"id");
-	getWorkshopSelect("production/workshopSupply",$("#search_factory :selected").text(),"","#search_supply_workshop",null,"id")
-	getWorkshopSelect("",$("#search_factory :selected").text(),"","#search_receive_workshop","全部","id")
 	getOrderNoSelect("#search_order_no","",null,null,"#search_factory");
-	getOrderNoSelect("#order","#order_id",null,null,"#factory","copy");
+	getOrderNoSelect("#order","#order_id",function(obj){
+		$("#order").attr("order_qty",obj.orderQty);
+	},null,"#factory","copy");
+	getKeysSelect("BASE_PARTS", "", "#search_parts","全部","id");
 }
 
 function ajaxQuery(){
@@ -91,9 +57,11 @@ function ajaxQuery(){
 		ordering:false,
 		searching: false,
 		bAutoWidth:false,
-/*		fixedColumns:   {
+		fixedColumns:   {
+			leftColumns:0,
             rightColumns:1
-        },*/
+        },
+		 rowsGroup:[0,1,2,3,4],
 		destroy: true,
 		sScrollY: $(window).height()-250,
 		scrollX: true,
@@ -120,9 +88,8 @@ function ajaxQuery(){
 					"order_no":$("#search_order_no").val(),
 					"search_date_start":$("#search_date_start").val(),
 					"search_date_end":$("#search_date_end").val(),
-					"supply_workshop":$("#search_supply_workshop :selected").text(),
-					"receive_workshop":$("#search_receive_workshop :selected").text(),
-					"orderColumn":"order_no"
+					"parts_id":$("#search_parts").val(),
+					"orderColumn":"factory_id,order_id,parts_id"
 				};
             param.length = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
             param.start = data.start;//开始的记录序号
@@ -130,7 +97,7 @@ function ajaxQuery(){
 
             $.ajax({
                 type: "post",
-                url: "getWorkshopSupplyList",
+                url: "getPartsOnOffList",
                 cache: false,  //禁用缓存
                 data: param,  //传入组装的参数
                 dataType: "json",
@@ -152,14 +119,17 @@ function ajaxQuery(){
 		},
 		columns: [
 		            {"title":"生产工厂","class":"center","data":"factory_name","defaultContent": ""},
-		            {"title":"供货车间","class":"center","data":"supply_workshop","defaultContent": ""},
-		            {"title":"接收车间","class":"center","data":"receive_workshop","defaultContent": ""},
 		            {"title":"生产订单","class":"center","data":"order_desc","defaultContent": ""},
-		            {"title":"数量","class":"center","data": "quantity","defaultContent": ""},
-		            {"title":"累计供应数","class":"center","data":"supply_total","defaultContent": ""},		            
-		            {"title":"日期","class":"center","data":"supply_date","defaultContent": ""},		            
-		            {"title":"维护人","class":"center","data": "editor","defaultContent": ""},		            
+		            {"title":"部件","class":"center","data":"parts_name","defaultContent": ""},
+		            {"title":"上线累计","class":"center","data":"online_total","defaultContent": ""},
+		            {"title":"下线累计","class":"center","data": "offline_total","defaultContent": ""},
+		            {"title":"日期","class":"center","data":"prod_date","defaultContent": ""},		            
+		            {"title":"上线计划","class":"center","data":"online_plan_qty","defaultContent": ""},		            
+		            {"title":"上线数量","class":"center","data": "online_real_qty","defaultContent": ""},		  
+		            {"title":"下线计划","class":"center","data": "offline_plan_qty","defaultContent": ""},		
+		            {"title":"下线数量","class":"center","data": "offline_real_qty","defaultContent": ""},	
 		            {"title":"维护时间","class":"center","data":"edit_date","defaultContent": ""},
+		            {"title":"维护人","class":"center","data":"editor","defaultContent": ""},
 		            {"title":"操作","class":"center","data":"","render":function(data,type,row){
 		            	return "<i class=\"ace-icon fa fa-pencil bigger-130 editorder\" title='编辑' onclick = 'showEditPage(" + JSON.stringify(row)+ ");' style='color:green;cursor: pointer;'></i>";		            		
 		            	}
@@ -170,21 +140,21 @@ function ajaxQuery(){
 
 
 function showEditPage(row){
-	$("#supply_num").next("span").html("");
 	$("#create_form")[0].reset();
 	getFactorySelect("",row.factory_id,"#factory","","id");
 	$("#order_id").val(row.order_id);
 	$("#order").val(row.order_no);
-	getWorkshopSelect("production/workshopSupply",$("#factory :selected").text(),row.supply_workshop,"#supply_workshop","请选择","id")
-	getWorkshopSelect("",$("#factory :selected").text(),row.receive_workshop,"#receive_workshop","请选择","id")
-	$("#supply_num").val(row.quantity);
-	$("#supply_date").val(row.supply_date);
+	getKeysSelect("BASE_PARTS", row.parts_id, "#parts","请选择","id");
+	$("#prod_date").val(row.prod_date);
+	$("#parts").val(row.parts_id);
+	$("#online_num").val(row.online_real_qty);
+	$("#offline_num").val(row.offline_real_qty);
 	
 	var dialog = $( "#dialog-config" ).removeClass('hide').dialog({
-		width:450,
+		width:400,
 		height:380,
 		modal: true,
-		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i> 编辑车间供货</h4></div>",
+		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i> 编辑部件上下线</h4></div>",
 		title_html: true,
 		buttons: [ 
 			{
@@ -206,49 +176,49 @@ function showEditPage(row){
 }
 
 function ajaxAdd(){
-	if($("#factory").val()==""){
-		alert("请选择生产工厂！");
+	//数据验证
+	if($("#factory").val()==undefined||$("#factory").val().trim().length==0){
+		alert('请选择生产工厂！');
 		return false;
 	}
 	if($("#order_id").val()==undefined||$("#order_id").val()==""){
 		alert("请输入有效订单编号！");
 		return false;
 	}
-	if($("#supply_workshop").val()==""){
-		alert("请选择供货车间！");
+	if($("#parts").val()==undefined||$("#parts").val().trim().length==0){
+		alert('请选择生产部件！');
 		return false;
 	}
-	if($("#receive_workshop").val()==""){
-		alert("请选择接收车间！");
+	if(isNaN(parseFloat($("#online_num").val()))){
+		alert('上线数量须为数字！');
 		return false;
 	}
-	if(isNaN($("#supply_num").val())){
-		alert('供应车付必须为数字！');
+	if(isNaN(parseFloat($("#offline_num").val()))){
+		alert('下线数量须为数字！');
 		return false;
 	}
-	if($("#supply_num").val()>$("#supply_num").data("left_qty")){
-		alert("可供应数量不够！");
+	//查询生产部件、订单下 上下线总数
+	var info=getPartsFinishCount();
+	
+	if($("#online_num").val()>(info.production_qty-info.online_total)){
+		alert("上线不能超出工厂订单数！");
 		return false;
 	}
-	if($("#supply_num").val()==0){
-		alert("可供应数量必须大于0！");
-		return false;
-	}
-	if($("#supply_date").val()==""){
-		alert("请选择交付日期！");
+	if($("#offline_num").val()>(info.production_qty-info.online_total)){
+		alert("下线不能超出工厂订单数！");
 		return false;
 	}
 	$.ajax({
 		type:"post",
-		url:"saveUpdateWorkshopSupply",
+		url:"saveUpdatePartsOnOffRecord",
 		dataType:"json",
 		data:{
 			factory_id:$("#factory").val(),
 			order_id:$("#order_id").val(),
-			supply_workshop:$("#supply_workshop :selected").text(),
-			receive_workshop:$("#receive_workshop :selected").text(),
-			quantity:$("#supply_num").val(),
-			supply_date:$("#supply_date").val()
+			parts_id:$("#parts").val(),
+			online_num:$("#online_num").val(),
+			offline_num:$("#online_num").val(),
+			prod_date:$("#prod_date").val()
 		},
 		success:function(response){
 			alert(response.message);
@@ -265,49 +235,49 @@ function ajaxAdd(){
  * @param bus_number
  */
 function ajaxEdit(id){
-	if($("#factory").val()==""){
-		alert("请选择生产工厂！");
+	//数据验证
+	if($("#factory").val()==undefined||$("#factory").val().trim().length==0){
+		alert('请选择生产工厂！');
 		return false;
 	}
 	if($("#order_id").val()==undefined||$("#order_id").val()==""){
 		alert("请输入有效订单编号！");
 		return false;
 	}
-	if($("#supply_workshop").val()==""){
-		alert("请选择供货车间！");
+	if($("#parts").val()==undefined||$("#parts").val().trim().length==0){
+		alert('请选择生产部件！');
 		return false;
 	}
-	if($("#receive_workshop").val()==""){
-		alert("请选择接收车间！");
+	if(isNaN(parseFloat($("#online_num").val()))){
+		alert('上线数量须为数字！');
 		return false;
 	}
-	if(isNaN($("#supply_num").val())){
-		alert('供应车付必须为数字！');
+	if(isNaN(parseFloat($("#offline_num").val()))){
+		alert('下线数量须为数字！');
 		return false;
 	}
-	if($("#supply_num").val()>$("#supply_num").data("left_qty")){
-		alert("可供应数量不够！");
+	//查询生产部件、订单下 上下线总数
+	var info=getPartsFinishCount();
+	
+	if($("#online_num").val()>info.online_left_qty){
+		alert("上线数不能超出工厂订单数！");
 		return false;
 	}
-	if($("#supply_num").val()==0){
-		alert("可供应数量必须大于0！");
-		return false;
-	}
-	if($("#supply_date").val()==""){
-		alert("请选择交付日期！");
+	if($("#offline_num").val()>info.offline_left_qty){
+		alert("下线数不能超出工厂订单数！");
 		return false;
 	}
 	$.ajax({
 		type:"post",
-		url:"saveUpdateWorkshopSupply",
+		url:"saveUpdatePartsOnOffRecord",
 		dataType:"json",
 		data:{
 			factory_id:$("#factory").val(),
 			order_id:$("#order_id").val(),
-			supply_workshop:$("#supply_workshop :selected").text(),
-			receive_workshop:$("#receive_workshop :selected").text(),
-			quantity:$("#supply_num").val(),
-			supply_date:$("#supply_date").val(),
+			parts_id:$("#parts").val(),
+			online_num:$("#online_num").val(),
+			offline_num:$("#online_num").val(),
+			prod_date:$("#prod_date").val(),
 			id:id
 		},
 		success:function(response){
@@ -321,31 +291,26 @@ function ajaxEdit(id){
 	})
 }
 
-function getSupplyInfo(){
+function getPartsFinishCount(){
 	var factory=$("#factory").val();
-	var supply_workshop=$("#supply_workshop :selected").text();
-	var receive_workshop=$("#receive_workshop :selected").text();
+	var parts_id=$("#parts").val();
 	var order_no=$("#order").val();
-	if(factory&&supply_workshop!=''&&receive_workshop!='请选择'&&order_no!=''){
-		$.ajax({
-			type:"post",
-			dataType:"json",
-			url: "getSupplyTotalCount",
-			async:false,
-			data:{
-				"factory_id":factory,
-				"supply_workshop":supply_workshop,
-				"receive_workshop":receive_workshop,
-				"order_no":order_no,
-			},
-			success:function (response) {
-				var data=response.data;
-	    		$("#supply_num").next("span").html("已供应："+data.supply_total+"；可供应："+data.left_qty);
-	    		$("#supply_num").data("left_qty",data.left_qty);
-		    }			
-		})	
-		$(this).next("span").show();
-		
-	}
-
+	var info={};
+	$.ajax({
+		type:"post",
+		dataType:"json",
+		url: "getPartsFinishCount",
+		async:false,
+		data:{
+			"factory_id":factory,
+			"parts_id":parts_id,
+			"order_no":order_no
+		},
+		success:function (response) {
+			info=response.data; 		
+	    }			
+	})	
+	return info;
 }
+
+
