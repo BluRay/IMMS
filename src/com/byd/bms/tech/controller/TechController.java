@@ -718,9 +718,9 @@ public class TechController extends BaseController{
 		String task_detail_id = request.getParameter("task_detail_id");
 		String update_status = request.getParameter("update_status");
 		String workshop = request.getParameter("workshop");
-		
-		int result = techService.editFollowingUp(curTime, edit_user, ids, task_detail_id, update_status, workshop);
-		initModel(true,String.valueOf(result),null);
+		techService.editFollowingUp(curTime, edit_user, ids, task_detail_id, update_status, workshop);
+		//initModel(true,String.valueOf(result),null);
+		model.put("success", true);
 		return model;
 	}
 	

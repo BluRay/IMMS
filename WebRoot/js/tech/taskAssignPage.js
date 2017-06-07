@@ -24,6 +24,15 @@ $(document).ready(function (){
 		ajaxQuery();
     });
 	
+	$('input:radio[name="switch_mode"]').change(function(){
+		//console.log("switch_mode = " + $(this).val());
+		if($(this).val()=='全部切换'){
+			$("#switch_node").val("");
+			$("#switch_node").prop("disabled",true);
+		}else{
+			$("#switch_node").prop("disabled",false);
+		}
+	});
 	
 });
 
@@ -99,7 +108,7 @@ function ajaxEdit(task_id,task_detail_id,task_content,tech_order_no,switch_mode,
 	
 	//$("#tr_switch_node").css("display","");
 	var mode_index=0;
-	var switch_mode='节点前切换';
+	//var switch_mode='节点前切换';
 	var is_follow = true;
 	var allTaskDiv = $("#new_accordion").children('div');
 	allTaskDiv.each(function(index){
@@ -122,7 +131,7 @@ function ajaxEdit(task_id,task_detail_id,task_content,tech_order_no,switch_mode,
 		var prod_factory_id=tech_detail.prod_factory_id;
 		var prod_factory=tech_detail.prod_factory;
 		addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id,prod_factory);
-		console.log("follow_detail = " + follow_detail);
+		//console.log("follow_detail = " + follow_detail);
 		$.each(follow_detail.split(";"),function(i,follow){
 			//alert(follow.split("||")[1]);
 			if(follow.split("||")[1]>0){
@@ -131,6 +140,12 @@ function ajaxEdit(task_id,task_detail_id,task_content,tech_order_no,switch_mode,
 			}
 		})
 	});	
+	if(switch_mode=='全部切换'){
+		mode_index=0;
+		$("#tr_switch_node").css("display","");
+		$("#switch_node").val("");
+		$("#switch_node").prop("disabled",true);
+	}
 	
 	if(switch_mode=='节点前切换'){
 		mode_index=1;
@@ -142,7 +157,8 @@ function ajaxEdit(task_id,task_detail_id,task_content,tech_order_no,switch_mode,
 		$("#tr_switch_node").css("display","");
 		$("#switch_node").val(switch_node);
 	}
-	$("[name=switch_mode]").eq(mode_index).prop('checked',true);
+	console.log("switch_mode = " + switch_mode + " mode_index = " + mode_index);
+	$("[name=switch_mode]").eq(mode_index).prop("checked",true);
 	if(is_follow){
 		$("[name=switch_mode]").prop("disabled",true);
 	}

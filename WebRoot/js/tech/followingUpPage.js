@@ -37,22 +37,11 @@ $(document).ready(function(){
 	
 	// 复选框全选、反选
 	$(".checkall").click(function() {
-		if ($(this).attr("checked") == "checked") {
-			$(".cbox").attr("checked", "checked");
+		if ($(this).prop("checked")) {
+			$(".cbox").prop("checked", true);
 		} else {
 			$(".cbox").removeAttr("checked");
 		}
-	});
-	// Enter键移动输入光标
-	$(".work_hour").live("keydown", function(event) {
-		if (event.keyCode == "13") {
-			$(this).parent().parent().next().find("input").focus();
-		}
-	});
-
-	// 删除
-	$(".close").live("click", function(e) {
-		$(e.target).closest("tr").remove();
 	});
 	
 
@@ -118,8 +107,8 @@ function ajaxQuery() {
 		            {"title":"订单","class":"center","data":"order_no","defaultContent": ""},
 		            {"title":"工厂","class":"center","data":"factory","defaultContent": ""},
 		            {"title":"车间","class":"center","data":"ws","defaultContent": ""},
-		            {"title":"技改台数","class":"center","data":"single_time_total","defaultContent": ""},
-		            {"title":"完成台数","class":"center","data":"single_time_total","defaultContent": ""},
+		            {"title":"技改台数","class":"center","data":"total","defaultContent": ""},
+		            {"title":"完成台数","class":"center","data":"complete","defaultContent": ""},
 		            {"title":"技改跟进","class":"center","data":"single_time_total","defaultContent": "",
 		            	"render": function ( data, type, row ) {
 		            		if (parseInt(row.total) - parseInt(row.complete) <= 0) {
@@ -306,7 +295,7 @@ function ajaxQueryDetail1(tbody, factory, workshop, order_no, tech_task_id) {
 function ajaxEdit() {
 	var ids = [];
 	$('.cbox').each(function(e) {
-		if ($(this).attr("checked") == "checked") {
+		if ($(this).prop("checked")) {
 			ids.push($(this).closest("tr").data('id'));
 		}
 	});
@@ -398,7 +387,7 @@ function showSelectBusNumberModal_view(factory, workshop, order_no, tech_task_id
 		resizable: false,
 		title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 技改查询</h4></div>',
 		title_html: true,
-		width:'500px',
+		width:'900px',
 		modal: true,
 		buttons: [{
 					text: "取消",
