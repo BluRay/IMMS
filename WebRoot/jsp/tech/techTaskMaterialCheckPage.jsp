@@ -53,7 +53,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<input name="switch_mode" value="节点后切换" id="type3" type="radio"><span>节点后切换&nbsp;&nbsp;</span>
 						</td>
 					</tr>
-					<tr id="tr_switch_node" style="display:none;height:40px">
+					<tr id="tr_switch_node" style="height:40px">
 						<td align="right" style="width:100px">切换节点：</td>
 						<td style="width:250px">
 							<select id="switch_node" class="input-medium">

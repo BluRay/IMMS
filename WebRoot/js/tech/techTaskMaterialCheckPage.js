@@ -25,6 +25,17 @@ $(document).ready(function(){
 	        }
 		});
 	});
+	
+	$('input:radio[name="switch_mode"]').change(function(){
+		//console.log("switch_mode = " + $(this).val());
+		if($(this).val()=='全部切换'){
+			$("#switch_node").val("");
+			$("#switch_node").prop("disabled",true);
+		}else{
+			$("#switch_node").prop("disabled",false);
+		}
+	});
+	
 });
 
 function getBaseInfo(ecnTaskId){
@@ -59,9 +70,10 @@ function getBaseInfo(ecnTaskId){
                 (value.tech_order_file=="")?$("#td_tech_order_file").html("无附件"):$("#tech_order_file").attr("href", value.tech_order_file);
                 (value.custom_change_file=="")?$("#td_custom_change_file").html("无附件"):$("#custom_change_file").attr("href", value.custom_change_file);
         		
-        		if(value.switch_mode=="全部切换")$("#type1").attr("checked", true);
-        		if(value.switch_mode=="节点前切换")$("#type2").attr("checked", true);
-        		if(value.switch_mode=="节点后切换")$("#type2").attr("checked", true);
+        		if(value.switch_mode=="全部切换"){$("#type1").prop("checked", true);$("#switch_node").prop("disabled",true);}
+        		if(value.switch_mode=="节点前切换"){$("#type2").prop("checked", true);$("#switch_node").prop("disabled",false);}
+        		if(value.switch_mode=="节点后切换"){$("#type2").prop("checked", true);$("#switch_node").prop("disabled",false);}
+        		
         		$("#switch_node").val(value.switch_node);
         	});
         	$.each(response.dataMaterielInfo,function (index,value) {

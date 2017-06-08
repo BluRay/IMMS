@@ -87,5 +87,9 @@ public class CommonServiceImpl implements ICommonService {
 	public List<Map<String, String>> getWorkshopSelect_Key() {
 		return commonDao.getWorkshopSelect_Key();
 	}
+	@Override
+	public List<Map<String, Object>> getOrderConfigSelect(String order_id) {
+		return commonDao.queryOrderConfigList(order_id);
+	}
 
 }

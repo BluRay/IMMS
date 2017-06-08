@@ -519,3 +519,24 @@ function getPartsSelect(elementId, submitId, fn_backcall) {
 		}
 	});
 }
+
+/**
+ * 根据订单id获取订单配置下拉列表
+ * @param order_id
+ */
+function getOrderConfigSelect(order_id,selectval,selectId,selectType,valName) {
+	$.ajax({
+		url : "/IMMS/common/getOrderConfigSelect",
+		dataType : "json",
+		data : {
+				order_id:order_id
+			},
+		async : false,
+		error : function(response) {
+			alert(response.message)
+		},
+		success : function(response) {
+			getSelects(response.data,selectval,selectId,selectType, valName);	
+		}
+	});
+}

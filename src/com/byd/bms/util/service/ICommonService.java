@@ -2,7 +2,6 @@ package com.byd.bms.util.service;
 
 import java.util.List;
 import java.util.Map;
-
 import com.byd.bms.util.model.BmsBaseProcess;
 
 public interface ICommonService {
@@ -37,4 +36,6 @@ public interface ICommonService {
 	List<BmsBaseProcess> queryProcessList(Map<String, Object> condMap);
 	
 	List<Map<String,String>> getWorkshopSelect_Key();
+
+	List<Map<String,Object>> getOrderConfigSelect(String order_id);
 }

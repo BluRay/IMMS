@@ -208,4 +208,15 @@ public class CommonController extends BaseController {
 		return model;
 	}
 	
+	/**
+	 * 根据订单编号查询订单配置列表
+	 * @return
+	 */
+	@RequestMapping("/getOrderConfigSelect")
+	@ResponseBody
+	public ModelMap getOrderConfigSelect(){
+		model=new ModelMap();
+		model.put("data", commonService.getOrderConfigSelect(request.getParameter("order_id")));
+		return model;
+	}
 }

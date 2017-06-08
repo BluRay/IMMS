@@ -155,4 +155,10 @@
 		SELECT id,workshop_name AS name FROM BMS_BASE_WORKSHOP 
 	</select>
 	
+	<select id="queryOrderConfigList" parameterType="String" resultType="Map">
+		SELECT id,order_config_name name FROM BMS_OR_ORDER_CONFIG 
+		WHERE order_id=#{order_id}
+	</select>
+	
+	
 </mapper>

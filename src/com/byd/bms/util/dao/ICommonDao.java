@@ -3,6 +3,7 @@ package com.byd.bms.util.dao;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.byd.bms.util.model.BmsBaseProcess;
@@ -41,4 +42,6 @@ public interface ICommonDao {
 	List<BmsBaseProcess> queryProcessList(Map<String, Object> condMap);
 	
 	public List<Map<String,String>> getWorkshopSelect_Key();
+
+	List<Map<String, Object>> queryOrderConfigList(@Param("order_id") String order_id);
 }
