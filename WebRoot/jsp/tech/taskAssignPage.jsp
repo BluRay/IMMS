@@ -99,10 +99,11 @@
 							<input name="switch_mode" value="节点后切换" type="radio"><span>节点后切换&nbsp;&nbsp;</span>
 						</td>
 					</tr>
-					<tr id="tr_switch_node" style="display:none;height:40px">
+					<tr id="tr_switch_node" style="height:40px">
 						<td align="right" style="width:100px">切换节点：</td>
 						<td style="width:250px">
 							<select id="switch_node" class="input-medium">
+								<option value=''></option>
 								<option value='焊装'>焊装</option>
 								<option value='玻璃钢'>玻璃钢</option>
 								<option value='涂装'>涂装</option>

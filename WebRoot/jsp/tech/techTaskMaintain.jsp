@@ -191,7 +191,7 @@
 				</form>
 				<form id="uploadForm" class="form-horizontal" action="" enctype="multipart/form-data" method="post">
 					<div class="form-group" id="upload_div">
-						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="editOrderCode">*&nbsp;配置信息：</label>
+						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="editOrderCode">*&nbsp;物料清单：</label>
 						<div class="col-sm-9">
 								<div class="col-sm-4">
 									<input id="file" style="margin-left: -10px;padding:0px 0px;font-size: 12px" class="btn btn-info btn-small" name="file" accept=".xls" type="file"> 				
