@@ -26,7 +26,7 @@ $(document).ready(function () {
 		$("#search_measures").append("<option value=''>全部</option><option value='0'>忽略</option><option value='1'>异常</option><option value='2'>停线</option>");
 		$("#edit_severity_level").append("<option value='0'>不影响</option><option value='1'>普通</option><option value='2'>严重</option>");
 		$("#edit_measures").append("<option value='0'>忽略</option><option value='1'>异常</option><option value='2'>停线</option>");
-		getKeysSelect("EXCEPTION_RESPONSIBILITY_DEPARTMENT", "", "#edit_duty_department","noall","value");
+		getKeysSelect("EXCEPTION_RESPONSIBILITY_DEPARTMENT", "", "#edit_duty_department",null,"value");
 	}
 });
 
@@ -84,7 +84,8 @@ function confirm(exception_id){
 	
 }
 
-function edit(id){
+function edit(id,factory,workshop,line,process){
+	getProcessList(factory,workshop,line,process);
 	getFactorySelect("plan/exceptionManager",'',"#edit_factory",null,'id');
 	getWorkshopSelect("plan/exceptionManager",$("#edit_factory :selected").text(),"","#edit_workshop",null,"id");
 	getReasonTypeSelect();
@@ -123,11 +124,12 @@ function edit(id){
 		success : function(response) {
 			$.each(response.rows,function(index,value){
 				if(index == 0){
+					
 					$("#exception_id").val(value.id);
-					$("#edit_factory").find("option[text='"+value.factory+"']").attr("selected", true);
-					$("#edit_workshop").find("option[text='"+value.workshop+"']").attr("selected", true);
+					$("#edit_factory option:contains('"+value.factory+"')").prop("selected", true);
+					$("#edit_workshop option:contains('"+value.workshop+"')").prop("selected", true);
+
 					$("#edit_line").val(value.line);
-					getProcessList(value.factory,value.workshop,value.line)
 					$("#edit_busNumber").val(value.bus_number);
 					$("#edit_reason_type").val(value.reason_type_id);
 					$("#edit_detailed_reason").val(value.detailed_reasons);
@@ -142,7 +144,7 @@ function edit(id){
 	
 }
 
-function getProcessList(factory,workshop,line){
+function getProcessList(factory,workshop,line,process){
 	$("#edit_process").empty();
 	$.ajax({
 		url : "../common/queryProcessList",
@@ -159,9 +161,11 @@ function getProcessList(factory,workshop,line){
 		success : function(response) {
 			var strs = "";
 		    $.each(response.data, function(index, value) {
-		    	strs += "<option value=" + value.id + ">" + value.process_name + "</option>";
+		    	strs += "<option value=" + value.process_name + ">" + value.process_name + "</option>";
 		    });
 		    $("#edit_process").append(strs);
+		    //console.log("-->process = " + process);
+		    $("#edit_process").val(process);
 		}
 	});
 }
@@ -390,7 +394,7 @@ function initTable() {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};},
     	        formatter:function(value, row, index){
     	        	return "<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"修改\" onclick='edit(" + row['id'] + 
-		                    ")' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;<i class=\"glyphicon glyphicon-ok bigger-130 showbus\" title=\"处理\" onclick='confirm(" + row['id'] + 
+		                    ",\""+row['factory']+"\",\""+row['workshop']+"\",\""+row['line']+"\",\""+row['process']+"\")' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;<i class=\"glyphicon glyphicon-ok bigger-130 showbus\" title=\"处理\" onclick='confirm(" + row['id'] + 
 		                    ")' style='color:blue;cursor: pointer;'></i>";
     	        }
             }

@@ -58,23 +58,9 @@
 							<td><input type="text" style="height: 30px;"
 								class="input-medium revise" placeholder="请输入任务内容..." value=""
 								id="search_tech_task_content" /></td>
-							<!-- <td><select id="search_order_status" class="input-medium revise">
-								<option value=''>全部</option>
-								<option value='0'>未开始</option>
-								<option value='1'>生产中</option>
-								<option value='2'>已完成</option>
-								</select>
-							</td> -->
 							<td>技改单日期：</td>
 							<td>
-								<div class="input-daterange input-group">
-									<input type="text" class="input-sm form-control" name="tech_date_start" data-date-format="yyyy-mm-dd" id="tech_date_start"  />
-									<span class="input-group-addon">
-										<i class="fa fa-exchange"></i>
-									</span>
-
-									<input type="text" class="input-sm form-control" name="tech_date_end" data-date-format="yyyy-mm-dd" id="tech_date_end"  />
-								</div>
+							<input id="search_tech_date_start" name="search_tech_date_start" placeholder="开始时间..." style="width:110px" type="text" onClick="WdatePicker({el:'search_tech_date_start',dateFmt:'yyyy-MM-dd'});"> - <input id="search_tech_date_end" name="search_tech_date_end" placeholder="结束时间..." style="width:110px" type="text" onClick="WdatePicker({el:'search_tech_date_end',dateFmt:'yyyy-MM-dd'});">
 							<td>状态：</td>
 							<td><select class="input-medium carType" id="search_tech_task_status" style="width: 80px">
 											<option value="">全部</option>
@@ -84,9 +70,7 @@
 											<option value="已完成">已完成</option>
 								</select>
 							</td>
-							<td><input type="button"
-								class="btn btn-sm btn-primary btnQuery" id="btnQuery" value="查询"
-								style="margin-left: 2px;"></input>
+							<td><input type="button" class="btn btn-sm btn-primary btnQuery" id="btnQuery" value="查询" style="margin-left: 2px;"></input>
 								<button id='btnAdd' class="btn btn-sm btn-success">新增</button></td>
 						</tr>
 					</table>
@@ -170,7 +154,7 @@
 						<div class="col-sm-3">
 							<input value='重大变更' type="checkbox" name="new_custom_change" title="" id="new_custom_change"/>&nbsp;是
 						</div>
-						<label class="col-sm-3 control-label no-padding-right" for="new_custom_change_no">*&nbsp;顾客变更单号：</label>
+						<label class="col-sm-3 control-label no-padding-right" for="new_custom_change_no">&nbsp;顾客变更单号：</label>
 						<div class="col-sm-3">
 							<input type="text" class="input-medium" style="width:100%;"
 								placeholder="" id="new_custom_change_no" name="new_custom_change_no" />
@@ -182,7 +166,7 @@
 						<div class="col-sm-4">
 							<input multiple="" name="new_tech_order_file" type="file" id="new_tech_order_file" />
 						</div>
-						<label class="col-sm-2 control-label no-padding-right" for="new_custom_change_no">*&nbsp;顾客变更单附件：</label>
+						<label class="col-sm-2 control-label no-padding-right" for="new_custom_change_no">&nbsp;顾客变更单附件：</label>
 						<div class="col-sm-4">
 							<input multiple="" name="new_custom_change_no" type="file" id="new_custom_change_file" />
 						</div>
@@ -191,7 +175,7 @@
 				</form>
 				<form id="uploadForm" class="form-horizontal" action="" enctype="multipart/form-data" method="post">
 					<div class="form-group" id="upload_div">
-						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="editOrderCode">*&nbsp;物料清单：</label>
+						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="editOrderCode">&nbsp;物料清单：</label>
 						<div class="col-sm-9">
 								<div class="col-sm-4">
 									<input id="file" style="margin-left: -10px;padding:0px 0px;font-size: 12px" class="btn btn-info btn-small" name="file" accept=".xls" type="file"> 				
@@ -369,8 +353,7 @@
 	<script src="../assets/js/ace/elements.onpage-help.js"></script>
 	<script src="../assets/js/ace/ace.onpage-help.js"></script>
 	<script src="../assets/js/bootstrap3-typeahead.js"></script>
-	<script src="../assets/js/date-time/bootstrap-datepicker.min.js"></script>
-	<script src="../assets/js/date-time/locales/bootstrap-datepicker.zh-CN.js"></script>
+	<script src="../js/datePicker/WdatePicker.js"></script>
 	<script src="../assets/js/ace/elements.fileinput.js"></script>
 	<script src="../assets/js/bootbox.min.js"></script>
 	<script src="../js/jsrender.min.js"></script>

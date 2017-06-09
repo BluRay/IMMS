@@ -140,7 +140,7 @@
 	
 	<select id="checkPlanIssuanceList" parameterType="Map" resultType="Map">
 	SELECT a.*,o.order_no,c.product_qty FROM (SELECT pp.factory_id,pp.order_id,COUNT(pp.D#{day}) AS count_num 
-	FROM BMS_PLAN_MASTER_PLAN pp WHERE pp.factory_id = #{factory_id} 
+	FROM BMS_PLAN_MASTER_PLAN pp WHERE pp.factory_id = #{factory_id} AND pp.order_id = (select id from BMS_OR_ORDER where order_no = #{order_no})
 		AND pp.plan_month =#{issuance_month} GROUP BY pp.order_id ORDER BY order_id) a
 		LEFT JOIN BMS_OR_FACTORY_ORDER_CONFIG c ON a.order_id = c.order_id AND a.factory_id = c.factory_id
 		LEFT JOIN BMS_OR_ORDER o ON a.order_id = o.id

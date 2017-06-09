@@ -175,7 +175,7 @@ public class PlanServiceImpl implements IPlanService {
 			copyPlanMasterPlan.setFlag(String.valueOf(Integer.parseInt(copyPlanMasterPlan.getFlag())+1));
 			copyPlanMasterPlan.setCreate_date(creatTime);
 			
-			int ttt = planDao.insertMasterPlan(copyPlanMasterPlan);
+			planDao.insertMasterPlan(copyPlanMasterPlan);
 			//更新 新增的 id 到list
 			datalist.set(i, copyPlanMasterPlan);
 		}

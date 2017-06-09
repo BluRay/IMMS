@@ -223,7 +223,7 @@ function showCreatePage(){
 				text: "保存&新增",
 				"class" : "btn btn-success btn-minier",
 				click: function() {
-					ajaxEdit(row.config_id||"0",true); 
+					ajaxEdit("0",true); 
 				} 
 			}
 		]

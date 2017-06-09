@@ -11,17 +11,19 @@ $(document).ready(function(){
 	generatekeys("ECN_CHANGE_TYPE", ECN_CHANGE_TYPE);
 	generatekeys("ECN_DUTY_UNIT", ECN_DUTY_UNIT);
 	
-	$('.input-daterange').datepicker({
-		language: 'zh-CN',
-		format: "yyyy-mm-dd",
-		autoclose: true,
-	});
-	
 	ajaxQuery();
 	
 	$(".btnQuery").on("click",function(){
 		ajaxQuery();
 	}); 
+	
+	$('#new_custom_change').change(function(){
+		if($(this).prop("checked")){
+			$('#new_custom_change_no').prop("disabled",false);
+		}else{
+			$('#new_custom_change_no').prop("disabled",true);
+		}
+	});
 	
 	/**
 	 * 触发弹出新增技改任务界面
@@ -34,19 +36,9 @@ $(document).ready(function(){
 		
 		$('#new_tech_point_num').val(1);
 		
-		/**
-		 * 日期控件初始化
-		 */
-		$('.date-picker').datepicker({
-			language: 'zh-CN',
-			autoclose: true,
-			todayHighlight: true,
-			todayBtn:  'linked'
-		})
-		//show datepicker when clicking on the icon
-		.next().on(ace.click_event, function(){
-			$(this).prev().focus();
-		});
+		$('#new_custom_change').prop("checked",false);
+		$('#new_custom_change_no').prop("disabled",true);
+
 		$('#new_tech_date').val(formatDate(new Date()));
 		//文件控件初始化
 		$('#new_tech_order_file , #new_custom_change_file').ace_file_input({
@@ -188,7 +180,7 @@ function ajaxQuery(){
 		sScrollY: $(window).height()-250,
 		scrollX: "1500px",
 		/*scrollCollapse: true,*/
-		pageLength: 10,
+		pageLength: 15,
 		pagingType:"full_numbers",
 		lengthChange:false,
 		orderMulti:false,
@@ -211,12 +203,12 @@ function ajaxQuery(){
 				"task_content":$("#search_task_content").val(),
 				"tech_date_start":$("#search_tech_date_start").val(),
 				"tech_date_end":$("#search_tech_date_end").val(),
-				"status":$("search_tech_task_status").val
+				"status":$("#search_tech_task_status").val()
 			};
             param.length = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
             param.start = data.start;//开始的记录序号
             param.page = (data.start / data.length)+1;//当前页码
-
+            console.log("-->tech_date_start = " + $("#search_tech_date_start").val(),param);
             $.ajax({
                 type: "post",
                 url: "techTaskMaintain/getTaskMaintainList",
@@ -293,24 +285,26 @@ function getSelectRowDatas(tableID) {
 		var obj = new Object();
 		var objTr = trs[i];
 		var tdArray = objTr.childNodes;
-
+		console.log("-->tdArray id  = " + tdArray[0].id);
 		if (tdArray[0].innerHTML == "" && tdArray[0].children.length == 0) {
 			continue;
 		}
 
 		for (var j = 0; j < tdArray.length; j++) {
 			var propertyName = tdArray[j].id;
+			console.log("-->propertyName = " + propertyName);
 			propertyValue = tdArray[j].innerHTML;
 			var childTag = tdArray[j].children;
 			if (childTag.length > 0) {
 				var inputType = childTag[0].tagName;
 				var inputName = childTag[0].type;
+				/**
 				if (inputName == "checkbox") {
 					if (childTag[0].checked == false) { // 判断为没有选中的数据行直接跳出不做处理
 						break;
 					}
 					continue;
-				}
+				}**/
 				if ((inputType == "INPUT" && inputName == "hidden") || (inputType == "INPUT" && inputName == "text") || inputType == "SELECT") {
 					propertyValue = childTag[0].value;
 				} else if (inputType === "A") {
@@ -506,7 +500,9 @@ function ajaxEdit() {
 		$("#edit_duty_unit").focus();
 		return false;
 	}
-	var trs = getSelectRowDatas("table2");
+	var trs = selectedrows; //getSelectRowDatas("table2");
+	
+	console.log('--trs = ' , trs);
 
 	$('#teckTaskForm_moidfy').ajaxSubmit({
 		url : "techTaskMaintain/editTechTaskMaintain",
@@ -536,23 +532,25 @@ function ajaxQueryChangedMaterialList(tech_task_id){
 			"tech_task_id" : tech_task_id
 		},
 		success : function(response) {
+			selectedrows = "";
 			$("#table2 tbody").html("");
+			selectedrows=JSON.stringify(response.data);
 			$.each(response.data, function(index, value) {
 				var tr = $("<tr />");
-				$("<td id=\"sap_no\" contentEditable=\"true\"/>").html(value.sap_no).appendTo(tr);
-				$("<td id=\"material_desc\" contentEditable=\"true\"/>").html(value.material_desc).appendTo(tr);
-				$("<td id=\"material_type\" contentEditable=\"true\"/>").html(value.material_type).appendTo(tr);
-				$("<td id=\"material_spec\" contentEditable=\"true\"/>").html(value.material_spec).appendTo(tr);
-				$("<td id=\"unit\" contentEditable=\"true\"/>").html(value.unit).appendTo(tr);
-				$("<td id=\"supplier_code\" contentEditable=\"true\"/>").html(value.supplier_code).appendTo(tr);
-				$("<td id=\"single_loss\" contentEditable=\"true\"/>").html(value.single_loss).appendTo(tr);
-				$("<td id=\"level_usage\" contentEditable=\"true\"/>").html(value.level_usage).appendTo(tr);
-				$("<td id=\"single_weight\" contentEditable=\"true\"/>").html(value.single_weight).appendTo(tr);
-				$("<td id=\"single_usage\" contentEditable=\"true\"/>").html(value.single_usage).appendTo(tr);
-				$("<td id=\"workshop\" contentEditable=\"true\"/>").html(value.workshop).appendTo(tr);
-				$("<td id=\"process\" contentEditable=\"true\"/>").html(value.process).appendTo(tr);
-				$("<td id=\"assemb_site\" contentEditable=\"true\"/>").html(value.assemb_site).appendTo(tr);
-				$("<td id=\"remark\" contentEditable=\"true\"/>").html(value.remark).appendTo(tr);
+				$("<td id=\"sap_no\" contentEditable=\"false\"/>").html(value.sap_no).appendTo(tr);
+				$("<td id=\"material_desc\" contentEditable=\"false\"/>").html(value.material_desc).appendTo(tr);
+				$("<td id=\"material_type\" contentEditable=\"false\"/>").html(value.material_type).appendTo(tr);
+				$("<td id=\"material_spec\" contentEditable=\"false\"/>").html(value.material_spec).appendTo(tr);
+				$("<td id=\"unit\" contentEditable=\"false\"/>").html(value.unit).appendTo(tr);
+				$("<td id=\"supplier_code\" contentEditable=\"false\"/>").html(value.supplier_code).appendTo(tr);
+				$("<td id=\"single_loss\" contentEditable=\"false\"/>").html(value.single_loss).appendTo(tr);
+				$("<td id=\"level_usage\" contentEditable=\"false\"/>").html(value.level_usage).appendTo(tr);
+				$("<td id=\"single_weight\" contentEditable=\"false\"/>").html(value.single_weight).appendTo(tr);
+				$("<td id=\"single_usage\" contentEditable=\"false\"/>").html(value.single_usage).appendTo(tr);
+				$("<td id=\"workshop\" contentEditable=\"false\"/>").html(value.workshop).appendTo(tr);
+				$("<td id=\"process\" contentEditable=\"false\"/>").html(value.process).appendTo(tr);
+				$("<td id=\"assemb_site\" contentEditable=\"false\"/>").html(value.assemb_site).appendTo(tr);
+				$("<td id=\"remark\" contentEditable=\"false\"/>").html(value.remark).appendTo(tr);
 				$("#table2 tbody").append(tr);
 			});
 		}
@@ -579,6 +577,7 @@ function upload(form,file,table){
 		}
 	}
 	if (allowSubmit) {
+		selectedrows = "";
 		$(form).ajaxSubmit({
 			dataType : "json",
 			type : 'post',

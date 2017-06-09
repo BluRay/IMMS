@@ -430,7 +430,8 @@ public class TechController extends BaseController{
 		infomap.put("id", request.getParameter("tech_task_id"));
 		editList.add(infomap);
 		String selectedrows = request.getParameter("selectedrows");
-		techService.updateTechTaskMaintain(editList);
+		selectedrows = selectedrows.replaceAll("\\\\", "");
+		selectedrows = selectedrows.substring(1, selectedrows.length()-1);
 		// 删除原来的变更物料清单
 		Map<String, Object> deletemap = new HashMap<String, Object>();
 		deletemap.put("tech_task_id", request.getParameter("tech_task_id"));
@@ -438,6 +439,7 @@ public class TechController extends BaseController{
 		List<Map<String, Object>> changeMaterialList = new ArrayList<Map<String, Object>>();
 		JSONArray jsonArray = JSONArray.fromObject(selectedrows);
 		JSONObject obj = null;
+		techService.updateTechTaskMaintain(editList);
 		for (int i = 0; i < jsonArray.size(); i++) {
 			Map<String, Object> changeMaterialMap = new HashMap<String, Object>();
 			obj = jsonArray.getJSONObject(i);
@@ -449,7 +451,7 @@ public class TechController extends BaseController{
 			changeMaterialMap.put("unit", obj.getString("unit"));
 			changeMaterialMap.put("supplier_code", obj.getString("supplier_code"));
 			changeMaterialMap.put("single_loss", obj.getString("single_loss"));
-			changeMaterialMap.put("level_usage", obj.getString("level_usage"));
+			changeMaterialMap.put("level_usage", obj.getString("level_usage")); 
 			changeMaterialMap.put("single_weight", obj.getString("single_weight"));
 			changeMaterialMap.put("single_usage", obj.getString("single_usage"));
 			changeMaterialMap.put("workshop", obj.getString("workshop"));

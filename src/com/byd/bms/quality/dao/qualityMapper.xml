@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.byd.bms.quality.dao.IQualityDao">
+
+	<select id="getOrderConfigList" parameterType="Map" resultType="Map">
+		select o.id,c.id config_id,o.order_no,CONCAT(o.order_no,' ',o.order_name,t.bus_type_code,'  ',o.order_qty,'台') AS order_desc,
+		o.memo,t.internal_name bus_type,c.order_config_name,u.username editor,c.edit_date,o.bus_type_id
+		from BMS_OR_ORDER_CONFIG c 
+		left join BMS_OR_ORDER o on o.id=c.order_id
+		left join BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id 
+		left join BMS_BASE_USER u on u.id=c.editor_id
+		where 1=1
+		<if test="order_id !=null and order_id !=''">
+			and o.id=#{order_id}
+		</if>
+		<if test="bus_type_id !=null and bus_type_id !=''">
+			and o.bus_type_id=#{bus_type_id}
+		</if>
+		<if test="order_config_id !=null and order_config_id !='' ">
+			and c.id=#{order_config_id}
+		</if>
+			order by o.order_no desc
+		<if test="start !=null">
+			limit #{start},#{length}
+		</if>
+		
+	</select>
+	
+	<select id="getConfigTotalCount" parameterType="Map" resultType="int">
+		select count(c.id)
+		from BMS_OR_ORDER_CONFIG c 
+		left join BMS_OR_ORDER o on o.id=c.order_id
+		where 1=1
+		<if test="order_id !=null and order_id !=''">
+			and o.id=#{order_id}
+		</if>
+		<if test="bus_type_id !=null and bus_type_id !=''">
+			and o.bus_type_id=#{bus_type_id}
+		</if>
+		<if test="order_config_id !=null and order_config_id !='' ">
+			and c.id=#{order_config_id}
+		</if>
+	</select>
+	
+	<select id="queryKeyPartsHeader" parameterType="Map" resultType="Map">
+		select id,bus_type_id,order_id,order_config_id from BMS_QM_KEY_PARTS_TEMPLATE_HEADER 
+		where bus_type_id=#{bus_type_id} and order_id=#{order_id} and order_config_id=#{order_config_id}
+	</select>
+	
+	<insert id="saveKeyPartsHeader" parameterType="Map" useGeneratedKeys="true" keyProperty="id" >
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into BMS_QM_KEY_PARTS_TEMPLATE_HEADER (bus_type_id,order_id,order_config_id,editor_id,edit_date)
+		values (#{bus_type_id},#{order_id},#{order_config_id},#{editor_id},#{edit_date})
+	</insert>
+	
+	<update id='updateKeyPartsHeader' parameterType="Map">
+		update BMS_QM_KEY_PARTS_TEMPLATE_HEADER set editor_id=#{editor_id} ,edit_date=#{edit_date}
+		where bus_type_id=#{bus_type_id} and order_id=#{order_id} and order_config_id=#{order_config_id}
+	</update>
+	
+	<insert id="saveKeyPartsDetails" parameterType="Map" useGeneratedKeys="true" keyProperty="id" >
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into BMS_QM_KEY_PARTS_TEMPLATE_DETAILS 
+		(key_components_template_id,sap_mat,parts_no,parts_name,size,vendor,workshop,process,3C_components)
+		values
+		<foreach collection="detail_list" item="detail" index="index" separator=",">
+			(#{header_id},#{detail.sap_mat},#{detail.parts_no},#{detail.parts_name},#{detail.size},#{detail.vendor},#{detail.workshop},#{detail.process},#{detail.ccc})
+		</foreach>		
+	</insert>
+	
+	<delete id="deleteKeyPartsByHeader" parameterType="int">
+		delete from BMS_QM_KEY_PARTS_TEMPLATE_DETAILS where key_components_template_id=#{header_id}
+	</delete>
+	
+	<select id="queryKeyPartsList" parameterType="Map" resultType="Map">
+		select d.sap_mat,d.parts_no,d.parts_name,d.size,d.vendor,d.workshop,d.process,d.3C_components ccc
+		from BMS_QM_KEY_PARTS_TEMPLATE_DETAILS d
+		left join BMS_QM_KEY_PARTS_TEMPLATE_HEADER h on d.key_components_template_id=h.id
+		where h.bus_type_id=#{bus_type_id} and h.order_id=#{order_id} and h.order_config_id=#{order_config_id}
+	</select>
+</mapper>

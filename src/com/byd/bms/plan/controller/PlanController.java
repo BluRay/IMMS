@@ -287,10 +287,10 @@ public class PlanController extends BaseController{
 	@RequestMapping("/getIssuancePlan")
 	@ResponseBody
 	public ModelMap getIssuancePlan(){
-		Map<String,Object> conditionMap=new HashMap<String,Object>();
+		Map<String,Object> conditionMap=new HashMap<String,Object>();		//2017-06-01
 		if (request.getParameter("issuance_date") != null) conditionMap.put("issuance_date", request.getParameter("issuance_date"));
-		conditionMap.put("day",Integer.valueOf(request.getParameter("issuance_date").substring(6, 8)));		
-		conditionMap.put("issuance_month",request.getParameter("issuance_date").substring(0, 6));	
+		conditionMap.put("day",Integer.valueOf(request.getParameter("issuance_date").substring(8, 10)));		
+		conditionMap.put("issuance_month",request.getParameter("issuance_date").substring(0, 4) + request.getParameter("issuance_date").substring(5, 7));	
 		if (request.getParameter("factory_id") != null) conditionMap.put("factory_id", request.getParameter("factory_id"));
 		if (request.getParameter("order_no") != null) conditionMap.put("order_no", request.getParameter("order_no"));
 
@@ -324,8 +324,8 @@ public class PlanController extends BaseController{
 				PlanIssuance newIssuance = new PlanIssuance();
 				newIssuance.setOrder_config_name(cur_planIssuance.getOrder_no() + "总数");
 				Map<String,Object> conditionMap2=new HashMap<String,Object>();				
-				conditionMap2.put("day",Integer.valueOf(request.getParameter("issuance_date").substring(6, 8)));		
-				conditionMap2.put("month",request.getParameter("issuance_date").substring(0, 6));		
+				conditionMap2.put("day",Integer.valueOf(request.getParameter("issuance_date").substring(8, 10)));		
+				conditionMap2.put("month",request.getParameter("issuance_date").substring(0, 4) + request.getParameter("issuance_date").substring(5, 7));		
 				conditionMap2.put("factory_id", request.getParameter("factory_id"));
 				conditionMap2.put("order_id",this_order_id);
 				total_datalist = planService.getPlanIssuanceTotal(conditionMap2);
@@ -790,6 +790,7 @@ public class PlanController extends BaseController{
 		condMap.put("length", length);
 		condMap.put("id", request.getParameter("id"));
 		condMap.put("factory", request.getParameter("factory"));
+		condMap.put("workshop", request.getParameter("workshop"));
 		condMap.put("line", request.getParameter("line"));
 		condMap.put("bus_number", request.getParameter("bus_number"));
 		condMap.put("severity_level_id", request.getParameter("severity_level_id"));
