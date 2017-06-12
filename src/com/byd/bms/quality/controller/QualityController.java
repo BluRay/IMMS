@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.io.FileUtils;
@@ -27,6 +28,8 @@ import com.byd.bms.quality.model.BmsBaseQCStdRecord;
 import com.byd.bms.util.ExcelModel;
 import com.byd.bms.util.ExcelTool;
 import com.byd.bms.util.controller.BaseController;
+
+import net.sf.json.JSONObject;
 /**
  * 品质模块Controller
  * @author xiong.jianwu
@@ -312,6 +315,32 @@ public class QualityController extends BaseController {
 
 		return model;
 		
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping("/getFaultLibList")
+	@ResponseBody
+	public ModelMap getFaultLibList(){
+		String conditions = request.getParameter("conditions");
+		JSONObject jo=JSONObject.fromObject(conditions);
+		Map<String,Object> conditionMap=new HashMap<String,Object>();
+		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
+		int start=(request.getParameter("start")!=null)?Integer.parseInt(request.getParameter("start")):0;		//分页数据起始数
+		int length=(request.getParameter("length")!=null)?Integer.parseInt(request.getParameter("length")):500;	//每一页数据条数
+		conditionMap.put("draw", draw);
+		conditionMap.put("start", start);
+		conditionMap.put("length", length);
+		for(Iterator it=jo.keys();it.hasNext();){
+			String key=(String) it.next();
+			//System.out.println(key);
+			if(key.equals("faultLevel")||key.equals("faultType")){
+				Object[] arr=jo.getJSONArray(key).toArray();
+				conditionMap.put(key, arr);
+			}else
+			conditionMap.put(key, jo.get(key));
+		}
+		
+		return model;
 	}
 	
 }

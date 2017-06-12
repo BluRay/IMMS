@@ -25,4 +25,5 @@ public interface IQualityService {
 	
 	public int getStdRecordCount(Map<String,Object> conditionMap);
 	
+	public Map<String,Object> getFaultLibList(Map<String, Object> conditionMap);
 }

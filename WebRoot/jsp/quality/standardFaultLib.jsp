@@ -22,7 +22,7 @@
 					<ul class="breadcrumb">
 						<li><i class="ace-icon fa fa-home home-icon"></i><a href="<%=request.getContextPath()%>/index">首页</a></li>
 						<li><a href="#">制程品质</a></li>
-						<li class="active">功能</li>
+						<li class="active">标准故障库</li>
 					</ul><!-- /.breadcrumb -->
 
 					<!-- #section:basics/content.searchbox -->
@@ -38,7 +38,41 @@
 			<div class="page-content">
 					<div class="page-content-area">
 					
-					<!-- 东西放这里！ -->		
+					<div class="well">
+						<table>
+							<tr>
+								<td>零部件名称：</td>
+								<td><input id="input_parts" placeholder="零部件名称..." style="width:100px" type="text"></td>
+								<td>&nbsp;缺陷类别：</td>
+								<td><input id="input_bug_type" placeholder="缺陷类别..." style="width:100px" type="text"></td>
+								<td>&nbsp;严重等级：</td>
+								<td width="180px">
+									<label class="checkbox" style="width:35px;display:-webkit-inline-box;margin-left:20px">
+									<input type="checkbox" name="faultlevel" value="S" />S
+									</label>
+									<label class="checkbox" style="width:35px;display:-webkit-inline-box;vertical-align:bottom">
+									<input type="checkbox" name="faultlevel" value="A" />A
+									</label>
+									<label class="checkbox" style="width:35px;display:-webkit-inline-box;vertical-align:bottom">
+									<input type="checkbox" name="faultlevel" value="B" />B
+									</label>
+									<label class="checkbox" style="width:35px;display:-webkit-inline-box;vertical-align:bottom">
+									<input type="checkbox" name="faultlevel" value="C" />C								
+									</label>
+								</td>
+								<td>缺陷分类：</td>
+								<td>
+									<label class="checkbox" style="width:55px;display:-webkit-inline-box;margin-left:20px">
+									<input type="checkbox" name="faulttype" value="1" />尺寸
+									</label>
+									<label class="checkbox" style="width:55px;display:-webkit-inline-box;vertical-align:bottom">
+									<input type="checkbox" name="faulttype" value="0" />非尺寸
+									</label>
+								</td>
+								<td><input id="btnQuery" type="button" class="btn btn-sm btn-primary" value="查询" style="margin-left: 2px;"></input><input id="btnAdd" type="button" class="btn btn-sm btn-success" value="新增" style="margin-left: 2px;"></input></td>
+							</tr>
+						</table>
+					</div>	
 					
 					</div>
 			</div><!-- /.main-content -->

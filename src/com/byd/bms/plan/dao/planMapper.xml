@@ -291,11 +291,11 @@
 	</insert>
 	
 	<select id="getPauseList" parameterType="Map" resultType="com.byd.bms.plan.model.PlanPause">
-	SELECT P.*,O1.name AS factory_name,O2.name AS workshop_name,K.key_name as reason_type,
+	SELECT P.*,O1.factory_name AS factory_name,O2.workshop_name AS workshop_name,K.key_name as reason_type,
 	K2.key_name AS duty_department 
 	FROM BMS_PLAN_STOPLINE P
-	LEFT JOIN BMS_BASE_ORG O1 ON P.factory_id = O1.foreign_id AND O1.org_type = 2 
-	LEFT JOIN BMS_BASE_ORG O2 ON P.workshop_id = O2.foreign_id AND O2.org_type = 5 
+	LEFT JOIN BMS_BASE_FACTORY O1 ON P.factory_id = O1.id
+	LEFT JOIN BMS_BASE_WORKSHOP O2 ON P.workshop_id = O2.id 
 	LEFT JOIN BMS_BASE_KEY K ON P.reason_type_id = K.value AND K.key_code='ABNORMAL_REASON'
 	LEFT JOIN BMS_BASE_KEY K2 ON P.duty_department_id = K2.value AND K2.key_code='EXCEPTION_RESPONSIBILITY_DEPARTMENT'
 	WHERE 1=1 
@@ -336,8 +336,8 @@
 	<select id="getPauseTotalCount" parameterType="Map" resultType="int">
 	SELECT COUNT(P.id)
 	FROM BMS_PLAN_STOPLINE P
-	LEFT JOIN BMS_BASE_ORG O1 ON P.factory_id = O1.foreign_id AND O1.org_type = 2 
-	LEFT JOIN BMS_BASE_ORG O2 ON P.workshop_id = O2.foreign_id AND O2.org_type = 5 
+	LEFT JOIN BMS_BASE_FACTORY O1 ON P.factory_id = O1.id
+	LEFT JOIN BMS_BASE_WORKSHOP O2 ON P.workshop_id = O2.id 
 	LEFT JOIN BMS_BASE_KEY K ON P.reason_type_id = K.value AND K.key_code='ABNORMAL_REASON'
 	WHERE 1=1 
 	<if test="factory_id!='' and factory_id!=null">

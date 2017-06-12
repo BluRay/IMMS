@@ -152,4 +152,46 @@
 			<![CDATA[and t.creat_date < #{updateEnd}]]>
 		</if>
      </select>
+     
+     <select id="getFaultLibList" parameterType="Map" resultType="Map">
+     	select f.id,f.parts_id,p.parts_name parts,f.bug_type,f.bug,f.serious_level,f.fault_type,
+		f.workshop_name,f.workgroup_name,f.editor_id,u.username,f.edit_date
+		from BMS_QM_STANDARD_FAULT_LIBRARY f 
+		left join BMS_BASE_USER u on f.editor_id=u.id
+		left join BMS_BASE_PARTS p on f.parts_id=p.id
+		where 1=1
+		<if test="parts!=null and parts!=''">
+			and p.parts_name like CONCAT('%',#{parts},'%')
+		</if>
+		<if test="bugType !=null and  bugType !=''">
+			and f.bug_type like CONCAT('%',#{bugType},'%')
+		</if>
+		<if test="bug!=null and  bug!=''">
+			and f.bug like CONCAT('%',#{bug},'%')
+		</if>
+		<if test="workshop!=null and  workshop!=''">
+			and f.workshop_name=#{workshop}
+		</if>
+		<if test="workgroup!=null and  workgroup!=''">
+			and f.workgroup_name=#{workgroup}
+		</if>
+		<if test="faultType!=null and faultType.length!=0">
+			and f.fault_type in
+			<foreach collection="faultType" index="index" item="item"
+				open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="faultLevel!=null  and faultLevel.length!=0">
+			and f.serious_level in
+			<foreach collection="faultLevel" index="index" item="item"
+				open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		order by f.edit_date desc
+		<if test="start !=null">
+			LIMIT ${start} ,${length} 
+		</if>
+     </select>
 </mapper>

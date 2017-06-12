@@ -36,4 +36,5 @@ public interface IQualityDao {
 	
 	public int getStdRecordCount(Map<String,Object> conditionMap);
 
+	public List<Map<String, String>> getFaultLibList(Map<String, Object> conditionMap);
 }

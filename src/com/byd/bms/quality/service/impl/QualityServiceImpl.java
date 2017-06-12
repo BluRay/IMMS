@@ -107,6 +107,11 @@ public class QualityServiceImpl implements IQualityService {
 	public int getStdRecordCount(Map<String, Object> conditionMap) {
         return qualityDao.getStdRecordCount(conditionMap);
 	}
+	@Override
+	public Map<String, Object> getFaultLibList(Map<String, Object> conditionMap) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 		
 }
