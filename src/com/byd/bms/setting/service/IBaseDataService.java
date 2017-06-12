@@ -1,17 +1,15 @@
 package com.byd.bms.setting.service;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
-
 import com.byd.bms.setting.model.BmsBaseBusType;
 import com.byd.bms.setting.model.BmsBaseFactory;
 import com.byd.bms.setting.model.BmsBaseLine;
 import com.byd.bms.setting.model.BmsBaseProcess;
 import com.byd.bms.setting.model.BmsBaseStandardWorkgroup;
+import com.byd.bms.setting.model.BmsBaseVinRule;
 import com.byd.bms.setting.model.BmsBaseWorkshop;
 
 public interface IBaseDataService {
@@ -23,9 +21,11 @@ public interface IBaseDataService {
 		public int checkDeleteFactory(List ids);
 		public int addFactory(BmsBaseFactory factory);
 		
-		//车间
+		//车间 分页查询
 		public Map<String, Object> getWorkshopList(Map<String,Object> queryMap);
 		//public int getWorkshopTotalCount(Map<String,Object> queryMap);
+		// 查询所有记录
+		public Map<String, Object> getAllWorkshopList();
 		public int addWorkshop(BmsBaseWorkshop workshop);
 		public void updateWorkshop(BmsBaseWorkshop workshop);
 		public void deleteWorkshop(List ids);
@@ -51,8 +51,8 @@ public interface IBaseDataService {
 		public void editProcessConfig(List<Map<String, Object>> process_list,ModelMap model);
 		public void deleteProcessConfig(Map<String, Object> condMap,ModelMap model);
 		//车间班组
-		public Map<String, Object> getWorkgroupList(Map<String,Object> queryMap);
-		//public int getWorkgroupTotalCount(Map<String,Object> queryMap);
+		public List<BmsBaseStandardWorkgroup> getWorkgroupList(Map<String,Object> queryMap);
+		public List<Map<String, Object>> getWorkshopTreeList(Map<String,Object> queryMap);
 		public int addWorkgroup(BmsBaseStandardWorkgroup workgroup);
 		public void updateWorkgroup(BmsBaseStandardWorkgroup workgroup);
 		public void deleteWorkgroup(List ids);
@@ -62,5 +62,12 @@ public interface IBaseDataService {
 		public int addBusType(BmsBaseBusType busType);
 		public void updateBusType(BmsBaseBusType busType);
 		public Map<String, Object> getProcessConfigList(Map<String, Object> condMap);
+		public BmsBaseBusType getBusTypeById(Map<String,Object> queryMap);
+		//VIN生成规则
+		public Map<String, Object> getVinRuleList(Map<String,Object> queryMap);
+		//public int getWorkgroupTotalCount(Map<String,Object> queryMap);
+		public int addVinRule(BmsBaseVinRule workgroup);
+		public void updateVinRule(BmsBaseVinRule workgroup);
+		public void deleteVinRule(List ids);
 		
 }

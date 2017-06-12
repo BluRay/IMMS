@@ -6,7 +6,10 @@ public class BmsBaseStandardWorkgroup {
 	private String factoryName;
 	private int workshopId;
 	private String workshopName;
-	private int workgroupId;
+	private String parentId;
+	private String responsibility;
+	private String type;
+	private String workgroupId;
 	private String groupName;
 	private String memo;
 	private String deleteFlag;
@@ -14,10 +17,10 @@ public class BmsBaseStandardWorkgroup {
 	private String editor;
 	private String editDate;
 	
-	public int getWorkgroupId() {
+	public String getWorkgroupId() {
 		return workgroupId;
 	}
-	public void setWorkgroupId(int workgroupId) {
+	public void setWorkgroupId(String workgroupId) {
 		this.workgroupId = workgroupId;
 	}
 	public int getWorkshopId() {
@@ -50,6 +53,24 @@ public class BmsBaseStandardWorkgroup {
 	}
 	public void setWorkshopName(String workshopName) {
 		this.workshopName = workshopName;
+	}
+	public String getParentId() {
+		return parentId;
+	}
+	public void setParentId(String parentId) {
+		this.parentId = parentId;
+	}
+	public String getResponsibility() {
+		return responsibility;
+	}
+	public void setResponsibility(String responsibility) {
+		this.responsibility = responsibility;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
 	}
 	public String getDeleteFlag() {
 		return deleteFlag;

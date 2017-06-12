@@ -3,38 +3,38 @@ package com.byd.bms.setting.model;
 public class BmsBaseBusType {
 	private int id;
 	private String busTypeCode;
-	private String internalName;
-	private String brand;
+	private String internalName; // 车辆内部名称
+	private String brand; // 品牌
 	private String wmi;
-	private String manufacturer;
-	private int busVehicleTypeId;
-	private String busVehicleTypeName;
-	private int busBodyTypeId;
-	private String busBodyTypeName;
-	private String vehicleModel;
-	private String chassisModel;
-	private String vehicleLength;
-	private String wheelbase;
-	private String maxWeight;
+	private String manufacturer; // 制造商
+	private int busVehicleTypeId; // 车辆类型ID
+	private String busVehicleTypeName;  // 车辆烈性名称
+	private int busBodyTypeId;  // 车身类型ID
+	private String busBodyTypeName; // 车身类型名称
+	private String vehicleModel;  // 车辆型号
+	private String chassisModel; // 底盘型号
+	private String vehicleLength;  // 车辆长度
+	private String wheelbase; // 轴距
+	private String maxWeight;  //最大允许总质量
 	private String passengers;
-	private String fuelType;
-	private int driveMotorTypeId;
+	private String fuelType;  // 燃料类型
+	private int driveMotorTypeId; // 驱动电机类型
 	private String driveMotorTypeName;
-	private String driveMotor;
-	private String motorModel;
-	private String motorPower;
-	private String batteryModel;
-	private String batteryCapacity;
+	private String driveMotor; // 驱动电机
+	private String motorModel; // 电机型号
+	private String motorPower;  // 电机最大功率
+	private String batteryModel; // 电池型号
+	private String batteryCapacity; // 电池容量
 	private String ratedVoltage;
 	private String vinPrefix;
 	private String memo;
 	private int editorId;
 	private String editor;
 	private String editDate;
-	private String passengerNum;
+	private String passengerNum; // 乘员数
 	private String springNum;
-	private String lightDowndip;
-	private String maxSpeed;
+	private String lightDowndip; // 灯光下倾值
+	private String maxSpeed; // 最大时速
 	
 	public int getId() {
 		return id;

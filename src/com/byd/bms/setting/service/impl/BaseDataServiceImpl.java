@@ -17,6 +17,7 @@ import com.byd.bms.setting.model.BmsBaseFactory;
 import com.byd.bms.setting.model.BmsBaseLine;
 import com.byd.bms.setting.model.BmsBaseProcess;
 import com.byd.bms.setting.model.BmsBaseStandardWorkgroup;
+import com.byd.bms.setting.model.BmsBaseVinRule;
 import com.byd.bms.setting.model.BmsBaseWorkshop;
 import com.byd.bms.setting.service.IBaseDataService;
 @Service
@@ -64,6 +65,15 @@ public class BaseDataServiceImpl implements IBaseDataService {
 		result.put("draw", queryMap.get("draw"));
 		result.put("recordsTotal", totalCount);
 		result.put("recordsFiltered", totalCount);
+		result.put("data", datalist);
+		return result;
+	}
+	public Map<String, Object> getAllWorkshopList() {
+
+		List<BmsBaseWorkshop> datalist=baseDataDao.getAllWorkshopList();
+
+		Map<String, Object> result=new HashMap<String,Object>();
+		
 		result.put("data", datalist);
 		return result;
 	}
@@ -247,42 +257,81 @@ public class BaseDataServiceImpl implements IBaseDataService {
 	}
 	
 	//班组
-	@Override
-	public Map<String, Object> getWorkgroupList(Map<String, Object> queryMap) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<BmsBaseStandardWorkgroup> getWorkgroupList(Map<String, Object> queryMap) {
+		return baseDataDao.getWorkgroupList(queryMap);
+	}
+
+	public List<Map<String, Object>> getWorkshopTreeList(Map<String, Object> queryMap) {
+	
+		return baseDataDao.getWorkshopTreeList(queryMap);
 	}
 	@Override
 	public int addWorkgroup(BmsBaseStandardWorkgroup workgroup) {
-		// TODO Auto-generated method stub
-		return 0;
+	
+		return baseDataDao.addWorkgroup(workgroup);
 	}
 	@Override
 	public void updateWorkgroup(BmsBaseStandardWorkgroup workgroup) {
-		// TODO Auto-generated method stub
-		
+		baseDataDao.updateWorkgroup(workgroup);
 	}
 	@Override
 	public void deleteWorkgroup(List ids) {
-		// TODO Auto-generated method stub
-		
+		for(Object id : ids){
+			if(id!=null){
+				baseDataDao.deleteWorkgroup((String)id);
+			}
+		}
 	}
 	
 	//车型
 	@Override
 	public Map<String, Object> getBusTypeList(Map<String, Object> queryMap) {
-		// TODO Auto-generated method stub
-		return null;
+		int totalCount=0;
+		List<BmsBaseBusType> datalist=baseDataDao.getBusTypeList(queryMap);
+		totalCount=baseDataDao.getBusTypeTotalCount(queryMap);
+		Map<String, Object> result=new HashMap<String,Object>();
+		result.put("draw", queryMap.get("draw"));
+		result.put("recordsTotal", totalCount);
+		result.put("recordsFiltered", totalCount);
+		result.put("data", datalist);
+		return result;
 	}
 	@Override
 	public int addBusType(BmsBaseBusType busType) {
-		// TODO Auto-generated method stub
-		return 0;
+		return baseDataDao.addBusType(busType);
 	}
 	@Override
 	public void updateBusType(BmsBaseBusType busType) {
-		// TODO Auto-generated method stub
-		
+	    baseDataDao.updateBusType(busType);
 	}
+	@Override
+	public BmsBaseBusType getBusTypeById(Map<String, Object> queryMap) {
+		return baseDataDao.getBusTypeById(queryMap);
+	}
+	// VIN生成规则
 	
+	public Map<String, Object> getVinRuleList(Map<String, Object> queryMap) {
+		int totalCount=0;
+		List<BmsBaseVinRule> datalist=baseDataDao.getVinRuleList(queryMap);
+		totalCount=baseDataDao.getVinRuleTotalCount(queryMap);
+		Map<String, Object> result=new HashMap<String,Object>();
+		result.put("draw", queryMap.get("draw"));
+		result.put("recordsTotal", totalCount);
+		result.put("recordsFiltered", totalCount);
+		result.put("data", datalist);
+		return result;
+	}
+
+	public int addVinRule(BmsBaseVinRule vinRule) {
+		return baseDataDao.addVinRule(vinRule);
+	}
+
+	public void updateVinRule(BmsBaseVinRule vinRule) {
+		baseDataDao.updateVinRule(vinRule);
+	}
+
+	public void deleteVinRule(List ids) {
+		baseDataDao.deleteVinRule(ids);
+	}
+
 }

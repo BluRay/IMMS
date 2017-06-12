@@ -90,6 +90,11 @@
 			LIMIT #{start} ,#{length} 
 		</if>
 	</select>
+
+	<select id="getAllWorkshopList" parameterType="Map" resultMap="workshopMap">
+		SELECT w.id,w.workshop_name,w.workshop_code,w.delete_flag,w.edit_date,w.memo,u.display_name editor from BMS_BASE_WORKSHOP as w left join
+		BMS_BASE_USER u on u.staff_number=w.editor_id where 1=1 and w.delete_flag='0'
+	</select>
 	<select id="getWorkshopTotalCount" parameterType="Map"
 		resultType="int">
 		select count(w.id) from BMS_BASE_WORKSHOP as w left join
@@ -341,6 +346,194 @@
 	
 	<update id="deleteProcessConfig" parameterType="Map">
 		delete from BMS_PD_SCAN_RULE where factory=#{factory} and order_type=#{order_type}
+	</update>
+	<!-- VIN生成规则 
+	<resultMap type="com.byd.bms.setting.model.BmsBaseVinRule" id="vinRuleMap">
+		<id property="id" column="id" />
+		<result property="busTypeId" column="bustype_id" />
+		<result property="area" column="area" />
+		<result property="vinPrefix" column="VIN_prefix" />
+		<result property="wmiExtension" column="WMI_extension" />
+		<result property="numberSize" column="number_size" />
+		<result property="editorId" column="editor_id" />
+		<result property="editDate" column="edit_date" />
+	</resultMap>-->
+	<select id="getVinRuleList" parameterType="Map" resultType="com.byd.bms.setting.model.BmsBaseVinRule">
+		select id as id,bustype_id as busTypeId,area as area,
+		  VIN_prefix as vinPrefix,WMI_extension as wmiExtension,
+		  number_size as numberSize,editor_id as editorId,edit_date as editDate
+		  from BMS_BASE_VIN_RULE where 1=1 
+		<if test="busTypeId !=null and busTypeId !=''">
+			and bustype_id=#{busTypeId}
+		</if>
+		<if test="area !=null and area !=''">
+			and area=#{area}
+		</if>
+	</select>
+	<select id="getVinRuleTotalCount" parameterType="Map" resultType="int">
+		select count(id) from BMS_BASE_VIN_RULE where 1=1 
+		<if test="busTypeId !=null and busTypeId !=''">
+			and bustype_id=#{busTypeId}
+		</if>
+		<if test="area !=null and area !=''">
+			and area=#{area}
+		</if>
+	</select>
+	<insert id="addVinRule" parameterType="com.byd.bms.setting.model.BmsBaseVinRule">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT LAST_INSERT_ID() AS id
+		</selectKey>
+		insert into BMS_BASE_VIN_RULE (bustype_id,area,VIN_prefix,WMI_extension,number_size,editor_id,edit_date)
+		values
+			(#{busTypeId},#{area},#{vinPrefix},#{wmiExtension},
+			#{numberSize},#{editorId},#{editDate})
+	</insert>
+	<delete id="deleteVinRule" parameterType="List">
+		delete from BMS_BASE_VIN_RULE 
+		where id in
+		<foreach collection="list" item="id" index="index" open="(" close=")" separator=",">
+			#{id}
+		</foreach>
+	</delete>
+	<update id="updateVinRule" parameterType="com.byd.bms.setting.model.BmsBaseVinRule">
+		update BMS_BASE_VIN_RULE set 
+		bustype_id=#{busTypeId},area=#{area},VIN_prefix=#{vinPrefix},WMI_extension=#{wmiExtension},
+		number_size=#{numberSize},editor_id=#{editorId},edit_date=#{editDate}
+		where id=#{id}
+	</update>
+	
+	<!-- 车型 -->
+	<!-- resultMap type="com.byd.bms.setting.model.BmsBaseBusType" id="busTypeMap">
+		<id property="id" column="id" />
+		<result property="busTypeCode" column="bus_type_code" />
+		<result property="internalName" column="internal_name" />
+		<result property="brand" column="brand" />
+		<result property="wmi" column="wmi" />
+		<result property="manufacturer" column="manufacturer" />
+		<result property="busVehicleTypeId" column="bus_vehicle_type" />
+		<result property="busBodyTypeId" column="bus_body_type" />
+		<result property="vehicleModel" column="vehicle_model" />
+		<result property="chassisModel" column="chassis_model" />
+		<result property="vehicleLength" column="vehicle_length" />
+		<result property="wheelbase" column="wheelbase" />
+		<result property="maxWeight" column="max_weight" />
+		<result property="passengers" column="passengers" />
+		<result property="fuelType" column="fuel_type" />
+		<result property="driveMotorTypeId" column="drive_motor_type" />
+		<result property="driveMotor" column="drive_motor" />
+		<result property="motorModel" column="motor_model" />
+		<result property="motorPower" column="motor_power" />
+		<result property="batteryModel" column="battery_model" />
+		<result property="batteryCapacity" column="battery_capacity" />
+		<result property="ratedVoltage" column="rated_voltage" />
+		<result property="passengerNum" column="passenger_num" />
+		<result property="lightDowndip" column="light_downdip" />
+		<result property="maxSpeed" column="max_speed" />
+		<result property="memo" column="memo" />
+		<result property="editorId" column="editor_id" />
+		<result property="editDate" column="edit_date" />
+	</resultMap-->
+	<insert id="addBusType" parameterType="com.byd.bms.setting.model.BmsBaseBusType">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT LAST_INSERT_ID() AS id
+		</selectKey>
+		insert into BMS_BASE_BUS_TYPE (bus_type_code,internal_name,brand,manufacturer,
+		  bus_vehicle_type,fuel_type,bus_body_type,drive_motor_type,vehicle_model,drive_motor,
+		  chassis_model,motor_model,vehicle_length,motor_power,wheelbase,battery_model,max_weight,
+		  passenger_num,max_speed,light_downdip)
+		values
+			(#{busTypeCode},#{internalName},#{brand},#{manufacturer},#{busVehicleTypeId},#{fuelType},
+			#{busBodyTypeId},#{driveMotorTypeId},#{vehicleModel},#{driveMotor},#{chassisModel},
+			#{motorModel},#{vehicleLength},#{motorPower},#{wheelbase},#{batteryModel},#{maxWeight},
+			#{passengerNum},#{maxSpeed},#{lightDowndip})
+	</insert>
+	<select id="getBusTypeList" parameterType="Map" resultType="com.byd.bms.setting.model.BmsBaseBusType">
+		select id id,
+		  bus_type_code busTypeCode,internal_name internalName,brand brand,manufacturer manufacturer,
+		  bus_vehicle_type busVehicleTypeId,fuel_type fuelType,bus_body_type busBodyTypeId,
+		  drive_motor_type driveMotorTypeId,vehicle_model vehicleModel,drive_motor driveMotor,
+		  chassis_model chassisModel,motor_model motorModel,vehicle_length vehicleLength,
+		  motor_power motorPower,wheelbase wheelbase,battery_model batteryModel,max_weight maxWeight,
+		  passenger_num passengerNum,max_speed maxSpeed,light_downdip lightDowndip
+		  from BMS_BASE_BUS_TYPE where 1=1 
+		<if test="busTypeCode !=null and busTypeCode !=''">
+			and bus_type_code=#{busTypeCode}
+		</if>
+		
+	</select>
+	<select id="getBusTypeById" parameterType="Map" resultType="com.byd.bms.setting.model.BmsBaseBusType">
+		select id id,
+		  bus_type_code busTypeCode,internal_name internalName,brand brand,manufacturer manufacturer,
+		  bus_vehicle_type busVehicleTypeId,fuel_type fuelType,bus_body_type busBodyTypeId,
+		  drive_motor_type driveMotorTypeId,vehicle_model vehicleModel,drive_motor driveMotor,
+		  chassis_model chassisModel,motor_model motorModel,vehicle_length vehicleLength,
+		  motor_power motorPower,wheelbase wheelbase,battery_model batteryModel,max_weight maxWeight,
+		  passenger_num passengerNum,max_speed maxSpeed,light_downdip lightDowndip
+		  from BMS_BASE_BUS_TYPE where 1=1 
+		<if test="busTypeCode !=null and busTypeCode !=''">
+			and bus_type_code=#{busTypeCode}
+		</if>
+		<if test="id !=null and id !=''">
+			and id=#{id}
+		</if>
+		
+	</select>
+	<select id="getBusTypeTotalCount" parameterType="Map" resultType="int">
+		select count(id) from BMS_BASE_BUS_TYPE where 1=1 
+		<if test="busTypeCode !=null and busTypeCode !=''">
+			and bus_type_code=#{busTypeCode}
+		</if>
+		
+	</select>
+	<update id="updateBusType" parameterType="com.byd.bms.setting.model.BmsBaseBusType">
+		update BMS_BASE_BUS_TYPE set 
+		bus_type_code=#{busTypeCode},internal_name=#{internalName},brand=#{brand},manufacturer=#{manufacturer},
+		vehicle_model=#{vehicleModel},drive_motor=#{driveMotor},chassis_model=#{chassisModel},
+		motor_model=#{motorModel},vehicle_length=#{vehicleLength},motor_power=#{motorPower},
+		wheelbase=#{wheelbase},battery_model=#{batteryModel},max_weight=#{maxWeight},passenger_num=#{passengerNum},
+		max_speed=#{maxSpeed},light_downdip=#{lightDowndip},editor_id=#{editorId},edit_date=#{editDate}
+		where id=#{id}
+	</update>
+	
+	
+	
+	<select id="getWorkshopTreeList" parameterType="Map" resultType="Map">
+		
+		SELECT CONCAT('t',id) id,workshop_name,0 parent_id,id workshop_id,
+		(SELECT COUNT(f2.id) FROM BMS_BASE_STANDARD_WORKGROUP f2 WHERE f2.workshop_id = t.id) AS sub_count
+		FROM BMS_BASE_WORKSHOP t where t.delete_flag='0'
+		union all 
+		select id id,workgroup_name,parent_id,workshop_id,
+		(SELECT COUNT(f2.id) FROM BMS_BASE_STANDARD_WORKGROUP f2 WHERE f2.parent_id = t1.id) AS sub_count 
+		from BMS_BASE_STANDARD_WORKGROUP t1
+	</select>
+	<select id="getWorkgroupList" parameterType="Map" resultType="com.byd.bms.setting.model.BmsBaseStandardWorkgroup">
+		SELECT id,workgroup_no workgroupId,workgroup_name groupName,responsibility,memo from BMS_BASE_STANDARD_WORKGROUP t where 1=1
+		<if test="parentId!=null and parentId!=''">
+			and t.parent_id=#{parentId}
+		</if>
+	</select>
+	<insert id="addWorkgroup" parameterType="com.byd.bms.setting.model.BmsBaseStandardWorkgroup">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT LAST_INSERT_ID() AS id
+		</selectKey>
+		insert into BMS_BASE_STANDARD_WORKGROUP (workshop_id,parent_id,workgroup_no,workgroup_name,
+		  responsibility,memo,editor_id,edit_date)
+		values
+			(#{workshopId},#{parentId},#{workgroupId},#{groupName},#{responsibility},#{memo},
+			#{editorId},#{editDate})
+	</insert>
+	<update id="updateWorkgroup" parameterType="com.byd.bms.setting.model.BmsBaseStandardWorkgroup">
+		update BMS_BASE_STANDARD_WORKGROUP set 
+		workgroup_id=#{workgroupId},group_name=#{groupName},responsibility=#{responsibility},
+		memo=#{memo},editor_id=#{editorId},edit_date=#{editDate}
+		where id=#{id}
+	</update>
+	<!--删除标准班组 -->
+	<update id="deleteWorkgroup" parameterType="String">
+		<![CDATA[
+			delete from BMS_BASE_STANDARD_WORKGROUP where id= #{id}
+		]]>
 	</update>
 	
 </mapper>

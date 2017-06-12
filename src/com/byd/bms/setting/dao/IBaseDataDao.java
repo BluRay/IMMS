@@ -4,12 +4,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Repository;
-
 import com.byd.bms.setting.model.BmsBaseBusType;
 import com.byd.bms.setting.model.BmsBaseFactory;
 import com.byd.bms.setting.model.BmsBaseLine;
 import com.byd.bms.setting.model.BmsBaseProcess;
 import com.byd.bms.setting.model.BmsBaseStandardWorkgroup;
+import com.byd.bms.setting.model.BmsBaseVinRule;
 import com.byd.bms.setting.model.BmsBaseWorkshop;
 
 @Repository(value="baseDataDao")
@@ -24,6 +24,7 @@ public interface IBaseDataDao {
 	
 	//车间
 	public List<BmsBaseWorkshop> getWorkshopList(Map<String,Object> queryMap);
+	public List<BmsBaseWorkshop> getAllWorkshopList();
 	public int getWorkshopTotalCount(Map<String,Object> queryMap);
 	public int addWorkshop(BmsBaseWorkshop workshop);
 	public void updateWorkshop(BmsBaseWorkshop workshop);
@@ -54,15 +55,23 @@ public interface IBaseDataDao {
 	
 	//车间班组
 	public List<BmsBaseStandardWorkgroup> getWorkgroupList(Map<String,Object> queryMap);
+	public List<Map<String,Object>> getWorkshopTreeList(Map<String,Object> queryMap);
 	public int getWorkgroupTotalCount(Map<String,Object> queryMap);
 	public int addWorkgroup(BmsBaseStandardWorkgroup workgroup);
 	public void updateWorkgroup(BmsBaseStandardWorkgroup workgroup);
-	public void deleteWorkgroup(List ids);
+	public void deleteWorkgroup(String id);
 	
 	//车型
 	public List<BmsBaseBusType> getBusTypeList(Map<String,Object> queryMap);
 	public int getBusTypeTotalCount(Map<String,Object> queryMap);
 	public int addBusType(BmsBaseBusType busType);
 	public void updateBusType(BmsBaseBusType busType);
-
+	public BmsBaseBusType getBusTypeById(Map<String,Object> queryMap);
+	// VIN生成规则
+	public List<BmsBaseVinRule> getVinRuleList(Map<String,Object> queryMap);
+	public int getVinRuleTotalCount(Map<String,Object> queryMap);	
+	public int addVinRule(BmsBaseVinRule vinRule);
+	public void updateVinRule(BmsBaseVinRule vinRule);
+	public void deleteVinRule(List ids);
+	
 }

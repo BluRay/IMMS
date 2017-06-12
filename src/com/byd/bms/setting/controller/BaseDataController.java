@@ -1,5 +1,7 @@
 package com.byd.bms.setting.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,24 +11,25 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.byd.bms.setting.model.BmsBaseBusType;
 import com.byd.bms.setting.model.BmsBaseFactory;
 import com.byd.bms.setting.model.BmsBaseLine;
 import com.byd.bms.setting.model.BmsBaseProcess;
+import com.byd.bms.setting.model.BmsBaseStandardWorkgroup;
+import com.byd.bms.setting.model.BmsBaseVinRule;
 import com.byd.bms.setting.model.BmsBaseWorkshop;
 import com.byd.bms.setting.service.IBaseDataService;
 import com.byd.bms.util.controller.BaseController;
+
 
 @Controller
 @RequestMapping("/setting")
@@ -34,7 +37,6 @@ public class BaseDataController extends BaseController {
 	static Logger logger = Logger.getLogger("SETTING");
 	@Autowired
 	protected IBaseDataService baseDataService;
-
 	// 工厂
 	@RequestMapping("/factory")
 	public ModelAndView factoryPage() {
@@ -76,7 +78,13 @@ public class BaseDataController extends BaseController {
 		mv.setViewName("setting/busType");
 		return mv;
 	}
-
+	// vin生成规则
+	@RequestMapping("/vinRule")
+	public ModelAndView vinRulePage() {
+		mv.setViewName("setting/vinRule");
+		return mv;
+	}
+	
 	/**
 	 * ajax 获取工厂列表
 	 * 
@@ -220,6 +228,20 @@ public class BaseDataController extends BaseController {
 		queryMap.put("length", length);
 		queryMap.put("workshopName", workshopName);
 		Map<String, Object> result = baseDataService.getWorkshopList(queryMap);
+		model.addAllAttributes(result);
+
+		return model;
+	}
+	/**
+	 * ajax 获取车间列表(不分页)
+	 * 
+	 * @return model
+	 */
+	@RequestMapping("/getAllWorkshopList")
+	@ResponseBody
+	public ModelMap getAllWorkshopList() {
+		
+		Map<String, Object> result = baseDataService.getAllWorkshopList();
 		model.addAllAttributes(result);
 
 		return model;
@@ -589,10 +611,14 @@ public class BaseDataController extends BaseController {
 			process_list=JSONArray.toList(jsar,Map.class);
 		}
 
-		process_list.forEach(e->{
-			e.put("editor_id", userid);
-			e.put("edit_date", curTime);
-		});
+//		process_list.forEach(e->{
+//			e.put("editor_id", userid);
+//			e.put("edit_date", curTime);
+//		});
+		for(Map map : process_list){
+			map.put("editor_id", userid);
+			map.put("edit_date", curTime);
+		}
 		baseDataService.addProcessConfig(process_list,model);
 		
 		return model;
@@ -616,10 +642,14 @@ public class BaseDataController extends BaseController {
 			process_list=JSONArray.toList(jsar,Map.class);
 		}
 
-		process_list.forEach(e->{
-			e.put("editor_id", userid);
-			e.put("edit_date", curTime);
-		});
+//		process_list.forEach(e->{
+//			e.put("editor_id", userid);
+//			e.put("edit_date", curTime);
+//		});
+		for(Map map : process_list){
+			map.put("editor_id", userid);
+			map.put("edit_date", curTime);
+		}
 		baseDataService.editProcessConfig(process_list,model);
 		
 		return model;
@@ -641,5 +671,313 @@ public class BaseDataController extends BaseController {
 		return model;
 	}
 	
+	/**
+	 * ajax 获取vin码生成规则列表
+	 * 
+	 * @return model
+	 */
+	@RequestMapping("/getVinRuleList")
+	@ResponseBody
+	public ModelMap getVinRuleList() {
+		Map<String, Object> queryMap = new HashMap<String, Object>();
+		int draw = Integer.parseInt(request.getParameter("draw"));// jquerydatatables
+		int start = Integer.parseInt(request.getParameter("start"));// 分页数据起始数
+		int length = Integer.parseInt(request.getParameter("length"));// 每一页数据条数
+
+		String busTypeId = request.getParameter("busTypeId");// 工厂
+		String area = request.getParameter("area");//
+
+		queryMap.put("draw", draw);
+		queryMap.put("start", start);
+		queryMap.put("length", length);
+		queryMap.put("busTypeId", busTypeId);
+		queryMap.put("area", area);
+		Map<String, Object> result = baseDataService.getVinRuleList(queryMap);
+		model.addAllAttributes(result);
+
+		return model;
+	}
+	/**
+	 * 删除vin生成规则
+	 */
+	@RequestMapping("/deleteVinRule")
+	@ResponseBody
+	public ModelMap deleteVinRule( ){
+		String ids=request.getParameter("ids");
+		List idlist=Arrays.asList(ids.split(","));
+		baseDataService.deleteVinRule(idlist);
+		initModel(true, "删除成功！", null);
+		return mv.getModelMap();
+	}
+	@RequestMapping("/addVinRule")
+	@ResponseBody
+	public ModelMap addVinRule() {
+		try {
+			String busTypeId =request.getParameter("busTypeId");
+			String vinPrefix = request.getParameter("vinPrefix");
+			String wmiExtension = request.getParameter("wmiExtension") == null ? "" : request.getParameter("wmiExtension");
+			String numberSize = request.getParameter("numberSize") == null ? "" : request.getParameter("numberSize");
+			String area = request.getParameter("area") == null ? "" : request.getParameter("area");
+			int editor_id =(int) request.getSession().getAttribute("user_id");
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String edit_date = df.format(new Date());
+
+			BmsBaseVinRule vinRule = new BmsBaseVinRule();
+
+			vinRule.setBusTypeId(Integer.parseInt(busTypeId));
+			vinRule.setVinPrefix(vinPrefix);
+			vinRule.setWmiExtension(wmiExtension);
+			vinRule.setNumberSize(numberSize);
+			vinRule.setEditorId(editor_id);
+			vinRule.setEditDate(edit_date);
+			vinRule.setArea(area);
+			int reuslt = baseDataService.addVinRule(vinRule);
+			initModel(true, "success", reuslt);
+		} catch (Exception e) {
+			initModel(false, e.getMessage(), e.toString());
+		}
+		model = mv.getModelMap();
+		return model;
+	}
+
+	@RequestMapping("/updateVinRule")
+	@ResponseBody
+	public ModelMap updateVinRule() {
+		try {
+			int id = Integer.parseInt(request.getParameter("id"));
+			
+			String busTypeId = request.getParameter("busTypeId") == null ? "" : request.getParameter("busTypeId");
+			String vinPrefix = request.getParameter("vinPrefix") == null ? "" : request.getParameter("vinPrefix");
+			String wmiExtension = request.getParameter("wmiExtension") == null ? "" : request.getParameter("wmiExtension");
+			String numberSize = request.getParameter("numberSize") == null ? "" : request.getParameter("numberSize");
+			String area = request.getParameter("area") == null ? "" : request.getParameter("area");
+			int editor_id =(int) request.getSession().getAttribute("user_id");
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String edit_date = df.format(new Date());
+
+			BmsBaseVinRule vinRule = new BmsBaseVinRule();
+			vinRule.setId(id);
+			vinRule.setBusTypeId(Integer.parseInt(busTypeId));
+			vinRule.setVinPrefix(vinPrefix);
+			vinRule.setWmiExtension(wmiExtension);
+			vinRule.setNumberSize(numberSize);
+			vinRule.setEditorId(editor_id);
+			vinRule.setEditDate(edit_date);
+			vinRule.setArea(area);
+			baseDataService.updateVinRule(vinRule);
+			initModel(true, "success", "");
+		} catch (Exception e) {
+			initModel(false, e.getMessage(), e.toString());
+		}
+		model = mv.getModelMap();
+		return model;
+	}
+	/**
+	 * ajax 获取车型列表
+	 * 
+	 * @return model
+	 */
+	@RequestMapping("/getBusTypeList")
+	@ResponseBody
+	public ModelMap getBusTypeList() {
+		Map<String, Object> queryMap = new HashMap<String, Object>();
+		int draw = Integer.parseInt(request.getParameter("draw"));// jquerydatatables
+		int start = Integer.parseInt(request.getParameter("start"));// 分页数据起始数
+		int length = Integer.parseInt(request.getParameter("length"));// 每一页数据条数
+
+		String busTypeCode = request.getParameter("busTypeCode");
+		
+		queryMap.put("draw", draw);
+		queryMap.put("start", start);
+		queryMap.put("length", length);
+		queryMap.put("busTypeCode", busTypeCode);
+		Map<String, Object> result = baseDataService.getBusTypeList(queryMap);
+
+		model.addAllAttributes(result);
+
+		return model;
+	}
+	@RequestMapping("/addBusType")
+	@ResponseBody
+	public ModelMap addBusType() {
+		try {
+			
+			int editor_id =(int) request.getSession().getAttribute("user_id");
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String edit_date = df.format(new Date());
+			BmsBaseBusType busType = new BmsBaseBusType();
+
+			busType.setBusTypeCode(request.getParameter("busTypeCode"));
+            busType.setInternalName(request.getParameter("internalName"));
+            busType.setBrand(request.getParameter("brand"));
+            busType.setManufacturer(request.getParameter("manufacturer"));
+            busType.setBatteryModel(request.getParameter("batteryModel"));
+            busType.setChassisModel(request.getParameter("chassisModel"));
+            busType.setDriveMotor(request.getParameter("driveMotor"));
+            busType.setLightDowndip(request.getParameter("lightDowndip"));
+            busType.setMaxSpeed(request.getParameter("maxSpeed"));
+            busType.setMaxWeight(request.getParameter("maxWeight"));
+            busType.setMotorModel(request.getParameter("motorModel"));
+            busType.setMotorPower(request.getParameter("motorPower"));
+            busType.setPassengerNum(request.getParameter("passengerNum"));
+            busType.setVehicleLength(request.getParameter("vehicleLength"));
+            busType.setVehicleModel(request.getParameter("vehicleModel"));
+            busType.setWheelbase(request.getParameter("wheelbase"));
+            busType.setEditDate(edit_date);
+            busType.setEditorId(editor_id);
+			int reuslt = baseDataService.addBusType(busType);
+			initModel(true, "success", reuslt);
+		} catch (Exception e) {
+			initModel(false, e.getMessage(), e.toString());
+		}
+		model = mv.getModelMap();
+		return model;
+	}
+
+	@RequestMapping("/updateBusType")
+	@ResponseBody
+	public ModelMap updateBusType() {
+		try {
+			int id = Integer.parseInt(request.getParameter("id"));
+			
+			int editor_id =(int) request.getSession().getAttribute("user_id");
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String edit_date = df.format(new Date());
+			BmsBaseBusType busType = new BmsBaseBusType();
+			busType.setId(id);
+			busType.setBusTypeCode(request.getParameter("busTypeCode"));
+            busType.setInternalName(request.getParameter("internalName"));
+            busType.setBrand(request.getParameter("brand"));
+            busType.setManufacturer(request.getParameter("manufacturer"));
+            busType.setBatteryModel(request.getParameter("batteryModel"));
+            busType.setChassisModel(request.getParameter("chassisModel"));
+            busType.setDriveMotor(request.getParameter("driveMotor"));
+            busType.setLightDowndip(request.getParameter("lightDowndip"));
+            busType.setMaxSpeed(request.getParameter("maxSpeed"));
+            busType.setMaxWeight(request.getParameter("maxWeight"));
+            busType.setMotorModel(request.getParameter("motorModel"));
+            busType.setMotorPower(request.getParameter("motorPower"));
+            busType.setPassengerNum(request.getParameter("passengerNum"));
+            busType.setVehicleLength(request.getParameter("vehicleLength"));
+            busType.setVehicleModel(request.getParameter("vehicleModel"));
+            busType.setWheelbase(request.getParameter("wheelbase"));
+            busType.setEditDate(edit_date);
+            busType.setEditorId(editor_id);
+			baseDataService.updateBusType(busType);
+			initModel(true, "success", "");
+		} catch (Exception e) {
+			initModel(false, e.getMessage(), e.toString());
+		}
+		model = mv.getModelMap();
+		return model;
+	}
+	@RequestMapping("/getBusTypeById")
+	@ResponseBody
+	public ModelMap getBusTypeById() {
+		Map<String, Object> queryMap = new HashMap<String, Object>();
+		int id = Integer.parseInt(request.getParameter("id"));
+		queryMap.put("id", id);
+		
+		Map<String, Object> result=new HashMap<String, Object>(); 
+		BmsBaseBusType bmsBaseBusType= baseDataService.getBusTypeById(queryMap);
+		result.put("data",bmsBaseBusType);
+		model.addAllAttributes(result);
+
+		return model;
+	}
+	// 获取班组tree型菜单
+	@RequestMapping("/getWorkshopTreeList")
+	@ResponseBody
+	public ModelMap getWorkshopTreeList() {
+		Map<String, Object> queryMap = new HashMap<String, Object>();
+		
+//		String busTypeCode = request.getParameter("busTypeCode");
+//		queryMap.put("busTypeCode", busTypeCode);
+		List result = baseDataService.getWorkshopTreeList(queryMap);
+		Map<String, Object> map = new HashMap<String, Object>();  
+// 
+        map.put( "data",result);
+//      
+//        JSONObject jsonObject = JSONObject.fromObject(map);
 	
+		model.addAllAttributes(map);
+
+		return model;
+	}
+	// 根据ID查询该班组子节点菜单
+	@RequestMapping("/getWorkgroupList")
+	@ResponseBody
+	public ModelMap getWorkgroupList() {
+		Map<String, Object> queryMap = new HashMap<String, Object>();
+		
+		String parentId = request.getParameter("id");
+		queryMap.put("parentId", parentId);
+		List result = baseDataService.getWorkgroupList(queryMap);
+		Map<String, Object> map = new HashMap<String, Object>();  
+        map.put( "data",result);
+
+		model.addAllAttributes(map);
+
+		return model;
+	}
+	
+	@RequestMapping("/addWorkgroup")
+	@ResponseBody
+	public ModelMap addWorkgroup() {
+		try {
+			
+			int editor_id =(int) request.getSession().getAttribute("user_id");
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String edit_date = df.format(new Date());
+			BmsBaseStandardWorkgroup workgroup = new BmsBaseStandardWorkgroup();
+			workgroup.setWorkshopId(Integer.parseInt(request.getParameter("workshopId")));
+			workgroup.setWorkgroupId(request.getParameter("workgroupId"));
+			workgroup.setGroupName(request.getParameter("groupName"));
+			workgroup.setResponsibility(request.getParameter("responsibility"));
+			workgroup.setMemo(request.getParameter("memo"));
+			workgroup.setParentId(request.getParameter("parentId"));
+            workgroup.setEditDate(edit_date);
+            workgroup.setEditorId(editor_id);
+			int reuslt = baseDataService.addWorkgroup(workgroup);
+			initModel(true, "success", reuslt);
+		} catch (Exception e) {
+			initModel(false, e.getMessage(), e.toString());
+		}
+		model = mv.getModelMap();
+		return model;
+	}
+	@RequestMapping("/updateWorkgroup")
+	@ResponseBody
+	public ModelMap updateWorkgroup() {
+		try {
+			
+			int editor_id =(int) request.getSession().getAttribute("user_id");
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String edit_date = df.format(new Date());
+			BmsBaseStandardWorkgroup workgroup = new BmsBaseStandardWorkgroup();
+			workgroup.setId(Integer.parseInt(request.getParameter("id")));
+			workgroup.setWorkgroupId(request.getParameter("workgroupId"));
+			workgroup.setGroupName(request.getParameter("groupName"));
+			workgroup.setResponsibility(request.getParameter("responsibility"));
+			workgroup.setMemo(request.getParameter("memo"));
+            workgroup.setEditDate(edit_date);
+            workgroup.setEditorId(editor_id);
+			baseDataService.updateWorkgroup(workgroup);
+			
+		} catch (Exception e) {
+			initModel(false, e.getMessage(), e.toString());
+		}
+		model = mv.getModelMap();
+		return model;
+	}
+	@RequestMapping("/deleteWorkgroup")
+	@ResponseBody
+	public ModelMap deleteWorkgroup(){
+		String ids=request.getParameter("ids");
+		List idlist=Arrays.asList(ids.split(","));
+		baseDataService.deleteWorkgroup(idlist);
+		initModel(true, "删除成功！", null);
+		return mv.getModelMap();
+	}
+
 }

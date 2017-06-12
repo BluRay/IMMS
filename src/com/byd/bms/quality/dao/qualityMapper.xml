@@ -99,7 +99,7 @@
 		<result property="editDate" column="creat_date" />
 		<result property="editor" column="editor" />
 	</resultMap>
-	<insert id="insertStdRecord" parameterType="com.byd.bms.setting.model.BmsBaseQCStdRecord"
+	<insert id="insertStdRecord" parameterType="com.byd.bms.quality.model.BmsBaseQCStdRecord"
 		useGeneratedKeys="true">
 		<selectKey resultType="int" keyProperty="id" order="AFTER">
 			SELECT
