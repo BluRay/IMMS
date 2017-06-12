@@ -328,7 +328,7 @@ function initTable() {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
     	        	}
             },{
-            	field: 'editor_id',title: '&nbsp;&nbsp;维护人&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
+            	field: 'editor_name',title: '&nbsp;&nbsp;维护人&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
                 sortable: false,visible: true,footerFormatter: totalTextFormatter,
                 cellStyle:function cellStyle(value, row, index, field) {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
@@ -346,7 +346,7 @@ function initTable() {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
     	        	}
             },{
-            	field: 'pfinish_time',title: '&nbsp;&nbsp;预计结束时间&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
+            	field: 'pfinish_time',title: '&nbsp;&nbsp;处理时间&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
                 sortable: false,visible: true,footerFormatter: totalTextFormatter,
                 cellStyle:function cellStyle(value, row, index, field) {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
@@ -386,7 +386,12 @@ function initTable() {
                 sortable: false,visible: true,footerFormatter: totalTextFormatter,
                 cellStyle:function cellStyle(value, row, index, field) {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
-    	        	}
+    	        	},
+	        	 formatter:function(value, row, index){
+	        		 if(value === "1"){str = "处理完成"}
+	        		 if(value === "0"){str = "处理中"}
+	        		 return  str;
+	        	 }
             },{
             	field: 'status',title: '&nbsp;&nbsp;操作&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
                 sortable: false,visible: true,footerFormatter: totalTextFormatter,

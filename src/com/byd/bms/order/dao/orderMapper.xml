@@ -173,7 +173,8 @@
 		select o.id,c.id config_id,o.order_no,CONCAT(o.order_name,t.bus_type_code,o.order_qty,'台') AS order_name_str,
 		o.productive_year,o.delivery_date,c.battery_capacity,c.rated_voltage,c.spring_num,c.tire_type,c.passenger_num,
 		o.order_qty,c.order_config_name,c.sap_materialNo,c.material,c.config_file,c.config_qty,c.customer,c.bus_seats,
-		(select ifnull(sum(fc.product_qty),0) from BMS_OR_FACTORY_ORDER_CONFIG fc where fc.order_config_id=c.id) allot_qty
+		(select ifnull(sum(fc.product_qty),0) from BMS_OR_FACTORY_ORDER_CONFIG fc where fc.order_config_id=c.id) allot_qty,
+		(select ifnull(sum(oc.config_qty),0) from BMS_OR_ORDER_CONFIG oc where oc.order_id=o.id) total_config_qty
 		from BMS_OR_ORDER o
 		left join BMS_OR_ORDER_CONFIG c on o.id=c.order_id
 		left join BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id
@@ -454,5 +455,9 @@
 		<if test="status !=null and status !=''">
 			and fo.status=#{status}
 		</if>
+	</select>
+	
+	<select id="queryOrderConfigTotalQty" parameterType="String" resultType="int">
+		select ifnull(sum(oc.config_qty),0) from BMS_OR_ORDER_CONFIG oc where oc.order_id=#{order_id}
 	</select>
 </mapper>

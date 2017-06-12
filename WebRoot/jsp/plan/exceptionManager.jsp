@@ -4,7 +4,7 @@
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta charset="utf-8" />
-		<title>生产异常处理</title>
+		<title>异常处理</title>
 		
 		<link rel="stylesheet" href="../css/bootstrap-table.css">
 		<link rel="stylesheet" href="../css/bootstrap-editable.css">
@@ -28,7 +28,7 @@
 					<ul class="breadcrumb">
 						<li><i class="ace-icon fa fa-home home-icon"></i><a href="<%=request.getContextPath()%>/index">首页</a></li>
 						<li><a href="#">生产计划</a></li>
-						<li class="active">生产异常处理</li>
+						<li class="active">异常处理</li>
 					</ul><!-- /.breadcrumb -->
 
 					<!-- #section:basics/content.searchbox -->

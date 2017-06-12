@@ -29,4 +29,5 @@ public interface IOrderService {
 	public List getConfigListByOrder(Map<String, Object> condMap);
 	public void saveOrderConfigAllot(List detail_list);
 	public ModelMap getOrderQueryData(Map<String, Object> condMap);
+	public void getOrderConfigTotalQty(String order_id, ModelMap model);
 }

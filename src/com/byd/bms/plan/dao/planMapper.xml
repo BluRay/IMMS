@@ -380,8 +380,9 @@
 	</update>
 	
 	<select id="getExceptionList" parameterType="Map" resultType="com.byd.bms.production.model.ProductionException">
-		SELECT E.*,K.key_name AS duty_department FROM BMS_PD_PRODUCTION_EXCEPTION E
+		SELECT E.*,K.key_name AS duty_department,u.display_name AS editor_name FROM BMS_PD_PRODUCTION_EXCEPTION E
 		LEFT JOIN BMS_BASE_KEY K ON E.duty_department_id = K.value AND K.key_code='EXCEPTION_RESPONSIBILITY_DEPARTMENT'
+		LEFT JOIN BMS_BASE_USER u ON E.editor_id = u.id
 		WHERE 1=1
 		<if test="id !='' and id !=null">
 		AND E.id=#{id}
@@ -393,7 +394,7 @@
 		AND E.workshop=#{workshop}
 		</if>
 		<if test="line !='' and line !=null">
-		AND E.line=#{line}
+		AND E.line LIKE CONCAT('%',#{line},'%')
 		</if>
 		<if test="bus_number !='' and bus_number !=null">
 		AND E.bus_number=#{bus_number}

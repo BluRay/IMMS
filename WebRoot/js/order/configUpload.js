@@ -14,11 +14,38 @@ $(document).ready(function(){
 	
 	$("#configQty").change(function(){
 		//alert($(this).data("allot_qty"));
+		var config_qty=Number($(this).val());
+		if(isNaN(config_qty)){
+			alert("配置数量只能为数字！");
+			$(this).val("");
+			return false;
+		}
+		/*var old_qty=Number($(this).data("old_qty"));
+		//alert(old_qty);
+		var config_qty_total=getOrderConfigTotalQty($("#order_id").val());
 		if($(this).val()<$(this).data("allot_qty")){
 			alert("该配置的配置数量不能小于产地分配数量，配置产地已分配"+$(this).data("allot_qty")+"台！");
 			$("#configQty").focus();
 			$(this).val($(this).data("allot_qty"));
+			return false;
 		}
+		if(!isNaN(old_qty)){//编辑时
+			var order_qty=Number($("#order").attr("order_qty"));
+			//alert(order_qty);
+			if((config_qty_total-old_qty+config_qty)>order_qty){
+				alert("配置数量之和不能超出订单数量！该订单已配置数量为:"+config_qty_total+",订单数量为:"+order_qty);
+				return false;
+			}
+		}
+		if(isNaN(old_qty)){//新增时
+			var order_qty=Number($("#order").attr("order_qty"));
+			//alert(order_qty)
+			if((config_qty_total+config_qty)>order_qty){
+				alert("配置数量之和不能超出订单数量！该订单已配置数量为:"+config_qty_total+",订单数量为:"+order_qty);
+				return false;
+			}
+		}
+		*/
 	});
 	
 });
@@ -28,7 +55,9 @@ function initPage(){
 	cur_year = new Date().getFullYear();
 	$("#search_productive_year").html('<option value="'+cur_year+'">'+cur_year+'</option><option value="'+(cur_year-1)+'">'+(cur_year-1)+'</option><option value="'+(cur_year+1)+'">'+(cur_year+1)+'</option><option value="'+(cur_year+2)+'">'+(cur_year+2)+'</option>');	
 	getOrderNoSelect("#search_order_no","#orderId");
-	getOrderNoSelect("#order","#order_id");
+	getOrderNoSelect("#order","#order_id",function(value){
+		$("#order").attr("order_qty",value.orderQty);
+	});
 	ajaxQuery();
 }
 
@@ -122,10 +151,11 @@ function ajaxQuery(){
 function showEditPage(row){
 	var allot_qty=row.allot_qty;
 	//显示订单配置数据
-	$("#order").val(row.order_no).attr("disabled",true);
+	$("#order").val(row.order_no).attr("disabled",true).data("total_config_qty",row.total_config_qty||0);
+	$("#order").attr("order_qty",row.order_qty);
 	$("#order_id").val(row.id)
 	$("#configName").val(row.order_config_name).attr("disabled",false);
-	$("#configQty").val(row.config_qty).attr("disabled",false).data("allot_qty",allot_qty);
+	$("#configQty").val(row.config_qty).attr("disabled",false).data("allot_qty",allot_qty).data("old_qty",row.config_qty);
 	$("#materialNo").val(row.sap_materialNo).attr("disabled",false);
 	$("#customer").val(row.customer).attr("disabled",false);
 	$("#material").val(row.material).attr("disabled",false);
@@ -185,7 +215,8 @@ function showCreatePage(){
 	$("#order").val("");
 	$("#order_id").val('0');
 	$("#configName").val("").attr("disabled",false);;
-	$("#configQty").val("").attr("disabled",false);;
+	$("#configQty").val("").attr("disabled",false);
+	$("#configQty").data("allot_qty",0).data("old_qty",0);
 	$("#materialNo").val("").attr("disabled",false);;
 	$("#customer").val("").attr("disabled",false);;
 	$("#material").val("").attr("disabled",false);;
@@ -333,7 +364,7 @@ function ajaxEdit(config_id,saveAdd){
 		alert("请输入配置数量！");
 		return false;
 	}
-	if(materialNo.trim().length==0){
+/*	if(materialNo.trim().length==0){
 		alert("请输入总成料号！");
 		return false;
 	}
@@ -369,8 +400,36 @@ function ajaxEdit(config_id,saveAdd){
 	if(passenger_num.trim().length==0){
 		alert("请输入额定载客人数！");
 		return false;
-	}
+	}*/
 	//alert(config_name);
+	
+	var config_qty=Number($("#configQty").val());
+	var old_qty=Number($("#configQty").data("old_qty"));
+	//alert(old_qty);
+	var config_qty_total=getOrderConfigTotalQty($("#order_id").val());
+	if($("#configQty").val()<$("#configQty").data("allot_qty")){
+		alert("该配置的配置数量不能小于产地分配数量，配置产地已分配"+$("#configQty").data("allot_qty")+"台！");
+		$("#configQty").focus();
+		$("#configQty").val($("#configQty").data("allot_qty"));
+		return false;
+	}
+	if(!isNaN(old_qty)){//编辑时
+		var order_qty=Number($("#order").attr("order_qty"));
+		//alert(order_qty);
+		if((config_qty_total-old_qty+config_qty)>order_qty){
+			alert("配置数量之和不能超出订单数量！该订单已配置数量为:"+config_qty_total+",订单数量为:"+order_qty);
+			return false;
+		}
+	}
+	if(isNaN(old_qty)){//新增时
+		var order_qty=Number($("#order").attr("order_qty"));
+		//alert(order_qty)
+		if((config_qty_total+config_qty)>order_qty){
+			alert("配置数量之和不能超出订单数量！该订单已配置数量为:"+config_qty_total+",订单数量为:"+order_qty);
+			return false;
+		}
+	}
+	
 	var param={};
 	param.config_id=config_id;
 	param.order_id=order_id;
@@ -468,3 +527,29 @@ function showInfoPage(row){
 	});
 	$( "#dialog-config" ).data("config_id",row.config_id);
 }
+
+function getOrderConfigTotalQty(order_id){
+	var qty=0;
+	$.ajax({
+		type: "post",
+        url: "getOrderConfigTotalQty",
+        async:false,
+        data: {
+        	order_id:order_id
+        },  
+        dataType: "json",
+        success: function (result) {
+        	qty=result.data;
+        }
+	});
+	return qty;
+}
+
+
+
+
+
+
+
+
+

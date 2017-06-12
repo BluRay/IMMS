@@ -501,4 +501,17 @@ public class OrderController extends BaseController{
 
 		return model;
 	}
+	
+	/**
+	 * 查询订单配置数量之和
+	 * @return
+	 */
+	@RequestMapping("/getOrderConfigTotalQty")
+	@ResponseBody
+	public ModelMap getOrderConfigTotalQty(){
+		model.clear();
+		String order_id=request.getParameter("order_id");
+		orderService.getOrderConfigTotalQty(order_id,model);
+		return model;
+	}
 }

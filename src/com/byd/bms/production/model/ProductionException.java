@@ -11,6 +11,7 @@ public class ProductionException {
 	private String lack_reason_id;
 	private String detailed_reasons;
 	private String editor_id;
+	private String editor_name;
 	private String edit_date;
 	private String start_time;
 	private String pfinish_time;
@@ -182,6 +183,12 @@ public class ProductionException {
 	}
 	public void setLack_reason_id(String lack_reason_id) {
 		this.lack_reason_id = lack_reason_id;
+	}
+	public String getEditor_name() {
+		return editor_name;
+	}
+	public void setEditor_name(String editor_name) {
+		this.editor_name = editor_name;
 	}
 	
 }

@@ -103,12 +103,12 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="materialNo">*&nbsp;总成料号：</label>
+						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="materialNo">&nbsp;总成料号：</label>
 						<div class="col-sm-3">
 							<input type="text"  class="input-medium" style="width:100%"
 								placeholder="总成料号..." id="materialNo" />
 						</div>
-						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="customer">*&nbsp;客户：</label>
+						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="customer">&nbsp;客户：</label>
 						<div class="col-sm-3">
 							<input type="text"  class="input-medium" style="width:100%"
 								placeholder="客户..." id="customer" />
@@ -116,43 +116,43 @@
 					</div>
 					
 					<div class="form-group">
-						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="material">*&nbsp;物料描述：</label>
+						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="material">&nbsp;物料描述：</label>
 						<div class="col-sm-8">
 							<input type="text"  class="input-medium" style="width:100%"
 								placeholder="物料描述..." id="material" />
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="tire_type">*&nbsp;轮胎规格：</label>
+						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="tire_type">&nbsp;轮胎规格：</label>
 						<div class="col-sm-3">
 							<input type="text"  class="input-medium" style="width:100%"
 								placeholder="轮胎规格..." id="tire_type" />
 						</div>
-						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="spring_num">*&nbsp;弹簧片数：</label>
+						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="spring_num">&nbsp;弹簧片数：</label>
 						<div class="col-sm-3">
 							<input type="text"  class="input-medium" style="width:100%"
 								placeholder="弹簧片数..." id="spring_num" />
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="bus_seats">*&nbsp;座位数：</label>
+						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="bus_seats">&nbsp;座位数：</label>
 						<div class="col-sm-3">
 							<input type="text"  class="input-medium" style="width:100%"
 								placeholder="座位数..." id="bus_seats" />
 						</div>
-						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="rated_voltage">*&nbsp;额定电压：</label>
+						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="rated_voltage">&nbsp;额定电压：</label>
 						<div class="col-sm-3">
 							<input type="text"  class="input-medium" style="width:100%"
 								placeholder="额定电压..." id="rated_voltage" />
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="battery_capacity">*&nbsp;电池容量：</label>
+						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="battery_capacity">&nbsp;电池容量：</label>
 						<div class="col-sm-3">
 							<input type="text"  class="input-medium" style="width:100%"
 								placeholder="电池容量..." id="battery_capacity" />
 						</div>
-						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="passenger_num">*&nbsp;额定载客人数：</label>
+						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="passenger_num">&nbsp;额定载客人数：</label>
 						<div class="col-sm-3">
 							<input type="text"  class="input-medium" style="width:100%"
 								placeholder="额定载客人数..." id="passenger_num" />
@@ -160,7 +160,7 @@
 					</div>
 					
 					<div class="form-group" id="upload_div">
-						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="editOrderCode">*&nbsp;配置信息：</label>
+						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="editOrderCode">&nbsp;配置信息：</label>
 						<div class="col-sm-9">
 							<form id="uploadForm" action="" enctype="multipart/form-data" method="post">
 								<div class="col-sm-4">

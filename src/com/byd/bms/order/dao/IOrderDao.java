@@ -34,5 +34,6 @@ public interface IOrderDao {
 	public void batchSaveFactoryOrderConfig(List detail_list);
 	public List queryOrderQueryList(Map<String, Object> condMap);
 	public int queryOrderQueryListCount(Map<String, Object> condMap);
+	public int queryOrderConfigTotalQty(String order_id);
 	
 }
