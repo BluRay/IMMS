@@ -84,4 +84,72 @@
 		left join BMS_QM_KEY_PARTS_TEMPLATE_HEADER h on d.key_components_template_id=h.id
 		where h.bus_type_id=#{bus_type_id} and h.order_id=#{order_id} and h.order_config_id=#{order_config_id}
 	</select>
+	
+	<!-- 品质标准更新记录 start add by tangjin -->
+	
+	<resultMap type="com.byd.bms.quality.model.BmsBaseQCStdRecord" id="stdRecordMap">
+		<id property="id" column="id" />
+		<result property="recordNo" column="record_num" />
+		<result property="usynopsis" column="usynopsis" />
+		<result property="standardfile" column="standardfile" />
+		<result property="bfilePath" column="bfile_path" />
+		<result property="afilePath" column="afile_path" />
+		<result property="memo" column="memo" />
+		<result property="editorId" column="creator_id" />
+		<result property="editDate" column="creat_date" />
+		<result property="editor" column="editor" />
+	</resultMap>
+	<insert id="insertStdRecord" parameterType="com.byd.bms.setting.model.BmsBaseQCStdRecord"
+		useGeneratedKeys="true">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into BMS_QM_QUALITY_STANDARDS_CHANGE_LOGS 
+		(record_num,usynopsis,standardfile,bfile_path,afile_path,memo,creator_id,creat_date)
+		values(
+		#{recordNo},#{usynopsis},#{standardfile},#{bfilePath},#{afilePath},#{memo},#{editorId},#{editDate}
+		)
+	</insert>
+	<select id="selectStdRecord" parameterType="int" resultMap="stdRecordMap">
+		select * from BMS_QM_QUALITY_STANDARDS_CHANGE_LOGS where
+		id=#{recordId}
+	</select>
+	<select id="getStdRecordList" parameterType="Map" resultMap="stdRecordMap">
+		select t.*,u.username editor from BMS_QM_QUALITY_STANDARDS_CHANGE_LOGS
+		t
+		left join BMS_BASE_USER u on t.creator_id=u.id where 1=1
+		<if test="recordNo!=null and recordNo!=0">
+			and t.record_num=#{recordNo}
+		</if>
+		<if test="stdFileName!=null and  stdFileName!=''">
+			and t.standardfile=#{stdFileName}
+		</if>
+		<if test="updateStart!=null and  updateStart!=''">
+			<![CDATA[and t.creat_date>=#{updateStart}]]>
+		</if>
+		<if test="updateEnd!=null and  updateEnd!=''">
+			<![CDATA[and t.creat_date < #{updateEnd}]]>
+		</if>
+		order by t.creat_date desc
+		<if test="offset!=null">
+			LIMIT #{offset} ,#{pageSize}
+		</if>
+	</select>
+	<select id="getStdRecordCount" parameterType="Map" resultType="int">
+		select count(t.id) from BMS_QM_QUALITY_STANDARDS_CHANGE_LOGS t left
+		join BMS_BASE_USER u on t.creator_id=u.id where 1=1
+		<if test="recordNo!=null and recordNo!=0">
+			and record_num=#{recordNo}
+		</if>
+		<if test="stdFileName!=null and  stdFileName!=''">
+			and standardfile=#{stdFileName}
+		</if>
+		<if test="updateStart!=null and  updateStart!=''">
+			<![CDATA[and t.creat_date>=#{updateStart}]]>
+		</if>
+		<if test="updateEnd!=null and  updateEnd!=''">
+			<![CDATA[and t.creat_date < #{updateEnd}]]>
+		</if>
+     </select>
 </mapper>

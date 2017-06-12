@@ -17,6 +17,7 @@ import org.springframework.ui.ModelMap;
 
 import com.byd.bms.quality.dao.IQualityDao;
 import com.byd.bms.quality.service.IQualityService;
+import com.byd.bms.quality.model.BmsBaseQCStdRecord;
 @Service
 public class QualityServiceImpl implements IQualityService {
 	@Resource(name="qualityDao")
@@ -82,5 +83,30 @@ public class QualityServiceImpl implements IQualityService {
 		model.put("data", qualityDao.queryKeyPartsList(condMap));		
 	}
 
+	public int insertStdRecord(BmsBaseQCStdRecord stdRecord) {
+		return qualityDao.insertStdRecord(stdRecord);
+	}
+    // 品质标准更新记录【新增、查询】 add by tangjin
+	public BmsBaseQCStdRecord selectStdRecord(int recordId) {
+		return qualityDao.selectStdRecord(recordId);
+	}
+
+	public Map<String, Object> getStdRecordList(
+			Map<String, Object> conditionMap) {
+		int totalCount=0;
+		List<BmsBaseQCStdRecord> datalist=qualityDao.getStdRecordList(conditionMap);
+		totalCount=qualityDao.getStdRecordCount(conditionMap);
+		Map<String, Object> result=new HashMap<String,Object>();
+		result.put("draw", conditionMap.get("draw"));
+		result.put("recordsTotal", totalCount);
+		result.put("recordsFiltered", totalCount);
+		result.put("data", datalist);
+		return result;
+	}
+
+	public int getStdRecordCount(Map<String, Object> conditionMap) {
+        return qualityDao.getStdRecordCount(conditionMap);
+	}
+	
 		
 }

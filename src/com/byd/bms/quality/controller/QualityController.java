@@ -2,6 +2,7 @@ package com.byd.bms.quality.controller;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.byd.bms.quality.service.IQualityService;
+import com.byd.bms.quality.model.BmsBaseQCStdRecord;
 import com.byd.bms.util.ExcelModel;
 import com.byd.bms.util.ExcelTool;
 import com.byd.bms.util.controller.BaseController;
@@ -46,6 +49,36 @@ public class QualityController extends BaseController {
 		mv.setViewName("quality/orderKeyParts");
 		return mv;
 	}
+	// 品质标准
+	@RequestMapping("/qcStdRecord")
+	public ModelAndView qcStdRecordPage() {
+		mv.setViewName("quality/qcStdRecord");
+		return mv;
+	}
+	
+	@RequestMapping("/standardFaultLib")
+	public ModelAndView standardFaultLib(){ 			//标准故障库
+		mv.setViewName("quality/standardFaultLib");
+        return mv;  
+    }
+	
+	@RequestMapping("/qaTargetParameter")
+	public ModelAndView qaTargetParameter(){ 			//质量目标参数
+		mv.setViewName("quality/qaTargetParameter");
+        return mv;  
+    }
+	
+	@RequestMapping("/problemImprove")
+	public ModelAndView problemImprove(){ 				//问题改善
+		mv.setViewName("quality/problemImprove");
+        return mv;  
+    }
+	
+	@RequestMapping("/processFault")
+	public ModelAndView processFault(){ 				//制程异常
+		mv.setViewName("quality/processFault");
+        return mv;  
+    }
 	
 	/**
 	 * 订单配置列表
@@ -181,4 +214,105 @@ public class QualityController extends BaseController {
 		
 		return model;
 	}
+	/**
+	 * 
+	 */
+	@RequestMapping("/showRecordList")
+	@ResponseBody
+	public ModelMap showRecordList() {
+		Map conditionMap = new HashMap();
+		String recordNo = request.getParameter("recordNo");
+		String stdFileName = request.getParameter("stdFileName");
+		String update_start = request.getParameter("start_date");
+		String update_end = request.getParameter("end_date");
+		// 封装查询条件
+		conditionMap.put("recordNo", recordNo);
+		conditionMap.put("stdFileName", stdFileName);
+		conditionMap.put("updateStart", update_start);
+		conditionMap.put("updateEnd", update_end);
+		int draw = Integer.parseInt(request.getParameter("draw"));// jquerydatatables
+		int start = Integer.parseInt(request.getParameter("start"));// 分页数据起始数
+		int length = Integer.parseInt(request.getParameter("length"));// 每一页数据条数
+		
+		conditionMap.put("draw", draw);
+		conditionMap.put("start", start);
+		conditionMap.put("length", length);
+		Map<String, Object> result = qualityService.getStdRecordList(conditionMap);
+
+		model.addAllAttributes(result);
+
+		return model;
+	}
+
+	/**
+	 * 品质标准更新记录保存
+	 */
+	@RequestMapping("/addRecord")
+	@ResponseBody
+	public ModelAndView addRecord(BmsBaseQCStdRecord stdRecord,@RequestParam("afile") MultipartFile afile,
+			@RequestParam("bfile") MultipartFile bfile) {
+		int editor_id =(int) request.getSession().getAttribute("user_id");
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String edit_date = df.format(new Date());
+		String bpath = "docs/upload/qcStandard/";
+		
+		// 把上传的文件放到指定的路径下
+		String path = request.getSession().getServletContext().getRealPath(bpath);
+
+		// 写到指定的路径中
+		File file = new File(path);
+		// 如果指定的路径没有就创建
+		if (!file.exists()) {
+			file.mkdirs();
+		}
+		String afile_db = "qcAfile_"
+				+ edit_date.replace("-", "").replace(":", "").replace(" ", "")
+				+ afile.getOriginalFilename().substring(afile.getOriginalFilename().indexOf("."),
+						afile.getOriginalFilename().length());
+		String bfile_db= "qcBfile_"
+				+ edit_date.replace("-", "").replace(":", "").replace(" ", "")
+				+ bfile.getOriginalFilename().substring(bfile.getOriginalFilename().indexOf("."),
+						bfile.getOriginalFilename().length());
+		if (afile != null) {
+			try {
+				FileUtils.copyInputStreamToFile(afile.getInputStream(), new File(file, afile_db));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		if (bfile != null) {
+			try {
+				FileUtils.copyInputStreamToFile(bfile.getInputStream(), new File(file, bfile_db));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		stdRecord.setAfilePath(bpath+ afile_db);
+		stdRecord.setBfilePath(bpath+ bfile_db);
+		stdRecord.setEditorId(editor_id);
+		stdRecord.setEditDate(edit_date);
+		qualityService.insertStdRecord(stdRecord);
+		
+		mv.setViewName("quality/qcStdRecord");
+		return mv;
+	}
+
+	/**
+	 * 品质标准更新记录预览
+	 */
+	@RequestMapping("/showStdRecord")
+	@ResponseBody
+	public ModelMap showStdRecord() {
+		Map<String, Object> result = new HashMap<String, Object>();
+		Map conditionMap = new HashMap();
+		int id = Integer.parseInt(request.getParameter("id"));
+		
+		BmsBaseQCStdRecord stdRecord = qualityService.selectStdRecord(id);
+		result.put("stdRecord",stdRecord);
+		model.addAllAttributes(result);
+
+		return model;
+		
+	}
+	
 }

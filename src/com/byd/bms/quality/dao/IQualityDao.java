@@ -7,6 +7,8 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import com.byd.bms.quality.model.BmsBaseQCStdRecord;
+
 @Repository(value="qualityDao")
 public interface IQualityDao {
 	int getConfigTotalCount(Map<String, Object> condMap);
@@ -24,5 +26,14 @@ public interface IQualityDao {
 	int deleteKeyPartsByHeader(@Param(value="header_id")int header_id);
 
 	List<Map<String, Object>> queryKeyPartsList(Map<String, Object> condMap);
+	
+	//品质标准更新记录 add by tangjin
+	public int insertStdRecord(BmsBaseQCStdRecord stdRecord);
+	
+	public BmsBaseQCStdRecord selectStdRecord(int recordId);
+	
+	public List<BmsBaseQCStdRecord> getStdRecordList(Map<String,Object> conditionMap);
+	
+	public int getStdRecordCount(Map<String,Object> conditionMap);
 
 }
