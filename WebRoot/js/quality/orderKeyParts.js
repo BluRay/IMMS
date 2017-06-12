@@ -56,7 +56,8 @@ function drawKeyPartsTable(tableId,data){
 		            {"title":"供应商名称","class":"center","data": "vendor","defaultContent": ""},
 		            {"title":"装配车间","class":"center","data":"workshop","defaultContent":""},
 		            {"title":"工序","class":"center","data":"process","defaultContent": ""},	
-		            {"title":"3C件","class":"center","data":"ccc","defaultContent": "","width":"6%"}		          
+		            {"title":"3C件","class":"center","data":"ccc","defaultContent": "","width":"6%"},
+		            {"title":"3C编号","class":"center","data":"cccNo","defaultContent": ""},	
 		          ]	
 	});
 }
@@ -157,7 +158,7 @@ function showEditPage(row){
 		
 		drawKeyPartsTable("#keyPartsTable");
 		var dialog = $( "#dialog-config" ).removeClass('hide').dialog({
-			width:900,
+			width:1000,
 			height:550,
 			modal: true,
 			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i> 订单关键零部件导入</h4></div>",
@@ -205,7 +206,7 @@ function showInfoPage(row){
 	
 	//show dialog
 	var dialog = $( "#dialog-config-view" ).removeClass('hide').dialog({
-		width:900,
+		width:1000,
 		height:550,
 		modal: true,
 		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i> 订单关键零部件导入</h4></div>",

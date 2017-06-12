@@ -194,4 +194,13 @@
 			LIMIT ${start} ,${length} 
 		</if>
      </select>
+     
+     <select id="queryWorkshopProcessList" resultType="Map">
+     	select workshop,process_name process from BMS_BASE_PROCESS
+     	where
+     	<foreach collection='addList' item='detail' index="index" separator="or" >
+     		(workshop=#{detail.workshop} and process_name=#{detail.process})
+     	</foreach>
+     </select>
+     
 </mapper>

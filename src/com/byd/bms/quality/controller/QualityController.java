@@ -124,7 +124,7 @@ public class QualityController extends BaseController {
 		Map<String, Integer> dataType = new HashMap<String, Integer>();
 		dataType.put("0", ExcelModel.CELL_TYPE_CANNULL);
 		dataType.put("1", ExcelModel.CELL_TYPE_CANNULL);
-		dataType.put("2", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("2", ExcelModel.CELL_TYPE_STRING);
 		dataType.put("3", ExcelModel.CELL_TYPE_CANNULL);
 		dataType.put("4", ExcelModel.CELL_TYPE_CANNULL);
 		dataType.put("5", ExcelModel.CELL_TYPE_CANNULL);
@@ -143,6 +143,7 @@ public class QualityController extends BaseController {
 		excelTool.readExcel(is, excelModel);
 
 		List<Map<String, String>> addList = new ArrayList<Map<String, String>>();
+		int i=1;
 		for (Object[] data : excelModel.getData()) {
 			Map<String, String> infomap = new HashMap<String, String>();
 
@@ -154,15 +155,22 @@ public class QualityController extends BaseController {
 			infomap.put("workshop", data[5] == null ? null : data[5].toString().trim());
 			infomap.put("process", data[6] == null ? null : data[6].toString().trim());
 			String is_3c=data[7] == null ? "" : data[7].toString().trim();
-			
+			String parts_name=data[2] == null ? null : data[2].toString().trim();
 			if(!is_3c.equals("是")&&!is_3c.equals("否")){
-				throw new Exception("数据错误，3C件请填写‘是’或者‘否’！");
+				throw new Exception("数据错误，第"+i+"行数据3C件请填写‘是’或者‘否’！");
 			}
-			infomap.put("ccc", data[4] == null ? null : data[7].toString().trim());
-
+			if(parts_name==null||parts_name.isEmpty()){
+				throw new Exception("数据错误，第"+i+"行数据零部件名称为空！");
+			}
+			infomap.put("ccc", data[7] == null ? null : data[7].toString().trim());
+			infomap.put("cccNo", data[8] == null ? null : data[8].toString().trim());
 			addList.add(infomap);
+			i++;
 		}
 		initModel(true,"导入成功！",addList);
+		
+		//根据车间、工序校验车间工序是否有效
+		qualityService.validateWorkshopProcess(addList);
 		}catch(Exception e){
 			initModel(false,"导入失败！"+e.getMessage(),null);
 		}

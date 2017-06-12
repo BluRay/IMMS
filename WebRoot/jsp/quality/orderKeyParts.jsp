@@ -107,7 +107,7 @@
 					</div>
 					<div class="form-group">					
 						<div class="col-sm-12">			
-							<table class="table table-striped table-bordered table-hover" style="width: 872px;" id="keyPartsTable">
+							<table class="table table-striped table-bordered table-hover" style="width: 872px;font-size:12px;" id="keyPartsTable">
 							</table>
 						</div>
 					</div>
@@ -129,7 +129,7 @@
 					</div>
 					<div class="form-group">					
 						<div class="col-sm-12">			
-							<table class="table table-striped table-bordered table-hover" style="width: 872px;" id="keyPartsTable_view">
+							<table class="table table-striped table-bordered table-hover" style="width: 872px;font-size:12px;" id="keyPartsTable_view">
 							</table>
 						</div>
 					</div>

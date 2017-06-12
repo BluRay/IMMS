@@ -195,7 +195,7 @@ function drawConfigListTable(data){
 		            }
 		            },
 		            {"title":"生产数量","class":"center","data": "product_qty","defaultContent": "","render":function(data,type,row){
-		            	return "<input style='border:0;width:50px;text-align:center' class='product_qty' old_val='"+data+"'value='"+(data||"")+"'/>";
+		            	return "<input style='border:0;width:50px;text-align:center' class='product_qty' old_val='"+(data||0)+"'value='"+(data||"")+"'/>";
 		            }},
 		            {"title":"配置数量","class":"center","data":"config_qty","defaultContent": ""},		            
 		            {"title":"已分配数量","class":"center","data":"already_qty","defaultContent": ""},
@@ -212,16 +212,16 @@ function ajaxEdit(order_id,factory_id){
 	var sequence_arr=[];
 	$.each(trs,function(index,tr){
 		var tds=$(tr).children("td");
-		var config_qty=Number($(tds[3]).html());//配置数量
-		var already_qty=Number($(tds[4]).html());//已配置分配的数量
-		var allot_bus_qty=Number($(tds[5]).html());//已生成车号数量
+		var config_qty=Number($(tds[3]).html()||0);//配置数量
+		var already_qty=Number($(tds[4]).html()||0);//已配置分配的数量
+		var allot_bus_qty=Number($(tds[5]).html()||0);//已生成车号数量
 		var seq_input=$(tds[1]).find("input");
 		var product_qty_input=$(tds[2]).find("input");
 		var allot_config_id=$(seq_input).data("allot_config_id");
 		var order_config_id=$(seq_input).data("order_config_id");
 		var sequence=$(seq_input).val();
-		var product_qty=Number($(product_qty_input).val());
-		var old_product_qty=Number($(product_qty_input).attr("old_val"));
+		var product_qty=Number($(product_qty_input).val()||0);
+		var old_product_qty=Number($(product_qty_input).attr("old_val")||0);
 		if(isNaN(product_qty)){
 			alert("生产数量必须为数字！");
 			save_flag=false;

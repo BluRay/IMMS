@@ -296,6 +296,7 @@
 		case p.key_process_flag when '0' then 'N' else 'Y' end as key_process_flag, ifnull(k.key_name,'') plan_node
 		from BMS_BASE_PROCESS p 
 		left join BMS_BASE_KEY k on p.plan_node_id=k.id
+		left join BMS_BASE_WORKSHOP w on w.workshop_name=p.workshop and w.delete_flag='0'
 		where p.delete_flag !='1'
 		<if test="factory !=null and factory !=''">
 			and p.factory=#{factory}
@@ -303,7 +304,7 @@
 		<if test="workshop !=null and workshop !=''">
 			and p.workshop=#{workshop}
 		</if>
-		order by cast(substring(p.process_code,3) as signed)
+		order by w.sort_flag,cast(substring(p.process_code,3) as signed)
 	</select>
 	
 	<select id="queryProcessConfigDetailList"  parameterType="Map" resultType="Map">

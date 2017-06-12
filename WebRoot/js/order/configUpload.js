@@ -154,7 +154,7 @@ function showEditPage(row){
 	$("#order").val(row.order_no).attr("disabled",true).data("total_config_qty",row.total_config_qty||0);
 	$("#order").attr("order_qty",row.order_qty);
 	$("#order_id").val(row.id)
-	$("#configName").val(row.order_config_name).attr("disabled",false);
+	$("#configName").val(row.order_config_name).attr("disabled",false).attr("config_id",row.config_id);
 	$("#configQty").val(row.config_qty).attr("disabled",false).data("allot_qty",allot_qty).data("old_qty",row.config_qty);
 	$("#materialNo").val(row.sap_materialNo).attr("disabled",false);
 	$("#customer").val(row.customer).attr("disabled",false);
@@ -201,7 +201,13 @@ function showEditPage(row){
 				text: "确定",
 				"class" : "btn btn-primary btn-minier",
 				click: function() {
-					ajaxEdit(row.config_id||"0"); 
+					ajaxEdit(); 
+				} 
+			},{
+				text: "保存&新增",
+				"class" : "btn btn-success btn-minier",
+				click: function() {
+					ajaxEdit(true); 
 				} 
 			}
 		]
@@ -338,7 +344,8 @@ function upload(form,file){
 	
 }
 
-function ajaxEdit(config_id,saveAdd){
+function ajaxEdit(saveAdd){
+	var config_id=$("#configName").attr("config_id")||0;
 	var order_id=$("#order_id").val();
 	var config_name=$("#configName").val();
 	var config_qty=$("#configQty").val();
@@ -457,6 +464,9 @@ function ajaxEdit(config_id,saveAdd){
         		alert("保存成功！");
         		if(!saveAdd){
         			$( "#dialog-config" ).dialog( "close" );
+        		}else{
+        			$("#configName").attr("config_id","0");
+        			$("#configQty").data("old_qty","")
         		}
         		ajaxQuery();    		
         	}else{
@@ -544,12 +554,3 @@ function getOrderConfigTotalQty(order_id){
 	});
 	return qty;
 }
-
-
-
-
-
-
-
-
-

@@ -230,13 +230,13 @@
 	<update id="updateOrderConfig" parameterType="Map">
 		update BMS_OR_ORDER_CONFIG 
 		 <trim prefix="SET" suffixOverrides=","> 
-			<if test="sap_materialNo !=null">
+			<if test="materialNo !=null">
 				sap_materialNo=#{materialNo},
 			</if>
 			<if test="material !=null">
 				material=#{material},
 			</if>
-			<if test="order_config_name !=null">
+			<if test="config_name !=null">
 				order_config_name=#{config_name},
 			</if>
 			<if test="customer !=null">

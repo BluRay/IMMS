@@ -113,5 +113,20 @@ public class QualityServiceImpl implements IQualityService {
 		return null;
 	}
 	
+	@Override
+	public void validateWorkshopProcess(List<Map<String, String>> addList) throws Exception {
+		List<Map<String,String>> process_list=qualityDao.queryWorkshopProcessList(addList);
+		for(int i=0;i<addList.size();i++){
+			Map<String,String> m=new HashMap<String,String>();
+			m.put("workshop", addList.get(i).get("workshop"));
+			m.put("process", addList.get(i).get("process"));
+			if(!process_list.contains(m)){
+				throw new Exception("数据错误，第"+i+"行数据装配车间、工序不存在！");
+			};
+			
+		}
+		
+	}
+	
 		
 }

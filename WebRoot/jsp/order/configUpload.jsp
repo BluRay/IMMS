@@ -62,9 +62,9 @@
 							<td><input type="button"
 								class="btn btn-sm btn-primary btnQuery" id="btnQuery" value="查询"
 								style="margin-left: 2px;"></input>
-								<input type="button"
+								<!-- <input type="button"
 								class="btn btn-sm btn-success btnQuery" id="btnAdd" value="新增"
-								style="margin-left: 2px;"></input>
+								style="margin-left: 2px;"></input> -->
 							</td>
 						</tr>
 					</table>
@@ -177,7 +177,7 @@
 
 					<div class="form-group">					
 						<div class="col-sm-12">			
-							<table class="table table-striped table-bordered table-hover" style="width:1000px;overflow-x:auto" id="orderConfigTable">
+							<table class="table table-striped table-bordered table-hover" style="width:1000px;overflow-x:auto;font-size:12px;" id="orderConfigTable">
 							</table>
 						</div>
 					</div>

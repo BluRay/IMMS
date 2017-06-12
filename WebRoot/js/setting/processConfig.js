@@ -661,6 +661,7 @@ function ajaxAdd(){
 	if(flag){
 		$.ajax({
 			url : "addProcessConfig",
+			type:"post",
 			dataType : "json",
 			data : {
 					"process_list":JSON.stringify(process_list)
