@@ -31,6 +31,19 @@ public interface IQualityDao {
 	
 	List<Map<String, String>> queryWorkshopProcessList(@Param(value="addList")List<Map<String, String>> addList);
 	
+	List<Map<String, Object>> queryPrdRcdBusTypeTplList( HashMap<String, Object> condMap);
+	
+	int queryPrdRcdBusTypeTplCount(HashMap<String, Object> condMap);
+
+	void insertPrdRcdBusTypeTplHeader(Map<String, Object> condMap);
+
+	void updatePrdRcdBusTypeTplHeader(Map<String, Object> condMap);
+
+	void insertPrdRcdBusTypeTplDetail(Map<String, Object> smap);
+
+	void deletePrdRcdBusTypeTplByHeader(@Param(value="tpl_header_id")int tpl_header_id);
+
+	List<Map<String, String>> queryPrdRcdBusTypeTplDetail(@Param(value="tpl_header_id")String tpl_header_id);
 	//======================== xjw end=================================//
 	
 	

@@ -19,12 +19,19 @@ public interface IQualityService {
 	void getKeyPartsList(HashMap<String, Object> condMap, ModelMap model);
 	
 	void validateWorkshopProcess(List<Map<String, String>> addList) throws Exception;
+	
+	void getPrdRcdBusTypeTplList(HashMap<String, Object> condMap, ModelMap model);
+	
+	void savePrdRcdBusTypeTpl(Map<String, Object> condMap);
+
+	void getPrdRcdBusTypeTplDetail(String tpl_header_id, ModelMap model);
 	//======================== xjw end=================================//
 		
 	
 	//========================yk start=================================//
 	public int insertFaultLib(StdFaultLibBean faultLib);
 	public int updateFaultLib(StdFaultLibBean faultLib);
+	public Map<String,Object> getQaTargetParamList(Map<String, Object> conditionMap);
 			
 	//======================== yk end=================================//
 			
@@ -46,4 +53,6 @@ public interface IQualityService {
 	public int getStdRecordCount(Map<String,Object> conditionMap);
 	
 	public Map<String,Object> getFaultLibList(Map<String, Object> conditionMap);
+
+
 }

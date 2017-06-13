@@ -130,10 +130,10 @@ public class QualityController extends BaseController {
 			String is_3c=data[7] == null ? "" : data[7].toString().trim();
 			String parts_name=data[2] == null ? null : data[2].toString().trim();
 			if(!is_3c.equals("是")&&!is_3c.equals("否")){
-				throw new Exception("数据错误，第"+i+"行数据3C件请填写‘是’或者‘否’！");
+				throw new Exception("数据错误，第"+i+"行数据“3C件”请填写‘是’或者‘否’！");
 			}
 			if(parts_name==null||parts_name.isEmpty()){
-				throw new Exception("数据错误，第"+i+"行数据零部件名称为空！");
+				throw new Exception("数据错误，第"+i+"行数据“零部件名称”为空！");
 			}
 			infomap.put("ccc", data[7] == null ? null : data[7].toString().trim());
 			infomap.put("cccNo", data[8] == null ? null : data[8].toString().trim());
@@ -198,6 +198,145 @@ public class QualityController extends BaseController {
 		return model;
 	}
 	
+	/**
+	 * 车型成品记录表模板页面
+	 * @return
+	 */
+	@RequestMapping("/prdRcdBusTypeTpl")
+	public ModelAndView productRecordBusTypeTpl(){
+		mv.setViewName("quality/productRecordBusTypeTpl");
+		return mv;
+	}
+	
+	/**
+	 * 查询车型成品记录表模板列表
+	 * @return
+	 */
+	@RequestMapping("getPrdRcdBusTypeTplList")
+	@ResponseBody
+	public ModelMap getPrdRcdBusTypeTplList(){
+		model.clear();
+		String bus_type_id=request.getParameter("bus_type_id");//车型
+		String test_node_id=request.getParameter("test_node_id");
+		int draw=Integer.parseInt(request.getParameter("draw"));//jquerydatatables 
+		int start=Integer.parseInt(request.getParameter("start"));//分页数据起始数
+		int length=Integer.parseInt(request.getParameter("length"));//每一页数据条数
+		HashMap<String, Object> condMap =new HashMap<String,Object>();
+		condMap.put("bus_type_id",bus_type_id);
+		condMap.put("test_node_id", test_node_id);
+		condMap.put("draw", draw);
+		condMap.put("start", start);
+		condMap.put("length", length);
+		
+		qualityService.getPrdRcdBusTypeTplList(condMap,model);
+		return model;
+	}
+	
+	/**
+	 * 车型成品记录表模板上传
+	 * @return
+	 */
+	@RequestMapping(value="/uploadPrdRcdBusTypeTpl",method=RequestMethod.POST)
+	@ResponseBody
+	public ModelMap uploadPrdRcdBusTypeTpl(@RequestParam(value="file",required=false) MultipartFile file){
+		logger.info("uploading PrdRcdBusTypeTpl .....");
+		String fileName="prdRcdBusTypeTpl.xls";
+		try{
+		ExcelModel excelModel = new ExcelModel();
+		excelModel.setReadSheets(1);
+		excelModel.setStart(1);
+		Map<String, Integer> dataType = new HashMap<String, Integer>();
+		dataType.put("0", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("1", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("2", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("3", ExcelModel.CELL_TYPE_CANNULL);
+		excelModel.setDataType(dataType);
+		excelModel.setPath(fileName);
+		File tempfile=new File(fileName);
+		file.transferTo(tempfile);
+		/**
+		 * 读取输入流中的excel文件，并且将数据封装到ExcelModel对象中
+		 */
+		InputStream is = new FileInputStream(tempfile);
+
+		ExcelTool excelTool = new ExcelTool();
+		excelTool.readExcel(is, excelModel);
+
+		List<Map<String, String>> addList = new ArrayList<Map<String, String>>();
+		int i=1;
+		for (Object[] data : excelModel.getData()) {
+			Map<String, String> infomap = new HashMap<String, String>();
+
+			infomap.put("test_item", data[0] == null ? null : data[0].toString().trim());
+			infomap.put("test_standard", data[1] == null ? null : data[1].toString().trim());
+			infomap.put("test_request", data[2] == null ? null : data[2].toString().trim());
+			infomap.put("is_null", data[3] == null ? null : data[3].toString().trim());
+			String test_item=data[0] == null ? null : data[0].toString().trim();
+			String test_standard=data[1] == null ? null : data[1].toString().trim();
+			String is_null=data[3] == null ? null : data[3].toString().trim();
+			if(test_item==null||test_item.isEmpty()){
+				throw new Exception("数据错误，第"+i+"行数据“检验项目”为空！");
+			}
+			if(test_standard==null||test_standard.isEmpty()){
+				throw new Exception("数据错误，第"+i+"行数据“检验标准”为空！");
+			}
+			if(!is_null.equals("是")&&!is_null.equals("否")){
+				throw new Exception("数据错误，第"+i+"行数据“是否必填项”请填写‘是’或者‘否’！");
+			}
+			addList.add(infomap);
+			i++;
+		}
+		initModel(true,"导入成功！",addList);
+		
+		}catch(Exception e){
+			initModel(false,"导入失败！"+e.getMessage(),null);
+		}
+		return mv.getModelMap();
+	}
+	
+	/**
+	 * 保存车型成品记录表模板
+	 * @return
+	 */
+	@RequestMapping("savePrdRcdBusTypeTpl")
+	@ResponseBody
+	public ModelMap savePrdRcdBusTypeTpl(){
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat df_v = new SimpleDateFormat("yyyyMMddHHmmss");
+		String curTime = df.format(new Date());
+		int userid=(int) session.getAttribute("user_id");
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("bus_type_id", request.getParameter("bus_type_id"));
+		condMap.put("test_node_id", request.getParameter("test_node_id"));
+		condMap.put("test_node", request.getParameter("test_node"));
+		condMap.put("memo", request.getParameter("memo"));
+		condMap.put("tpl_header_id", request.getParameter("tpl_header_id"));
+		condMap.put("version", df_v.format(new Date()));
+		condMap.put("tpl_list_str", request.getParameter("tpl_list_str"));
+		condMap.put("editor_id", userid);
+		condMap.put("edit_date", curTime);
+		
+		try{
+			qualityService.savePrdRcdBusTypeTpl(condMap);
+			initModel(true,"保存成功！",null);
+		}catch(Exception e){
+			initModel(false,"保存失败！"+e.getMessage(),null);
+		}
+		return mv.getModelMap();
+	}
+	
+	/**
+	 * 查询车型成品记录表模板
+	 * @return
+	 */
+	@RequestMapping("getPrdRcdBusTypeTplDetail")
+	@ResponseBody
+	public ModelMap getPrdRcdBusTypeTplDetail(){
+		model.clear();
+		String tpl_header_id=request.getParameter("tpl_header_id");
+		qualityService.getPrdRcdBusTypeTplDetail(tpl_header_id,model);
+		return model;
+	}
 	//======================== xjw end=================================//
 	
 	
@@ -242,6 +381,23 @@ public class QualityController extends BaseController {
 		int result = qualityService.updateFaultLib(stdFaultLib);
 		initModel(true,String.valueOf(result),null);
 		model = mv.getModelMap();
+		return model;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping("getQaTargetParamList")
+	@ResponseBody
+	public ModelMap getQaTargetParamList(){
+		String conditions = request.getParameter("conditions");
+		JSONObject jo=JSONObject.fromObject(conditions);
+		Map<String,Object> conditionMap=(Map<String, Object>) JSONObject.toBean(jo, Map.class);
+		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
+		int start=(request.getParameter("start")!=null)?Integer.parseInt(request.getParameter("start")):0;		//分页数据起始数
+		int length=(request.getParameter("length")!=null)?Integer.parseInt(request.getParameter("length")):500;	//每一页数据条数
+		conditionMap.put("draw", draw);
+		conditionMap.put("start", start);
+		conditionMap.put("length", length);
+		
 		return model;
 	}
 	

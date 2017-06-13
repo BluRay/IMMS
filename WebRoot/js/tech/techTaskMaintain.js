@@ -11,6 +11,11 @@ $(document).ready(function(){
 	generatekeys("ECN_CHANGE_TYPE", ECN_CHANGE_TYPE);
 	generatekeys("ECN_DUTY_UNIT", ECN_DUTY_UNIT);
 	
+	$("#breadcrumbs").resize(function() {
+		console.log("-->resize");
+		ajaxQuery();
+	});
+	
 	ajaxQuery();
 	
 	$(".btnQuery").on("click",function(){
@@ -168,10 +173,6 @@ $(document).on("click",".close",function(e){
 function ajaxQuery(){
 	$("#tableTechTask").dataTable({
 		serverSide: true,
-		fixedColumns:   {
-            leftColumns: 2,
-            rightColumns:1
-        },
 		paiging:true,
 		ordering:false,
 		searching: false,
@@ -232,33 +233,33 @@ function ajaxQuery(){
 		
 		},
 		columns: [
-		            {"title":"技改任务","class":"center","data":"task_content",/*"render": function ( data, type, row ) {
+		            {"title":"技改任务","sWidth":"150px","class":"center","data":"task_content",/*"render": function ( data, type, row ) {
 	                    return "<input style='border:0;width:100%;height:100%;background-color:transparent;text-align:center;' value='"+data+"' />";
 	                },*/"defaultContent": ""},
-		            {"title":"变更单类型","class":"center","data":"tech_order_type","render":function(data,type,row){
+		            {"title":"变更单类型","sWidth":"100px","class":"center","data":"tech_order_type","render":function(data,type,row){
 		            	return getKeys(ECN_CHANGE_TYPE, data)
 		            },"defaultContent": ""},
-		            {"title":"技改单号","class":"center","data":"tech_order_no","defaultContent": ""},
-		            {"title":"变更单附件","class":"center","data":"tech_order_file","render": function(data,type,row){
+		            {"title":"技改单号","sWidth":"100px","class":"center","data":"tech_order_no","defaultContent": ""},
+		            {"title":"变更单附件","sWidth":"100px","class":"center","data":"tech_order_file","render": function(data,type,row){
 		            	return data==null?"":"<a href='#' onclick='window.open(\"" + data + "\")'>查看</a>" },"defaultContent":""
 		            },
-		            {"title":"技改单日期","class":"center","data": "tech_date","defaultContent": ""},
-		            {"title":"责任单位","class":"center","data":"duty_unit","render":function(data,type,row){
+		            {"title":"技改单日期","sWidth":"100px","class":"center","data": "tech_date","defaultContent": ""},
+		            {"title":"责任单位","sWidth":"100px","class":"center","data":"duty_unit","render":function(data,type,row){
 		            	return getKeys(ECN_DUTY_UNIT, data)
 		            },"defaultContent": ""},		            
-		            {"title":"重大变更","class":"center","data":"major_change","defaultContent": ""},		            
-		            {"title":"顾客变更","class":"center","data": "custom_change","defaultContent": ""},
-		            {"title":"顾客变更单附件","class":"center","data":"custom_change_file","render": function(data,type,row){
+		            {"title":"重大变更","sWidth":"100px","class":"center","data":"major_change","defaultContent": ""},		            
+		            {"title":"顾客变更","sWidth":"100px","class":"center","data": "custom_change","defaultContent": ""},
+		            {"title":"顾客变更单","sWidth":"100px","class":"center","data":"custom_change_file","render": function(data,type,row){
 		            	return data==null?"":"<a href='#' onclick='window.open(\"" + data + "\")'>查看</a>" },"defaultContent":""
 		            },
-		            {"title":"重复变更","class":"center","data": "repeat_change","defaultContent": ""},
-		            {"title":"技改类型","class":"center","data":"tech_type","render":function(data,type,row){
+		            {"title":"重复变更","sWidth":"100px","class":"center","data": "repeat_change","defaultContent": ""},
+		            {"title":"技改类型","sWidth":"100px","class":"center","data":"tech_type","render":function(data,type,row){
 		            	return getKeys(ECN_TYPE, data)
 		            },"defaultContent": ""},		         
-		            {"title":"订单状态","class":"center","data":"status","render":function(data,type,row){
+		            {"title":"订单状态","sWidth":"100px","class":"center","data":"status","render":function(data,type,row){
 		            	return data=="0"?"未开始":(data=="1"?"生产中":"已完成")},"defaultContent":""
 		            },	            
-		            {"title":"操作","class":"center","data":null,"render":function(data,type,row){
+		            {"title":"操作","sWidth":"50px","class":"center","data":null,"render":function(data,type,row){
 		            	return "<i class=\"ace-icon fa fa-pencil bigger-110 editorder\" onclick = 'showEditModal(" + row.id+ ");' style='color:green;cursor: pointer;'></i>"},
 		            	"defaultContent": "<i class=\"ace-icon fa fa-pencil bigger-110 editorder\" style='color:green;cursor: pointer;'></i>"} 
 		          ],

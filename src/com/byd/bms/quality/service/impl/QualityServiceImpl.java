@@ -93,10 +93,64 @@ public class QualityServiceImpl implements IQualityService {
 			m.put("workshop", addList.get(i).get("workshop"));
 			m.put("process", addList.get(i).get("process"));
 			if(!process_list.contains(m)){
-				throw new Exception("数据错误，第"+i+"行数据装配车间、工序不存在！");
+				throw new Exception("数据错误，第"+(i+1)+"行数据装配车间("+addList.get(i).get("workshop")+")、工序("+addList.get(i).get("process")+")不存在！");
 			};		
 		}		
 	}
+	@Override
+	public void getPrdRcdBusTypeTplList(HashMap<String, Object> condMap, ModelMap model) {
+		int totalCount=0;
+		List<Map<String, Object>> datalist=qualityDao.queryPrdRcdBusTypeTplList(condMap);
+		totalCount=qualityDao.queryPrdRcdBusTypeTplCount(condMap);
+		Map<String, Object> result=new HashMap<String,Object>();
+		result.put("draw", condMap.get("draw"));
+		result.put("recordsTotal", totalCount);
+		result.put("recordsFiltered", totalCount);
+		result.put("data", datalist);
+		model.addAllAttributes(result);
+		
+	}
+	@Override
+	@Transactional
+	public void savePrdRcdBusTypeTpl(Map<String, Object> condMap) {
+		int tpl_header_id=condMap.get("tpl_header_id")==null?0:Integer.parseInt((String)condMap.get("tpl_header_id"));
+		String tpl_detail=String.valueOf(condMap.get("tpl_list_str"));
+		List detail_list=new ArrayList();
+		JSONArray jsa=new JSONArray();
+		if(tpl_detail.contains("[")){
+			jsa=JSONArray.fromObject(tpl_detail);
+		}
+		Iterator it=jsa.iterator();
+		while(it.hasNext()){
+			JSONObject el= (JSONObject) it.next();
+			Map<String,Object> detail=(Map<String, Object>) JSONObject.toBean(el, Map.class);
+			detail_list.add(detail);
+		}
+		Map<String,Object> smap=null;
+		
+		if(tpl_header_id==0){//无header_id 新增模板
+			qualityDao.insertPrdRcdBusTypeTplHeader(condMap);
+			tpl_header_id=Integer.parseInt(condMap.get("id").toString());
+			smap=new HashMap<String,Object>();
+			smap.put("tpl_header_id", tpl_header_id);
+			smap.put("detail_list", detail_list);
+			
+			qualityDao.insertPrdRcdBusTypeTplDetail(smap);
+		}else{//更新模板
+			smap=new HashMap<String,Object>();
+			smap.put("tpl_header_id", tpl_header_id);
+			smap.put("detail_list", detail_list);
+			qualityDao.updatePrdRcdBusTypeTplHeader(condMap);
+			qualityDao.deletePrdRcdBusTypeTplByHeader(tpl_header_id);
+			qualityDao.insertPrdRcdBusTypeTplDetail(smap);
+		}		
+	}
+	
+	@Override
+	public void getPrdRcdBusTypeTplDetail(String tpl_header_id, ModelMap model) {
+		model.put("data", qualityDao.queryPrdRcdBusTypeTplDetail(tpl_header_id));
+	}
+	
 	//======================== xjw end=================================//
 		
 	
@@ -108,10 +162,8 @@ public class QualityServiceImpl implements IQualityService {
 			
 	//========================tj start=================================//
 			
-		
+	
 	//======================== tj end=================================//
-
-
 	public int insertStdRecord(BmsBaseQCStdRecord stdRecord) {
 		return qualityDao.insertStdRecord(stdRecord);
 	}
@@ -155,6 +207,11 @@ public class QualityServiceImpl implements IQualityService {
 	@Override
 	public int updateFaultLib(StdFaultLibBean faultLib) {
 		return qualityDao.updateFaultLib(faultLib);
+	}
+	@Override
+	public Map<String, Object> getQaTargetParamList(Map<String, Object> conditionMap) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 		

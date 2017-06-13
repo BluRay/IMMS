@@ -6,7 +6,7 @@ $(document).ready(function(){
 	initPage();
 	
 	function initPage(){
-		
+		getPartsSelect("#input_parts");
 	}
 	
 	$("#btnQuery").click (function () {

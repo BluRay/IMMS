@@ -67,10 +67,10 @@
 			LAST_INSERT_ID()
 		</selectKey>
 		insert into BMS_QM_KEY_PARTS_TEMPLATE_DETAILS 
-		(key_components_template_id,sap_mat,parts_no,parts_name,size,vendor,workshop,process,3C_components)
+		(key_components_template_id,sap_mat,parts_no,parts_name,size,vendor,workshop,process,3C_components,3C_no)
 		values
 		<foreach collection="detail_list" item="detail" index="index" separator=",">
-			(#{header_id},#{detail.sap_mat},#{detail.parts_no},#{detail.parts_name},#{detail.size},#{detail.vendor},#{detail.workshop},#{detail.process},#{detail.ccc})
+			(#{header_id},#{detail.sap_mat},#{detail.parts_no},#{detail.parts_name},#{detail.size},#{detail.vendor},#{detail.workshop},#{detail.process},#{detail.ccc},#{detail.cccNo})
 		</foreach>		
 	</insert>
 	
@@ -91,6 +91,72 @@
      	<foreach collection='addList' item='detail' index="index" separator="or" >
      		(workshop=#{detail.workshop} and process_name=#{detail.process})
      	</foreach>
+     </select>
+     
+     <select id="queryPrdRcdBusTypeTplList" parameterType="Map" resultType="Map">
+     	select h.*,t.bus_type_code,u.username editor
+     	from BMS_QM_TEST_CARD_TEMPLATE_HEADER h
+     	left join BMS_BASE_BUS_TYPE t on t.id=h.bus_type_id
+     	left join BMS_BASE_USER u on u.id=h.editor_id
+     	where 1=1
+     	<if test="bus_type_id !=null and bus_type_id !=0 ">
+			and h.bus_type_id=#{bus_type_id}
+		</if>
+		<if test="test_node_id !=null and test_node_id !=0 ">
+			and h.test_node_id=#{test_node_id}
+		</if>
+			order by h.bus_type_id,h.version desc
+		<if test="start !=null">
+			limit #{start},#{length}
+		</if>
+     </select>
+     
+     <select id="queryPrdRcdBusTypeTplCount" parameterType="Map" resultType="int">
+     	select count(h.id) 
+     	from BMS_QM_TEST_CARD_TEMPLATE_HEADER h
+     	left join BMS_BASE_BUS_TYPE t on t.id=h.bus_type_id
+     	where 1=1
+     	<if test="bus_type_id !=null and bus_type_id !=0 ">
+			and h.bus_type_id=#{bus_type_id}
+		</if>
+		<if test="test_node_id !=null and test_node_id !=0 ">
+			and h.test_node_id=#{test_node_id}
+		</if>
+     </select>
+     
+     <insert id='insertPrdRcdBusTypeTplHeader' parameterType="Map" useGeneratedKeys="true" keyProperty="id" >
+     	<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into BMS_QM_TEST_CARD_TEMPLATE_HEADER (bus_type_id,test_node_id,test_node,tplType,version,memo,editor_id,edit_date)
+		values (#{bus_type_id},#{test_node_id},#{test_node},'0',#{version},#{memo},#{editor_id},#{edit_date})
+     </insert>
+     
+     <update id='updatePrdRcdBusTypeTplHeader' parameterType="Map">
+     	update BMS_QM_TEST_CARD_TEMPLATE_HEADER set memo=#{memo},editor_id=#{editor_id},edit_date=#{edit_date}
+     	where id=#{tpl_header_id}
+     </update>
+     
+     <insert id="insertPrdRcdBusTypeTplDetail" parameterType="Map"  useGeneratedKeys="true" keyProperty="id" >
+     	<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into BMS_QM_TEST_CARD_TEMPLATE_DETAILS (test_card_template_id,test_item,test_standard_no,test_standard,test_request,is_null)
+		values
+		<foreach collection="detail_list" item="detail" index="index" separator=",">
+			(#{tpl_header_id},#{detail.test_item},#{index},#{detail.test_standard},#{detail.test_request},#{detail.is_null})
+		</foreach>	
+     </insert>
+     
+     <delete id="deletePrdRcdBusTypeTplByHeader" parameterType="int">
+     	delete from BMS_QM_TEST_CARD_TEMPLATE_DETAILS where test_card_template_id=#{tpl_header_id}
+     </delete>
+     
+     <select id="queryPrdRcdBusTypeTplDetail" parameterType="String" resultType="Map">
+     	select * from BMS_QM_TEST_CARD_TEMPLATE_DETAILS where test_card_template_id=#{tpl_header_id} 
+     	order by cast(test_standard_no as signed)
      </select>
 <!-- ======================== xjw end=================================-->
 

@@ -7,6 +7,9 @@
 		<title>质量目标参数</title>
 		<meta name="description" content="Common Buttons &amp; Icons" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+		<link rel="stylesheet" href="../assets/css/jquery-ui.min.css" />
+		<link rel="stylesheet" href="../assets/css/jquery-ui.custom.min.css" />
+		<link rel="stylesheet" href="../assets/css/jquery.gritter.css" />
 	</head>
 	<body class="no-skin" style="font-family: 'Microsoft YaHei';">
 		<!-- 头 -->
@@ -38,7 +41,20 @@
 			<div class="page-content">
 					<div class="page-content-area">
 					
-					<!-- 东西放这里！ -->		
+					<div class="well">
+						<table>
+							<tr>
+								<td>工厂：</td>
+								<td><select id="search_factory" class="input-small" style="width:100px"></select></td>
+								<td>&nbsp;车间：</td>
+								<td><select id="search_workshop" class="input-small" style="width:80px"></select></td>
+								<td>&nbsp;参数类别：</td>
+								<td><select id="search_targetType" class="input-small" style="width:100px"><option value='A'>A线</option><option value='B'>B线</option></select></td>
+								<td>&nbsp;有效期：</td>
+								<td colspan=3><input id="date_start" placeholder="开始时间..." style="width:125px" type="text" onClick="WdatePicker({el:'date_start',dateFmt:'yyyy-MM-dd'});"> - <input id="date_end" placeholder="结束时间..." style="width:125px" type="text" onClick="WdatePicker({el:'date_end',dateFmt:'yyyy-MM-dd'});"></td>
+							</tr>
+						</table>
+					</div>	
 					
 					</div>
 			</div><!-- /.main-content -->
@@ -49,4 +65,16 @@
 		</div><!-- /.main-container -->
 	</div>
 	</body>
+	<script src="../assets/js/fuelux/fuelux.tree.min.js"></script>
+	<script src="../assets/js/jquery-ui.min.js"></script>
+	<script src="../assets/js/jquery.ui.touch-punch.min.js"></script>
+	<script src="../assets/js/jquery.gritter.min.js"></script>
+
+	<script src="../assets/js/jquery.dataTables.min.js"></script>
+	<script src="../assets/js/jquery.dataTables.bootstrap.js"></script>
+	<script src="../assets/js/dataTables.fixedColumns.min.js"></script>
+	<script src="../assets/js/bootstrap3-typeahead.js"></script>
+	<script type="text/javascript" src="../js/datePicker/WdatePicker.js"></script>
+	<script type="text/javascript" src="../js/common.js"></script>
+	<script type="text/javascript" src="../js/quality/qaTargetParameter.js"></script>
 </html>
