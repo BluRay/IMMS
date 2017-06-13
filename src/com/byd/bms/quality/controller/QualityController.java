@@ -209,11 +209,39 @@ public class QualityController extends BaseController {
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String curTime = df.format(new Date());
 		StdFaultLibBean stdFaultLib = new StdFaultLibBean();
+		stdFaultLib.setPartsId(Integer.valueOf(request.getParameter("partsId").toString()));
+		stdFaultLib.setBugType(request.getParameter("bugType").toString());
+		stdFaultLib.setBug(request.getParameter("bug").toString());
+		stdFaultLib.setFaultLevel(request.getParameter("faultLevel").toString());
+		stdFaultLib.setFaultType(request.getParameter("faultType").toString());
+		
 		stdFaultLib.setEditorId(userid);
 		stdFaultLib.setEditDate(curTime);
 		
-		
-		
+		int result = qualityService.insertFaultLib(stdFaultLib);
+		initModel(true,String.valueOf(result),null);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("updateParamRecord")
+	@ResponseBody
+	public ModelMap updateParamRecord(){
+		int userid=(int) session.getAttribute("user_id");
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		StdFaultLibBean stdFaultLib = new StdFaultLibBean();
+		stdFaultLib.setPartsId(Integer.valueOf(request.getParameter("partsId").toString()));
+		stdFaultLib.setBugType(request.getParameter("bugType").toString());
+		stdFaultLib.setBug(request.getParameter("bug").toString());
+		stdFaultLib.setFaultLevel(request.getParameter("faultLevel").toString());
+		stdFaultLib.setFaultType(request.getParameter("faultType").toString());
+		stdFaultLib.setId(Integer.valueOf(request.getParameter("id").toString()));
+		stdFaultLib.setEditorId(userid);
+		stdFaultLib.setEditDate(curTime);
+		int result = qualityService.updateFaultLib(stdFaultLib);
+		initModel(true,String.valueOf(result),null);
+		model = mv.getModelMap();
 		return model;
 	}
 	

@@ -95,7 +95,24 @@
 <!-- ======================== xjw end=================================-->
 
 <!-- ======================== yk start=================================-->
-
+	<insert id="insertFaultLib" parameterType="com.byd.bms.quality.model.StdFaultLibBean" useGeneratedKeys="true">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into BMS_QM_STANDARD_FAULT_LIBRARY
+		(parts_id,bug_type,bug,serious_level,fault_type,workshop_name,workgroup_name,editor_id,edit_date)
+		values(#{partsId},#{bugType},#{bug},#{faultLevel},#{faultType},#{workshop},#{workgroup},#{editorId},#{editDate})
+	</insert>
+	<update id="updateFaultLib" parameterType="com.byd.bms.quality.model.StdFaultLibBean">
+		update BMS_QM_STANDARD_FAULT_LIBRARY
+		<set>
+			parts_id=#{partsId},bug_type=#{bugType},bug=#{bug},serious_level=#{faultLevel},fault_type=#{faultType},workshop_name=#{workshop},
+			workgroup_name=#{workgroup},editor_id=#{editorId},edit_date=#{editDate}
+		</set>
+		where id=#{id}
+	</update>
+	
 <!-- ======================== yk end=================================-->
 
 <!-- ======================== tj start=================================-->
@@ -174,7 +191,7 @@
      
      <select id="getFaultLibList" parameterType="Map" resultType="Map">
      	select f.id,f.parts_id,p.parts_name parts,f.bug_type,f.bug,f.serious_level,f.fault_type,
-		f.workshop_name,f.workgroup_name,f.editor_id,u.username,f.edit_date
+		f.workshop_name,f.workgroup_name,f.editor_id,u.display_name,f.edit_date
 		from BMS_QM_STANDARD_FAULT_LIBRARY f 
 		left join BMS_BASE_USER u on f.editor_id=u.id
 		left join BMS_BASE_PARTS p on f.parts_id=p.id

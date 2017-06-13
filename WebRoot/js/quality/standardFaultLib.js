@@ -43,8 +43,47 @@ $(document).ready(function(){
 });
 
 function btnNewConfirm(){
+	if($("#new_parts").val()==''){
+		alert("请输入有效的零部件！");
+		$("#new_parts").focus();
+		return false;
+	}
+	var partsId=getPartsId($("#new_parts").val());
+	//console.log("-->partsId = " + partsId);
+	if(partsId=='0'){
+		alert("请输入有效的零部件！");
+		return false;
+	}
+	if($("#new_bug").val()==''||($("#new_bug").val().trim()).length==0){
+		alert("质量缺陷不能为空");
+		return false;
+	}
 	
-	
+	$.ajax({
+		url: "addParamRecord",
+		dataType: "json",
+		type: "get",
+		data: {
+				"partsId" : partsId,
+				"bug":$("#new_bug").val(),
+				"bugType" : $("#new_bug_type").val(),
+				"faultLevel" : $("#new_faultlevel").val(),
+				"faultType" : $("#new_faulttype").val()
+		},
+		async: false,
+		error: function () {alert(response.message);},
+		success: function (response) {
+			if(response.success){
+				$.gritter.add({
+					title: '系统提示：',
+					text: '<h5>增加成功！</h5>',
+					class_name: 'gritter-info'
+				});
+			}
+			$("#dialog-add").dialog( "close" );
+			ajaxQuery();
+		}
+	});
 }
 
 function ajaxQuery(){
@@ -104,13 +143,102 @@ function ajaxQuery(){
             });
 		},
 		columns: [
-		            {"title":"生产工厂",width:'80',"class":"center","data":"factory_name","defaultContent": ""},
+		            {"title":"零部件名称",width:'80',"class":"center","data":"parts","defaultContent": ""},
+		            {"title":"缺陷类别",width:'80',"class":"center","data":"bug_type","defaultContent": ""},
+		            {"title":"质量缺陷",width:'80',"class":"center","data":"bug","defaultContent": ""},
+		            {"title":"严重等级",width:'80',"class":"center","data":"serious_level","defaultContent": ""},
+		            {"title":"缺陷分类",width:'80',"class":"center","data":"fault_type","defaultContent": "",
+		            	"render": function ( data, type, row ) {
+		            		return data == '0'?'非尺寸':'尺寸';
+		            	}
+		            },
+		            {"title":"维护人",width:'80',"class":"center","data":"display_name","defaultContent": ""},
+		            {"title":"维护时间",width:'80',"class":"center","data":"edit_date","defaultContent": ""},
 		            {"title":"操作",width:'60',"class":"center","data":null,"defaultContent": "",
 		            	"render": function ( data, type, row ) {
-		            		return "<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"编辑\" onclick='editPause(" + row['id'] + ")' style='color:blue;cursor: pointer;'></i>"
+		            		return "<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"编辑\" onclick='editFault(" 
+		            		+ row['id'] + ",\"" + row['parts'] + "\",\"" + row['bug_type'] + "\",\"" + row['bug'] + "\",\""
+		            		+ row['serious_level'] + "\",\"" + row['fault_type'] + "\")' style='color:blue;cursor: pointer;'></i>"
 		            	},
 		            }
 		          ],
 	});
 	
 }
+
+function editFault(id,parts,bug_type,bug,serious_level,fault_type){
+	getPartsSelect("#edit_parts");
+	$("#edit_id").val(id);
+	$("#edit_parts").val(parts);
+	$("#edit_bug_type").val(bug_type);
+	$("#edit_bug").val(bug);
+	$("#edit_faultlevel").val(serious_level);
+	$("#edit_faulttype").val(fault_type);
+	
+	$("#dialog-edit").removeClass('hide').dialog({
+		resizable: false,
+		title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 编辑标准故障库</h4></div>',
+		title_html: true,
+		width:'550px',
+		modal: true,
+		buttons: [{
+					text: "取消",
+					"class" : "btn btn-minier",
+					click: function() {$( this ).dialog( "close" );} 
+				},
+				{
+					text: "保存",
+					id:"btn_ok",
+					"class" : "btn btn-success btn-minier",
+					click: function() {
+						btnEditConfirm();
+					} 
+				}
+			]
+	});
+}
+
+function btnEditConfirm(){
+	if($("#edit_parts").val()==''){
+		alert("请输入有效的零部件！");
+		$("#edit_parts").focus();
+		return false;
+	}
+	var partsId=getPartsId($("#edit_parts").val());
+	if(partsId=='0'){
+		alert("请输入有效的零部件！");
+		return false;
+	}
+	if($("#edit_bug").val()==''||($("#edit_bug").val().trim()).length==0){
+		alert("质量缺陷不能为空！");
+		return false;
+	}
+	$.ajax({
+		url: "updateParamRecord",
+		dataType: "json",
+		type: "get",
+		data: {
+				"partsId" : partsId,
+				"bug":$("#edit_bug").val(),
+				"bugType" : $("#edit_bug_type").val(),
+				"faultLevel" : $("#edit_faultlevel").val(),
+				"faultType" : $("#edit_faulttype").val(),
+				"id": $("#edit_id").val()
+		},
+		async: false,
+		error: function () {alert(response.message);},
+		success: function (response) {
+			if(response.success){
+				$.gritter.add({
+					title: '系统提示：',
+					text: '<h5>编辑成功！</h5>',
+					class_name: 'gritter-info'
+				});
+			}
+			$("#dialog-edit").dialog( "close" );
+			ajaxQuery();
+		}
+	});
+	
+}
+

@@ -112,6 +112,36 @@
 				</form>
 			
 			</div>
+			
+			<div id="dialog-edit" class="hide" style="align:center;width:700px;height:500px">
+				<form>
+					<table>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">零部件名称：</td><td style="width:150px"><input type="text" class="input-medium" id="edit_parts" style="width:150px" /></td>
+						<td align="right" style="width:100px">缺陷类别：</td><td style="width:150px"><input type="text" class="input-medium" id="edit_bug_type" style="width:150px"/></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">严重等级：</td><td style="width:150px">
+							<select class="input-medium" id="edit_faultlevel" style="width:150px">
+								<option value="S">S</option>
+								<option value="A">A</option>
+								<option value="B">B</option>
+								<option value="C">C</option>
+							</select></td>
+						<td align="right" style="width:100px">缺陷分类：</td><td style="width:150px">
+							<select class="input-medium" id="edit_faulttype" style="width:150px">
+								<option value="0">非尺寸</option>
+								<option value="1">尺寸</option>
+							</select></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">质量缺陷：</td><td colspan=3><input type="text" class="input-medium" id="edit_bug" style="width:400px"/></td>
+					</tr>
+					
+					</table>
+					<input type="text" class="input-medium" id="edit_id" style="display:none"/>
+				</form>
+			</div>
 
 			<!-- 脚 -->
 			<%-- <jsp:include page="footer.jsp" flush="true"/> --%>

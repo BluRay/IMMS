@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.byd.bms.quality.model.BmsBaseQCStdRecord;
+import com.byd.bms.quality.model.StdFaultLibBean;
 
 @Repository(value="qualityDao")
 public interface IQualityDao {
@@ -34,7 +35,8 @@ public interface IQualityDao {
 	
 	
 	//========================yk start=================================//
-		
+	public int insertFaultLib(StdFaultLibBean faultLib);
+	public int updateFaultLib(StdFaultLibBean faultLib);
 		
 	//======================== yk end=================================//
 		

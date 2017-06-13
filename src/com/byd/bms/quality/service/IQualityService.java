@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.ui.ModelMap;
 
 import com.byd.bms.quality.model.BmsBaseQCStdRecord;
+import com.byd.bms.quality.model.StdFaultLibBean;
 
 public interface IQualityService {
 		
@@ -22,7 +23,8 @@ public interface IQualityService {
 		
 	
 	//========================yk start=================================//
-			
+	public int insertFaultLib(StdFaultLibBean faultLib);
+	public int updateFaultLib(StdFaultLibBean faultLib);
 			
 	//======================== yk end=================================//
 			

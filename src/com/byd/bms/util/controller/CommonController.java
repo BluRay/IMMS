@@ -232,4 +232,12 @@ public class CommonController extends BaseController {
 		model.put("data",selectList);
 		return model;
 	}
+	
+	@RequestMapping("/getPartsSelectByParts")
+	@ResponseBody
+	public ModelMap getPartsSelectByParts(){
+		String parts = request.getParameter("parts");
+		
+		return model;
+	}
 }

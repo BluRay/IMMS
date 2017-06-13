@@ -18,6 +18,7 @@ import org.springframework.ui.ModelMap;
 import com.byd.bms.quality.dao.IQualityDao;
 import com.byd.bms.quality.service.IQualityService;
 import com.byd.bms.quality.model.BmsBaseQCStdRecord;
+import com.byd.bms.quality.model.StdFaultLibBean;
 @Service
 public class QualityServiceImpl implements IQualityService {
 	@Resource(name="qualityDao")
@@ -145,6 +146,15 @@ public class QualityServiceImpl implements IQualityService {
 		result.put("recordsFiltered", totalCount);
 		result.put("data", datalist);
 		return result;
+	}
+	
+	@Override
+	public int insertFaultLib(StdFaultLibBean faultLib) {
+		return qualityDao.insertFaultLib(faultLib);
+	}
+	@Override
+	public int updateFaultLib(StdFaultLibBean faultLib) {
+		return qualityDao.updateFaultLib(faultLib);
 	}
 	
 		

@@ -633,7 +633,7 @@
 		FROM BMS_PLAN_BUS b
 		LEFT JOIN BMS_OR_ORDER o on b.order_id=o.id
 		LEFT JOIN BMS_BASE_FACTORY f on f.id=b.factory_id
-		WHERE substring(b.painting_offline_date,1,10)&lt;#{tech_date} and (b.dispatch_date is null OR b.dispatch_date ='') and b.painting_offline_date is not null and b.painting_offline_date !=''
+		WHERE substring(b.painting_online_date,1,10)&lt;#{tech_date} and (b.dispatch_date is null OR b.dispatch_date ='') and b.painting_online_date is not null and b.painting_online_date !=''
 		and o.order_no=#{order_no} and f.factory_name in (#{factory_list})
 		union all
 		SELECT #{tech_task_id} tech_task_id,b.bus_number,o.order_no,f.factory_name factory,'底盘' workshop

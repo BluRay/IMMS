@@ -519,6 +519,30 @@ function getPartsSelect(elementId, submitId, fn_backcall) {
 	});
 }
 
+/*
+ * 根据零部件输入值获取零部件ID
+ */
+function getPartsId(parts) {
+	var partsId = "0";
+	$.ajax({
+		url : "/IMMS/common/getPartsSelect",
+		dataType : "json",
+		data : {
+			"parts" : parts
+		},
+		async : false,
+		error : function() {
+			alertError();
+		},
+		success : function(response) {
+			if (response.data.length > 0) {
+				partsId = response.data[0].id;
+			}
+		}
+	})
+	return partsId;
+}
+
 /**
  * 根据订单id获取订单配置下拉列表
  * @param order_id
