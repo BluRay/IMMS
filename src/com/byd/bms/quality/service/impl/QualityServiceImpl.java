@@ -22,6 +22,8 @@ import com.byd.bms.quality.model.BmsBaseQCStdRecord;
 public class QualityServiceImpl implements IQualityService {
 	@Resource(name="qualityDao")
 	private IQualityDao qualityDao;
+	
+	//======================== xjw start=================================//
 	@Override
 	public void getOrderConfigList(Map<String, Object> condMap, ModelMap model) {
 		int totalCount=0;
@@ -82,6 +84,32 @@ public class QualityServiceImpl implements IQualityService {
 	public void getKeyPartsList(HashMap<String, Object> condMap, ModelMap model) {
 		model.put("data", qualityDao.queryKeyPartsList(condMap));		
 	}
+	@Override
+	public void validateWorkshopProcess(List<Map<String, String>> addList) throws Exception {
+		List<Map<String,String>> process_list=qualityDao.queryWorkshopProcessList(addList);
+		for(int i=0;i<addList.size();i++){
+			Map<String,String> m=new HashMap<String,String>();
+			m.put("workshop", addList.get(i).get("workshop"));
+			m.put("process", addList.get(i).get("process"));
+			if(!process_list.contains(m)){
+				throw new Exception("数据错误，第"+i+"行数据装配车间、工序不存在！");
+			};		
+		}		
+	}
+	//======================== xjw end=================================//
+		
+	
+	//========================yk start=================================//
+			
+			
+	//======================== yk end=================================//
+			
+			
+	//========================tj start=================================//
+			
+		
+	//======================== tj end=================================//
+
 
 	public int insertStdRecord(BmsBaseQCStdRecord stdRecord) {
 		return qualityDao.insertStdRecord(stdRecord);
@@ -109,23 +137,13 @@ public class QualityServiceImpl implements IQualityService {
 	}
 	@Override
 	public Map<String, Object> getFaultLibList(Map<String, Object> conditionMap) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	@Override
-	public void validateWorkshopProcess(List<Map<String, String>> addList) throws Exception {
-		List<Map<String,String>> process_list=qualityDao.queryWorkshopProcessList(addList);
-		for(int i=0;i<addList.size();i++){
-			Map<String,String> m=new HashMap<String,String>();
-			m.put("workshop", addList.get(i).get("workshop"));
-			m.put("process", addList.get(i).get("process"));
-			if(!process_list.contains(m)){
-				throw new Exception("数据错误，第"+i+"行数据装配车间、工序不存在！");
-			};
-			
-		}
-		
+		List<Map<String,String>> data_list= qualityDao.getFaultLibList(conditionMap);
+		int totalCount= qualityDao.getFaultLibCount(conditionMap);
+		Map<String, Object> result=new HashMap<String,Object>();
+		result.put("draw", conditionMap.get("draw"));
+		result.put("total", totalCount);
+		result.put("rows", data_list);
+		return result;
 	}
 	
 		

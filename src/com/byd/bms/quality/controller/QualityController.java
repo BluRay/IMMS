@@ -30,6 +30,8 @@ import com.byd.bms.util.ExcelTool;
 import com.byd.bms.util.controller.BaseController;
 
 import net.sf.json.JSONObject;
+
+//======================== xjw start=================================//
 /**
  * 品质模块Controller
  * @author xiong.jianwu
@@ -51,36 +53,6 @@ public class QualityController extends BaseController {
 		mv.setViewName("quality/orderKeyParts");
 		return mv;
 	}
-	// 品质标准
-	@RequestMapping("/qcStdRecord")
-	public ModelAndView qcStdRecordPage() {
-		mv.setViewName("quality/qcStdRecord");
-		return mv;
-	}
-	
-	@RequestMapping("/standardFaultLib")
-	public ModelAndView standardFaultLib(){ 			//标准故障库
-		mv.setViewName("quality/standardFaultLib");
-        return mv;  
-    }
-	
-	@RequestMapping("/qaTargetParameter")
-	public ModelAndView qaTargetParameter(){ 			//质量目标参数
-		mv.setViewName("quality/qaTargetParameter");
-        return mv;  
-    }
-	
-	@RequestMapping("/problemImprove")
-	public ModelAndView problemImprove(){ 				//问题改善
-		mv.setViewName("quality/problemImprove");
-        return mv;  
-    }
-	
-	@RequestMapping("/processFault")
-	public ModelAndView processFault(){ 				//制程异常
-		mv.setViewName("quality/processFault");
-        return mv;  
-    }
 	
 	/**
 	 * 订单配置列表
@@ -224,6 +196,55 @@ public class QualityController extends BaseController {
 		
 		return model;
 	}
+	
+	//======================== xjw end=================================//
+	
+	
+	//========================yk start=================================//
+	
+	
+	
+	
+	//======================== yk end=================================//
+	
+	
+	//========================tj start=================================//
+	
+	
+	
+	
+	//======================== tj end=================================//
+	// 品质标准
+	@RequestMapping("/qcStdRecord")
+	public ModelAndView qcStdRecordPage() {
+		mv.setViewName("quality/qcStdRecord");
+		return mv;
+	}
+	
+	@RequestMapping("/standardFaultLib")
+	public ModelAndView standardFaultLib(){ 			//标准故障库
+		mv.setViewName("quality/standardFaultLib");
+        return mv;  
+    }
+	
+	@RequestMapping("/qaTargetParameter")
+	public ModelAndView qaTargetParameter(){ 			//质量目标参数
+		mv.setViewName("quality/qaTargetParameter");
+        return mv;  
+    }
+	
+	@RequestMapping("/problemImprove")
+	public ModelAndView problemImprove(){ 				//问题改善
+		mv.setViewName("quality/problemImprove");
+        return mv;  
+    }
+	
+	@RequestMapping("/processFault")
+	public ModelAndView processFault(){ 				//制程异常
+		mv.setViewName("quality/processFault");
+        return mv;  
+    }
+	
 	/**
 	 * 
 	 */
@@ -348,6 +369,10 @@ public class QualityController extends BaseController {
 			conditionMap.put(key, jo.get(key));
 		}
 		
+		Map<String, Object> result = qualityService.getFaultLibList(conditionMap);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(result);
+		model = mv.getModelMap();
 		return model;
 	}
 	
