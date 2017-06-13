@@ -91,5 +91,9 @@ public class CommonServiceImpl implements ICommonService {
 	public List<Map<String, Object>> getOrderConfigSelect(String order_id) {
 		return commonDao.queryOrderConfigList(order_id);
 	}
+	@Override
+	public List<Map<String, String>> getPartsSelect(String parts) {
+		return commonDao.getPartsSelect(parts);
+	}
 
 }

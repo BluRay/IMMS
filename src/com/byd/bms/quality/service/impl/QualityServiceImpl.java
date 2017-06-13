@@ -137,12 +137,13 @@ public class QualityServiceImpl implements IQualityService {
 	}
 	@Override
 	public Map<String, Object> getFaultLibList(Map<String, Object> conditionMap) {
-		List<Map<String,String>> data_list= qualityDao.getFaultLibList(conditionMap);
+		List<Map<String,String>> datalist= qualityDao.getFaultLibList(conditionMap);
 		int totalCount= qualityDao.getFaultLibCount(conditionMap);
 		Map<String, Object> result=new HashMap<String,Object>();
 		result.put("draw", conditionMap.get("draw"));
-		result.put("total", totalCount);
-		result.put("rows", data_list);
+		result.put("recordsTotal", totalCount);
+		result.put("recordsFiltered", totalCount);
+		result.put("data", datalist);
 		return result;
 	}
 	

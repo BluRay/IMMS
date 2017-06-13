@@ -77,11 +77,41 @@
 						</table>
 					</div>	
 					
-					<table id="tableData" class="table table-striped table-bordered table-hover" style="width:1800px;overflow-x:auto;font-size: 12px;">
+					<table id="tableData" class="table table-striped table-bordered table-hover" style="overflow-x:auto;font-size: 12px;">
 					</table>
 					
 					</div>
 			</div><!-- /.main-content -->
+			
+			<div id="dialog-add" class="hide" style="align:center;width:700px;height:500px">
+				<form>
+					<table>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">零部件名称：</td><td style="width:150px"><input type="text" class="input-medium" id="new_parts" style="width:150px" /></td>
+						<td align="right" style="width:100px">缺陷类别：</td><td style="width:150px"><input type="text" class="input-medium" id="new_bug_type" style="width:150px"/></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">严重等级：</td><td style="width:150px">
+							<select class="input-medium" id="new_faultlevel" style="width:150px">
+								<option value="S">S</option>
+								<option value="A">A</option>
+								<option value="B">B</option>
+								<option value="C">C</option>
+							</select></td>
+						<td align="right" style="width:100px">缺陷分类：</td><td style="width:150px">
+							<select class="input-medium" id="new_faulttype" style="width:150px">
+								<option value="0">非尺寸</option>
+								<option value="1">尺寸</option>
+							</select></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">质量缺陷：</td><td colspan=3><input type="text" class="input-medium" id="new_bug" style="width:400px"/></td>
+					</tr>
+					
+					</table>
+				</form>
+			
+			</div>
 
 			<!-- 脚 -->
 			<%-- <jsp:include page="footer.jsp" flush="true"/> --%>

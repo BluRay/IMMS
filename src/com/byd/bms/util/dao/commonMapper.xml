@@ -160,5 +160,11 @@
 		WHERE order_id=#{order_id}
 	</select>
 	
+	<select id="getPartsSelect" parameterType="String" resultType="Map">
+		select id,parts_name name,parts_code code,parts_type type from
+		BMS_BASE_PARTS where parts_name like CONCAT('%',#{parts},'%') and
+		status !='1'
+	</select>
+	
 	
 </mapper>

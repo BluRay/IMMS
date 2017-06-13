@@ -25,13 +25,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.byd.bms.quality.service.IQualityService;
 import com.byd.bms.quality.model.BmsBaseQCStdRecord;
+import com.byd.bms.quality.model.StdFaultLibBean;
 import com.byd.bms.util.ExcelModel;
 import com.byd.bms.util.ExcelTool;
 import com.byd.bms.util.controller.BaseController;
 
 import net.sf.json.JSONObject;
 
-//======================== xjw start=================================//
 /**
  * 品质模块Controller
  * @author xiong.jianwu
@@ -44,6 +44,7 @@ public class QualityController extends BaseController {
 	@Autowired
 	protected IQualityService qualityService;
 	
+	//======================== xjw start=================================//
 	/**
 	 * 订单关键零部件页面
 	 * @return
@@ -201,7 +202,20 @@ public class QualityController extends BaseController {
 	
 	
 	//========================yk start=================================//
-	
+	@RequestMapping("addParamRecord")
+	@ResponseBody
+	public ModelMap addParamRecord(){
+		int userid=(int) session.getAttribute("user_id");
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		StdFaultLibBean stdFaultLib = new StdFaultLibBean();
+		stdFaultLib.setEditorId(userid);
+		stdFaultLib.setEditDate(curTime);
+		
+		
+		
+		return model;
+	}
 	
 	
 	

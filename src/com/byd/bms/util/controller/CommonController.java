@@ -1,6 +1,7 @@
 package com.byd.bms.util.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -217,6 +218,18 @@ public class CommonController extends BaseController {
 	public ModelMap getOrderConfigSelect(){
 		model=new ModelMap();
 		model.put("data", commonService.getOrderConfigSelect(request.getParameter("order_id")));
+		return model;
+	}
+	
+	@RequestMapping("/getPartsSelect")
+	@ResponseBody
+	public ModelMap getPartsSelect(){
+		String parts = request.getParameter("parts");
+		List<Map<String,String>> selectList = commonService.getPartsSelect(parts);
+		//mv.clear();
+		//model = mv.getModelMap();
+		model=new ModelMap();
+		model.put("data",selectList);
 		return model;
 	}
 }

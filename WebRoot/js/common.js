@@ -473,17 +473,16 @@ function getPartsSelect(elementId, submitId, fn_backcall) {
 		source : function(input, process) {
 			$.get("/IMMS/common/getPartsSelect", {
 				"parts" : input
-			}, function(data) {
-				partslist = data;
+			}, function(response) {
+				partslist = response.data;
 				var results = new Array();
-				$.each(data, function(index, value) {
+				$.each(response.data, function(index, value) {
 					results.push(value.name);
 				})
 				return process(results);
 			}, 'json');
 		},
 		matcher : function(item) {
-			//alert(item)
 			var selectId = "";
 			$.each(partslist, function(index, value) {
 				if (value.name == item) {

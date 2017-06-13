@@ -38,4 +38,6 @@ public interface ICommonService {
 	List<Map<String,String>> getWorkshopSelect_Key();
 
 	List<Map<String,Object>> getOrderConfigSelect(String order_id);
+	
+	public List<Map<String,String>> getPartsSelect(String parts);
 }

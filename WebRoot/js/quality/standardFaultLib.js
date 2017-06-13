@@ -14,7 +14,38 @@ $(document).ready(function(){
 		return false;
 	});
 	
+	$("#btnAdd").on('click', function(e) {
+		getPartsSelect("#new_parts");
+		e.preventDefault();
+		$("#dialog-add").removeClass('hide').dialog({
+			resizable: false,
+			title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 增加标准故障库</h4></div>',
+			title_html: true,
+			width:'550px',
+			modal: true,
+			buttons: [{
+						text: "取消",
+						"class" : "btn btn-minier",
+						click: function() {$( this ).dialog( "close" );} 
+					},
+					{
+						text: "增加",
+						id:"btn_ok",
+						"class" : "btn btn-success btn-minier",
+						click: function() {
+							btnNewConfirm();
+						} 
+					}
+				]
+		});
+	});
+	
 });
+
+function btnNewConfirm(){
+	
+	
+}
 
 function ajaxQuery(){
 	var parts=$("#input_parts").val();
