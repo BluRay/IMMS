@@ -49,15 +49,36 @@
 								<td>&nbsp;车间：</td>
 								<td><select id="search_workshop" class="input-small" style="width:80px"></select></td>
 								<td>&nbsp;参数类别：</td>
-								<td><select id="search_targetType" class="input-small" style="width:100px"><option value='A'>A线</option><option value='B'>B线</option></select></td>
+								<td><select id="search_targetType" class="input-small" style="width:100px"></select></td>
 								<td>&nbsp;有效期：</td>
 								<td colspan=3><input id="date_start" placeholder="开始时间..." style="width:125px" type="text" onClick="WdatePicker({el:'date_start',dateFmt:'yyyy-MM-dd'});"> - <input id="date_end" placeholder="结束时间..." style="width:125px" type="text" onClick="WdatePicker({el:'date_end',dateFmt:'yyyy-MM-dd'});"></td>
+								<td><input id="btnQuery" type="button" class="btn btn-sm btn-primary" value="查询" style="margin-left: 2px;"></input><input id="btnAdd" type="button" class="btn btn-sm btn-success" value="新增" style="margin-left: 2px;"></input></td>
 							</tr>
 						</table>
 					</div>	
-					
+					<table id="tableData" class="table table-striped table-bordered table-hover" style="overflow-x:auto;font-size: 12px;">
+					</table>
 					</div>
 			</div><!-- /.main-content -->
+			
+			<div id="dialog-add" class="hide" style="align:center;width:700px;height:500px">
+				<form>
+					<table>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">工厂：</td><td style="width:130px"><select id="new_factory" class="input-small" style="width:125px"></select></td>
+						<td align="right" style="width:100px">车间：</td><td style="width:150px"><select id="new_workshop" class="input-small" style="width:125px"></select></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">参数类别：</td><td style="width:130px"><select id="new_targetType" class="input-small" style="width:125px"></select></td>
+						<td align="right" style="width:100px">目标值：</td><td style="width:150px"><input type="text" class="input-medium" id="new_targetVal" style="width:125px"></input></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">有效期：</td>
+						<td colspan=3><input id="new_date_start" placeholder="开始时间..." style="width:125px" type="text" onClick="WdatePicker({el:'new_date_start',dateFmt:'yyyy-MM-dd'});"> - <input id="new_date_end" placeholder="结束时间..." style="width:125px" type="text" onClick="WdatePicker({el:'new_date_end',dateFmt:'yyyy-MM-dd'});"></td>
+					</tr>
+					</table>
+				</form>
+			</div>
 
 			<!-- 脚 -->
 			<%-- <jsp:include page="footer.jsp" flush="true"/> --%>

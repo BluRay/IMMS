@@ -18,6 +18,7 @@ import org.springframework.ui.ModelMap;
 import com.byd.bms.quality.dao.IQualityDao;
 import com.byd.bms.quality.service.IQualityService;
 import com.byd.bms.quality.model.BmsBaseQCStdRecord;
+import com.byd.bms.quality.model.QualityTargetBean;
 import com.byd.bms.quality.model.StdFaultLibBean;
 @Service
 public class QualityServiceImpl implements IQualityService {
@@ -210,8 +211,18 @@ public class QualityServiceImpl implements IQualityService {
 	}
 	@Override
 	public Map<String, Object> getQaTargetParamList(Map<String, Object> conditionMap) {
-		// TODO Auto-generated method stub
-		return null;
+		Map<String, Object> result=new HashMap<String,Object>();
+		int totalCount= qualityDao.getQualityTargetCount(conditionMap);
+		List<Map<String,String>> datalist= qualityDao.getQualityTargetList(conditionMap);
+		result.put("draw", conditionMap.get("draw"));
+		result.put("recordsTotal", totalCount);
+		result.put("recordsFiltered", totalCount);
+		result.put("data", datalist);
+		return result;
+	}
+	@Override
+	public int insertQualityTarget(QualityTargetBean qualityTarget) {
+		return qualityDao.insertQualityTarget(qualityTarget);
 	}
 	
 		

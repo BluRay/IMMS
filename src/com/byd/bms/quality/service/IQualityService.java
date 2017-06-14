@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.ui.ModelMap;
 
 import com.byd.bms.quality.model.BmsBaseQCStdRecord;
+import com.byd.bms.quality.model.QualityTargetBean;
 import com.byd.bms.quality.model.StdFaultLibBean;
 
 public interface IQualityService {
@@ -32,7 +33,7 @@ public interface IQualityService {
 	public int insertFaultLib(StdFaultLibBean faultLib);
 	public int updateFaultLib(StdFaultLibBean faultLib);
 	public Map<String,Object> getQaTargetParamList(Map<String, Object> conditionMap);
-			
+	public int insertQualityTarget(QualityTargetBean qualityTarget);		
 	//======================== yk end=================================//
 			
 			

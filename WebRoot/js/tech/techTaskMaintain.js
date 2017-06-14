@@ -12,7 +12,6 @@ $(document).ready(function(){
 	generatekeys("ECN_DUTY_UNIT", ECN_DUTY_UNIT);
 	
 	$("#breadcrumbs").resize(function() {
-		console.log("-->resize");
 		ajaxQuery();
 	});
 	

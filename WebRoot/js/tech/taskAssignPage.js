@@ -17,7 +17,13 @@ $(document).ready(function (){
 		s=vYear+"-"+(vMon<10 ? "0" + vMon : vMon)+"-"+(vDay<10 ? "0"+ vDay : vDay);
 		$("#search_date_start").val(s1);
 		$("#search_date_end").val(s);
+		//ajaxQuery();
 	}
+	
+	$("#breadcrumbs").resize(function() {
+		//eachSeries(scripts, getScript, initTable);
+		ajaxQuery();
+	});
 	
 	$("#btnQuery").click(function () {
 		eachSeries(scripts, getScript, initTable);
@@ -37,6 +43,7 @@ $(document).ready(function (){
 });
 
 function ajaxQuery(){
+	
 	$table.bootstrapTable('refresh', {url: 'taskAssignPage/getTaskList'});
 }
 

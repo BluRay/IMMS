@@ -25,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.byd.bms.quality.service.IQualityService;
 import com.byd.bms.quality.model.BmsBaseQCStdRecord;
+import com.byd.bms.quality.model.QualityTargetBean;
 import com.byd.bms.quality.model.StdFaultLibBean;
 import com.byd.bms.util.ExcelModel;
 import com.byd.bms.util.ExcelTool;
@@ -398,10 +399,33 @@ public class QualityController extends BaseController {
 		conditionMap.put("start", start);
 		conditionMap.put("length", length);
 		
+		Map<String, Object> result = qualityService.getQaTargetParamList(conditionMap);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(result);
+		model = mv.getModelMap();
 		return model;
 	}
 	
-	
+	@RequestMapping("addQaTargetParam")
+	@ResponseBody
+	public ModelMap addQaTargetParam(){
+		int userid=(int) session.getAttribute("user_id");
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		QualityTargetBean qualityTarget = new QualityTargetBean();
+		qualityTarget.setEditorId(userid);
+		qualityTarget.setEditDate(curTime);
+		qualityTarget.setFactoryId(Integer.valueOf(request.getParameter("factoryId").toString()));
+		qualityTarget.setWorkshopId(Integer.valueOf(request.getParameter("workshopId").toString()));
+		qualityTarget.setTargetTypeId(Integer.valueOf(request.getParameter("targetTypeId").toString()));
+		qualityTarget.setTargetVal(request.getParameter("targetVal").toString());
+		qualityTarget.setEffecDateStart(request.getParameter("effecDateStart").toString());
+		qualityTarget.setEffecDateEnd(request.getParameter("effecDateEnd").toString());
+		int result = qualityService.insertQualityTarget(qualityTarget);
+		initModel(true,String.valueOf(result),null);
+		model = mv.getModelMap();
+		return model;
+	}
 	
 	//======================== yk end=================================//
 	

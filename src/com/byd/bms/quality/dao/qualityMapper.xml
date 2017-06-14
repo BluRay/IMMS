@@ -179,6 +179,72 @@
 		where id=#{id}
 	</update>
 	
+	<select id="getQualityTargetList" parameterType="Map" resultType="Map">
+		select
+		p.id,p.factory_id,f.factory_name,p.workshop_id,w.workshop_name,p.target_type
+		target_type_id,k.key_name target_type,p.target_value,
+		p.estart_date,p.eend_date,p.editor_id,u.username,p.edit_date,p.status
+		from BMS_QM_QUALITY_TARGET_PARAMETER p left join BMS_BASE_USER u on
+		p.editor_id=u.id
+		left join BMS_BASE_FACTORY f on p.factory_id=f.id
+		left join BMS_BASE_WORKSHOP w on p.workshop_id=w.id
+		left join BMS_BASE_KEY k on p.target_type=k.id
+		where p.status='0'
+		<if test="factoryId!=null and factoryId!=0">
+			and p.factory_id=#{factoryId}
+		</if>
+		<if test="workshopId!=null and  workshopId!=0">
+			and p.workshop_id=#{workshopId}
+		</if>
+		<if test="targetTypeId!=null and  targetTypeId!=0">
+			and p.target_type=#{targetTypeId}
+		</if>
+		<if test="effecDateStart!=null and  effecDateStart!=''">
+			<![CDATA[and p.estart_date>=#{effecDateStart}]]>
+		</if>
+		<if test="effecDateEnd!=null and  effecDateEnd!=''">
+			<![CDATA[and p.eend_date <= #{effecDateEnd}]]>
+		</if>
+		order by p.edit_date desc
+		<if test="start !=null">
+			LIMIT ${start} ,${length} 
+		</if>
+	</select>
+	<select id="getQualityTargetCount" parameterType="Map" resultType="int">
+		select count(p.id)
+		from BMS_QM_QUALITY_TARGET_PARAMETER p left join
+		BMS_BASE_USER u on p.editor_id=u.id
+		left join BMS_BASE_FACTORY f on p.factory_id=f.id
+		left join BMS_BASE_WORKSHOP w on p.workshop_id=w.id
+		left join BMS_BASE_KEY k on p.target_type=k.id
+		where p.status='0'
+		<if test="factoryId!=null and factoryId!=0">
+			and p.factory_id=#{factoryId}
+		</if>
+		<if test="workshopId!=null and  workshopId!=0">
+			and p.workshop_id=#{workshopId}
+		</if>
+		<if test="targetTypeId!=null and  targetTypeId!=0">
+			and p.target_type=#{targetTypeId}
+		</if>
+		<if test="effecDateStart!=null and  effecDateStart!=''">
+			<![CDATA[and p.estart_date>=#{effecDateStart}]]>
+		</if>
+		<if test="effecDateEnd!=null and  effecDateEnd!=''">
+			<![CDATA[and p.eend_date <= #{effecDateEnd}]]>
+		</if>
+	</select>
+	<insert id="insertQualityTarget" parameterType="com.byd.bms.quality.model.QualityTargetBean" useGeneratedKeys="true">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into BMS_QM_QUALITY_TARGET_PARAMETER
+		(factory_id,workshop_id,target_type,target_value,estart_date,eend_date,status,editor_id,edit_date)
+		values(#{factoryId},#{workshopId},#{targetTypeId},#{targetVal},#{effecDateStart},#{effecDateEnd},'0',#{editorId},#{editDate})
+	</insert>
+	
+	
+	
 <!-- ======================== yk end=================================-->
 
 <!-- ======================== tj start=================================-->
