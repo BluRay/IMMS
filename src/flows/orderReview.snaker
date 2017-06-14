@@ -5,34 +5,24 @@
 </start>
 <task displayName="计划部发起评审" form="/order/review/apply" layout="65,124,105,50" name="apply">
 <transition g="" name="path14" offset="0,-10" to="technical"/>
-<transition g="" name="path26" offset="0,-10" to="technical"/>
-<transition g="" name="path33" offset="0,-10" to="technical"/>
 </task>
 <task displayName="技术部评审" form="/order/review/technical" layout="214,123,130,50" name="technical">
 <transition g="" name="path15" offset="0,-10" to="technology"/>
-<transition g="" name="path27" offset="0,-10" to="technology"/>
-<transition g="" name="path36" offset="0,-10" to="technology"/>
 </task>
 <task displayName="工艺部评审" form="/order/review/technology" layout="373,122,121,50" name="technology">
 <transition g="" name="path16" offset="0,-10" to="quality"/>
-<transition g="" name="path28" offset="0,-10" to="quality"/>
 </task>
 <task displayName="品质部评审" form="/order/review/quality" layout="522,125,120,50" name="quality">
 <transition g="" name="path17" offset="0,-10" to="factory"/>
-<transition g="" name="path23" offset="0,-10" to="factory"/>
-<transition g="" name="path29" offset="0,-10" to="factory"/>
 </task>
 <task displayName="工厂内部评审" form="/order/review/factory" layout="523,192,118,50" name="factory">
 <transition g="" name="path18" offset="0,-10" to="planning"/>
-<transition g="" name="path25" offset="0,-10" to="planning"/>
-<transition g="" name="path30" offset="0,-10" to="planning"/>
 </task>
 <task displayName="综合计划部物控评审" form="/order/review/planning" layout="372,192,123,50" name="planning">
 <transition g="" name="transition1" offset="0,0" to="task1"/>
 </task>
 <task displayName="评审结果修正" form="/order/review/result" layout="65,191,105,50" name="result">
 <transition g="" name="path20" offset="0,-10" to="end"/>
-<transition g="" name="path32" offset="0,-10" to="end"/>
 </task>
 <end displayName="结束" layout="-20,193,50,50" name="end"/>
 <task autoExecute="Y" displayName="综合计划部计划评审" layout="214,190,131,52" name="task1" performType="ANY" taskType="Major">

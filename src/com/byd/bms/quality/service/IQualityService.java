@@ -35,6 +35,8 @@ public interface IQualityService {
 	public Map<String,Object> getQaTargetParamList(Map<String, Object> conditionMap);
 	public int insertQualityTarget(QualityTargetBean qualityTarget);
 	public int updateQualityTarget(QualityTargetBean qualityTarget);
+	
+	public Map<String,Object> getProcessFaultList(Map<String, Object> conditionMap);
 	//======================== yk end=================================//
 			
 			

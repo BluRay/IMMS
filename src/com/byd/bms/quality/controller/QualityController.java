@@ -450,6 +450,29 @@ public class QualityController extends BaseController {
 		return model;
 	}
 	
+	@RequestMapping("getProcessFaultList")
+	@ResponseBody
+	public ModelMap getProcessFaultList(){
+		Map<String, Object> conditionMap = new HashMap<String, Object>();
+		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
+		int start=(request.getParameter("start")!=null)?Integer.parseInt(request.getParameter("start")):0;		//分页数据起始数
+		int length=(request.getParameter("length")!=null)?Integer.parseInt(request.getParameter("length")):500;	//每一页数据条数
+		conditionMap.put("draw", draw);
+		conditionMap.put("start", start);
+		conditionMap.put("length", length);
+		conditionMap.put("factory_id", request.getParameter("factory_id").toString());
+		conditionMap.put("customer_name", request.getParameter("customer_name").toString());
+		conditionMap.put("status", request.getParameter("status").toString());
+		conditionMap.put("fault_phenomenon", request.getParameter("fault_phenomenon").toString());
+		conditionMap.put("fault_date_start", request.getParameter("fault_date_start").toString());
+		conditionMap.put("fault_date_end", request.getParameter("fault_date_end").toString());
+		Map<String, Object> result = qualityService.getProcessFaultList(conditionMap);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(result);
+		model = mv.getModelMap();
+		return model;
+	}
+	
 	
 	//======================== yk end=================================//
 	

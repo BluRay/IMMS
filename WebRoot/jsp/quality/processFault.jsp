@@ -7,6 +7,9 @@
 		<title>制程异常</title>
 		<meta name="description" content="Common Buttons &amp; Icons" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+		<link rel="stylesheet" href="../assets/css/jquery-ui.min.css" />
+		<link rel="stylesheet" href="../assets/css/jquery-ui.custom.min.css" />
+		<link rel="stylesheet" href="../assets/css/jquery.gritter.css" />
 	</head>
 	<body class="no-skin" style="font-family: 'Microsoft YaHei';">
 		<!-- 头 -->
@@ -38,8 +41,25 @@
 			<div class="page-content">
 					<div class="page-content-area">
 					
-					<!-- 东西放这里！ -->		
-					
+					<div class="well">
+						<table>
+							<tr>
+								<td>责任工厂：</td>
+								<td><select id="search_factory" class="input-small" style="width:100px"></select></td>
+								<td>&nbsp;客户：</td>
+								<td><input id="search_customer_name" placeholder="客户..." style="width:100px" type="text"></td>
+								<td>&nbsp;报告状态：</td>
+								<td><select id="search_status" class="input-small" style="width:60px"><option value="">全部</option><option value="1">已编写</option><option value="0">未编写</option></select></td>
+								<td>&nbsp;故障现象：</td>
+								<td><input id="search_fault_phenomenon" placeholder="故障现象..." style="width:100px" type="text"></td>
+								<td>&nbsp;反馈日期：</td>
+								<td colspan=3><input id="search_date_start" placeholder="开始时间..." style="width:90px" type="text" onClick="WdatePicker({el:'search_date_start',dateFmt:'yyyy-MM-dd'});"> - <input id="search_date_end" placeholder="结束时间..." style="width:90px" type="text" onClick="WdatePicker({el:'search_date_end',dateFmt:'yyyy-MM-dd'});"></td>
+								<td><input id="btnQuery" type="button" class="btn btn-sm btn-primary" value="查询" style="margin-left: 2px;"></input></td>
+							</tr>
+						</table>	
+					</div>
+					<table id="tableData" class="table table-striped table-bordered table-hover" style="overflow-x:auto;font-size: 12px;">
+					</table>
 					</div>
 			</div><!-- /.main-content -->
 
@@ -49,4 +69,16 @@
 		</div><!-- /.main-container -->
 	</div>
 	</body>
+	<script src="../assets/js/fuelux/fuelux.tree.min.js"></script>
+	<script src="../assets/js/jquery-ui.min.js"></script>
+	<script src="../assets/js/jquery.ui.touch-punch.min.js"></script>
+	<script src="../assets/js/jquery.gritter.min.js"></script>
+
+	<script src="../assets/js/jquery.dataTables.min.js"></script>
+	<script src="../assets/js/jquery.dataTables.bootstrap.js"></script>
+	<script src="../assets/js/dataTables.fixedColumns.min.js"></script>
+	<script src="../assets/js/bootstrap3-typeahead.js"></script>
+	<script type="text/javascript" src="../js/datePicker/WdatePicker.js"></script>
+	<script type="text/javascript" src="../js/common.js"></script>
+	<script type="text/javascript" src="../js/quality/processFault.js"></script>
 </html>

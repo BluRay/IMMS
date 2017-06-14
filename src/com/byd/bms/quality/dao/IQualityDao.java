@@ -55,7 +55,10 @@ public interface IQualityDao {
 	public int getQualityTargetCount(Map<String, Object> conditionMap);
 	public int insertQualityTarget(QualityTargetBean qualityTarget);
 	public int updateQualityTarget(QualityTargetBean qualityTarget);
-		
+	
+	public List<Map<String,String>> getProcessFaultList(Map<String, Object> conditionMap);
+	public int getProcessFaultCount(Map<String, Object> conditionMap);
+	
 	//======================== yk end=================================//
 		
 		

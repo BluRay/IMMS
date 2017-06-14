@@ -251,6 +251,52 @@
 		where id=#{id}
 	</update>
 	
+	<select id="getProcessFaultList" parameterType="Map" resultType="Map">
+	SELECT p.*,f.factory_name FROM BMS_QM_PROCESS_PROBLEM p
+	LEFT JOIN BMS_BASE_FACTORY f ON p.factory_id = f.id
+	WHERE 1=1 
+		<if test="factory_id != null and factory_id != 0">
+			AND p.factory_id = #{factory_id}
+		</if>
+		<if test="customer_name != null and customer_name != 0">
+			AND p.customer_name LIKE CONCAT('%',#{customer_name},'%')
+		</if>
+		<if test="status != null and status != 0">
+			AND p.status = #{status}
+		</if>
+		<if test="fault_phenomenon != null and fault_phenomenon != 0">
+			AND p.fault_phenomenon LIKE CONCAT('%',#{fault_phenomenon},'%')
+		</if>
+		<if test="fault_date_start != null and fault_date_start != 0">
+			AND p.fault_date >= #{fault_date_start}
+		</if>
+		<if test="fault_date_end != null and fault_date_end != 0">
+			<![CDATA[ AND p.fault_date <= #{fault_date_end} ]]>
+		</if>
+	</select>
+	<select id="getProcessFaultCount" parameterType="Map" resultType="int">
+	SELECT COUNT(p.id) FROM BMS_QM_PROCESS_PROBLEM p
+	LEFT JOIN BMS_BASE_FACTORY f ON p.factory_id = f.id
+	WHERE 1=1  
+		<if test="factory_id != null and factory_id != 0">
+			AND p.factory_id = #{factory_id}
+		</if>
+		<if test="customer_name != null and customer_name != 0">
+			AND p.customer_name LIKE CONCAT('%',#{customer_name},'%')
+		</if>
+		<if test="status != null and status != 0">
+			AND p.status = #{status}
+		</if>
+		<if test="fault_phenomenon != null and fault_phenomenon != 0">
+			AND p.fault_phenomenon LIKE CONCAT('%',#{fault_phenomenon},'%')
+		</if>
+		<if test="fault_date_start != null and fault_date_start != 0">
+			AND p.fault_date >= #{fault_date_start}
+		</if>
+		<if test="fault_date_end != null and fault_date_end != 0">
+			<![CDATA[ AND p.fault_date <= #{fault_date_end} ]]>
+		</if>
+	</select>
 	
 	
 <!-- ======================== yk end=================================-->

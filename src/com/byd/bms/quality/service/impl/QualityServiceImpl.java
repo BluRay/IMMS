@@ -228,6 +228,17 @@ public class QualityServiceImpl implements IQualityService {
 	public int updateQualityTarget(QualityTargetBean qualityTarget) {
 		return qualityDao.updateQualityTarget(qualityTarget);
 	}
+	@Override
+	public Map<String, Object> getProcessFaultList(Map<String, Object> conditionMap) {
+		Map<String, Object> result=new HashMap<String,Object>();
+		int totalCount= qualityDao.getProcessFaultCount(conditionMap);
+		List<Map<String,String>> datalist= qualityDao.getProcessFaultList(conditionMap);
+		result.put("draw", conditionMap.get("draw"));
+		result.put("recordsTotal", totalCount);
+		result.put("recordsFiltered", totalCount);
+		result.put("data", datalist);
+		return result;
+	}
 	
 		
 }
