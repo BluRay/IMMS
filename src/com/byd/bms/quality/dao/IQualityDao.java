@@ -54,6 +54,7 @@ public interface IQualityDao {
 	public List<Map<String,String>> getQualityTargetList(Map<String, Object> conditionMap);
 	public int getQualityTargetCount(Map<String, Object> conditionMap);
 	public int insertQualityTarget(QualityTargetBean qualityTarget);
+	public int updateQualityTarget(QualityTargetBean qualityTarget);
 		
 	//======================== yk end=================================//
 		

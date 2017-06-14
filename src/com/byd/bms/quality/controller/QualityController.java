@@ -427,6 +427,30 @@ public class QualityController extends BaseController {
 		return model;
 	}
 	
+	@RequestMapping("updateQaTargetParam")
+	@ResponseBody
+	public ModelMap updateQaTargetParam(){
+		int userid=(int) session.getAttribute("user_id");
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		QualityTargetBean qualityTarget = new QualityTargetBean();
+		qualityTarget.setEditorId(userid);
+		qualityTarget.setEditDate(curTime);
+		qualityTarget.setId(Integer.valueOf(request.getParameter("id").toString()));
+		qualityTarget.setFactoryId(Integer.valueOf(request.getParameter("factoryId").toString()));
+		qualityTarget.setWorkshopId(Integer.valueOf(request.getParameter("workshopId").toString()));
+		qualityTarget.setTargetTypeId(Integer.valueOf(request.getParameter("targetTypeId").toString()));
+		qualityTarget.setTargetVal(request.getParameter("targetVal").toString());
+		qualityTarget.setStatus(request.getParameter("status").toString());
+		qualityTarget.setEffecDateStart(request.getParameter("effecDateStart").toString());
+		qualityTarget.setEffecDateEnd(request.getParameter("effecDateEnd").toString());
+		int result = qualityService.updateQualityTarget(qualityTarget);
+		initModel(true,String.valueOf(result),null);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	
 	//======================== yk end=================================//
 	
 	

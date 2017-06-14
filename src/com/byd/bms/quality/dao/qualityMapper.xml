@@ -183,9 +183,9 @@
 		select
 		p.id,p.factory_id,f.factory_name,p.workshop_id,w.workshop_name,p.target_type
 		target_type_id,k.key_name target_type,p.target_value,
-		p.estart_date,p.eend_date,p.editor_id,u.username,p.edit_date,p.status
-		from BMS_QM_QUALITY_TARGET_PARAMETER p left join BMS_BASE_USER u on
-		p.editor_id=u.id
+		p.estart_date,p.eend_date,p.editor_id,u.display_name AS username,p.edit_date,p.status
+		from BMS_QM_QUALITY_TARGET_PARAMETER p 
+		left join BMS_BASE_USER u on p.editor_id=u.id
 		left join BMS_BASE_FACTORY f on p.factory_id=f.id
 		left join BMS_BASE_WORKSHOP w on p.workshop_id=w.id
 		left join BMS_BASE_KEY k on p.target_type=k.id
@@ -242,6 +242,14 @@
 		(factory_id,workshop_id,target_type,target_value,estart_date,eend_date,status,editor_id,edit_date)
 		values(#{factoryId},#{workshopId},#{targetTypeId},#{targetVal},#{effecDateStart},#{effecDateEnd},'0',#{editorId},#{editDate})
 	</insert>
+	<update id="updateQualityTarget" parameterType="com.byd.bms.quality.model.QualityTargetBean">
+		update BMS_QM_QUALITY_TARGET_PARAMETER
+		<set>
+			factory_id=#{factoryId},workshop_id=#{workshopId},target_type=#{targetTypeId},target_value=#{targetVal},estart_date=#{effecDateStart},
+			eend_date=#{effecDateEnd},status=#{status},editor_id=#{editorId},edit_date=#{editDate}
+		</set>
+		where id=#{id}
+	</update>
 	
 	
 	

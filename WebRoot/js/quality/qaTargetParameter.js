@@ -55,7 +55,7 @@ $(document).ready(function(){
 function btnNewConfirm(){
 	var factory=$("#new_factory").val();
 	var workshop=$("#new_workshop").val();
-	var paramType=$("#new_targetType").val();
+	var targetType=$("#new_targetType").val();
 	var targetVal=$("#new_targetVal").val();
 	var effectDateStart=$("#new_date_start").val();
 	var effectDateEnd=$("#new_date_end").val();
@@ -67,7 +67,7 @@ function btnNewConfirm(){
 		alert("请选择车间！");
 		return false;
 	} 
-	if(paramType==''){
+	if(targetType==''){
 		alert("请选择参数类别！");
 		return false;
 	} 
@@ -84,7 +84,32 @@ function btnNewConfirm(){
 		return false;
 	}
 	
-	
+	$.ajax({
+		url: "addQaTargetParam",
+		dataType: "json",
+		type: "get",
+		data: {
+				"factoryId" : factory,
+				"workshopId" : workshop,
+				"targetTypeId" : targetType,
+				"targetVal" : targetVal,
+				"effecDateStart" : effectDateStart,
+				"effecDateEnd" : effectDateEnd
+		},
+		async: false,
+		error: function () {alert(response.message);},
+		success: function (response) {
+			if(response.success){
+				$.gritter.add({
+					title: '系统提示：',
+					text: '<h5>增加成功！</h5>',
+					class_name: 'gritter-info'
+				});
+			}
+			$("#dialog-add").dialog( "close" );
+			ajaxQuery();
+		}
+	});
 	
 }
 
@@ -137,26 +162,159 @@ function ajaxQuery(){
             });
 		},
 		columns: [
-		            {"title":"零部件名称",width:'80',"class":"center","data":"parts","defaultContent": ""},
-		            {"title":"缺陷类别",width:'80',"class":"center","data":"bug_type","defaultContent": ""},
-		            {"title":"质量缺陷",width:'80',"class":"center","data":"bug","defaultContent": ""},
-		            {"title":"严重等级",width:'80',"class":"center","data":"serious_level","defaultContent": ""},
-		            {"title":"缺陷分类",width:'80',"class":"center","data":"fault_type","defaultContent": "",
-		            	"render": function ( data, type, row ) {
-		            		return data == '0'?'非尺寸':'尺寸';
-		            	}
-		            },
-		            {"title":"维护人",width:'80',"class":"center","data":"display_name","defaultContent": ""},
+		            {"title":"工厂",width:'80',"class":"center","data":"factory_name","defaultContent": ""},
+		            {"title":"车间",width:'80',"class":"center","data":"workshop_name","defaultContent": ""},
+		            {"title":"参数类别",width:'80',"class":"center","data":"target_type","defaultContent": ""},
+		            {"title":"目标值",width:'80',"class":"center","data":"target_value","defaultContent": ""},
+		            {"title":"有效起始日",width:'80',"class":"center","data":"estart_date","defaultContent": ""},
+		            {"title":"有效结束日",width:'80',"class":"center","data":"eend_date","defaultContent": ""},
+		            {"title":"维护人",width:'80',"class":"center","data":"username","defaultContent": ""},
 		            {"title":"维护时间",width:'80',"class":"center","data":"edit_date","defaultContent": ""},
 		            {"title":"操作",width:'60',"class":"center","data":null,"defaultContent": "",
 		            	"render": function ( data, type, row ) {
-		            		return "<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"编辑\" onclick='editFault(" 
-		            		+ row['id'] + ",\"" + row['parts'] + "\",\"" + row['bug_type'] + "\",\"" + row['bug'] + "\",\""
-		            		+ row['serious_level'] + "\",\"" + row['fault_type'] + "\")' style='color:blue;cursor: pointer;'></i>"
+		            		return "<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"编辑\" onclick='editTargetParamete(" 
+		            		+ row['id'] + ",\"" + row['factory_id'] + "\",\"" + row['workshop_id'] + "\",\"" + row['target_type_id'] + "\",\""
+		            		+ row['target_value'] + "\",\"" + row['estart_date'] + "\",\"" + row['eend_date'] 
+		            		+ "\")' style='color:blue;cursor: pointer;'></i>" + 
+		            		"&nbsp;&nbsp;&nbsp;<i class=\"glyphicon glyphicon-remove bigger-130 showbus\" title=\"删除\" onclick='deleteTargetParamete(" 
+		            		+ row['id'] + ",\"" + row['factory_id'] + "\",\"" + row['workshop_id'] + "\",\"" + row['target_type_id'] + "\",\""
+		            		+ row['target_value'] + "\",\"" + row['estart_date'] + "\",\"" + row['eend_date'] 
+		            		+ "\")' style='color:blue;cursor: pointer;'></i>"
 		            	},
 		            }
 		          ],
 	});
 	
+}
+
+function deleteTargetParamete(id,factory_id,workshop_id,target_type_id,target_value,estart_date,eend_date){
+	if(confirm("确定要删除吗？")==true){
+		console.log("deleteTargetParamete" + id);
+		$.ajax({
+			url: "updateQaTargetParam",
+			dataType: "json",
+			type: "get",
+			data: {
+					"id" : id,
+					"factoryId" : factory_id,
+					"workshopId" : workshop_id,
+					"targetTypeId" : target_type_id,
+					"targetVal" : target_value,
+					"status" : "1",
+					"effecDateStart" : estart_date,
+					"effecDateEnd" : eend_date
+			},
+			async: false,
+			error: function () {alert(response.message);},
+			success: function (response) {
+				if(response.success){
+					$.gritter.add({
+						title: '系统提示：',
+						text: '<h5>删除成功！</h5>',
+						class_name: 'gritter-info'
+					});
+				}
+				//$("#dialog-edit").dialog( "close" );
+				ajaxQuery();
+			}
+		});
+	}
+}
+
+function editTargetParamete(id,factory_id,workshop_id,target_type_id,target_value,estart_date,eend_date){
+	$("#edit_id").val(id);
+	getFactorySelect("quality/qaTargetParameter",'',"#edit_factory",null,'id');
+	$("#edit_factory").val(factory_id);
+	getWorkshopSelect("quality/qaTargetParameter",$("#edit_factory :selected").text(),"","#edit_workshop",null,"id");
+	$("#edit_workshop").val(workshop_id);
+	getKeysSelect("QUALITY_TARGET_PARAM", "", "#edit_targetType","全部","value");
+	$("#edit_targetType").val(target_type_id);
+	$("#edit_targetVal").val(target_value);
+	$("#edit_date_start").val(estart_date);
+	$("#edit_date_end").val(eend_date);
+	
+	$("#dialog-edit").removeClass('hide').dialog({
+		resizable: false,
+		title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 编辑质量目标参数</h4></div>',
+		title_html: true,
+		width:'550px',
+		modal: true,
+		buttons: [{
+					text: "取消",
+					"class" : "btn btn-minier",
+					click: function() {$( this ).dialog( "close" );} 
+				},
+				{
+					text: "保存",
+					id:"btn_ok",
+					"class" : "btn btn-success btn-minier",
+					click: function() {
+						btnEditConfirm();
+					} 
+				}
+			]
+	});
+}
+
+function btnEditConfirm(){
+	var factory=$("#edit_factory").val();
+	var workshop=$("#edit_workshop").val();
+	var targetType=$("#edit_targetType").val();
+	var targetVal=$("#edit_targetVal").val();
+	var effectDateStart=$("#edit_date_start").val();
+	var effectDateEnd=$("#edit_date_end").val();
+	if(factory==''){
+		alert("请选择工厂！");
+		return false;
+	}
+	if(workshop==''){
+		alert("请选择车间！");
+		return false;
+	} 
+	if(targetType==''){
+		alert("请选择参数类别！");
+		return false;
+	} 
+	if(targetVal==''){
+		alert("请输入目标值！");
+		return false;
+	}
+	if(effectDateStart==''){
+		alert("请输入有效日期！");
+		return false;
+	}
+	if(effectDateEnd==''){
+		alert("请输入有效日期！");
+		return false;
+	}
+	
+	$.ajax({
+		url: "updateQaTargetParam",
+		dataType: "json",
+		type: "get",
+		data: {
+				"id" : $("#edit_id").val(),
+				"factoryId" : factory,
+				"workshopId" : workshop,
+				"targetTypeId" : targetType,
+				"targetVal" : targetVal,
+				"status" : "0",
+				"effecDateStart" : effectDateStart,
+				"effecDateEnd" : effectDateEnd
+		},
+		async: false,
+		error: function () {alert(response.message);},
+		success: function (response) {
+			if(response.success){
+				$.gritter.add({
+					title: '系统提示：',
+					text: '<h5>编辑成功！</h5>',
+					class_name: 'gritter-info'
+				});
+			}
+			$("#dialog-edit").dialog( "close" );
+			ajaxQuery();
+		}
+	});
 }
 

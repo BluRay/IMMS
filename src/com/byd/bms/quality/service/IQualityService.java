@@ -33,7 +33,8 @@ public interface IQualityService {
 	public int insertFaultLib(StdFaultLibBean faultLib);
 	public int updateFaultLib(StdFaultLibBean faultLib);
 	public Map<String,Object> getQaTargetParamList(Map<String, Object> conditionMap);
-	public int insertQualityTarget(QualityTargetBean qualityTarget);		
+	public int insertQualityTarget(QualityTargetBean qualityTarget);
+	public int updateQualityTarget(QualityTargetBean qualityTarget);
 	//======================== yk end=================================//
 			
 			

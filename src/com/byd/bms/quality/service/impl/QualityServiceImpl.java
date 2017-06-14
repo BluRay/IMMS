@@ -224,6 +224,10 @@ public class QualityServiceImpl implements IQualityService {
 	public int insertQualityTarget(QualityTargetBean qualityTarget) {
 		return qualityDao.insertQualityTarget(qualityTarget);
 	}
+	@Override
+	public int updateQualityTarget(QualityTargetBean qualityTarget) {
+		return qualityDao.updateQualityTarget(qualityTarget);
+	}
 	
 		
 }

@@ -79,6 +79,26 @@
 					</table>
 				</form>
 			</div>
+			
+			<div id="dialog-edit" class="hide" style="align:center;width:700px;height:500px">
+				<form>
+					<table>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">工厂：</td><td style="width:130px"><select id="edit_factory" class="input-small" style="width:125px"></select></td>
+						<td align="right" style="width:100px">车间：</td><td style="width:150px"><select id="edit_workshop" class="input-small" style="width:125px"></select></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">参数类别：</td><td style="width:130px"><select id="edit_targetType" class="input-small" style="width:125px"></select></td>
+						<td align="right" style="width:100px">目标值：</td><td style="width:150px"><input type="text" class="input-medium" id="edit_targetVal" style="width:125px"></input></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">有效期：</td>
+						<td colspan=3><input id="edit_date_start" placeholder="开始时间..." style="width:125px" type="text" onClick="WdatePicker({el:'edit_date_start',dateFmt:'yyyy-MM-dd'});"> - <input id="edit_date_end" placeholder="结束时间..." style="width:125px" type="text" onClick="WdatePicker({el:'edit_date_end',dateFmt:'yyyy-MM-dd'});"></td>
+					</tr>
+					</table>
+					<input type="text" class="input-medium" id="edit_id" style="display:none"></input>
+				</form>
+			</div>
 
 			<!-- 脚 -->
 			<%-- <jsp:include page="footer.jsp" flush="true"/> --%>
