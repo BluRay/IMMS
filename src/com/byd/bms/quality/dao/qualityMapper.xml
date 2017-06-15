@@ -79,7 +79,7 @@
 	</delete>
 	
 	<select id="queryKeyPartsList" parameterType="Map" resultType="Map">
-		select d.sap_mat,d.parts_no,d.parts_name,d.size,d.vendor,d.workshop,d.process,d.3C_components ccc
+		select d.sap_mat,d.parts_no,d.parts_name,d.size,d.vendor,d.workshop,d.process,d.3C_components ccc,d.3C_no cccNo
 		from BMS_QM_KEY_PARTS_TEMPLATE_DETAILS d
 		left join BMS_QM_KEY_PARTS_TEMPLATE_HEADER h on d.key_components_template_id=h.id
 		where h.bus_type_id=#{bus_type_id} and h.order_id=#{order_id} and h.order_config_id=#{order_config_id}
@@ -138,7 +138,7 @@
      	where id=#{tpl_header_id}
      </update>
      
-     <insert id="insertPrdRcdBusTypeTplDetail" parameterType="Map"  useGeneratedKeys="true" keyProperty="id" >
+     <insert id="insertPrdRcdTplDetail" parameterType="Map"  useGeneratedKeys="true" keyProperty="id" >
      	<selectKey resultType="int" keyProperty="id" order="AFTER">
 			SELECT
 			LAST_INSERT_ID()
@@ -150,14 +150,87 @@
 		</foreach>	
      </insert>
      
-     <delete id="deletePrdRcdBusTypeTplByHeader" parameterType="int">
+     <delete id="deletePrdRcdTplByHeader" parameterType="int">
      	delete from BMS_QM_TEST_CARD_TEMPLATE_DETAILS where test_card_template_id=#{tpl_header_id}
      </delete>
      
-     <select id="queryPrdRcdBusTypeTplDetail" parameterType="String" resultType="Map">
+     <select id="queryPrdRcdTplDetail" parameterType="String" resultType="Map">
      	select * from BMS_QM_TEST_CARD_TEMPLATE_DETAILS where test_card_template_id=#{tpl_header_id} 
      	order by cast(test_standard_no as signed)
      </select>
+     
+     <select id="queryPrdRcdOrderTplList" parameterType="Map" resultType="Map">
+     	select h.id,t.bus_type_code bus_type,o.order_no,h.order_id,concat(o.order_no,' ',o.order_name,t.bus_type_code,' ',o.order_qty,'台') order_desc,h.bus_type_id,
+     	h.order_config_id,c.order_config_name order_config,h.test_node_id,h.test_node,h.version,h.version_cp,u.username editor,h.edit_date
+     	from BMS_QM_TEST_CARD_TEMPLATE_HEADER h
+     	left join BMS_BASE_BUS_TYPE t on h.bus_type_id=t.id
+     	left join BMS_OR_ORDER o on o.id=h.order_id
+     	left join BMS_OR_ORDER_CONFIG c on c.id=h.order_config_id
+     	left join BMS_BASE_USER u on u.id=h.editor_id
+     	where h.tplType='1'
+     	<if test="order_id !=null and order_id !=''">
+     		and h.order_id=#{order_id}
+     	</if>
+     	<if test="order_config_id !=null and order_config_id !=''">
+     		and h.order_config_id=#{order_config_id}
+     	</if>
+     	<if test="bus_type_id !=null and bus_type_id !=''">
+     		and h.bus_type_id=#{bus_type_id}
+     	</if>
+     	<if test="test_node_id !=null and test_node_id !=''">
+     		and h.test_node_id=#{test_node_id}
+     	</if>
+     	order by h.order_id,h.order_config_id,h.version desc
+		<if test="start !=null">
+			limit #{start},#{length}
+		</if>
+     </select>
+     
+     <select id="queryPrdRcdOrderTplCount" parameterType="Map" resultType="int">
+     	select count(id)  from BMS_QM_TEST_CARD_TEMPLATE_HEADER h
+     	where h.tplType='1'
+     	<if test="order_id !=null and order_id !=''">
+     		and h.order_id=#{order_id}
+     	</if>
+     	<if test="order_config_id !=null and order_config_id !=''">
+     		and h.order_config_id=#{order_config_id}
+     	</if>
+     	<if test="bus_type_id !=null and bus_type_id !=''">
+     		and h.bus_type_id=#{bus_type_id}
+     	</if>
+     	<if test="test_node_id !=null and test_node_id !=''">
+     		and h.test_node_id=#{test_node_id}
+     	</if>
+     </select>
+     
+     <select id="queryPrdRcdBusTypeTplHeader" parameterType="Map" resultType="Map">
+     	select id,version from BMS_QM_TEST_CARD_TEMPLATE_HEADER
+     	where tplType='0' and bus_type_id=#{bus_type_id} and test_node_id=#{test_node_id}
+     	order by version desc
+     	limit 1
+     </select>
+     
+     <select id="queryPrdRcdBusTypeTplDetailLatest" parameterType="Map" resultType="Map">
+     	select * from BMS_QM_TEST_CARD_TEMPLATE_DETAILS 
+     	where  
+     	order by cast(test_standard_no as signed)
+     </select>
+     
+     <insert id='insertPrdRcdOrderTplHeader' parameterType="Map" useGeneratedKeys="true" keyProperty="id">
+     	<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into BMS_QM_TEST_CARD_TEMPLATE_HEADER 
+		(bus_type_id,order_id,order_config_id,test_node_id,test_node,tplType,version,editor_id,edit_date,version_cp)
+		values (#{bus_type_id},#{order_id},#{order_config_id},#{test_node_id},#{test_node},'1',#{version},#{editor_id},#{edit_date},#{version_cp})		
+     </insert>
+     
+     <update id="updatePrdRcdOrderTplHeader" parameterType="Map">
+     	update BMS_QM_TEST_CARD_TEMPLATE_HEADER set editor_id=#{editor_id},edit_date=#{edit_date}
+     	where id=#{tpl_header_id}
+     </update>
+     
 <!-- ======================== xjw end=================================-->
 
 <!-- ======================== yk start=================================-->
@@ -296,6 +369,24 @@
 		<if test="fault_date_end != null and fault_date_end != 0">
 			<![CDATA[ AND p.fault_date <= #{fault_date_end} ]]>
 		</if>
+	</select>
+	
+	<insert id="addProcessFault" parameterType="com.byd.bms.quality.model.ProcessFaultBean" useGeneratedKeys="true">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		INSERT INTO BMS_QM_PROCESS_PROBLEM 
+		(factory_id, customer_name, vin, order_id, order_describe, customer_bus_number, license_number, 
+		fault_phenomenon, fault_components, fault_date, bus_type, fault_mils, fault_level_id, 
+		response_workshop, is_batch, fault_reason, resolve_method, resolve_date, resolve_result, 
+		memo, report_file_path, punish, compensation, status, editor_id, edit_date)	
+		VALUES(#{factory_id},#{customer_name},#{vin},#{order_id},#{order_describe},#{customer_bus_number},#{license_number},
+		#{fault_phenomenon},#{fault_components},#{fault_date},#{bus_type},#{fault_mils},#{fault_level_id},
+		#{response_workshop},#{is_batch},#{fault_reason},#{resolve_method},#{resolve_date},#{resolve_result},
+		#{memo},#{report_file_path},#{punish},#{compensation},#{status},#{editor_id},#{edit_date})
+	</insert>
+	<select id="showProcessFaultInfo" parameterType="int" resultType="com.byd.bms.quality.model.ProcessFaultBean">
+		SELECT * FROM BMS_QM_PROCESS_PROBLEM WHERE id = #{id}
 	</select>
 	
 	

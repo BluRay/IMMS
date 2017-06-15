@@ -31,7 +31,7 @@
 					<ul class="breadcrumb">
 						<li><i class="ace-icon fa fa-home home-icon"></i><a
 							href="<%=request.getContextPath()%>/index">首页</a></li>
-						<li><a href="#">品质</a></li>
+						<li><a href="#">制程品质</a></li>
 						<li><a href="#">基础数据</a></li>
 						<li><a href="#">订单关键零部件模板</a></li>
 					</ul>
@@ -107,7 +107,7 @@
 					</div>
 					<div class="form-group">					
 						<div class="col-sm-12">			
-							<table class="table table-striped table-bordered table-hover" style="width: 972px;overflow-x:auto;font-size:12px;" id="keyPartsTable">
+							<table class="table table-striped table-bordered table-hover" style="width: 1052px;font-size:12px;" id="keyPartsTable">
 							</table>
 						</div>
 					</div>
@@ -129,7 +129,7 @@
 					</div>
 					<div class="form-group">					
 						<div class="col-sm-12">			
-							<table class="table table-striped table-bordered table-hover" style="width: 972px;font-size:12px;" id="keyPartsTable_view">
+							<table class="table table-striped table-bordered table-hover" style="width: 1052px;font-size:12px;" id="keyPartsTable_view">
 							</table>
 						</div>
 					</div>

@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.byd.bms.quality.model.BmsBaseQCStdRecord;
+import com.byd.bms.quality.model.ProcessFaultBean;
 import com.byd.bms.quality.model.QualityTargetBean;
 import com.byd.bms.quality.model.StdFaultLibBean;
 
@@ -40,11 +41,24 @@ public interface IQualityDao {
 
 	void updatePrdRcdBusTypeTplHeader(Map<String, Object> condMap);
 
-	void insertPrdRcdBusTypeTplDetail(Map<String, Object> smap);
+	void insertPrdRcdTplDetail(Map<String, Object> smap);
 
-	void deletePrdRcdBusTypeTplByHeader(@Param(value="tpl_header_id")int tpl_header_id);
+	void deletePrdRcdTplByHeader(@Param(value="tpl_header_id")int tpl_header_id);
 
-	List<Map<String, String>> queryPrdRcdBusTypeTplDetail(@Param(value="tpl_header_id")String tpl_header_id);
+	List<Map<String, Object>> queryPrdRcdTplDetail(@Param(value="tpl_header_id")String tpl_header_id);
+
+	List<Map<String, Object>> queryPrdRcdOrderTplList( HashMap<String, Object> condMap);
+
+	int queryPrdRcdOrderTplCount(HashMap<String, Object> condMap);
+
+	List<Map<String, Object>> queryPrdRcdBusTypeTplDetailLatest(HashMap<String, Object> condMap);
+
+	Map<String, Object> queryPrdRcdBusTypeTplHeader(HashMap<String, Object> condMap);
+	
+	void insertPrdRcdOrderTplHeader(Map<String, Object> condMap);
+
+	void updatePrdRcdOrderTplHeader(Map<String, Object> condMap);
+
 	//======================== xjw end=================================//
 	
 	
@@ -58,6 +72,8 @@ public interface IQualityDao {
 	
 	public List<Map<String,String>> getProcessFaultList(Map<String, Object> conditionMap);
 	public int getProcessFaultCount(Map<String, Object> conditionMap);
+	public int addProcessFault(ProcessFaultBean pocessFault);
+	public ProcessFaultBean showProcessFaultInfo(int id);
 	
 	//======================== yk end=================================//
 		

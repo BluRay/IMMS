@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.ui.ModelMap;
 
 import com.byd.bms.quality.model.BmsBaseQCStdRecord;
+import com.byd.bms.quality.model.ProcessFaultBean;
 import com.byd.bms.quality.model.QualityTargetBean;
 import com.byd.bms.quality.model.StdFaultLibBean;
 
@@ -26,6 +27,14 @@ public interface IQualityService {
 	void savePrdRcdBusTypeTpl(Map<String, Object> condMap);
 
 	void getPrdRcdBusTypeTplDetail(String tpl_header_id, ModelMap model);
+
+	void getPrdRcdOrderTplList(HashMap<String, Object> condMap, ModelMap model);
+
+	void getPrdRcdBusTypeTplDetailLatest(HashMap<String, Object> condMap,ModelMap model);
+
+	void savePrdRcdOrderTpl(Map<String, Object> condMap);
+
+	void getPrdRcdOrderTplDetail(String tpl_header_id, ModelMap model);
 	//======================== xjw end=================================//
 		
 	
@@ -37,6 +46,8 @@ public interface IQualityService {
 	public int updateQualityTarget(QualityTargetBean qualityTarget);
 	
 	public Map<String,Object> getProcessFaultList(Map<String, Object> conditionMap);
+	public int addProcessFault(ProcessFaultBean pocessFault);
+	public ProcessFaultBean showProcessFaultInfo(int id);
 	//======================== yk end=================================//
 			
 			

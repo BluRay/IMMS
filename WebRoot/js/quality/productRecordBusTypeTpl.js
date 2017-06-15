@@ -306,7 +306,7 @@ function showInfoPage(row){
 		width:900,
 		height:550,
 		modal: true,
-		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i>车型成品记录表模板导入</h4></div>",
+		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i>车型成品记录表模板查看</h4></div>",
 		title_html: true,
 		buttons: [ 
 			{

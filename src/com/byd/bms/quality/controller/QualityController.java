@@ -11,6 +11,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.ServletContext;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +23,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.ContextLoader;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.byd.bms.quality.service.IQualityService;
 import com.byd.bms.quality.model.BmsBaseQCStdRecord;
+import com.byd.bms.quality.model.ProcessFaultBean;
 import com.byd.bms.quality.model.QualityTargetBean;
 import com.byd.bms.quality.model.StdFaultLibBean;
 import com.byd.bms.util.ExcelModel;
@@ -41,7 +46,7 @@ import net.sf.json.JSONObject;
 @Controller
 @RequestMapping("/quality")
 public class QualityController extends BaseController {
-	static Logger logger = Logger.getLogger(QualityController.class.getName());
+	static Logger logger = Logger.getLogger("QUALITY");
 	@Autowired
 	protected IQualityService qualityService;
 	
@@ -338,6 +343,105 @@ public class QualityController extends BaseController {
 		qualityService.getPrdRcdBusTypeTplDetail(tpl_header_id,model);
 		return model;
 	}
+	
+	/**
+	 * 订单成品记录表模板页面
+	 * @return
+	 */
+	@RequestMapping("/prdRcdOrderTpl")
+	public ModelAndView productRecordOrderTpl(){
+		mv.setViewName("quality/productRecordOrderTpl");
+		return mv;
+	}
+	
+	/**
+	 * 查询车型成品记录表模板列表
+	 * @return
+	 */
+	@RequestMapping("getPrdRcdOrderTplList")
+	@ResponseBody
+	public ModelMap getPrdRcdOrderTplList(){
+		model.clear();
+		String bus_type_id=request.getParameter("bus_type_id");//车型
+		String test_node_id=request.getParameter("test_node_id");
+		String order_id=request.getParameter("order_id");
+		String order_config_id=request.getParameter("order_config_id");
+		int draw=Integer.parseInt(request.getParameter("draw"));//jquerydatatables 
+		int start=Integer.parseInt(request.getParameter("start"));//分页数据起始数
+		int length=Integer.parseInt(request.getParameter("length"));//每一页数据条数
+		HashMap<String, Object> condMap =new HashMap<String,Object>();
+		condMap.put("bus_type_id",bus_type_id);
+		condMap.put("test_node_id", test_node_id);
+		condMap.put("order_id",order_id);
+		condMap.put("order_config_id", order_config_id);
+		condMap.put("draw", draw);
+		condMap.put("start", start);
+		condMap.put("length", length);
+		
+		qualityService.getPrdRcdOrderTplList(condMap,model);
+		return model;
+	}
+	
+	/**
+	 * 根据车型、检验节点查询最新车型模板
+	 * @return
+	 */
+	@RequestMapping("getPrdRcdBusTypeTplDetailLatest")
+	@ResponseBody
+	public ModelMap getPrdRcdBusTypeTplDetailLatest(){
+		model.clear();
+		HashMap<String, Object> condMap =new HashMap<String,Object>();
+		condMap.put("bus_type_id", request.getParameter("bus_type_id"));
+		condMap.put("test_node_id", request.getParameter("test_node_id"));
+		qualityService.getPrdRcdBusTypeTplDetailLatest(condMap,model);
+		return model;
+	}
+	
+	/**
+	 * 保存订单成品记录表模板明细
+	 * @return
+	 */
+	@RequestMapping("savePrdRcdOrderTypeTpl")
+	@ResponseBody
+	public ModelMap savePrdRcdOrderTypeTpl(){
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat df_v = new SimpleDateFormat("yyyyMMddHHmmss");
+		String curTime = df.format(new Date());
+		int userid=(int) session.getAttribute("user_id");
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("bus_type_id", request.getParameter("bus_type_id"));
+		condMap.put("test_node_id", request.getParameter("test_node_id"));
+		condMap.put("test_node", request.getParameter("test_node"));
+		condMap.put("order_id", request.getParameter("order_id"));
+		condMap.put("order_config_id", request.getParameter("order_config_id"));
+		condMap.put("tpl_header_id", request.getParameter("tpl_header_id"));
+		condMap.put("version", df_v.format(new Date()));
+		condMap.put("version_cp", request.getParameter("version_cp"));
+		condMap.put("tpl_list_str", request.getParameter("tpl_list_str"));
+		condMap.put("editor_id", userid);
+		condMap.put("edit_date", curTime);
+		
+		try{
+			qualityService.savePrdRcdOrderTpl(condMap);
+			initModel(true,"保存成功！",null);
+		}catch(Exception e){
+			initModel(false,"保存失败！"+e.getMessage(),null);
+		}
+		return mv.getModelMap();
+	}
+	
+	/**
+	 * 查询车型成品记录表模板
+	 * @return
+	 */
+	@RequestMapping("getPrdRcdOrderTplDetail")
+	@ResponseBody
+	public ModelMap getPrdRcdOrderTplDetail(){
+		model.clear();
+		String tpl_header_id=request.getParameter("tpl_header_id");
+		qualityService.getPrdRcdOrderTplDetail(tpl_header_id,model);
+		return model;
+	}
 	//======================== xjw end=================================//
 	
 	
@@ -471,6 +575,82 @@ public class QualityController extends BaseController {
 		mv.getModelMap().addAllAttributes(result);
 		model = mv.getModelMap();
 		return model;
+	}
+	
+	@RequestMapping(value="addProcessFault",method=RequestMethod.POST)
+	@ResponseBody
+	public ModelMap addProcessFault(@RequestParam(value="new_report_file",required=false) MultipartFile file){	
+		int userid=(int) session.getAttribute("user_id");
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String filename = saveFileMethod(file);
+		logger.info("-->filename = " + filename);
+		ProcessFaultBean pocessFault = new ProcessFaultBean();
+		pocessFault.setBus_type(request.getParameter("bus_type"));
+		pocessFault.setFault_date(request.getParameter("fault_date"));
+		pocessFault.setFault_mils(request.getParameter("fault_mils"));
+		pocessFault.setCustomer_name(request.getParameter("customer_name"));
+		pocessFault.setLicense_number(request.getParameter("license_number"));
+		pocessFault.setVin(request.getParameter("vin"));
+		pocessFault.setFault_level_id(Integer.valueOf(request.getParameter("fault_level_id")));
+		pocessFault.setIs_batch(request.getParameter("is_batch"));
+		pocessFault.setFault_phenomenon(request.getParameter("fault_phenomenon"));
+		pocessFault.setFault_reason(request.getParameter("fault_reason"));
+		pocessFault.setFactory_id(Integer.valueOf(request.getParameter("factory")));
+		pocessFault.setResponse_workshop(request.getParameter("response_workshop"));
+		pocessFault.setResolve_method(request.getParameter("resolve_method"));
+		pocessFault.setResolve_date(request.getParameter("resolve_date"));
+		pocessFault.setResolve_result(request.getParameter("resolve_result"));
+		pocessFault.setPunish(request.getParameter("punish"));
+		pocessFault.setCompensation(request.getParameter("compensation"));
+		pocessFault.setMemo(request.getParameter("memo"));
+		pocessFault.setEditor_id(userid);
+		pocessFault.setEdit_date(curTime);
+		pocessFault.setReport_file_path(filename);
+		int result = qualityService.addProcessFault(pocessFault);
+		initModel(true,String.valueOf(result),null);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("showProcessFaultInfo")
+	@ResponseBody
+	public ModelMap showProcessFaultInfo(){
+		int ProcessFaultID = Integer.valueOf(request.getParameter("id"));
+		ProcessFaultBean processFault = qualityService.showProcessFaultInfo(ProcessFaultID);
+		initModel(true,"SUCCESS",processFault);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	private String saveFileMethod(MultipartFile file) {
+		ServletContext servletContext = ContextLoader.getCurrentWebApplicationContext().getServletContext(); 
+		String filepath = "";
+		if (file != null) {
+			try {
+				 //取得当前上传文件的文件名称  
+                String myFileName = file.getOriginalFilename();  
+                //如果名称不为“”,说明该文件存在，否则说明该文件不存在  
+                if(myFileName.trim() !=""){  
+    				// 把上传的文件放到指定的路径下
+    				String path = servletContext.getRealPath("/file/upload/ProcessFault/");
+    				// 写到指定的路径中
+    				File savedir = new File(path);
+    				// 如果指定的路径没有就创建
+    				if (!savedir.exists()) {
+    					savedir.mkdirs();
+    				}
+    				File saveFile = new File(savedir, String.valueOf(System.currentTimeMillis()) + ".pdf");
+                    System.out.println(myFileName);  
+                    file.transferTo(saveFile);
+                    filepath = "/IMMS/file/upload/ProcessFault/" + saveFile.getName();
+                }
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		return filepath;
 	}
 	
 	

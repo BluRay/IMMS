@@ -4,7 +4,7 @@
 
 	<select id="queryOrderList" parameterType="Map" resultType="Map">
 		select o.id,o.order_name name,o.order_no orderNo,o.order_code
-		orderCode,o.order_qty orderQty,t.internal_name busType
+		orderCode,o.order_qty orderQty,t.internal_name busType,t.id bus_type_id
 		from BMS_OR_ORDER o
 		left join BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id 
 		<if test="factory !=null and  factory !=''">

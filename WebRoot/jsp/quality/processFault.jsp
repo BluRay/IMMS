@@ -54,7 +54,7 @@
 								<td><input id="search_fault_phenomenon" placeholder="故障现象..." style="width:100px" type="text"></td>
 								<td>&nbsp;反馈日期：</td>
 								<td colspan=3><input id="search_date_start" placeholder="开始时间..." style="width:90px" type="text" onClick="WdatePicker({el:'search_date_start',dateFmt:'yyyy-MM-dd'});"> - <input id="search_date_end" placeholder="结束时间..." style="width:90px" type="text" onClick="WdatePicker({el:'search_date_end',dateFmt:'yyyy-MM-dd'});"></td>
-								<td><input id="btnQuery" type="button" class="btn btn-sm btn-primary" value="查询" style="margin-left: 2px;"></input></td>
+								<td><input id="btnQuery" type="button" class="btn btn-sm btn-primary" value="查询" style="margin-left: 2px;"></input><input id="btnAdd" type="button" class="btn btn-sm btn-success" value="新增" style="margin-left: 2px;"></input></td>
 							</tr>
 						</table>	
 					</div>
@@ -62,6 +62,118 @@
 					</table>
 					</div>
 			</div><!-- /.main-content -->
+			
+			<div id="dialog-add" class="hide" style="align:center;width:700px;height:500px">
+				<form id="form_add">
+					<table>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">* 车辆型号：</td><td style="width:150px">
+						<select name="" id="new_bus_type" class="input-medium busType">
+							</select>
+							<script id="tmplBusTypeSelect" type="text/x-jsrander">
+                            	<option value='{{:id}}'>{{:code}}</option>
+                            </script>
+						</td>
+						<td align="right" style="width:100px">*故障反馈日期：</td><td style="width:150px"><input type="text" class="input-medium" id="new_fault_date" name="new_fault_date" onClick="WdatePicker({el:'new_fault_date',dateFmt:'yyyy-MM-dd'});" style="width:150px"/></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">* 故障里程：</td><td style="width:150px"><input type="text" class="input-medium" id="new_fault_mils" name="new_fault_mils" style="width:150px" /></td>
+						<td align="right" style="width:100px">*客户名称：</td><td style="width:150px"><input type="text" class="input-medium" id="new_customer_name" name="new_customer_name" style="width:150px"/></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">* 车牌号码：</td><td style="width:150px"><input type="text" class="input-medium" id="new_license_number" name="new_license_number" style="width:150px" /></td>
+						<td align="right" style="width:100px">*VIN号：</td><td style="width:150px"><input type="text" class="input-medium" id="new_vin" name="new_vin" style="width:150px"/></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">* 故障等级：</td><td style="width:150px"><select class="input-medium" id="new_fault_level_id" style="width:150px"><option value="0">一般</option></select></td>
+						<td align="right" style="width:100px">*问题性质：</td><td style="width:150px"><select class="input-medium" id="new_is_batch" style="width:150px"><option value="0">非批量</option><option value="1">批量</option></select></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">* 故障现象：</td><td colspan=3><input type="text" class="input-medium" id="new_fault_phenomenon" style="width:400px"/></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">* 故障原因：</td><td colspan=3><input type="text" class="input-medium" id="new_fault_reason" style="width:400px"/></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">责任工厂：</td><td style="width:150px"><select id="new_factory" class="input-small" style="width:150px"></select></td>
+						<td align="right" style="width:100px">责任车间：</td><td style="width:150px"><select id="new_workshop" class="input-small" style="width:80px"></select></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">解决方法：</td><td colspan=3><input type="text" class="input-medium" id="new_resolve_method" style="width:400px"/></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">处理时间：</td><td style="width:150px"><input type="text" class="input-medium" id="new_resolve_date" style="width:150px" /></td>
+						<td align="right" style="width:100px">处理结果：</td><td style="width:150px"><select class="input-medium" id="new_resolve_result" style="width:150px"><option value="0">关闭</option><option value="1">受理</option></select></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">问题报告：</td><td colspan=3><input name="new_report_file" type="file" id="new_report_file" /></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">处罚情况：</td><td style="width:150px"><input type="text" class="input-medium" id="new_punish" style="width:150px" /></td>
+						<td align="right" style="width:100px">索赔情况：</td><td style="width:150px"><input type="text" class="input-medium" id="new_compensation" style="width:150px"/></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">备注信息：</td><td colspan=3><input type="text" class="input-medium" id="new_memo" style="width:400px"/></td>
+					</tr>
+					</table>
+				</form>
+			</div>
+			
+			<div id="dialog-edit" class="hide" style="align:center;width:700px;height:500px">
+				<form id="form_edit">
+					<table>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">* 车辆型号：</td><td style="width:150px">
+							<select name="" id="edit_bus_type" class="input-medium busType">
+							</select>
+							<script id="tmplBusTypeSelect" type="text/x-jsrander">
+                            	<option value='{{:id}}'>{{:code}}</option>
+                            </script>
+						</td>
+						<td align="right" style="width:100px">*故障反馈日期：</td><td style="width:150px"><input type="text" class="input-medium" id="edit_fault_date" name="new_fault_date" onClick="WdatePicker({el:'new_fault_date',dateFmt:'yyyy-MM-dd'});" style="width:150px"/></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">* 故障里程：</td><td style="width:150px"><input type="text" class="input-medium" id="edit_fault_mils" name="new_fault_mils" style="width:150px" /></td>
+						<td align="right" style="width:100px">*客户名称：</td><td style="width:150px"><input type="text" class="input-medium" id="edit_customer_name" name="new_customer_name" style="width:150px"/></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">* 车牌号码：</td><td style="width:150px"><input type="text" class="input-medium" id="edit_license_number" name="new_license_number" style="width:150px" /></td>
+						<td align="right" style="width:100px">*VIN号：</td><td style="width:150px"><input type="text" class="input-medium" id="edit_vin" name="new_vin" style="width:150px"/></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">* 故障等级：</td><td style="width:150px"><select class="input-medium" id="edit_fault_level_id" style="width:150px"><option value="0">一般</option></select></td>
+						<td align="right" style="width:100px">*问题性质：</td><td style="width:150px"><select class="input-medium" id="edit_is_batch" style="width:150px"><option value="0">非批量</option><option value="1">批量</option></select></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">* 故障现象：</td><td colspan=3><input type="text" class="input-medium" id="edit_fault_phenomenon" style="width:400px"/></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">* 故障原因：</td><td colspan=3><input type="text" class="input-medium" id="edit_fault_reason" style="width:400px"/></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">责任工厂：</td><td style="width:150px"><select id="edit_factory" class="input-small" style="width:150px"></select></td>
+						<td align="right" style="width:100px">责任车间：</td><td style="width:150px"><select id="edit_workshop" class="input-small" style="width:80px"></select></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">解决方法：</td><td colspan=3><input type="text" class="input-medium" id="edit_resolve_method" style="width:400px"/></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">处理时间：</td><td style="width:150px"><input type="text" class="input-medium" id="edit_resolve_date" style="width:150px" /></td>
+						<td align="right" style="width:100px">处理结果：</td><td style="width:150px"><select class="input-medium" id="edit_resolve_result" style="width:150px"><option value="0">关闭</option><option value="1">受理</option></select></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">问题报告：</td><td colspan=3><input name="new_report_file" type="file" id="edit_report_file" style="width:300px"/><a id="file_link">查看</a></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">处罚情况：</td><td style="width:150px"><input type="text" class="input-medium" id="edit_punish" style="width:150px" /></td>
+						<td align="right" style="width:100px">索赔情况：</td><td style="width:150px"><input type="text" class="input-medium" id="edit_compensation" style="width:150px"/></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">备注信息：</td><td colspan=3><input type="text" class="input-medium" id="edit_memo" style="width:400px"/></td>
+					</tr>
+					</table>
+				</form>
+			</div>
 
 			<!-- 脚 -->
 			<%-- <jsp:include page="footer.jsp" flush="true"/> --%>
@@ -73,12 +185,15 @@
 	<script src="../assets/js/jquery-ui.min.js"></script>
 	<script src="../assets/js/jquery.ui.touch-punch.min.js"></script>
 	<script src="../assets/js/jquery.gritter.min.js"></script>
-
 	<script src="../assets/js/jquery.dataTables.min.js"></script>
 	<script src="../assets/js/jquery.dataTables.bootstrap.js"></script>
 	<script src="../assets/js/dataTables.fixedColumns.min.js"></script>
 	<script src="../assets/js/bootstrap3-typeahead.js"></script>
+	<script src="../assets/js/ace/elements.fileinput.js"></script>
+	<script type="text/javascript" src="../js/jquery.form.js"></script>
 	<script type="text/javascript" src="../js/datePicker/WdatePicker.js"></script>
 	<script type="text/javascript" src="../js/common.js"></script>
+	<script type="text/javascript" src="../assets/js/bootstrap3-typeahead.js"></script>
+	<script type="text/javascript" src="../js/jsrender.min.js"></script>
 	<script type="text/javascript" src="../js/quality/processFault.js"></script>
 </html>

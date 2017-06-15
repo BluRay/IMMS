@@ -39,7 +39,7 @@ import org.apache.commons.lang.StringUtils;
 @Controller
 @RequestMapping("/tech")
 public class TechController extends BaseController{
-	static Logger logger = Logger.getLogger(TechController.class.getName());
+	static Logger logger = Logger.getLogger("TECH");
 	@Autowired
 	protected ITechService techService;
 	

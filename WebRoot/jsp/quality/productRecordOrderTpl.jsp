@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <meta charset="utf-8" />
-<title>车型成品记录表模板</title>
+<title>订单成品记录表模板</title>
 <meta name="description" content="Common Buttons &amp; Icons" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />	
@@ -33,7 +33,7 @@
 							href="<%=request.getContextPath()%>/index">首页</a></li>
 						<li><a href="#">制程品质</a></li>
 						<li><a href="#">基础数据</a></li>
-						<li><a href="#">车型成品记录表模板</a></li>
+						<li><a href="#">订单成品记录表模板</a></li>
 					</ul>
 					<!-- /.breadcrumb -->
 
@@ -57,8 +57,14 @@
 								<td>
 									<select name="" id="search_bus_type" class="input-medium carType" style="height: 30px;width:100px;" ></select>
 								</td>
-<!-- 								<td>订单：</td>
-								<td><input style="height: 30px;width:130px;" type="text" class="input-medium revise" placeholder="订单编号..." id="search_order_no" /></td> -->
+ 								<td>订单：</td>
+								<td><input style="height: 30px;width:130px;" type="text" class="input-medium revise" placeholder="订单编号..." id="search_order_no" /></td> 
+								<td>配置：</td>
+								<td>
+									<select name="" id="search_order_config" class="input-medium carType" style="height: 30px;width:100px;" >
+										<option value=''>全部</option>
+									</select>
+								</td>
 								<td>检验节点：</td>
 								<td>
 									<!-- <input type="text"  id="search_parts" class="input-medium" style="height: 30px;width:90px;" ></input> -->
@@ -67,7 +73,7 @@
 									</select>
 								</td>						
 								<td><input type="button" class="btn btn-sm btn-primary" id="btnQuery" value="查询" style="margin-left: 2px;"></input>						
-										 <input type="button" class="btn btn-sm btn-success" id="btnImport" value="导入" style="margin-left: 2px;"></input>
+										 <input type="button" class="btn btn-sm btn-success" id="btnCopy" value="复制" style="margin-left: 2px;"></input>
 								</td>
 							</tr>
 
@@ -83,49 +89,50 @@
 				</div>
 
 			<div id="dialog-config" class="hide">
-				<div id="create_form" class="form-horizontal">
-					<div class="form-group">
-						<label class="col-sm-2 control-label no-padding-right" for="" >*&nbsp;车型：</label>
-						<div class="col-sm-2">
-							<select id="bus_type" class="input-medium" style="height: 30px;width:100%;" ></select>
-						</div>						
-						<label class="col-sm-2 control-label no-padding-right " for="" >*&nbsp;检验节点：</label>
-						<div class="col-sm-2">
-							<select id="node" class="input-medium" style="height: 30px;width:100%" ></select>
+				<form id="create_form" class="form-horizontal">
+					<div class="form-group">							
+						<div class="col-sm-4">
+							<label class="control-label no-padding-right" for="" style="width: 30%;">*&nbsp;订单：</label>
+							<input id="order" type="text" class="input-medium" style="height: 30px;width:50%;" ></input>
+						</div>	
+						<div class="col-sm-4">
+							<label class="control-label no-padding-right" for="" style="width: 40%;">*&nbsp;车型：</label>
+							<input id="bus_type" type="text" class="input-medium" style="height: 30px;width:50%;background-color:white" disabled></input>
 						</div>					
 					</div>
-					<div class="form-group">
-						<label class="col-sm-2 control-label no-padding-right" for="" >*&nbsp;备注：</label>
-						<div class="col-sm-6">
-							<textarea class="input-xlarge" style="width: 100%" id="memo" rows="2"></textarea>
-						</div>
-					</div>
-	<!-- 				<div class="form-group">
-						<label class="col-sm-2 control-label no-padding-right " for="" >&nbsp;检验节点：</label>
-						<select id="node" class="input-medium" style="height: 30px;width:100px;" ></select>
-					</div> -->
-					<div class="form-group">					
-						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="editOrderCode">*&nbsp;模板明细：</label>
-						<div class="col-sm-9">
-							<form id="uploadForm" action="" enctype="multipart/form-data" method="post">
-								<div class="col-sm-4">
-									<input id="file" style="margin-left: -10px;padding:0px 0px;font-size: 12px" class="btn btn-info btn-small" name="file" accept=".xls" type="file"> 				
-								</div>
-								<div class="col-sm-4">
-									<input id="btn_upload" style="padding:0px 0px;font-size: 12px;height:35px" class="btn btn-primary" value="上传并导入" onclick="javascript:return upload(this.form, this.form.file.value)" type="button"> 
-									<a href="../docs/prdRcdBusTypeTpl.xls">下载批导模板</a>
-								</div>							
-							</form>
-						</div>									
+					<div class="form-group">	
+						<div class="col-sm-4">
+							<label class="control-label no-padding-right" for="" style="width: 30%;">*&nbsp;配置：</label>
+							<select id="order_config" class="input-medium" style="height: 30px;width:50%;" >
+								<option value=''>请选择</option>
+							</select>
+						</div>				
+						<div class="col-sm-4">
+							<label class="control-label no-padding-right " for=""  style="width: 40%;">*&nbsp;检验节点：</label>
+							<select id="node" class="input-medium" style="height: 30px;width:50%" >
+							</select>
+						</div>		
+						<div class="col-sm-4">
+							<input type="button" class="btn btn-sm btn-primary" id="btnQueryTpl" value="查询" style="margin-left: 2px;"></input>						
+							
+						</div>		
 					</div>
 					<div class="form-group">					
 						<div class="col-sm-12">			
-							<table class="table table-striped table-bordered table-hover" style="width: 872px;font-size:12px;" id="tplDetailTable">
+							<table class="table table-striped table-bordered table-hover" style="width: 860px;font-size:12px;" id="tplDetailTable">
 							</table>
 						</div>
 					</div>
 					
-			</div>
+			</form>
+		</div>
+		
+		<div id="dialog-editTplTable" class="hide">
+			<div class="form-group">					
+					<div class="col-sm-12">	
+						<textarea rows="2"  class="input-xlarge"  style="width:100%" id="edit_content"></textarea>
+					</div>
+			</div>			
 		</div>
 		
 		</div>
@@ -141,7 +148,7 @@
 	<script src="../assets/js/bootstrap3-typeahead.js"></script>
 	<script src="../js/jquery.form.js"></script>	
 	<script src="../js/common.js"></script>
-	<script src="../js/quality/productRecordBusTypeTpl.js"></script>
+	<script src="../js/quality/productRecordOrderTpl.js"></script>
 </body>
 
 </html>

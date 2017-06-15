@@ -18,6 +18,7 @@ import org.springframework.ui.ModelMap;
 import com.byd.bms.quality.dao.IQualityDao;
 import com.byd.bms.quality.service.IQualityService;
 import com.byd.bms.quality.model.BmsBaseQCStdRecord;
+import com.byd.bms.quality.model.ProcessFaultBean;
 import com.byd.bms.quality.model.QualityTargetBean;
 import com.byd.bms.quality.model.StdFaultLibBean;
 @Service
@@ -136,22 +137,93 @@ public class QualityServiceImpl implements IQualityService {
 			smap.put("tpl_header_id", tpl_header_id);
 			smap.put("detail_list", detail_list);
 			
-			qualityDao.insertPrdRcdBusTypeTplDetail(smap);
+			qualityDao.insertPrdRcdTplDetail(smap);
 		}else{//更新模板
 			smap=new HashMap<String,Object>();
 			smap.put("tpl_header_id", tpl_header_id);
 			smap.put("detail_list", detail_list);
 			qualityDao.updatePrdRcdBusTypeTplHeader(condMap);
-			qualityDao.deletePrdRcdBusTypeTplByHeader(tpl_header_id);
-			qualityDao.insertPrdRcdBusTypeTplDetail(smap);
+			qualityDao.deletePrdRcdTplByHeader(tpl_header_id);
+			qualityDao.insertPrdRcdTplDetail(smap);
 		}		
 	}
 	
 	@Override
 	public void getPrdRcdBusTypeTplDetail(String tpl_header_id, ModelMap model) {
-		model.put("data", qualityDao.queryPrdRcdBusTypeTplDetail(tpl_header_id));
+		model.put("data", qualityDao.queryPrdRcdTplDetail(tpl_header_id));
 	}
 	
+	@Override
+	public void getPrdRcdOrderTplList(HashMap<String, Object> condMap, ModelMap model) {
+		int totalCount=0;
+		List<Map<String, Object>> datalist=qualityDao.queryPrdRcdOrderTplList(condMap);
+		totalCount=qualityDao.queryPrdRcdOrderTplCount(condMap);
+		Map<String, Object> result=new HashMap<String,Object>();
+		result.put("draw", condMap.get("draw"));
+		result.put("recordsTotal", totalCount);
+		result.put("recordsFiltered", totalCount);
+		result.put("data", datalist);
+		model.addAllAttributes(result);
+		
+	}
+	
+	@Override
+	public void getPrdRcdBusTypeTplDetailLatest(HashMap<String, Object> condMap, ModelMap model) {
+		Map<String,Object> tpl_header=null;
+		tpl_header=qualityDao.queryPrdRcdBusTypeTplHeader(condMap);
+		if(tpl_header==null){
+			tpl_header=new HashMap<String,Object>();
+		}
+		String version=(String) tpl_header.get("version");
+		List<Map<String,Object>> datalist=new ArrayList<Map<String,Object>>();
+		datalist=qualityDao.queryPrdRcdTplDetail(tpl_header.get("id").toString());
+		datalist.forEach(e->{
+			e.put("version_cp", version);
+		});
+		model.put("data", datalist);
+		
+	}
+
+	@Override
+	public void savePrdRcdOrderTpl(Map<String, Object> condMap) {
+		int tpl_header_id=condMap.get("tpl_header_id")==null?0:Integer.parseInt((String)condMap.get("tpl_header_id"));
+		String tpl_detail=String.valueOf(condMap.get("tpl_list_str"));
+		List detail_list=new ArrayList();
+		JSONArray jsa=new JSONArray();
+		if(tpl_detail.contains("[")){
+			jsa=JSONArray.fromObject(tpl_detail);
+		}
+		Iterator it=jsa.iterator();
+		while(it.hasNext()){
+			JSONObject el= (JSONObject) it.next();
+			Map<String,Object> detail=(Map<String, Object>) JSONObject.toBean(el, Map.class);
+			detail_list.add(detail);
+		}
+		Map<String,Object> smap=null;
+		
+		if(tpl_header_id==0){//无header_id 新增模板
+			qualityDao.insertPrdRcdOrderTplHeader(condMap);
+			tpl_header_id=Integer.parseInt(condMap.get("id").toString());
+			smap=new HashMap<String,Object>();
+			smap.put("tpl_header_id", tpl_header_id);
+			smap.put("detail_list", detail_list);
+			
+			qualityDao.insertPrdRcdTplDetail(smap);
+		}else{//更新模板
+			smap=new HashMap<String,Object>();
+			smap.put("tpl_header_id", tpl_header_id);
+			smap.put("detail_list", detail_list);
+			qualityDao.updatePrdRcdOrderTplHeader(condMap);
+			qualityDao.deletePrdRcdTplByHeader(tpl_header_id);
+			qualityDao.insertPrdRcdTplDetail(smap);
+		}		
+	}
+
+	@Override
+	public void getPrdRcdOrderTplDetail(String tpl_header_id, ModelMap model) {
+		model.put("data", qualityDao.queryPrdRcdTplDetail(tpl_header_id));
+		
+	}
 	//======================== xjw end=================================//
 		
 	
@@ -163,7 +235,7 @@ public class QualityServiceImpl implements IQualityService {
 			
 	//========================tj start=================================//
 			
-	
+
 	//======================== tj end=================================//
 	public int insertStdRecord(BmsBaseQCStdRecord stdRecord) {
 		return qualityDao.insertStdRecord(stdRecord);
@@ -238,6 +310,14 @@ public class QualityServiceImpl implements IQualityService {
 		result.put("recordsFiltered", totalCount);
 		result.put("data", datalist);
 		return result;
+	}
+	@Override
+	public int addProcessFault(ProcessFaultBean pocessFault) {
+		return qualityDao.addProcessFault(pocessFault);
+	}
+	@Override
+	public ProcessFaultBean showProcessFaultInfo(int id) {
+		return qualityDao.showProcessFaultInfo(id);
 	}
 	
 		
