@@ -162,7 +162,7 @@
 						<td align="right" style="width:100px">处理结果：</td><td style="width:150px"><select class="input-medium" id="edit_resolve_result" style="width:150px"><option value="0">关闭</option><option value="1">受理</option></select></td>
 					</tr>
 					<tr style="height:40px">
-						<td align="right" style="width:100px">问题报告：</td><td colspan=3><input name="new_report_file" type="file" id="edit_report_file" style="width:300px"/><a id="file_link">查看</a></td>
+						<td align="right" style="width:100px">问题报告：</td><td colspan=3><input name="edit_report_file" type="file" id="edit_report_file" style="width:300px"/><a id="file_link">查看</a></td>
 					</tr>
 					<tr style="height:40px">
 						<td align="right" style="width:100px">处罚情况：</td><td style="width:150px"><input type="text" class="input-medium" id="edit_punish" style="width:150px" /></td>

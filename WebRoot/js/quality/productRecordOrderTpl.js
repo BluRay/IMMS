@@ -7,13 +7,12 @@ $(document).ready(function(){
 	
 	$(document).on("input","#search_order_no",function(){
 		//alert("change");
-		getOrderConfigSelect($(this).attr("order_id")||"","","#search_order_config","全部","id") ;
 		$("#search_order_no").attr("order_id","");
 	})
-/*	$("#search_order_no").change(function(){
+	$("#search_order_no").change(function(){
 		getOrderConfigSelect($(this).attr("order_id")||"","","#search_order_config","全部","id") ;
 	})
-	*/
+	
 	$(document).on("input","#order",function(){
 		//alert("change");
 		$("#order").attr("order_id","");
@@ -175,8 +174,8 @@ function drawTplDetailTable(tableId,data,editable){
 		destroy: true,
 		paginate:false,
 		rowsGroup:[0],
-		//sScrollY: $(window).height()-250,
-		scrollX: true,
+		/*//sScrollY: $(window).height()-250,
+		scrollX: true,*/
 		scrollCollapse: false,
 		lengthChange:false,
 		orderMulti:false,

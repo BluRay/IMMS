@@ -390,8 +390,8 @@ function ajaxQuery(){
 	            	}},*/
 		            {"title":"工厂","class":"center","data":"factory","defaultContent": ""},
 		            {"title":"订单类型","class":"center","data":"order_type","defaultContent": ""},
-		            {"title":"维护人","class":"center","data":"line","defaultContent": ""},
-		            {"title":"维护时间","class":"center","data":"process_code","defaultContent": ""},
+		            {"title":"维护人","class":"center","data":"editor","defaultContent": ""},
+		            {"title":"维护时间","class":"center","data":"edit_date","defaultContent": ""},
 		            {"title":"操作","class":"center","data":"","render":function(data,type,row){
 		            	return "<i class=\"ace-icon fa fa-search bigger-130 editorder\" title='查看' onclick = 'showInfoPage(" + JSON.stringify(row)+ ");' style='color:green;cursor: pointer;'></i>&nbsp;&nbsp;&nbsp;&nbsp;"+
 		            	"<i class=\"ace-icon fa fa-pencil bigger-130 editorder\" title='编辑' onclick = 'showEditPage(" + JSON.stringify(row)+ ");' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;&nbsp;&nbsp;"+

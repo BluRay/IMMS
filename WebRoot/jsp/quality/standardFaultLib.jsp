@@ -44,12 +44,12 @@
 					<div class="well">
 						<table>
 							<tr>
-								<td>零部件名称：</td>
-								<td><input id="input_parts" placeholder="零部件名称..." style="width:100px" type="text"></td>
+								<td>缺陷名称：</td>
+								<td><input id="input_bug" placeholder="缺陷名称..." style="width:100px" type="text"></td>
 								<td>&nbsp;缺陷类别：</td>
 								<td><input id="input_bug_type" placeholder="缺陷类别..." style="width:100px" type="text"></td>
 								<td>&nbsp;严重等级：</td>
-								<td width="180px">
+								<td width="220px">
 									<label class="checkbox" style="width:35px;display:-webkit-inline-box;margin-left:20px">
 									<input type="checkbox" name="faultlevel" value="S" />S
 									</label>
@@ -61,15 +61,6 @@
 									</label>
 									<label class="checkbox" style="width:35px;display:-webkit-inline-box;vertical-align:bottom">
 									<input type="checkbox" name="faultlevel" value="C" />C								
-									</label>
-								</td>
-								<td>缺陷分类：</td>
-								<td>
-									<label class="checkbox" style="width:55px;display:-webkit-inline-box;margin-left:20px">
-									<input type="checkbox" name="faulttype" value="1" />尺寸
-									</label>
-									<label class="checkbox" style="width:55px;display:-webkit-inline-box;vertical-align:bottom">
-									<input type="checkbox" name="faulttype" value="0" />非尺寸
 									</label>
 								</td>
 								<td><input id="btnQuery" type="button" class="btn btn-sm btn-primary" value="查询" style="margin-left: 2px;"></input><input id="btnAdd" type="button" class="btn btn-sm btn-success" value="新增" style="margin-left: 2px;"></input></td>
@@ -87,8 +78,8 @@
 				<form>
 					<table>
 					<tr style="height:40px">
-						<td align="right" style="width:100px">零部件名称：</td><td style="width:150px"><input type="text" class="input-medium" id="new_parts" style="width:150px" /></td>
 						<td align="right" style="width:100px">缺陷类别：</td><td style="width:150px"><input type="text" class="input-medium" id="new_bug_type" style="width:150px"/></td>
+						<td></td><td></td>
 					</tr>
 					<tr style="height:40px">
 						<td align="right" style="width:100px">严重等级：</td><td style="width:150px">
@@ -99,13 +90,11 @@
 								<option value="C">C</option>
 							</select></td>
 						<td align="right" style="width:100px">缺陷分类：</td><td style="width:150px">
-							<select class="input-medium" id="new_faulttype" style="width:150px">
-								<option value="0">非尺寸</option>
-								<option value="1">尺寸</option>
-							</select></td>
+							<input type="text" class="input-medium" id="new_faulttype" style="width:150px" />
+						</td>
 					</tr>
 					<tr style="height:40px">
-						<td align="right" style="width:100px">质量缺陷：</td><td colspan=3><input type="text" class="input-medium" id="new_bug" style="width:400px"/></td>
+						<td align="right" style="width:100px">缺陷名称：</td><td colspan=3><input type="text" class="input-medium" id="new_bug" style="width:400px"/></td>
 					</tr>
 					
 					</table>
@@ -117,8 +106,8 @@
 				<form>
 					<table>
 					<tr style="height:40px">
-						<td align="right" style="width:100px">零部件名称：</td><td style="width:150px"><input type="text" class="input-medium" id="edit_parts" style="width:150px" /></td>
 						<td align="right" style="width:100px">缺陷类别：</td><td style="width:150px"><input type="text" class="input-medium" id="edit_bug_type" style="width:150px"/></td>
+						<td></td><td></td>
 					</tr>
 					<tr style="height:40px">
 						<td align="right" style="width:100px">严重等级：</td><td style="width:150px">
@@ -129,13 +118,10 @@
 								<option value="C">C</option>
 							</select></td>
 						<td align="right" style="width:100px">缺陷分类：</td><td style="width:150px">
-							<select class="input-medium" id="edit_faulttype" style="width:150px">
-								<option value="0">非尺寸</option>
-								<option value="1">尺寸</option>
-							</select></td>
+							<input type="text" class="input-medium" id="edit_faulttype" style="width:150px" />
 					</tr>
 					<tr style="height:40px">
-						<td align="right" style="width:100px">质量缺陷：</td><td colspan=3><input type="text" class="input-medium" id="edit_bug" style="width:400px"/></td>
+						<td align="right" style="width:100px">缺陷名称：</td><td colspan=3><input type="text" class="input-medium" id="edit_bug" style="width:400px"/></td>
 					</tr>
 					
 					</table>

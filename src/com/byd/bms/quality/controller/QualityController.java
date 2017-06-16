@@ -453,7 +453,7 @@ public class QualityController extends BaseController {
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String curTime = df.format(new Date());
 		StdFaultLibBean stdFaultLib = new StdFaultLibBean();
-		stdFaultLib.setPartsId(Integer.valueOf(request.getParameter("partsId").toString()));
+		//stdFaultLib.setPartsId(Integer.valueOf(request.getParameter("partsId").toString()));
 		stdFaultLib.setBugType(request.getParameter("bugType").toString());
 		stdFaultLib.setBug(request.getParameter("bug").toString());
 		stdFaultLib.setFaultLevel(request.getParameter("faultLevel").toString());
@@ -475,7 +475,6 @@ public class QualityController extends BaseController {
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String curTime = df.format(new Date());
 		StdFaultLibBean stdFaultLib = new StdFaultLibBean();
-		stdFaultLib.setPartsId(Integer.valueOf(request.getParameter("partsId").toString()));
 		stdFaultLib.setBugType(request.getParameter("bugType").toString());
 		stdFaultLib.setBug(request.getParameter("bug").toString());
 		stdFaultLib.setFaultLevel(request.getParameter("faultLevel").toString());
@@ -608,6 +607,42 @@ public class QualityController extends BaseController {
 		pocessFault.setEdit_date(curTime);
 		pocessFault.setReport_file_path(filename);
 		int result = qualityService.addProcessFault(pocessFault);
+		initModel(true,String.valueOf(result),null);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping(value="editProcessFault",method=RequestMethod.POST)
+	@ResponseBody
+	public ModelMap editProcessFault(@RequestParam(value="edit_report_file",required=false) MultipartFile file){	
+		int userid=(int) session.getAttribute("user_id");
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String filename = saveFileMethod(file);
+		ProcessFaultBean pocessFault = new ProcessFaultBean();
+		pocessFault.setBus_type(request.getParameter("bus_type"));
+		pocessFault.setFault_date(request.getParameter("fault_date"));
+		pocessFault.setFault_mils(request.getParameter("fault_mils"));
+		pocessFault.setCustomer_name(request.getParameter("customer_name"));
+		pocessFault.setLicense_number(request.getParameter("license_number"));
+		pocessFault.setVin(request.getParameter("vin"));
+		pocessFault.setFault_level_id(Integer.valueOf(request.getParameter("fault_level_id")));
+		pocessFault.setIs_batch(request.getParameter("is_batch"));
+		pocessFault.setFault_phenomenon(request.getParameter("fault_phenomenon"));
+		pocessFault.setFault_reason(request.getParameter("fault_reason"));
+		pocessFault.setFactory_id(Integer.valueOf(request.getParameter("factory")));
+		pocessFault.setResponse_workshop(request.getParameter("response_workshop"));
+		pocessFault.setResolve_method(request.getParameter("resolve_method"));
+		pocessFault.setResolve_date(request.getParameter("resolve_date"));
+		pocessFault.setResolve_result(request.getParameter("resolve_result"));
+		pocessFault.setPunish(request.getParameter("punish"));
+		pocessFault.setCompensation(request.getParameter("compensation"));
+		pocessFault.setMemo(request.getParameter("memo"));
+		pocessFault.setId(Integer.valueOf(request.getParameter("id")));
+		pocessFault.setEditor_id(userid);
+		pocessFault.setEdit_date(curTime);
+		pocessFault.setReport_file_path(filename);
+		int result = qualityService.editProcessFault(pocessFault);
 		initModel(true,String.valueOf(result),null);
 		model = mv.getModelMap();
 		return model;
@@ -811,7 +846,7 @@ public class QualityController extends BaseController {
 		for(Iterator it=jo.keys();it.hasNext();){
 			String key=(String) it.next();
 			//System.out.println(key);
-			if(key.equals("faultLevel")||key.equals("faultType")){
+			if(key.equals("faultLevel")){
 				Object[] arr=jo.getJSONArray(key).toArray();
 				conditionMap.put(key, arr);
 			}else

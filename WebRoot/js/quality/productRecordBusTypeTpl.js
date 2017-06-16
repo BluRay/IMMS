@@ -175,8 +175,8 @@ function drawTplDetailTable(tableId,data){
 		destroy: true,
 		paginate:false,
 		rowsGroup:[0],
-		//sScrollY: $(window).height()-250,
-		scrollX: true,
+		/*//sScrollY: $(window).height()-250,
+		scrollX: true,*/
 		scrollCollapse: false,
 		lengthChange:false,
 		orderMulti:false,
@@ -186,15 +186,10 @@ function drawTplDetailTable(tableId,data){
 			infoEmpty:"",
 			zeroRecords:"请导入模板明细！"
 		},
-		columnDefs: [{
-            "searchable": false,
-            "orderable": false,
-            "targets": 0
-        }],
 		data:data||{},
 		columns: [
-		            {"title":"检验项目","class":"center","data":"test_item","defaultContent": ""},
-		            {"title":"检验标准","class":"center","width":"40%","data":"test_standard","defaultContent": ""},
+		            {"title":"检验项目","class":"center","width":"15%","data":"test_item","defaultContent": ""},
+		            {"title":"检验标准","class":"center","width":"55%","data":"test_standard","defaultContent": ""},
 		            {"title":"要求","class":"center","data": "test_request","defaultContent": ""},
 		            {"title":"是否必录项","class":"center","width":"10%","data":"is_null","defaultContent": ""},		            	            
 		          ]	
@@ -249,10 +244,9 @@ function showEditPage(row){
 	$("#uploadForm").show();
 	var detail_list=getTplDetailByHeader(row.id)
 	json_tpl_list=detail_list;
-	drawTplDetailTable("#tplDetailTable",detail_list);
 	
 	var dialog = $( "#dialog-config" ).removeClass('hide').dialog({
-		width:900,
+		width:920,
 		height:550,
 		modal: true,
 		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i>车型成品记录表模板导入</h4></div>",
@@ -274,6 +268,7 @@ function showEditPage(row){
 			}
 		]
 	});
+	drawTplDetailTable("#tplDetailTable",detail_list);
 }
 
 function getTplDetailByHeader(tpl_header_id){
@@ -303,7 +298,7 @@ function showInfoPage(row){
 	drawTplDetailTable("#tplDetailTable",detail_list);
 	$("#uploadForm").hide();
 	var dialog = $( "#dialog-config" ).removeClass('hide').dialog({
-		width:900,
+		width:920,
 		height:550,
 		modal: true,
 		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i>车型成品记录表模板查看</h4></div>",

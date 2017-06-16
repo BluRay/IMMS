@@ -158,13 +158,18 @@
 	
 	<select id="queryBusNumberByOrder" parameterType="Map" resultType="Map">
 		SELECT b.id,b.factory_id,f.factory_name,b.order_id,b.bus_number,b.vin,b.latest_process_id,p.process_name,
-		o.order_no,o.order_name,o.order_qty FROM BMS_PLAN_BUS b
+		b.welding_online_date,b.welding_offline_date,b.painting_online_date,b.painting_offline_date,b.chassis_online_date,b.chassis_offline_date,
+		b.assembly_online_date,b.assembly_offline_date,b.warehousing_date,b.dispatch_date,o.order_no,o.order_name,o.order_qty 
+		FROM BMS_PLAN_BUS b
 		LEFT OUTER JOIN BMS_BASE_FACTORY f ON b.factory_id = f.id
 		LEFT OUTER JOIN BMS_OR_ORDER o ON b.order_id = o.id
 		LEFT OUTER JOIN BMS_BASE_PROCESS p ON b.latest_process_id = p.id
 		WHERE b.order_id = #{order_id} 
 		<if test="factory_id != null">
-		 and b.factory_id = #{factory_id} 
+			 and b.factory_id = #{factory_id} 
+		</if>
+		<if test="order_config_id != null">
+			 and b.order_config_id = #{order_config_id} 
 		</if>
 		order by cast(reverse(substr(reverse(bus_number),1,instr(reverse(bus_number),'-')-1)) as signed)
 	</select>
@@ -394,7 +399,7 @@
 	
 	<select id="queryOrderQueryList" parameterType="Map" resultType="Map">
 		select o.id,CONCAT(o.order_no,' ',o.order_name,t.bus_type_code,' ',o.order_qty,'台') AS order_desc,o.order_type,o.delivery_date,
-		f.factory_name,fo.production_qty,c.order_config_name,fc.product_qty,fc.sequence,
+		fo.factory_id,f.factory_name,fo.production_qty,c.order_config_name,fc.product_qty,fc.sequence,c.id order_config_id,
 		(SELECT ifnull(SUM(p.quantity),0) FROM BMS_PD_WORKSHOP_SUPPLY p WHERE p.order_id = o.id AND p.factory_id = fo.factory_id AND supply_workshop ='自制件' AND receive_workshop ='部件') as zzj_offline_count,
 		(SELECT ifnull(SUM(p.online_real_qty),0) FROM BMS_PD_PARTS_PLAN_FINISH p WHERE p.order_id = o.id AND p.factory_id = fo.factory_id AND p.parts_id=194) as parts_online_count,
 		(SELECT ifnull(SUM(p.offline_real_qty),0) FROM BMS_PD_PARTS_PLAN_FINISH p WHERE p.order_id = o.id AND p.factory_id = fo.factory_id AND p.parts_id=194) as parts_offline_count,

@@ -6,7 +6,8 @@ $(document).ready(function(){
 	initPage();
 	
 	function initPage(){
-		getPartsSelect("#input_parts");
+		//getPartsSelect("#input_parts");
+		ajaxQuery();
 	}
 	
 	$("#btnQuery").click (function () {
@@ -43,7 +44,8 @@ $(document).ready(function(){
 });
 
 function btnNewConfirm(){
-	if($("#new_parts").val()==''){
+	
+	/**if($("#new_parts").val()==''){
 		alert("请输入有效的零部件！");
 		$("#new_parts").focus();
 		return false;
@@ -53,9 +55,9 @@ function btnNewConfirm(){
 	if(partsId=='0'){
 		alert("请输入有效的零部件！");
 		return false;
-	}
+	}**/
 	if($("#new_bug").val()==''||($("#new_bug").val().trim()).length==0){
-		alert("质量缺陷不能为空");
+		alert("缺陷名称不能为空");
 		return false;
 	}
 	
@@ -64,7 +66,6 @@ function btnNewConfirm(){
 		dataType: "json",
 		type: "get",
 		data: {
-				"partsId" : partsId,
 				"bug":$("#new_bug").val(),
 				"bugType" : $("#new_bug_type").val(),
 				"faultLevel" : $("#new_faultlevel").val(),
@@ -87,18 +88,14 @@ function btnNewConfirm(){
 }
 
 function ajaxQuery(){
-	var parts=$("#input_parts").val();
+	//var parts=$("#input_parts").val();
 	var bug=$("#input_bug").val();
 	var bugType=$("#input_bug_type").val();
 	var faultLevel=[];
-	var faultType=[];
 	$('input[name="faultlevel"]:checked').each(function(){
 		faultLevel.push($(this).val());
 	});
-	$('input[name="faulttype"]:checked').each(function(){
-		faultType.push($(this).val());
-	});	
-	var conditions={'parts':parts,'bugType':bugType,'bug':bug,'faultLevel':faultLevel,'faultType':faultType};
+	var conditions={'parts':'','bugType':bugType,'bug':bug,'faultLevel':faultLevel,'faultType':""};
 	
 	
 	$("#tableData").dataTable({
@@ -143,15 +140,10 @@ function ajaxQuery(){
             });
 		},
 		columns: [
-		            {"title":"零部件名称",width:'80',"class":"center","data":"parts","defaultContent": ""},
 		            {"title":"缺陷类别",width:'80',"class":"center","data":"bug_type","defaultContent": ""},
-		            {"title":"质量缺陷",width:'80',"class":"center","data":"bug","defaultContent": ""},
+		            {"title":"缺陷名称",width:'80',"class":"center","data":"bug","defaultContent": ""},
 		            {"title":"严重等级",width:'80',"class":"center","data":"serious_level","defaultContent": ""},
-		            {"title":"缺陷分类",width:'80',"class":"center","data":"fault_type","defaultContent": "",
-		            	"render": function ( data, type, row ) {
-		            		return data == '0'?'非尺寸':'尺寸';
-		            	}
-		            },
+		            {"title":"缺陷分类",width:'80',"class":"center","data":"fault_type","defaultContent": ""},
 		            {"title":"维护人",width:'80',"class":"center","data":"display_name","defaultContent": ""},
 		            {"title":"维护时间",width:'80',"class":"center","data":"edit_date","defaultContent": ""},
 		            {"title":"操作",width:'60',"class":"center","data":null,"defaultContent": "",
@@ -167,9 +159,7 @@ function ajaxQuery(){
 }
 
 function editFault(id,parts,bug_type,bug,serious_level,fault_type){
-	getPartsSelect("#edit_parts");
 	$("#edit_id").val(id);
-	$("#edit_parts").val(parts);
 	$("#edit_bug_type").val(bug_type);
 	$("#edit_bug").val(bug);
 	$("#edit_faultlevel").val(serious_level);
@@ -199,16 +189,7 @@ function editFault(id,parts,bug_type,bug,serious_level,fault_type){
 }
 
 function btnEditConfirm(){
-	if($("#edit_parts").val()==''){
-		alert("请输入有效的零部件！");
-		$("#edit_parts").focus();
-		return false;
-	}
-	var partsId=getPartsId($("#edit_parts").val());
-	if(partsId=='0'){
-		alert("请输入有效的零部件！");
-		return false;
-	}
+
 	if($("#edit_bug").val()==''||($("#edit_bug").val().trim()).length==0){
 		alert("质量缺陷不能为空！");
 		return false;
@@ -218,7 +199,6 @@ function btnEditConfirm(){
 		dataType: "json",
 		type: "get",
 		data: {
-				"partsId" : partsId,
 				"bug":$("#edit_bug").val(),
 				"bugType" : $("#edit_bug_type").val(),
 				"faultLevel" : $("#edit_faultlevel").val(),

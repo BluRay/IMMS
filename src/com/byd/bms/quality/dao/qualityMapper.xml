@@ -240,13 +240,13 @@
 			LAST_INSERT_ID()
 		</selectKey>
 		insert into BMS_QM_STANDARD_FAULT_LIBRARY
-		(parts_id,bug_type,bug,serious_level,fault_type,workshop_name,workgroup_name,editor_id,edit_date)
-		values(#{partsId},#{bugType},#{bug},#{faultLevel},#{faultType},#{workshop},#{workgroup},#{editorId},#{editDate})
+		(bug_type,bug,serious_level,fault_type,workshop_name,workgroup_name,editor_id,edit_date)
+		values(#{bugType},#{bug},#{faultLevel},#{faultType},#{workshop},#{workgroup},#{editorId},#{editDate})
 	</insert>
 	<update id="updateFaultLib" parameterType="com.byd.bms.quality.model.StdFaultLibBean">
 		update BMS_QM_STANDARD_FAULT_LIBRARY
 		<set>
-			parts_id=#{partsId},bug_type=#{bugType},bug=#{bug},serious_level=#{faultLevel},fault_type=#{faultType},workshop_name=#{workshop},
+			bug_type=#{bugType},bug=#{bug},serious_level=#{faultLevel},fault_type=#{faultType},workshop_name=#{workshop},
 			workgroup_name=#{workgroup},editor_id=#{editorId},edit_date=#{editDate}
 		</set>
 		where id=#{id}
@@ -385,6 +385,59 @@
 		#{response_workshop},#{is_batch},#{fault_reason},#{resolve_method},#{resolve_date},#{resolve_result},
 		#{memo},#{report_file_path},#{punish},#{compensation},#{status},#{editor_id},#{edit_date})
 	</insert>
+	<update id="editProcessFault" parameterType="com.byd.bms.quality.model.ProcessFaultBean">
+		UPDATE BMS_QM_PROCESS_PROBLEM
+		SET factory_id=#{factory_id}, customer_name=#{customer_name}, vin=#{vin}, license_number=#{license_number},
+		fault_date=#{fault_date}, bus_type=#{bus_type}, fault_mils=#{fault_mils},
+		<if test="customer_bus_number != null and customer_bus_number != ''">
+		customer_bus_number = #{customer_bus_number},  
+		</if>
+		<if test="fault_phenomenon != null and fault_phenomenon != ''">
+		fault_phenomenon = #{fault_phenomenon},  
+		</if>
+		<if test="fault_components != null and fault_components != ''">
+		fault_components = #{fault_components},  
+		</if>
+		<if test="fault_level_id != null and fault_level_id != ''">
+		fault_level_id = #{fault_level_id},  
+		</if>
+		<if test="response_workshop != null and response_workshop != ''">
+		response_workshop = #{response_workshop},  
+		</if>
+		<if test="is_batch != null and is_batch != ''">
+		is_batch = #{is_batch},  
+		</if>
+		<if test="fault_reason != null and fault_reason != ''">
+		fault_reason = #{fault_reason},  
+		</if>
+		<if test="resolve_method != null and resolve_method != ''">
+		resolve_method = #{resolve_method},  
+		</if>
+		<if test="resolve_date != null and resolve_date != ''">
+		resolve_date = #{resolve_date},  
+		</if>
+		<if test="resolve_result != null and resolve_result != ''">
+		resolve_result = #{resolve_result},  
+		</if>
+		<if test="memo != null and memo != ''">
+		memo = #{memo},  
+		</if>
+		<if test="report_file_path != null and report_file_path != ''">
+		report_file_path = #{report_file_path},  
+		</if>
+		<if test="punish != null and punish != ''">
+		punish = #{punish},  
+		</if>
+		<if test="compensation != null and compensation != ''">
+		compensation = #{compensation},  
+		</if>
+		<if test="status != null and status != ''">
+		status = #{status},  
+		</if>
+		editor_id=#{editor_id}, 
+		edit_date=#{edit_date}
+		WHERE id = #{id};
+	</update>
 	<select id="showProcessFaultInfo" parameterType="int" resultType="com.byd.bms.quality.model.ProcessFaultBean">
 		SELECT * FROM BMS_QM_PROCESS_PROBLEM WHERE id = #{id}
 	</select>

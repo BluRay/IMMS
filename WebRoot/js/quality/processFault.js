@@ -81,6 +81,7 @@ function showProcessFault(id){
 			$("#edit_fault_mils").val(response.data.fault_mils);
 			$("#edit_customer_name").val(response.data.customer_name);
 			$("#edit_license_number").val(response.data.license_number);
+			$("#edit_vin").val(response.data.vin);
 			$("#edit_fault_level_id").val(response.data.fault_level_id);
 			$("#edit_is_batch").val(response.data.is_batch);
 			$("#edit_fault_phenomenon").val(response.data.fault_phenomenon);
@@ -93,6 +94,7 @@ function showProcessFault(id){
 			$("#edit_punish").val(response.data.punish);
 			$("#edit_compensation").val(response.data.compensation);
 			$("#edit_memo").val(response.data.memo);
+			//$("#edit_report_file").hide();
 			if(response.data.report_file_path != null){
 				$('#file_link').show();
 				$('#file_link').attr('href',response.data.report_file_path); 
@@ -135,6 +137,7 @@ function editProcessFault(id){
 			$("#edit_fault_mils").val(response.data.fault_mils);
 			$("#edit_customer_name").val(response.data.customer_name);
 			$("#edit_license_number").val(response.data.license_number);
+			$("#edit_vin").val(response.data.vin);
 			$("#edit_fault_level_id").val(response.data.fault_level_id);
 			$("#edit_is_batch").val(response.data.is_batch);
 			$("#edit_fault_phenomenon").val(response.data.fault_phenomenon);
@@ -147,6 +150,7 @@ function editProcessFault(id){
 			$("#edit_punish").val(response.data.punish);
 			$("#edit_compensation").val(response.data.compensation);
 			$("#edit_memo").val(response.data.memo);
+			//$("#edit_report_file").show();
 			if(response.data.report_file_path != null){
 				$('#file_link').show();
 				$('#file_link').attr('href',response.data.report_file_path); 
@@ -169,7 +173,7 @@ function editProcessFault(id){
 							id:"btn_ok",
 							"class" : "btn btn-success btn-minier",
 							click: function() {
-								btnEditConfirm();
+								btnEditConfirm(id);
 							} 
 						}
 					]
@@ -177,6 +181,91 @@ function editProcessFault(id){
 			
 		}
 	})
+}
+
+function btnEditConfirm(id){
+	if($("#edit_fault_date").val()==''){
+		alert("请输入故障反馈日期！");
+		$("#edit_fault_date").focus();
+		return false;
+	}
+	if($("#edit_fault_mils").val()==''){
+		alert("请输入故障里程！");
+		$("#new_fault_mils").focus();
+		return false;
+	}
+	if($("#edit_customer_name").val()==''){
+		alert("请输入客户名称！");
+		$("#edit_customer_name").focus();
+		return false;
+	}
+	if($("#edit_license_number").val()==''){
+		alert("请输入车牌号码！");
+		$("#edit_license_number").focus();
+		return false;
+	}
+	if($("#edit_vin").val()==''){
+		alert("请输入VIN号！");
+		$("#edit_vin").focus();
+		return false;
+	}
+	if($("#edit_fault_phenomenon").val()==''){
+		alert("请输入故障现象！");
+		$("#edit_fault_phenomenon").focus();
+		return false;
+	}
+	if($("#edit_fault_reason").val()==''){
+		alert("请输入故障原因！");
+		$("#edit_fault_reason").focus();
+		return false;
+	}
+	console.log("-->id = "+ id);
+	$('#form_edit').ajaxSubmit({
+		url: "editProcessFault",
+		dataType : "json",
+		type : "post",
+	    data: {
+	    	"id":id,
+	    	"bus_type" : $("#edit_bus_type").find("option:selected").text(),
+			"fault_date":$("#edit_fault_date").val(),
+			"fault_mils" : $("#edit_fault_mils").val(),
+			"customer_name" : $("#edit_customer_name").val(),
+			"license_number" : $("#edit_license_number").val(),
+			"vin" : $("#edit_vin").val(),
+			"fault_level_id" : $("#edit_fault_level_id").val(),
+			"is_batch" : $("#edit_is_batch").val(),
+			"fault_phenomenon" : $("#edit_fault_phenomenon").val(),
+			"fault_reason" : $("#edit_fault_reason").val(),
+			"factory" : $("#edit_factory").val(),
+			"workshop" : $('#edit_workshop').find("option:selected").text(),
+			"resolve_method" : $("#edit_resolve_method").val(),
+			"resolve_dat" : $("#edit_resolve_date").val(),
+			"resolve_result" : $("#edit_resolve_result").val(),
+			"punish" : $("#edit_punish").val(),
+			"compensation" : $("#edit_compensation").val(),
+			"memo" : $("#edit_memo").val()
+	    },
+		async: false,
+	    success:function (response) {
+	    	if (response.success) {
+		    	$.gritter.add({
+					title: '系统提示：',
+					text: '<h5>编辑成功！</h5>',
+					class_name: 'gritter-info'
+				});
+	    		$( "#dialog-edit" ).dialog( "close" ); 
+	    		ajaxQuery();
+	    	} else {
+		    	$.gritter.add({
+					title: '系统提示：',
+					text: '<h5>编辑失败！</h5>',
+					class_name: 'gritter-info'
+				});
+	    	}
+	    },
+	    error:function(){alertError();}
+	});
+	
 }
 
 function btnNewConfirm(){

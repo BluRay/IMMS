@@ -47,6 +47,7 @@ public interface IQualityService {
 	
 	public Map<String,Object> getProcessFaultList(Map<String, Object> conditionMap);
 	public int addProcessFault(ProcessFaultBean pocessFault);
+	public int editProcessFault(ProcessFaultBean pocessFault);
 	public ProcessFaultBean showProcessFaultInfo(int id);
 	//======================== yk end=================================//
 			

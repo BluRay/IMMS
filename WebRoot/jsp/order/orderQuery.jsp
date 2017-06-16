@@ -9,10 +9,11 @@
 <meta name="description" content="Common Buttons &amp; Icons" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />	
-<link rel="stylesheet" href="../css/bootstrap.3.2.css">	
+<!-- <link rel="stylesheet" href="../css/bootstrap.3.2.css">	 -->
 <link rel="stylesheet" href="../assets/css/fixedColumns.bootstrap.min.css" />
 <link rel="stylesheet" href="../css/bootstrap-table.css">
 <link rel="stylesheet" href="../css/bootstrap-editable.css">
+<link rel="stylesheet" href="../assets/css/jquery-ui.min.css"  >
 
 </head>
 <body class="no-skin" style="font-family: 'Microsoft YaHei';">
@@ -126,7 +127,11 @@
 						<input type="text" style="display: none;" id="factory_id" name="factory_id">
 					</form>
 
-
+				<div id="dialog-message" class="hide">
+					<table id="tableBusNumber" style="table-layout: fixed;font-size: 12px;width:2100px;overflow-x:auto" class="table table-bordered table-striped">
+					</table>
+				</div>
+				
 				</div>
 			</div>
 			<!-- /.main-container -->
@@ -138,8 +143,12 @@
 		<script src="../js/datePicker/WdatePicker.js"></script>
 		<script src="../assets/js/jquery-ui.min.js"></script>
 		<script src="../assets/js/jquery.gritter.min.js"></script>
-<!-- 		<script src="../assets/js/ace/elements.onpage-help.js"></script>
-		<script src="../assets/js/ace/ace.onpage-help.js"></script> -->
+		<script src="../assets/js/jquery.dataTables.min.js"></script>
+		<script src="../assets/js/jquery.dataTables.bootstrap.js"></script>
+		<script src="../assets/js/dataTables.fixedColumns.min.js"></script>
+		<script src="../assets/js/dataTables.rowGroup.js"></script>
+		<script src="../assets/js/ace/elements.onpage-help.js"></script>
+		<script src="../assets/js/ace/ace.onpage-help.js"></script>
 		<script src="../assets/js/bootstrap3-typeahead.js"></script>
 		<script src="../js/jquery.form.js"></script>
 		<script src="../js/bootstrap-table.js"></script>
@@ -153,7 +162,7 @@
 }
 .fixed-table-toolbar .bs-bars, .fixed-table-toolbar .search, .fixed-table-toolbar .columns {
     position: absolute;
-	margin-top: -10px;
+	margin-top: -8px;
 	right: 15px;
 	top: -45px;
 }

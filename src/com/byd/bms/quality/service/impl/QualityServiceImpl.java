@@ -319,6 +319,10 @@ public class QualityServiceImpl implements IQualityService {
 	public ProcessFaultBean showProcessFaultInfo(int id) {
 		return qualityDao.showProcessFaultInfo(id);
 	}
+	@Override
+	public int editProcessFault(ProcessFaultBean pocessFault) {
+		return qualityDao.editProcessFault(pocessFault);
+	}
 	
 		
 }

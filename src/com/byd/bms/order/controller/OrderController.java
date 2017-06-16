@@ -234,6 +234,7 @@ public class OrderController extends BaseController{
 		Map<String,Object> conditionMap=new HashMap<String,Object>();
 		conditionMap.put("order_id",request.getParameter("order_id"));
 		conditionMap.put("factory_id",request.getParameter("factory_id"));
+		conditionMap.put("order_config_id", request.getParameter("order_config_id"));
 		initModel(true,"查询成功！",orderService.getBusNumberByOrder(conditionMap));
 		return mv.getModelMap();
 	}
