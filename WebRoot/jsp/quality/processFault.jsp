@@ -63,7 +63,7 @@
 					</div>
 			</div><!-- /.main-content -->
 			
-			<div id="dialog-add" class="hide" style="align:center;width:700px;height:500px">
+			<div id="dialog-add" class="hide" style="align:center;width:800px;height:500px">
 				<form id="form_add">
 					<table>
 					<tr style="height:40px">
@@ -119,7 +119,7 @@
 				</form>
 			</div>
 			
-			<div id="dialog-edit" class="hide" style="align:center;width:700px;height:500px">
+			<div id="dialog-edit" class="hide" style="align:center;width:800px;height:500px">
 				<form id="form_edit">
 					<table>
 					<tr style="height:40px">

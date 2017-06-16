@@ -4,11 +4,12 @@
 <!-- ======================== xjw start=================================-->
 	<select id="getOrderConfigList" parameterType="Map" resultType="Map">
 		select o.id,c.id config_id,o.order_no,CONCAT(o.order_no,' ',o.order_name,t.bus_type_code,'  ',o.order_qty,'台') AS order_desc,
-		o.memo,t.internal_name bus_type,c.order_config_name,u.username editor,c.edit_date,o.bus_type_id
+		o.memo,t.internal_name bus_type,c.order_config_name,u.username editor,h.edit_date,o.bus_type_id
 		from BMS_OR_ORDER_CONFIG c 
 		left join BMS_OR_ORDER o on o.id=c.order_id
 		left join BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id 
-		left join BMS_BASE_USER u on u.id=c.editor_id
+		left join BMS_QM_KEY_PARTS_TEMPLATE_HEADER h on h.bus_type_id=t.id and h.order_id=c.order_id and h.order_config_id=c.id
+		left join BMS_BASE_USER u on u.id=h.editor_id
 		where 1=1
 		<if test="order_id !=null and order_id !=''">
 			and o.id=#{order_id}

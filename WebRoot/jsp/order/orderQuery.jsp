@@ -11,6 +11,7 @@
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />	
 <!-- <link rel="stylesheet" href="../css/bootstrap.3.2.css">	 -->
 <link rel="stylesheet" href="../assets/css/fixedColumns.bootstrap.min.css" />
+<link rel="stylesheet" href="../assets/css/fixedColumns.dataTables.min.css" />
 <link rel="stylesheet" href="../css/bootstrap-table.css">
 <link rel="stylesheet" href="../css/bootstrap-editable.css">
 <link rel="stylesheet" href="../assets/css/jquery-ui.min.css"  >
@@ -128,7 +129,7 @@
 					</form>
 
 				<div id="dialog-message" class="hide">
-					<table id="tableBusNumber" style="table-layout: fixed;font-size: 12px;width:2100px;overflow-x:auto" class="table table-bordered table-striped">
+					<table id="tableBusNumber" style="font-size: 12px;width:2100px;overflow-x:auto" class="table table-bordered table-striped">
 					</table>
 				</div>
 				

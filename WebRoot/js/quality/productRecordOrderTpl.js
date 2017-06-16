@@ -316,8 +316,9 @@ function showEditDialog(td, cellData, rowData, row, col){
 				"class" : "btn btn-primary btn-minier",
 				click: function() {
 					//alert(JSON.stringify(rowData))
+					var test_item=col==0?$("#edit_content").val():rowData.test_item;
 					var insertData={
-							test_item:(col==0?$("#edit_content").val():""),
+							test_item:test_item,
 							test_standard:(col==1?$("#edit_content").val():""),
 							is_null:(col==3?$("#edit_content").val():"否"),
 							test_request:(col==2?$("#edit_content").val():"")

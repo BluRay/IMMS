@@ -399,7 +399,7 @@
 	
 	<select id="queryOrderQueryList" parameterType="Map" resultType="Map">
 		select o.id,CONCAT(o.order_no,' ',o.order_name,t.bus_type_code,' ',o.order_qty,'台') AS order_desc,o.order_type,o.delivery_date,
-		fo.factory_id,f.factory_name,fo.production_qty,c.order_config_name,fc.product_qty,fc.sequence,c.id order_config_id,
+		fo.factory_id,f.factory_name,fo.production_qty,c.order_config_name,fc.product_qty,fc.sequence,c.id order_config_id,fc.product_qty config_qty,
 		(SELECT ifnull(SUM(p.quantity),0) FROM BMS_PD_WORKSHOP_SUPPLY p WHERE p.order_id = o.id AND p.factory_id = fo.factory_id AND supply_workshop ='自制件' AND receive_workshop ='部件') as zzj_offline_count,
 		(SELECT ifnull(SUM(p.online_real_qty),0) FROM BMS_PD_PARTS_PLAN_FINISH p WHERE p.order_id = o.id AND p.factory_id = fo.factory_id AND p.parts_id=194) as parts_online_count,
 		(SELECT ifnull(SUM(p.offline_real_qty),0) FROM BMS_PD_PARTS_PLAN_FINISH p WHERE p.order_id = o.id AND p.factory_id = fo.factory_id AND p.parts_id=194) as parts_offline_count,

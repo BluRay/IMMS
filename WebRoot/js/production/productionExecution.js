@@ -459,6 +459,10 @@ function getAllProcessSelect(order_type) {
 		    $("#exec_process").html("");
 		    var process_id_default="";
 		    var process_name_default="";
+		    if(response.data==null){
+		    	fadeMessageAlert(null,"未配置扫描逻辑！","agritter-error");
+		    	return false;
+		    }	 
 		    $.each(response.data, function(index, value) {
 		    	if (index == 0) {
 		    		process_id_default=value.id;

@@ -7,9 +7,9 @@ $(document).ready(function(){
 	function initPage(){
 		getFactorySelect("quality/processFault",'',"#search_factory",null,'id');
 		$('#new_report_file,#edit_report_file').ace_file_input({
-			no_file:'No File ...',
-			btn_choose:'Choose',
-			btn_change:'Change',
+			no_file:'请选择要上传的PDF文件...',
+			btn_choose:'选择文件',
+			btn_change:'重新选择',
 			width:"300px",
 			droppable:false,
 			onchange:null,
@@ -43,7 +43,7 @@ $(document).ready(function(){
 			resizable: false,
 			title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 增加制程异常</h4></div>',
 			title_html: true,
-			width:'550px',
+			width:'600px',
 			modal: true,
 			buttons: [{
 						text: "取消",
@@ -106,7 +106,7 @@ function showProcessFault(id){
 				resizable: false,
 				title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 查看制程异常</h4></div>',
 				title_html: true,
-				width:'550px',
+				width:'600px',
 				modal: true,
 				buttons: [{
 							text: "关闭",

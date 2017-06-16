@@ -54,14 +54,12 @@
 							<td><input type="text" style="height: 30px;"
 								class="input-medium revise" placeholder="请输入技改单编号..." value=""
 								id="search_tech_order_no" /></td>
-							<td>技改内容：</td>
-							<td><input type="text" style="height: 30px;"
-								class="input-medium revise" placeholder="请输入任务内容..." value=""
-								id="search_tech_task_content" /></td>
-							<td>技改单日期：</td>
+							<td>&nbsp;技改任务：</td>
+							<td><input type="text" style="height: 30px;" class="input-medium revise" placeholder="请输入技改任务..." value="" id="search_tech_task_content" /></td>
+							<td>&nbsp;技改单日期：</td>
 							<td>
 							<input id="search_tech_date_start" name="search_tech_date_start" placeholder="开始时间..." style="width:110px" type="text" onClick="WdatePicker({el:'search_tech_date_start',dateFmt:'yyyy-MM-dd'});"> - <input id="search_tech_date_end" name="search_tech_date_end" placeholder="结束时间..." style="width:110px" type="text" onClick="WdatePicker({el:'search_tech_date_end',dateFmt:'yyyy-MM-dd'});">
-							<td>状态：</td>
+							<td>&nbsp;状态：</td>
 							<td><select class="input-medium carType" id="search_tech_task_status" style="width: 80px">
 											<option value="">全部</option>
 											<option value="已创建">已创建</option>
@@ -162,7 +160,7 @@
 					</div>
 					
 					<div class="form-group">
-						<label class="col-sm-2 control-label no-padding-right" for="new_tech_order_file">&nbsp;技改单附件：</label>
+						<label class="col-sm-2 control-label no-padding-right" for="new_tech_order_file">*&nbsp;技改单附件：</label>
 						<div class="col-sm-4">
 							<input multiple="" name="new_tech_order_file" type="file" id="new_tech_order_file" />
 						</div>
@@ -277,18 +275,18 @@
 						<div class="col-sm-3">
 							<input value='重大变更' type="checkbox" name="edit_custom_change" title="" id="edit_custom_change"/>&nbsp;是
 						</div>
-						<label class="col-sm-3 control-label no-padding-right" for="edit_custom_change_no">*&nbsp;顾客变更单号：</label>
+						<label class="col-sm-3 control-label no-padding-right" for="edit_custom_change_no">&nbsp;顾客变更单号：</label>
 						<div class="col-sm-3">
 							<input type="text" class="input-medium" style="width:100%;" id="edit_custom_change_no" name="edit_custom_change_no" />
 						</div>
 					</div>
 					
 					<div class="form-group">
-						<label class="col-sm-2 control-label no-padding-right" for="edit_tech_order_file">&nbsp;技改单附件：</label>
+						<label class="col-sm-2 control-label no-padding-right" for="edit_tech_order_file">*&nbsp;技改单附件：</label>
 						<div class="col-sm-4">
 							<input type="file" accept="application/pdf" name="edit_tech_order_file" id="edit_tech_order_file" style="height: 30px; width: 180px">
 						</div>
-						<label class="col-sm-2 control-label no-padding-right" for="edit_custom_change_file">*&nbsp;顾客变更单附件：</label>
+						<label class="col-sm-2 control-label no-padding-right" for="edit_custom_change_file">&nbsp;顾客变更单附件：</label>
 						<div class="col-sm-4">
 							<input multiple="" name="edit_custom_change_file" type="file" id="edit_custom_change_file" />
 						</div>
@@ -297,7 +295,7 @@
 				</form>
 				<form id="uploadForm_moidfy" class="form-horizontal" action="" enctype="multipart/form-data" method="post">
 					<div class="form-group" id="upload_div_modify">
-						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="editOrderCode">*&nbsp;配置信息：</label>
+						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="editOrderCode">&nbsp;物料清单：</label>
 						<div class="col-sm-9">
 								<div class="col-sm-4">
 									<input id="file" style="margin-left: -10px;padding:0px 0px;font-size: 12px" class="btn btn-info btn-small" name="file" accept=".xls" type="file"> 				

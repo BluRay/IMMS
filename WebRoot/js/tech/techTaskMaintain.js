@@ -46,9 +46,9 @@ $(document).ready(function(){
 		$('#new_tech_date').val(formatDate(new Date()));
 		//文件控件初始化
 		$('#new_tech_order_file , #new_custom_change_file').ace_file_input({
-			no_file:'No File ...',
-			btn_choose:'Choose',
-			btn_change:'Change',
+			no_file:'请选择要上传的PDF文件...',
+			btn_choose:'选择文件',
+			btn_change:'重新选择',
 			droppable:false,
 			onchange:null,
 			thumbnail:false, //| true | large
@@ -200,7 +200,7 @@ function ajaxQuery(){
 			var param ={
 				"draw":1,
 				"tech_order_no":$("#search_tech_order_no").val(),
-				"task_content":$("#search_task_content").val(),
+				"task_content":$("#search_tech_task_content").val(),
 				"tech_date_start":$("#search_tech_date_start").val(),
 				"tech_date_end":$("#search_tech_date_end").val(),
 				"status":$("#search_tech_task_status").val()
@@ -238,7 +238,7 @@ function ajaxQuery(){
 		            {"title":"变更单类型","sWidth":"100px","class":"center","data":"tech_order_type","render":function(data,type,row){
 		            	return getKeys(ECN_CHANGE_TYPE, data)
 		            },"defaultContent": ""},
-		            {"title":"技改单号","sWidth":"100px","class":"center","data":"tech_order_no","defaultContent": ""},
+		            {"title":"技改单编号","sWidth":"100px","class":"center","data":"tech_order_no","defaultContent": ""},
 		            {"title":"变更单附件","sWidth":"100px","class":"center","data":"tech_order_file","render": function(data,type,row){
 		            	return data==null?"":"<a href='#' onclick='window.open(\"" + data + "\")'>查看</a>" },"defaultContent":""
 		            },
@@ -259,7 +259,7 @@ function ajaxQuery(){
 		            	return data=="0"?"未开始":(data=="1"?"生产中":"已完成")},"defaultContent":""
 		            },	            
 		            {"title":"操作","sWidth":"50px","class":"center","data":null,"render":function(data,type,row){
-		            	return "<i class=\"ace-icon fa fa-pencil bigger-110 editorder\" onclick = 'showEditModal(" + row.id+ ");' style='color:green;cursor: pointer;'></i>"},
+		            	return "<i class=\"ace-icon fa fa-pencil bigger-110 editorder\" title=\"编辑\" onclick = 'showEditModal(" + row.id+ ");' style='color:green;cursor: pointer;'></i>"},
 		            	"defaultContent": "<i class=\"ace-icon fa fa-pencil bigger-110 editorder\" style='color:green;cursor: pointer;'></i>"} 
 		          ],
 	});
@@ -366,7 +366,7 @@ function ajaxAdd (argument) {
 		return false;
 	}
 	if ($("#new_tech_order_file").val().trim() == "") {
-		alert("技改单附件 值不能为空！");
+		alert("技改单附件不能为空！");
 		$("#new_tech_order_file").focus();
 		return false;
 	}
@@ -438,7 +438,7 @@ function showEditModal(techTaskId){
 				width:1080,
 				height:560,
 				modal: true,
-				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i> 订单分配</h4></div>",
+				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i> 编辑技改任务</h4></div>",
 				title_html: true,
 				buttons: [ 
 					{

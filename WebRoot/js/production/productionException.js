@@ -335,7 +335,7 @@ function getAllProcessSelect(order_type) {
 			var strs = "";
 		    $("#exec_process").html("");
 		    var process_id_default="";
-		    var process_name_default="";
+		    var process_name_default="";   
 		    $.each(response.data, function(index, value) {
 		    	if (index == 0) {
 		    		process_id_default=value.id;

@@ -46,33 +46,34 @@ public class TechServiceImpl implements ITechService {
 		int tech_task_id = techDao.addTechTask(conditionMap);
 		tech_task_id = Integer.valueOf(conditionMap.get("id").toString());
 		List<Map<String, Object>> changeMaterialList = new ArrayList<Map<String, Object>>();
-		JSONArray jsonArray = JSONArray.fromObject(conditionMap.get("selectedrows").toString());
-		JSONObject obj = null;
-		for (int i = 0; i < jsonArray.size(); i++) {
-			Map<String, Object> changeMaterialMap = new HashMap<String, Object>();
-			obj = jsonArray.getJSONObject(i);
-			// asns.add(obj.getString("asnNo"));
-			changeMaterialMap.put("tech_task_id", tech_task_id);
-			changeMaterialMap.put("sap_no", obj.getString("sap_no"));
-			changeMaterialMap.put("material_desc", obj.getString("material_desc"));
-			changeMaterialMap.put("material_type", obj.getString("material_type"));
-			changeMaterialMap.put("material_spec", obj.getString("material_spec"));
-			changeMaterialMap.put("unit", obj.getString("unit"));
-			changeMaterialMap.put("supplier_code", obj.getString("supplier_code"));
-			changeMaterialMap.put("single_loss", obj.getString("single_loss"));
-			changeMaterialMap.put("level_usage", obj.getString("level_usage"));
-			changeMaterialMap.put("single_weight", obj.getString("single_weight"));
-			changeMaterialMap.put("single_usage", obj.getString("single_usage"));
-			changeMaterialMap.put("workshop", obj.getString("workshop"));
-			changeMaterialMap.put("process", obj.getString("process"));
-			changeMaterialMap.put("assemb_site", obj.getString("assemb_site"));
-			changeMaterialMap.put("remark", obj.getString("remark"));
-			changeMaterialList.add(changeMaterialMap);
+		if(conditionMap.get("selectedrows") != null){
+			JSONArray jsonArray = JSONArray.fromObject(conditionMap.get("selectedrows").toString());
+			JSONObject obj = null;
+			for (int i = 0; i < jsonArray.size(); i++) {
+				Map<String, Object> changeMaterialMap = new HashMap<String, Object>();
+				obj = jsonArray.getJSONObject(i);
+				// asns.add(obj.getString("asnNo"));
+				changeMaterialMap.put("tech_task_id", tech_task_id);
+				changeMaterialMap.put("sap_no", obj.getString("sap_no"));
+				changeMaterialMap.put("material_desc", obj.getString("material_desc"));
+				changeMaterialMap.put("material_type", obj.getString("material_type"));
+				changeMaterialMap.put("material_spec", obj.getString("material_spec"));
+				changeMaterialMap.put("unit", obj.getString("unit"));
+				changeMaterialMap.put("supplier_code", obj.getString("supplier_code"));
+				changeMaterialMap.put("single_loss", obj.getString("single_loss"));
+				changeMaterialMap.put("level_usage", obj.getString("level_usage"));
+				changeMaterialMap.put("single_weight", obj.getString("single_weight"));
+				changeMaterialMap.put("single_usage", obj.getString("single_usage"));
+				changeMaterialMap.put("workshop", obj.getString("workshop"));
+				changeMaterialMap.put("process", obj.getString("process"));
+				changeMaterialMap.put("assemb_site", obj.getString("assemb_site"));
+				changeMaterialMap.put("remark", obj.getString("remark"));
+				changeMaterialList.add(changeMaterialMap);
+			}
+			if (changeMaterialList.size() > 0) {
+				techDao.addChangedMaterialList(changeMaterialList);
+			}
 		}
-		if (changeMaterialList.size() > 0) {
-			techDao.addChangedMaterialList(changeMaterialList);
-		}
-		 
 	}
 
 	@Override
