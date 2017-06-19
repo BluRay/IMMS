@@ -32,6 +32,14 @@ $(document).ready(function (){
 	
 	$('input:radio[name="switch_mode"]').change(function(){
 		//console.log("switch_mode = " + $(this).val());
+		$("input[name='new_tecn_flag']").removeAttr("checked");
+		var tbs=$(".tech_factory").find("table");
+		$.each(tbs,function(i,tb){
+			var tr_body=$(tb).find("tr").eq(1);
+			$(tr_body).html("<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>");
+		})
+		alert("切换方式已更改，请重新勾选技改实施范围！")
+		
 		if($(this).val()=='全部切换'){
 			$("#switch_node").val("");
 			$("#switch_node").prop("disabled",true);
@@ -39,6 +47,7 @@ $(document).ready(function (){
 			$("#switch_node").prop("disabled",false);
 		}
 	});
+	
 	
 });
 
@@ -59,11 +68,20 @@ $(document).on("click","input[name='new_tecn_flag']",function(e){
 		var switch_mode=$("input[name='switch_mode']:checked").val();
 		var switch_node=$("#switch_node").val()||"";
 		var node_list="";
+		//console.log("-->switch_node = " + switch_node);
 		var node_index=switch_node_arr.indexOf(switch_node);
 		if(switch_mode=='节点前切换'){
+			if(switch_node == ""){
+				alert("请选择切换节点！");
+				return false;
+			}
 			node_list=switch_node_arr.substring(0,node_index-1)
 		}
-		if(switch_mode=='节点后切换'){				
+		if(switch_mode=='节点后切换'){	
+			if(switch_node == ""){
+				alert("请选择切换节点！");
+				return false;
+			}			
 			node_list=switch_node_arr.substring(node_index,switch_node_arr.length)
 		}
 		var datalist=getTechBusNum(order_no,factory,tech_date,switch_mode,switch_node,node_list);
@@ -147,6 +165,9 @@ function ajaxEdit(task_id,task_detail_id,task_content,tech_order_no,switch_mode,
 			}
 		})
 	});	
+	if(switch_mode==''){
+		$("#switch_node").prop("disabled",true);
+	}
 	if(switch_mode=='全部切换'){
 		mode_index=0;
 		//$("#tr_switch_node").css("display","");
@@ -168,6 +189,8 @@ function ajaxEdit(task_id,task_detail_id,task_content,tech_order_no,switch_mode,
 	$("[name=switch_mode]").eq(mode_index).prop("checked",true);
 	if(is_follow){
 		$("[name=switch_mode]").prop("disabled",true);
+	}else{
+		$("[name=switch_mode]").prop("disabled",false);
 	}
 	$("#v_task_content").val(task_content);
 	$("#v_tech_order_no").val(tech_order_no);
@@ -217,8 +240,8 @@ function assignTechTask(){
 	//console.log('---->factory_cboxs = ',factory_cboxs);
 	$.each(factory_cboxs,function(i,cbox){
 		var factory=$(cbox).parent("div").find("span").html();
-		console.log('---->conditions factory= ' + factory);
 		var factory_id=$(cbox).parent("div").find("span").prop("factory_id");
+		console.log('---->conditions factory= ' + factory + " ,factory_id = " + factory_id);
 		var tech_factory=$(cbox).parent("div").find(".tech_factory :selected").text();
 		var tech_factory_id=$(cbox).parent("div").find(".tech_factory").val();
 		var order_no=$(cbox).parent("div").parent("div").parent("div").find(".assess_order_no").val();
@@ -378,6 +401,7 @@ function addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factor
 			if(tech_info.trim().length>0){
 				checked="checked";
 			}
+			console.log("-->factory = " + factory);
 			//prod_factory_id=prod_factory_id||factory_id;
 			//prod_factory=prod_factory||factory;
 			var facotory_div=$("<div style='margin-top:10px'><b>生产工厂：</b><span factory_id='"+(prod_factory_id||factory_id)+"'>"+(prod_factory||factory)+"</span></div>");

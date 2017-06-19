@@ -50,7 +50,7 @@ function initTable() {
 	        	return {css: {"padding-left": "3px", "padding-right": "2px","font-size":"13px"}};
 	        	}
             },{
-            	field: 'tech_order_type',title: '&nbsp;&nbsp;&nbsp;变更单类型&nbsp;&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
+            	field: 'tech_order_type_name',title: '&nbsp;&nbsp;&nbsp;变更单类型&nbsp;&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
                 sortable: false,visible: true,footerFormatter: totalTextFormatter,
                 cellStyle:function cellStyle(value, row, index, field) {
 	        	return {css: {"padding-left": "3px", "padding-right": "2px","font-size":"13px"}};
@@ -68,8 +68,8 @@ function initTable() {
 	        	return {css: {"padding-left": "3px", "padding-right": "2px","font-size":"13px"}};
 	        	},
 	        	formatter:function(value, row, index){
-	        		if(value.tech_order_file!=null){
-	        			return "<a href='#' onclick='window.open(\""+value.tech_order_file+"\")'>"+(value.tech_order_file==""?"":"查看")+"</a>"
+	        		if(row.tech_order_file!=""){
+	        			return "<a href='#' onclick='window.open(\""+row.tech_order_file+"\")'>"+(row.tech_order_file==""?"":"查看")+"</a>"
 	        		}
 	        	}
             },{
@@ -79,7 +79,7 @@ function initTable() {
 	        	return {css: {"padding-left": "3px", "padding-right": "2px","font-size":"13px"}};
 	        	}
             },{
-            	field: 'duty_unit',title: '&nbsp;&nbsp;&nbsp;责任单位&nbsp;&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
+            	field: 'duty_unit_name',title: '&nbsp;&nbsp;&nbsp;责任单位&nbsp;&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
                 sortable: false,visible: true,footerFormatter: totalTextFormatter,
                 cellStyle:function cellStyle(value, row, index, field) {
 	        	return {css: {"padding-left": "3px", "padding-right": "2px","font-size":"13px"}};
@@ -103,7 +103,7 @@ function initTable() {
 	        	return {css: {"padding-left": "3px", "padding-right": "2px","font-size":"13px"}};
 	        	}
             },{
-            	field: 'tech_type',title: '&nbsp;&nbsp;&nbsp;技改类型&nbsp;&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
+            	field: 'tech_type_name',title: '&nbsp;&nbsp;&nbsp;技改类型&nbsp;&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
                 sortable: false,visible: true,footerFormatter: totalTextFormatter,
                 cellStyle:function cellStyle(value, row, index, field) {
 	        	return {css: {"padding-left": "3px", "padding-right": "2px","font-size":"13px"}};

@@ -1126,7 +1126,7 @@
 	
 	<select id="queryTaskOrderFinishInfo" parameterType="Map" resultType="Map">
 		SELECT GROUP_CONCAT(S.finish) AS finish_str FROM (
-		SELECT (CONCAT(t.workshop,':',COUNT(t.id))) AS finish FROM BMS_TECH_TASK_FOLLOW t 
+		SELECT (CONCAT(t.workshop,':',COUNT(distinct(t.bus_number)))) AS finish FROM BMS_TECH_TASK_FOLLOW t 
 		WHERE t.tech_task_id = #{taskid} AND t.order_no = #{order_no} GROUP BY workshop
 		) S
 	</select>
@@ -1282,8 +1282,11 @@
 	
 	<!--技改任务维护-查询 -->
 	<select id="queryTechTaskMaintainList" parameterType="Map" resultType="Map">
-		SELECT t.*
+		SELECT t.*,k.key_name AS tech_order_type_name, k2.key_name AS tech_type_name,k3.key_name AS duty_unit_name
 		FROM BMS_TECH_TASK t
+		LEFT JOIN BMS_BASE_KEY k ON t.tech_order_type = k.id
+		LEFT JOIN BMS_BASE_KEY k2 ON t.tech_type = k2.id
+		LEFT JOIN BMS_BASE_KEY k3 ON t.duty_unit = k3.id
 		WHERE 1=1
 		<if test="task_content !=null and task_content !=''">
 			and t.task_content like (concat('%',#{task_content},'%'))

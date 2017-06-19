@@ -218,17 +218,17 @@ function ajaxQueryDetail(tbody, factory, workshop, order_no, tech_task_id, view)
 				var tr = $("<tr />");
 				if ("view" != view) {
 					if (!value.confirmor) {
-						$("<td />").html("<input type='checkbox' class='cbox' >").appendTo(tr);
+						$("<td style='text-align: center;'/>").html("<input type='checkbox' class='cbox' >").appendTo(tr);
 					} else {
-						$("<td />").html("").appendTo(tr);
+						$("<td style='text-align: center;'/>").html("").appendTo(tr);
 					}
 				}
-				$("<td />").html(index + 1).appendTo(tr);
-				$("<td />").html(value.bus_number).appendTo(tr);
-				$("<td />").html(value.factory).appendTo(tr);
-				$("<td />").html(value.process_name).appendTo(tr);
-				$("<td />").html(value.confirmor).appendTo(tr);
-				$("<td />").html(value.confirmor_date).appendTo(tr);
+				$("<td style='text-align: center;'/>").html(index + 1).appendTo(tr);
+				$("<td style='text-align: center;'/>").html(value.bus_number).appendTo(tr);
+				$("<td style='text-align: center;'/>").html(value.factory).appendTo(tr);
+				$("<td style='text-align: center;'/>").html(value.process_name).appendTo(tr);
+				$("<td style='text-align: center;'/>").html(value.confirmor).appendTo(tr);
+				$("<td style='text-align: center;'/>").html(value.confirmor_date).appendTo(tr);
 				$(tr).data("id", value.id);
 				tbody.append(tr);
 			});

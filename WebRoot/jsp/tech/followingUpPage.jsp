@@ -78,8 +78,8 @@
 					</div>
 					
 					<div id="selectBusNumberModal" class="hide" style="align:center;height:500px">
-						车号：<input type="text" class="input-medium revise" placeholder="车号流水..."  id="bus_num_start" >
-				       	~<input type="text" class="input-medium revise" placeholder="车号流水..."  id="bus_num_end" >
+						车号流水：<input type="text" class="input-medium revise" placeholder="车号流水开始..."  id="bus_num_start" >
+				       	~<input type="text" class="input-medium revise" placeholder="车号流水结束..."  id="bus_num_end" >
 				       	<input type="button" class="btn btn-sm btn-primary" id="btn_single_bus_num_query" value="查询"></input>
 				       	
 				       	<table id="selectBusNumber_table" style="table-layout:fixed;font-size:12px" class="table table-bordered table-striped">
@@ -149,8 +149,8 @@
 					</div>
 					
 					<div id="selectBusNumberModal_view" class="hide" style="align:center;width:900px;height:500px">
-					车号：<input type="text" class="input-medium revise" placeholder="车号流水..."  id="bus_num_start_view" >
-			       	~<input type="text" class="input-medium revise" placeholder="车号流水..."  id="bus_num_end_view" >
+					车号流水：<input type="text" class="input-medium revise" placeholder="车号流水开始..."  id="bus_num_start_view" >
+			       	~<input type="text" class="input-medium revise" placeholder="车号流水结束..."  id="bus_num_end_view" >
 			       	<input type="button" class="btn btn-sm btn-primary" id="btn_single_bus_num_query_view" value="查询" style="margin-left: 2px;margin-bottom: 10px;"></input>
 			       	
 			       	<table id="selectBusNumber_table_view" style="table-layout:fixed;font-size:12px;width:850px" class="table table-bordered table-striped">

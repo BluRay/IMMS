@@ -142,7 +142,7 @@
 						<div class="col-sm-3">
 							<input value='重大变更' type="checkbox" name="new_major_change" title="" id="new_major_change"/>&nbsp;是
 						</div>
-						<label class="col-sm-3 control-label no-padding-right" for="new_productive_year">*&nbsp;重复变更：</label>
+						<label class="col-sm-3 control-label no-padding-right" for="new_productive_year">&nbsp;重复变更：</label>
 						<div class="col-sm-3">
 							<input value='重复变更' type="checkbox" name="new_repeat_change" title="" id="new_repeat_change"/>&nbsp;是
 						</div>
@@ -265,7 +265,7 @@
 						<div class="col-sm-3">
 							<input value='重大变更' type="checkbox" name="edit_major_change" title="" id="edit_major_change"/>&nbsp;是
 						</div>
-						<label class="col-sm-3 control-label no-padding-right" for="edit_repeat_change">*&nbsp;重复变更：</label>
+						<label class="col-sm-3 control-label no-padding-right" for="edit_repeat_change">&nbsp;重复变更：</label>
 						<div class="col-sm-3">
 							<input value='重复变更' type="checkbox" name="edit_repeat_change" title="" id="edit_repeat_change"/>&nbsp;是
 						</div>

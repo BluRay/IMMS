@@ -69,10 +69,11 @@ function getBaseInfo(ecnTaskId){
         		$("#finish_date").val(value.finish_date);
                 (value.tech_order_file=="")?$("#td_tech_order_file").html("无附件"):$("#tech_order_file").attr("href", value.tech_order_file);
                 (value.custom_change_file=="")?$("#td_custom_change_file").html("无附件"):$("#custom_change_file").attr("href", value.custom_change_file);
-        		
+        		console.log("-->switch_mode = " + value.switch_mode);
+        		$("#switch_node").prop("disabled",true);
         		if(value.switch_mode=="全部切换"){$("#type1").prop("checked", true);$("#switch_node").prop("disabled",true);}
         		if(value.switch_mode=="节点前切换"){$("#type2").prop("checked", true);$("#switch_node").prop("disabled",false);}
-        		if(value.switch_mode=="节点后切换"){$("#type2").prop("checked", true);$("#switch_node").prop("disabled",false);}
+        		if(value.switch_mode=="节点后切换"){$("#type3").prop("checked", true);$("#switch_node").prop("disabled",false);}
         		
         		$("#switch_node").val(value.switch_node);
         	});
@@ -107,7 +108,7 @@ function getBaseInfo(ecnTaskId){
         	dataOrderInfo = response.dataOrderInfo;
         	$.each(response.dataOrderInfo,function (index,value) {
         		if(index==0){
-        			var paramHtml = '<li class="active"><a href="#new_task1" onclick="showOrderInfo('+(index)+');" data-toggle="tab" style="font-size: 14px; color: #333">'+value.order_no+'</a></li>';
+        			var paramHtml = '<li class="active"><a href="#new_task1" onclick="showOrderInfo('+(index)+');" data-toggle="tab" style="font-size: 14px; color: #333">'+value.order_no+'('+value.factory+')</a></li>';
             		$(paramHtml).appendTo("#new_tab");
             		//var tech_str = '{' + value.TECH_LIST + '}';
             		//var tech_str = '{"自制件":11,"焊装":10,"玻璃钢":10,"涂装":10}';
@@ -126,7 +127,7 @@ function getBaseInfo(ecnTaskId){
                     }
             		showOrderInfo(0);
         		}else{
-        			var paramHtml = '<li><a href="#new_task1" onclick="showOrderInfo('+(index)+');" data-toggle="tab" style="font-size: 14px; color: #333">'+value.order_no+'</a></li>';
+        			var paramHtml = '<li><a href="#new_task1" onclick="showOrderInfo('+(index)+');" data-toggle="tab" style="font-size: 14px; color: #333">'+value.order_no+'('+value.factory+')</a></li>';
             		$(paramHtml).appendTo("#new_tab");
         		}
         	});
