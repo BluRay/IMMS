@@ -434,8 +434,8 @@
 			and fo.status=#{status}
 		</if>
 		 order by o.id desc
-		<if test="offset !=null">
-			limit #{offset},#{pageSize}
+		<if test="start !=null">
+			limit #{start},#{length}
 		</if>
 	</select>
 	

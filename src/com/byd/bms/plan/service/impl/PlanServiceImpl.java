@@ -713,4 +713,315 @@ public class PlanServiceImpl implements IPlanService {
 		return planDao.checkProductionPlan(queryMap);
 	}
 
+	@Override
+	public List<Map<String, String>> getPlanSerach(Map<String, Object> queryMap) {
+		return planDao.getPlanSerach(queryMap);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Map<String, Object> showPlanSearchDetail(Map<String, Object> queryMap) {
+		String date_array = queryMap.get("date_array").toString();
+		String[] dateArray = date_array.split(",");
+		String month = dateArray[0].substring(0, 7);
+		String startDate = dateArray[0].replaceAll("-", "");
+		String endDate = dateArray[dateArray.length-1].replaceAll("-", "");
+		logger.info("---->startDate = " + startDate + "|endDate = " + endDate);
+		List datalist=new ArrayList();		
+		List<String> order_list = new ArrayList<String>();
+		
+		if(queryMap.get("order_no").toString().equals("")){
+			List<Map<String,String>> orderlist = new ArrayList<Map<String, String>>();
+			Map<String,Object> conditionMap2=new HashMap<String,Object>();
+			conditionMap2.put("factory_id", queryMap.get("factory_id").toString());
+			conditionMap2.put("start_date", startDate);
+			conditionMap2.put("end_date", endDate);
+			orderlist = planDao.getPlanOrderList(conditionMap2);
+			for(int m=0;m<orderlist.size();m++){
+				order_list.add(((Map<String,String>)orderlist.get(m)).get("order_no"));
+			}
+		}else{
+			order_list.add(queryMap.get("order_no").toString());
+		}
+		
+		
+		return null;
+	}
+	
+	public List<String[]> getPlanDetailByOrder(String order_no,String date_array,Map<String, Object> queryMap){
+		String[] dateArray = date_array.split(",");		
+		String month = dateArray[0].substring(0, 7);
+		logger.info("-->month = " + month);
+		String workshop = "";
+		if (!queryMap.get("workshop").toString().equals("全部")) workshop = queryMap.get("workshop").toString();
+		String[] detailArray_1 = new String[35];  String[] detailArray_1_real = new String[35];
+		String[] detailArray_2 = new String[35];  String[] detailArray_2_real = new String[35];
+		String[] detailArray_3 = new String[35];  String[] detailArray_3_real = new String[35];
+		String[] detailArray_4 = new String[35];  String[] detailArray_4_real = new String[35];
+		String[] detailArray_5 = new String[35];  String[] detailArray_5_real = new String[35];
+		String[] detailArray_6 = new String[35];  String[] detailArray_6_real = new String[35];
+		String[] detailArray_7 = new String[35];  String[] detailArray_7_real = new String[35];
+		String[] detailArray_8 = new String[35];  String[] detailArray_8_real = new String[35];
+		String[] detailArray_9 = new String[35];  String[] detailArray_9_real = new String[35];
+		String[] detailArray_10 = new String[35]; String[] detailArray_10_real = new String[35];
+		String[] detailArray_11 = new String[35]; String[] detailArray_11_real = new String[35];
+		String[] detailArray_12 = new String[35]; String[] detailArray_12_real = new String[35];
+		
+		List<String[]> detailList = new ArrayList<String[]>();
+		detailList.add(detailArray_1);  detailList.add(detailArray_1_real);
+		detailList.add(detailArray_2);  detailList.add(detailArray_2_real);
+		detailList.add(detailArray_3);  detailList.add(detailArray_3_real);
+		detailList.add(detailArray_4);  detailList.add(detailArray_4_real);
+		detailList.add(detailArray_5);  detailList.add(detailArray_5_real);
+		detailList.add(detailArray_6);  detailList.add(detailArray_6_real);
+		detailList.add(detailArray_7);  detailList.add(detailArray_7_real);
+		detailList.add(detailArray_8);  detailList.add(detailArray_8_real);
+		detailList.add(detailArray_9);  detailList.add(detailArray_9_real);
+		detailList.add(detailArray_10); detailList.add(detailArray_10_real);
+		detailList.add(detailArray_11); detailList.add(detailArray_11_real);
+		detailList.add(detailArray_12); detailList.add(detailArray_12_real);
+		
+		for(int i = 0; i < dateArray.length; i++) {			//循环查询每一天所有车间的数据
+			Map<String,Object> conditionMap=new HashMap<String,Object>();
+			conditionMap.put("factory_id", queryMap.get("factory_id").toString());
+			conditionMap.put("order_no", order_no);
+			conditionMap.put("workshop", workshop);
+			//conditionMap.put("plan_date", dateArray[i].replaceAll("-", ""));		//???
+			conditionMap.put("plan_date", dateArray[i]);
+			List<Map<String,String>> datalist=new ArrayList<Map<String, String>>();
+			datalist = planDao.getPlanSearchPlanQty(conditionMap);
+			
+			for (int j = 0; j < datalist.size(); j++) {	
+				Map<String,String> resultMap=new HashMap<String,String>();
+				resultMap = (Map<String, String>) datalist.get(j);
+				Map<String,Object> conditionMap2=new HashMap<String,Object>();
+				conditionMap2.put("factory_id", queryMap.get("factory_id").toString());
+				conditionMap2.put("order_no", order_no);
+				conditionMap2.put("workshop", resultMap.get("key_name_en") + "_date");
+				conditionMap2.put("plan_date", dateArray[i]);
+				
+				// 部件车间完成数另外计算
+				if(resultMap.get("key_name_en").equals("parts_online") || resultMap.get("key_name_en").equals("parts_offline")){
+					conditionMap2.put("plan_date", dateArray[i]);
+					if (resultMap.get("key_name_en").equals("parts_online")){
+						conditionMap2.put("parts", "online_real_qty");
+					}else{
+						conditionMap2.put("parts", "offline_real_qty");
+					}					
+					int real_qty = planDao.getPlanSearchRealPartsQty(conditionMap2);
+					resultMap.put("sum_real_qty", String.valueOf(real_qty));
+				}else if(resultMap.get("key_name_en").equals("ZZJ_offline")){
+					Map<String,Object> conditionMap3=new HashMap<String,Object>();
+					conditionMap3.put("factory_id", queryMap.get("factory_id").toString());
+					conditionMap3.put("order_no", order_no);
+					conditionMap3.put("plan_date", dateArray[i]);
+					int real_qty = planDao.getPlanSearchRealZzjQty(conditionMap3);
+					resultMap.put("sum_real_qty", String.valueOf(real_qty));
+				}else{
+					int real_qty = planDao.getPlanSearchRealQty(conditionMap2);
+					logger.info("---->real_qty = " + conditionMap2.get("factory_id") + "|" + conditionMap2.get("order_no") + "|" + conditionMap2.get("workshop") + "|" + String.valueOf(real_qty));
+					resultMap.put("sum_real_qty", String.valueOf(real_qty));
+				}
+				
+			}
+			if (i==0){
+				detailArray_1[0]=queryMap.get("factory_id").toString();
+				detailArray_1[1]=queryMap.get("order_no").toString();
+				detailArray_1[2]="自制件下线计划";detailArray_1[34]="1";					
+				detailArray_2[0]=queryMap.get("factory_id").toString();
+				detailArray_2[1]=queryMap.get("order_no").toString();
+				detailArray_2[2]="部件上线计划";detailArray_2[34]="2";	
+				detailArray_3[0]=queryMap.get("factory_id").toString();
+				detailArray_3[1]=queryMap.get("order_no").toString();
+				detailArray_3[2]="部件下线计划";detailArray_3[34]="3";				
+				
+				detailArray_1_real[0]=queryMap.get("factory_id").toString();
+				detailArray_1_real[1]=queryMap.get("order_no").toString();
+				detailArray_1_real[2]="自制件下线完成";detailArray_1_real[34]="1";					
+				detailArray_2_real[0]=queryMap.get("factory_id").toString();
+				detailArray_2_real[1]=queryMap.get("order_no").toString();
+				detailArray_2_real[2]="部件上线完成";detailArray_2_real[34]="2";			
+				detailArray_3_real[0]=queryMap.get("factory_id").toString();
+				detailArray_3_real[1]=queryMap.get("order_no").toString();
+				detailArray_3_real[2]="部件下线完成";detailArray_3_real[34]="3";
+				
+				detailArray_4[0]=queryMap.get("factory_id").toString();
+				detailArray_4[1]=queryMap.get("order_no").toString();
+				detailArray_4[2]="焊装上线计划";detailArray_4[34]="4";			
+				detailArray_5[0]=queryMap.get("factory_id").toString();
+				detailArray_5[1]=queryMap.get("order_no").toString();
+				detailArray_5[2]="焊装下线计划";detailArray_5[34]="5";
+				
+				detailArray_4_real[0]=queryMap.get("factory_id").toString();
+				detailArray_4_real[1]=queryMap.get("order_no").toString();
+				detailArray_4_real[2]="焊装上线完成";detailArray_4_real[34]="4";
+				detailArray_5_real[0]=queryMap.get("factory_id").toString();
+				detailArray_5_real[1]=queryMap.get("order_no").toString();
+				detailArray_5_real[2]="焊装下线完成";detailArray_5_real[34]="5";
+				
+				detailArray_6[0]=queryMap.get("factory_id").toString();
+				detailArray_6[1]=queryMap.get("order_no").toString();
+				detailArray_6[2]="涂装上线计划";detailArray_6[34]="6";
+				detailArray_7[0]=queryMap.get("factory_id").toString();
+				detailArray_7[1]=queryMap.get("order_no").toString();
+				detailArray_7[2]="涂装下线计划";detailArray_7[34]="7";
+				
+				detailArray_6_real[0]=queryMap.get("factory_id").toString();
+				detailArray_6_real[1]=queryMap.get("order_no").toString();
+				detailArray_6_real[2]="涂装上线完成";detailArray_6_real[34]="6";
+				detailArray_7_real[0]=queryMap.get("factory_id").toString();
+				detailArray_7_real[1]=queryMap.get("order_no").toString();
+				detailArray_7_real[2]="涂装下线完成";detailArray_7_real[34]="7";
+				
+				detailArray_8[0]=queryMap.get("factory_id").toString();
+				detailArray_8[1]=queryMap.get("order_no").toString();
+				detailArray_8[2]="底盘上线计划";detailArray_8[34]="8";
+				detailArray_9[0]=queryMap.get("factory_id").toString();
+				detailArray_9[1]=queryMap.get("order_no").toString();
+				detailArray_9[2]="底盘下线计划";detailArray_9[34]="9";
+				
+				detailArray_8_real[0]=queryMap.get("factory_id").toString();
+				detailArray_8_real[1]=queryMap.get("order_no").toString();
+				detailArray_8_real[2]="底盘上线完成";detailArray_8_real[34]="8";
+				detailArray_9_real[0]=queryMap.get("factory_id").toString();
+				detailArray_9_real[1]=queryMap.get("order_no").toString();
+				detailArray_9_real[2]="底盘下线完成";detailArray_9_real[34]="9";
+				
+				detailArray_10[0]=queryMap.get("factory_id").toString();
+				detailArray_10[1]=queryMap.get("order_no").toString();
+				detailArray_10[2]="总装上线计划";detailArray_10[34]="10";
+				detailArray_11[0]=queryMap.get("factory_id").toString();
+				detailArray_11[1]=queryMap.get("order_no").toString();
+				detailArray_11[2]="总装下线计划";detailArray_11[34]="11";
+				
+				detailArray_12[0]=queryMap.get("factory_id").toString();
+				detailArray_12[1]=queryMap.get("order_no").toString();
+				detailArray_12[2]="入库计划";detailArray_12[34]="12";
+				
+				detailArray_10_real[0]=queryMap.get("factory_id").toString();
+				detailArray_10_real[1]=queryMap.get("order_no").toString();
+				detailArray_10_real[2]="总装上线完成";detailArray_10_real[34]="10";
+				detailArray_11_real[0]=queryMap.get("factory_id").toString();
+				detailArray_11_real[1]=queryMap.get("order_no").toString();
+				detailArray_11_real[2]="总装下线完成";detailArray_11_real[34]="11";
+				
+				detailArray_12_real[0]=queryMap.get("factory_id").toString();
+				detailArray_12_real[1]=queryMap.get("order_no").toString();
+				detailArray_12_real[2]="入库完成";detailArray_12_real[34]="12";
+				
+				for (int j = 0; j < datalist.size(); j++) {	
+					Map<String,String> resultMap=new HashMap<String,String>();
+					resultMap = (Map<String, String>) datalist.get(j);
+					
+					switch(Integer.valueOf(String.valueOf(resultMap.get("plan_code_id")))){
+					case 1:
+						detailArray_1[3]=String.valueOf(resultMap.get("sum_plan_qty"));
+						detailArray_1_real[3]=String.valueOf(resultMap.get("sum_real_qty"));
+						break;
+					case 2:
+						detailArray_2[3]=String.valueOf(resultMap.get("sum_plan_qty"));
+						detailArray_2_real[3]=String.valueOf(resultMap.get("sum_real_qty"));
+						break;
+					case 3:
+						detailArray_3[3]=String.valueOf(resultMap.get("sum_plan_qty"));
+						detailArray_3_real[3]=String.valueOf(resultMap.get("sum_real_qty"));
+						break;
+					case 4:
+						detailArray_4[3]=String.valueOf(resultMap.get("sum_plan_qty"));
+						detailArray_4_real[3]=String.valueOf(resultMap.get("sum_real_qty"));
+						break;
+					case 5:
+						detailArray_5[3]=String.valueOf(resultMap.get("sum_plan_qty"));
+						detailArray_5_real[3]=String.valueOf(resultMap.get("sum_real_qty"));
+						break;
+					case 6:
+						detailArray_6[3]=String.valueOf(resultMap.get("sum_plan_qty"));
+						detailArray_6_real[3]=String.valueOf(resultMap.get("sum_real_qty"));
+						break;
+					case 7:
+						detailArray_7[3]=String.valueOf(resultMap.get("sum_plan_qty"));
+						detailArray_7_real[3]=String.valueOf(resultMap.get("sum_real_qty"));
+						break;
+					case 8:
+						detailArray_8[3]=String.valueOf(resultMap.get("sum_plan_qty"));
+						detailArray_8_real[3]=String.valueOf(resultMap.get("sum_real_qty"));
+						break;
+					case 9:
+						detailArray_9[3]=String.valueOf(resultMap.get("sum_plan_qty"));
+						detailArray_9_real[3]=String.valueOf(resultMap.get("sum_real_qty"));
+						break;
+					case 10:
+						detailArray_10[3]=String.valueOf(resultMap.get("sum_plan_qty"));
+						detailArray_10_real[3]=String.valueOf(resultMap.get("sum_real_qty"));
+						break;
+					case 11:
+						detailArray_11[3]=String.valueOf(resultMap.get("sum_plan_qty"));
+						detailArray_11_real[3]=String.valueOf(resultMap.get("sum_real_qty"));
+						break;
+					case 12:
+						detailArray_12[3]=String.valueOf(resultMap.get("sum_plan_qty"));
+						detailArray_12_real[3]=String.valueOf(resultMap.get("sum_real_qty"));
+						break;
+					}			
+				}
+			}else {		//1,2,3,4...
+				for (int j = 0; j < datalist.size(); j++) {	
+					Map<String,String> resultMap=new HashMap<String,String>();
+					resultMap = (Map<String, String>) datalist.get(j);
+					switch(Integer.valueOf(String.valueOf(resultMap.get("plan_code_id")))){
+						case 1:
+							detailArray_1[3+i]=String.valueOf(resultMap.get("sum_plan_qty"));
+							detailArray_1_real[3+i]=String.valueOf(resultMap.get("sum_real_qty"));
+							break;
+						case 2:
+							detailArray_2[3+i]=String.valueOf(resultMap.get("sum_plan_qty"));
+							detailArray_2_real[3+i]=String.valueOf(resultMap.get("sum_real_qty"));
+							break;
+						case 3:
+							detailArray_3[3+i]=String.valueOf(resultMap.get("sum_plan_qty"));
+							detailArray_3_real[3+i]=String.valueOf(resultMap.get("sum_real_qty"));
+							break;
+						case 4:
+							detailArray_4[3+i]=String.valueOf(resultMap.get("sum_plan_qty"));
+							detailArray_4_real[3+i]=String.valueOf(resultMap.get("sum_real_qty"));
+							break;
+						case 5:
+							detailArray_5[3+i]=String.valueOf(resultMap.get("sum_plan_qty"));
+							detailArray_5_real[3+i]=String.valueOf(resultMap.get("sum_real_qty"));
+							break;
+						case 6:
+							detailArray_6[3+i]=String.valueOf(resultMap.get("sum_plan_qty"));
+							detailArray_6_real[3+i]=String.valueOf(resultMap.get("sum_real_qty"));
+							break;
+						case 7:
+							detailArray_7[3+i]=String.valueOf(resultMap.get("sum_plan_qty"));
+							detailArray_7_real[3+i]=String.valueOf(resultMap.get("sum_real_qty"));
+							break;
+						case 8:
+							detailArray_8[3+i]=String.valueOf(resultMap.get("sum_plan_qty"));
+							detailArray_8_real[3+i]=String.valueOf(resultMap.get("sum_real_qty"));
+							break;
+						case 9:
+							detailArray_9[3+i]=String.valueOf(resultMap.get("sum_plan_qty"));
+							detailArray_9_real[3+i]=String.valueOf(resultMap.get("sum_real_qty"));
+							break;
+						case 10:
+							detailArray_10[3+i]=String.valueOf(resultMap.get("sum_plan_qty"));
+							detailArray_10_real[3+i]=String.valueOf(resultMap.get("sum_real_qty"));
+							break;
+						case 11:
+							detailArray_11[3+i]=String.valueOf(resultMap.get("sum_plan_qty"));
+							detailArray_11_real[3+i]=String.valueOf(resultMap.get("sum_real_qty"));
+							break;
+						case 12:
+							detailArray_12[3+i]=String.valueOf(resultMap.get("sum_plan_qty"));
+							detailArray_12_real[3+i]=String.valueOf(resultMap.get("sum_real_qty"));
+							break;
+					}
+				}
+			}
+		}
+		return detailList;
+	}
+
 }

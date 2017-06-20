@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="../assets/css/fixedColumns.bootstrap.min.css" />
 <link rel="stylesheet" href="../assets/css/fixedColumns.dataTables.min.css" />
 <link rel="stylesheet" href="../assets/css/jquery-ui.min.css" />
+<link rel="stylesheet" href="../assets/css/buttons.dataTables.css" /> 
 </head>
 <body class="no-skin" style="font-family: 'Microsoft YaHei';">
 	<!-- 头 -->
@@ -72,9 +73,7 @@
 
 				<div class="row">
 					<div class="col-xs-12">
-						<table id="tableOrder"
-							class="table table-striped table-bordered table-hover"
-							style="font-size: 12px;">
+						<table id="tableOrder" class="table table-striped table-bordered table-hover" style="font-size: 12px;">
 						</table>
 					</div>
 				</div>
@@ -195,12 +194,15 @@
 	<script src="../assets/js/jquery.dataTables.bootstrap.js"></script>
 	<script src="../assets/js/dataTables.fixedColumns.min.js"></script>
 	<script src="../assets/js/dataTables.rowGroup.js"></script>
-	<script src="../assets/js/ace/elements.onpage-help.js"></script>
-	<script src="../assets/js/ace/ace.onpage-help.js"></script>
 	<script src="../assets/js/bootstrap3-typeahead.js"></script>
+	
+	 <script src="../assets/js/dataTables.buttons.js"></script>
+	<script src="../assets/js/buttons.colVis.js"></script>
+	<script src="../assets/js/buttons.html5.js"></script>
+	<script src="../assets/js/buttons.flash.js"></script> 
+	
 	<script src="../js/jquery.form.js"></script>
 	<script src="../js/common.js"></script>
 	<script src="../js/order/configUpload.js"></script>
 </body>
-
 </html>

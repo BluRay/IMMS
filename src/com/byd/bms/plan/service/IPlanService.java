@@ -49,4 +49,6 @@ public interface IPlanService {
 	public int busTransferIn(Map<String,Object> queryMap);
 	public List<Map<String,String>> getBusTransferHisList(Map<String,Object> queryMap);
 	public List<Map<String,String>> checkProductionPlan(Map<String,Object> queryMap);
+	public List<Map<String,String>> getPlanSerach(Map<String,Object> queryMap);	
+	public Map<String,Object> showPlanSearchDetail(Map<String,Object> queryMap);
 }

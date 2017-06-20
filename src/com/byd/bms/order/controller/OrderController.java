@@ -488,15 +488,21 @@ public class OrderController extends BaseController{
 	@ResponseBody
 	public ModelMap getOrderDetailList(){
 		model=new ModelMap();
+		int draw=Integer.parseInt(request.getParameter("draw"));//jquerydatatables 
+		int start=Integer.parseInt(request.getParameter("start"));//分页数据起始数
+		int length=Integer.parseInt(request.getParameter("length"));//每一页数据条数
 		Map<String,Object> condMap=new HashMap<String,Object>();
 		condMap.put("order_no", request.getParameter("order_no"));
 		condMap.put("factory", request.getParameter("factory"));
 		condMap.put("actYear", request.getParameter("actYear"));
 		condMap.put("status", request.getParameter("status"));		
-		if(request.getParameter("offset")!=null)condMap.put("offset", Integer.valueOf(request.getParameter("offset")));
-		if(request.getParameter("limit")!=null)condMap.put("pageSize", Integer.valueOf(request.getParameter("limit")));
+		/*if(request.getParameter("offset")!=null)condMap.put("offset", Integer.valueOf(request.getParameter("offset")));
+		if(request.getParameter("limit")!=null)condMap.put("pageSize", Integer.valueOf(request.getParameter("limit")));*/
+		condMap.put("start", start);
+		condMap.put("length", length);
 		condMap.put("sort", request.getParameter("sort"));
 		condMap.put("order", request.getParameter("order"));
+		condMap.put("draw", draw);
 		
 		model=orderService.getOrderQueryData(condMap);
 

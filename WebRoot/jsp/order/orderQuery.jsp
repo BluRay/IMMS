@@ -12,9 +12,10 @@
 <!-- <link rel="stylesheet" href="../css/bootstrap.3.2.css">	 -->
 <link rel="stylesheet" href="../assets/css/fixedColumns.bootstrap.min.css" />
 <link rel="stylesheet" href="../assets/css/fixedColumns.dataTables.min.css" />
-<link rel="stylesheet" href="../css/bootstrap-table.css">
-<link rel="stylesheet" href="../css/bootstrap-editable.css">
+<!-- <link rel="stylesheet" href="../css/bootstrap-table.css">
+<link rel="stylesheet" href="../css/bootstrap-editable.css"> -->
 <link rel="stylesheet" href="../assets/css/jquery-ui.min.css"  >
+<link rel="stylesheet" href="../assets/css/buttons.dataTables.css" /> 
 
 </head>
 <body class="no-skin" style="font-family: 'Microsoft YaHei';">
@@ -86,7 +87,7 @@
 							<div style="display: none;position:fixed;z-index:999;margin-top:150px;margin-left:500px" class="divLoading" >
 				            	<span><i class="fa fa-spinner fa-spin fa-4x" style="height:1em;"></i></span>
 				        	</div>
-							<div style="padding-left:0px;padding-right:0px;padding-top:0px">
+						<!-- 	<div style="padding-left:0px;padding-right:0px;padding-top:0px">
 							<div id="toolbar"></div>
 							<table style="font-weight:normal;width:1500px;" id="table" data-toolbar="#toolbar" data-search="false" data-show-refresh="true"
 					           data-show-toggle="false" data-show-columns="true" data-show-export="true" data-detail-view="false"
@@ -94,7 +95,10 @@
 					           data-pagination="true" data-id-field="id" data-page-list="[5,50, 100, 200, 500, ALL]"
 					           data-show-footer="false" data-side-pagination="server" data-response-handler="responseHandler" '>
 					    	</table>
-							</div>
+							</div> -->
+							
+							<table id="tableOrder" class="table table-striped table-bordered table-hover" style="font-size: 12px;width:2800px;overflow-x:auto;">
+						</table>
 						</div>
 					</div>
 				</div>
@@ -152,9 +156,14 @@
 		<script src="../assets/js/ace/ace.onpage-help.js"></script>
 		<script src="../assets/js/bootstrap3-typeahead.js"></script>
 		<script src="../js/jquery.form.js"></script>
-		<script src="../js/bootstrap-table.js"></script>
+		
+		<script src="../assets/js/dataTables.buttons.js"></script>
+		<script src="../assets/js/buttons.colVis.js"></script>
+		<script src="../assets/js/buttons.html5.js"></script>
+		<script src="../assets/js/buttons.flash.js"></script> 
+		<!-- <script src="../js/bootstrap-table.js"></script> -->
 		<script src="../js/common.js"></script>
-		<script src="../js/bootstrapInit.js"></script>	
+		<!-- <script src="../js/bootstrapInit.js"></script>	 -->
 		<script src="../js/order/orderQuery.js"></script>
 
 <style type="text/css">
@@ -177,10 +186,10 @@
 		color:#393939;
 }
 
-.table > thead > tr > th {
+/* .table > thead > tr > th {
     vertical-align: bottom;
     border-bottom: 1px solid #ddd;
-}
+} */
 .btn-group > .btn > .caret {
 	margin-top: 0px;
 	border-width: 0px;

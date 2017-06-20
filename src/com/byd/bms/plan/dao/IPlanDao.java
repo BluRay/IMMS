@@ -82,4 +82,10 @@ public interface IPlanDao {
 	public void insertFactoryOrder(Map<String, Object> queryMap);
 	public void updateFactoryOrderQty(String factory_order_id);
 	public List<Map<String,String>> getBusTransferHisList(Map<String,Object> queryMap);
+	public List<Map<String,String>> getPlanSerach(Map<String,Object> queryMap);
+	public List<Map<String,String>> getPlanOrderList(Map<String,Object> queryMap);
+	public List<Map<String,String>> getPlanSearchPlanQty(Map<String,Object> queryMap);
+	public int getPlanSearchRealPartsQty(Map<String,Object> queryMap);
+	public int getPlanSearchRealZzjQty(Map<String,Object> queryMap);
+	public int getPlanSearchRealQty(Map<String,Object> queryMap);
 }

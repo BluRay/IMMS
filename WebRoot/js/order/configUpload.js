@@ -62,20 +62,25 @@ function initPage(){
 }
 
 function ajaxQuery(){
-	$("#tableOrder").dataTable({
+	var tb=$("#tableOrder").DataTable({
 		serverSide: true,
 /*		fixedColumns:   {
             leftColumns: 1,
             rightColumns:1
         },*/
+/*		dom: 'Bfrtip',
+	    buttons: [
+	        {extend:'excel',title:'data_export',className:'black',text:'<i class=\"glyphicon glyphicon-search bigger-130 showbus\"></i>'},
+	        {extend:'colvis',text:'选择显示'}
+	    ],*/
         rowsGroup:[0,1,2,3,4],
 		paiging:true,
 		ordering:false,
 		searching: false,
 		bAutoWidth:false,
 		destroy: true,
-		sScrollY: $(window).height()-250,
-		scrollX: "1500px",
+		sScrollY: $(window).height()-270,
+		scrollX: true,
 		/*scrollCollapse: true,*/
 		pageLength: pageSize,
 		pagingType:"full_numbers",
@@ -143,9 +148,10 @@ function ajaxQuery(){
 		            	},
 		            }
 		          ],
-		
-		
 	});
+	/*$("#tableOrder_info").addClass('col-xs-6');
+	$("#tableOrder_paginate").addClass('col-xs-6');
+	$(".dt-buttons").css("margin-top","-50px").find("a").css("border","0px");*/
 }
 
 function showEditPage(row){

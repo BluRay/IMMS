@@ -291,10 +291,13 @@ public class OrderServiceImpl implements IOrderService {
 	public ModelMap getOrderQueryData(Map<String, Object> condMap) {
 		List datalist=new ArrayList();
 		datalist=orderDao.queryOrderQueryList(condMap);
-		int totalCount=orderDao.queryOrderQueryListCount(condMap);
+		int totalCount=orderDao.queryOrderQueryListCount(condMap);		
+		
 		ModelMap model=new ModelMap();
-		model.put("rows", datalist);
-		model.put("total", totalCount);
+		model.put("draw", condMap.get("draw"));
+		model.put("recordsTotal", totalCount);
+		model.put("recordsFiltered", totalCount);
+		model.put("data", datalist);
 		return model;
 	}
 

@@ -55,7 +55,7 @@
 										<div class="widget-main">
 											<h4 class="header blue lighter bigger"><i class="ace-icon fa fa-coffee green"></i>请登录</h4>
 											<div class="space-6"></div>
-											<form id="login" action="login" method="post">
+											<form id="login" action="" method="post" >
 												<fieldset>
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
@@ -79,7 +79,7 @@
 															<span class="lbl">记住我</span>
 														</label>
 
-														<button type="button" class="width-35 pull-right btn btn-sm btn-primary" onclick="javascript:login.submit();" >
+														<button type="button" class="width-35 pull-right btn btn-sm btn-primary" onclick="javascript:return doSubmit();" >
 															<i class="ace-icon fa fa-key"></i>
 															<span class="bigger-110">登录</span>
 														</button>
@@ -332,6 +332,34 @@
 			});
 			 
 			});
+			
+		function doSubmit(){
+				var loginForm=document.getElementById("login");	
+	 			if(IsPC()){
+	 				loginForm.action="login";
+					loginForm.submit();
+				}else{
+					loginForm.action="login_mobile";
+					loginForm.submit();
+				} 
+				
+			}
+			
+			function IsPC() {
+			    var userAgentInfo = navigator.userAgent;
+			    //alert(userAgentInfo);
+			    var Agents = ["Android", "iPhone",
+			                "SymbianOS", "Windows Phone",
+			                "iPad", "iPod"];
+			    var flag = true;
+			    for (var v = 0; v < Agents.length; v++) {
+			        if (userAgentInfo.indexOf(Agents[v]) > 0) {
+			            flag = false;
+			            break;
+			        }
+			    }
+			    return flag;
+			}
 		</script>
 	</body>
 </html>

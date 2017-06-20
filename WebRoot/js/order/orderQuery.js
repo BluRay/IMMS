@@ -5,8 +5,8 @@ $(document).ready(function(){
 	initPage();
 	
 	$("#btnQuery").click(function () {
-		$("#btnQuery").attr("disabled","disabled");
-		eachSeries(scripts, getScript, initTable);
+		/*$("#btnQuery").attr("disabled","disabled");*/
+		/*eachSeries(scripts, getScript, initTable);*/
 		ajaxQuery();
     });
 
@@ -23,9 +23,117 @@ function initPage(){
 }
 
 function ajaxQuery(){
-	$table.bootstrapTable('refresh', {url: 'getOrderDetailList'});
-	$("#btnQuery").removeAttr("disabled");
+	/*$table.bootstrapTable('refresh', {url: 'getOrderDetailList'});
+	$("#btnQuery").removeAttr("disabled");*/
+
+	var tb=$("#tableOrder").DataTable({
+		serverSide: true,
+		fixedColumns:   {
+            leftColumns: 0,
+            rightColumns:2
+        },
+		dom: 'Bfrtip',
+	    buttons: [
+	        {extend:'excel',title:'data_export',className:'black',text:'<i class=\"fa fa-file-excel-o bigger-130\" tooltip=\"导出excel\"></i>'},
+	        {extend:'colvis',text:'<i class=\"fa fa-list bigger-130\" tooltip=\"导出excel\"></i>'}
+	    ],
+        rowsGroup:[0,1,2,3,4],
+		paiging:true,
+		ordering:false,
+		searching: false,
+		bAutoWidth:false,
+		destroy: true,
+		sScrollY: $(window).height()-270,
+		scrollX: true,
+		/*scrollCollapse: true,*/
+		pageLength: pageSize,
+		pagingType:"full_numbers",
+		lengthChange:false,
+		orderMulti:false,
+		language: {
+			emptyTable:"抱歉，未查询到数据！",
+			info:"共计 _TOTAL_ 条，当前第 _PAGE_ 页 共 _PAGES_ 页",
+			infoEmpty:"",
+			paginate: {
+			  first:"首页",
+		      previous: "上一页",
+		      next:"下一页",
+		      last:"尾页",
+		      loadingRecords: "请稍等,加载中...",		     
+			}
+		},
+		ajax:function (data, callback, settings) {
+			
+			var param ={
+				"draw":1,
+				"order_no":$("#search_order_no").val(),
+				"factory":getAllFromOptions("#search_factory","val"),
+				"actYear":$("#search_productive_year").val(),
+				"status":$("#search_status").val()
+			};
+            param.length = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
+            param.start = data.start;//开始的记录序号
+            param.page = (data.start / data.length)+1;//当前页码
+
+            $.ajax({
+                type: "post",
+                url: "getOrderDetailList",
+                cache: false,  //禁用缓存
+                data: param,  //传入组装的参数
+                dataType: "json",
+                success: function (result) {
+                    //console.log(result);
+                	//封装返回数据
+                    var returnData = {};
+                    returnData.draw = data.draw;//这里直接自行返回了draw计数器,应该由后台返回
+                    returnData.recordsTotal = result.recordsTotal;//返回数据全部记录
+                    returnData.recordsFiltered = result.recordsTotal;//后台不实现过滤功能，每次查询均视作全部结果
+                    returnData.data = result.data;//返回的数据列表
+                    //console.log(returnData);
+                    //调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
+                    //此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
+                    callback(returnData);
+                }
+            });
+		
+		},
+		columns: [
+		            {"title":"订单","class":"center","data":"order_desc","defaultContent": ""},
+		            {"title":"订单类型","class":"center","data":"order_type","defaultContent": ""},
+		            {"title":"订单交期","class":"center","data":"delivery_date","defaultContent": ""},
+		            {"title":"生产工厂","class":"center","data": "factory_name","defaultContent": ""},
+		            {"title":"生产<br/>数量","class":"center","data":"production_qty","defaultContent": ""},		            
+		            {"title":"配置","class":"center","data":"order_config_name","defaultContent": ""},		            
+		            {"title":"配置<br/>数量","class":"center","data": "config_qty","defaultContent": ""},
+		            {"title":"客户","class":"center","data":"customer","defaultContent":""},
+		            {"title":"生产<br/>顺序","class":"center","data":"sequence","defaultContent": ""},
+		            
+		            {"title":"自制件<br/>下线","class":"center","data":"zzj_offline_count","defaultContent": ""},
+		            {"title":"部件<br/>上线","class":"center","data":"parts_online_count","defaultContent": ""},
+		            {"title":"部件<br/>下线","class":"center","data":"parts_offline_count","defaultContent": ""},
+		            {"title":"焊装<br/>上线","class":"center","data": "welding_online_count","defaultContent": ""},
+		            {"title":"焊装<br/>下线","class":"center","data":"welding_offline_count","defaultContent": ""},		            
+		            {"title":"涂装<br/>上线","class":"center","data":"painting_online_count","defaultContent": ""},		            
+		            {"title":"涂装<br/>下线","class":"center","data": "painting_offline_count","defaultContent": ""},
+		            {"title":"底盘<br/>上线","class":"center","data":"chassis_online_count","defaultContent":""},
+		            {"title":"底盘<br/>下线","class":"center","data":"chassis_offline_count","defaultContent": ""},
+		            
+		            {"title":"总装<br/>上线","class":"center","data": "assembly_online_count","defaultContent": ""},
+		            {"title":"总装<br/>下线","class":"center","data":"assembly_offline_count","defaultContent": ""},		            
+		            {"title":"入库","class":"center","data":"warehousing_count","defaultContent": ""},		            
+		            {"title":"发车","class":"center","data": "dispatch_count","defaultContent": ""},
+		            {"title":"车辆<br/>详情","class":"center","data":"","defaultContent":"","render":function(data,type,row){
+		            	return "<i class=\"ace-icon fa fa-search bigger-130 editorder\" onclick = 'ajaxShowBusNumber(" + row.id+ ","+row.factory_id+","+row.order_config_id+");' style='color:blue;cursor: pointer;'></i>";
+		            }},
+		            {"title":"评审<br/>结果","class":"center","data":"","defaultContent": ""},
+		          ],
+	});
+	$("#tableOrder_info").addClass('col-xs-6');
+	$("#tableOrder_paginate").addClass('col-xs-6');
+	$(".dt-buttons").css("margin-top","-50px").find("a").css("border","0px");
 }
+
+
 
 //----------START bootstrap initTable ----------
 function initTable() {
@@ -210,9 +318,9 @@ function initTable() {
     });
     
     
-    $(window).resize(function () {
+/*    $(window).resize(function () {
         $table.bootstrapTable('resetView', {height:getHeight()});
-    });
+    });*/
     
     
     $table.on('load-success.bs.table',function(){
@@ -221,9 +329,9 @@ function initTable() {
     $table.on('page-change.bs.table',function(){
     	//$("#btnQuery").attr("disabled","disabled");
     });
-    $(window).resize(function () {
+/*    $(window).resize(function () {
         $table.bootstrapTable('resetView', {height: getHeight()});
-    });
+    });*/
 }
 //----------END bootstrap initTable ----------
 function ajaxShowBusNumber(order_id,factory_id,order_config_id){

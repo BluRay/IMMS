@@ -153,4 +153,41 @@ public class LoginController extends BaseController{
 		mv.setViewName("blank");
         return mv;  
     } 
+	
+	@RequestMapping("/login_mobile")
+    public ModelAndView login_mobile(BmsBaseUser user,Model model) throws NoSuchAlgorithmException, UnsupportedEncodingException, IOException{ 
+		String password=StringUtils.isEmpty(user.getPassword())?"":user.getPassword();
+		user=loginService.getUser(user.getUsername());
+		String last_url=request.getParameter("last_url");
+		
+		if(MD5Util.validPassword(password, user.getPassword())){
+			session.setAttribute("user_name", user.getUsername());
+			session.setAttribute("display_name", user.getDisplay_name());
+			session.setAttribute("user_id", user.getId());
+			session.setAttribute("staff_number", user.getStaff_number());
+			session.setAttribute("factory", user.getFactory());
+			session.setAttribute("bmsuser", user);
+			model.addAttribute("user", user);
+			
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String login_time = df.format(new Date());
+			user.setLast_login_time(login_time);			
+			loginService.saveUserLoginInfo(user);
+			
+			if(last_url!=""&&last_url!=null){
+				response.sendRedirect(last_url);
+				return null;
+			}else
+				mv.setViewName("home_mobile");
+		}else{
+			mv.setViewName("error");
+		}
+        return mv;  
+    }
+	
+	@RequestMapping("/index_mobile")  
+    public ModelAndView index_mobile(){ 
+		mv.setViewName("home_mobile");
+        return mv;  
+    } 
 }
