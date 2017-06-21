@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta charset="utf-8" />
+<title>BMS</title>
+<meta name="description" content="Common Buttons &amp; Icons" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<link rel="stylesheet" href="../css/bootstrap.3.2.css">
+<link rel="stylesheet"
+	href="../assets/css/fixedColumns.bootstrap.min.css" />
+<link rel="stylesheet" href="../css/bootstrap-table.css">
+<link rel="stylesheet" href="../css/bootstrap-editable.css">
+<link rel="stylesheet" href="../assets/css/jquery.gritter.css" />
+<link rel="stylesheet" href="../css/common.css">
+<style type="text/css" media="screen">
+/* .myselect {
+	border: 0px none;
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	font-size: 100%;
+	margin-bottom: 3px;
+	color: #555;
+	background-color: #f5f5f5;
+	width: 56px;
+	padding: 0px;
+	height: 27px;
+	cursor: pointer;
+	margin-left: -8px;
+}
+
+.header {
+	padding-left: 12px;
+	margin-top: 10px;
+	margin-bottom: 0px;
+	border-bottom: none;
+} */
+label {
+    font-weight: 400;
+    font-size: 13px;
+    text-align:right;
+}
+</style>
+<jsp:include page="../common.jsp"></jsp:include>
+</head>
+<body class="no-skin" style="font-family: 'Microsoft YaHei';">
+	<!-- 头 -->
+	<%-- <jsp:include page="../top.jsp" flush="true" /> --%>
+	<!-- 身 -->
+	<div class="main-container" id="main-container">
+		<!-- 左边菜单 -->
+		<%-- <jsp:include page="../left.jsp" flush="true" /> --%>
+		<!-- 主体 -->
+		<div class="main-content">
+			<!-- 路径和搜索框 -->
+			<div class="main-content-inner">
+				<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+					<ul class="breadcrumb">
+						<li><i class="ace-icon fa fa-home home-icon"></i><a
+							href="<%=request.getContextPath()%>/index_mobile">BMS</a></li>
+						<li><a href="#">车辆扫描</a></li>
+					</ul>
+					<!-- /.breadcrumb -->
+				</div>
+
+				<div class="page-content">
+					<div class="form-horizontal">
+						<div class="form-group">
+							<label class="col-xs-4 control-label no-padding-right">车号：</label>
+							<div class="col-xs-8">
+								<input type="text" class="input-medium" style="width:100%;height:30px;"/>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-xs-4 control-label no-padding-right">工厂：</label>
+							<div class="col-xs-8">
+								<select class="input-medium" style="width:100%">
+									<option value=''>请选择</option>
+								</select>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-xs-4 control-label no-padding-right">车间：</label>
+							<div class="col-xs-8">
+								<select class="input-medium" style="width:100%">
+									<option value=''>请选择</option>
+								</select>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-xs-4 control-label no-padding-right">线别：</label>
+							<div class="col-xs-8">
+								<select class="input-medium" style="width:100%">
+									<option value=''>请选择</option>
+								</select>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-xs-4 control-label no-padding-right" style="text-align:right">工序：</label>
+							<div class="col-xs-8">
+								<select class="input-medium" style="width:40%">
+									<option value=''>请选择</option>
+									<option value='HA2'>HA2</option>
+								</select>
+								骨架合装
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-xs-4 control-label no-padding-right">关键零部件：</label>
+							<div class="col-xs-8">
+								<select class="input-medium" style="width:100%">
+									<option value=''>请选择</option>
+								</select>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-xs-4 control-label no-padding-right">零部件编号：</label>
+							<div class="col-xs-8">
+								<input type="text" class="input-medium" style="width:100%;height:30px;"/>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-xs-4 control-label no-padding-right">SAP料号：</label>
+							<div class="col-xs-8">
+								<input type="text" class="input-medium" style="width:100%;height:30px;"/>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-xs-4 control-label no-padding-right">供应商：</label>
+							<div class="col-xs-8">
+								<input type="text" class="input-medium" style="width:100%;height:30px;"/>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-xs-4 control-label no-padding-right">批次：</label>
+							<div class="col-xs-8">
+								<input type="text" class="input-medium" style="width:100%;height:30px;" />
+							</div>
+						</div>
+						
+					</div>
+				</div>
+
+			</div>
+			<!-- /.main-container -->
+		</div>
+		
+		<script src="../assets/js/jquery.dataTables.min.js"></script>
+		<script src="../assets/js/jquery.dataTables.bootstrap.js"></script>
+		<script src="../assets/js/jquery.gritter.min.js"></script>
+		<script src="../js/common.js"></script>
+		<script src="../js/production/productionExecution.js"></script>
+</div>
+</body>
+</html>

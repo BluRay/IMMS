@@ -135,8 +135,8 @@
 								<table id="tablePlanDetail" style="font-size:12px;"  class="table table-bordered table-striped">
 									<thead>
 								         <tr id='0'>
-								         	<th style="width:80px;text-align:center;">生产订单</th>
-								        	<th style="width:105px;text-align:center;">生产车间</th>
+								         	<th style="width:80px;text-align:center;">订单</th>
+								        	<th style="width:105px;text-align:center;">车间</th>
 								            <th id="D1" style="text-align:center; width:55px;"> </th>
 								            <th id="D2" style="text-align:center; width:55px;"> </th>
 								            <th id="D3" style="text-align:center; width:55px;"> </th>
@@ -169,8 +169,8 @@
 								            <th id="D30" style="text-align:center; width:55px;"> </th>
 								            <th id="D31" style="text-align:center; width:55px;"> </th>
 								            <th id="Total" style="width:65px;text-align:center;">合计</th>
-								            <th id="TotalMonth" style="width:70px;text-align:center;">本月合计</th>
-								            <th id="TotalOrder" style="width:70px;text-align:center;">订单合计</th>
+								            <th id="TotalMonth" style="width:70px;text-align:center;padding-left:1px;padding-right:0px">本月合计</th>
+								            <th id="TotalOrder" style="width:70px;text-align:center;padding-left:1px;padding-right:0px">订单合计</th>
 								        </tr>
 								    </thead>
 								<tbody>

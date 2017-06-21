@@ -88,4 +88,8 @@ public interface IPlanDao {
 	public int getPlanSearchRealPartsQty(Map<String,Object> queryMap);
 	public int getPlanSearchRealZzjQty(Map<String,Object> queryMap);
 	public int getPlanSearchRealQty(Map<String,Object> queryMap);
+	public int getPlanSearchTotalMonthPlanQty(Map<String,Object> queryMap);
+	public int getPlanSearchTotalRealPartsQty(Map<String,Object> queryMap);
+	public int getPlanSearchTotalRealZzjQty(Map<String,Object> queryMap);
+	public int getPlanSearchTotalRealQty(Map<String,Object> queryMap);
 }

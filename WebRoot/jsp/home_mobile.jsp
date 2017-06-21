@@ -48,7 +48,7 @@
 							<div class="row" style="margin-top:20px;">
 								<div class="col-xs-12">
 									<div class="col-xs-6">
-										<img id="scan" class="img " src="images/scan.png" style="width:100%;height:100%;">							
+										<img id="scan" class="img " src="images/scan.png" style="width:100%;height:100%;" onclick="javascript: return pageForward('execution');">							
 									</div>
 									<div class="col-xs-6">
 										<img id="scan" class="img " src="images/prdRcd.png" style="width:100%;height:100%;">
@@ -103,4 +103,14 @@
 		</div><!-- /.main-container -->
 	</div>
 	</body>
+	<script type="text/javascript">
+		function pageForward(flag){
+			var url="";
+			if(flag=='execution'){
+				url="/IMMS/production/execution_mobile"
+			}
+			
+			window.location=url
+		}
+	</script>
 </html>

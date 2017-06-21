@@ -124,7 +124,7 @@
 						<label class="col-sm-2 control-label no-padding-right" for="new_tech_date">*&nbsp;技改单日期：</label>
 						<div class="col-sm-3">
 							<div class="input-group">
-							  <input class="form-control date-picker" id="new_tech_date" name="new_tech_date" type="text" data-date-format="yyyy-mm-dd">
+							  <input class="form-control date-picker" id="new_tech_date" name="new_tech_date" type="text" data-date-format="yyyy-mm-dd"  onClick="WdatePicker({el:'new_tech_date',dateFmt:'yyyy-MM-dd'});">
 								<span class="input-group-addon">
 									<i class="fa fa-calendar bigger-110"></i>
 								</span>
@@ -247,7 +247,7 @@
 						<label class="col-sm-2 control-label no-padding-right" for="edit_tech_date">*&nbsp;技改单日期：</label>
 						<div class="col-sm-3">
 							<div class="input-group">
-							  <input class="form-control date-picker" id="edit_tech_date" name="edit_tech_date" type="text" data-date-format="yyyy-mm-dd">
+							  <input class="form-control date-picker" id="edit_tech_date" name="edit_tech_date" type="text" data-date-format="yyyy-mm-dd" onClick="WdatePicker({el:'edit_tech_date',dateFmt:'yyyy-MM-dd'});">
 								<span class="input-group-addon">
 									<i class="fa fa-calendar bigger-110"></i>
 								</span>

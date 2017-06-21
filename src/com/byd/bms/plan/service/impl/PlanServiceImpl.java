@@ -718,16 +718,16 @@ public class PlanServiceImpl implements IPlanService {
 		return planDao.getPlanSerach(queryMap);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, Object> showPlanSearchDetail(Map<String, Object> queryMap) {
+		Map<String, Object> result=new HashMap<String,Object>();
 		String date_array = queryMap.get("date_array").toString();
 		String[] dateArray = date_array.split(",");
 		String month = dateArray[0].substring(0, 7);
 		String startDate = dateArray[0].replaceAll("-", "");
 		String endDate = dateArray[dateArray.length-1].replaceAll("-", "");
 		logger.info("---->startDate = " + startDate + "|endDate = " + endDate);
-		List datalist=new ArrayList();		
+		List<Map<String, String>> datalist=new ArrayList<Map<String, String>>();		
 		List<String> order_list = new ArrayList<String>();
 		
 		if(queryMap.get("order_no").toString().equals("")){
@@ -744,8 +744,139 @@ public class PlanServiceImpl implements IPlanService {
 			order_list.add(queryMap.get("order_no").toString());
 		}
 		
-		
-		return null;
+		for(int n=0;n<order_list.size();n++){
+			List<String[]> detailList = this.getPlanDetailByOrder(order_list.get(n),date_array,queryMap);
+			for(int i = 0; i < detailList.size(); i++) {	
+				Map<String,String> resultMap=new HashMap<String,String>();
+				int total = 0;int total_month = 0;int total_order = 0;
+				resultMap.put("factory_id", detailList.get(i)[0]);
+				resultMap.put("order_no", order_list.get(n));
+				resultMap.put("workshop", detailList.get(i)[2]);
+				
+				resultMap.put("D1", detailList.get(i)[3]);  total+=Integer.parseInt((detailList.get(i)[3]==null)?"0":detailList.get(i)[3]);
+				resultMap.put("D2", detailList.get(i)[4]);  total+=Integer.parseInt((detailList.get(i)[4]==null)?"0":detailList.get(i)[4]);
+				resultMap.put("D3", detailList.get(i)[5]);  total+=Integer.parseInt((detailList.get(i)[5]==null)?"0":detailList.get(i)[5]);
+				resultMap.put("D4", detailList.get(i)[6]);  total+=Integer.parseInt((detailList.get(i)[6]==null)?"0":detailList.get(i)[6]);
+				resultMap.put("D5", detailList.get(i)[7]);  total+=Integer.parseInt((detailList.get(i)[7]==null)?"0":detailList.get(i)[7]);
+				resultMap.put("D6", detailList.get(i)[8]);  total+=Integer.parseInt((detailList.get(i)[8]==null)?"0":detailList.get(i)[8]);
+				resultMap.put("D7", detailList.get(i)[9]);  total+=Integer.parseInt((detailList.get(i)[9]==null)?"0":detailList.get(i)[9]);
+				resultMap.put("D8", detailList.get(i)[10]); total+=Integer.parseInt((detailList.get(i)[10]==null)?"0":detailList.get(i)[10]);
+				resultMap.put("D9", detailList.get(i)[11]); total+=Integer.parseInt((detailList.get(i)[11]==null)?"0":detailList.get(i)[11]);
+				resultMap.put("D10", detailList.get(i)[12]);total+=Integer.parseInt((detailList.get(i)[12]==null)?"0":detailList.get(i)[12]);
+
+				resultMap.put("D11", detailList.get(i)[13]);total+=Integer.parseInt((detailList.get(i)[13]==null)?"0":detailList.get(i)[13]);
+				resultMap.put("D12", detailList.get(i)[14]);total+=Integer.parseInt((detailList.get(i)[14]==null)?"0":detailList.get(i)[14]);
+				resultMap.put("D13", detailList.get(i)[15]);total+=Integer.parseInt((detailList.get(i)[15]==null)?"0":detailList.get(i)[15]);
+				resultMap.put("D14", detailList.get(i)[16]);total+=Integer.parseInt((detailList.get(i)[16]==null)?"0":detailList.get(i)[16]);
+				resultMap.put("D15", detailList.get(i)[17]);total+=Integer.parseInt((detailList.get(i)[17]==null)?"0":detailList.get(i)[17]);
+				resultMap.put("D16", detailList.get(i)[18]);total+=Integer.parseInt((detailList.get(i)[18]==null)?"0":detailList.get(i)[18]);
+				resultMap.put("D17", detailList.get(i)[19]);total+=Integer.parseInt((detailList.get(i)[19]==null)?"0":detailList.get(i)[19]);
+				resultMap.put("D18", detailList.get(i)[20]);total+=Integer.parseInt((detailList.get(i)[20]==null)?"0":detailList.get(i)[20]);
+				resultMap.put("D19", detailList.get(i)[21]);total+=Integer.parseInt((detailList.get(i)[21]==null)?"0":detailList.get(i)[21]);
+				resultMap.put("D20", detailList.get(i)[22]);total+=Integer.parseInt((detailList.get(i)[22]==null)?"0":detailList.get(i)[22]);
+
+				resultMap.put("D21", detailList.get(i)[23]);total+=Integer.parseInt((detailList.get(i)[23]==null)?"0":detailList.get(i)[23]);
+				resultMap.put("D22", detailList.get(i)[24]);total+=Integer.parseInt((detailList.get(i)[24]==null)?"0":detailList.get(i)[24]);
+				resultMap.put("D23", detailList.get(i)[25]);total+=Integer.parseInt((detailList.get(i)[25]==null)?"0":detailList.get(i)[25]);
+				resultMap.put("D24", detailList.get(i)[26]);total+=Integer.parseInt((detailList.get(i)[26]==null)?"0":detailList.get(i)[26]);
+				resultMap.put("D25", detailList.get(i)[27]);total+=Integer.parseInt((detailList.get(i)[27]==null)?"0":detailList.get(i)[27]);
+				resultMap.put("D26", detailList.get(i)[28]);total+=Integer.parseInt((detailList.get(i)[28]==null)?"0":detailList.get(i)[28]);
+				resultMap.put("D27", detailList.get(i)[29]);total+=Integer.parseInt((detailList.get(i)[29]==null)?"0":detailList.get(i)[29]);
+				resultMap.put("D28", detailList.get(i)[30]);total+=Integer.parseInt((detailList.get(i)[30]==null)?"0":detailList.get(i)[30]);
+				resultMap.put("D29", detailList.get(i)[31]);total+=Integer.parseInt((detailList.get(i)[31]==null)?"0":detailList.get(i)[31]);
+				resultMap.put("D30", detailList.get(i)[32]);total+=Integer.parseInt((detailList.get(i)[32]==null)?"0":detailList.get(i)[32]);
+				resultMap.put("D31", detailList.get(i)[33]);total+=Integer.parseInt((detailList.get(i)[33]==null)?"0":detailList.get(i)[33]);
+				resultMap.put("total", String.valueOf(total));
+				
+				//计算本月合计（跨月取第一个月的数据）
+				//计划
+				String workshop = detailList.get(i)[2];
+				if(workshop.substring(workshop.length()-2, workshop.length()).equals("计划")){
+					Map<String,Object> conditionMap2=new HashMap<String,Object>();
+					conditionMap2.put("factory_id", detailList.get(i)[0]);
+					conditionMap2.put("order_no", order_list.get(n));
+					conditionMap2.put("month", month);
+					conditionMap2.put("plan_code_id", detailList.get(i)[34]);
+					total_month = planDao.getPlanSearchTotalMonthPlanQty(conditionMap2);
+					Map<String,Object> conditionMap3=new HashMap<String,Object>();
+					conditionMap3.put("factory_id", detailList.get(i)[0]);
+					conditionMap3.put("order_no", order_list.get(n));
+					conditionMap3.put("month", "");
+					conditionMap3.put("plan_code_id", detailList.get(i)[34]);
+					logger.info("-->factory_id = " + detailList.get(i)[0] + "|order_no = " + detailList.get(i)[1] + "|plan_code_id = " + detailList.get(i)[34]);
+					total_order = planDao.getPlanSearchTotalMonthPlanQty(conditionMap3);
+				}else{
+					//完成数
+					Map<String,Object> conditionMap2=new HashMap<String,Object>();
+					conditionMap2.put("factory_id", detailList.get(i)[0]);
+					conditionMap2.put("order_no", order_list.get(n));
+					conditionMap2.put("month", month);
+					
+					Map<String,Object> conditionMap3=new HashMap<String,Object>();
+					conditionMap3.put("factory_id", detailList.get(i)[0]);
+					conditionMap3.put("order_no", order_list.get(n));
+					conditionMap3.put("month", "");
+					
+					int plan_code_id = Integer.valueOf(detailList.get(i)[34]);
+					switch(plan_code_id){
+					case 4:
+						conditionMap2.put("workshop", "welding_online_date");conditionMap3.put("workshop", "welding_online_date");break;
+					case 5:
+						conditionMap2.put("workshop", "welding_offline_date");conditionMap3.put("workshop", "welding_offline_date");break;
+					//case 1:
+					//	conditionMap2.put("workshop", "fiberglass_offline_date");conditionMap3.put("workshop", "fiberglass_offline_date");break;
+					case 6:
+						conditionMap2.put("workshop", "painting_online_date");conditionMap3.put("workshop", "painting_online_date");break;
+					case 7:
+						conditionMap2.put("workshop", "painting_offline_date");conditionMap3.put("workshop", "painting_offline_date");break;
+					case 8:
+						conditionMap2.put("workshop", "chassis_online_date");conditionMap3.put("workshop", "chassis_online_date");break;
+					case 9:
+						conditionMap2.put("workshop", "chassis_offline_date");conditionMap3.put("workshop", "chassis_offline_date");break;
+					case 10:
+						conditionMap2.put("workshop", "assembly_online_date");conditionMap3.put("workshop", "assembly_online_date");break;
+					case 11:
+						conditionMap2.put("workshop", "assembly_offline_date");conditionMap3.put("workshop", "assembly_offline_date");break;
+					}
+					if(plan_code_id==2||plan_code_id==3){
+						if(plan_code_id==2){
+							conditionMap2.put("parts", "online_real_qty");
+							conditionMap2.put("month", month);							
+							conditionMap3.put("parts", "online_real_qty");
+							conditionMap3.put("month", "");
+						}else{
+							conditionMap2.put("parts", "offline_real_qty");
+							conditionMap2.put("month", month);					
+							conditionMap3.put("parts", "offline_real_qty");
+							conditionMap3.put("month", "");
+						}
+						total_month = planDao.getPlanSearchTotalRealPartsQty(conditionMap2);
+						total_order = planDao.getPlanSearchTotalRealPartsQty(conditionMap3);
+					}else if(plan_code_id==1){	//自制件下线
+						logger.info("----> month = " + month + detailList.get(i)[0] + order_list.get(n));
+						Map<String,Object> conditionMap4=new HashMap<String,Object>();
+						Map<String,Object> conditionMap5=new HashMap<String,Object>();
+						conditionMap4.put("factory_id", detailList.get(i)[0]);
+						conditionMap4.put("order_no", order_list.get(n));
+						conditionMap4.put("month", "");
+						conditionMap5.put("factory_id", detailList.get(i)[0]);
+						conditionMap5.put("order_no", order_list.get(n));
+						conditionMap5.put("month", month);
+						total_month = planDao.getPlanSearchTotalRealZzjQty(conditionMap4);
+						total_order = planDao.getPlanSearchTotalRealZzjQty(conditionMap5);
+					}else{
+						total_month = planDao.getPlanSearchTotalRealQty(conditionMap2);
+						total_order = planDao.getPlanSearchTotalRealQty(conditionMap3);
+					}
+					
+				}
+				resultMap.put("total_month", String.valueOf(total_month));
+				resultMap.put("total_order", String.valueOf(total_order));
+				datalist.add(resultMap);
+			}
+		}
+		result.put("data", datalist);
+		return result;
 	}
 	
 	public List<String[]> getPlanDetailByOrder(String order_no,String date_array,Map<String, Object> queryMap){

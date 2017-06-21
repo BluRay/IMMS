@@ -1074,5 +1074,41 @@
 		AND b.order_id = (SELECT id FROM BMS_OR_ORDER WHERE order_no = #{order_no})
 		AND date_add(${workshop}, interval +410 MINUTE)  LIKE CONCAT('%',#{plan_date},'%')
 	</select>
+	<select id="getPlanSearchTotalMonthPlanQty" parameterType="Map" resultType="int">
+		SELECT IFNULL(SUM(plan_qty),'0') AS total_month_plan_qty FROM BMS_PLAN_PRODUCTION_PLAN p WHERE 
+		p.factory_id = #{factory_id} AND 
+		p.order_id = (SELECT id FROM BMS_OR_ORDER WHERE order_no = #{order_no}) 
+		AND p.plan_code_value = #{plan_code_id} 
+		<if test="month !=''">
+			AND p.plan_date LIKE CONCAT('%',#{month},'%')
+		</if>
+	</select>
+	<select id="getPlanSearchTotalRealPartsQty" parameterType="Map" resultType="int">
+		SELECT IFNULL(SUM(${parts}),'0') AS real_qty FROM BMS_PD_PARTS_PLAN_FINISH WHERE 
+		factory_id = #{factory_id} AND order_id = (SELECT id FROM BMS_OR_ORDER WHERE order_no = #{order_no}) 
+		<if test="month !=''">
+			AND date LIKE CONCAT('%',#{month},'%') 
+		</if>
+		  AND  parts_id = '194' 
+	</select>
+	<select id="getPlanSearchTotalRealZzjQty" parameterType="Map" resultType="int">
+		SELECT IFNULL(SUM(quantity),'0') AS real_qty FROM BMS_PD_WORKSHOP_SUPPLY 
+		WHERE order_id = (SELECT id FROM BMS_OR_ORDER WHERE order_no = #{order_no}) AND factory_id = #{factory_id}
+		AND supply_workshop = '自制件' 
+		AND receive_workshop = '部件'
+		<if test="month !=''">
+			AND supply_date LIKE CONCAT('%',#{month},'%') 
+		</if>
+	</select>
+	<select id="getPlanSearchTotalRealQty" parameterType="Map" resultType="int">
+		SELECT IFNULL(COUNT(b.id),'0') AS total_month_real_qty FROM BMS_PLAN_BUS b WHERE b.factory_id = #{factory_id}
+		AND b.order_id = (SELECT id FROM BMS_OR_ORDER WHERE order_no = #{order_no}) 
+		<if test="month !=''">
+			AND ${workshop} LIKE CONCAT('%',#{month},'%')
+		</if>
+		<if test="month ==''">
+			AND ${workshop} IS NOT NULL
+		</if>
+	</select>
 	
 </mapper>

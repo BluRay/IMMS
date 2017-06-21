@@ -5,7 +5,7 @@ $(document).ready(function () {
 		ajaxQuery();
 	},1000*60*5);
 	
-	$("#search_factory").live("change",function(){
+	$("#search_factory").bind("change",function(){
 		ajaxQuery();
 	});
 	
