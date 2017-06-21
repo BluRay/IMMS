@@ -13,7 +13,7 @@ $(document).ready(function () {
 		$("#start_date").val(formatDate(startDate));
 		$("#end_date").val(formatDate(now));
 		//$("#home").css("height",div_height);
-		$("#messages").css("height",div_height);
+		//$("#messages").css("height",div_height);
 	}
 	
 	$("li").click(function(e){
@@ -355,6 +355,7 @@ function getDetail(){
     		});
     		//隐藏空白列
     		//先恢复显示
+    		
     		for(var i=0;i<36;i++){
     			$('#tablePlanDetail tr').find('th:eq('+i+')').show();
     			$('#tablePlanDetail tr').find('td:eq('+i+')').show();
@@ -363,14 +364,20 @@ function getDetail(){
     			$('#tablePlanDetail tr').find('th:eq('+(dateCount+3+i)+')').hide();
     			$('#tablePlanDetail tr').find('td:eq('+(dateCount+3+i)+')').hide();
     		}
-    		$("#tablePlanDetail tbody tr").css({"width":"100%","display":"table","table-layout":"fixed"});
+    		//$("#tablePlanDetail tbody tr").css({"width":"100%","display":"table","table-layout":"fixed"});
     		$("#btnQuery").removeAttr("disabled");
 	    }
 	});
 	
 }
 
-
+function rate(realQty,planQty){
+	if(realQty == null || planQty == null || realQty ==0 || planQty ==0){
+		return "0%";
+	}else{
+		return Math.round(realQty / planQty * 10000) / 100.00 + "%"
+	}
+}
 function StringToDate(DateStr){     
     var converted = Date.parse(DateStr);  
     var myDate = new Date(converted);  

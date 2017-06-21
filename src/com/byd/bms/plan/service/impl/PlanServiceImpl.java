@@ -724,8 +724,8 @@ public class PlanServiceImpl implements IPlanService {
 		String date_array = queryMap.get("date_array").toString();
 		String[] dateArray = date_array.split(",");
 		String month = dateArray[0].substring(0, 7);
-		String startDate = dateArray[0].replaceAll("-", "");
-		String endDate = dateArray[dateArray.length-1].replaceAll("-", "");
+		String startDate = dateArray[0];
+		String endDate = dateArray[dateArray.length-1];
 		logger.info("---->startDate = " + startDate + "|endDate = " + endDate);
 		List<Map<String, String>> datalist=new ArrayList<Map<String, String>>();		
 		List<String> order_list = new ArrayList<String>();
@@ -837,6 +837,8 @@ public class PlanServiceImpl implements IPlanService {
 						conditionMap2.put("workshop", "assembly_online_date");conditionMap3.put("workshop", "assembly_online_date");break;
 					case 11:
 						conditionMap2.put("workshop", "assembly_offline_date");conditionMap3.put("workshop", "assembly_offline_date");break;
+					case 12:
+						conditionMap2.put("workshop", "warehousing_date");conditionMap3.put("workshop", "warehousing_date");break;
 					}
 					if(plan_code_id==2||plan_code_id==3){
 						if(plan_code_id==2){

@@ -9889,6 +9889,7 @@ input[type=checkbox].ace.ace-switch.ace-switch-4:checked+.lbl::before,
 .table>thead>tr {
 	color: #707070;
 	font-weight: 400;
+	height:35px;
 	background: #F2F2F2 repeat-x;
 	background-image: -webkit-linear-gradient(top, #f8f8f8 0, #ececec 100%);
 	background-image: -o-linear-gradient(top, #f8f8f8 0, #ececec 100%);

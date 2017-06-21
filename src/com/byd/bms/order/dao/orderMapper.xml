@@ -403,17 +403,17 @@
 		(SELECT ifnull(SUM(p.quantity),0) FROM BMS_PD_WORKSHOP_SUPPLY p WHERE p.order_id = o.id AND p.factory_id = fo.factory_id AND supply_workshop ='自制件' AND receive_workshop ='部件') as zzj_offline_count,
 		(SELECT ifnull(SUM(p.online_real_qty),0) FROM BMS_PD_PARTS_PLAN_FINISH p WHERE p.order_id = o.id AND p.factory_id = fo.factory_id AND p.parts_id=194) as parts_online_count,
 		(SELECT ifnull(SUM(p.offline_real_qty),0) FROM BMS_PD_PARTS_PLAN_FINISH p WHERE p.order_id = o.id AND p.factory_id = fo.factory_id AND p.parts_id=194) as parts_offline_count,
-		(SELECT COUNT(b.id) FROM BMS_PLAN_BUS b WHERE b.welding_online_date is NOT NULL AND b.order_id = o.id AND b.factory_id = fo.factory_id) as welding_online_count,
-		(SELECT COUNT(b.id) FROM BMS_PLAN_BUS b WHERE b.welding_offline_date is NOT NULL AND b.order_id = o.id AND b.factory_id = fo.factory_id) as welding_offline_count,
-		(SELECT COUNT(b.id) FROM BMS_PLAN_BUS b WHERE b.fiberglass_offline_date is NOT NULL AND b.order_id = o.id AND b.factory_id = fo.factory_id) as fiberglass_offline_count,
-		(SELECT COUNT(b.id) FROM BMS_PLAN_BUS b WHERE b.painting_online_date is NOT NULL AND b.order_id = o.id AND b.factory_id = fo.factory_id) as painting_online_count,
-		(SELECT COUNT(b.id) FROM BMS_PLAN_BUS b WHERE b.painting_offline_date is NOT NULL AND b.order_id = o.id AND b.factory_id = fo.factory_id) as painting_offline_count,
-		(SELECT COUNT(b.id) FROM BMS_PLAN_BUS b WHERE b.chassis_online_date is NOT NULL AND b.order_id = o.id AND b.factory_id = fo.factory_id) as chassis_online_count,
-		(SELECT COUNT(b.id) FROM BMS_PLAN_BUS b WHERE b.chassis_offline_date is NOT NULL AND b.order_id = o.id AND b.factory_id = fo.factory_id) as chassis_offline_count,
-		(SELECT COUNT(b.id) FROM BMS_PLAN_BUS b WHERE b.assembly_online_date is NOT NULL AND b.order_id = o.id AND b.factory_id = fo.factory_id) as assembly_online_count,
-		(SELECT COUNT(b.id) FROM BMS_PLAN_BUS b WHERE b.assembly_offline_date is NOT NULL AND b.order_id = o.id AND b.factory_id = fo.factory_id) as assembly_offline_count,
-		(SELECT COUNT(b.id) FROM BMS_PLAN_BUS b WHERE b.warehousing_date is NOT NULL AND b.order_id = o.id AND b.factory_id = fo.factory_id) as warehousing_count,
-		(SELECT COUNT(b.id) FROM BMS_PLAN_BUS b WHERE b.dispatch_date is NOT NULL AND b.order_id = o.id AND b.factory_id = fo.factory_id) as dispatch_count
+		(SELECT COUNT(b.id) FROM BMS_PLAN_BUS b WHERE b.welding_online_date >0 AND b.order_id = o.id AND b.factory_id = fo.factory_id) as welding_online_count,
+		(SELECT COUNT(b.id) FROM BMS_PLAN_BUS b WHERE b.welding_offline_date  >0 AND b.order_id = o.id AND b.factory_id = fo.factory_id) as welding_offline_count,
+		(SELECT COUNT(b.id) FROM BMS_PLAN_BUS b WHERE b.fiberglass_offline_date >0 AND b.order_id = o.id AND b.factory_id = fo.factory_id) as fiberglass_offline_count,
+		(SELECT COUNT(b.id) FROM BMS_PLAN_BUS b WHERE b.painting_online_date >0 AND b.order_id = o.id AND b.factory_id = fo.factory_id) as painting_online_count,
+		(SELECT COUNT(b.id) FROM BMS_PLAN_BUS b WHERE b.painting_offline_date >0 AND b.order_id = o.id AND b.factory_id = fo.factory_id) as painting_offline_count,
+		(SELECT COUNT(b.id) FROM BMS_PLAN_BUS b WHERE b.chassis_online_date >0 AND b.order_id = o.id AND b.factory_id = fo.factory_id) as chassis_online_count,
+		(SELECT COUNT(b.id) FROM BMS_PLAN_BUS b WHERE b.chassis_offline_date >0 AND b.order_id = o.id AND b.factory_id = fo.factory_id) as chassis_offline_count,
+		(SELECT COUNT(b.id) FROM BMS_PLAN_BUS b WHERE b.assembly_online_date >0 AND b.order_id = o.id AND b.factory_id = fo.factory_id) as assembly_online_count,
+		(SELECT COUNT(b.id) FROM BMS_PLAN_BUS b WHERE b.assembly_offline_date >0 AND b.order_id = o.id AND b.factory_id = fo.factory_id) as assembly_offline_count,
+		(SELECT COUNT(b.id) FROM BMS_PLAN_BUS b WHERE b.warehousing_date>0 AND b.order_id = o.id AND b.factory_id = fo.factory_id) as warehousing_count,
+		(SELECT COUNT(b.id) FROM BMS_PLAN_BUS b WHERE b.dispatch_date>0 AND b.order_id = o.id AND b.factory_id = fo.factory_id) as dispatch_count
 		from BMS_OR_ORDER o
 		left join BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id
 		left join BMS_OR_FACTORY_ORDER fo on fo.order_id=o.id

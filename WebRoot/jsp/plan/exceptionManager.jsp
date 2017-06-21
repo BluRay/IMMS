@@ -148,7 +148,7 @@
 		position: absolute;
 		margin-top: 102px;
 		right: 20px;
-		top: -45px;
+		top: -46px;
 	}
 	.btn-default {
 		color: #333;

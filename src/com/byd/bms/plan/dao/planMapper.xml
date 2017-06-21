@@ -1042,7 +1042,7 @@
 	</select>
 	<select id="getPlanSearchPlanQty" parameterType="Map" resultType="Map">
 		SELECT k.key_name,p.order_id,k.id AS plan_code_id,IFNULL(p.plan_qty,0) AS sum_plan_qty ,'0' AS sum_real_qty, '0' AS rate,k.id,k.key_name_en FROM BMS_BASE_KEY k 
-		left JOIN BMS_PLAN_PRODUCTION_PLAN p ON k.id = p.plan_code_id and 
+		left JOIN BMS_PLAN_PRODUCTION_PLAN p ON k.id = p.plan_code_value and 
 		p.order_id = (SELECT id FROM BMS_OR_ORDER WHERE order_no = #{order_no}) AND p.plan_date = #{plan_date}	
 		WHERE k.key_code = 'PLAN_CODE' AND k.delete_flag = '0' AND k.key_name_en != ''		
 		<if test="workshop !=''">
@@ -1087,7 +1087,7 @@
 		SELECT IFNULL(SUM(${parts}),'0') AS real_qty FROM BMS_PD_PARTS_PLAN_FINISH WHERE 
 		factory_id = #{factory_id} AND order_id = (SELECT id FROM BMS_OR_ORDER WHERE order_no = #{order_no}) 
 		<if test="month !=''">
-			AND date LIKE CONCAT('%',#{month},'%') 
+			AND prod_date LIKE CONCAT('%',#{month},'%') 
 		</if>
 		  AND  parts_id = '194' 
 	</select>
