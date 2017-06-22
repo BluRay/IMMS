@@ -36,7 +36,7 @@ $(document).ready(function () {
 			$("#btnSubmit").removeAttr("disabled");
 			return false;
 		}
-		if(($('#reason_type').val() == "40") && ($('#lack_reason').val() == "")){
+		if(($('#reason_type :selected').text() == "缺料") && ($('#lack_reason').val() == "")){
 			alert("请选择缺料原因！");
 			$("#btnSubmit").removeAttr("disabled");
 			return false;

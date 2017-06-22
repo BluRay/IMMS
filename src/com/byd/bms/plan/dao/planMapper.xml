@@ -1005,7 +1005,7 @@
 		<if test="end_date !=null and end_date !=''">
 			and b1.warehousing_date &lt;=concat(#{end_date},' 17:10:00')
 		</if>
-		where b.warehousing_date is not null and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=fo.order_id
+		where b.warehousing_date != '' and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=fo.order_id
 		where fo.factory_id=#{factory_id} and fo.status='0' 
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no like concat(#{order_no},'%')
