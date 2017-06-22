@@ -777,10 +777,10 @@
 		left join BMS_BASE_PARTS p1 on p1.id=f.parts_id 
 		left join BMS_PD_PARTS_PLAN_FINISH f1 on f.id=f1.id 
 		<if test="start_date !=null and start_date !=''">
-			and f1.prod_date >= replace(#{start_date},'-','')
+			and f1.prod_date >= #{start_date}
 		</if>
 		<if test="end_date !=null and end_date !=''">
-			and f1.prod_date &lt;= replace(#{end_date},'-','')
+			and f1.prod_date &lt;= #{end_date}
 		</if>	
 		where f.factory_id=#{factory_id}  and p1.parts_name='中段车架总成' and p1.workshop_name='部件' group by f.order_id ) tmp
 		on tmp.order_id=fo.order_id	 
@@ -801,10 +801,10 @@
 		left join BMS_BASE_PARTS p1 on p1.id=f.parts_id 
 		left join BMS_PD_PARTS_PLAN_FINISH f1 on f.id=f1.id 
 		<if test="start_date !=null and start_date !=''">
-			and f1.prod_date >= replace(#{start_date},'-','')
+			and f1.prod_date >= #{start_date}
 		</if>
 		<if test="end_date !=null and end_date !=''">
-			and f1.prod_date &lt;= replace(#{end_date},'-','')
+			and f1.prod_date &lt;= #{end_date}
 		</if>	
 		where f.factory_id=#{factory_id}  and p1.parts_name='喷砂' and p1.workshop_name='部件' group by f.order_id ) tmp
 		on tmp.order_id=fo.order_id	 
@@ -1019,10 +1019,10 @@
 		left join BMS_BASE_KEY k on p1.plan_code_value=k.value AND key_code = 'PLAN_CODE'
 		where  p1.factory_id=#{factory_id}
 		<if test="start_date !=null and start_date !=''">
-			and p1.plan_date >=replace(#{start_date},'-','')
+			and p1.plan_date >=#{start_date}
 		</if>
 		<if test="end_date !=null and end_date !=''">
-			and p1.plan_date &lt;=replace(#{end_date},'-','')
+			and p1.plan_date &lt;=#{end_date}
 		</if>
 		group by p1.order_id,k.key_name
 		) p on p.key_name=record.key_name and p.order_id=record.order_id

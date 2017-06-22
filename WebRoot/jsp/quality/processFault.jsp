@@ -64,7 +64,7 @@
 			</div><!-- /.main-content -->
 			
 			<div id="dialog-add" class="hide" style="align:center;width:800px;height:500px">
-				<form id="form_add">
+				<form id="form_add" class="">
 					<table>
 					<tr style="height:40px">
 						<td align="right" style="width:100px">* 车辆型号：</td><td style="width:150px">
@@ -85,7 +85,7 @@
 						<td align="right" style="width:100px">*VIN号：</td><td style="width:150px"><input type="text" class="input-medium" id="new_vin" name="new_vin" style="width:150px"/></td>
 					</tr>
 					<tr style="height:40px">
-						<td align="right" style="width:100px">* 故障等级：</td><td style="width:150px"><select class="input-medium" id="new_fault_level_id" style="width:150px"><option value="0">一般</option></select></td>
+						<td align="right" style="width:100px">* 故障等级：</td><td style="width:150px"><select class="input-medium" id="new_fault_level_id" style="width:150px"><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="S">S</option></select></td>
 						<td align="right" style="width:100px">*问题性质：</td><td style="width:150px"><select class="input-medium" id="new_is_batch" style="width:150px"><option value="0">非批量</option><option value="1">批量</option></select></td>
 					</tr>
 					<tr style="height:40px">
@@ -102,7 +102,7 @@
 						<td align="right" style="width:100px">解决方法：</td><td colspan=3><input type="text" class="input-medium" id="new_resolve_method" style="width:400px"/></td>
 					</tr>
 					<tr style="height:40px">
-						<td align="right" style="width:100px">处理时间：</td><td style="width:150px"><input type="text" class="input-medium" id="new_resolve_date" style="width:150px" /></td>
+						<td align="right" style="width:100px">处理时间：</td><td style="width:150px"><input type="text" class="input-medium" id="new_resolve_date" style="width:150px" onClick="WdatePicker({el:'new_resolve_date',dateFmt:'yyyy-MM-dd'});"/></td>
 						<td align="right" style="width:100px">处理结果：</td><td style="width:150px"><select class="input-medium" id="new_resolve_result" style="width:150px"><option value="0">关闭</option><option value="1">受理</option></select></td>
 					</tr>
 					<tr style="height:40px">
@@ -120,6 +120,7 @@
 			</div>
 			
 			<div id="dialog-edit" class="hide" style="align:center;width:800px;height:500px">
+			<div class = "div-dialog">
 				<form id="form_edit">
 					<table>
 					<tr style="height:40px">
@@ -141,7 +142,7 @@
 						<td align="right" style="width:100px">*VIN号：</td><td style="width:150px"><input type="text" class="input-medium" id="edit_vin" name="new_vin" style="width:150px"/></td>
 					</tr>
 					<tr style="height:40px">
-						<td align="right" style="width:100px">* 故障等级：</td><td style="width:150px"><select class="input-medium" id="edit_fault_level_id" style="width:150px"><option value="0">一般</option></select></td>
+						<td align="right" style="width:100px">* 故障等级：</td><td style="width:150px"><select class="input-medium" id="edit_fault_level_id" style="width:150px"><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="S">S</option></select></td>
 						<td align="right" style="width:100px">*问题性质：</td><td style="width:150px"><select class="input-medium" id="edit_is_batch" style="width:150px"><option value="0">非批量</option><option value="1">批量</option></select></td>
 					</tr>
 					<tr style="height:40px">
@@ -158,7 +159,7 @@
 						<td align="right" style="width:100px">解决方法：</td><td colspan=3><input type="text" class="input-medium" id="edit_resolve_method" style="width:400px"/></td>
 					</tr>
 					<tr style="height:40px">
-						<td align="right" style="width:100px">处理时间：</td><td style="width:150px"><input type="text" class="input-medium" id="edit_resolve_date" style="width:150px" /></td>
+						<td align="right" style="width:100px">处理时间：</td><td style="width:150px"><input type="text" class="input-medium" id="edit_resolve_date" style="width:150px" onClick="WdatePicker({el:'edit_resolve_date',dateFmt:'yyyy-MM-dd'});"/></td>
 						<td align="right" style="width:100px">处理结果：</td><td style="width:150px"><select class="input-medium" id="edit_resolve_result" style="width:150px"><option value="0">关闭</option><option value="1">受理</option></select></td>
 					</tr>
 					<tr style="height:40px">
@@ -173,6 +174,7 @@
 					</tr>
 					</table>
 				</form>
+				</div>
 			</div>
 
 			<!-- 脚 -->

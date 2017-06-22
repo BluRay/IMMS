@@ -231,6 +231,12 @@ public class ProductionServiceImpl implements IProductionService {
 		result.put("data", datalist);
 		return result;
 	}
+
+	@Override
+	public Map<String, Object> getNextProcess(Map<String, Object> condMap) {
+		Map<String,Object> nextProcess=productionDao.queryNextProcess(condMap);
+		return nextProcess;
+	}
 	
 	
 

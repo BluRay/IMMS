@@ -3,20 +3,22 @@ var table;
 var table_height = $(window).height()-250;
 $(document).ready(function(){
 	initPage();
-	
+	$("#breadcrumbs").resize(function() {
+		ajaxQuery();
+	});
 	function initPage(){
 		getFactorySelect("quality/processFault",'',"#search_factory",null,'id');
 		$('#new_report_file,#edit_report_file').ace_file_input({
-			no_file:'请选择要上传的PDF文件...',
+			no_file:'请选择要上传的文件...',
 			btn_choose:'选择文件',
 			btn_change:'重新选择',
 			width:"300px",
 			droppable:false,
 			onchange:null,
 			thumbnail:false, //| true | large
-			allowExt: ['pdf','PDF'],
+			//allowExt: ['pdf','PDF'],
 		}).on('file.error.ace', function(event, info) {
-			alert("请上传PDF文件!");
+			alert("请上传正确的文件!");
 			return false;
 	    });
 	}
@@ -102,6 +104,9 @@ function showProcessFault(id){
 				$('#file_link').hide();
 			}
 			
+			$(".div-dialog input").prop("disabled",true);  
+		    $(".div-dialog select").prop("disabled",true);  
+			
 			$("#dialog-edit").removeClass('hide').dialog({
 				resizable: false,
 				title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 查看制程异常</h4></div>',
@@ -124,7 +129,9 @@ function editProcessFault(id){
 	getBusType();
 	getFactorySelect("quality/processFault",'',"#edit_factory",null,'id');
 	getWorkshopSelect("quality/processFault",$("#edit_factory :selected").text(),"","#edit_workshop",null,"id");
-	
+
+	$(".div-dialog input").prop("disabled",false);  
+    $(".div-dialog select").prop("disabled",false);  
 	$.ajax({
 		url: "showProcessFaultInfo",
 		dataType: "json",
@@ -160,7 +167,7 @@ function editProcessFault(id){
 			
 			$("#dialog-edit").removeClass('hide').dialog({
 				resizable: false,
-				title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 查看制程异常</h4></div>',
+				title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 编辑制程异常</h4></div>',
 				title_html: true,
 				width:'550px',
 				modal: true,
@@ -415,17 +422,19 @@ function ajaxQuery(){
             });
 		},
 		columns: [
-		            {"title":"车型",width:'80',"class":"center","data":"bus_type","defaultContent": ""},
-		            {"title":"故障反馈日期",width:'80',"class":"center","data":"fault_date","defaultContent": ""},
+		            {"title":"车型",width:'60',"class":"center","data":"bus_type","defaultContent": ""},
+		            {"title":"反馈日期",width:'95',"class":"center","data":"fault_date","defaultContent": ""},
 		            {"title":"故障里程",width:'80',"class":"center","data":"fault_mils","defaultContent": ""},
 		            {"title":"客户",width:'80',"class":"center","data":"customer_name","defaultContent": ""},
 		            {"title":"车牌号码",width:'80',"class":"center","data":"license_number","defaultContent": ""},
 		            {"title":"VIN号",width:'80',"class":"center","data":"vin","defaultContent": ""},
 		            {"title":"故障等级",width:'80',"class":"center","data":"fault_level_id","defaultContent": ""},
-		            {"title":"故障现象",width:'80',"class":"center","data":"fault_phenomenon","defaultContent": ""},
+		            {"title":"故障现象",width:'100',"class":"center","data":"fault_phenomenon","defaultContent": ""},
 		            {"title":"责任工厂",width:'80',"class":"center","data":"factory_name","defaultContent": ""},
 		            {"title":"责任车间",width:'80',"class":"center","data":"response_workshop","defaultContent": ""},
-		            {"title":"操作",width:'60',"class":"center","data":null,"defaultContent": "",
+		            {"title":"维护人",width:'60',"class":"center","data":"editor_name","defaultContent": ""},
+		            {"title":"维护时间",width:'150',"class":"center","data":"edit_date","defaultContent": ""},
+		            {"title":"操作",width:'80',"class":"center","data":null,"defaultContent": "",
 		            	"render": function ( data, type, row ) {
 		            		return "<i class=\"glyphicon glyphicon-search bigger-130 showbus\" title=\"查看\" onclick='showProcessFault(" 
 		            		+ row['id'] + ")' style='color:blue;cursor: pointer;'></i>" + 

@@ -254,10 +254,11 @@ function ajaxQuery(){
 		            {"title":"重复变更","sWidth":"100px","class":"center","data": "repeat_change","defaultContent": ""},
 		            {"title":"技改类型","sWidth":"100px","class":"center","data":"tech_type","render":function(data,type,row){
 		            	return getKeys(ECN_TYPE, data)
-		            },"defaultContent": ""},		         
+		            },"defaultContent": ""},	
+		            /**
 		            {"title":"订单状态","sWidth":"100px","class":"center","data":"status","render":function(data,type,row){
 		            	return data=="0"?"未开始":(data=="1"?"生产中":"已完成")},"defaultContent":""
-		            },	            
+		            },	   **/         
 		            {"title":"操作","sWidth":"50px","class":"center","data":null,"render":function(data,type,row){
 		            	return "<i class=\"ace-icon fa fa-pencil bigger-110 editorder\" title=\"编辑\" onclick = 'showEditModal(" + row.id+ ");' style='color:green;cursor: pointer;'></i>"},
 		            	"defaultContent": "<i class=\"ace-icon fa fa-pencil bigger-110 editorder\" style='color:green;cursor: pointer;'></i>"} 

@@ -50,118 +50,123 @@ label {
 	<!-- 头 -->
 	<%-- <jsp:include page="../top.jsp" flush="true" /> --%>
 	<!-- 身 -->
-	<div class="main-container" id="main-container">
+	<div class="main-container" id="main-container" style="height:100%">
 		<!-- 左边菜单 -->
 		<%-- <jsp:include page="../left.jsp" flush="true" /> --%>
 		<!-- 主体 -->
 		<div class="main-content">
 			<!-- 路径和搜索框 -->
-			<div class="main-content-inner">
-				<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+				<div class="breadcrumbs breadcrumbs-fixed" id="breadcrumbs">
 					<ul class="breadcrumb">
 						<li><i class="ace-icon fa fa-home home-icon"></i><a
 							href="<%=request.getContextPath()%>/index_mobile">BMS</a></li>
 						<li><a href="#">车辆扫描</a></li>
 					</ul>
 					<!-- /.breadcrumb -->
-				</div>
-
-				<div class="page-content">
-					<div class="form-horizontal">
-						<div class="form-group">
-							<label class="col-xs-4 control-label no-padding-right">车号：</label>
-							<div class="col-xs-8">
-								<input type="text" class="input-medium" style="width:100%;height:30px;"/>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-xs-4 control-label no-padding-right">工厂：</label>
-							<div class="col-xs-8">
-								<select class="input-medium" style="width:100%">
-									<option value=''>请选择</option>
-								</select>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-xs-4 control-label no-padding-right">车间：</label>
-							<div class="col-xs-8">
-								<select class="input-medium" style="width:100%">
-									<option value=''>请选择</option>
-								</select>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-xs-4 control-label no-padding-right">线别：</label>
-							<div class="col-xs-8">
-								<select class="input-medium" style="width:100%">
-									<option value=''>请选择</option>
-								</select>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-xs-4 control-label no-padding-right" style="text-align:right">工序：</label>
-							<div class="col-xs-8">
-								<select class="input-medium" style="width:40%">
-									<option value=''>请选择</option>
-									<option value='HA2'>HA2</option>
-								</select>
-								骨架合装
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-xs-4 control-label no-padding-right">关键零部件：</label>
-							<div class="col-xs-8">
-								<select class="input-medium" style="width:100%">
-									<option value=''>请选择</option>
-								</select>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-xs-4 control-label no-padding-right">零部件编号：</label>
-							<div class="col-xs-8">
-								<input type="text" class="input-medium" style="width:100%;height:30px;"/>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-xs-4 control-label no-padding-right">SAP料号：</label>
-							<div class="col-xs-8">
-								<input type="text" class="input-medium" style="width:100%;height:30px;"/>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-xs-4 control-label no-padding-right">供应商：</label>
-							<div class="col-xs-8">
-								<input type="text" class="input-medium" style="width:100%;height:30px;"/>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-xs-4 control-label no-padding-right">批次：</label>
-							<div class="col-xs-8">
-								<input type="text" class="input-medium" style="width:100%;height:30px;" />
-							</div>
-						</div>
-						
+					<div class="nav-search" id="nav-search" style="margin-top: 5px;margin-right:10px;">
+						<i id="btn_clear" class="ace-icon fa fa-refresh  red bigger-160" style="cursor:pointer;margin-right:20px;"></i>
+						<i id="btn_save" class="ace-icon fa fa-floppy-o green bigger-160" style="cursor:pointer"></i>
 					</div>
 				</div>
 
-			</div>
+				<div class="page-content" style="position:fixed;top:38px;bottom:10px;width:100%;overflow-y:auto;padding-left: 0px;padding-right:12px;">
+					<form class="form-horizontal" id="scan_form">
+						<div class="form-group">
+							<label class="col-xs-3 control-label no-padding-right">车号:</label>
+							<div class="col-xs-9">
+								<!-- <input id="vinText"  type="text" class="input-medium" style="width:100%;height:30px;"/> -->
+								<span class="input-icon input-icon-right" style="width: 100%;">
+										<input id="vinText" type="text" class="input-medium" style="width:100%;height:30px;">
+										
+								</span>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-xs-3 control-label no-padding-right">工厂:</label>
+							<div class="col-xs-9">
+								<select id="exec_factory" class="input-medium" style="width:100%" >
+									<!-- <option value=''>请选择</option> -->
+								</select>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-xs-3 control-label no-padding-right">车间:</label>
+							<div class="col-xs-9">
+								<select id="exec_workshop" class="input-medium" style="width:100%">
+									<!-- <option value=''>请选择</option> -->
+								</select>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-xs-3 control-label no-padding-right">线别:</label>
+							<div class="col-xs-9">
+								<select id="exec_line" class="input-medium" style="width:100%">
+									<!-- <option value=''>请选择</option> -->
+								</select>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-xs-3 control-label no-padding-right" style="text-align:right">工序:</label>
+							<div class="col-xs-9">
+								<select id="exec_process" class="input-medium" style="width:40%">
+									<!-- <option value=''>请选择</option> -->
+								</select>
+								<span id="exec_processname"></span>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-xs-3 control-label no-padding-right">零部件:</label>
+							<div class="col-xs-9">
+								<select id="key_parts" class="input-medium" style="width:100%">
+									<!-- <option value=''>请选择</option> -->
+								</select>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-xs-3 control-label no-padding-right">编号:</label>
+							<div class="col-xs-9">
+								<input id="parts_no" type="text" class="input-medium" style="width:100%;height:30px;" disabled/>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-xs-3 control-label no-padding-right">SAP料号:</label>
+							<div class="col-xs-9">
+								<input id="sap_mat" type="text" class="input-medium" style="width:100%;height:30px;" disabled/>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-xs-3 control-label no-padding-right">供应商:</label>
+							<div class="col-xs-9">
+								<input id="vendor" type="text" class="input-medium" style="width:100%;height:30px;" disabled/>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-xs-3 control-label no-padding-right">批次:</label>
+							<div class="col-xs-9">
+								<input id="batch" type="text" class="input-medium" style="width:100%;height:30px;" />
+							</div>
+						</div>		
+									
+					</form>
+				</div>
 			<!-- /.main-container -->
 		</div>
 		
 		<script src="../assets/js/jquery.dataTables.min.js"></script>
 		<script src="../assets/js/jquery.dataTables.bootstrap.js"></script>
 		<script src="../assets/js/jquery.gritter.min.js"></script>
+		<script src="../js/jquery.form.js"></script>
 		<script src="../js/common.js"></script>
-		<script src="../js/production/productionExecution.js"></script>
+		<script src="../js/production/productionExecution_Mobile.js"></script>
 </div>
 </body>
 </html>

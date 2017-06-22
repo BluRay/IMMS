@@ -16,7 +16,7 @@ public class ProcessFaultBean {
 	private String fault_date;
 	private String bus_type;
 	private String fault_mils;
-	private int fault_level_id;
+	private String fault_level_id;
 	private String fault_level;
 	private String response_workshop;
 	private String is_batch;
@@ -122,10 +122,10 @@ public class ProcessFaultBean {
 	public void setFault_mils(String fault_mils) {
 		this.fault_mils = fault_mils;
 	}
-	public int getFault_level_id() {
+	public String getFault_level_id() {
 		return fault_level_id;
 	}
-	public void setFault_level_id(int fault_level_id) {
+	public void setFault_level_id(String fault_level_id) {
 		this.fault_level_id = fault_level_id;
 	}
 	public String getFault_level() {

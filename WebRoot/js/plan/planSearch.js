@@ -45,7 +45,7 @@ $(document).ready(function () {
 		return false;
 	});
 	
-	function ajaxQuery(targetPage){	
+	function ajaxQuery(){	
 		if (li_flag =="1"){
 			getSearch();
 		}else{

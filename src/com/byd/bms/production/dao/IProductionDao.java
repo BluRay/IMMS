@@ -23,6 +23,8 @@ public interface IProductionDao {
 	Map<String, Object> queryScanLastPlanNode(Map<String,Object> condMap);//查询车辆当前扫描节点的上一个计划节点是否存在扫描记录
 	
 	Map<String, Object> queryLastPlanNode(Map<String,Object> condMap);//查询车辆当前扫描节点的上一个计划节点
+	
+	Map<String,Object> queryNextProcess(Map<String, Object> condMap);//查询车辆当前扫描节点的下一个扫描工序
 
 	int queryScanRecord(Map<String, Object> condMap);//查询车辆当前工序是否存在扫描记录
 
@@ -62,4 +64,5 @@ public interface IProductionDao {
 	List<Map<String, Object>> queryPartsOnOffList(Map<String, Object> condMap);
 
 	int queryPartsOnOffCount(Map<String, Object> condMap);
+	
 }

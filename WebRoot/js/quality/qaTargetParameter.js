@@ -5,9 +5,9 @@ $(document).ready(function(){
 	initPage();
 	
 	function initPage(){
-		getFactorySelect("quality/qaTargetParameter",'',"#search_factory",null,'id');
+		getFactorySelect("quality/qaTargetParameter",'',"#search_factory","全部",'id');
 		getKeysSelect("QUALITY_TARGET_PARAM", "", "#search_targetType","全部","value");
-		getWorkshopSelect("quality/qaTargetParameter",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
+		getWorkshopSelect("quality/qaTargetParameter",$("#search_factory :selected").text(),"","#search_workshop","全部","id");
 	}
 	
 	$("#btnQuery").click (function () {

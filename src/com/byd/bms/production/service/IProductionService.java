@@ -43,4 +43,6 @@ public interface IProductionService {
 			ModelMap model);
 
 	public Map<String,Object> getPartsOnOffList(Map<String, Object> condMap);
+	
+	public Map<String,Object> getNextProcess(Map<String,Object> condMap);
 }

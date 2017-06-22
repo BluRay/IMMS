@@ -84,6 +84,17 @@ public class ProductionController extends BaseController {
 		mv.setViewName("production/productionExecution");
 		return mv;
 	}
+	
+	/**
+	 * 生产扫描页面(移动端)
+	 * @return
+	 */
+	@RequestMapping("/execution_mobile")
+	public ModelAndView execution_mobile(){
+		mv.setViewName("production/productionExecution_Mobile");
+		return mv;
+	}
+	
 	/**
 	 * 查询监控工序下拉列表
 	 * @return
@@ -118,7 +129,13 @@ public class ProductionController extends BaseController {
 		//查询车辆基本信息
 		Map<String,Object> businfo=new HashMap<String,Object>();
 		businfo=productionService.getBusInfo(bus_number);
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("factory_name", businfo.get("factory"));
+		condMap.put("order_type", businfo.get("order_type"));
+		condMap.put("process_name", businfo.get("process_name"));
+		Map<String,Object> nextProcess=productionService.getNextProcess(condMap);
 		model.put("businfo", businfo);
+		model.put("nextProcess", nextProcess);
 		
 /*		//根据车辆所属订单类型、工厂、车间、线别查询监控工序列表
 		if(businfo!=null&&!businfo.isEmpty()&&businfo.containsKey("factory_name")){

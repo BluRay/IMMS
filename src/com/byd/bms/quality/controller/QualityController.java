@@ -591,12 +591,12 @@ public class QualityController extends BaseController {
 		pocessFault.setCustomer_name(request.getParameter("customer_name"));
 		pocessFault.setLicense_number(request.getParameter("license_number"));
 		pocessFault.setVin(request.getParameter("vin"));
-		pocessFault.setFault_level_id(Integer.valueOf(request.getParameter("fault_level_id")));
+		pocessFault.setFault_level_id(request.getParameter("fault_level_id"));
 		pocessFault.setIs_batch(request.getParameter("is_batch"));
 		pocessFault.setFault_phenomenon(request.getParameter("fault_phenomenon"));
 		pocessFault.setFault_reason(request.getParameter("fault_reason"));
 		pocessFault.setFactory_id(Integer.valueOf(request.getParameter("factory")));
-		pocessFault.setResponse_workshop(request.getParameter("response_workshop"));
+		pocessFault.setResponse_workshop(request.getParameter("workshop"));
 		pocessFault.setResolve_method(request.getParameter("resolve_method"));
 		pocessFault.setResolve_date(request.getParameter("resolve_date"));
 		pocessFault.setResolve_result(request.getParameter("resolve_result"));
@@ -626,12 +626,12 @@ public class QualityController extends BaseController {
 		pocessFault.setCustomer_name(request.getParameter("customer_name"));
 		pocessFault.setLicense_number(request.getParameter("license_number"));
 		pocessFault.setVin(request.getParameter("vin"));
-		pocessFault.setFault_level_id(Integer.valueOf(request.getParameter("fault_level_id")));
+		pocessFault.setFault_level_id(request.getParameter("fault_level_id"));
 		pocessFault.setIs_batch(request.getParameter("is_batch"));
 		pocessFault.setFault_phenomenon(request.getParameter("fault_phenomenon"));
 		pocessFault.setFault_reason(request.getParameter("fault_reason"));
 		pocessFault.setFactory_id(Integer.valueOf(request.getParameter("factory")));
-		pocessFault.setResponse_workshop(request.getParameter("response_workshop"));
+		pocessFault.setResponse_workshop(request.getParameter("workshop"));
 		pocessFault.setResolve_method(request.getParameter("resolve_method"));
 		pocessFault.setResolve_date(request.getParameter("resolve_date"));
 		pocessFault.setResolve_result(request.getParameter("resolve_result"));
@@ -675,7 +675,8 @@ public class QualityController extends BaseController {
     				if (!savedir.exists()) {
     					savedir.mkdirs();
     				}
-    				File saveFile = new File(savedir, String.valueOf(System.currentTimeMillis()) + ".pdf");
+    				//System.out.println(myFileName.substring(myFileName.indexOf("."),myFileName.length()));
+    				File saveFile = new File(savedir, String.valueOf(System.currentTimeMillis()) + myFileName.substring(myFileName.indexOf("."),myFileName.length()));
                     System.out.println(myFileName);  
                     file.transferTo(saveFile);
                     filepath = "/IMMS/file/upload/ProcessFault/" + saveFile.getName();
