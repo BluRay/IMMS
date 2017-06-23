@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.ui.ModelMap;
 
 import com.byd.bms.quality.model.BmsBaseQCStdRecord;
+import com.byd.bms.quality.model.ProblemImproveBean;
 import com.byd.bms.quality.model.ProcessFaultBean;
 import com.byd.bms.quality.model.QualityTargetBean;
 import com.byd.bms.quality.model.StdFaultLibBean;
@@ -49,6 +50,11 @@ public interface IQualityService {
 	public int addProcessFault(ProcessFaultBean pocessFault);
 	public int editProcessFault(ProcessFaultBean pocessFault);
 	public ProcessFaultBean showProcessFaultInfo(int id);
+	
+	public int insertProblemImprove(ProblemImproveBean problemImprove);
+	public Map<String, Object> getProblemImproveList(Map<String, Object> conditionMap);
+	public ProblemImproveBean showProblemImproveInfo(int id);
+	
 	//======================== yk end=================================//
 			
 			

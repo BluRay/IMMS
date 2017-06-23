@@ -45,7 +45,7 @@
 						<table>
 							<tr>
 								<td>责任工厂：</td>
-								<td><select id="search_factory" class="input-small" style="width:100px"></select></td>
+								<td><select id="search_factory" class="form-control" style="width:100px"></select></td>
 								<td>&nbsp;客户：</td>
 								<td><input id="search_customer_name" placeholder="客户..." style="width:100px" type="text"></td>
 								<td>&nbsp;报告状态：</td>

@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.byd.bms.quality.model.BmsBaseQCStdRecord;
+import com.byd.bms.quality.model.ProblemImproveBean;
 import com.byd.bms.quality.model.ProcessFaultBean;
 import com.byd.bms.quality.model.QualityTargetBean;
 import com.byd.bms.quality.model.StdFaultLibBean;
@@ -75,6 +76,11 @@ public interface IQualityDao {
 	public int addProcessFault(ProcessFaultBean pocessFault);
 	public int editProcessFault(ProcessFaultBean pocessFault);
 	public ProcessFaultBean showProcessFaultInfo(int id);
+	
+	public int insertProblemImprove(ProblemImproveBean problemImprove);
+	public List<Map<String,String>> getProblemImproveList(Map<String, Object> conditionMap);
+	public int getProblemImproveCount(Map<String, Object> conditionMap);
+	public ProblemImproveBean showProblemImproveInfo(int id);
 	
 	//======================== yk end=================================//
 		

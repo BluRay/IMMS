@@ -444,6 +444,9 @@
 	<select id="showProcessFaultInfo" parameterType="int" resultType="com.byd.bms.quality.model.ProcessFaultBean">
 		SELECT * FROM BMS_QM_PROCESS_PROBLEM WHERE id = #{id}
 	</select>
+	<select id="showProblemImproveInfo" parameterType="int" resultType="com.byd.bms.quality.model.ProblemImproveBean">
+		SELECT * FROM BMS_QM_IMPROVE_PROBLEM WHERE id = #{id}
+	</select>
 	
 	
 <!-- ======================== yk end=================================-->
@@ -601,5 +604,68 @@
 		</if>
 	</select>
      
+     <insert id="insertProblemImprove" parameterType="com.byd.bms.quality.model.ProblemImproveBean" useGeneratedKeys="true">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		INSERT INTO BMS_QM_IMPROVE_PROBLEM
+		(fault_description, factory_id, customer_name, report_status, vin, order_id, 
+		order_describe, license_number, fault_phenomenon, fault_components, fault_date, 
+		bus_type, fault_mils, fault_level_id, response_workshop, fault_reason, 
+		resolve_method, resolve_date, risk_evaluate, keystone_attention,fault_pic_path, 8D_REPORT_PATH, 
+		close_evidenc_path, is_closed, memo, editor_id, edit_date)
+		VALUES(#{fault_description}, #{factory_id}, #{customer_name}, #{report_status}, #{vin}, #{order_id}, 
+		#{order_describe}, #{license_number}, #{fault_phenomenon}, #{fault_components}, #{fault_date}, 
+		#{bus_type}, #{fault_mils}, #{fault_level}, #{response_workshop}, #{fault_reason}, 
+		#{resolve_method}, #{resolve_date}, #{risk_evaluate}, #{keystone_attention}, #{fault_pic_path},  #{eightD_report_path}, 
+		#{close_evidenc_path}, #{is_closed}, #{memo}, #{editor_id}, #{edit_date});
+	</insert>
+	<select id="getProblemImproveList" parameterType="Map" resultType="Map">
+		SELECT p.*,u.display_name,f.factory_name FROM BMS_QM_IMPROVE_PROBLEM p
+		LEFT JOIN BMS_BASE_USER u on p.editor_id=u.id
+		LEFT JOIN BMS_BASE_FACTORY f ON p.factory_id = f.id
+		WHERE 1=1 
+		<if test="factory_id!=null and factory_id!=''">
+			and p.factory_id = #{factory_id}
+		</if>
+		<if test="bus_type!=null and bus_type!=''">
+			and p.bus_type = #{bus_type}
+		</if>
+		<if test="vin!=null and vin!=''">
+			and p.vin = #{vin}
+		</if>
+		<if test="fault_description!=null and fault_description!=''">
+			and p.fault_description like CONCAT('%',#{fault_description},'%')
+		</if>
+		<if test="is_closed!=null and is_closed!=''">
+			and p.is_closed = #{is_closed}
+		</if>
+		order by f.edit_date desc
+		<if test="start !=null">
+			LIMIT ${start} ,${length} 
+		</if>
+	</select>
+	<select id="getProblemImproveCount" parameterType="Map" resultType="int">
+		SELECT COUNT(p.id) FROM BMS_QM_IMPROVE_PROBLEM p
+		LEFT JOIN BMS_BASE_USER u on p.editor_id=u.id
+		LEFT JOIN BMS_BASE_FACTORY f ON p.factory_id = f.id
+		WHERE 1=1 
+		<if test="factory_id!=null and factory_id!=''">
+			and p.factory_id = #{factory_id}
+		</if>
+		<if test="bus_type!=null and bus_type!=''">
+			and p.bus_type = #{bus_type}
+		</if>
+		<if test="vin!=null and vin!=''">
+			and p.vin = #{vin}
+		</if>
+		<if test="fault_description!=null and fault_description!=''">
+			and p.fault_description like CONCAT('%',#{fault_description},'%')
+		</if>
+		<if test="is_closed!=null and is_closed!=''">
+			and p.is_closed = #{is_closed}
+		</if>
+	</select>
      
 </mapper>

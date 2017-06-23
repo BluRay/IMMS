@@ -29,6 +29,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.byd.bms.quality.service.IQualityService;
 import com.byd.bms.quality.model.BmsBaseQCStdRecord;
+import com.byd.bms.quality.model.ProblemImproveBean;
 import com.byd.bms.quality.model.ProcessFaultBean;
 import com.byd.bms.quality.model.QualityTargetBean;
 import com.byd.bms.quality.model.StdFaultLibBean;
@@ -572,6 +573,82 @@ public class QualityController extends BaseController {
 		Map<String, Object> result = qualityService.getProcessFaultList(conditionMap);
 		mv.clear();
 		mv.getModelMap().addAllAttributes(result);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping(value="addProblemImprove",method=RequestMethod.POST)
+	@ResponseBody
+	public ModelMap addProblemImprove(@RequestParam(value="new_fault_pic",required=false) MultipartFile new_fault_pic,@RequestParam(value="new_8d_report",required=false) MultipartFile new_8d_report,@RequestParam(value="new_close_evidenc",required=false) MultipartFile new_close_evidenc){	
+		int userid=(int) session.getAttribute("user_id");
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		ProblemImproveBean problemImprove = new ProblemImproveBean();
+		problemImprove.setFault_description(request.getParameter("new_fault_description"));
+		problemImprove.setFactory_id(Integer.valueOf(request.getParameter("new_factory")));
+		problemImprove.setResponse_workshop(request.getParameter("new_workshop"));
+		problemImprove.setBus_type(request.getParameter("new_bus_type"));
+		problemImprove.setVin(request.getParameter("new_vin"));
+		problemImprove.setLicense_number(request.getParameter("new_license_number"));
+		problemImprove.setFault_mils(request.getParameter("new_fault_mils"));
+		problemImprove.setFault_phenomenon(request.getParameter("new_fault_phenomenon"));
+		problemImprove.setFault_level(request.getParameter("new_fault_level_id"));
+		problemImprove.setFault_reason(request.getParameter("new_fault_reason"));
+		problemImprove.setRisk_evaluate(request.getParameter("new_risk_evaluate"));
+		problemImprove.setKeystone_attention(request.getParameter("new_keystone_attention"));
+		problemImprove.setResolve_method(request.getParameter("new_resolve_method"));
+		problemImprove.setResolve_date(request.getParameter("new_resolve_date"));
+		problemImprove.setMemo(request.getParameter("new_memo"));
+		problemImprove.setIs_closed(request.getParameter("new_is_closed"));
+		problemImprove.setEditor_id(userid);
+		problemImprove.setEdit_date(curTime);
+		if(new_fault_pic != null){
+			String new_fault_pic_path = saveFileMethod(new_fault_pic);
+			problemImprove.setFault_pic_path(new_fault_pic_path);
+		}
+		if(new_8d_report != null){
+			String new_8d_report_path = saveFileMethod(new_8d_report);
+			problemImprove.setEightD_report_path(new_8d_report_path);
+		}
+		if(new_close_evidenc != null){
+			String new_close_evidenc_path = saveFileMethod(new_close_evidenc);
+			problemImprove.setClose_evidenc_path(new_close_evidenc_path);
+		}
+		int result = qualityService.insertProblemImprove(problemImprove);
+		initModel(true,String.valueOf(result),null);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("getProblemImproveList")
+	@ResponseBody
+	public ModelMap getProblemImproveList(){
+		Map<String, Object> conditionMap = new HashMap<String, Object>();
+		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
+		int start=(request.getParameter("start")!=null)?Integer.parseInt(request.getParameter("start")):0;		//分页数据起始数
+		int length=(request.getParameter("length")!=null)?Integer.parseInt(request.getParameter("length")):500;	//每一页数据条数
+		conditionMap.put("draw", draw);
+		conditionMap.put("start", start);
+		conditionMap.put("length", length);
+		conditionMap.put("factory_id", request.getParameter("factory_id").toString());
+		conditionMap.put("bus_type", request.getParameter("bus_type").toString());
+		conditionMap.put("vin", request.getParameter("vin").toString());
+		conditionMap.put("fault_description", request.getParameter("fault_description").toString());
+		conditionMap.put("is_closed", request.getParameter("is_closed").toString());
+		
+		Map<String, Object> result = qualityService.getProblemImproveList(conditionMap);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(result);
+		model = mv.getModelMap();
+		return model;
+	}
+
+	@RequestMapping("showProblemImprove")
+	@ResponseBody
+	public ModelMap showProblemImprove(){
+		int id = Integer.valueOf(request.getParameter("id"));
+		ProblemImproveBean problemImprove = qualityService.showProblemImproveInfo(id);
+		initModel(true,"SUCCESS",problemImprove);
 		model = mv.getModelMap();
 		return model;
 	}

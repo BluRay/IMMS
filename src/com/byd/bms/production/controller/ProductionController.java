@@ -264,6 +264,16 @@ public class ProductionController extends BaseController {
 	}
 	
 	/**
+	 * 生产异常登记页面(移动端)
+	 * @return
+	 */
+	@RequestMapping("/exception_mobile")
+	public ModelAndView exception_mobile(){
+		mv.setViewName("production/productionException_Mobile");
+		return mv;
+	}
+	
+	/**
 	 * 生产异常登记
 	 * @return
 	 */

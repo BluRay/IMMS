@@ -829,7 +829,7 @@
 		<if test="end_date !=null and end_date !=''">
 			and b1.welding_online_date &lt;=concat(#{end_date},' 17:10:00')
 		</if>
-		where b.welding_online_date is not null and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=fo.order_id
+		where b.welding_online_date != '' and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=fo.order_id
 		where fo.factory_id=#{factory_id} and fo.status='0' 
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no like concat(#{order_no},'%')
@@ -851,7 +851,7 @@
 		<if test="end_date !=null and end_date !=''">
 			and b1.welding_offline_date &lt;=concat(#{end_date},' 17:10:00')
 		</if>
-		where b.welding_offline_date is not null and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=fo.order_id
+		where b.welding_offline_date != '' and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=fo.order_id
 		where fo.factory_id=#{factory_id} and fo.status='0' 
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no like concat(#{order_no},'%')
@@ -873,7 +873,7 @@
 		<if test="end_date !=null and end_date !=''">
 			and b1.painting_online_date &lt;=concat(#{end_date},' 17:10:00')
 		</if>
-		where b.painting_online_date is not null and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=fo.order_id
+		where b.painting_online_date != '' and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=fo.order_id
 		where fo.factory_id=#{factory_id} and fo.status='0' 
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no like concat(#{order_no},'%')
@@ -895,7 +895,7 @@
 		<if test="end_date !=null and end_date !=''">
 			and b1.painting_offline_date &lt;=concat(#{end_date},' 17:10:00')
 		</if>
-		where b.painting_offline_date is not null and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=fo.order_id
+		where b.painting_offline_date != '' and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=fo.order_id
 		where fo.factory_id=#{factory_id} and fo.status='0' 
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no like concat(#{order_no},'%')
@@ -917,7 +917,7 @@
 		<if test="end_date !=null and end_date !=''">
 			and b1.chassis_online_date &lt;=concat(#{end_date},' 17:10:00')
 		</if>
-		where b.chassis_online_date is not null and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=fo.order_id
+		where b.chassis_online_date != '' and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=fo.order_id
 		where fo.factory_id=#{factory_id} and fo.status='0' 
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no like concat(#{order_no},'%')
@@ -939,7 +939,7 @@
 		<if test="end_date !=null and end_date !=''">
 			and b1.chassis_offline_date &lt;=concat(#{end_date},' 17:10:00')
 		</if>
-		where b.chassis_offline_date is not null and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=fo.order_id
+		where b.chassis_offline_date != '' and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=fo.order_id
 		where fo.factory_id=#{factory_id} and fo.status='0' 
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no like concat(#{order_no},'%')
@@ -961,7 +961,7 @@
 		<if test="end_date !=null and end_date !=''">
 			and b1.assembly_online_date &lt;=concat(#{end_date},' 17:10:00')
 		</if>
-		where b.assembly_online_date is not null and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=fo.order_id
+		where b.assembly_online_date != '' and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=fo.order_id
 		where fo.factory_id=#{factory_id} and fo.status='0' 
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no like concat(#{order_no},'%')
@@ -983,7 +983,7 @@
 		<if test="end_date !=null and end_date !=''">
 			and b1.assembly_offline_date &lt;=concat(#{end_date},' 17:10:00')
 		</if>
-		where b.assembly_offline_date is not null and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=fo.order_id
+		where b.assembly_offline_date != '' and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=fo.order_id
 		where fo.factory_id=#{factory_id} and fo.status='0' 
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no like concat(#{order_no},'%')

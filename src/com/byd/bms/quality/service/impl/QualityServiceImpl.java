@@ -18,6 +18,7 @@ import org.springframework.ui.ModelMap;
 import com.byd.bms.quality.dao.IQualityDao;
 import com.byd.bms.quality.service.IQualityService;
 import com.byd.bms.quality.model.BmsBaseQCStdRecord;
+import com.byd.bms.quality.model.ProblemImproveBean;
 import com.byd.bms.quality.model.ProcessFaultBean;
 import com.byd.bms.quality.model.QualityTargetBean;
 import com.byd.bms.quality.model.StdFaultLibBean;
@@ -322,6 +323,25 @@ public class QualityServiceImpl implements IQualityService {
 	@Override
 	public int editProcessFault(ProcessFaultBean pocessFault) {
 		return qualityDao.editProcessFault(pocessFault);
+	}
+	@Override
+	public int insertProblemImprove(ProblemImproveBean problemImprove) {
+		return qualityDao.insertProblemImprove(problemImprove);
+	}
+	@Override
+	public Map<String, Object> getProblemImproveList(Map<String, Object> conditionMap) {
+		Map<String, Object> result=new HashMap<String,Object>();
+		int totalCount= qualityDao.getProblemImproveCount(conditionMap);
+		List<Map<String,String>> datalist= qualityDao.getProblemImproveList(conditionMap);
+		result.put("draw", conditionMap.get("draw"));
+		result.put("recordsTotal", totalCount);
+		result.put("recordsFiltered", totalCount);
+		result.put("data", datalist);
+		return result;
+	}
+	@Override
+	public ProblemImproveBean showProblemImproveInfo(int id) {
+		return qualityDao.showProblemImproveInfo(id);
 	}
 	
 		

@@ -51,7 +51,7 @@
 										<img id="scan" class="img " src="images/scan.png" style="width:100%;height:100%;" onclick="javascript: return pageForward('execution');">							
 									</div>
 									<div class="col-xs-6">
-										<img id="scan" class="img " src="images/prdRcd.png" style="width:100%;height:100%;">
+										<img id="scan" class="img " src="images/prdRcd.png" style="width:100%;height:100%;" onclick="javascript: return pageForward('execution');">
 									</div>
 								</div>
 							</div>			
@@ -73,10 +73,10 @@
 							<div class="row" style="margin-top:20px;">
 								<div class="col-xs-12">
 									<div class="col-xs-6">
-										<img id="scan" class="img " src="images/keyparts.png" style="width:100%;height:100%;">							
+										<img id="scan" class="img " src="images/keyparts.png" style="width:100%;height:100%;" onclick="javascript: return pageForward('key_parts');">							
 									</div>
 									<div class="col-xs-6">
-										<img id="scan" class="img " src="images/exception.png" style="width:100%;height:100%;">
+										<img id="scan" class="img " src="images/exception.png" style="width:100%;height:100%;" onclick="javascript: return pageForward('exception');">
 									</div>
 								</div>
 							</div>			
@@ -108,6 +108,9 @@
 			var url="";
 			if(flag=='execution'){
 				url="/IMMS/production/execution_mobile"
+			}
+			if(flag=='exception'){
+				url="/IMMS/production/exception_mobile"
 			}
 			
 			window.location=url
