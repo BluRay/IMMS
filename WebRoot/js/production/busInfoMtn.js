@@ -40,6 +40,16 @@ $(document).ready(function(){
 		ajaxQuery();
 	});
 	
+	$("#bus_list").change(function(){
+		if($(this).val().trim().length>0){
+			$("#factory").val("").attr("disabled",true);
+			$("#order").val("").attr("order_id","").attr("disabled",true);
+		}else{
+			$("#factory").attr("disabled",false);
+			$("#order").attr("disabled",false);
+		}
+	});
+	
 });
 
 function initPage(){
@@ -141,7 +151,7 @@ function ajaxQuery(){
 }
 
 function specifyBus(){
-	$("#bus_list").val("");
+	/*$("#bus_list").val("");*/
 	
 	var dialog = $( "#dialog-config-bus" ).removeClass('hide').dialog({
 		width:400,
@@ -150,13 +160,13 @@ function specifyBus(){
 		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i> 指定车号</h4></div>",
 		title_html: true,
 		buttons: [ 
-			{
+		/*	{
 				text: "取消",
 				"class" : "btn btn-minier",
 				click: function() {
 					$( this ).dialog( "close" ); 
 				} 
-			},
+			},*/
 			{
 				text: "确定",
 				"class" : "btn btn-primary btn-minier",
@@ -219,11 +229,11 @@ function showEditPage(row){
  * 批量编辑
  */
 function ajaxAdd(){
-	if($("#factory").val()==""){
+	if($("#factory").val()==""&&$("#bus_list").val().trim().length==0){
 		alert("请选择生产工厂！");
 		return false;
 	}
-	if(($("#order_id").val()==undefined||$("#order_id").val()=="")&&$("#bus_list").val()==""){
+	if(($("#order_id").val()==undefined||$("#order_id").val()=="")&&$("#bus_list").val().trim().length==0){
 		alert("请输入有效订单编号！");
 		return false;
 	}
@@ -254,6 +264,7 @@ function ajaxAdd(){
 		success:function(response){
 			alert(response.message);
 			$("#dialog-config" ).dialog( "close" ); 
+			$("#bus_list").val("");
 			ajaxQuery();
 		},
 		error:function(response){

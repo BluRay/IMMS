@@ -265,7 +265,8 @@ $(document).ready(function () {
             		$("<td />").html(parts.parts_name).appendTo(tr);
             		$("<td />").html(parts.size).appendTo(tr);
             		$("<td />").html(parts.vendor).appendTo(tr);
-            		if(parts['3C_components']=='Y'){
+            	
+            		if(parts['3C_no'].trim().length>0){
             			$("<td />").html(parts['3C_no']).appendTo(tr);
             		}else{
             			$("<td />").html("<input class='batch' style='border:0;background:transparent;text-align:center;width:100%' value='"+(parts.batch||'')+"'>").appendTo(tr);

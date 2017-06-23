@@ -27,12 +27,7 @@
 		<if test="factory !=null and factory !=''">
 			and find_in_set(f.factory_id ,#{factory} )
 		</if>
-		<if test="orderColumn==null">
-			ORDER BY id DESC,d.busnum_start ASC
-		</if>
-		<if test="orderColumn !=null">
-			ORDER BY #{orderColumn} ASC
-		</if>
+			ORDER BY o.order_no DESC
 		<if test="start !=null">
 			LIMIT #{start} ,#{length} 
 		</if>			
@@ -320,7 +315,7 @@
 		<if test="factory !=null and factory !=''">
 			and find_in_set(fo.factory_id,#{factory})
 		</if>
-			order by o.order_no,fo.id desc
+			order by o.order_no desc
 		<if test="start !=null">
 			limit #{start},#{length}
 		</if>

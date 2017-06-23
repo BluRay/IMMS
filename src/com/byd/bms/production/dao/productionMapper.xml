@@ -201,12 +201,55 @@
 	</select>
 	
 	<update id='updateBusInfo' parameterType="Map">
-		update BMS_PLAN_BUS set bus_color=#{bus_color},bus_seats=#{bus_seats},spring_num=#{spring_num},
-		passenger_num=#{passenger_num},tire_type=#{tire_type},battery_capacity=#{battery_capacity},
-		rated_voltage=#{rated_voltage},dp_production_date=#{dp_production_date},dp_zzd=#{dp_zzd},
-		zc_production_date=#{zc_production_date},zc_zzd=#{zc_zzd},hgz_note=#{hgz_note},ccczs_date=#{ccczs_date},
-		dpgg_date=#{dpgg_date},zcgg_date=#{zcgg_date}
-		where 1=1
+		update BMS_PLAN_BUS 
+		<trim prefix="set" suffixOverrides=",">
+			<if test="bus_color !=null and bus_color !=''">
+				bus_color=#{bus_color},
+			</if>
+			<if test="bus_seats !=null and bus_seats !=''">
+				bus_seats=#{bus_seats},
+			</if>
+			<if test="spring_num !=null and spring_num !=''">
+				spring_num=#{spring_num},
+			</if>
+			<if test="passenger_num !=null and passenger_num !=''">
+				passenger_num=#{passenger_num},
+			</if>
+			<if test="tire_type !=null and tire_type !=''">
+				tire_type=#{tire_type},
+			</if>
+			<if test="battery_capacity !=null and battery_capacity !=''">
+				battery_capacity=#{battery_capacity},
+			</if>
+			<if test="rated_voltage !=null and rated_voltage !=''">
+				rated_voltage=#{rated_voltage},
+			</if>
+			<if test="dp_production_date !=null and dp_production_date !=''">
+				dp_production_date=#{dp_production_date},
+			</if>
+			<if test="dp_zzd !=null and dp_zzd !=''">
+				dp_zzd=#{dp_zzd},
+			</if>
+			<if test="zc_production_date !=null and zc_production_date !=''">
+				zc_production_date=#{zc_production_date},
+			</if>
+			<if test="zc_zzd !=null and zc_zzd !=''">
+				zc_zzd=#{zc_zzd},
+			</if>
+			<if test="hgz_note !=null and hgz_note !=''">
+				hgz_note=#{hgz_note},
+			</if>
+			<if test="ccczs_date !=null and ccczs_date !=''">
+				ccczs_date=#{ccczs_date},
+			</if>
+			<if test="dpgg_date !=null and dpgg_date !=''">
+				dpgg_date=#{dpgg_date},
+			</if>
+			<if test="zcgg_date !=null and zcgg_date !=''">
+				zcgg_date=#{zcgg_date}
+			</if>
+		</trim>
+			where 1=1
 		<if test="factory_id !=null and factory_id !=''">
 			and factory_id=#{factory_id}
 		</if>

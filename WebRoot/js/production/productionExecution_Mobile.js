@@ -276,8 +276,8 @@ function initPage(){
                     	fadeMessageAlert(null,'没有对应车号的车辆信息！','gritter-error');
                     	$("#vinText").val("");
                     	return false;
-                    }else if(response.businfo.factory.indexOf(getAllFromOptions("#exec_factotry","name"))<0){
-                    	fadeMessageAlert(null,'抱歉，该车辆属于'+response.businfo.factory+'，您没有扫描权限！','gritter-error');
+                    }else if(response.businfo.factory_name.indexOf(getAllFromOptions("#exec_factotry","name"))<0){
+                    	fadeMessageAlert(null,'抱歉，该车辆属于'+response.businfo.factory_name+'，您没有扫描权限！','gritter-error');
                     	$("#vinText").val("");
                     	return false;
                     }else{        
@@ -303,11 +303,11 @@ function initPage(){
                 		
                 		//选中工厂、车间、线别、工序
                 		$("#exec_factory").val(bus.factory_id).attr("disabled",true);
-                		getAllWorkshopSelect(nextProcess.workshop||bus.workshop);
+                		getAllWorkshopSelect(nextProcess==null?bus.workshop:nextProcess.workshop);
                 		getAllLineSelect(bus.line)
                 		
                 		var cur_line=$("#exec_line option:selected").text();
-                		getAllProcessSelect(bus.order_type,nextProcess.process_name);
+                		getAllProcessSelect(bus.order_type,nextProcess==null?bus.process_name:nextProcess.processName);
 
                     }
             },
@@ -344,8 +344,11 @@ function initPage(){
             			parts_no_default=value.parts_no;
             			sap_mat_default=value.spa_mat;
             			vendor_default=value.vendor;
+            			$("#batch").attr("disabled",false);
             			if(value['3C_no'].trim().length>0){
             				batch_default=value['3C_no'];
+            				parts_list[index].batch=batch_default;
+            				$("#batch").attr("disabled",true);
             			}          			
             		}else
             		 strs += "<option value=" + value.id  + ">"+" parts_index="+index  + value.parts_name + "</option>";

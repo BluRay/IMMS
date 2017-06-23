@@ -82,6 +82,10 @@ function editProblemImprove(id){
 		error: function () {alertError();},
 		success: function (response) {
 			$("#edit_fault_description").val(response.data.fault_description);
+			$("#edit_factory").val(response.data.factory_id);
+			$("#edit_workshop").find("option:contains('"+response.data.response_workshop+"')").attr("selected",true);
+			
+			
 		}
     });
     

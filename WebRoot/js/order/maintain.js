@@ -478,6 +478,7 @@ function ajaxQuery(){
 	                    return "<input style='border:0;width:100%;height:100%;background-color:transparent;text-align:center;' value='"+data+"' />";
 	                },*/"defaultContent": ""},
 		            {"title":"订单描述","class":"center","data":"order_name_str","defaultContent": ""},
+		            {"title":"订单类型","class":"center","data":"order_type","defaultContent": ""},
 		            {"title":"客户","class":"center","data":"customer","defaultContent": ""},
 		            {"title":"生产年份","class":"center","data":"productive_year","defaultContent": ""},
 		            {"title":"订单交期","class":"center","data": "delivery_date","defaultContent": ""},
