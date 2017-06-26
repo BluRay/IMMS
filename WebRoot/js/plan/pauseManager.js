@@ -27,7 +27,7 @@ $(document).ready(function () {
 		$("#A").removeAttr("checked");$("#B").removeAttr("checked");
 		getFactorySelect("plan/pauseManager",'',"#new_factory",null,'id');
 		getWorkshopSelect("plan/pauseManager",$("#new_factory :selected").text(),"","#new_workshop",null,"id");
-		getKeysSelect("EXCEPTION_RESPONSIBILITY_DEPARTMENT", "", "#new_dep_id","noall","value");
+		getKeysSelect("EXCEPTION_RESPONSIBILITY_DEPARTMENT", "", "#new_dep_id",null,"value");
 		getBusType();
 		e.preventDefault();
 		$("#dialog-add").removeClass('hide').dialog({

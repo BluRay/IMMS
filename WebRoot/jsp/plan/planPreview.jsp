@@ -45,6 +45,8 @@
 								<td><select id="search_factory" class="input-small" style="width:120px"></select></td>
 								<td>&nbsp;订单编号：</td>
 								<td><input id="search_order_no" placeholder="请输入订单编号..." style="width:120px" class="col-sm-10" type="text"></td>
+								<td>&nbsp;计划月份：</td>
+								<td width="80px"><input id="search_plan_month" placeholder="计划月份..." onClick="WdatePicker({el:'search_plan_month',dateFmt:'yyyyMM'});" style="width:80px" type="text"></td>
 								<td>&nbsp;计划版本：</td>
 								<td><input id="search_plan_version" placeholder="请输入计划版本..." class="col-sm-12" type="text"></td>
 								<td><input type="button" class="btn btn-sm btn-success" id="btnQuery" value="查询" style="margin-left: 2px;"></input>&nbsp;</td>
@@ -54,7 +56,7 @@
 					</div>		
 					<table id="tableData" class="table table-striped table-bordered table-hover" style="font-size: 12px;">
 					<thead><tr>
-						<th style="text-align:center;padding-left:0px;padding-right:0px;width:60px;">计划预览</th><th id="th_order_no" style="text-align:center;padding-left:0px;padding-right:0px;" width="55px">D2017001</th>
+						<th style="text-align:center;padding-left:0px;padding-right:0px;width:60px;">计划预览</th><th id="th_order_no" style="text-align:center;padding-left:0px;padding-right:0px;" width="55px"></th>
 						<th style="text-align:center;padding-left:0px;padding-right:0px;" width="30px">日期</th>
 						<th style="text-align:center;padding-left:0px;padding-right:0px;" width="23px">1</th><th style="text-align:center;padding-left:0px;padding-right:0px;" width="23px">2</th><th style="text-align:center;padding-left:0px;padding-right:0px;" width="23px">3</th>
 						<th style="text-align:center;padding-left:0px;padding-right:0px;" width="23px">4</th><th style="text-align:center;padding-left:0px;padding-right:0px;" width="23px">5</th><th style="text-align:center;padding-left:0px;padding-right:0px;" width="23px">6</th>
@@ -81,11 +83,12 @@
 		</div><!-- /.main-container -->
 	</div>
 	</body>
+	<script src="../assets/js/bootstrap3-typeahead.js"></script>
 	<script src="../assets/js/jquery.gritter.min.js"></script>
 	<script src="../assets/js/jquery.dataTables.min.js"></script>
 	<script src="../assets/js/jquery.dataTables.bootstrap.js"></script>
 	<script src="../assets/js/dataTables.fixedColumns.min.js"></script>
-	
+	<script type="text/javascript" src="../js/datePicker/WdatePicker.js"></script>
 	<script type="text/javascript" src="../js/common.js"></script>
 	<script type="text/javascript" src="../js/plan/planPreview.js"></script>
 </html>

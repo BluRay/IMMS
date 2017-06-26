@@ -77,7 +77,7 @@ $(document).ready(function () {
 			return false;
 		}
 		$("#new_order_no").val($('#search_order_no').val());
-		getKeysSelect("ORDER_AREA", "", "#new_area","noall","value");
+		getKeysSelect("ORDER_AREA", "", "#new_area",null,"value");
 		$('#new_vinPrefix').val("");$("#new_WMI_extension").val("");
 		$.ajax({
 			url : "getVinPrefix",

@@ -72,6 +72,23 @@
 			FROM
 			BMS_PLAN_MASTER_PLAN WHERE version = #{version})
 		</if>
+		<if test="plan_month!=''">
+			AND m.plan_month = #{plan_month}
+			AND version =
+			(SELECT MAX(version) FROM BMS_PLAN_MASTER_PLAN WHERE
+			order_id =
+			(SELECT id FROM BMS_OR_ORDER WHERE order_no=o.order_no) AND
+			factory_id =
+			#{factory_id} AND plan_month=#{plan_month})
+			AND flag =
+			(SELECT
+			MAX(flag+0) FROM BMS_PLAN_MASTER_PLAN WHERE 
+			version =(SELECT
+			MAX(version) FROM BMS_PLAN_MASTER_PLAN WHERE order_id = (SELECT id
+			FROM BMS_OR_ORDER WHERE order_no=o.order_no) AND factory_id = #{factory_id} AND plan_month=#{plan_month}) AND
+			plan_month=#{plan_month} AND factory_id = #{factory_id})
+			
+		</if>
 		<if test="order_no!=''">
 			and order_id = (SELECT id FROM BMS_OR_ORDER WHERE
 			order_no=#{order_no})

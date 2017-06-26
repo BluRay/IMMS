@@ -347,19 +347,19 @@
 		<if test="factory_id != null and factory_id != 0">
 			AND p.factory_id = #{factory_id}
 		</if>
-		<if test="customer_name != null and customer_name != 0">
+		<if test="customer_name != null and customer_name != ''">
 			AND p.customer_name LIKE CONCAT('%',#{customer_name},'%')
 		</if>
 		<if test="status != null and status != 0">
 			AND p.status = #{status}
 		</if>
-		<if test="fault_phenomenon != null and fault_phenomenon != 0">
+		<if test="fault_phenomenon != null and fault_phenomenon != ''">
 			AND p.fault_phenomenon LIKE CONCAT('%',#{fault_phenomenon},'%')
 		</if>
-		<if test="fault_date_start != null and fault_date_start != 0">
+		<if test="fault_date_start != null and fault_date_start != ''">
 			AND p.fault_date >= #{fault_date_start}
 		</if>
-		<if test="fault_date_end != null and fault_date_end != 0">
+		<if test="fault_date_end != null and fault_date_end != ''">
 			<![CDATA[ AND p.fault_date <= #{fault_date_end} ]]>
 		</if>
 		ORDER BY edit_date DESC
@@ -371,19 +371,19 @@
 		<if test="factory_id != null and factory_id != 0">
 			AND p.factory_id = #{factory_id}
 		</if>
-		<if test="customer_name != null and customer_name != 0">
+		<if test="customer_name != null and customer_name != ''">
 			AND p.customer_name LIKE CONCAT('%',#{customer_name},'%')
 		</if>
 		<if test="status != null and status != 0">
 			AND p.status = #{status}
 		</if>
-		<if test="fault_phenomenon != null and fault_phenomenon != 0">
+		<if test="fault_phenomenon != null and fault_phenomenon != ''">
 			AND p.fault_phenomenon LIKE CONCAT('%',#{fault_phenomenon},'%')
 		</if>
-		<if test="fault_date_start != null and fault_date_start != 0">
+		<if test="fault_date_start != null and fault_date_start != ''">
 			AND p.fault_date >= #{fault_date_start}
 		</if>
-		<if test="fault_date_end != null and fault_date_end != 0">
+		<if test="fault_date_end != null and fault_date_end != ''">
 			<![CDATA[ AND p.fault_date <= #{fault_date_end} ]]>
 		</if>
 	</select>
