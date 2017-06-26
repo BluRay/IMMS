@@ -54,6 +54,7 @@ public interface IQualityService {
 	public int insertProblemImprove(ProblemImproveBean problemImprove);
 	public Map<String, Object> getProblemImproveList(Map<String, Object> conditionMap);
 	public ProblemImproveBean showProblemImproveInfo(int id);
+	public int updateProblemImprove(ProblemImproveBean problemImprove);
 	
 	//======================== yk end=================================//
 			

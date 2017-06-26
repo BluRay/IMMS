@@ -105,7 +105,7 @@
 						<td align="right" style="width:100px">解决方法：</td><td colspan=3><input type="text" class="input-medium" id="new_resolve_method" style="width:400px"/></td>
 					</tr>
 					<tr style="height:40px">
-						<td align="right" style="width:100px">处理时间：</td><td style="width:150px"><input type="text" class="input-medium" id="new_resolve_date" name="new_resolve_date" style="width:150px"/></td>
+						<td align="right" style="width:100px">处理时间：</td><td style="width:150px"><input type="text" class="input-medium" id="new_resolve_date" name="new_resolve_date" style="width:150px" onClick="WdatePicker({el:'new_resolve_date',dateFmt:'yyyy-MM-dd'});"/></td>
 						<td align="right" style="width:100px">备注：</td><td style="width:150px"><input type="text" class="input-medium" id="new_memo" name="new_memo" style="width:150px"/></td>
 					</tr>
 					<tr style="height:40px">
@@ -117,6 +117,7 @@
 			</div>
 			
 			<div id="dialog-edit" class="hide" style="align:center;width:900px;height:500px">
+			<div class = "div-dialog">
 				<form id="form_edit" class="">
 					<table>
 					<tr style="height:40px">
@@ -158,7 +159,7 @@
 						<td align="right" style="width:100px">解决方法：</td><td colspan=3><input type="text" class="input-medium" id="edit_resolve_method" style="width:400px"/></td>
 					</tr>
 					<tr style="height:40px">
-						<td align="right" style="width:100px">处理时间：</td><td style="width:150px"><input type="text" class="input-medium" id="edit_resolve_date" name="edit_resolve_date" style="width:150px"/></td>
+						<td align="right" style="width:100px">处理时间：</td><td style="width:150px"><input type="text" class="input-medium" id="edit_resolve_date" name="edit_resolve_date" style="width:150px" onClick="WdatePicker({el:'edit_resolve_date',dateFmt:'yyyy-MM-dd'});"/></td>
 						<td align="right" style="width:100px">备注：</td><td style="width:150px"><input type="text" class="input-medium" id="edit_memo" name="edit_memo" style="width:150px"/></td>
 					</tr>
 					<tr style="height:40px">
@@ -167,6 +168,7 @@
 				
 					</table>
 				</form>
+			</div>
 			</div>
 
 			<!-- 脚 -->

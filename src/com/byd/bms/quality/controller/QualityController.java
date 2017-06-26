@@ -577,6 +577,51 @@ public class QualityController extends BaseController {
 		return model;
 	}
 	
+	@RequestMapping(value="editProblemImprove",method=RequestMethod.POST)
+	@ResponseBody 
+	public ModelMap editProblemImprove(@RequestParam(value="edit_fault_pic",required=false) MultipartFile edit_fault_pic,@RequestParam(value="edit_8d_report",required=false) MultipartFile edit_8d_report,@RequestParam(value="edit_close_evidenc",required=false) MultipartFile edit_close_evidenc){
+		int userid=(int) session.getAttribute("user_id");
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		ProblemImproveBean problemImprove = new ProblemImproveBean();
+		problemImprove.setId(Integer.valueOf(request.getParameter("edit_id")));
+		problemImprove.setFault_description(request.getParameter("edit_fault_description"));
+		problemImprove.setFactory_id(Integer.valueOf(request.getParameter("edit_factory")));
+		problemImprove.setResponse_workshop(request.getParameter("edit_workshop"));
+		problemImprove.setBus_type(request.getParameter("edit_bus_type"));
+		problemImprove.setVin(request.getParameter("edit_vin"));
+		problemImprove.setLicense_number(request.getParameter("edit_license_number"));
+		problemImprove.setFault_mils(request.getParameter("edit_fault_mils"));
+		problemImprove.setFault_phenomenon(request.getParameter("edit_fault_phenomenon"));
+		problemImprove.setFault_level(request.getParameter("edit_fault_level_id"));
+		problemImprove.setFault_reason(request.getParameter("edit_fault_reason"));
+		problemImprove.setRisk_evaluate(request.getParameter("edit_risk_evaluate"));
+		problemImprove.setKeystone_attention(request.getParameter("edit_keystone_attention"));
+		problemImprove.setResolve_method(request.getParameter("edit_resolve_method"));
+		problemImprove.setResolve_date(request.getParameter("edit_resolve_date"));
+		problemImprove.setMemo(request.getParameter("edit_memo"));
+		problemImprove.setIs_closed(request.getParameter("edit_is_closed"));
+		problemImprove.setEditor_id(userid);
+		problemImprove.setEdit_date(curTime);
+		if(edit_fault_pic != null){
+			String new_fault_pic_path = saveFileMethod(edit_fault_pic);
+			problemImprove.setFault_pic_path(new_fault_pic_path);
+		}
+		if(edit_8d_report != null){
+			String new_8d_report_path = saveFileMethod(edit_8d_report);
+			problemImprove.setEightD_report_path(new_8d_report_path);
+		}
+		if(edit_close_evidenc != null){
+			String new_close_evidenc_path = saveFileMethod(edit_close_evidenc);
+			problemImprove.setClose_evidenc_path(new_close_evidenc_path);
+		}
+
+		int result = qualityService.updateProblemImprove(problemImprove);
+		initModel(true,String.valueOf(result),null);
+		model = mv.getModelMap();
+		return model;
+	}
+	
 	@RequestMapping(value="addProblemImprove",method=RequestMethod.POST)
 	@ResponseBody
 	public ModelMap addProblemImprove(@RequestParam(value="new_fault_pic",required=false) MultipartFile new_fault_pic,@RequestParam(value="new_8d_report",required=false) MultipartFile new_8d_report,@RequestParam(value="new_close_evidenc",required=false) MultipartFile new_close_evidenc){	

@@ -81,6 +81,7 @@ public interface IQualityDao {
 	public List<Map<String,String>> getProblemImproveList(Map<String, Object> conditionMap);
 	public int getProblemImproveCount(Map<String, Object> conditionMap);
 	public ProblemImproveBean showProblemImproveInfo(int id);
+	public int updateProblemImprove(ProblemImproveBean problemImprove);
 	
 	//======================== yk end=================================//
 		

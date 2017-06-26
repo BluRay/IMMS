@@ -35,7 +35,7 @@ function ajaxQuery(){
 		dom: 'Bfrtip',
 	    buttons: [
 	        {extend:'excel',title:'data_export',className:'black',text:'<i class=\"fa fa-file-excel-o bigger-130\" tooltip=\"导出excel\"></i>'},
-	        {extend:'colvis',text:'<i class=\"fa fa-list bigger-130\" tooltip=\"导出excel\"></i>'}
+	        {extend:'colvis',text:'<i class=\"fa fa-list bigger-130\" tooltip=\"选择展示列\"></i>'}
 	    ],
         rowsGroup:[0,1,2,3,4],
 		paiging:true,
@@ -98,34 +98,34 @@ function ajaxQuery(){
 		
 		},
 		columns: [
-		            {"title":"订单","class":"center","data":"order_desc","defaultContent": ""},
+		            {"title":"订单","width":"230","class":"center","data":"order_desc","defaultContent": ""},
 		            {"title":"订单类型","class":"center","data":"order_type","defaultContent": ""},
 		            {"title":"订单交期","class":"center","data":"delivery_date","defaultContent": ""},
 		            {"title":"生产工厂","class":"center","data": "factory_name","defaultContent": ""},
-		            {"title":"生产<br/>数量","class":"center","data":"production_qty","defaultContent": ""},		            
+		            {"title":"生产数量","class":"center","data":"production_qty","defaultContent": ""},		            
 		            {"title":"配置","class":"center","data":"order_config_name","defaultContent": ""},		            
-		            {"title":"配置<br/>数量","class":"center","data": "config_qty","defaultContent": ""},
+		            {"title":"配置数量","class":"center","data": "config_qty","defaultContent": ""},
 		            {"title":"客户","class":"center","data":"customer","defaultContent":""},
-		            {"title":"生产<br/>顺序","class":"center","data":"sequence","defaultContent": ""},
+		            {"title":"生产顺序","class":"center","data":"sequence","defaultContent": ""},
 		            
-		            {"title":"自制件<br/>下线","class":"center","data":"zzj_offline_count","defaultContent": ""},
-		            {"title":"部件<br/>上线","class":"center","data":"parts_online_count","defaultContent": ""},
-		            {"title":"部件<br/>下线","class":"center","data":"parts_offline_count","defaultContent": ""},
-		            {"title":"焊装<br/>上线","class":"center","data": "welding_online_count","defaultContent": ""},
-		            {"title":"焊装<br/>下线","class":"center","data":"welding_offline_count","defaultContent": ""},		            
-		            {"title":"涂装<br/>上线","class":"center","data":"painting_online_count","defaultContent": ""},		            
-		            {"title":"涂装<br/>下线","class":"center","data": "painting_offline_count","defaultContent": ""},
-		            {"title":"底盘<br/>上线","class":"center","data":"chassis_online_count","defaultContent":""},
-		            {"title":"底盘<br/>下线","class":"center","data":"chassis_offline_count","defaultContent": ""},
+		            {"title":"自制件下线","class":"center","data":"zzj_offline_count","defaultContent": ""},
+		            {"title":"部件上线","class":"center","data":"parts_online_count","defaultContent": ""},
+		            {"title":"部件下线","class":"center","data":"parts_offline_count","defaultContent": ""},
+		            {"title":"焊装上线","class":"center","data": "welding_online_count","defaultContent": ""},
+		            {"title":"焊装下线","class":"center","data":"welding_offline_count","defaultContent": ""},		            
+		            {"title":"涂装上线","class":"center","data":"painting_online_count","defaultContent": ""},		            
+		            {"title":"涂装下线","class":"center","data": "painting_offline_count","defaultContent": ""},
+		            {"title":"底盘上线","class":"center","data":"chassis_online_count","defaultContent":""},
+		            {"title":"底盘下线","class":"center","data":"chassis_offline_count","defaultContent": ""},
 		            
-		            {"title":"总装<br/>上线","class":"center","data": "assembly_online_count","defaultContent": ""},
-		            {"title":"总装<br/>下线","class":"center","data":"assembly_offline_count","defaultContent": ""},		            
+		            {"title":"总装上线","class":"center","data": "assembly_online_count","defaultContent": ""},
+		            {"title":"总装下线","class":"center","data":"assembly_offline_count","defaultContent": ""},		            
 		            {"title":"入库","class":"center","data":"warehousing_count","defaultContent": ""},		            
 		            {"title":"发车","class":"center","data": "dispatch_count","defaultContent": ""},
-		            {"title":"车辆<br/>详情","class":"center","data":"","defaultContent":"","render":function(data,type,row){
+		            {"title":"车辆详情","class":"center","data":"","defaultContent":"","render":function(data,type,row){
 		            	return "<i class=\"ace-icon fa fa-search bigger-130 editorder\" onclick = 'ajaxShowBusNumber(" + row.id+ ","+row.factory_id+","+row.order_config_id+");' style='color:blue;cursor: pointer;'></i>";
 		            }},
-		            {"title":"评审<br/>结果","class":"center","data":"","defaultContent": ""},
+		            {"title":"评审结果","class":"center","data":"","defaultContent": ""},
 		          ],
 	});
 	$("#tableOrder_info").addClass('col-xs-6');

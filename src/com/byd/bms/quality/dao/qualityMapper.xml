@@ -253,6 +253,20 @@
 		where id=#{id}
 	</update>
 	
+	<update id="updateProblemImprove" parameterType="com.byd.bms.quality.model.ProblemImproveBean">
+		update BMS_QM_IMPROVE_PROBLEM
+		<set>
+			fault_description = #{fault_description},factory_id = #{factory_id},
+			vin = #{vin},license_number = #{license_number},fault_phenomenon = #{fault_phenomenon},fault_components = #{fault_components},
+			fault_date = #{fault_date},bus_type = #{bus_type},fault_mils = #{fault_mils},fault_level_id = #{fault_level_id},
+			response_workshop = #{response_workshop},fault_reason = #{fault_reason},resolve_method = #{resolve_method},
+			resolve_date = #{resolve_date},risk_evaluate = #{risk_evaluate},keystone_attention = #{keystone_attention},
+			fault_pic_path = #{fault_pic_path},8D_REPORT_PATH = #{eightD_report_path},close_evidenc_path = #{close_evidenc_path},
+			is_closed = #{is_closed},memo = #{memo},editor_id = #{editor_id},edit_date = #{edit_date}
+		</set>
+		where id=#{id}
+	</update>
+	
 	<select id="getQualityTargetList" parameterType="Map" resultType="Map">
 		select
 		p.id,p.factory_id,f.factory_name,p.workshop_id,w.workshop_name,p.target_type
@@ -622,9 +636,10 @@
 		#{close_evidenc_path}, #{is_closed}, #{memo}, #{editor_id}, #{edit_date});
 	</insert>
 	<select id="getProblemImproveList" parameterType="Map" resultType="Map">
-		SELECT p.*,u.display_name,f.factory_name FROM BMS_QM_IMPROVE_PROBLEM p
+		SELECT p.*,u.display_name,f.factory_name,w.workshop_name FROM BMS_QM_IMPROVE_PROBLEM p
 		LEFT JOIN BMS_BASE_USER u on p.editor_id=u.id
 		LEFT JOIN BMS_BASE_FACTORY f ON p.factory_id = f.id
+		LEFT JOIN BMS_BASE_WORKSHOP w on p.response_workshop=w.id
 		WHERE 1=1 
 		<if test="factory_id!=null and factory_id!=''">
 			and p.factory_id = #{factory_id}

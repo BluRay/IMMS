@@ -343,6 +343,10 @@ public class QualityServiceImpl implements IQualityService {
 	public ProblemImproveBean showProblemImproveInfo(int id) {
 		return qualityDao.showProblemImproveInfo(id);
 	}
+	@Override
+	public int updateProblemImprove(ProblemImproveBean problemImprove) {
+		return qualityDao.updateProblemImprove(problemImprove);
+	}
 	
 		
 }

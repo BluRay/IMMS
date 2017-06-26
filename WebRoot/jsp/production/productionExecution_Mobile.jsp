@@ -60,7 +60,7 @@ label {
 					<ul class="breadcrumb">
 						<li><i class="ace-icon fa fa-home home-icon"></i><a
 							href="<%=request.getContextPath()%>/index_mobile">BMS</a></li>
-						<li><a href="#">车辆扫描</a></li>
+						<li><a href="#">生产扫描</a></li>
 					</ul>
 					<!-- /.breadcrumb -->
 					<div class="nav-search" id="nav-search" style="margin-top: 5px;margin-right:10px;">
