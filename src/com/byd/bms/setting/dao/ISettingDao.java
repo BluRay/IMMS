@@ -37,4 +37,5 @@ public interface ISettingDao {
 	public int updateUserRole(BmsUserRole userRole);
 	public int delUserRole(@Param("staff_number")String staff_number,@Param("roles")String roles);
 	public int delOneUserRole(@Param("staff_number")String staff_number,@Param("role")String role);
+	public List<Map<String,Object>> getPermissionByMap(Map<String,Object> queryMap);
 }

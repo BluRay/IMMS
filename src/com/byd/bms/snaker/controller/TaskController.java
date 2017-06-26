@@ -33,7 +33,7 @@ public class TaskController {
 	
 	@RequestMapping(value = "active", method=RequestMethod.GET)
 	public String homeTaskList(Model model) {
-		String[] assignees = new String[]{"admin"};
+		String[] assignees = new String[]{"2","3","admin","test","snaker"};
 		
 		Page<WorkItem> majorPage = new Page<WorkItem>(5);
 		Page<WorkItem> aidantPage = new Page<WorkItem>(3);

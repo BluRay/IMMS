@@ -25,6 +25,7 @@
 	</bean>
 	<bean id="taskService" class="org.snaker.engine.core.TaskService">
 		<property name="access" ref="dbAccess"/>
+		<property name="strategy" ref="strategy"/>
 	</bean>
 	<bean id="managerService" class="org.snaker.engine.core.ManagerService">
 		<property name="access" ref="dbAccess"/>
@@ -32,7 +33,8 @@
 	<bean id="queryService" class="org.snaker.engine.core.QueryService">
 		<property name="access" ref="dbAccess"/>
 	</bean>
-	
+	<bean id="strategy" class="org.snaker.engine.impl.GeneralAccessStrategy">
+	</bean>
 	<bean id="cacheManager" class="org.snaker.engine.cache.memory.MemoryCacheManager"/>
 	<bean class="org.snaker.engine.impl.LogInterceptor"/>
 	<bean class="org.snaker.engine.spring.SpelExpression"/>

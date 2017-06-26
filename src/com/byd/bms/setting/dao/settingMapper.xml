@@ -168,5 +168,17 @@
 		WHERE staff_number = #{staff_number} AND role_id = #{role};
 		]]>
 	</update>
-	
+	<select id='getPermissionByMap' parameterType="Map" resultType="Map">
+		select u.id,u.staff_number,ur.role_id,ur.permission_value,r.role_name 
+		        from BMS_BASE_USER u 
+		   LEFT JOIN BMS_BASE_USER_ROLE ur on u.staff_number=ur.staff_number
+		   LEFT JOIN BMS_BASE_ROLE r  on r.id=ur.role_id
+		where 1=1 
+		<if test="userId !=null and userId !=''"> 
+			and u.id=#{userId}
+        </if>
+        <if test="roleName !=null and roleName !=''"> 
+			and r.role_name like '%${roleName}%'
+        </if>
+	</select>
 </mapper>

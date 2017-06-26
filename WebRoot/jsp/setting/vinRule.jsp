@@ -117,7 +117,7 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="editShortName">*&nbsp;工厂简称</label>
+							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="editShortName">*&nbsp;VIN前8位</label>
 							<div class="col-sm-9">
 								<input type="text" class="input-medium" placeholder="VIN前8位..." id="edit_vinPrefix" />
 							</div>

@@ -43,6 +43,12 @@
 			and f.vin_assembly_code = #{assembcode}
 		</if>
 	</select>
+	<select id="getFactoryById" parameterType="String" resultMap="factoryMap">
+		select f.* from BMS_BASE_FACTORY f where 1=1 and f.delete_flag='0'
+		<if test="id!=null and id!=''">
+			and id=#{id}
+		</if>
+	</select>
 	<insert id="addFactory" parameterType="com.byd.bms.setting.model.BmsBaseFactory">
 		<selectKey resultType="int" keyProperty="id" order="AFTER">
 			SELECT LAST_INSERT_ID() AS id

@@ -18,6 +18,7 @@ $(document).ready(function(){
 	$(document).on("click","#btnAdd",function(){
 		$("#add_wmiExtension").attr("readonly",false);
 		$("#add_numberSize").attr("readonly",false);
+		$("#addForm")[0].reset();
 		var dialog = $( "#dialog-add" ).removeClass('hide').dialog({
 			width:600,
 			modal: true,
@@ -46,10 +47,32 @@ $(document).ready(function(){
 							$("#add_area").focus();
 							return false;
 						}
-						if($("#add_vinPrefix").val()===""){
+						var vinPrefix=$("#add_vinPrefix").val();
+						if(vinPrefix===""){
 							alert("VIN前八位不能为空！");
 							$("#add_vinPrefix").focus();
 							return false;
+						}else{
+							vinPrefix=vinPrefix.trim();
+							if(vinPrefix.length!=8){
+								alert("请输入8位字符！");
+								$("#add_vinPrefix").focus();
+								return false;
+							}
+							var pattern = new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？]");
+							var rs = "";  
+							if(pattern.test(vinPrefix)){     
+							    alert("不能输入特殊字符！");  
+							    $("#add_vinPrefix").focus();
+							    return false;          
+							} 
+							var reg = new RegExp("[\\u4E00-\\u9FFF]+","g");
+							if(reg.test(vinPrefix.trim())){     
+							    alert("不能输入汉字！"); 
+							    $("#add_vinPrefix").focus();
+							    return false;          
+							}   
+							$("#add_vinPrefix").val(vinPrefix.toUpperCase());
 						}
 						if($("#add_numberSize").val()===""){
 							alert("生成序列号位数不能为空！");
@@ -96,16 +119,18 @@ $(document).ready(function(){
 	
 	$(document).on("click",".editVinRule",function(){
 		getKeysSelect("ORDER_AREA", "", $("#edit_area"),"-请选择-","");
+		$("#edit_busType").html("");
 		getBusType($("#edit_busType"));
 		$('#editId').val($(this).closest('tr').find('td').eq(0).find('input').eq(0).val());
-		var busTypeId=convertBusType($(this).closest('tr').find('td').eq(2).html(),"1");
+		var busTypeId=convertBusType($(this).closest('tr').find('td').eq(1).html(),"1");
 		$("#edit_busType option[value="+busTypeId+"]").attr("selected",true);
-		var area=convertArea($(this).closest('tr').find('td').eq(3).html(),"1");
+		var area=convertArea($(this).closest('tr').find('td').eq(2).html(),"1");
 		$("#edit_area option[value="+area+"]").attr("selected",true);
-		$('#edit_vinPrefix').val($(this).closest('tr').find('td').eq(4).html());
-		$('#edit_wmiExtension').val($(this).closest('tr').find('td').eq(5).html());
-		$('#edit_numberSize').val($(this).closest('tr').find('td').eq(6).html());
-		
+		$('#edit_vinPrefix').val($(this).closest('tr').find('td').eq(3).html());
+		$('#edit_wmiExtension').val($(this).closest('tr').find('td').eq(4).html());
+		$('#edit_numberSize').val($(this).closest('tr').find('td').eq(5).html());
+		$("#edit_wmiExtension").attr("readonly",true);
+		$("#edit_numberSize").attr("readonly",true);
 		var dialog = $( "#dialog-edit" ).removeClass('hide').dialog({
 			width:600,
 			/*height:500,*/
@@ -135,10 +160,29 @@ $(document).ready(function(){
 							$("#edit_area").focus();
 							return false;
 						}
-						if($("#edit_vinPrefix").val()===""){
+						var vinPrefix=$("#edit_vinPrefix").val();
+						if(vinPrefix===""){
 							alert("VIN前八位不能为空！");
 							$("#edit_vinPrefix").focus();
 							return false;
+						}else{
+							vinPrefix=vinPrefix.trim();
+							if(vinPrefix.length!=8){
+								alert("请输入8位字符！");
+								return false;
+							}
+							var pattern = new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？]");
+							var rs = "";  
+							if(pattern.test(vinPrefix)){     
+							    alert("不能输入特殊字符！");  
+							    return false;          
+							} 
+							var reg = new RegExp("[\\u4E00-\\u9FFF]+","g");
+							if(reg.test(vinPrefix.trim())){     
+							    alert("不能输入汉字！");  
+							    return false;          
+							}   
+							
 						}
 						if($("#edit_numberSize").val()===""){
 							alert("生成序列号位数不能为空！");
@@ -177,11 +221,45 @@ $(document).ready(function(){
 					    }
 					});
 					$( this ).dialog( "close" ); 
+					$("#editForm")[0].reset();
 					} 
 				}
 			]
 		});
 	}); 
+	$("#add_vinPrefix").blur(function(){
+		checkVinPrefix($(this));
+	});
+	$("#edit_vinPrefix").blur(function(){
+		checkVinPrefix($(this));
+	});
+	function checkVinPrefix(e){
+		var vinPrefix=$(e).val();
+		if(vinPrefix===""){
+			return false;
+		}else{
+			vinPrefix=vinPrefix.trim();
+			if(vinPrefix.length!=8){
+				alert("请输入8位字符！");
+				$(e).focus();
+				return false;
+			}
+			var pattern = new RegExp("[`~!@#$^&*%()=|{}':;',\\[\\].<>/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？]");
+			var rs = "";  
+			if(pattern.test(vinPrefix)){     
+			    alert("不能输入特殊字符！");  
+			    $(e).focus();
+			    return false;          
+			} 
+			var reg = new RegExp("[\\u4E00-\\u9FFF]+","g");
+			if(reg.test(vinPrefix.trim())){     
+			    alert("不能输入汉字！"); 
+			    $(e).focus();
+			    return false;          
+			}   
+			$(e).val(vinPrefix.toUpperCase());
+		}
+	}
 	
 	$("#add_area").change(function(){
 		changeArea($(this),"add");
@@ -325,7 +403,7 @@ function ajaxQuery(){
 		          	{"title":"<input type='checkbox' id='selectAll' onclick='selectAll()'/>","class":"center","data":"id","render": function ( data, type, row ) {
 	                    return "<input id='id' value='"+data+"' type='hidden' /><input type='checkbox' fid='cb_"+data+"'>";
 	                },"defaultContent": ""},
-		            {"title":"序号","class":"center","data":"","defaultContent": ""},
+		            //{"title":"序号","class":"center","data":"","defaultContent": ""},
 		            {"title":"车型","class":"center","data":"busTypeId","defaultContent": ""},
 		            {"title":"区域","class":"center","data":"area","defaultContent": ""},
 		            {"title":"VIN前八位","class":"center","data":"vinPrefix","defaultContent": ""},

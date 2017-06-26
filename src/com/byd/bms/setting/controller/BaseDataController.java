@@ -713,6 +713,7 @@ public class BaseDataController extends BaseController {
 	@ResponseBody
 	public ModelMap addVinRule() {
 		try {
+			String message="";
 			String busTypeId =request.getParameter("busTypeId");
 			String vinPrefix = request.getParameter("vinPrefix");
 			String wmiExtension = request.getParameter("wmiExtension") == null ? "" : request.getParameter("wmiExtension");
@@ -721,10 +722,8 @@ public class BaseDataController extends BaseController {
 			int editor_id =(int) request.getSession().getAttribute("user_id");
 			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String edit_date = df.format(new Date());
-
-			BmsBaseVinRule vinRule = new BmsBaseVinRule();
-
-			vinRule.setBusTypeId(Integer.parseInt(busTypeId));
+            BmsBaseVinRule vinRule = new BmsBaseVinRule();
+            vinRule.setBusTypeId(Integer.parseInt(busTypeId));
 			vinRule.setVinPrefix(vinPrefix);
 			vinRule.setWmiExtension(wmiExtension);
 			vinRule.setNumberSize(numberSize);
@@ -732,7 +731,17 @@ public class BaseDataController extends BaseController {
 			vinRule.setEditDate(edit_date);
 			vinRule.setArea(area);
 			int reuslt = baseDataService.addVinRule(vinRule);
-			initModel(true, "success", reuslt);
+			if(reuslt==0){
+				message="添加失败";
+				initModel(false, message, reuslt);
+			}else if(reuslt==1){
+				message="添加成功";
+				initModel(true, message, reuslt);
+			}else if(reuslt==2){
+				message="已存在记录，不能添加";
+				initModel(false, message, reuslt);
+			}
+			
 		} catch (Exception e) {
 			initModel(false, e.getMessage(), e.toString());
 		}

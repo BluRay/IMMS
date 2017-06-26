@@ -323,11 +323,24 @@ public class BaseDataServiceImpl implements IBaseDataService {
 	}
 
 	public int addVinRule(BmsBaseVinRule vinRule) {
-		return baseDataDao.addVinRule(vinRule);
+		/*
+		 * result 0:插入失败; 1:插入成功; 2:已存在记录
+		 */
+		int result=0;
+		Map map=new HashMap<String,Object>();
+		map.put("busTypeId", vinRule.getBusTypeId());
+		map.put("area",vinRule.getArea());
+		int count=baseDataDao.getVinRuleTotalCount(map);
+		if(count==0){
+			result=baseDataDao.addVinRule(vinRule);
+		}else{
+			result=2;
+		}
+		return result;
 	}
 
-	public void updateVinRule(BmsBaseVinRule vinRule) {
-		baseDataDao.updateVinRule(vinRule);
+	public int updateVinRule(BmsBaseVinRule vinRule) {
+		return baseDataDao.updateVinRule(vinRule);
 	}
 
 	public void deleteVinRule(List ids) {

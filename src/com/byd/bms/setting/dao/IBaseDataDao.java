@@ -3,7 +3,9 @@ package com.byd.bms.setting.dao;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
 import com.byd.bms.setting.model.BmsBaseBusType;
 import com.byd.bms.setting.model.BmsBaseFactory;
 import com.byd.bms.setting.model.BmsBaseLine;
@@ -17,6 +19,7 @@ public interface IBaseDataDao {
 	//工厂
 	public List<BmsBaseFactory> getFactoryList(Map<String,Object> queryMap);
 	public int getFactoryTotalCount(Map<String,Object> queryMap);
+	public BmsBaseFactory getFactoryById(@Param("id") String id);
 	public void updateFactory(BmsBaseFactory factory);
 	public void deleteFactory(List ids);
 	public int checkDeleteFactory(List ids);
@@ -71,7 +74,7 @@ public interface IBaseDataDao {
 	public List<BmsBaseVinRule> getVinRuleList(Map<String,Object> queryMap);
 	public int getVinRuleTotalCount(Map<String,Object> queryMap);	
 	public int addVinRule(BmsBaseVinRule vinRule);
-	public void updateVinRule(BmsBaseVinRule vinRule);
+	public int updateVinRule(BmsBaseVinRule vinRule);
 	public void deleteVinRule(List ids);
 	
 }

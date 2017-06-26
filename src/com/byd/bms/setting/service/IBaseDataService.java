@@ -67,7 +67,7 @@ public interface IBaseDataService {
 		public Map<String, Object> getVinRuleList(Map<String,Object> queryMap);
 		//public int getWorkgroupTotalCount(Map<String,Object> queryMap);
 		public int addVinRule(BmsBaseVinRule workgroup);
-		public void updateVinRule(BmsBaseVinRule workgroup);
+		public int updateVinRule(BmsBaseVinRule workgroup);
 		public void deleteVinRule(List ids);
 		
 }
