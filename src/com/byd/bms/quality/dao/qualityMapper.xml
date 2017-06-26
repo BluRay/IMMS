@@ -481,6 +481,7 @@
 		<result property="bfilePath" column="bfile_path" />
 		<result property="afilePath" column="afile_path" />
 		<result property="memo" column="memo" />
+		<result property="mailAddrs" column="email_addrs" />
 		<result property="editorId" column="creator_id" />
 		<result property="editDate" column="creat_date" />
 		<result property="editor" column="editor" />
@@ -492,9 +493,9 @@
 			LAST_INSERT_ID()
 		</selectKey>
 		insert into BMS_QM_QUALITY_STANDARDS_CHANGE_LOGS 
-		(record_num,usynopsis,standardfile,bfile_path,afile_path,memo,creator_id,creat_date)
+		(record_num,usynopsis,standardfile,bfile_path,afile_path,memo,email_addrs,creator_id,creat_date)
 		values(
-		#{recordNo},#{usynopsis},#{standardfile},#{bfilePath},#{afilePath},#{memo},#{editorId},#{editDate}
+		#{recordNo},#{usynopsis},#{standardfile},#{bfilePath},#{afilePath},#{memo},#{mailAddrs},#{editorId},#{editDate}
 		)
 	</insert>
 	<select id="selectStdRecord" parameterType="int" resultMap="stdRecordMap">

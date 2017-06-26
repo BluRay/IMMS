@@ -1,6 +1,6 @@
 
 $(document).ready(function(){
-
+	$("#addForm")[0].reset()
 	ajaxQuery();
 	
 	$(".btnQuery").on("click",function(){
@@ -21,7 +21,7 @@ $(document).ready(function(){
 		var dialog = $( "#dialog-add" ).removeClass('hide').dialog({
 			width:600,
 			modal: true,
-			title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-gear green"></i> 新增品质标准更新记录</h4></div>',
+			title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-gear green"></i> 品质标准更新记录新增</h4></div>',
 			title_html: true,
 			buttons: [ 
 				{
@@ -41,9 +41,15 @@ $(document).ready(function(){
 							$("#recordNo").focus();
 							return false;
 						}
-						if($("#bfile").val()===""){
-							alert("请选择更替前附件！");
-							$("#bfile").focus();
+						
+						if($("#stdFileName").val()===""){
+							alert("标准文件名称不能为空！");
+							$("#stdFileName").focus();
+							return false;
+						}
+						if($("#usynopsis").val()===""){
+							alert("更新摘要内容不能为空！");
+							$("#usynopsis").focus();
 							return false;
 						}
 						if($("#afile").val()===""){
@@ -106,17 +112,24 @@ $(document).ready(function(){
 				$('#recordNo_show').html(response.stdRecord.recordNo);
 				$('#stdFileName_show').html(response.stdRecord.standardfile);
 				$('#usynopsis_show').html(response.stdRecord.usynopsis);
-				var val=$('#bfile_path').attr("href")+"/";
-				$('#bfile_path').attr("href",val+response.stdRecord.bfilePath);
+				var val=$('#urlPath').val();
+				if(response.stdRecord.bfilePath!=null){
+					$('#bfile_path').text("查看");
+					$('#bfile_path').attr("href",val+response.stdRecord.bfilePath);
+				}else{
+					$('#bfile_path').text("");
+				}
+				
 				$('#afile_path').attr("href",val+response.stdRecord.afilePath);
 				$("#memo_show").html(response.stdRecord.memo);
+				$("#mailAddrs_show").html(response.stdRecord.mailAddrs);
 			}
 		})
 		var dialog = $( "#dialog-edit" ).removeClass('hide').dialog({
 			width:600,
 			/*height:500,*/
 			modal: true,
-			title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-gear green"></i> 品质标准更新记录</h4></div>',
+			title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-gear green"></i> 品质标准更新记录编辑</h4></div>',
 			title_html: true,
 			buttons: [ 
 				{
@@ -237,10 +250,10 @@ function ajaxQuery(){
 
             {"title":"记录编号","class":"center","data":"recordNo","defaultContent": ""},
             {"title":"更新内容摘要","class":"center","data":"usynopsis","defaultContent": ""},
-            {"title":"标准文件标号/名称","class":"center","data":"standardfile","defaultContent": ""},
+            {"title":"标准文件编号/名称","class":"center","data":"standardfile","defaultContent": ""},
             {"title":"编制人","class":"center","data":"editor","defaultContent": ""},
             {"title":"编制日期","class":"center","data": "editDate","defaultContent": ""},
-            {"title":"查看","class":"center","data":null,"defaultContent": "<i class=\"ace-icon fa fa-pencil bigger-130 show\" style='color:green;cursor: pointer;'></i>"}
+            {"title":"查看","class":"center","data":null,"defaultContent": "<i class=\"glyphicon glyphicon-search bigger-110 show\" style='color:green;cursor: pointer;'></i>"}
           ],
 	});
 	

@@ -49,17 +49,17 @@
 								<td>&nbsp;缺陷类别：</td>
 								<td><input id="input_bug_type" placeholder="缺陷类别..." style="width:100px" type="text"></td>
 								<td>&nbsp;严重等级：</td>
-								<td width="220px">
-									<label class="checkbox" style="width:35px;display:-webkit-inline-box;margin-left:20px">
+								<td width="300px">
+									<label class="checkbox" style="width:38px;display:-webkit-inline-box;margin-left:20px">
 									<input type="checkbox" name="faultlevel" value="S" />S
 									</label>
-									<label class="checkbox" style="width:35px;display:-webkit-inline-box;vertical-align:bottom">
+									<label class="checkbox" style="width:38px;display:-webkit-inline-box;vertical-align:bottom">
 									<input type="checkbox" name="faultlevel" value="A" />A
 									</label>
-									<label class="checkbox" style="width:35px;display:-webkit-inline-box;vertical-align:bottom">
+									<label class="checkbox" style="width:38px;display:-webkit-inline-box;vertical-align:bottom">
 									<input type="checkbox" name="faultlevel" value="B" />B
 									</label>
-									<label class="checkbox" style="width:35px;display:-webkit-inline-box;vertical-align:bottom">
+									<label class="checkbox" style="width:38px;display:-webkit-inline-box;vertical-align:bottom">
 									<input type="checkbox" name="faultlevel" value="C" />C								
 									</label>
 								</td>

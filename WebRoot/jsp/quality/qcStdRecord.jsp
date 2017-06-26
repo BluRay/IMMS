@@ -47,9 +47,9 @@
 							<tr>
 								<td>记录编号：</td>
 								<td><input type="text" style="height: 30px;" class="input-medium revise" placeholder="记录编号..." value="" id="search_recordNo" /></td>
-								<td>&nbsp;标准文件标号/名称：</td>
+								<td>&nbsp;标准文件编号/名称：</td>
 								<td><input type="text" style="height: 30px;" class="input-medium revise" placeholder="标准文件标号/名称..." value="" id="search_stdFileName"/></td>
-								<td>开始/结束日期：</td>
+								<td>编制日期：</td>
 								<td><input id="start_date" placeholder="开始时间..." style="width:125px" type="text" onClick="WdatePicker({el:'start_date',dateFmt:'yyyy-MM-dd'});"> - <input id="end_date" placeholder="结束时间..." style="width:125px" type="text" onClick="WdatePicker({el:'end_date',dateFmt:'yyyy-MM-dd'});"></td>
 
 								<td><input type="button" class="btn btn-sm btn-primary btnQuery" id="btnQuery" value="查询" style="margin-left: 2px;"></input>
@@ -90,7 +90,7 @@
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-3 control-label no-padding-right" for="add">*&nbsp;更替前附件</label>
+							<label class="col-sm-3 control-label no-padding-right" for="add">&nbsp;更替前附件</label>
 							<div class="col-sm-9">
 								<input class="maintain" type="file" name="bfile" id="bfile" style="width:210px"/>					
 								<!-- <input type="submit" value="上传" class="btn btn-primary maintain"/> -->
@@ -110,53 +110,54 @@
 								<textarea class="input-xlarge" id="memo" rows="1" name="memo"></textarea>
 							</div>
 						</div>
-						
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right" for="">&nbsp;通知邮箱地址</label>
+							<div class="col-sm-9">
+								<textarea class="input-xlarge" id="mailAddrs" rows="1" placeholder="多个邮箱以;隔开" name="mailAddrs"></textarea>
+							</div>
+					    </div>
 					</form>
 
 				</div>
 				
 				<div id="dialog-edit" class="hide">
 					<form id="editForm" class="form-horizontal">
+					    <input type="hidden" id="urlPath" value="<%=request.getContextPath()%>/">
 						<div class="form-group">
-							<label class="col-sm-3 control-label no-padding-right" for="add">*&nbsp;记录编号</label>
-							<div class="col-sm-9">
-								<p class="input-medium" id="recordNo_show"></p>
-							</div>
+							<label class="col-sm-3 control-label no-padding-right">*&nbsp;记录编号</label>&nbsp;&nbsp;
+<!-- 							<div class="col-sm-9"> -->
+							<label class="control-label" style="padding-left:2px;align:left" id="recordNo_show"></label>
+<!-- 								<p class="input-medium" id="recordNo_show"></p> -->
+<!-- 							</div> -->
 						</div>
 						<div class="form-group">
-							<label class="col-sm-3 control-label no-padding-right" for="add">*&nbsp;标准文件编号/名称</label>
-							<div class="col-sm-9">
-							    <p class="input-medium" id="stdFileName_show"></p>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-3 control-label no-padding-right" for="add">*&nbsp;更新内容摘要</label>
-							<div class="col-sm-9">
-							    <p class="input-medium" id="usynopsis_show"></p>
-							</div>
+							<label class="col-sm-3 control-label no-padding-right">*&nbsp;标准文件编号/名称</label>&nbsp;&nbsp;
+<!-- 							<div class="col-sm-9"> -->
+<!-- 							    <p class="input-medium" id="stdFileName_show"></p> -->
+                            <label class="control-label" style="padding-left:2px;align:left" id="stdFileName_show"></label>
+<!-- 							</div> -->
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-3 control-label no-padding-right" for="add">&nbsp;更替前附件</label>
-							<div class="col-sm-9">
-								<p><a href="<%=request.getContextPath()%>" class="text-info" id="bfile_path" target="_blank">查看</a></p>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-3 control-label no-padding-right" for="add">*&nbsp;更替后附件</label>
-							<div class="col-sm-9">
-								<p><a href="<%=request.getContextPath()%>" class="text-info" id="afile_path" target="_blank">查看</a></p>
-							</div>
+							<label class="col-sm-3 control-label no-padding-right">*&nbsp;更新内容摘要</label>&nbsp;&nbsp;
+                            <label class="control-label" style="padding-left:2px;align:left" id="usynopsis_show"></label>
 						</div>
 						<div class="form-group">
-							<label class="col-sm-3 control-label no-padding-right" for="add">*&nbsp;备注</label>
-							<div class="col-sm-9">
-								<p id="memo_show" class="text-info"></p>
-							</div>
+							<label class="col-sm-3 control-label no-padding-right">&nbsp;更替前附件</label>&nbsp;&nbsp;
+                            <label class="control-label" style="padding-left:2px;align:left"><a href="" class="text-info" id="bfile_path" target="_blank">查看</a></label>
+                        </div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right">*&nbsp;更替后附件</label>&nbsp;&nbsp;
+							<label class="control-label" style="padding-left:2px;align:left"><a href="" class="text-info" id="afile_path" target="_blank">查看</a></label>
 						</div>
-						
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right">&nbsp;备注</label>&nbsp;&nbsp;
+							<label class="control-label" style="padding-left:2px;align:left" id="memo_show"></label>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right">&nbsp;通知邮件地址</label>&nbsp;&nbsp;
+							<label class="control-label" style="padding-left:2px;align:left" id="mailAddrs_show"></label>
+						</div>
 					</form>
 				</div>
 				

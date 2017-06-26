@@ -545,6 +545,7 @@ public class PlanServiceImpl implements IPlanService {
 		for(int i=0;i<vin_list.size();i++){
 			PlanVIN planVIN = new PlanVIN();
 			planVIN.setVin(vin_list.get(i).get("vin").toString());
+			planVIN.setBus_number(vin_list.get(i).get("bus_number").toString());
 			planVIN.setOrder_no(vin_list.get(i).get("order_no").toString());
 			planVIN.setFactory_name(vin_list.get(i).get("factory_name").toString());
 			planVIN.setLeft_motor_number(vin_list.get(i).get("left_motor_number").toString());
@@ -553,6 +554,7 @@ public class PlanServiceImpl implements IPlanService {
 			planVIN.setCreat_date(vin_list.get(i).get("curTime").toString());
 			planVIN.setSource("1");
 			result += planDao.insertPlanVin2(planVIN);
+			//如导入数据中有车号信息，则需要更新两个表：plan_bus表和pd_vin表
 			if(!(vin_list.get(i).get("bus_number").toString().equals(""))){
 				result += planDao.updatePlanBus(planVIN);
 			}

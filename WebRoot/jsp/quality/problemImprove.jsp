@@ -139,7 +139,7 @@
 						<td align="right" style="width:100px">故障现象：</td><td colspan=3><input type="text" class="input-medium" id="edit_fault_phenomenon" style="width:400px"/></td>
 					</tr>
 					<tr style="height:40px">
-						<td align="right" style="width:100px">故障图片：</td><td style="width:150px"><input name="edit_fault_pic" type="file" id="edit_fault_pic" /><a id="file_link1">查看</a></td>
+						<td align="right" style="width:100px">故障图片：</td><td style="width:150px"><input name="edit_fault_pic" type="file" id="edit_fault_pic" /><a target="blank" id="file_link1">查看</a></td>
 						<td align="right" style="width:100px">故障等级：</td><td style="width:150px"><select class="input-medium" id="edit_fault_level_id" style="width:150px"><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="S">S</option></select></td>
 					</tr>
 					<tr style="height:40px">
@@ -152,8 +152,8 @@
 						<td align="right" style="width:100px">重点关注：</td><td colspan=3><input type="text" class="input-medium" id="edit_keystone_attention" style="width:400px"/></td>
 					</tr>
 					<tr style="height:40px">
-						<td align="right" style="width:100px">8D报告：</td><td style="width:150px"><input name="edit_8d_report" type="file" id="edit_8d_report" /><a id="file_link2">查看</a></td>
-						<td align="right" style="width:100px">关闭证据：</td><td style="width:150px"><input name="edit_close_evidenc" type="file" id="edit_close_evidenc" /><a id="file_link3">查看</a></td>
+						<td align="right" style="width:100px">8D报告：</td><td style="width:150px"><input name="edit_8d_report" type="file" id="edit_8d_report" /><a target="blank" id="file_link2">查看</a></td>
+						<td align="right" style="width:100px">关闭证据：</td><td style="width:150px"><input name="edit_close_evidenc" type="file" id="edit_close_evidenc" /><a target="blank" id="file_link3">查看</a></td>
 					</tr>
 					<tr style="height:40px">
 						<td align="right" style="width:100px">解决方法：</td><td colspan=3><input type="text" class="input-medium" id="edit_resolve_method" style="width:400px"/></td>

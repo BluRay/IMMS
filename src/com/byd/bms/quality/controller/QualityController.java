@@ -593,7 +593,8 @@ public class QualityController extends BaseController {
 		problemImprove.setLicense_number(request.getParameter("edit_license_number"));
 		problemImprove.setFault_mils(request.getParameter("edit_fault_mils"));
 		problemImprove.setFault_phenomenon(request.getParameter("edit_fault_phenomenon"));
-		problemImprove.setFault_level(request.getParameter("edit_fault_level_id"));
+		//problemImprove.setFault_level(request.getParameter("edit_fault_level_id"));
+		problemImprove.setFault_level_id(request.getParameter("edit_fault_level_id"));
 		problemImprove.setFault_reason(request.getParameter("edit_fault_reason"));
 		problemImprove.setRisk_evaluate(request.getParameter("edit_risk_evaluate"));
 		problemImprove.setKeystone_attention(request.getParameter("edit_keystone_attention"));
@@ -903,35 +904,38 @@ public class QualityController extends BaseController {
 		if (!file.exists()) {
 			file.mkdirs();
 		}
-		String afile_db = "qcAfile_"
-				+ edit_date.replace("-", "").replace(":", "").replace(" ", "")
-				+ afile.getOriginalFilename().substring(afile.getOriginalFilename().indexOf("."),
-						afile.getOriginalFilename().length());
-		String bfile_db= "qcBfile_"
-				+ edit_date.replace("-", "").replace(":", "").replace(" ", "")
-				+ bfile.getOriginalFilename().substring(bfile.getOriginalFilename().indexOf("."),
-						bfile.getOriginalFilename().length());
+		String afile_db ="";
 		if (afile != null) {
+			afile_db = "qcAfile_"
+					+ edit_date.replace("-", "").replace(":", "").replace(" ", "")
+					+ afile.getOriginalFilename().substring(afile.getOriginalFilename().indexOf("."),
+							afile.getOriginalFilename().length());
 			try {
 				FileUtils.copyInputStreamToFile(afile.getInputStream(), new File(file, afile_db));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			
+			stdRecord.setAfilePath(bpath+ afile_db);
 		}
-		if (bfile != null) {
+		String bfile_db= "";
+		if (bfile.getSize() != 0) {
+			bfile_db= "qcBfile_"
+					+ edit_date.replace("-", "").replace(":", "").replace(" ", "")
+					+ bfile.getOriginalFilename().substring(bfile.getOriginalFilename().indexOf("."),
+							bfile.getOriginalFilename().length());
 			try {
 				FileUtils.copyInputStreamToFile(bfile.getInputStream(), new File(file, bfile_db));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			stdRecord.setBfilePath(bpath+ bfile_db);
 		}
-		stdRecord.setAfilePath(bpath+ afile_db);
-		stdRecord.setBfilePath(bpath+ bfile_db);
 		stdRecord.setEditorId(editor_id);
 		stdRecord.setEditDate(edit_date);
 		qualityService.insertStdRecord(stdRecord);
 		
-		mv.setViewName("quality/qcStdRecord");
+		mv.setViewName("redirect:/quality/qcStdRecord");
 		return mv;
 	}
 
