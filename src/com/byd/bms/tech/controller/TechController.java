@@ -491,9 +491,9 @@ public class TechController extends BaseController{
 		conditionMap.put("draw", draw);
 		conditionMap.put("start", start);
 		conditionMap.put("length", length);
-		conditionMap.put("task_content", null);
-		conditionMap.put("tech_order_no", null);
-		conditionMap.put("order_no", null);
+		//conditionMap.put("task_content", null);
+		//conditionMap.put("tech_order_no", null);
+		//conditionMap.put("order_no", null);
 		Map<String,Object> list = techService.getTaskList(conditionMap);
 		mv.clear();
 		mv.getModelMap().addAllAttributes(list);

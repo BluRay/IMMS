@@ -73,8 +73,8 @@ function getBaseInfo(ecnTaskId){
         		console.log("-->switch_mode = " + value.switch_mode);
         		$("#switch_node").prop("disabled",true);
         		if(value.switch_mode=="全部切换"){$("#type1").prop("checked", true);$("#switch_node").prop("disabled",true);}
-        		if(value.switch_mode=="节点前切换"){$("#type2").prop("checked", true);$("#switch_node").prop("disabled",false);}
-        		if(value.switch_mode=="节点后切换"){$("#type3").prop("checked", true);$("#switch_node").prop("disabled",false);}
+        		if(value.switch_mode=="节点前切换"){$("#type2").prop("checked", true);$("#switch_node").prop("disabled",true);}
+        		if(value.switch_mode=="节点后切换"){$("#type3").prop("checked", true);$("#switch_node").prop("disabled",true);}
         		
         		$("#switch_node").val(value.switch_node);
         	});

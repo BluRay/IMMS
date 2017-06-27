@@ -470,12 +470,13 @@
 	</select>
 	
 	<update id="updateExceptionInfo" parameterType="com.byd.bms.production.model.ProductionException">
-		<![CDATA[
 		UPDATE BMS_PD_PRODUCTION_EXCEPTION
-		SET factory=#{factory}, workshop=#{workshop}, line=#{line}, process=#{process}, reason_type_id=#{reason_type_id}, 
+		SET factory=#{factory}, workshop=#{workshop}, line=#{line}, process=#{process}, 
+		<if test="reason_type_id!=null and reason_type_id !=''">
+		reason_type_id=#{reason_type_id}, 
+		</if>
 		detailed_reasons=#{detailed_reasons},severity_level_id=#{severity_level_id}, duty_department_id=#{duty_department_id},
 		measures_id=#{measures_id}, solution=#{solution} WHERE id=#{id}
-		]]>
 	</update>
 	
 	<update id="confirmException" parameterType="com.byd.bms.production.model.ProductionException">
@@ -611,7 +612,15 @@
 		<if test="update == 'right_motor'">
 		right_motor_number=#{update_val}
 		</if>
-		WHERE vin=#{vin}
+		WHERE vin=#{vin};
+		UPDATE BMS_PLAN_BUS SET
+		<if test="update == 'left_motor'">
+		left_motor_number=#{update_val}
+		</if>
+		<if test="update == 'right_motor'">
+		right_motor_number=#{update_val}
+		</if>
+		WHERE vin=#{vin};
 	</update>
 	
 	<select id="checkBusNumber" parameterType="Map" resultType="int">

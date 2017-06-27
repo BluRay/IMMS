@@ -102,7 +102,7 @@
 					<tr id="tr_switch_node" style="height:40px">
 						<td align="right" style="width:100px">切换节点：</td>
 						<td style="width:250px">
-							<select id="switch_node" class="input-medium">
+							<select id="switch_node" disabled="disabled" class="input-medium">
 								<option value=''></option>
 								<option value='焊装'>焊装</option>
 								<option value='玻璃钢'>玻璃钢</option>

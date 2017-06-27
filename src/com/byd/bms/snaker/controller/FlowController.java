@@ -55,11 +55,11 @@ public class FlowController extends BaseController{
         String factoryId = request.getParameter("factoryId");
         String type = request.getParameter("type");
         String reviewResultId = request.getParameter("reviewResultId");
-        
+        String userId = request.getSession().getAttribute("user_id") + "";
         String nextOperator = request.getParameter("");
         if (StringUtils.isEmpty(orderId) && StringUtils.isEmpty(taskId)) {
         	BmsOrderReviewResults bmsOrderReviewResults=getBmsOrderReviewResults(request);
-        	Order order=facets.startAndExecute(processId, "14", params);
+        	Order order=facets.startAndExecute(processId, userId, params);
         	if(type.equals("apply")){
         		bmsOrderReviewResults.setOrderId(Integer.parseInt(reviewOrderId));
             	bmsOrderReviewResults.setFactoryId(Integer.parseInt(factoryId));
@@ -80,7 +80,7 @@ public class FlowController extends BaseController{
             }
             switch(method) {
                 case 0://任务执行
-                    facets.execute(taskId, "2", params);
+                    facets.execute(taskId, userId, params);
                     params.put("type",type);
                     params.put("id", reviewResultId);
             		int reuslt =reviewService.updateBmsOrderReviewResults(params);
@@ -89,11 +89,11 @@ public class FlowController extends BaseController{
                 	}
                     break;
                 case -1://驳回、任意跳转
-                    facets.executeAndJump(taskId, "admin", params, request.getParameter("nodeName"));
+                    facets.executeAndJump(taskId, userId, params, request.getParameter("nodeName"));
                     break;
                 case 1://转办
                     if(StringUtils.isNotEmpty(nextOperator)) {
-                        facets.transferMajor(taskId, "admin", nextOperator.split(","));
+                        facets.transferMajor(taskId, userId, nextOperator.split(","));
                     }
                     break;
                 case 2://协办
@@ -102,7 +102,7 @@ public class FlowController extends BaseController{
                     }
                     break;
                 default:
-                    facets.execute(taskId, "admin", params);
+                    facets.execute(taskId, userId, params);
                     break;
             }
         }
@@ -220,8 +220,8 @@ public class FlowController extends BaseController{
         	params.put("bomdemandNode", bomdemandNode);
         	params.put("apply.operator", apply_operator);
         	params.put("technical.operator", technical_operator);
-        	params.put("technology.operator", technology_operator);
-        	params.put("quality.operator", quality_operator);
+//        	params.put("technology.operator", technology_operator);
+//        	params.put("quality.operator", quality_operator);
     	}
     	if(type.equals("technical")){
     		// 技术部页面评审参数
@@ -239,8 +239,8 @@ public class FlowController extends BaseController{
         	params.put("drawingearlierjudging", drawingearlierjudging);
         	params.put("purchasedetail", purchasedetail);
         	params.put("technicaldatanode", technicaldatanode);
-//        	params.put("technical.operator", technical_operator);
-//        	params.put("technology.operator", technology_operator);
+        	params.put("technical.operator", technical_operator);
+        	params.put("technology.operator", technology_operator);
     	}
     	if(type.equals("technology")){
     		// 工艺部页面评审参数
@@ -250,7 +250,7 @@ public class FlowController extends BaseController{
         	String quality_operator= request.getParameter("quality.operator");
         	params.put("technicsNode", technicsNode);
         	params.put("technicsInfo", technicsInfo);
-        	//params.put("technology.operator", technology_operator);
+        	params.put("technology.operator", technology_operator);
         	params.put("quality.operator", quality_operator);
     	}
     	if(type.equals("quality")){

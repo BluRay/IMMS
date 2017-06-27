@@ -31,7 +31,8 @@ function ajaxQuery(){
 }
 function ajaxEdit(task_id,task_detail_id,task_content,tech_order_no,switch_mode,switch_node,tech_date){
 	$("#task_assess").clearForm();
-	$("[name=switch_mode]").removeAttr("disabled");
+	$("#switch_node").prop("disabled",true);
+	//$("[name=switch_mode]").removeAttr("disabled");
 	$("#new_accordion").html("");
 	$("#tr_switch_node").css("display","none");
 	var allTaskDiv = $("#new_accordion").children('div');
@@ -54,11 +55,13 @@ function ajaxEdit(task_id,task_detail_id,task_content,tech_order_no,switch_mode,
 	//节点前切换
 	if(switch_mode=='节点前切换'){
 		mode_index=1;
+		$("#tr_switch_node").css("display","");
 		$("#switch_node").val(switch_node);
 	}
 	//节点后切换
 	if(switch_mode=='节点后切换'){
 		mode_index=2;
+		$("#tr_switch_node").css("display","");
 		$("#switch_node").val(switch_node);
 	}
 	$("[name=switch_mode]").eq(mode_index).prop('checked',true);
@@ -157,6 +160,7 @@ function asessTechTask(){
 				text: '<h5>分配成功！</h5>',
 				class_name: 'gritter-info'
 			});
+			ajaxQuery();
 		    }
 		});
 }

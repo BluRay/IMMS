@@ -170,19 +170,19 @@ function ajaxEdit(task_id,task_detail_id,task_content,tech_order_no,switch_mode,
 	}
 	if(switch_mode=='全部切换'){
 		mode_index=0;
-		//$("#tr_switch_node").css("display","");
+		$("#tr_switch_node").css("display","none");
 		$("#switch_node").val("");
 		$("#switch_node").prop("disabled",true);
 	}
 	
 	if(switch_mode=='节点前切换'){
 		mode_index=1;
-		//$("#tr_switch_node").css("display","");
+		$("#tr_switch_node").css("display","");
 		$("#switch_node").val(switch_node);
 	}
 	if(switch_mode=='节点后切换'){
 		mode_index=2;
-		//$("#tr_switch_node").css("display","");
+		$("#tr_switch_node").css("display","");
 		$("#switch_node").val(switch_node);
 	}
 	console.log("switch_mode = " + switch_mode + " mode_index = " + mode_index);

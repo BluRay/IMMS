@@ -99,6 +99,30 @@ public class PlanController extends BaseController{
         return mv;
 	}
 	
+	@RequestMapping("/busDispatchPlan")
+	public ModelAndView busDispatchPlan(){		//发车计划
+		mv.setViewName("plan/busDispatchPlan");
+        return mv;
+	}
+	
+	@RequestMapping("/busDispatch")
+	public ModelAndView busDispatch(){			//发车交接
+		mv.setViewName("plan/busDispatch");
+        return mv;
+	}
+	
+	@RequestMapping("/busDispatchSearch")
+	public ModelAndView busDispatchSearch(){	//发车查询
+		mv.setViewName("plan/busDispatchSearch");
+        return mv;
+	}
+	
+	@RequestMapping("/busDispatchAccessories")
+	public ModelAndView busDispatchAccessories(){//发车附件
+		mv.setViewName("plan/busDispatchAccessories");
+        return mv;
+	}
+	
 	@RequestMapping(value="/uploadMasterPlan",method=RequestMethod.POST)
 	@ResponseBody
 	public ModelMap uploadMasterPlan(@RequestParam(value="file",required=false) MultipartFile file){
