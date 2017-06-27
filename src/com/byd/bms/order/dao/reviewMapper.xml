@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.byd.bms.order.dao.IReviewDao">
 	<select id="getOrderReviewList" parameterType="Map" resultType="Map">
-		SELECT f.production_qty,a.area,a.id AS 'factory_id',
+		SELECT f.production_qty,a.area,a.id AS 'factory_id',a.factory_code AS 'factory_code',
 		a.factory_name,a.factory_name,f.edit_date,u.display_name as 'user_name',
 		t.bus_type_code,o.*,CONCAT(o.order_name,t.bus_type_code,o.order_qty,'台') AS 'order_name_str',f.status,
 		IFNULL(r.review_status,'0') as review_status,IFNULL(r.id,'') as reviewId

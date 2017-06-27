@@ -21,7 +21,8 @@ $(document).ready(function(){
 	        },
 	        success: function(response) {
 	        	alert("确认成功！");
-	        	getBaseInfo(ecnTaskId);
+	        	//getBaseInfo(ecnTaskId);
+	        	window.close();
 	        }
 		});
 	});
@@ -181,7 +182,8 @@ function showOrderInfo(index){
         type: "get",
         data: {
         	"taskid":dataOrderInfo[index].tech_task_id,
-        	"order_no":dataOrderInfo[index].order_no
+        	"order_no":dataOrderInfo[index].order_no,
+        	"factory":dataOrderInfo[index].prod_factory
         },
         success: function(response) {
         	//alert(response.dataOrderFinishInfo[0].FINISH_STR);

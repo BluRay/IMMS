@@ -44,6 +44,25 @@ public class ReviewServiceImpl implements IReviewService {
 			Map<String, Object> condMap) {
 		int totalCount=0;
 		List<Map<String, Object>> datalist=reviewDao.getOrderReviewList(condMap);
+		// 查询是否有权限，有permission：true
+		for(Map<String, Object> map : datalist){
+			Map<String, Object> queryMap=new HashMap<String, Object>();
+			queryMap.put("userId", condMap.get("userId"));
+			queryMap.put("roleName", "评审");
+			List<Map<String, Object>> list=settingDao.getPermissionByMap(queryMap);
+			String permissionValue="";
+			boolean isResult=false;
+			for(Map<String,Object> m : list){
+				permissionValue+=(String) m.get("permission_value")+",";
+			}
+			String [] array=permissionValue.split(",");
+			for(String arr : array){
+				if(arr.equals((String)map.get("factory_code"))){
+					isResult=true;
+				}
+			}
+			map.put("permission", isResult);
+		}
 		totalCount=reviewDao.getOrderReviewTotalCount(condMap);
 		Map<String, Object> result=new HashMap<String,Object>();
 		result.put("draw", condMap.get("draw"));
@@ -78,15 +97,14 @@ public class ReviewServiceImpl implements IReviewService {
 
 	public boolean isPermission(Map<String, Object> condMap) {
 		boolean isResult=false;
-		List list=settingDao.getPermissionByMap(condMap);
+		List<Map<String,Object>> list=settingDao.getPermissionByMap(condMap);
 		
 		if(list!=null && list.size()>0){
-			Map<String,Object> map=(Map<String,Object>) list.get(0);
-//			if(!"start".equals((String)condMap.get("type"))){
-//				return true;
-//			}
+			String permissionValue="";
+			for(Map<String,Object> m : list){
+				permissionValue+=(String) m.get("permission_value");
+			}
 			
-			String permissionValue=(String) map.get("permission_value");
 			String [] array=permissionValue.split(",");
 			BmsBaseFactory factory=baseDataDao.getFactoryById((String)condMap.get("factoryId"));
 			for(String arr : array){

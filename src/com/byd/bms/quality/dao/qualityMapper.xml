@@ -350,8 +350,8 @@
 		<if test="customer_name != null and customer_name != ''">
 			AND p.customer_name LIKE CONCAT('%',#{customer_name},'%')
 		</if>
-		<if test="status != null and status != 0">
-			AND p.status = #{status}
+		<if test="status != null and status != ''">
+			AND p.resolve_result = #{status}
 		</if>
 		<if test="fault_phenomenon != null and fault_phenomenon != ''">
 			AND p.fault_phenomenon LIKE CONCAT('%',#{fault_phenomenon},'%')

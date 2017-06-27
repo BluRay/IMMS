@@ -265,6 +265,7 @@ public class OrderReviewController extends BaseController{
 	@ResponseBody
 	public ModelMap showOrderReviewList(){
 		model=new ModelMap();
+		String userId = request.getSession().getAttribute("user_id") + "";
 		Map<String,Object> condMap=new HashMap<String,Object>();
 		int draw=Integer.parseInt(request.getParameter("draw"));//jquerydatatables 
 		int start=Integer.parseInt(request.getParameter("start"));//分页数据起始数
@@ -282,6 +283,7 @@ public class OrderReviewController extends BaseController{
 		condMap.put("actYear",actYear);
 		condMap.put("factory", factory);
 		condMap.put("orderColumn", orderColumn);
+		condMap.put("userId", userId);
 		Map<String,Object> result=reviewService.getOrderReviewListPage(condMap);
 		model.addAllAttributes(result);
 		

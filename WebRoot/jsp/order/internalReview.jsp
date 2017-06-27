@@ -86,9 +86,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 				<div class="row"  >
 					<div class="col-xs-12"  style="width:100%">
-						<table id="tableOrder" 
-							class="table table-striped table-bordered table-hover "
-							style="font-size: 12px; width:1500px;overflow-x:auto" >
+						<table id="tableOrder" class="table table-striped table-bordered table-hover" style="font-size: 12px;" >
 						</table>
 					</div>
 				</div>

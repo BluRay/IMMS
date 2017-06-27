@@ -271,8 +271,8 @@ public class BaseDataServiceImpl implements IBaseDataService {
 		return baseDataDao.addWorkgroup(workgroup);
 	}
 	@Override
-	public void updateWorkgroup(BmsBaseStandardWorkgroup workgroup) {
-		baseDataDao.updateWorkgroup(workgroup);
+	public int updateWorkgroup(BmsBaseStandardWorkgroup workgroup) {
+		return baseDataDao.updateWorkgroup(workgroup);
 	}
 	@Override
 	public void deleteWorkgroup(List ids) {

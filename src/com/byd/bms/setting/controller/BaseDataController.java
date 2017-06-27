@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.json.JSONArray;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -913,6 +914,22 @@ public class BaseDataController extends BaseController {
 
 		return model;
 	}
+	@RequestMapping("/getWorkgroupNodeName")
+	@ResponseBody
+	public ModelMap getWorkgroupNodeName() {
+		Map<String, Object> queryMap = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
+		String id = request.getParameter("id");
+		queryMap.put("id", id);
+		List<Map<String, Object>> result = baseDataService.getWorkshopTreeList(queryMap);
+		if(result!=null && result.size()>0){
+			Map<String, Object> m=result.get(0);
+			map.put( "nodeName",m.get("workshop_name"));
+		}
+		model.addAllAttributes(map);
+
+		return model;
+	}
 	// 根据ID查询该班组子节点菜单
 	@RequestMapping("/getWorkgroupList")
 	@ResponseBody
@@ -971,7 +988,12 @@ public class BaseDataController extends BaseController {
 			workgroup.setMemo(request.getParameter("memo"));
             workgroup.setEditDate(edit_date);
             workgroup.setEditorId(editor_id);
-			baseDataService.updateWorkgroup(workgroup);
+			int result=baseDataService.updateWorkgroup(workgroup);
+			if(result==1){
+				initModel(true, "更新成功", result);
+			}else{
+				initModel(false, "更新失败", result);
+			}
 			
 		} catch (Exception e) {
 			initModel(false, e.getMessage(), e.toString());

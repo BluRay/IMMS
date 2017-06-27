@@ -57,39 +57,7 @@ $(document).ready(function(){
 							$("#afile").focus();
 							return false;
 						}
-						
 						$("#addForm").submit();
-
-//						$("#addForm").ajaxSubmit({
-//						    url: "",
-//						    type: "post",
-//							dataType:"json",
-//						    data: {
-//						    	"afile" : $("#afile").val(),
-//						    	"recordNo" : $("#recordNo").val(),
-//						    	"stdFileName" : $("#stdFileName").val(),
-//						    	"usynopsis" : $("#usynopsis").val(),
-//						    	"bfile" : $("#bfile").val()
-//						    },
-//						    success:function(response){
-//						    	if(response.success){
-//						    	$.gritter.add({
-//									title: '系统提示：',
-//									text: '<h5>增加VIN生成规则成功！</h5>',
-//									class_name: 'gritter-info'
-//								});
-//						    	$("#addForm")[0].reset();
-//						    	ajaxQuery();
-//						    	}else{
-//						    		$.gritter.add({
-//										title: '系统提示：',
-//										text: '<h5></h5><br>'+response.message,
-//										class_name: 'gritter-info'
-//									});
-//						    	}
-//						    }
-//						});
-						$("#addForm").reset();
 						$( this ).dialog( "close" ); 
 					} 
 				}
@@ -109,9 +77,9 @@ $(document).ready(function(){
 			},
 			dataType:"json",
 			success:function(response){
-				$('#recordNo_show').html(response.stdRecord.recordNo);
-				$('#stdFileName_show').html(response.stdRecord.standardfile);
-				$('#usynopsis_show').html(response.stdRecord.usynopsis);
+				$('#recordNo_show').val(response.stdRecord.recordNo);
+				$('#stdFileName_show').val(response.stdRecord.standardfile);
+				$('#usynopsis_show').val(response.stdRecord.usynopsis);
 				var val=$('#urlPath').val();
 				if(response.stdRecord.bfilePath!=null){
 					$('#bfile_path').text("查看");
@@ -121,15 +89,15 @@ $(document).ready(function(){
 				}
 				
 				$('#afile_path').attr("href",val+response.stdRecord.afilePath);
-				$("#memo_show").html(response.stdRecord.memo);
-				$("#mailAddrs_show").html(response.stdRecord.mailAddrs);
+				$("#memo_show").val(response.stdRecord.memo);
+				$("#mailAddrs_show").val(response.stdRecord.mailAddrs);
 			}
 		})
 		var dialog = $( "#dialog-edit" ).removeClass('hide').dialog({
 			width:600,
 			/*height:500,*/
 			modal: true,
-			title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-gear green"></i> 品质标准更新记录编辑</h4></div>',
+			title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-gear green"></i> 品质标准更新记录查看</h4></div>',
 			title_html: true,
 			buttons: [ 
 				{

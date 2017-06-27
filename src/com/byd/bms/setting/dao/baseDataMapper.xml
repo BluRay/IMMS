@@ -505,7 +505,7 @@
 	
 	
 	<select id="getWorkshopTreeList" parameterType="Map" resultType="Map">
-		
+		select * from (
 		SELECT CONCAT('t',id) id,workshop_name,0 parent_id,id workshop_id,
 		(SELECT COUNT(f2.id) FROM BMS_BASE_STANDARD_WORKGROUP f2 WHERE f2.workshop_id = t.id) AS sub_count
 		FROM BMS_BASE_WORKSHOP t where t.delete_flag='0'
@@ -513,6 +513,10 @@
 		select id id,workgroup_name,parent_id,workshop_id,
 		(SELECT COUNT(f2.id) FROM BMS_BASE_STANDARD_WORKGROUP f2 WHERE f2.parent_id = t1.id) AS sub_count 
 		from BMS_BASE_STANDARD_WORKGROUP t1
+		) t2 where 1=1 
+		<if test="id!=null and id!=''">
+			and t2.id=#{id}
+		</if>
 	</select>
 	<select id="getWorkgroupList" parameterType="Map" resultType="com.byd.bms.setting.model.BmsBaseStandardWorkgroup">
 		SELECT id,workgroup_no workgroupId,workgroup_name groupName,responsibility,memo from BMS_BASE_STANDARD_WORKGROUP t where 1=1
@@ -532,7 +536,7 @@
 	</insert>
 	<update id="updateWorkgroup" parameterType="com.byd.bms.setting.model.BmsBaseStandardWorkgroup">
 		update BMS_BASE_STANDARD_WORKGROUP set 
-		workgroup_id=#{workgroupId},group_name=#{groupName},responsibility=#{responsibility},
+		workgroup_no=#{workgroupId},workgroup_name=#{groupName},responsibility=#{responsibility},
 		memo=#{memo},editor_id=#{editorId},edit_date=#{editDate}
 		where id=#{id}
 	</update>

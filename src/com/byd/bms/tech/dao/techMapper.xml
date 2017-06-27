@@ -152,6 +152,7 @@
 	
 	<select id="queryTechTaskListCount" parameterType="Map" resultType="int">
 		SELECT count(task.id) from (
+		
 		SELECT t.id,d.id task_detail_id,t.task_content,t.tech_order_no,t.major_change,t.custom_change,t.custom_change_no,
 		t.repeat_change,t.tech_point_num,t.tech_order_file,t.custom_change_file,t.tech_date,t.duty_unit duty_unit_id,k2.key_name duty_unit,
 		t.switch_mode,t.switch_node,t.editor_id,t.edit_date,t.assigner_id,t.assign_date,t.assesor_id,t.assess_date,
@@ -296,12 +297,14 @@
 	
 	<select id="queryTechList" parameterType="Map" resultType="Map">
 		<![CDATA[		
-		SELECT concat(d.order_no,'<br>',o.order_name,bt.bus_type_code,' ',o.order_qty,'台') order_desc,d.prod_factory_id,d.prod_factory,
+		SELECT concat(d.order_no,'<br>',o.order_name,bt.bus_type_code,' ',o.order_qty,'台') order_desc,d.prod_factory_id,
+		group_concat(d.prod_factory,'_',f.id) AS prod_factory,
 		group_concat(d.factory_id,'_',d.factory,'||',d.tech_list separator ';') tech_detail_list,
 		group_concat(d.factory_id,'_',d.factory,'||',(select count(f.bus_number) from BMS_TECH_TASK_FOLLOW f where f.confirmor_date is not null and f.confirmor_date !='' and f.factory=d.factory and f.order_no=d.order_no)  separator ';') follow_detail
 		FROM BMS_TECH_TASK_DETAIL d 
 		LEFT JOIN BMS_OR_ORDER o ON o.order_no=d.order_no
 		LEFT JOIN BMS_BASE_BUS_TYPE bt on bt.id=o.bus_type_id
+		LEFT JOIN BMS_BASE_FACTORY f ON d.prod_factory = f.factory_name
 		WHERE d.tech_task_id=#{task_id} 
 		group by d.order_no
 		]]>
@@ -1127,7 +1130,7 @@
 	<select id="queryTaskOrderFinishInfo" parameterType="Map" resultType="Map">
 		SELECT GROUP_CONCAT(S.finish) AS finish_str FROM (
 		SELECT (CONCAT(t.workshop,':',COUNT(distinct(t.bus_number)))) AS finish FROM BMS_TECH_TASK_FOLLOW t 
-		WHERE t.tech_task_id = #{taskid} AND t.order_no = #{order_no} GROUP BY workshop
+		WHERE t.tech_task_id = #{taskid} AND t.order_no = #{order_no} AND t.factory = #{factory} GROUP BY workshop
 		) S
 	</select>
 	

@@ -48,15 +48,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<tr style="height:40px">
 						<td align="right" style="width:100px">切换方式：</td>
 						<td>
-							<input checked name="switch_mode" value="全部切换" id="type1" type="radio"><span>全部切换&nbsp;&nbsp;</span>
-							<input name="switch_mode" value="节点前切换" id="type2" type="radio"><span>节点前切换&nbsp;&nbsp;</span>
-							<input name="switch_mode" value="节点后切换" id="type3" type="radio"><span>节点后切换&nbsp;&nbsp;</span>
+							<input checked name="switch_mode" disabled="disabled" value="全部切换" id="type1" type="radio"><span>全部切换&nbsp;&nbsp;</span>
+							<input name="switch_mode" disabled="disabled" value="节点前切换" id="type2" type="radio"><span>节点前切换&nbsp;&nbsp;</span>
+							<input name="switch_mode" disabled="disabled" value="节点后切换" id="type3" type="radio"><span>节点后切换&nbsp;&nbsp;</span>
 						</td>
 					</tr>
 					<tr id="tr_switch_node" style="height:40px">
 						<td align="right" style="width:100px">切换节点：</td>
 						<td style="width:250px">
-							<select id="switch_node" class="input-medium">
+							<select id="switch_node" disabled="disabled" class="input-medium">
 								<option value='焊装'>焊装</option>
 								<option value='玻璃钢'>玻璃钢</option>
 								<option value='涂装'>涂装</option>

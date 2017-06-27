@@ -61,7 +61,7 @@ public interface IBaseDataDao {
 	public List<Map<String,Object>> getWorkshopTreeList(Map<String,Object> queryMap);
 	public int getWorkgroupTotalCount(Map<String,Object> queryMap);
 	public int addWorkgroup(BmsBaseStandardWorkgroup workgroup);
-	public void updateWorkgroup(BmsBaseStandardWorkgroup workgroup);
+	public int updateWorkgroup(BmsBaseStandardWorkgroup workgroup);
 	public void deleteWorkgroup(String id);
 	
 	//车型

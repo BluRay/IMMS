@@ -124,23 +124,22 @@
 					<form id="editForm" class="form-horizontal">
 					    <input type="hidden" id="urlPath" value="<%=request.getContextPath()%>/">
 						<div class="form-group">
-							<label class="col-sm-3 control-label no-padding-right">*&nbsp;记录编号</label>&nbsp;&nbsp;
-<!-- 							<div class="col-sm-9"> -->
-							<label class="control-label" style="padding-left:2px;align:left" id="recordNo_show"></label>
-<!-- 								<p class="input-medium" id="recordNo_show"></p> -->
-<!-- 							</div> -->
+							<label class="col-sm-3 control-label no-padding-right" for="add">*&nbsp;记录编号</label>
+							<div class="col-sm-9">
+								<input type="text" class="input-medium" id="recordNo_show" readonly="readonly"/>
+							</div>
 						</div>
 						<div class="form-group">
-							<label class="col-sm-3 control-label no-padding-right">*&nbsp;标准文件编号/名称</label>&nbsp;&nbsp;
-<!-- 							<div class="col-sm-9"> -->
-<!-- 							    <p class="input-medium" id="stdFileName_show"></p> -->
-                            <label class="control-label" style="padding-left:2px;align:left" id="stdFileName_show"></label>
-<!-- 							</div> -->
+							<label class="col-sm-3 control-label no-padding-right" for="add">*&nbsp;标准文件编号/名称</label>
+							<div class="col-sm-9">
+                                <input type="text" class="input-medium" id="stdFileName_show" readonly="readonly"/>
+                            </div>
 						</div>
-						
 						<div class="form-group">
-							<label class="col-sm-3 control-label no-padding-right">*&nbsp;更新内容摘要</label>&nbsp;&nbsp;
-                            <label class="control-label" style="padding-left:2px;align:left" id="usynopsis_show"></label>
+							<label class="col-sm-3 control-label no-padding-right" for="add">*&nbsp;更新内容摘要</label>
+							<div class="col-sm-9">
+								<textarea class="input-xlarge" id="usynopsis_show" rows="1" name="usynopsis" readonly="readonly"></textarea>
+							</div>
 						</div>
 						<div class="form-group">
 							<label class="col-sm-3 control-label no-padding-right">&nbsp;更替前附件</label>&nbsp;&nbsp;
@@ -151,13 +150,17 @@
 							<label class="control-label" style="padding-left:2px;align:left"><a href="" class="text-info" id="afile_path" target="_blank">查看</a></label>
 						</div>
 						<div class="form-group">
-							<label class="col-sm-3 control-label no-padding-right">&nbsp;备注</label>&nbsp;&nbsp;
-							<label class="control-label" style="padding-left:2px;align:left" id="memo_show"></label>
+							<label class="col-sm-3 control-label no-padding-right" for="add">&nbsp;备注</label>
+							<div class="col-sm-9">
+								<textarea class="input-xlarge" id="memo_show" rows="1" name="memo" readonly="readonly"></textarea>
+							</div>
 						</div>
 						<div class="form-group">
-							<label class="col-sm-3 control-label no-padding-right">&nbsp;通知邮件地址</label>&nbsp;&nbsp;
-							<label class="control-label" style="padding-left:2px;align:left" id="mailAddrs_show"></label>
-						</div>
+							<label class="col-sm-3 control-label no-padding-right" for="">&nbsp;通知邮箱地址</label>
+							<div class="col-sm-9">
+								<textarea class="input-xlarge" id="mailAddrs_show" rows="1" name="mailAddrs" readonly="readonly"></textarea>
+							</div>
+					    </div>
 					</form>
 				</div>
 				

@@ -48,8 +48,8 @@
 								<td><select id="search_factory" class="form-control" style="width:100px"></select></td>
 								<td>&nbsp;客户：</td>
 								<td><input id="search_customer_name" placeholder="客户..." style="width:100px" type="text"></td>
-								<td>&nbsp;报告状态：</td>
-								<td><select id="search_status" class="input-small" style="width:60px"><option value="">全部</option><option value="1">已编写</option><option value="0">未编写</option></select></td>
+								<td>&nbsp;处理结果：</td>
+								<td><select id="search_resolve_result" class="input-small" style="width:70px"><option value="">全部</option><option value="0">已关闭</option><option value="1">处理中</option></select></td>
 								<td>&nbsp;故障现象：</td>
 								<td><input id="search_fault_phenomenon" placeholder="故障现象..." style="width:100px" type="text"></td>
 								<td>&nbsp;反馈日期：</td>

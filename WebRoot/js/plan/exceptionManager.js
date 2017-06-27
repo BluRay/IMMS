@@ -15,6 +15,10 @@ $(document).ready(function () {
 		getWorkshopSelect("plan/exceptionManager",$("#edit_factory :selected").text(),"","#edit_workshop",null,"id");
 	})
 	
+	$('#edit_workshop').change(function(){
+		getProcessList($("#edit_factory :selected").text(),$("#edit_workshop :selected").text(),$('#edit_line').val(),0);
+	})
+	
 	$("#btnQuery").click(function () {
 		eachSeries(scripts, getScript, initTable);
 		ajaxQuery();
@@ -85,7 +89,7 @@ function confirm(exception_id){
 }
 
 function edit(id,factory,workshop,line,process){
-	getProcessList(factory,workshop,line,process);
+	getProcessList(factory,workshop,line.replace('线',''),process);
 	getFactorySelect("plan/exceptionManager",'',"#edit_factory",null,'id');
 	getWorkshopSelect("plan/exceptionManager",$("#edit_factory :selected").text(),"","#edit_workshop",null,"id");
 	getReasonTypeSelect();
@@ -128,8 +132,7 @@ function edit(id,factory,workshop,line,process){
 					$("#exception_id").val(value.id);
 					$("#edit_factory option:contains('"+value.factory+"')").prop("selected", true);
 					$("#edit_workshop option:contains('"+value.workshop+"')").prop("selected", true);
-
-					$("#edit_line").val(value.line);
+					$("#edit_line option:contains('"+value.line+"')").prop("selected", true);
 					$("#edit_busNumber").val(value.bus_number);
 					$("#edit_reason_type").val(value.reason_type_id);
 					$("#edit_detailed_reason").val(value.detailed_reasons);
@@ -346,7 +349,7 @@ function initTable() {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
     	        	}
             },{
-            	field: 'pfinish_time',title: '&nbsp;&nbsp;处理时间&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
+            	field: 'process_date',title: '&nbsp;&nbsp;处理时间&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
                 sortable: false,visible: true,footerFormatter: totalTextFormatter,
                 cellStyle:function cellStyle(value, row, index, field) {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
@@ -398,9 +401,14 @@ function initTable() {
                 cellStyle:function cellStyle(value, row, index, field) {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};},
     	        formatter:function(value, row, index){
-    	        	return "<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"修改\" onclick='edit(" + row['id'] + 
-		                    ",\""+row['factory']+"\",\""+row['workshop']+"\",\""+row['line']+"\",\""+row['process']+"\")' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;<i class=\"glyphicon glyphicon-ok bigger-130 showbus\" title=\"处理\" onclick='confirm(" + row['id'] + 
-		                    ")' style='color:blue;cursor: pointer;'></i>";
+    	        	if(row['process_date']!=null){
+    	        		return "-";
+    	        	}else{
+    	        		return "<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"修改\" onclick='edit(" + row['id'] + 
+	                    ",\""+row['factory']+"\",\""+row['workshop']+"\",\""+row['line']+"\",\""+row['process']+"\")' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;<i class=\"glyphicon glyphicon-ok bigger-130 showbus\" title=\"处理\" onclick='confirm(" + row['id'] + 
+	                    ")' style='color:blue;cursor: pointer;'></i>";
+    	        	}
+    	        	
     	        }
             }
         ]

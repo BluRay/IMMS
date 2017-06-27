@@ -386,6 +386,12 @@ function addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factor
 	tech_detail_list=tech_detail_list||"";
 	if(tech_detail_list.trim().length>0){
 		var tech_detail_arr=tech_detail_list.split(";");
+		
+		//prod_factory:"武汉工厂_22,长沙工厂_16"
+		if(typeof(prod_factory) != "undefined"){
+			var prod_factory_arr=prod_factory.split(",");
+		}
+		
 		var content=$("<div id=\"tech_factory_"+taskNum+"\" class=\"tech_factory\"/>");
 		$.each(tech_detail_arr,function(i,tech_detail){
 			var factory_id=tech_detail.split("||")[0].split("_")[0];
@@ -401,7 +407,12 @@ function addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factor
 			if(tech_info.trim().length>0){
 				checked="checked";
 			}
-			console.log("-->factory = " + factory);
+			if(typeof(prod_factory) != "undefined"){
+				prod_factory_id = prod_factory_arr[i].split("_")[1];
+				prod_factory = prod_factory_arr[i].split("_")[0];
+				console.log(i+"-->prod_factory_id = " + prod_factory_id);
+				console.log(i+"-->prod_factory = " + prod_factory);
+			}
 			//prod_factory_id=prod_factory_id||factory_id;
 			//prod_factory=prod_factory||factory;
 			var facotory_div=$("<div style='margin-top:10px'><b>生产工厂：</b><span factory_id='"+(prod_factory_id||factory_id)+"'>"+(prod_factory||factory)+"</span></div>");

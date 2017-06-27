@@ -58,9 +58,9 @@
 								<div class="col-sm-8">
 									<div id="div_tree2" class="widget-box widget-color-green2" style="height:800px;OVERFLOW-X:auto;OVERFLOW-Y:auto;OVERFLOW:auto">
 										<div class="widget-header">
-											<h4 class="widget-title lighter smaller">标准班组:&nbsp;</h4>
+											<h4 class="widget-title lighter smaller" id="nodeName">标准班组:&nbsp;</h4>
 											<button id="btn_delete" style="float:right;margin-top:2px" class="btn btn-sm btn-purple">删除</button>&nbsp;&nbsp;
-											<button id="btn_addRole" style="float:right;margin-top:2px" class="btn btn-sm btn-success">新增</button>
+											<button id="btn_add" style="float:right;margin-top:2px" class="btn btn-sm btn-success">新增</button>
 										</div>
 
 										<div class="widget-body">
@@ -141,13 +141,8 @@
 							<div class="col-sm-9"><input id="edit_memo" placeholder="备注" class="col-sm-9" type="text"></div>
 						</div>
 					</fieldset>
-	
-					<div class="form-actions center">
-					    <input type="hidden" id="edit_parentId">
-					    <input type="hidden" id="edit_workshopId">
-						<button id="btn_edit_ok" type="button" class="btn btn-success" role="button"><span class="ui-button-text"><i class="ace-icon glyphicon glyphicon-ok"></i>&nbsp; 增加</span></button>
-					    <button id="btn_edit_cancel" type="button" class="btn" role="button"><span class="ui-button-text"><i class="ace-icon glyphicon glyphicon-remove"></i>&nbsp; 取消</span></button>
-					</div>
+	                <input type="hidden" id="edit_parentId">
+					<input type="hidden" id="edit_workshopId">
 				</form>
             </div>
 			<!-- 脚 -->

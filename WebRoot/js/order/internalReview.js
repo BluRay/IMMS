@@ -14,6 +14,7 @@ var dt;
 $(document).ready(function(){
 	cur_year = new Date().getFullYear();
 	ajaxQuery();
+	getFactorySelect();
 	$(".btnQuery").on("click",function(){
 		ajaxQuery();
 	}); 
@@ -24,10 +25,10 @@ $(document).ready(function(){
 function ajaxQuery(){
 	dt=$("#tableOrder").DataTable({
 		serverSide: true,
-		fixedColumns:   {
-            leftColumns: 2,
-            rightColumns:3
-        },
+//		fixedColumns:   {
+//            leftColumns: 3,
+//            rightColumns:3
+//        },
         rowsGroup:[0,1,2,3,4,5],
 		paiging:true,
 		ordering:false,
@@ -91,30 +92,28 @@ function ajaxQuery(){
 		
 		},
 		columns: [
-		            {"title":"订单编号","class":"center","data":"order_no",/*"render": function ( data, type, row ) {
+		            {"title":"订单编号",width:'100',"class":"center","data":"order_no",/*"render": function ( data, type, row ) {
 	                    return "<input style='border:0;width:100%;height:100%;background-color:transparent;text-align:center;' value='"+data+"' />";
 	                },*/"defaultContent": ""},
-		            {"title":"订单描述","class":"center","data":"order_name_str","defaultContent": ""},
-		            {"title":"客户","class":"center","data":"customer","defaultContent": ""},
-		            {"title":"生产年份","class":"center","data":"productive_year","defaultContent": ""},
-		            {"title":"订单交期","class":"center","data": "delivery_date","defaultContent": ""},
-		            {"title":"订单数量","class":"center","data":"order_qty","defaultContent": ""},		            
-		            {"title":"生产工厂","class":"center","data":"factory_name","defaultContent": ""},		            
-		            {"title":"生产数量","class":"center","data": "production_qty","defaultContent": ""},
+		            {"title":"订单描述",width:'180',"class":"center","data":"order_name_str","defaultContent": ""},
+		            //{"title":"客户","class":"center","data":"customer","defaultContent": ""},
+		            {"title":"生产工厂",width:'100',"class":"center","data":"factory_name","defaultContent": ""},
+		            {"title":"生产数量",width:'80',"class":"center","data": "production_qty","defaultContent": ""},
+		            {"title":"生产年份",width:'80',"class":"center","data":"productive_year","defaultContent": ""},
+		            {"title":"订单交期",width:'100',"class":"center","data": "delivery_date","defaultContent": ""},
+		            //{"title":"订单数量","class":"center","data":"order_qty","defaultContent": ""},		            
 		            {"title":"订单状态","class":"center","data":"status","render":function(data,type,row){
 		            	return data=="0"?"未开始":(data=="1"?"生产中":"已完成")},"defaultContent":""
 		            },
-		            {"title":"评审状态","class":"center","data":"review_status","render":function(data,type,row){
-		            	return data=="2"?"已评审":(data=="1"?"评审中":"未评审")},"defaultContent":""
+		            {"title":"评审状态",width:'80',"class":"center","data":"review_status","render":function(data,type,row){
+		            	return row.permission==true ? (data=="2"?"已评审":(data=="1"?"评审中":"未评审")) : ""},"defaultContent":""
 		            },
-		            {"title":"评审结果","class":"center","data":"review_status","render":function(data,type,row){
-		            	return data=="2"? "<i class=\"glyphicon glyphicon-search bigger-110 editorder\" onclick = 'ajaxSearch(" + row.reviewId+ ");' style='color:green;cursor: pointer;'></i>": ""},
+		            {"title":"评审结果",width:'80',"class":"center","data":"review_status","render":function(data,type,row){
+		            	return row.permission==true ? (data=="2"? "<i class=\"glyphicon glyphicon-search bigger-110 editorder\" onclick = 'ajaxSearch(" + row.reviewId+ ");' style='color:green;cursor: pointer;'></i>": "") : ""},
 		            	"defaultContent": ""
 		            },
-		            
-		            {"title":"评审","class":"center","data":"review_status","render":function(data,type,row){
-		            	
-		            	return data!="2"? "<i class=\"ace-icon fa fa-pencil bigger-130 editorder\" onclick = 'ajaxReview(\""+ row.id+"\",\""+row.factory_id+"\",\""+row.order_no+"\");' style='color:green;cursor: pointer;'></i>": ""},
+		            {"title":"评审",width:'60',"class":"center","data":"review_status","render":function(data,type,row){
+		            	return row.permission==true ? (data!="2"? "<i class=\"ace-icon fa fa-pencil bigger-130 editorder\" onclick = 'ajaxReview(\""+ row.id+"\",\""+row.factory_id+"\",\""+row.order_no+"\");' style='color:green;cursor: pointer;'></i>": "") : ""},
 		            	"defaultContent": ""},
 		            ],
 		
@@ -234,7 +233,7 @@ function ajaxReview(orderId,factoryId,orderNo){
 				if(isPermission==false){
 					$.gritter.add({
 						title: '系统提示：',
-						text: '<h5></h5><br>'+"您没有发起评审权限",
+						text: '<h5></h5><br>'+"未发起评审",
 						class_name: 'gritter-info'
 					});
 				}else{
@@ -345,4 +344,36 @@ function isApplyPermission(factoryId,type){
 		}
 	})
 	return isPermission;
+}
+function getFactorySelect() {
+	$.ajax({
+		url : "/IMMS/common/getFactorySelectAuth",
+		dataType : "json",
+		data : {"function_url":"order/maintain"},
+		async : false,
+		error : function(response) {
+			alert(response.message)
+		},
+		success : function(response) {
+			getSelects(response.data, "", "#search_factory","全部");
+			getSelects_noall(response.data, "", "#factory_id1");
+			
+			select_str = "<select name='' id='factory_id1' class='input-small'>";
+			select_str1 = "<select name='' id='factory_id2' class='input-small'>";
+			$.each(response.data, function(index, value){
+				select_str += "<option value=" + value.id + ">" + value.name + "</option>";
+				select_str2 += "<option value=" + value.id + ">" + value.name + "</option>";
+			});
+			select_str += "</select>";
+			select_str2 += "</select>";
+			
+			var paramHtml="<tr><td><button disabled=\"disabled\" type=\"button\" class=\"close add\" aria-label=\"Close\" ><span aria-hidden=\"true\">&times;</span></button></td>" +
+			"<td>" + select_str + "</td>" +
+			"<td><input type='text' style='width:60px' class='input-small orderNum add' value='0' id='production_qty1'/></td>" +
+			"<td><input type='text' style='width:60px' disabled='disabled' class='input-small busNum' value='0' id='busnum_start1'/></td>" +
+			"<td><input type='text' style='width:60px' disabled='disabled' class='input-small busNum' value='0' id='busnum_end1'/></td>" +
+			"</tr>";
+			$(paramHtml).appendTo("#factoryOrder_parameters");
+		}
+	});
 }

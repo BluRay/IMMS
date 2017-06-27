@@ -184,7 +184,7 @@ public class PlanController extends BaseController{
 				String node = excelModel.getData().get(i)[2].toString().trim();
 				int lineCountSwitch = i % 12;
 				switch(lineCountSwitch){
-					case 0 : if(!node.equals("自制件下线")){throw new RuntimeException("导入文件的格式有误！");}break; 
+					case 0 : if(!node.equals("自制下线")){throw new RuntimeException("导入文件的格式有误！");}break; 
 					case 1 : if(!node.equals("部件上线")){throw new RuntimeException("导入文件的格式有误！");}break; 
 					case 2 : if(!node.equals("部件下线")){throw new RuntimeException("导入文件的格式有误！");}break; 
 					case 3 : if(!node.equals("焊装上线")){throw new RuntimeException("导入文件的格式有误！");}break; 
@@ -195,7 +195,7 @@ public class PlanController extends BaseController{
 					case 8 : if(!node.equals("底盘下线")){throw new RuntimeException("导入文件的格式有误！");}break; 
 					case 9 : if(!node.equals("总装上线")){throw new RuntimeException("导入文件的格式有误！");}break; 
 					case 10 : if(!node.equals("总装下线")){throw new RuntimeException("导入文件的格式有误！");}break; 
-					case 11 : if(!node.equals("入库")){throw new RuntimeException("导入文件的格式有误！");}break; 
+					case 11 : if(!node.equals("车辆入库")){throw new RuntimeException("导入文件的格式有误！");}break; 
 				}
 			}
 			//上传的文件验证完成

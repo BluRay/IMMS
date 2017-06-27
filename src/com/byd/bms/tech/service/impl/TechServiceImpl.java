@@ -424,6 +424,7 @@ public class TechServiceImpl implements ITechService {
 			
 		}			
 		Map<String, Object> result=new HashMap<String,Object>();
+		totalCount -= (data_list.size()-rows.size());
 		result.put("draw", conditionMap.get("draw"));
 		result.put("total", totalCount);
 		result.put("dataList", data_list);

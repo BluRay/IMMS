@@ -583,9 +583,11 @@ public class TechController extends BaseController{
 	public ModelMap getTaskOrderFinishInfo(){
 		String taskid = request.getParameter("taskid");
 		String order_no = request.getParameter("order_no");
+		String factory = request.getParameter("factory");
 		Map<String, Object> conditionMap = new HashMap<String, Object>();
 		conditionMap.put("taskid", taskid);
 		conditionMap.put("order_no", order_no);
+		conditionMap.put("factory", factory);
 		Map<String, Object> result = techService.getTaskOrderFinishInfo(conditionMap);
 		mv.clear();
 		mv.getModelMap().addAllAttributes(result);
@@ -781,8 +783,10 @@ public class TechController extends BaseController{
 			request.getParameter("task_detail_status"));
 		}
 		List<Map<String,Object>> datalist = techService.queryTaskBusNumber(map);
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("data", datalist);
 		mv.clear();
-		mv.getModelMap().addAllAttributes(datalist);
+		mv.getModelMap().addAllAttributes(result);
 		model = mv.getModelMap();
 		return model;
 	}

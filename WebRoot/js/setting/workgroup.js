@@ -96,22 +96,22 @@ jQuery(function($) {
 		    			var id=value.id.substring(1,value.id.length);
 		    			if(value.sub_count === 0){
 
-		    				fun_str += '"'+value.id+'" : {"name": "<i class=\'fa fa-pencil-square-o blue\'></i><a href=# onClick=\'getWorkgroupListById('+id+','+id+',0)\'>'+value.workshop_name+'</a>","id":"'+value.id+'", "type": "item" ' + ((jQuery.inArray(value.id+'', "") >= 0)?',"additionalParameters" : {"item-selected": true}':'') +'},';
+		    				fun_str += '"'+value.id+'" : {"name": "<i class=\'fa fa-pencil-square-o blue\'></i><a href=# onClick=getWorkgroupListById('+id+','+id+',0)>'+value.workshop_name+'</a>","id":"'+value.id+'", "type": "item" ' + ((jQuery.inArray(value.id+'', "") >= 0)?',"additionalParameters" : {"item-selected": true}':'') +'},';
 
 		    			}else{
-		    				fun_str += '"'+value.id+'" : {"name": "<i class=\'fa fa-pencil-square-o blue\'></i><a href=# onClick=\'getWorkgroupListById('+id+','+id+',0)\'> '+value.workshop_name+'</a>","id":"'+value.id+'", "type": "folder"},';   				
+		    				fun_str += '"'+value.id+'" : {"name": "<i class=\'fa fa-pencil-square-o blue\'></i><a href=# onClick=getWorkgroupListById('+id+','+id+',0)> '+value.workshop_name+'</a>","id":"'+value.id+'", "type": "folder"},';   				
 		    				var subFun_str = '{"children" : {';
 		    				var cur_id = value.id + '';
 		    				$.each(funs, function(i, v) {
 		    					if(v.parent_id === cur_id){
 		    						if(v.sub_count === 0){
-		    							subFun_str += '"'+v.id+'" : {"name": "<i class=\'fa fa-pencil-square-o blue\'></i><a href=# onClick=\'getWorkgroupListById('+v.id+','+id+',1)\'> '+v.workshop_name+'</a>","id":"'+v.id+'", "type": "item" ' + ((jQuery.inArray(v.id+'', "") >= 0)?',"additionalParameters" : {"item-selected": true}':'') +'},';
+		    							subFun_str += '"'+v.id+'" : {"name": "<i class=\'fa fa-pencil-square-o blue\'></i><a href=# onClick=getWorkgroupListById('+v.id+','+id+',1)> '+v.workshop_name+'</a>","id":"'+v.id+'", "type": "item" ' + ((jQuery.inArray(v.id+'', "") >= 0)?',"additionalParameters" : {"item-selected": true}':'') +'},';
 		    						}else{
-		    							subFun_str += '"'+v.id+'" : {"name": "<i class=\'fa fa-pencil-square-o blue\'></i><a href=# onClick=\'getWorkgroupListById('+v.id+','+id+',1)\'> '+v.workshop_name+'</a>","id":"'+v.id+'", "type": "folder"},';
+		    							subFun_str += '"'+v.id+'" : {"name": "<i class=\'fa fa-pencil-square-o blue\'></i><a href=# onClick=getWorkgroupListById('+v.id+','+id+',1)> '+v.workshop_name+'</a>","id":"'+v.id+'", "type": "folder"},';
 		    							var subFun_str2 = '{"children" : {';
 		    							var cur_id2 = v.id + '';
 		    							$.each(funs, function(i2, v2) {
-		    								if(v2.parent_id === cur_id2)subFun_str2 += '"'+v2.id+'" : {"name": "<i class=\'fa fa-pencil-square-o blue\' <a href=# onClick=\'getWorkgroupListById('+v2.id+','+id+',2)\'></i> '+v2.workshop_name+'","id":"'+v2.id+'", "type": "item" ' + ((jQuery.inArray(v2.id+'', "") >= 0)?',"additionalParameters" : {"item-selected": true}':'') +'},';
+		    								if(v2.parent_id === cur_id2)subFun_str2 += '"'+v2.id+'" : {"name": "<i class=\'fa fa-pencil-square-o blue\' <a href=# onClick=getWorkgroupListById('+v2.id+','+id+',2)></i> '+v2.workshop_name+'","id":"'+v2.id+'", "type": "item" ' + ((jQuery.inArray(v2.id+'', "") >= 0)?',"additionalParameters" : {"item-selected": true}':'') +'},';
 		    							})
 		    							subFun_str2 = subFun_str2.substring(0,subFun_str2.length-1) + '}}';
 		    							subFun2[v.id] = eval('(' + subFun_str2 + ')');
@@ -169,9 +169,7 @@ jQuery(function($) {
 
 		})
 		.on('click', function(e) {
-			//$(this).trigger("selected");
-			console.log('object',e);
-			//alert(e.target.innerText);
+			//console.log('object',e);
 		})
 		.on('opened', function(e) {
 		})
@@ -186,8 +184,12 @@ jQuery(function($) {
 			else title.text($title);
 		}
 	}));
-	$("#btn_addRole").on('click', function(e) {	
+	$("#btn_add").on('click', function(e) {	
 		e.preventDefault();
+		$("#new_workgroupId").val("");
+		$("#new_groupName").val("");
+		$("#new_responsibility").val("");
+		$("#new_memo").val("");
 		$("#dialog-confirm").removeClass('hide').dialog({
 			resizable: false,
 			title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 新增班组</h4></div>',
@@ -195,8 +197,7 @@ jQuery(function($) {
 			width:'500px',
 			modal: true
 		});
-		$("#new_role_name").val("");
-		$("#new_role_description").val("");
+		
 	});
 	
 	$("#btn_save").on('click', function(e) {
@@ -249,7 +250,7 @@ jQuery(function($) {
 		$('#edit_groupName').val($(this).closest('tr').find('td').eq(2).html());
 		$('#edit_responsibility').val($(this).closest('tr').find('td').eq(3).html());
 		$('#edit_memo').val($(this).closest('tr').find('td').eq(4).html());
-		var dialog = $( "#dialog-edit" ).removeClass('hide').dialog({
+		var dialog = $("#dialog-edit").removeClass('hide').dialog({
 			width:600,
 			/*height:500,*/
 			modal: true,
@@ -299,7 +300,7 @@ jQuery(function($) {
 								class_name: 'gritter-info'
 							});
 					    	$("#editForm")[0].reset();
-					    	ajaxQuery();
+
 					    	}else{
 					    		$.gritter.add({
 									title: '系统提示：',
@@ -343,10 +344,6 @@ jQuery(function($) {
 		    },
 		    success:function(response){
 
-//		    	if(response.data > 0){
-//		    		alert("增加用户成功！");
-//		    		$("#dialog-confirm").dialog("close");
-//		    	}
 		    	$("#dialog-confirm").dialog("close");
 		    	showtree2();
 		    	getWorkgroupListById($("#new_parentId").val(),$("#new_showshopId").val());
@@ -363,8 +360,10 @@ function getWorkgroupListById(id,workshopId,nodeLayer){
 	if(nodeLayer===0){
 		id="t"+id;
 	}
+	var nodeName=getNodeName(id);
     $("#new_parentId").val(id);
     $("#new_workshopId").val(workshopId);
+    $("#nodeName").text("班组："+nodeName);
 	$("#tableData").dataTable({
 		serverSide: true,
 		fixedColumns:   {
@@ -467,13 +466,12 @@ function ajaxDelete(){
 	    },
 	    success:function(response){
 	    	if(response.success){
-	    	$.gritter.add({
-				title: '系统提示：',
-				text: '<h5>删除成功！</h5>',
-				class_name: 'gritter-info'
-			});
-	    	
-	    	ajaxQuery();
+		    	$.gritter.add({
+					title: '系统提示：',
+					text: '<h5>删除成功！</h5>',
+					class_name: 'gritter-info'
+				});
+		    	showtree2();
 	    	}else{
 	    		$.gritter.add({
 					title: '系统提示：',
@@ -483,4 +481,23 @@ function ajaxDelete(){
 	    	}
 	    }
 	});
+}
+function getNodeName(id){
+	var nodeName="";
+	$.ajax({
+		url: "/IMMS/setting/getWorkgroupNodeName",
+		dataType: "json",
+		async: false,
+		data: {
+			"id" : id,
+			},
+		error: function () {},
+		success: function (response) {
+			
+			if(response.nodeName!=null){
+				nodeName=response.nodeName;
+			}
+		}
+	})
+	return nodeName;
 }

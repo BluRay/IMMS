@@ -44,9 +44,17 @@ function ajaxShowBusNumber(order_no,tech_task_id,bus_num_s,bus_num_e,factory,wor
 		async: false,
 		error: function () {alert(response.message);},
 		success: function (response) {
-			if(response.success){
-				
-			}
+			$("#selectBusNumber_table_view tbody").html("");
+    		$.each(response.data,function (index,value) {
+    			var tr = $("<tr />");
+    			$("<td style=\"text-align:center;\" />").html(index+1).appendTo(tr);
+    			$("<td style=\"text-align:center;\" />").html(value.bus_number).appendTo(tr);
+    			$("<td style=\"text-align:center;\" />").html(value.factory_name).appendTo(tr);
+    			$("<td style=\"text-align:center;\" />").html(value.process_name).appendTo(tr);
+       			$("<td style=\"text-align:center;\" />").html(value.confirmor).appendTo(tr);
+    			$("<td style=\"text-align:center;\" />").html(value.confirmor_date).appendTo(tr);
+    			$("#selectBusNumber_table_view tbody").append(tr);
+    		});
 		}
 	});
 	
@@ -89,7 +97,7 @@ function initTable() {
         	conditions.workshop_list=workshop;
         	conditions.tech_date_start=$("#search_date_start").val();
         	conditions.tech_date_end=$("#search_date_end").val();
-        	conditions.workshop_status=$("#status").val();
+        	conditions.status=$("#status").val();
         	
         	params["conditions"] = JSON.stringify(conditions); 
         	return params;

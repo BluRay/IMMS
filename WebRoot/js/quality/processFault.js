@@ -89,7 +89,7 @@ function showProcessFault(id){
 			$("#edit_fault_phenomenon").val(response.data.fault_phenomenon);
 			$("#edit_fault_reason").val(response.data.fault_reason);
 			$("#edit_factory").val(response.data.factory_id);
-			$("#edit_workshop").find("option:contains('"+response.data.workshop+"')").attr("selected",true);
+			$("#edit_workshop").find("option:contains('"+response.data.response_workshop+"')").attr("selected",true);
 			$("#edit_resolve_method").val(response.data.resolve_method);
 			$("#edit_resolve_date").val(response.data.resolve_date);
 			$("#edit_resolve_result").val(response.data.resolve_result);
@@ -150,7 +150,7 @@ function editProcessFault(id){
 			$("#edit_fault_phenomenon").val(response.data.fault_phenomenon);
 			$("#edit_fault_reason").val(response.data.fault_reason);
 			$("#edit_factory").val(response.data.factory_id);
-			$("#edit_workshop").find("option:contains('"+response.data.workshop+"')").attr("selected",true);
+			$("#edit_workshop").find("option:contains('"+response.data.response_workshop+"')").attr("selected",true);
 			$("#edit_resolve_method").val(response.data.resolve_method);
 			$("#edit_resolve_date").val(response.data.resolve_date);
 			$("#edit_resolve_result").val(response.data.resolve_result);
@@ -246,7 +246,7 @@ function btnEditConfirm(id){
 			"factory" : $("#edit_factory").val(),
 			"workshop" : $('#edit_workshop').find("option:selected").text(),
 			"resolve_method" : $("#edit_resolve_method").val(),
-			"resolve_dat" : $("#edit_resolve_date").val(),
+			"resolve_date" : $("#edit_resolve_date").val(),
 			"resolve_result" : $("#edit_resolve_result").val(),
 			"punish" : $("#edit_punish").val(),
 			"compensation" : $("#edit_compensation").val(),
@@ -391,7 +391,7 @@ function ajaxQuery(){
 				"orderColumn":"id",
 				"factory_id" : $("#search_factory").val(),
 				"customer_name" : $("#search_customer_name").val(),
-				"status" : $("#search_status").val(),
+				"status" : $("#search_resolve_result").val(),
 				"fault_phenomenon" : $("#search_fault_phenomenon").val(),
 				"fault_date_start" : $("#search_date_start").val(),
 				"fault_date_end" : $("#search_date_end").val()
