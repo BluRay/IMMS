@@ -46,5 +46,7 @@ public interface ICommonDao {
 	List<Map<String, Object>> queryOrderConfigList(@Param("order_id") String order_id);
 	
 	public List<Map<String,String>> getPartsSelect(String parts);
+
+	List<Map<String, String>> queryBusNumberList(String bus_input);
 	
 }

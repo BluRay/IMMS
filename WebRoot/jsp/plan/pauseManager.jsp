@@ -10,6 +10,68 @@
 		<link rel="stylesheet" href="../assets/css/jquery-ui.min.css" />
 		<link rel="stylesheet" href="../assets/css/jquery-ui.custom.min.css" />
 		<link rel="stylesheet" href="../assets/css/jquery.gritter.css" />
+		
+	<style type="text/css">
+	.chosen-container {
+    position: relative;
+    display: inline-block;
+    font-size: 13px;
+    vertical-align: middle;
+    zoom: 1;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+    *display: inline;
+	}
+.chosen-container-multi .chosen-choices {
+    position: relative;
+    width: 100%;
+    min-height: 30px;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    cursor: text;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+.chosen-container-multi .chosen-choices li {
+    display: block;
+    float: left;
+    padding: 0 0px;
+    margin: 5px 0 0 6px;
+    list-style: none;
+}
+.chosen-container-multi .chosen-choices li.search-choice {
+    position: relative;
+    padding-right: 0px;
+    cursor: default;
+    -webkit-transition: all .4s cubic-bezier(.175,.885,.32,1);
+    transition: all .4s cubic-bezier(.175,.885,.32,1);
+}
+.chosen-container-multi .chosen-choices li.search-choice .search-choice-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: block;
+    width: 20px;
+    height: 20px;
+    font-size: 15.6px;
+    font-weight: 700;
+    line-height: 14px;
+    color: #000;
+    text-align: center;
+    text-shadow: 0 1px 0 #fff;
+    filter: alpha(opacity=20);
+    opacity: .2;
+}
+	</style>
 	</head>
 	<body class="no-skin" style="font-family: 'Microsoft YaHei';">
 		<!-- 头 -->
@@ -81,9 +143,20 @@
 					<tr style="height:40px">
 						<td align="right">生产线别：</td><td colspan=3><label><input id="A" class="ace" onclick='checkLine(this)' type="checkbox"><span class="lbl"> A线</span></label>&nbsp;&nbsp;<label><input id="B" class="ace" onclick='checkLine(this)' type="checkbox"><span class="lbl"> B线</span></label><input style="height: 30px;display:none" id="line_str" type="text" class="input-small revise"/></td>
 					</tr>
+					<tr>
+					<td align="right">车辆型号：</td><td><select id="new_bus_type" class="form-control" style="width:120px"></select></td>
+					<td></td><td></td>
+					</tr>
 					<tr style="height:40px">
-						<td align="right">订单范围：</td><td><input id="new_order_list" placeholder="请输入订单范围..." style="width:150px" type="text"></td>
-						<td align="right">车辆型号：</td><td><select id="new_bus_type" class="form-control" style="width:120px"></select></td>
+						<td align="right">订单范围：</td>
+						
+						<td colspan=3>
+							<div id="order_area" style="width: 350px;" class="chosen-container chosen-container-multi">
+							<ul class="chosen-choices">					
+							</ul>
+		                	</div>
+		                	<input tabindex="2" id="order_no_list" class="input-large revise" style="width:350px; height: 30px;display:none" type="text" >
+						</td>
 					</tr>
 					<tr style="height:40px">
 						<td align="right">停线原因：</td><td><select id="new_reason_type" class="form-control" style="width:150px"></select></td>
@@ -98,7 +171,11 @@
 					</tr>
 					<tr style="height:40px">
 						<td align="right">损失产能：</td><td><input id="new_capacity" placeholder="损失产能..." style="width:100px" type="text">台</td>
-						<td></td><td></td>
+						<td align="right"></td><td></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right">实际恢复时间：</td><td><input id="new_end_time" placeholder="实际恢复时间..." style="width:150px" type="text" onClick="WdatePicker({el:'new_end_time',dateFmt:'yyyy-MM-dd HH:mm'});"></td>
+						<td align="right"></td><td></td>
 					</tr>
 					<tr style="height:40px">
 						<td align="right">详细原因：</td><td colspan=3><input id="new_reason_detailed" placeholder="详细原因..." style="width:350px" type="text"></td>

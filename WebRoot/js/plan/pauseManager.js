@@ -2,6 +2,8 @@ var lineStr = '';
 var pageSize=1;
 var table;
 var table_height = $(window).height()-270;
+var orderlist=[];
+var orderDescList=[];
 $(document).ready(function () {	
 	initPage();
 	
@@ -20,6 +22,83 @@ $(document).ready(function () {
 	$("#btnQuery").click (function () {
 		ajaxQuery();
 		return false;
+	});
+	
+	$("#order_no_list").typeahead({
+		source : function(input, process) {
+			var bustype=$("#new_bus_type :selected").text();
+			var factory=$("#new_factory :selected").text()=="请选择"?"":$("#new_factory :selected").text();
+			
+			var data={
+					"busType":bustype,
+					"orderNo":input,
+					"factory":''
+			};		
+			return $.ajax({
+				url:"../common/getOrderFuzzySelect",
+				dataType : "json",
+				type : "get",
+				data : data,
+				success: function (response) { 
+					order_list = response.data;
+					var results = new Array();
+					$.each(response.data, function(index, value) {
+						results.push(value.orderNo);
+					})
+					console.log("-->process results = ",results);
+					return process(results);
+				}
+			});
+		},
+		items : 30,
+		highlighter : function(item) {
+			var order_name = "";
+			var bus_type = "";
+			var order_qty = "";
+			$.each(order_list, function(index, value) {
+				if (value.orderNo == item) {
+					order_name = value.name;
+					bus_type = value.busType;
+					order_qty = value.orderQty + "台";
+				}
+			})
+			return item + "  " + order_name + " " + bus_type + order_qty;
+		},
+		matcher : function(item) {
+			console.log("-->matcher");
+			return true;
+		},
+		updater : function(item) {
+			console.log("-->updater");
+			$.each(order_list, function(index, value) {
+				if (value.orderNo == item) {
+					selectId = value.id;
+					var order_li="<li class=\"search-choice\"><span>"+
+					value.orderNo+"</span><button type=\"button\" class=\"close rmorder\" title=\"删除\" style=\"font-size: 16px;\" aria-label=\"Close\">"+
+					"<span aria-hidden=\"true\">×</span></button></li>";
+					
+					$("#order_area ul").append(order_li);
+					$("#order_no_list").hide();
+					$("#order_area").show();
+					orderlist.push(value.orderNo);
+					orderDescList.push(value.orderNo+" "+value.name + " " + value.busType +" "+ value.orderQty+"台 ");
+				}
+			})
+			$("#order_no_list").attr("order_id", selectId);
+			
+			return item;
+		}	
+	});
+	//订单范围点击显示订单模糊查询输入框
+	$("#order_area").on("click",function(e){
+		var c=$(e.target).attr("class")
+
+		if(c!="close rmorder"){
+			$(this).hide();
+			$("#order_no_list").val("");
+			$("#order_no_list").show();
+			$("#order_no_list").focus();
+		}	
 	});
 	
 	$("#btnAdd").on('click', function(e) {
@@ -116,7 +195,10 @@ $(document).ready(function () {
 				"capacity" : $("#new_capacity").val(),
 				"memo" : $("#new_memo").val(),
 				"email_send" : $("#new_pause_email_send").val(),
-				"order_list": $("#new_order_list").val(),
+				"order_list":orderlist.join(","),
+				"orderDesc":orderDescList.join("<br />"),
+				"end_time":$("#new_end_time").val(),
+				//"order_list": $("#new_order_list").val(),
 				//"orderDesc":orderDescList.join("<br />"),
 				"pause_hours":$("#new_pause_hours").val()
 				},
@@ -284,8 +366,12 @@ function ajaxQuery(){
 		            {"title":"责任部门",width:'80',"class":"center","data":"duty_department","defaultContent": ""},
 		            {"title":"损失人数",width:'80',"class":"center","data":"human_lossed","defaultContent": ""},
 		            {"title":"损失产能",width:'80',"class":"center","data":"capacity_lossed","defaultContent": ""},
-		            {"title":"状态",width:'40',"class":"center","data":"","defaultContent": ""},
-		            {"title":"录入人",width:'60',"class":"center","data":"create_user","defaultContent": ""},
+		            {"title":"状态",width:'50',"class":"center","data":"","defaultContent": "",
+		            	"render": function ( data, type, row ) {
+		            		return (row['end_time'] == null)?"停线中":"已恢复";
+		            	},
+		            },
+		            {"title":"录入人",width:'60',"class":"center","data":"create_user_name","defaultContent": ""},
 		            {"title":"操作",width:'60',"class":"center","data":null,"defaultContent": "",
 		            	"render": function ( data, type, row ) {
 		            		return "<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"编辑\" onclick='editPause(" + row['id'] + ")' style='color:blue;cursor: pointer;'></i>"

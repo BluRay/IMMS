@@ -722,6 +722,7 @@ public class PlanController extends BaseController{
 			pause.setLine(staffArray[i]);
 			pause.setStart_time(request.getParameter("pause_date_start"));
 			pause.setPend_time(request.getParameter("pause_date_end"));
+			pause.setEnd_time(request.getParameter("end_time"));
 			pause.setReason_type_id(Integer.parseInt(request.getParameter("reason_type_id")));
 			pause.setBus_type(request.getParameter("bus_type_id"));
 			pause.setDuty_department_id(Integer.parseInt(request.getParameter("duty_department_id")));

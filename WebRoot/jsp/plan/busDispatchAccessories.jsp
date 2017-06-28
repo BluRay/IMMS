@@ -39,7 +39,19 @@
 					<!-- /section:settings.box -->
 					<div class="page-content-area">
 					
-					<!-- 东西放这里！ -->		
+					<div class="well">
+						<table>
+							<tr>
+								<td>订单编号：</td>
+								<td><input id="search_order_no" placeholder="请输入订单编号..." style="width:110px" type="text"></td>
+								<td>
+									<input id="btnQuery" type="button" class="btn btn-sm btn-success" value="查询" style="margin-left: 2px;">
+									<input id="btnConfire" type="button" class="btn btn-sm btn-info" value="交接" style="margin-left: 2px;">
+								</td>
+								<td></td>
+							</tr>
+						</table>
+					</div>
 					
 					</div>
 			</div><!-- /.main-content -->

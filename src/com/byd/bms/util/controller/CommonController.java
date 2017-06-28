@@ -240,4 +240,14 @@ public class CommonController extends BaseController {
 		
 		return model;
 	}
+	
+	@RequestMapping("/getBusNumberFuzzySelect")
+	@ResponseBody
+	public ModelMap getBusNumberFuzzySelect(){
+		String bus_input=request.getParameter("bus_input");
+		List<Map<String,String>> selectList =commonService.getBusNumberList(bus_input);
+		model=new ModelMap();
+		model.put("data",selectList);
+		return model;
+	}
 }

@@ -95,5 +95,9 @@ public class CommonServiceImpl implements ICommonService {
 	public List<Map<String, String>> getPartsSelect(String parts) {
 		return commonDao.getPartsSelect(parts);
 	}
+	@Override
+	public List<Map<String, String>> getBusNumberList(String bus_input) {
+		return commonDao.queryBusNumberList(bus_input);
+	}
 
 }

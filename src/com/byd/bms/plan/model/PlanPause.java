@@ -24,6 +24,7 @@ public class PlanPause {
 	private String solution;
 	private String memo;
 	private String create_user;
+	private String create_user_name;
 	private String create_time;
 	private String confirm_user;
 	private String confirm_time;
@@ -182,6 +183,12 @@ public class PlanPause {
 	}
 	public void setDuty_department(String duty_department) {
 		this.duty_department = duty_department;
+	}
+	public String getCreate_user_name() {
+		return create_user_name;
+	}
+	public void setCreate_user_name(String create_user_name) {
+		this.create_user_name = create_user_name;
 	}
 	
 	

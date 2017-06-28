@@ -2,6 +2,9 @@ package com.byd.bms.util.service;
 
 import java.util.List;
 import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.byd.bms.util.model.BmsBaseProcess;
 
 public interface ICommonService {
@@ -40,4 +43,6 @@ public interface ICommonService {
 	List<Map<String,Object>> getOrderConfigSelect(String order_id);
 	
 	public List<Map<String,String>> getPartsSelect(String parts);
+
+	List<Map<String, String>> getBusNumberList(@Param(value="bus_input") String bus_input);
 }

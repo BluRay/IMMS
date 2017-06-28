@@ -304,15 +304,16 @@
 		pend_time, end_time, hours, memo,create_user,create_time)
 		VALUES(#{factory_id}, #{workshop_id}, #{line}, #{bus_type}, #{order_list}, #{order_desc}, #{reason_type_id}, 
 		#{detailed_reason}, #{duty_department_id}, #{human_lossed}, #{capacity_lossed}, #{start_time}, 
-		#{pend_time}, #{end_time}, #{hours}, #{hours}, #{create_user}, #{create_time})
+		#{pend_time}, #{end_time}, #{hours}, #{memo}, #{create_user}, #{create_time})
 	</insert>
 	
 	<select id="getPauseList" parameterType="Map" resultType="com.byd.bms.plan.model.PlanPause">
 	SELECT P.*,O1.factory_name AS factory_name,O2.workshop_name AS workshop_name,K.key_name as reason_type,
-	K2.key_name AS duty_department 
+	K2.key_name AS duty_department ,u.display_name AS create_user_name
 	FROM BMS_PLAN_STOPLINE P
 	LEFT JOIN BMS_BASE_FACTORY O1 ON P.factory_id = O1.id
 	LEFT JOIN BMS_BASE_WORKSHOP O2 ON P.workshop_id = O2.id 
+	LEFT JOIN BMS_BASE_USER u ON P.create_user = u.staff_number
 	LEFT JOIN BMS_BASE_KEY K ON P.reason_type_id = K.value AND K.key_code='ABNORMAL_REASON'
 	LEFT JOIN BMS_BASE_KEY K2 ON P.duty_department_id = K2.value AND K2.key_code='EXCEPTION_RESPONSIBILITY_DEPARTMENT'
 	WHERE 1=1 
@@ -326,7 +327,7 @@
 		AND P.line = #{line}
 	</if>
 	<if test="order_no !='' and order_no!=null">
-		and find_in_set(P.order_list,#{order_no})>0
+		and P.order_list LIKE CONCAT('%',#{order_no},'%')
 	</if>
 	<if test="reason_type_id != '' and reason_type_id!=null">
 		AND P.reason_type_id = #{reason_type_id}
