@@ -1136,5 +1136,11 @@
 			AND ${workshop} IS NOT NULL
 		</if>
 	</select>
+	<insert id="addDispatchPlan" useGeneratedKeys="true" keyProperty="id" parameterType="com.byd.bms.plan.model.PlanBusDispatchPlan">
+		INSERT INTO BMS_PLAN_BUS_DISPATCH_PLAN
+		(factory_id, order_id, plan_dispatch_qty, dispatch_date,customer_number_flag, status, email_addrs, creater_id, creatdate)
+		VALUES(#{factory_id},#{order_id},#{plan_dispatch_qty},#{dispatch_date},
+		#{customer_number_flag},#{status},#{email_addrs},#{creater_id},#{creatdate})
+	</insert>
 	
 </mapper>

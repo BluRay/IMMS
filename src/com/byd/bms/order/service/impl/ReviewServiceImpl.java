@@ -57,7 +57,7 @@ public class ReviewServiceImpl implements IReviewService {
 			}
 			String [] array=permissionValue.split(",");
 			for(String arr : array){
-				if(arr.equals((String)map.get("factory_code"))){
+				if(arr.trim().equals((String)map.get("factory_code"))){
 					isResult=true;
 				}
 			}
@@ -102,13 +102,14 @@ public class ReviewServiceImpl implements IReviewService {
 		if(list!=null && list.size()>0){
 			String permissionValue="";
 			for(Map<String,Object> m : list){
-				permissionValue+=(String) m.get("permission_value");
+				String str=m.get("permission_value")!=null ? (String) m.get("permission_value") : "";
+				permissionValue+=str+",";
 			}
 			
 			String [] array=permissionValue.split(",");
 			BmsBaseFactory factory=baseDataDao.getFactoryById((String)condMap.get("factoryId"));
 			for(String arr : array){
-				if(arr.equals(factory.getFactoryCode())){
+				if(arr.trim().equals(factory.getFactoryCode())){
 					isResult=true;
 				}
 			}
@@ -123,10 +124,10 @@ public class ReviewServiceImpl implements IReviewService {
 		List<Map<String,Object>> list=settingDao.getPermissionByMap(conMap);
 		if(list!=null && list.size()>0){
 			for(Map m : list){
-				String permissionValue=(String) m.get("permission_value");
+				String permissionValue= m.get("permission_value")!=null ? (String)m.get("permission_value") : "";
 				String [] array=permissionValue.split(",");
 				for(String arr : array){
-					if(arr.equals(factory.getFactoryCode())){
+					if(arr.trim().equals(factory.getFactoryCode())){
 						result+=m.get("id")+",";
 					}
 				}

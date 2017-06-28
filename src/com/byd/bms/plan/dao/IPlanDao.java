@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import com.byd.bms.order.model.BmsOrder;
 import com.byd.bms.plan.model.PlanBus;
+import com.byd.bms.plan.model.PlanBusDispatchPlan;
 import com.byd.bms.plan.model.PlanBusNumber;
 import com.byd.bms.plan.model.PlanBusTransfer;
 import com.byd.bms.plan.model.PlanConfigIssedQty;
@@ -92,4 +93,5 @@ public interface IPlanDao {
 	public int getPlanSearchTotalRealPartsQty(Map<String,Object> queryMap);
 	public int getPlanSearchTotalRealZzjQty(Map<String,Object> queryMap);
 	public int getPlanSearchTotalRealQty(Map<String,Object> queryMap);
+	public int addDispatchPlan(PlanBusDispatchPlan planBusDispatchPlan);
 }

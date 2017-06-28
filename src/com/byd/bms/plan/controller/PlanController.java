@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import com.byd.bms.util.controller.BaseController;
 import com.byd.bms.util.ExcelTool;
+import com.byd.bms.plan.model.PlanBusDispatchPlan;
 import com.byd.bms.plan.model.PlanConfigIssedQty;
 import com.byd.bms.plan.model.PlanIssuance;
 import com.byd.bms.plan.model.PlanIssuanceCount;
@@ -737,6 +738,29 @@ public class PlanController extends BaseController{
 			pauseList.add(pause);
 		}
 		int result = planService.addPause(pauseList);
+		mv.clear();
+		initModel(true,String.valueOf(result),null);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/addDispatchPlan")
+	@ResponseBody
+	public ModelMap addDispatchPlan(){
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String create_user = request.getSession().getAttribute("staff_number") + "";
+		PlanBusDispatchPlan planBusDispatchPlan = new PlanBusDispatchPlan();
+		planBusDispatchPlan.setFactory_id(Integer.parseInt(request.getParameter("factory_id")));
+		planBusDispatchPlan.setOrder_no(request.getParameter("order_no"));
+		planBusDispatchPlan.setPlan_dispatch_qty(Integer.parseInt(request.getParameter("plan_dispatch_qty")));
+		planBusDispatchPlan.setDispatch_date(request.getParameter("dispatch_date"));
+		planBusDispatchPlan.setCustomer_number_flag(request.getParameter("customer_number_flag"));
+		planBusDispatchPlan.setEmail_addrs(request.getParameter("email_addrs"));
+		planBusDispatchPlan.setCreater_id(create_user);
+		planBusDispatchPlan.setCreatdate(curTime);
+		
+		int result = planService.addDispatchPlan(planBusDispatchPlan);
 		mv.clear();
 		initModel(true,String.valueOf(result),null);
 		model = mv.getModelMap();

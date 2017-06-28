@@ -17,6 +17,7 @@ import com.byd.bms.plan.model.PlanPause;
 import com.byd.bms.plan.model.PlanProductionPlan;
 import com.byd.bms.plan.model.PlanVIN;
 import com.byd.bms.plan.model.PlanBus;
+import com.byd.bms.plan.model.PlanBusDispatchPlan;
 import com.byd.bms.plan.model.PlanBusNumber;
 import com.byd.bms.plan.model.PlanBusTransfer;
 import com.byd.bms.plan.model.PlanConfigIssedQty;
@@ -1164,6 +1165,11 @@ public class PlanServiceImpl implements IPlanService {
 			}
 		}
 		return detailList;
+	}
+
+	@Override
+	public int addDispatchPlan(PlanBusDispatchPlan planBusDispatchPlan) {
+		return planDao.addDispatchPlan(planBusDispatchPlan);
 	}
 
 }

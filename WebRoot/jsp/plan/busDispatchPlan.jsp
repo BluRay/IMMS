@@ -64,6 +64,31 @@
 					
 					</div>
 			</div><!-- /.main-content -->
+			
+			<div id="dialog-add" class="hide" style="align:center;width:700px;height:500px">
+			<form>
+					<table>
+					<tr style="height:40px">
+						<td align="right" style="width:150px">生产工厂：</td><td style="width:150px"><select id="new_factory" class="form-control" style="width:150px"></select></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:150px">生产订单：</td><td style="width:150px"><input id="new_order_no" placeholder="请输入订单编号..." style="width:150px" type="text"></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:150px">计划发车数量：</td><td style="width:150px"><input id="new_plan_num" placeholder="请输入发车数量..." style="width:150px" type="text"></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:150px">计划发车时间：</td><td style="width:150px"><input id="new_plan_date" placeholder="请输入发车时间..." style="width:150px" type="text" onClick="WdatePicker({el:'new_plan_date',dateFmt:'yyyy-MM-dd'});"></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:150px">自编号：</td><td style="width:150px"><select id="new_customer_number_flag" class="form-control" style="width:150px"><option value='0'>有</option><option value='1'>无</option></select></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:150px">邮件通知：</td><td style="width:250px"><input id="new_mail_addr" placeholder="请输入邮件地址..." style="width:250px" type="text"></td>
+					</tr>
+					</table>
+			</form>		
+			</div>
 
 			<!-- 脚 -->
 			<%-- <jsp:include page="footer.jsp" flush="true"/> --%>

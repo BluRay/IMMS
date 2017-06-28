@@ -3,6 +3,7 @@ package com.byd.bms.plan.service;
 import java.util.List;
 import java.util.Map;
 import com.byd.bms.util.ExcelModel;
+import com.byd.bms.plan.model.PlanBusDispatchPlan;
 import com.byd.bms.plan.model.PlanConfigIssedQty;
 import com.byd.bms.plan.model.PlanIssuance;
 import com.byd.bms.plan.model.PlanIssuanceCount;
@@ -51,4 +52,5 @@ public interface IPlanService {
 	public List<Map<String,String>> checkProductionPlan(Map<String,Object> queryMap);
 	public List<Map<String,String>> getPlanSerach(Map<String,Object> queryMap);	
 	public Map<String,Object> showPlanSearchDetail(Map<String,Object> queryMap);
+	public int addDispatchPlan(PlanBusDispatchPlan planBusDispatchPlan);
 }
