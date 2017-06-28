@@ -365,6 +365,10 @@ function getDetail(){
     			$('#tablePlanDetail tr').find('td:eq('+(dateCount+3+i)+')').hide();
     		}
     		//$("#tablePlanDetail tbody tr").css({"width":"100%","display":"table","table-layout":"fixed"});
+    		if(dateCount > 15){
+    			$("#tablePlanDetail").css({"width":1400 + (dateCount*20)});
+    		}
+    		
     		$("#btnQuery").removeAttr("disabled");
 	    }
 	});

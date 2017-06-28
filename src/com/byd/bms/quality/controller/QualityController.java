@@ -443,6 +443,55 @@ public class QualityController extends BaseController {
 		qualityService.getPrdRcdOrderTplDetail(tpl_header_id,model);
 		return model;
 	}
+	
+	/**
+	 * 订单成品记录表模板页面
+	 * @return
+	 */
+	@RequestMapping("/prdRcdIn")
+	public ModelAndView productRecord(){
+		mv.setViewName("quality/productRecord");
+		return mv;
+	} 
+	
+	/**
+	 * 录入页面根据车号、检验节点查询成品记录表模板
+	 * @return
+	 */
+	@RequestMapping("getPrdRcdOrderTpl")
+	@ResponseBody
+	public ModelMap getPrdRcdOrderTpl(){
+		model.clear();
+		String bus_number=request.getParameter("bus_number");
+		String test_node=request.getParameter("test_node");
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("bus_number", bus_number);
+		condMap.put("test_node", test_node);
+		qualityService.getPrdRcdOrderTpl(condMap,model);
+		return model;
+	}
+	
+	/**
+	 * 标准故障库查询
+	 * @return
+	 */
+	@RequestMapping("getFaultLibFuzzyList")
+	@ResponseBody
+	public ModelMap getFaultLibFuzzyList(){
+		model.clear();
+		String bugType=request.getParameter("bugType");
+		String bug=request.getParameter("bug");
+		String seriousLevel=request.getParameter("seriousLevel");
+		String faultType=request.getParameter("faultType");
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("bugType", bugType);
+		condMap.put("bug", bug);
+		condMap.put("seriousLevel", seriousLevel);
+		condMap.put("faultType", faultType);
+		qualityService.getFaultLibFuzzyList(condMap,model);
+		return model;
+	}
+	
 	//======================== xjw end=================================//
 	
 	

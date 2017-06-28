@@ -152,7 +152,7 @@ $(document).ready(function () {
 			success : function(response) {
 				$.gritter.add({
 					title: '系统提示：',
-					text: '<h5>VIN号生成成功！</h5>',
+					text: '<h5>'+response.data.message+'</h5>',
 					class_name: 'gritter-info'
 				});
 				$("#dialog-new").dialog("close");

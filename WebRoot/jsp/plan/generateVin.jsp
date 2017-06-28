@@ -116,7 +116,7 @@
 						</tr>
 						<tr style="height:40px">
 							<td width="75px"></td>
-							<td align="right" style="width:100px">生产年份：</td><td style="width:150px"><input type="text" id="new_year" placeholder="生产年份..." class="input-medium" /></td>
+							<td align="right" style="width:100px">生产年份：</td><td style="width:150px"><input type="text" id="new_year" placeholder="生产年份..." class="input-medium" onClick="WdatePicker({el:'new_year',dateFmt:'yyyy'});"/></td>
 							<td></td>
 						</tr>
 						<tr style="height:40px">

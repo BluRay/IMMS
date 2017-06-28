@@ -460,9 +460,14 @@ public class PlanServiceImpl implements IPlanService {
 	public Map<String, Object> getGenerateVin(Map<String, Object> queryMap) {
 		int vinCount = Integer.valueOf(queryMap.get("vinCount").toString());
 		int factoryOrderQty = planDao.getFactoryOrderInfo(queryMap);
+		Map<String, Object> result = new HashMap<String,Object>();
+		if(factoryOrderQty == 0){
+			result.put("message", "没有该订单的工厂生产数据！");
+			result.put("success", false);
+			return result;
+		}
 		int totalCount=planDao.getPlanVinCount(queryMap);
 		int genVinCount = factoryOrderQty - totalCount;
-		Map<String, Object> result = new HashMap<String,Object>();
 		if(genVinCount <= 0){
 			result.put("message", "该订单的VIN号已经全部生成！");
 			result.put("success", false);
@@ -509,9 +514,9 @@ public class PlanServiceImpl implements IPlanService {
 				vinCount--;
 			}
 		}
-		result.put("message", "VIN号已生成！");
+		result.put("message", "操作成功！共生成" + (vinCount+1) + "个VIN号");
 		result.put("success", true);
-		return null;
+		return result;
 	}
 
 	@Override
@@ -876,7 +881,9 @@ public class PlanServiceImpl implements IPlanService {
 				}
 				resultMap.put("total_month", String.valueOf(total_month));
 				resultMap.put("total_order", String.valueOf(total_order));
-				datalist.add(resultMap);
+				if(total >0){
+					datalist.add(resultMap);
+				}
 			}
 		}
 		result.put("data", datalist);

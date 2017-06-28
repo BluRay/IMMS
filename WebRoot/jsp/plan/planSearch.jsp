@@ -64,7 +64,7 @@
 							</li>
 						</ul>
 
-						<div class="tab-content">
+						<div class="tab-content" id="tab-content">
 							<div id="home" class="tab-pane fade in active">
 								<p style="font-weight:bold">车间计划达成：</p>
 								<table id="tablePlan_total" style="table-layout:fixed;font-size:12px;text-align:center" class="table table-bordered table-striped">
@@ -131,8 +131,8 @@
 								</table>
 								
 							</div>
-							<div id="messages" class="tab-pane fade">
-								<table id="tablePlanDetail" style="font-size:12px;"  class="table table-bordered table-striped">
+							<div id="messages" style="overflow:auto" class="tab-pane fade">
+								<table id="tablePlanDetail" style="font-size:12px;overflow:auto"  class="table table-striped table-bordered table-hover">
 									<thead>
 								         <tr id='0'>
 								         	<th style="width:80px;text-align:center;">订单</th>

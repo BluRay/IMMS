@@ -564,6 +564,52 @@ function getOrderConfigSelect(order_id,selectval,selectId,selectType,valName) {
 	});
 }
 
+
+
+/*
+ * 查号模糊查询 submitId： 用于提交的元素的id
+ */
+function getBusNumberSelect(elementId, submitId, fn_backcall) {
+	var busNumberlist;
+	$(elementId).typeahead({
+		source : function(input, process) {
+			$.get("/IMMS/common/getBusNumberFuzzySelect", {
+				"bus_input" : input
+			}, function(response) {
+				var data=response.data;
+				busNumberlist = data;
+				var results = new Array();
+				$.each(data, function(index, value) {
+					results.push(value.bus_number);
+				})
+				return process(results);
+			}, 'json');
+		},
+		items : 30,
+		matcher : function(item) {
+			
+			return true;
+		},
+		updater : function(item) {
+			$.each(busNumberlist, function(index, value) {
+				if (value.bus_number == item) {
+					orderId = value.order_id;
+					orderConfigId=value.order_config_id;
+					if (typeof (fn_backcall) == "function") {
+						fn_backcall(value);
+					}
+				}
+			})
+			// alert(submitId);
+			$(elementId).attr("order_id", orderId);
+			$(elementId).attr("order_config_id", orderConfigId);
+			//$(submitId).val(selectId);
+			return item;
+		}
+	});
+}
+
+
 //监听div的高度变化
 (function($, h, c) {
     var a = $([]),e = $.resize = $.extend($.resize, {}),i,k = "setTimeout",j = "resize",d = j + "-special-event",b = "delay",f = "throttleWindow";

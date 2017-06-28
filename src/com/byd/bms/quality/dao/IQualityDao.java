@@ -52,13 +52,17 @@ public interface IQualityDao {
 
 	int queryPrdRcdOrderTplCount(HashMap<String, Object> condMap);
 
-	List<Map<String, Object>> queryPrdRcdBusTypeTplDetailLatest(HashMap<String, Object> condMap);
+	/*List<Map<String, Object>> queryPrdRcdBusTypeTplDetailLatest(HashMap<String, Object> condMap);*/
 
 	Map<String, Object> queryPrdRcdBusTypeTplHeader(HashMap<String, Object> condMap);
+	
+	Map<String, Object> queryPrdRcdOrderTplHeader(Map<String, Object> condMap);
 	
 	void insertPrdRcdOrderTplHeader(Map<String, Object> condMap);
 
 	void updatePrdRcdOrderTplHeader(Map<String, Object> condMap);
+	
+	public List<StdFaultLibBean> getFaultLibFuzzyList(Map<String, Object> conditionMap);
 
 	//======================== xjw end=================================//
 	

@@ -2,6 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.byd.bms.quality.dao.IQualityDao">
 <!-- ======================== xjw start=================================-->
+	<resultMap type="com.byd.bms.quality.model.StdFaultLibBean" id="faultLibMap">
+		<id property="id" column="id" />
+		<result property="partsId" column="parts_id" />
+		<result property="parts" column="parts" />
+		<result property="bugType" column="bug_type" />
+		<result property="bug" column="bug" />
+		<result property="faultLevel" column="serious_level" />
+		<result property="faultType" column="fault_type" />
+		<result property="workshop" column="workshop_name" />
+		<result property="workgroup" column="workgroup_name" />
+		<result property="editorId" column="editor_id" />
+		<result property="editor" column="username" />
+		<result property="editDate" column="edit_date" />
+	</resultMap>
 	<select id="getOrderConfigList" parameterType="Map" resultType="Map">
 		select o.id,c.id config_id,o.order_no,CONCAT(o.order_no,' ',o.order_name,t.bus_type_code,'  ',o.order_qty,'台') AS order_desc,
 		o.memo,t.internal_name bus_type,c.order_config_name,u.username editor,h.edit_date,o.bus_type_id
@@ -211,11 +225,21 @@
      	limit 1
      </select>
      
-     <select id="queryPrdRcdBusTypeTplDetailLatest" parameterType="Map" resultType="Map">
+     <select id="queryPrdRcdOrderTplHeader" parameterType="Map" resultType="Map">
+     	select h.id,h.version,b.factory_id,h.order_id,h.order_config_id,concat(o.order_no,' ',o.order_name,t.bus_type_code,' ',o.order_qty,'台') order_desc 
+     	from BMS_QM_TEST_CARD_TEMPLATE_HEADER h
+     	left join BMS_PLAN_BUS b on h.order_id=b.order_id and h.order_config_id=b.order_config_id 
+     	left join BMS_BASE_BUS_TYPE t on t.id=h.bus_type_id
+     	left join BMS_OR_ORDER o on o.id=h.order_id
+     	where h.tplType='1' and b.bus_number=#{bus_number} and h.test_node=#{test_node}
+     	order by version desc
+     	limit 1
+     </select>
+<!--      <select id="queryPrdRcdBusTypeTplDetailLatest" parameterType="Map" resultType="Map">
      	select * from BMS_QM_TEST_CARD_TEMPLATE_DETAILS 
      	where  
      	order by cast(test_standard_no as signed)
-     </select>
+     </select> -->
      
      <insert id='insertPrdRcdOrderTplHeader' parameterType="Map" useGeneratedKeys="true" keyProperty="id">
      	<selectKey resultType="int" keyProperty="id" order="AFTER">
@@ -231,6 +255,29 @@
      	update BMS_QM_TEST_CARD_TEMPLATE_HEADER set editor_id=#{editor_id},edit_date=#{edit_date}
      	where id=#{tpl_header_id}
      </update>
+     
+     <select id="getFaultLibFuzzyList" parameterType="Map" resultMap="faultLibMap">
+		select f.id,f.parts_id,p.parts_name
+		parts,f.bug_type,f.bug,f.serious_level,f.fault_type,
+		f.workshop_name,f.workgroup_name,f.editor_id,u.username,f.edit_date
+		from BMS_QM_STANDARD_FAULT_LIBRARY f left join BMS_BASE_USER u on
+		f.editor_id=u.id
+		left join BMS_BASE_PARTS p on f.parts_id=p.id
+		where 1=1
+		<if test="bugType !=null and  bugType !=''">
+			and f.bug_type like CONCAT('%',#{bugType},'%')
+		</if>
+		<if test="bug!=null and  bug!=''">
+			and f.bug like CONCAT('%',#{bug},'%')
+		</if>
+		<if test="workshop !=null and workshop !=''">
+			and f.workshop_name = #{workshop}
+		</if>
+		<if test="seriousLevel !=null and seriousLevel !=''">
+			and f.serious_level = #{seriousLevel}
+		</if>
+
+	</select>
      
 <!-- ======================== xjw end=================================-->
 

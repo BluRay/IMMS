@@ -161,6 +161,9 @@ $(document).ready(function () {
                     if(response.businfo == ""||response.businfo==null){
                     	fadeMessageAlert(null,'没有对应车号的车辆信息！','gritter-error');
                     	return false;
+                    }else if(response.businfo.factory_id !=$("#exec_factory").val()){
+                    	fadeMessageAlert(null,response.businfo.bus_number+'不属于'+$("#exec_factory :selected").text()+'！','gritter-error');
+                    	return false;
                     }else{                	
                     	var bus = response.businfo;
                     	$('#vinText').data("vin",bus.vin);
@@ -311,10 +314,10 @@ $(document).ready(function () {
     	var bus_number=$('#vinText').attr("value");
     	if(bus_number&&bus_number!=''&&$("#exec_process :selected").text()=='J01'){
     		$("#btnSubmit").attr("disabled","disabled");
-    		ajaxValidate();
-    	}else{
+    		ajaxValidate();	
+    	}/*else{
     		$("#btnSubmit").removeAttr("disabled");
-    	}
+    	}*/
     });
     
     $("#btnSubmit").click(function() {

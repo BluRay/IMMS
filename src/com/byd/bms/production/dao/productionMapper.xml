@@ -65,10 +65,11 @@
 	</select>
 	
 	<select id="queryLastPlanNode" parameterType="Map" resultType="Map">
-		SELECT p.id process_id,p.process_name,r.sequence
+		SELECT p.id process_id,p.process_name,r.sequence,k.key_name plan_node
 		FROM BMS_PD_SCAN_RULE r
 		LEFT JOIN BMS_BASE_PROCESS p on r.factory=p.factory and r.workshop=p.workshop 
 		and p.process_name=r.process_name and p.line=#{line_name}
+		LEFT JOIN BMS_BASE_KEY k on k.id=p.plan_node_id
 		where p.plan_node_id !=0 and r.factory=#{factory_name} <!-- and r.workshop=#{workshop_name} --> and r.sequence&lt;=(
 			select r1.sequence-1 from BMS_PD_SCAN_RULE r1 where r1.factory=#{factory_name} <!-- and r1.workshop=#{workshop_name} -->
 			and r1.process_name=#{process_name} and r1.order_type=#{order_type})

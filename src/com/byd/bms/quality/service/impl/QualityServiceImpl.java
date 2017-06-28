@@ -225,6 +225,26 @@ public class QualityServiceImpl implements IQualityService {
 		model.put("data", qualityDao.queryPrdRcdTplDetail(tpl_header_id));
 		
 	}
+	
+	@Override
+	public void getPrdRcdOrderTpl(Map<String, Object> condMap, ModelMap model) {
+		Map<String,Object> tpl_header=qualityDao.queryPrdRcdOrderTplHeader(condMap);
+		if(tpl_header==null){
+			model.put("message", "未匹配到订单模板！");
+			model.put("success", false);
+		}else{
+			String tpl_header_id=tpl_header.get("id").toString();
+			model.put("success", true);
+			model.put("data", qualityDao.queryPrdRcdTplDetail(tpl_header_id));
+			model.put("tpl_header", tpl_header);
+		}	
+	}
+
+	@Override
+	public void getFaultLibFuzzyList(Map<String, Object> condMap, ModelMap model) {
+		model.put("data", qualityDao.getFaultLibFuzzyList(condMap));
+		
+	}
 	//======================== xjw end=================================//
 		
 	

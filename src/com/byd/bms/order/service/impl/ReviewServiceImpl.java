@@ -132,7 +132,9 @@ public class ReviewServiceImpl implements IReviewService {
 				}
 			}
 		}
-		result=result.substring(0, result.length()-1);
+		if(!result.equals("")){
+			result=result.substring(0, result.length()-1);
+		}
 		return result;
 	}
 

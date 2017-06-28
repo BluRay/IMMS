@@ -89,7 +89,7 @@ public class ProductionServiceImpl implements IProductionService {
 				Map<String,Object> scanRecord=productionDao.queryScanLastPlanNode(condMap);
 				if(scanRecord==null){
 					rMap.put("success", false);
-					rMap.put("message", lastPlanNode.get("process_name")+"还未扫描，请先扫描"+lastPlanNode.get("process_name")+"!");
+					rMap.put("message", lastPlanNode.get("plan_node")+"("+lastPlanNode.get("process_name")+")还未扫描，请先扫描"+lastPlanNode.get("plan_node")+"!");
 					 return rMap;
 				}else{
 					productionDao.saveScanRecord(condMap);

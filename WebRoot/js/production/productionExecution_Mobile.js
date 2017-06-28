@@ -231,7 +231,7 @@ function initPage(){
 		                "line_name":$('#exec_line').find("option:selected").text(),
 		                "process_id":$('#exec_process').val(),
 		                "process_number":$('#exec_process :selected').text(),
-		                "process_name":$('#exec_processname').val(),
+		                "process_name":$('#exec_processname').html(),
 		                "field_name":field_name,
 		                "order_type":orderType,
 		                "plan_node_name":plan_node,
@@ -307,7 +307,7 @@ function initPage(){
                 		getAllLineSelect(bus.line)
                 		
                 		var cur_line=$("#exec_line option:selected").text();
-                		getAllProcessSelect(bus.order_type,nextProcess==null?bus.process_name:nextProcess.processName);
+                		getAllProcessSelect(bus.order_type,nextProcess==null?bus.process_name:nextProcess.process_name);
 
                     }
             },

@@ -535,7 +535,7 @@
 	</select>
 	
 	<select id="getFactoryOrderInfo" parameterType="Map" resultType="int">
-		SELECT sum(production_qty) FROM BMS_OR_FACTORY_ORDER WHERE
+		SELECT IFNULL(sum(production_qty),0) FROM BMS_OR_FACTORY_ORDER WHERE
 		order_id = (SELECT id FROM BMS_OR_ORDER WHERE order_no=#{order_no})
 		AND factory_id = #{factory_id}
 	</select>
