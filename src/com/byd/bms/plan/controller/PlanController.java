@@ -759,10 +759,64 @@ public class PlanController extends BaseController{
 		planBusDispatchPlan.setEmail_addrs(request.getParameter("email_addrs"));
 		planBusDispatchPlan.setCreater_id(create_user);
 		planBusDispatchPlan.setCreatdate(curTime);
-		
+		planBusDispatchPlan.setStatus("0");
 		int result = planService.addDispatchPlan(planBusDispatchPlan);
 		mv.clear();
 		initModel(true,String.valueOf(result),null);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/editDispatchPlan")
+	@ResponseBody
+	public ModelMap editDispatchPlan(){
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String create_user = request.getSession().getAttribute("staff_number") + "";
+		PlanBusDispatchPlan planBusDispatchPlan = new PlanBusDispatchPlan();
+		planBusDispatchPlan.setId(Integer.parseInt(request.getParameter("id")));
+		planBusDispatchPlan.setFactory_id(Integer.parseInt(request.getParameter("factory_id")));
+		planBusDispatchPlan.setOrder_no(request.getParameter("order_no"));
+		planBusDispatchPlan.setPlan_dispatch_qty(Integer.parseInt(request.getParameter("plan_dispatch_qty")));
+		planBusDispatchPlan.setDispatch_date(request.getParameter("dispatch_date"));
+		planBusDispatchPlan.setCustomer_number_flag(request.getParameter("customer_number_flag"));
+		planBusDispatchPlan.setEmail_addrs(request.getParameter("email_addrs"));
+		planBusDispatchPlan.setCreater_id(create_user);
+		planBusDispatchPlan.setCreatdate(curTime);
+		int result = planService.editDispatchPlan(planBusDispatchPlan);
+		mv.clear();
+		initModel(true,String.valueOf(result),null);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/getDispatchPlanList")
+	@ResponseBody
+	public ModelMap getDispatchPlanList(){
+		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
+		int start=(request.getParameter("start")!=null)?Integer.parseInt(request.getParameter("start")):0;		//分页数据起始数
+		int length=(request.getParameter("length")!=null)?Integer.parseInt(request.getParameter("length")):500;	//每一页数据条数
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("draw", draw);
+		condMap.put("start", start);
+		condMap.put("length", length);
+		condMap.put("factory", request.getParameter("factory"));
+		condMap.put("id", request.getParameter("id"));
+		condMap.put("bustype", request.getParameter("bustype"));
+		condMap.put("order_no", request.getParameter("order_no"));
+		condMap.put("start_date", request.getParameter("start_date"));
+		condMap.put("end_date", request.getParameter("end_date"));
+		condMap.put("orderColumn", "id");
+		Map<String,Object> result= planService.getDispatchPlanList(condMap);
+		model.addAllAttributes(result);
+		return model;
+	}
+	
+	@RequestMapping("/getOrderDispatchQty")
+	@ResponseBody
+	public ModelMap getOrderDispatchQty(){
+		int dispatchQty = planService.getOrderDispatchQty(Integer.parseInt(request.getParameter("order_id")));
+		initModel(true,String.valueOf(dispatchQty),null);
 		model = mv.getModelMap();
 		return model;
 	}
@@ -815,6 +869,7 @@ public class PlanController extends BaseController{
 		pause.setDuty_department_id(Integer.parseInt(request.getParameter("edit_dep_id")));
 		pause.setStart_time(request.getParameter("edit_pause_date_start"));
 		pause.setPend_time(request.getParameter("edit_pause_date_end"));
+		pause.setEnd_time(request.getParameter("edit_end_time"));
 		pause.setHours(request.getParameter("edit_pause_hours"));
 		pause.setHuman_lossed(request.getParameter("edit_human_lossed"));
 		pause.setCapacity_lossed(request.getParameter("edit_capacity"));

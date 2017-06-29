@@ -53,4 +53,7 @@ public interface IPlanService {
 	public List<Map<String,String>> getPlanSerach(Map<String,Object> queryMap);	
 	public Map<String,Object> showPlanSearchDetail(Map<String,Object> queryMap);
 	public int addDispatchPlan(PlanBusDispatchPlan planBusDispatchPlan);
+	public Map<String,Object> getDispatchPlanList(Map<String,Object> queryMap);
+	public int getOrderDispatchQty(int orderId);
+	public int editDispatchPlan(PlanBusDispatchPlan planBusDispatchPlan);
 }

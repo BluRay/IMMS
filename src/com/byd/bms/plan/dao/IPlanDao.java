@@ -94,4 +94,8 @@ public interface IPlanDao {
 	public int getPlanSearchTotalRealZzjQty(Map<String,Object> queryMap);
 	public int getPlanSearchTotalRealQty(Map<String,Object> queryMap);
 	public int addDispatchPlan(PlanBusDispatchPlan planBusDispatchPlan);
+	public List<Map<String,String>> getDispatchPlanList(Map<String,Object> queryMap);
+	public int getDispatchPlanListCount(Map<String,Object> queryMap);
+	public int getOrderDispatchQty(int orderId);
+	public int editDispatchPlan(PlanBusDispatchPlan planBusDispatchPlan);
 }

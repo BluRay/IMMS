@@ -27,6 +27,7 @@ public interface ISettingDao {
 	public int addUser(BmsBaseUser user);
 	public int editUser(BmsBaseUser user);
 	public int delUser(BmsBaseUser user);
+	public BmsBaseUser getUserById(@Param("id") String id);
 	public int resetUserPass(BmsBaseUser user);
 	public List<BmsBaseUser> getUserList(Map<String,Object> queryMap);
 	public int getTotalUserCount(Map<String,Object> queryMap);

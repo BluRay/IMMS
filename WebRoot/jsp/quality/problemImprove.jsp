@@ -10,6 +10,9 @@
 		<link rel="stylesheet" href="../assets/css/jquery-ui.min.css" />
 		<link rel="stylesheet" href="../assets/css/jquery-ui.custom.min.css" />
 		<link rel="stylesheet" href="../assets/css/jquery.gritter.css" />
+		<style type="text/css">
+		.center{padding-left:0px}
+		</style>
 	</head>
 	<body class="no-skin" style="font-family: 'Microsoft YaHei';">
 		<!-- 头 -->
@@ -85,8 +88,10 @@
 						<td align="right" style="width:100px">故障现象：</td><td colspan=3><input type="text" class="input-medium" id="new_fault_phenomenon" style="width:400px"/></td>
 					</tr>
 					<tr style="height:40px">
-						<td align="right" style="width:100px">故障图片：</td><td style="width:150px"><input name="new_fault_pic" type="file" id="new_fault_pic" /></td>
-						<td align="right" style="width:100px">故障等级：</td><td style="width:150px"><select class="input-medium" id="new_fault_level_id" style="width:150px"><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="S">S</option></select></td>
+						<td align="right" style="width:100px">故障等级：</td><td colspan=3><select class="input-medium" id="new_fault_level_id" style="width:150px"><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="S">S</option></select></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">故障图片：</td><td colspan=3><input name="new_fault_pic" type="file" id="new_fault_pic" /></td>
 					</tr>
 					<tr style="height:40px">
 						<td align="right" style="width:100px">原因分析：</td><td colspan=3><input type="text" class="input-medium" id="new_fault_reason" style="width:400px"/></td>
@@ -98,8 +103,10 @@
 						<td align="right" style="width:100px">重点关注：</td><td colspan=3><input type="text" class="input-medium" id="new_keystone_attention" style="width:400px"/></td>
 					</tr>
 					<tr style="height:40px">
-						<td align="right" style="width:100px">8D报告：</td><td style="width:150px"><input name="new_8d_report" type="file" id="new_8d_report" /></td>
-						<td align="right" style="width:100px">关闭证据：</td><td style="width:150px"><input name="new_close_evidenc" type="file" id="new_close_evidenc" /></td>
+						<td align="right" style="width:100px">8D报告：</td><td colspan=3><input name="new_8d_report" type="file" id="new_8d_report" /></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">关闭证据：</td><td colspan=3><input name="new_close_evidenc" type="file" id="new_close_evidenc" /></td>
 					</tr>
 					<tr style="height:40px">
 						<td align="right" style="width:100px">解决方法：</td><td colspan=3><input type="text" class="input-medium" id="new_resolve_method" style="width:400px"/></td>
@@ -139,8 +146,11 @@
 						<td align="right" style="width:100px">故障现象：</td><td colspan=3><input type="text" class="input-medium" id="edit_fault_phenomenon" style="width:400px"/></td>
 					</tr>
 					<tr style="height:40px">
-						<td align="right" style="width:100px">故障图片：</td><td style="width:150px"><input name="edit_fault_pic" type="file" id="edit_fault_pic" /><a target="blank" id="file_link1">查看</a></td>
-						<td align="right" style="width:100px">故障等级：</td><td style="width:150px"><select class="input-medium" id="edit_fault_level_id" style="width:150px"><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="S">S</option></select></td>
+						<td align="right" style="width:100px">故障等级：</td><td colspan=3><select class="input-medium" id="edit_fault_level_id" style="width:150px"><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="S">S</option></select></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">故障图片：</td><td colspan=2><input name="edit_fault_pic" style="width:250px" type="file" id="new_fault_pic" /></td>
+						<td><a target="blank" id="file_link1">查看</a></td>
 					</tr>
 					<tr style="height:40px">
 						<td align="right" style="width:100px">原因分析：</td><td colspan=3><input type="text" class="input-medium" id="edit_fault_reason" style="width:400px"/></td>
@@ -152,8 +162,12 @@
 						<td align="right" style="width:100px">重点关注：</td><td colspan=3><input type="text" class="input-medium" id="edit_keystone_attention" style="width:400px"/></td>
 					</tr>
 					<tr style="height:40px">
-						<td align="right" style="width:100px">8D报告：</td><td style="width:150px"><input name="edit_8d_report" type="file" id="edit_8d_report" /><a target="blank" id="file_link2">查看</a></td>
-						<td align="right" style="width:100px">关闭证据：</td><td style="width:150px"><input name="edit_close_evidenc" type="file" id="edit_close_evidenc" /><a target="blank" id="file_link3">查看</a></td>
+						<td align="right" style="width:100px">8D报告：</td><td colspan=2 style="width:150px"><input name="edit_8d_report" type="file" id="edit_8d_report" /></td>
+						<td><a target="blank" id="file_link2">查看</a></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">关闭证据：</td><td colspan=2 style="width:150px"><input name="edit_close_evidenc" type="file" id="edit_close_evidenc" /></td>
+						<td><a target="blank" id="file_link3">查看</a></td>
 					</tr>
 					<tr style="height:40px">
 						<td align="right" style="width:100px">解决方法：</td><td colspan=3><input type="text" class="input-medium" id="edit_resolve_method" style="width:400px"/></td>

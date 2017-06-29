@@ -124,8 +124,8 @@ function getSearch(){
     			$("<td style=\"text-align:center;\" />").html(value.total_qty).appendTo(tr);
     			last_order=value.order_desc;
     			$("#tablePlan tbody").append(tr);
-    			tplan_zzj+=(value.key_name=='自制件下线'?parseInt(value.total_plan_qty):0);
-        		treal_zzj+=(value.key_name=='自制件下线'?parseInt(value.real_qty):0);
+    			tplan_zzj+=(value.key_name=='自制下线'?parseInt(value.total_plan_qty):0);
+        		treal_zzj+=(value.key_name=='自制下线'?parseInt(value.real_qty):0);
         		tplan_bjon+=(value.key_name=='部件上线'?parseInt(value.total_plan_qty):0);
         		treal_bjon+=(value.key_name=='部件上线'?parseInt(value.real_qty):0);
         		tplan_bjoff+=(value.key_name=='部件下线'?parseInt(value.total_plan_qty):0);
@@ -146,8 +146,8 @@ function getSearch(){
         		treal_zzon+=(value.key_name=='总装上线'?parseInt(value.real_qty):0);
         		tplan_zzoff+=(value.key_name=='总装下线'?parseInt(value.total_plan_qty):0);
         		treal_zzoff+=(value.key_name=='总装下线'?parseInt(value.real_qty):0);
-        		tplan_rk+=(value.key_name=='入库'?parseInt(value.total_plan_qty):0);
-        		treal_rk+=(value.key_name=='入库'?parseInt(value.real_qty):0);			
+        		tplan_rk+=(value.key_name=='车辆入库'?parseInt(value.total_plan_qty):0);
+        		treal_rk+=(value.key_name=='车辆入库'?parseInt(value.real_qty):0);			
     		});
     		$("#tr_plan").find("td").eq("1").html(tplan_zzj);
     		$("#tr_plan").find("td").eq("2").html(tplan_bjoff);

@@ -115,8 +115,9 @@
       if (this.shown) {
         element = this.$menu;
       } else if (this.$appendTo) {
-        element = this.$menu.appendTo(this.$appendTo);
-        this.hasSameParent = this.$appendTo.is(this.$element.parent());
+      //  this.hasSameParent = this.$appendTo.is(this.$element.parent());
+        element = this.$menu.appendTo(this.$appendTo);//指定dropdown menu append to 
+        this.hasSameParent=false;
       } else {
         element = this.$menu.insertAfter(this.$element);
         this.hasSameParent = true;

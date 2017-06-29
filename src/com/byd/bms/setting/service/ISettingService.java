@@ -24,6 +24,7 @@ public interface ISettingService {
 	public int addUser(BmsBaseUser user);
 	public int editUser(BmsBaseUser user);
 	public int delUser(BmsBaseUser user);
+	public BmsBaseUser getUserByid(String id);
 	public int resetUserPass(BmsBaseUser user);
 	public Map<String,Object> getUserList(Map<String,Object> condMap);
 	public List<BmsUserRole> getUserRole(String staff_number);

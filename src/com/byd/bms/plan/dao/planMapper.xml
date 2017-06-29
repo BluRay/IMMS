@@ -769,7 +769,7 @@
 		select record.order_desc,record.key_name,record.production_qty,record.order_id,ifnull(record.real_qty,0) real_qty,ifnull(record.total_qty,0) total_qty,ifnull(p.total_plan_qty,0) total_plan_qty 
 		from
 		(
-		select '自制件下线' key_name,fo.order_id,tmp.quantity1 real_qty,tmp.quantity total_qty,sum(fo.production_qty) production_qty,concat(o.order_no,' ',o.order_name,t.internal_name,' ',sum(fo.production_qty),'台') order_desc
+		select '自制下线' key_name,fo.order_id,tmp.quantity1 real_qty,tmp.quantity total_qty,sum(fo.production_qty) production_qty,concat(o.order_no,' ',o.order_name,t.internal_name,' ',sum(fo.production_qty),'台') order_desc
 		from BMS_OR_FACTORY_ORDER fo
 		left join BMS_OR_ORDER o on o.id=fo.order_id
 		left join BMS_BASE_BUS_TYPE  t on o.bus_type_id=t.id
@@ -1139,8 +1139,79 @@
 	<insert id="addDispatchPlan" useGeneratedKeys="true" keyProperty="id" parameterType="com.byd.bms.plan.model.PlanBusDispatchPlan">
 		INSERT INTO BMS_PLAN_BUS_DISPATCH_PLAN
 		(factory_id, order_id, plan_dispatch_qty, dispatch_date,customer_number_flag, status, email_addrs, creater_id, creatdate)
-		VALUES(#{factory_id},#{order_id},#{plan_dispatch_qty},#{dispatch_date},
+		VALUES(#{factory_id},(SELECT id FROM BMS_OR_ORDER WHERE order_no = #{order_no}),#{plan_dispatch_qty},#{dispatch_date},
 		#{customer_number_flag},#{status},#{email_addrs},#{creater_id},#{creatdate})
 	</insert>
+	
+	<select id="getDispatchPlanList" parameterType="Map" resultType="Map">
+		SELECT P.*,F.factory_name,O.order_no,O.order_qty,T.bus_type_code, IFNULL(sum(d.qtys),0) AS plan_done_qty 
+		FROM BMS_PLAN_BUS_DISPATCH_PLAN P
+		LEFT OUTER JOIN BMS_PLAN_BUS_DISPATCH d on P.id=d.dispatch_plan_id
+		LEFT OUTER JOIN BMS_BASE_FACTORY F ON P.factory_id = F.id
+		LEFT OUTER JOIN BMS_OR_ORDER O ON P.order_id = O.id
+		LEFT OUTER JOIN BMS_BASE_BUS_TYPE T ON O.bus_type_id = T.id
+		WHERE 1=1 
+		<if test="id !=null and id !=''">
+			AND P.id = #{id}
+		</if>
+		<if test="factory !=null and factory !=''">
+			AND P.factory_id = #{factory}
+		</if>
+		<if test="bustype !=null and bustype !=''">
+			AND O.bus_type_id = #{bustype}
+		</if>
+		<if test="order_no !=null and order_no !=''">
+			AND O.order_no = #{order_no}
+		</if>
+		<if test="start_date !=null and start_date !=''">
+			AND P.dispatch_date >= #{start_date}
+		</if>
+		<if test="end_date !=null and end_date !=''">
+			AND P.dispatch_date &lt;= #{end_date}
+		</if>
+		GROUP BY P.id
+		<if test="start !=null">
+			LIMIT #{start} ,#{length} 
+		</if>	
+	</select>
+	<select id="getDispatchPlanListCount" parameterType="Map" resultType="int">
+		SELECT COUNT(P.id) FROM BMS_PLAN_BUS_DISPATCH_PLAN P
+		LEFT OUTER JOIN BMS_BASE_FACTORY F ON P.factory_id = F.id
+		LEFT OUTER JOIN BMS_OR_ORDER O ON P.order_id = O.id
+		LEFT OUTER JOIN BMS_BASE_BUS_TYPE T ON O.bus_type_id = T.id
+		WHERE 1=1 
+		<if test="id !=null and id !=''">
+			AND P.id = #{id}
+		</if>
+		<if test="factory !=null and factory !=''">
+			AND P.factory_id = #{factory}
+		</if>
+		<if test="bustype !=null and bustype !=''">
+			AND O.bus_type_id = #{bustype}
+		</if>
+		<if test="order_no !=null and order_no !=''">
+			AND O.order_no = #{order_no}
+		</if>
+		<if test="start_date !=null and start_date !=''">
+			AND P.dispatch_date >= #{start_date}
+		</if>
+		<if test="end_date !=null and end_date !=''">
+			AND P.dispatch_date &lt;= #{end_date}
+		</if>
+	</select>
+	<select id="getOrderDispatchQty" parameterType="int" resultType="int">
+		select case when sum(p.plan_dispatch_qty) is null then 0 else
+		sum(p.plan_dispatch_qty) end as order_dispacthed_qty
+		from
+		BMS_PLAN_BUS_DISPATCH_PLAN p left join BMS_OR_ORDER o on p.order_id=o.id
+		where p.order_id=#{orderId}
+	</select>
+	
+	<update id="editDispatchPlan" parameterType="com.byd.bms.plan.model.PlanBusDispatchPlan">
+		UPDATE BMS_PLAN_BUS_DISPATCH_PLAN
+		SET factory_id=#{factory_id}, order_id=(SELECT id FROM BMS_OR_ORDER WHERE order_no = #{order_no}), plan_dispatch_qty=#{plan_dispatch_qty}, dispatch_date=#{dispatch_date}, customer_number_flag=#{customer_number_flag}, 
+		email_addrs=#{email_addrs}, creater_id=#{creater_id}, creatdate=#{creatdate}
+		WHERE id=#{id};
+	</update>
 	
 </mapper>

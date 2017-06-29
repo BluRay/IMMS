@@ -75,6 +75,13 @@
 		UPDATE BMS_BASE_USER SET isdelete='1' WHERE staff_number=#{staff_number};
 		]]>
 	</update>
+	<select id="getUserById" parameterType="String" resultType="com.byd.bms.util.model.BmsBaseUser">
+		SELECT staff_number, username, email, telephone, cellphone, display_name, factory_id FROM BMS_BASE_USER 
+		where isdelete = 0 
+		<if test="id !=null">
+			and id=#{id}
+		</if>	
+	</select>
 	
 	<update id="resetUserPass" parameterType="com.byd.bms.util.model.BmsBaseUser">
 		<![CDATA[

@@ -213,6 +213,10 @@
 						<td align="right">浪费人数：</td><td><input id="edit_human_lossed" placeholder="浪费人数..." style="width:100px" type="text">人</td>
 					</tr>
 					<tr style="height:40px">
+						<td align="right">实际恢复时间：</td><td><input id="edit_end_time" placeholder="实际恢复时间..." style="width:150px" type="text" onClick="WdatePicker({el:'edit_end_time',dateFmt:'yyyy-MM-dd HH:mm'});"></td>
+						<td align="right"></td><td></td>
+					</tr>
+					<tr style="height:40px">
 						<td align="right">损失产能：</td><td><input id="edit_capacity" placeholder="损失产能..." style="width:100px" type="text">台</td>
 						<td></td><td></td>
 					</tr>

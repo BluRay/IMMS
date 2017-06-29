@@ -74,7 +74,7 @@ $(document).ready(function () {
 				if (value.orderNo == item) {
 					selectId = value.id;
 					var order_li="<li class=\"search-choice\"><span>"+
-					value.orderNo+"</span><button type=\"button\" class=\"close rmorder\" title=\"删除\" style=\"font-size: 16px;\" aria-label=\"Close\">"+
+					value.orderNo+"</span><button type=\"button\" class=\"close rmorder\" onclick=\"rmorder2(this);\" title=\"删除\" style=\"font-size: 16px;\" aria-label=\"Close\">"+
 					"<span aria-hidden=\"true\">×</span></button></li>";
 					
 					$("#order_area ul").append(order_li);
@@ -99,6 +99,11 @@ $(document).ready(function () {
 			$("#order_no_list").show();
 			$("#order_no_list").focus();
 		}	
+	});
+	
+	$("#order_no_list").on("blur",function(){
+		$(this).hide();
+		$("#order_area").show();
 	});
 	
 	$("#btnAdd").on('click', function(e) {
@@ -246,6 +251,15 @@ $(document).ready(function () {
 	
 });
 
+function rmorder2(obj){
+	var orderNo=$(obj).parent("li").find("span").eq(0).html();
+	var index=orderlist.indexOf(orderNo);
+	//console.log('-->orderNo = ' + orderNo);
+	orderlist.splice(index,1);
+	orderDescList.splice(index,1);
+	$(obj).parent("li").remove();
+}
+
 function checkLine(t){
 	if($(t).prop("checked")){
 		lineStr += $(t).attr('id') + ',' ;
@@ -368,7 +382,7 @@ function ajaxQuery(){
 		            {"title":"损失产能",width:'80',"class":"center","data":"capacity_lossed","defaultContent": ""},
 		            {"title":"状态",width:'50',"class":"center","data":"","defaultContent": "",
 		            	"render": function ( data, type, row ) {
-		            		return (row['end_time'] == null)?"停线中":"已恢复";
+		            		return (row['end_time'] == null || row['end_time'] == '')?"停线中":"已恢复";
 		            	},
 		            },
 		            {"title":"录入人",width:'60',"class":"center","data":"create_user_name","defaultContent": ""},
@@ -425,6 +439,7 @@ function editPause(pause_id){
 					$("#edit_dep_id").find("option[keyvalue='"+value.duty_department_id+"']").attr("selected", true);
 					$("#edit_pause_date_start").val(value.start_time);
 					$("#edit_pause_date_end").val(value.pend_time);
+					$("#edit_end_time").val(value.end_time);
 					$("#edit_pause_hours").val(value.hours);
 					$("#edit_human_lossed").val(value.human_lossed);
 					$("#edit_capacity").val(value.capacity_lossed);
@@ -453,6 +468,7 @@ function btnEditPauseConfirm(){
 			"edit_dep_id":$("#edit_dep_id :selected").attr('keyvalue'),
 			"edit_pause_date_start":$('#edit_pause_date_start').val(),
 			"edit_pause_date_end":$('#edit_pause_date_end').val(),
+			"edit_end_time":$('#edit_end_time').val(),
 			"edit_pause_hours":$('#edit_pause_hours').val(),
 			"edit_human_lossed":$('#edit_human_lossed').val(),
 			"edit_capacity":$('#edit_capacity').val(),

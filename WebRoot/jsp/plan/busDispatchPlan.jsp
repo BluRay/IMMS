@@ -61,7 +61,8 @@
 							</tr>
 						</table>
 					</div>
-					
+					<table id="tableData" class="table table-striped table-bordered table-hover" style="font-size: 12px;">
+					</table>
 					</div>
 			</div><!-- /.main-content -->
 			
@@ -69,10 +70,20 @@
 			<form>
 					<table>
 					<tr style="height:40px">
-						<td align="right" style="width:150px">生产工厂：</td><td style="width:150px"><select id="new_factory" class="form-control" style="width:150px"></select></td>
+						<td align="right" style="width:150px">生产工厂：</td><td style="width:180px"><select id="new_factory" class="form-control" style="width:150px"></select></td>
 					</tr>
 					<tr style="height:40px">
-						<td align="right" style="width:150px">生产订单：</td><td style="width:150px"><input id="new_order_no" placeholder="请输入订单编号..." style="width:150px" type="text"></td>
+						<td align="right" style="width:150px">生产订单：</td>
+						<td style="width:180px">
+							<input id="new_order_no" placeholder="请输入订单编号..." style="width:150px" type="text">
+						</td>
+					</tr>
+					<tr style="height:40px">
+					<td align="center" colspan="2" style="width:200px">
+						订单数量：<span class="text-info" id="new_order_qty">0</span>
+						已计划发车数量：<span class="text-info" id="new_plan_done_qty">0</span>&nbsp;
+						剩余数量：<span class="text-info" id="new_plan_left_qty">0</span>
+					</td>
 					</tr>
 					<tr style="height:40px">
 						<td align="right" style="width:150px">计划发车数量：</td><td style="width:150px"><input id="new_plan_num" placeholder="请输入发车数量..." style="width:150px" type="text"></td>
@@ -85,6 +96,41 @@
 					</tr>
 					<tr style="height:40px">
 						<td align="right" style="width:150px">邮件通知：</td><td style="width:250px"><input id="new_mail_addr" placeholder="请输入邮件地址..." style="width:250px" type="text"></td>
+					</tr>
+					</table>
+			</form>		
+			</div>
+			
+			<div id="dialog-edit" class="hide" style="align:center;width:700px;height:500px">
+			<form>
+					<table>
+					<tr style="height:40px">
+						<td align="right" style="width:150px">生产工厂：</td><td style="width:180px"><select id="edit_factory" class="form-control" style="width:150px"></select></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:150px">生产订单：</td>
+						<td style="width:180px">
+							<input id="edit_order_no" placeholder="请输入订单编号..." style="width:150px" type="text">
+						</td>
+					</tr>
+					<tr style="height:40px">
+					<td align="center" colspan="2" style="width:200px">
+						订单数量：<span class="text-info" id="edit_order_qty">0</span>
+						已计划发车数量：<span class="text-info" id="edit_plan_done_qty">0</span>&nbsp;
+						剩余数量：<span class="text-info" id="edit_plan_left_qty">0</span>
+					</td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:150px">计划发车数量：</td><td style="width:150px"><input id="edit_plan_num" placeholder="请输入发车数量..." style="width:150px" type="text"></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:150px">计划发车时间：</td><td style="width:150px"><input id="edit_plan_date" placeholder="请输入发车时间..." style="width:150px" type="text" onClick="WdatePicker({el:'edit_plan_date',dateFmt:'yyyy-MM-dd'});"></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:150px">自编号：</td><td style="width:150px"><select id="edit_customer_number_flag" class="form-control" style="width:150px"><option value='0'>有</option><option value='1'>无</option></select></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:150px">邮件通知：</td><td style="width:250px"><input id="edit_mail_addr" placeholder="请输入邮件地址..." style="width:250px" type="text"></td>
 					</tr>
 					</table>
 			</form>		

@@ -88,7 +88,12 @@ public class SettingServiceImpl implements ISettingService {
 	public int delUser(BmsBaseUser user) {
 		return settingDao.delUser(user);
 	}
-
+    
+	@Override
+	public BmsBaseUser getUserByid(String id) {
+		return settingDao.getUserById(id);
+	}
+	
 	@Override
 	public int resetUserPass(BmsBaseUser user) {
 		return settingDao.resetUserPass(user);
@@ -180,8 +185,5 @@ public class SettingServiceImpl implements ISettingService {
 	public List<BmsUserRole> getOneUserRole(String staff_number, String role_id) {
 		return settingDao.getOneUserRole(staff_number,role_id);
 	}
-
-
-
 
 }

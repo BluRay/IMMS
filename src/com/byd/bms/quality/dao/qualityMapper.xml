@@ -276,6 +276,9 @@
 		<if test="seriousLevel !=null and seriousLevel !=''">
 			and f.serious_level = #{seriousLevel}
 		</if>
+		<if test="faultType !=null and  faultType !=''">
+			and f.fault_type like CONCAT('%',#{faultType},'%')
+		</if>
 
 	</select>
      

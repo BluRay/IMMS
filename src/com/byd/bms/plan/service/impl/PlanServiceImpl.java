@@ -487,7 +487,7 @@ public class PlanServiceImpl implements IPlanService {
 		String year = queryMap.get("year").toString();
 		String WMI_extension = queryMap.get("WMI_extension").toString();
 		//获取当前年份最大的VIN流水号
-		int vin_count = 0;
+		int vin_count = 0; int vin_num = 0;
 		Map<String,Object> condMap=new HashMap<String,Object>();
 		condMap.put("year_code", vinYearMap.get(year));
 		condMap.put("vin_prefix", vin_prefix);
@@ -513,9 +513,10 @@ public class PlanServiceImpl implements IPlanService {
 				planVIN.setCreat_date(queryMap.get("curTime").toString());
 				planDao.insertPlanVin(planVIN);
 				vinCount--;
+				vin_num++;	//生成VIN号数量
 			}
 		}
-		result.put("message", "操作成功！共生成" + (vinCount+1) + "个VIN号");
+		result.put("message", "操作成功！共生成" + vin_num + "个VIN号");
 		result.put("success", true);
 		return result;
 	}
@@ -1170,6 +1171,29 @@ public class PlanServiceImpl implements IPlanService {
 	@Override
 	public int addDispatchPlan(PlanBusDispatchPlan planBusDispatchPlan) {
 		return planDao.addDispatchPlan(planBusDispatchPlan);
+	}
+
+	@Override
+	public Map<String, Object> getDispatchPlanList(Map<String, Object> queryMap) {
+		int totalCount=0;
+		List<Map<String,String>> datalist = planDao.getDispatchPlanList(queryMap);
+		totalCount = planDao.getDispatchPlanListCount(queryMap);
+		Map<String, Object> result = new HashMap<String,Object>();
+		result.put("draw", queryMap.get("draw"));
+		result.put("recordsTotal", totalCount);
+		result.put("recordsFiltered", totalCount);
+		result.put("data", datalist);
+		return result;
+	}
+
+	@Override
+	public int getOrderDispatchQty(int orderId) {
+		return planDao.getOrderDispatchQty(orderId);
+	}
+
+	@Override
+	public int editDispatchPlan(PlanBusDispatchPlan planBusDispatchPlan) {
+		return planDao.editDispatchPlan(planBusDispatchPlan);
 	}
 
 }

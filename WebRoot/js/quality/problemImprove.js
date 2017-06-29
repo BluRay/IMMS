@@ -16,7 +16,6 @@ $(document).ready(function(){
 			no_file:'文件...',
 			btn_choose:'选择文件',
 			btn_change:'重新选择',
-			width:"300px",
 			droppable:false,
 			onchange:null,
 			thumbnail:false, //| true | large
@@ -395,18 +394,18 @@ function ajaxQuery(){
 		            {"title":"责任车间",width:'80',"class":"center","data":"workshop_name","defaultContent": ""},
 		            {"title":"车型",width:'50',"class":"center","data":"bus_type","defaultContent": ""},
 		            {"title":"VIN号",width:'80',"class":"center","data":"vin","defaultContent": ""},
-		            {"title":"车牌号码",width:'90',"class":"center","data":"license_number","defaultContent": ""},
-		            {"title":"故障里程",width:'80',"class":"center","data":"fault_mils","defaultContent": ""},
-		            {"title":"故障现象",width:'150',"class":"center","data":"fault_phenomenon","defaultContent": ""},
-		            {"title":"解决方法",width:'150',"class":"center","data":"resolve_method","defaultContent": ""},
-		            {"title":"处理时间",width:'100',"class":"center","data":"resolve_date","defaultContent": ""},
+		            {"title":"车牌",width:'90',"class":"center","data":"license_number","defaultContent": ""},
+		            {"title":"里程",width:'50',"class":"center","data":"fault_mils","defaultContent": ""},
+		            {"title":"故障现象",width:'140',"class":"center","data":"fault_phenomenon","defaultContent": ""},
+		            {"title":"解决方法",width:'140',"class":"center","data":"resolve_method","defaultContent": ""},
+		            {"title":"处理时间",width:'90',"class":"center","data":"resolve_date","defaultContent": ""},
 		            {"title":"状态",width:'60',"class":"center","data":"is_closed","defaultContent": "",
 		            	"render": function ( data, type, row ) {
 		            		return (data == "0")?"未关闭":"已关闭";
 		            	}
 		            },
-		            {"title":"维护人",width:'60',"class":"center","data":"display_name","defaultContent": ""},
-		            {"title":"维护时间",width:'150',"class":"center","data":"edit_date","defaultContent": ""},
+		            {"title":"维护人",width:'70',"class":"center","data":"display_name","defaultContent": ""},
+		            {"title":"维护时间",width:'140',"class":"center","data":"edit_date","defaultContent": ""},
 		            {"title":"操作",width:'80',"class":"center","data":null,"defaultContent": "",
 		            	"render": function ( data, type, row ) {
 		            		return "<i class=\"glyphicon glyphicon-search bigger-130 showbus\" title=\"查看\" onclick='showProblemImprove(" 
