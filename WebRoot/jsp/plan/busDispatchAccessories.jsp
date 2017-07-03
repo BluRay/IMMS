@@ -138,6 +138,7 @@
 	<script src="../assets/js/fuelux/fuelux.tree.min.js"></script>
 	<script src="../assets/js/jquery-ui.min.js"></script>
 	<script src="../assets/js/jquery.ui.touch-punch.min.js"></script>
+	<script src="../assets/js/jquery.gritter.min.js"></script>
 	
 	<script type="text/javascript" src="../js/jquery.form.js"></script>
 	<script src="../assets/js/bootstrap3-typeahead.js"></script>

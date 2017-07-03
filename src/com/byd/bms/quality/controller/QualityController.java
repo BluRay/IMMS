@@ -29,6 +29,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.byd.bms.quality.service.IQualityService;
 import com.byd.bms.quality.model.BmsBaseQCStdRecord;
+import com.byd.bms.quality.model.MaterialExceptionLogs;
 import com.byd.bms.quality.model.ProblemImproveBean;
 import com.byd.bms.quality.model.ProcessFaultBean;
 import com.byd.bms.quality.model.QualityTargetBean;
@@ -948,41 +949,245 @@ public class QualityController extends BaseController {
 	
 	
 	//========================tj start=================================//
+	/**
+	 * 关键零部件跟踪
+	 * @return
+	 */
+	@RequestMapping("/keyPartsTrace")
+	public ModelAndView keyPartsTrace(){
+		mv.setViewName("quality/keyPartsTrace");
+		return mv;
+	}
 	
+	@RequestMapping("/getKeyPartsTraceList")
+	@ResponseBody
+	public ModelMap getKeyPartsTraceList() {
+		Map conditionMap = new HashMap();
+		String factoryId = request.getParameter("factoryId");
+		String busTypeId = request.getParameter("bustypeId");
+		String workshop = request.getParameter("workshop");
+		String busNumber = request.getParameter("busNumber");
+		String orderNo = request.getParameter("orderNo");
+		String orderconfigId = request.getParameter("orderconfigId");
+		// 封装查询条件
+		conditionMap.put("factoryId", factoryId);
+        conditionMap.put("workshop", workshop);
+		conditionMap.put("busNumber", busNumber);
+		conditionMap.put("bustypeId", busTypeId);
+        conditionMap.put("orderNo", orderNo);
+		conditionMap.put("orderconfigId", orderconfigId);
 	
+		int draw = Integer.parseInt(request.getParameter("draw"));// jquerydatatables
+		int start = Integer.parseInt(request.getParameter("start"));// 分页数据起始数
+		int length = Integer.parseInt(request.getParameter("length"));// 每一页数据条数
+		
+		conditionMap.put("draw", draw);
+		conditionMap.put("start", start);
+		conditionMap.put("length", length);
+		Map<String, Object> result = qualityService.getKeyPartsTraceList(conditionMap);
+
+		model.addAllAttributes(result);
+
+		return model;
+	}
+	@RequestMapping("/updateKeyParts")
+	@ResponseBody
+	public ModelMap updateKeyParts() {
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		int userid=(int) session.getAttribute("user_id");
+		String paramstr=request.getParameter("key_parts_list");
+		JSONArray jsa=JSONArray.fromObject(paramstr);
+		Iterator it=jsa.iterator();
+		List<Map<String,Object>> list=new ArrayList<Map<String,Object>>();
+		/**
+		 * 封装需要保存的数据
+		 */
+		while(it.hasNext()){
+			JSONObject el=(JSONObject) it.next();	
+			Map<String,Object> map=new HashMap<String,Object>();
+			map.put("id", el.get("id"));
+			map.put("batch", el.get("batch"));
+			map.put("editor_id",userid);
+			map.put("edit_date",curTime);
+			list.add(map);
+		}
+		//调用service保存数据
+		try{
+			qualityService.updateKeyParts(list);
+			initModel(true,"保存成功！",null);
+		}catch(Exception e){
+			initModel(false,"保存失败!",null);
+		}
+		return mv.getModelMap();
+	}
+	@RequestMapping("/getBusNumberDetailList")
+	@ResponseBody
+	public ModelMap getBusNumberDetailList() {
+		Map conditionMap = new HashMap();
+		String busType = request.getParameter("busType");
+		String factoryId = request.getParameter("factoryId");
+		String workshop = request.getParameter("workshop");
+		String busNumber = request.getParameter("busNumber");
+		// 封装查询条件
+		conditionMap.put("factoryId", factoryId);
+        conditionMap.put("workshop", workshop);
+		conditionMap.put("busNumber", busNumber);
+		
+		Map<String, Object> result = qualityService.getBusNumberDetailList(conditionMap);
+
+		model.addAllAttributes(result);
+
+		return model;
+	}
+	/**
+	 * 物料异常记录
+	 * @return
+	 */
+	@RequestMapping("/materialExceptionLogs") 
+	public ModelAndView materialExceptionLogs(){
+		mv.setViewName("quality/materialExceptionLogs");
+		return mv;
+	}
+	@RequestMapping("/getmaterialExceptionLogsList")
+	@ResponseBody
+	public ModelMap getmaterialExceptionLogsList() {
+		Map conditionMap = new HashMap();
+		String bustypeId = request.getParameter("bustypeId");
+		String workshopId = request.getParameter("workshopId");
+		String factoryId = request.getParameter("factoryId");
+		String material = request.getParameter("material");
+		String orderNo = request.getParameter("orderNo");
+		String bugLevel = request.getParameter("bugLevel");
+		String occurDateStart = request.getParameter("occurDateStart");
+		String occurDateEnd = request.getParameter("occurDateEnd");
+		// 封装查询条件
+		conditionMap.put("bustypeId", bustypeId);
+		conditionMap.put("orderNo", orderNo);
+		conditionMap.put("workshopId", workshopId);
+		conditionMap.put("factoryId", factoryId);
+		conditionMap.put("material", material);
+		conditionMap.put("bugLevel", bugLevel);
+		conditionMap.put("occurDateStart", occurDateStart);
+		conditionMap.put("occurDateEnd", occurDateEnd);
+		int draw = Integer.parseInt(request.getParameter("draw"));// jquerydatatables
+		int start = Integer.parseInt(request.getParameter("start"));// 分页数据起始数
+		int length = Integer.parseInt(request.getParameter("length"));// 每一页数据条数
+		
+		conditionMap.put("draw", draw);
+		conditionMap.put("start", start);
+		conditionMap.put("length", length);
+		Map<String, Object> result = qualityService.getMaterialExceptionLogsList(conditionMap);
+
+		model.addAllAttributes(result);
+
+		return model;
+	}
+	@RequestMapping(value="addMaterialExceptionLogs",method=RequestMethod.POST)
+	@ResponseBody 
+	public ModelMap addMaterialExceptionLogs(@RequestParam(value="new_bphoto",required=false) MultipartFile new_bphoto,
+			@RequestParam(value="new_fphoto",required=false) MultipartFile new_fphoto){
+		int userid=(int) session.getAttribute("user_id");
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		MaterialExceptionLogs logs = new MaterialExceptionLogs();
+		logs.setOccur_date(request.getParameter("occurDate"));
+		logs.setFactory_id(Integer.valueOf(request.getParameter("factroy_id")));
+		logs.setWorkshop_id(Integer.valueOf(request.getParameter("workshop")));
+		logs.setBus_type_id(Integer.valueOf(request.getParameter("bus_type")));
+		logs.setBug_level(request.getParameter("bugLevel"));
+		logs.setDescription(request.getParameter("description"));
+		logs.setExpc_finish_date(request.getParameter("expcFinishDate"));
+		logs.setFault_reason(request.getParameter("faultReason"));
+		logs.setOrder_no(request.getParameter("orderNo"));
+		logs.setImp_measure(request.getParameter("impMeasures"));
+		logs.setMaterial(request.getParameter("material"));
+		logs.setResp_person(request.getParameter("respPerson"));
+		logs.setResp_unit(request.getParameter("respUnit"));
+		logs.setTmp_measures(request.getParameter("tmpMeasures"));
+		logs.setVerifier(request.getParameter("verifier"));
+		logs.setVerify_result(request.getParameter("verifyResult"));
+		logs.setMemo(request.getParameter("memo"));
+		logs.setCreat_date(curTime);
+		logs.setCreator_id(userid);
+		if(new_bphoto != null){
+			String bphoto = saveFileMethod(new_bphoto);
+			logs.setBphoto(bphoto);
+		}
+		if(new_fphoto != null){
+			String fphoto = saveFileMethod(new_fphoto);
+			logs.setFphoto(fphoto);
+		}
+		int result = qualityService.saveMaterialExceptionLogs(logs);
+		initModel(true,String.valueOf(result),null);
+		model = mv.getModelMap();
+		return model;
+	}
+	@RequestMapping(value="editMaterialExceptionLogs",method=RequestMethod.POST)
+	@ResponseBody 
+	public ModelMap editMaterialExceptionLogs(@RequestParam(value="edit_bphoto",required=false) MultipartFile edit_bphoto,
+			@RequestParam(value="edit_fphoto",required=false) MultipartFile edit_fphoto){
+		int userid=(int) session.getAttribute("user_id");
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		MaterialExceptionLogs logs = new MaterialExceptionLogs();
+		logs.setId(Integer.valueOf(request.getParameter("id")));
+		logs.setOccur_date(request.getParameter("occurDate"));
+		logs.setFactory_id(Integer.valueOf(request.getParameter("factroy_id")));
+		logs.setWorkshop_id(Integer.valueOf(request.getParameter("workshop")));
+		logs.setBus_type_id(Integer.valueOf(request.getParameter("bus_type")));
+		logs.setBug_level(request.getParameter("bugLevel"));
+		logs.setDescription(request.getParameter("description"));
+		logs.setExpc_finish_date(request.getParameter("expcFinishDate"));
+		logs.setFault_reason(request.getParameter("faultReason"));
+		logs.setOrder_no(request.getParameter("orderNo"));
+		logs.setImp_measure(request.getParameter("impMeasures"));
+		logs.setMaterial(request.getParameter("material"));
+		logs.setResp_person(request.getParameter("respPerson"));
+		logs.setResp_unit(request.getParameter("respUnit"));
+		logs.setTmp_measures(request.getParameter("tmpMeasures"));
+		logs.setVerifier(request.getParameter("verifier"));
+		logs.setVerify_result(request.getParameter("verifyResult"));
+		logs.setMemo(request.getParameter("memo"));
+		logs.setCreat_date(curTime);
+		logs.setCreator_id(userid);
+		if(edit_bphoto != null){
+			String bphoto = saveFileMethod(edit_bphoto);
+			logs.setBphoto(bphoto);
+		}
+		if(edit_fphoto != null){
+			String fphoto = saveFileMethod(edit_fphoto);
+			logs.setFphoto(fphoto);
+		}
+		int result = qualityService.updateMaterialExceptionLogs(logs);
+		initModel(true,String.valueOf(result),null);
+		model = mv.getModelMap();
+		return model;
+	}
+	/**
+	 * 物料异常记录
+	 */
+	@RequestMapping("/showMaterialExceptionLogs")
+	@ResponseBody
+	public ModelMap showMaterialExceptionLogs() {
+		Map<String, Object> result = new HashMap<String, Object>();
+		Map conditionMap = new HashMap();
+		int id = Integer.parseInt(request.getParameter("id"));
+		
+		MaterialExceptionLogs logs = qualityService.selectLogsById(id);
+		result.put("data",logs);
+		model.addAllAttributes(result);
+
+		return model;
+		
+	}
 	
-	
-	//======================== tj end=================================//
 	// 品质标准
 	@RequestMapping("/qcStdRecord")
 	public ModelAndView qcStdRecordPage() {
 		mv.setViewName("quality/qcStdRecord");
 		return mv;
 	}
-	
-	@RequestMapping("/standardFaultLib")
-	public ModelAndView standardFaultLib(){ 			//标准故障库
-		mv.setViewName("quality/standardFaultLib");
-        return mv;  
-    }
-	
-	@RequestMapping("/qaTargetParameter")
-	public ModelAndView qaTargetParameter(){ 			//质量目标参数
-		mv.setViewName("quality/qaTargetParameter");
-        return mv;  
-    }
-	
-	@RequestMapping("/problemImprove")
-	public ModelAndView problemImprove(){ 				//问题改善
-		mv.setViewName("quality/problemImprove");
-        return mv;  
-    }
-	
-	@RequestMapping("/processFault")
-	public ModelAndView processFault(){ 				//制程异常
-		mv.setViewName("quality/processFault");
-        return mv;  
-    }
 	
 	/**
 	 * 
@@ -1087,6 +1292,35 @@ public class QualityController extends BaseController {
 		return model;
 		
 	}
+	
+	
+	//======================== tj end=================================//
+	
+	
+	@RequestMapping("/standardFaultLib")
+	public ModelAndView standardFaultLib(){ 			//标准故障库
+		mv.setViewName("quality/standardFaultLib");
+        return mv;  
+    }
+	
+	@RequestMapping("/qaTargetParameter")
+	public ModelAndView qaTargetParameter(){ 			//质量目标参数
+		mv.setViewName("quality/qaTargetParameter");
+        return mv;  
+    }
+	
+	@RequestMapping("/problemImprove")
+	public ModelAndView problemImprove(){ 				//问题改善
+		mv.setViewName("quality/problemImprove");
+        return mv;  
+    }
+	
+	@RequestMapping("/processFault")
+	public ModelAndView processFault(){ 				//制程异常
+		mv.setViewName("quality/processFault");
+        return mv;  
+    }
+	
 	
 	@SuppressWarnings("rawtypes")
 	@RequestMapping("/getFaultLibList")

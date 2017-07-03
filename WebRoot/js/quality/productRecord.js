@@ -161,8 +161,64 @@ function drawTplDetailTable(tableId,data,editable){
 			infoEmpty:"未匹配到订单模板！",
 			zeroRecords:"未匹配到订单模板！"
 		},
-	columnDefs: [{
+	columnDefs: [
+	         {
+	            "targets":[3]	,
+	            "render":function(data,type,row,meta){
+	            	var el= "<span class=\"block input-icon input-icon-right\"><input  class=\"input-medium test_result\" style='text-align:center;width:100%;height:30px' type=\"text\" value=\""+(data||"")+
+	            	"\" fault_id=\""+row.fault_id+"\">"+
+            		"<i class=\"ace-icon fa fa-arrow-up\" style='cursor:pointer;z-index: 0' title='选择标准故障' onclick='return showQuaStd("+meta.row+")'></i> </span>";
+	            	if(!editable){
+	            		el=data;
+	            	}
+	            	return el;
+	            }
+	         },
+	         {
+	        	 "targets":[4],
+	        	 "render":function(data,type,row,meta){
+		            	var el= "<select  class=\"input-medium judge\" style='width:80px;text-align:center'><option value='合格' selected>合格</option><option value='不合格'>不合格</option></select>";
+		            	if(data=="不合格"){
+		            		el= "<select  class=\"input-medium judge\" style='width:80px;text-align:center'><option value='合格' >合格</option><option value='不合格' selected>不合格</option></select>";
+		            	}
+		            	if(!editable){
+		            		el=data;
+		            	}
+		            	return el;
+		            }
+	         },
+	         {
+	        	 "targets":[5],
+	        	 "render":function(data,type,row,meta){
+		            	var el= "<select  class=\"input-medium rework\" style='width:100%;text-align:center'><option value='合格' selected>合格</option><option value='不合格'>不合格</option></select>";
+		            	if(data=="不合格"){
+		            		el= "<select  class=\"input-medium rework\" style='width:100%;text-align:center'><option value='合格' >合格</option><option value='不合格' selected>不合格</option></select>";
+		            	}
+		            	if(!editable){
+		            		el=data;
+		            	}
+		            	return el;
+		            }
+	         },
+	         {
+	        	 "targets":[6],
+	        	 "render":function(data,type,row,meta){
+		            	var el= "<input  class=\"input-medium tester\" style='text-align:center;height:30px'  type=\"text\" value='"+(data||"")+"'>";
+		            	if(!editable){
+		            		el=data;
+		            	}
+		            	return el;
+		            }
+	         },
+	        {
             "targets": [7],
+            "render":function(data,type,row,meta){
+            	var el= "<select  class=\"input-medium workshop\" style='text-align:center;width:100%'>"+$("#workshop_tmpl").html()+"</select>";
+            	if(!editable){
+            		el=data;
+            	}
+            	return el;
+            },
             "createdCell": function (td, cellData, rowData, row, col) {
             	var test_card_template_detail_id=rowData.test_card_template_detail_id;
             	if(test_card_template_detail_id==null ||test_card_template_detail_id==""){
@@ -186,6 +242,13 @@ function drawTplDetailTable(tableId,data,editable){
         },
         {
             "targets": [8],
+            "render":function(data,type,row,meta){
+            	var el= "<input  class=\"input-medium memo\" style='text-align:center;height:30px'  type=\"text\" value=\""+(data||"")+"\">";
+            	if(!editable){
+            		el=data;
+            	}
+            	return el;
+            },
             "createdCell": function (td, cellData, rowData, row, col) {
             	var element=$(td).find(".workgroup");
             	//alert(workgroup_list.length)
@@ -204,7 +267,7 @@ function drawTplDetailTable(tableId,data,editable){
 		            {"title":"检验项目","class":"center","width":"8%","data":"test_item","defaultContent": ""},
 		            {"title":"检验标准","class":"center","width":"25%","data":"test_standard","defaultContent": ""},
 		            {"title":"要求","class":"center","width":"11%","data": "test_request","defaultContent": ""},
-		            {"title":"检验结果","class":"center","width":"15%","data": "test_result","defaultContent": "","render":function(data,type,row,meta){
+		            {"title":"检验结果","class":"center","width":"15%","data": "test_result","defaultContent": ""/*,"render":function(data,type,row,meta){
 		            	var el= "<span class=\"block input-icon input-icon-right\"><input  class=\"input-medium test_result\" style='text-align:center;width:100%;height:30px' type=\"text\" value=\""+(data||"")+
 		            	"\" fault_id=\""+row.fault_id+"\">"+
 	            		"<i class=\"ace-icon fa fa-arrow-up\" style='cursor:pointer;z-index: 0' title='选择标准故障' onclick='return showQuaStd("+meta.row+")'></i> </span>";
@@ -212,8 +275,8 @@ function drawTplDetailTable(tableId,data,editable){
 		            		el=data;
 		            	}
 		            	return el;
-		            }},
-		            {"title":"判定","class":"center","width":"5%","data": "result_judge","defaultContent": "","render":function(data,type,row,meta){
+		            }*/},
+		            {"title":"判定","class":"center","width":"5%","data": "result_judge","defaultContent": ""/*,"render":function(data,type,row,meta){
 		            	var el= "<select  class=\"input-medium judge\" style='width:80px;text-align:center'><option value='合格' selected>合格</option><option value='不合格'>不合格</option></select>";
 		            	if(data=="不合格"){
 		            		el= "<select  class=\"input-medium judge\" style='width:80px;text-align:center'><option value='合格' >合格</option><option value='不合格' selected>不合格</option></select>";
@@ -222,8 +285,8 @@ function drawTplDetailTable(tableId,data,editable){
 		            		el=data;
 		            	}
 		            	return el;
-		            }},
-		            {"title":"复检判定","class":"center","width":"5%","data": "rework","defaultContent": "","render":function(data,type,row,meta){
+		            }*/},
+		            {"title":"复检判定","class":"center","width":"5%","data": "rework","defaultContent": ""/*,"render":function(data,type,row,meta){
 		            	var el= "<select  class=\"input-medium rework\" style='width:100%;text-align:center'><option value='合格' selected>合格</option><option value='不合格'>不合格</option></select>";
 		            	if(data=="不合格"){
 		            		el= "<select  class=\"input-medium rework\" style='width:100%;text-align:center'><option value='合格' >合格</option><option value='不合格' selected>不合格</option></select>";
@@ -232,37 +295,37 @@ function drawTplDetailTable(tableId,data,editable){
 		            		el=data;
 		            	}
 		            	return el;
-		            }},
-		            {"title":"检验员","class":"center","width":"5%","data": "tester","defaultContent": "","render":function(data,type,row,meta){
+		            }*/},
+		            {"title":"检验员","class":"center","width":"5%","data": "tester","defaultContent": ""/*,"render":function(data,type,row,meta){
 		            	var el= "<input  class=\"input-medium tester\" style='text-align:center;height:30px'  type=\"text\" value='"+(data||"")+"'>";
 		            	if(!editable){
 		            		el=data;
 		            	}
 		            	return el;
-		            }},
+		            }*/},
 
-		            {"title":"责任车间","class":"center","width":"7%","data": "workshop","defaultContent": "","render":function(data,type,row,meta){
+		            {"title":"责任车间","class":"center","width":"7%","data": "workshop","defaultContent": ""/*,"render":function(data,type,row,meta){
 		            	var el= "<select  class=\"input-medium workshop\" style='text-align:center;width:100%'>"+$("#workshop_tmpl").html()+"</select>";
 		            	if(!editable){
 		            		el=data;
 		            	}
 		            	return el;
-		            }},
+		            }*/},
 
-		            {"title":"责任班组","class":"center","width":"7%","data": "workgroup","defaultContent": "","render":function(data,type,row,meta){
+		            {"title":"责任班组","class":"center","width":"7%","data": "workgroup","defaultContent": ""/*,"render":function(data,type,row,meta){
 		            	var el="<select  class=\"input-medium workgroup\" style='text-align:center;width:100%'><select>";
 		            	if(!editable){
 		            		el=data;
 		            	}
 		            	return el;
-		            }},
-		            {"title":"备注","class":"center","width":"5%","data": "memo","defaultContent": "","render":function(data,type,row,meta){
+		            }*/},
+		            {"title":"备注","class":"center","width":"5%","data": "memo","defaultContent": ""/*,"render":function(data,type,row,meta){
 		            	var el= "<input  class=\"input-medium memo\" style='text-align:center;height:30px'  type=\"text\" value=\""+(data||"")+"\">";
 		            	if(!editable){
 		            		el=data;
 		            	}
 		            	return el;
-		            }},
+		            }*/},
 		            {"title":"是否必录项","class":"center is_null","width":"5%","data":"is_null","defaultContent": ""},		
 		         	
 		          ]	

@@ -15,9 +15,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 
+import com.byd.bms.order.dao.IOrderDao;
 import com.byd.bms.quality.dao.IQualityDao;
 import com.byd.bms.quality.service.IQualityService;
 import com.byd.bms.quality.model.BmsBaseQCStdRecord;
+import com.byd.bms.quality.model.MaterialExceptionLogs;
 import com.byd.bms.quality.model.ProblemImproveBean;
 import com.byd.bms.quality.model.ProcessFaultBean;
 import com.byd.bms.quality.model.QualityTargetBean;
@@ -26,7 +28,8 @@ import com.byd.bms.quality.model.StdFaultLibBean;
 public class QualityServiceImpl implements IQualityService {
 	@Resource(name="qualityDao")
 	private IQualityDao qualityDao;
-	
+	@Resource(name="orderDao")
+	private IOrderDao orderDao;
 	//======================== xjw start=================================//
 	@Override
 	public void getOrderConfigList(Map<String, Object> condMap, ModelMap model) {
@@ -293,9 +296,83 @@ public class QualityServiceImpl implements IQualityService {
 			
 			
 	//========================tj start=================================//
-			
-
-	//======================== tj end=================================//
+	@Override
+	public Map<String, Object> getKeyPartsTraceList(
+			Map<String, Object> conditionMap) {
+		int totalCount=0;
+		List datalist=qualityDao.getKeyPartsTraceList(conditionMap);
+		totalCount=qualityDao.getKeyPartsTraceCount(conditionMap);
+		Map<String, Object> result=new HashMap<String,Object>();
+		result.put("draw", conditionMap.get("draw"));
+		result.put("recordsTotal", totalCount);
+		result.put("recordsFiltered", totalCount);
+		result.put("data", datalist);
+		return result;
+	}
+	@Override
+	public int updateKeyParts(List<Map<String, Object>> list) {
+		int result=0;
+		for(Map map : list){
+			result=qualityDao.updateKeyParts(map);
+		}
+		return result;
+	}
+	
+	@Override
+	public Map<String, Object> getBusNumberDetailList(
+			Map<String, Object> conditionMap) {
+		List datalist=qualityDao.getBusNumberDetailList(conditionMap);
+		Map<String, Object> result=new HashMap<String,Object>();
+		result.put("data", datalist);
+		return result;
+	}
+	
+	@Override
+	public Map<String, Object> getMaterialExceptionLogsList(
+			Map<String, Object> conditionMap) {
+		int totalCount=0;
+		List datalist=qualityDao.getMaterialExceptionLogsList(conditionMap);
+		totalCount=qualityDao.getMaterialExceptionLogsCount(conditionMap);
+		Map<String, Object> result=new HashMap<String,Object>();
+		result.put("draw", conditionMap.get("draw"));
+		result.put("recordsTotal", totalCount);
+		result.put("recordsFiltered", totalCount);
+		result.put("data", datalist);
+		return result;
+	}
+	@Override
+	public int saveMaterialExceptionLogs(
+			MaterialExceptionLogs materialExceptionLogs) {
+		String orderNo=materialExceptionLogs.getOrder_no();
+		Map<String, Object> conditionMap=new HashMap<String, Object> ();
+		conditionMap.put("orderNo", orderNo);
+		Map<String,Object> map=orderDao.getOrderByNo(conditionMap);
+		long orderId=map.get("id")!=null ? (long)map.get("id") : 0;
+		materialExceptionLogs.setOrder_id(orderId);
+		return qualityDao.saveMaterialExceptionLogs(materialExceptionLogs);
+	}
+	@Override
+	public MaterialExceptionLogs selectLogsById(int id) {
+		MaterialExceptionLogs logs=qualityDao.selectLogsById(id);
+		Map<String, Object> conditionMap=new HashMap<String, Object> ();
+		conditionMap.put("orderId", logs.getOrder_id());
+		Map<String,Object> map=orderDao.getOrderByNo(conditionMap);
+		String order_no=(String)map.get("order_no");
+		logs.setOrder_no(order_no);
+		return logs;
+	}
+	@Override
+	public int updateMaterialExceptionLogs(
+			MaterialExceptionLogs materialExceptionLogs) {
+		String orderNo=materialExceptionLogs.getOrder_no();
+		Map<String, Object> conditionMap=new HashMap<String, Object> ();
+		conditionMap.put("orderNo", orderNo);
+		Map<String,Object> map=orderDao.getOrderByNo(conditionMap);
+		long orderId=map.get("id")!=null ? (long)map.get("id") : 0;
+		materialExceptionLogs.setOrder_id(orderId);
+		return qualityDao.updateMaterialExceptionLogs(materialExceptionLogs);
+	}
+	
 	public int insertStdRecord(BmsBaseQCStdRecord stdRecord) {
 		return qualityDao.insertStdRecord(stdRecord);
 	}
@@ -320,6 +397,23 @@ public class QualityServiceImpl implements IQualityService {
 	public int getStdRecordCount(Map<String, Object> conditionMap) {
         return qualityDao.getStdRecordCount(conditionMap);
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+		
+
+	//======================== tj end=================================//
+	
 	@Override
 	public Map<String, Object> getFaultLibList(Map<String, Object> conditionMap) {
 		List<Map<String,String>> datalist= qualityDao.getFaultLibList(conditionMap);

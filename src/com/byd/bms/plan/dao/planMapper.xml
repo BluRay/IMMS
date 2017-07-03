@@ -1232,4 +1232,11 @@
 		order by d.tool_name
 	</select>
 	
+	<insert id="insertOrderDispatchRecord" useGeneratedKeys="true" keyProperty="id" parameterType="Map">
+	INSERT INTO BMS_PLAN_ORDER_TOOLS_DISPATCH
+	(order_no, quantity, factory_id, receiver, workcardid, department, editor_id, edit_date, tool_name, unit, single_use_qty)
+	VALUES(#{order_no}, #{quantity}, #{factory_id}, #{receiver}, #{workcardid}, #{department}, #{editor_id},
+	#{edit_date}, #{tool_name}, #{unit}, #{single_use_qty});
+	</insert>
+	
 </mapper>

@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.byd.bms.quality.model.BmsBaseQCStdRecord;
+import com.byd.bms.quality.model.MaterialExceptionLogs;
 import com.byd.bms.quality.model.ProblemImproveBean;
 import com.byd.bms.quality.model.ProcessFaultBean;
 import com.byd.bms.quality.model.QualityTargetBean;
@@ -101,11 +102,23 @@ public interface IQualityDao {
 		
 		
 	//========================tj start=================================//
-		
+    public List<Map<String,Object>> getKeyPartsTraceList(Map<String,Object> conditionMap);
 	
-	//======================== tj end=================================//
+	public int getKeyPartsTraceCount(Map<String,Object> conditionMap);
 	
-
+	public int updateKeyParts(Map<String,Object> conditionMap);
+	
+    public List<Map<String,Object>> getBusNumberDetailList(Map<String,Object> conditionMap);
+	
+    public List<Map<String,Object>> getMaterialExceptionLogsList(Map<String,Object> conditionMap);
+	
+	public int getMaterialExceptionLogsCount(Map<String,Object> conditionMap);
+	
+	public int saveMaterialExceptionLogs(MaterialExceptionLogs materialExceptionLogs);
+	
+	public MaterialExceptionLogs selectLogsById(@Param(value="id") int id);
+	
+	public int updateMaterialExceptionLogs(MaterialExceptionLogs materialExceptionLogs);
 	
 	//品质标准更新记录 add by tangjin
 	public int insertStdRecord(BmsBaseQCStdRecord stdRecord);
@@ -115,6 +128,12 @@ public interface IQualityDao {
 	public List<BmsBaseQCStdRecord> getStdRecordList(Map<String,Object> conditionMap);
 	
 	public int getStdRecordCount(Map<String,Object> conditionMap);
+	
+	//======================== tj end=================================//
+	
+
+	
+	
 
 	public List<Map<String, String>> getFaultLibList(Map<String, Object> conditionMap);	
 

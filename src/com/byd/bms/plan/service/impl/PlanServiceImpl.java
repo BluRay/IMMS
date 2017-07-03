@@ -1201,4 +1201,31 @@ public class PlanServiceImpl implements IPlanService {
 		return planDao.getOrderDispatchList(conditionMap);
 	}
 
+	@Override
+	@Transactional
+	public Map<String, Object> saveOrderDispatchRecord(String curTime, String edit_user,String factory_id, String form_str) {
+		//form_str:aaaaa,1,d,4,D2017007,,,; bbbbb,2,d,10,D2017007,,,
+		String[] form_date = form_str.split(";");
+		for (int i = 0 ; i <form_date.length ; i++ ) {
+			String recode_str = form_date[i];
+			String[] recode = recode_str.split(",",-1);
+			Map<String, Object> recode_map = new HashMap<String,Object>();
+			recode_map.put("tool_name", recode[0]);
+			recode_map.put("single_use_qty", recode[1]);
+			recode_map.put("unit", recode[2]);
+			recode_map.put("quantity", recode[3]);
+			recode_map.put("order_no", recode[4]);
+			recode_map.put("receiver", recode[5]);
+			recode_map.put("workcardid", recode[6]);
+			recode_map.put("department", recode[7]);
+			recode_map.put("factory_id", factory_id);
+			recode_map.put("editor_id", edit_user);
+			recode_map.put("edit_date", curTime);
+			planDao.insertOrderDispatchRecord(recode_map);
+		} 
+		Map<String, Object> result = new HashMap<String,Object>();
+		result.put("message", "SUCCESS");
+		return result;
+	}
+
 }

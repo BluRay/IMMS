@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.ui.ModelMap;
 
 import com.byd.bms.quality.model.BmsBaseQCStdRecord;
+import com.byd.bms.quality.model.MaterialExceptionLogs;
 import com.byd.bms.quality.model.ProblemImproveBean;
 import com.byd.bms.quality.model.ProcessFaultBean;
 import com.byd.bms.quality.model.QualityTargetBean;
@@ -70,20 +71,35 @@ public interface IQualityService {
 			
 			
 	//========================tj start=================================//
-			
+
+public Map<String,Object> getKeyPartsTraceList(Map<String,Object> conditionMap);
+    
+    public int updateKeyParts(List<Map<String,Object>> list);
+    
+    public Map<String,Object> getBusNumberDetailList(Map<String,Object> conditionMap);
+    
+    public Map<String,Object> getMaterialExceptionLogsList(Map<String,Object> conditionMap);
+    
+    public int saveMaterialExceptionLogs(MaterialExceptionLogs materialExceptionLogs);
+    
+    public MaterialExceptionLogs selectLogsById(int id);
+    
+    public int updateMaterialExceptionLogs(MaterialExceptionLogs materialExceptionLogs);
+    
+  //品质标准更新记录  add by tangjin
+	
+  	public int insertStdRecord(BmsBaseQCStdRecord stdRecord);
+  	
+  	public BmsBaseQCStdRecord selectStdRecord(int recordId);
+  	
+  	public Map<String, Object> getStdRecordList(Map<String,Object> conditionMap);
+  	
+  	public int getStdRecordCount(Map<String,Object> conditionMap);
 		
 	//======================== tj end=================================//
 	
 	
-	//品质标准更新记录  add by tangjin
 	
-	public int insertStdRecord(BmsBaseQCStdRecord stdRecord);
-	
-	public BmsBaseQCStdRecord selectStdRecord(int recordId);
-	
-	public Map<String, Object> getStdRecordList(Map<String,Object> conditionMap);
-	
-	public int getStdRecordCount(Map<String,Object> conditionMap);
 	
 	public Map<String,Object> getFaultLibList(Map<String, Object> conditionMap);
 

@@ -606,7 +606,202 @@
 <!-- ======================== yk end=================================-->
 
 <!-- ======================== tj start=================================-->
-
+<select id="getKeyPartsTraceList" parameterType="Map" resultType="Map">
+		select f.id factory_id,f.factory_name,t.workshop,t.bus_number,o.order_no,o.order_name,
+		ty.bus_type_code,c.order_config_name,u.username,t.edit_date from BMS_QM_KEY_PARTS t
+		    LEFT JOIN BMS_PLAN_BUS b on t.bus_number=b.bus_number
+		    LEFT JOIN BMS_OR_ORDER o on o.id=b.order_id
+		    LEFT JOIN BMS_OR_ORDER_CONFIG c on c.order_id=o.id and b.order_config_id=c.id
+		    LEFT JOIN BMS_BASE_FACTORY f on f.id=t.factory_id
+		    LEFT JOIN BMS_BASE_BUS_TYPE ty on ty.id=o.bus_type_id
+		    LEFT JOIN BMS_BASE_USER u on u.id=t.editor_id where 1=1 
+		<if test="busNumber!=null and busNumber!=''">
+			and t.bus_number=#{busNumber}
+		</if>
+		<if test="factoryId!=null and factoryId!=''">
+			and t.factory_id=#{factoryId}
+		</if>
+		<if test="workshop!=null and workshop!=''">
+			and t.workshop=#{workshop}
+		</if>
+		<if test="orderNo!=null and orderNo!=''">
+			and o.order_no=#{orderNo}
+		</if>
+		<if test="bustypeId!=null and bustypeId!=''">
+			and o.bus_type_id=#{bustypeId}
+		</if>
+		<if test="orderconfigId!=null and orderconfigId!=''">
+			and b.order_config_id=#{orderconfigId}
+		</if>
+		
+		<if test="start!=null">
+			limit #{start},#{length}
+		</if>
+	</select>
+	<select id="getKeyPartsTraceCount" parameterType="Map" resultType="int">
+		select count(1)  from BMS_QM_KEY_PARTS t
+		    LEFT JOIN BMS_PLAN_BUS b on t.bus_number=b.bus_number
+		    LEFT JOIN BMS_OR_ORDER o on o.id=b.order_id
+		    LEFT JOIN BMS_OR_ORDER_CONFIG c on c.order_id=o.id and b.order_config_id=c.id
+		    LEFT JOIN BMS_BASE_FACTORY f on f.id=t.factory_id
+		    LEFT JOIN BMS_BASE_BUS_TYPE ty on ty.id=o.bus_type_id
+		    LEFT JOIN BMS_BASE_USER u on u.id=t.editor_id where 1=1 
+		<if test="busNumber!=null and busNumber!=''">
+			and t.bus_number=#{busNumber}
+		</if>
+		<if test="factoryId!=null and factoryId!=''">
+			and t.factory_id=#{factoryId}
+		</if>
+		<if test="workshop!=null and workshop!=''">
+			and t.workshop=#{workshop}
+		</if>
+		<if test="orderNo!=null and orderNo!=''">
+			and o.order_no=#{orderNo}
+		</if>
+		<if test="bustypeId!=null and bustypeId!=''">
+			and o.bus_type_id=#{bustypeId}
+		</if>
+		<if test="orderconfigId!=null and orderconfigId!=''">
+			and b.order_config_id=#{orderconfigId}
+		</if>
+		
+     </select>
+     <update id="updateKeyParts" parameterType="Map">
+		UPDATE BMS_QM_KEY_PARTS SET 
+		<if test="batch != null and batch != ''">
+		   batch = #{batch},  
+		</if>
+		editor_id=#{editor_id}, 
+		edit_date=#{edit_date}
+		WHERE id = #{id};
+	</update>
+     <select id="getBusNumberDetailList" parameterType="Map" resultType="Map">
+		select t.*,b.size,b.3C_components from BMS_QM_KEY_PARTS t 
+		    LEFT JOIN BMS_QM_KEY_PARTS_TEMPLATE_DETAILS b on t.key_parts_template_details_id=b.id
+			 where 1=1  
+		<if test="busNumber!=null and busNumber!=''">
+			and t.bus_number=#{busNumber}
+		</if>
+		<if test="factoryId!=null and factoryId!=''">
+			and t.factory_id=#{factoryId}
+		</if>
+		<if test="workshop!=null and workshop!=''">
+			and t.workshop=#{workshop}
+		</if>
+	</select>
+	
+	<select id="getMaterialExceptionLogsList" parameterType="Map" resultType="Map">
+		select t.*,f.factory_name, s.workshop_name,CONCAT(o.order_no,o.order_name) as order_name,
+		o.order_no,ty.bus_type_code from BMS_QM_MATERIAL_EXCEPTION_LOGS t
+		LEFT JOIN BMS_BASE_FACTORY f on f.id=t.factory_id
+	    LEFT JOIN BMS_BASE_BUS_TYPE ty on ty.id=t.bus_type_id
+	    LEFT JOIN BMS_BASE_WORKSHOP s on s.id=t.workshop_id
+	    LEFT JOIN BMS_OR_ORDER o on o.id=t.order_id where 1=1 
+		<if test="factoryId!=null and factoryId!=''">
+			and t.factory_id=#{factoryId}
+		</if>
+		<if test="workshopId!=null and  workshopId!=''">
+			and t.workshop_id=#{workshopId}
+		</if>
+		<if test="bustypeId!=null and bustypeId!=''">
+			and t.bus_type_id=#{bustypeId}
+		</if> 
+		<if test="material!=null and material!=''">
+			and t.material=#{material}
+		</if>
+		<if test="orderNo!=null and  orderNo!=''">
+			and o.order_no=#{orderNo}
+		</if>
+		<if test="bugLevel!=null and bugLevel!=''">
+			and t.bug_level=#{bugLevel}
+		</if>
+		<if test="occurDateStart!=null and  occurDateStart!=''">
+			<![CDATA[and t.occur_date>=#{occurDateStart}]]>
+		</if>
+		<if test="occurDateEnd!=null and  occurDateEnd!=''">
+			<![CDATA[and t.occur_date < #{occurDateEnd}]]>
+		</if>
+		<if test="start!=null">
+			limit #{start},#{length}
+		</if>
+	</select>
+	<select id="getMaterialExceptionLogsCount" parameterType="Map" resultType="int">
+		select COUNT(1) from BMS_QM_MATERIAL_EXCEPTION_LOGS t 
+           LEFT JOIN BMS_OR_ORDER o on o.id=t.order_id where 1=1 
+		<if test="factoryId!=null and factoryId!=''">
+			and t.factory_id=#{factoryId}
+		</if>
+		<if test="workshopId!=null and  workshopId!=''">
+			and t.workshop_id=#{workshopId}
+		</if>
+		<if test="bustypeId!=null and bustypeId!=''">
+			and t.bus_type_id=#{bustypeId}
+		</if> 
+		<if test="material!=null and material!=''">
+			and t.material=#{material}
+		</if>
+		<if test="orderNo!=null and  orderNo!=''">
+			and o.order_no=#{orderNo}
+		</if>
+		<if test="bugLevel!=null and bugLevel!=''">
+			and t.bug_level=#{bugLevel}
+		</if>
+		<if test="occurDateStart!=null and  occurDateStart!=''">
+			<![CDATA[and t.occur_date>=#{occurDateStart}]]>
+		</if>
+		<if test="occurDateEnd!=null and  occurDateEnd!=''">
+			<![CDATA[and t.occur_date < #{occurDateEnd}]]>
+		</if>
+     </select>
+     <insert id="saveMaterialExceptionLogs" parameterType="com.byd.bms.quality.model.MaterialExceptionLogs"
+		useGeneratedKeys="true">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into BMS_QM_MATERIAL_EXCEPTION_LOGS 
+		(occur_date,factory_id,workshop_id,bus_type_id,order_id,material,bug_level,
+		description,bphoto,tmp_measures,fault_reason,imp_measure,resp_unit,resp_person,
+		expc_finish_date,verifier,verify_result,fphoto,memo,creater_id,creat_date)
+		values(
+		#{occur_date},#{factory_id},#{workshop_id},#{bus_type_id},#{order_id},#{material},
+		#{bug_level},#{description},#{bphoto},#{tmp_measures},#{fault_reason},#{imp_measure},
+		#{resp_unit},#{resp_person},#{expc_finish_date},#{verifier},#{verify_result},#{fphoto},
+		#{memo},#{creator_id},#{creat_date}
+		)
+	</insert>
+	<update id="updateMaterialExceptionLogs" parameterType="com.byd.bms.quality.model.MaterialExceptionLogs">
+		update BMS_QM_MATERIAL_EXCEPTION_LOGS set
+		occur_date=#{occur_date},factory_id=#{factory_id},workshop_id=#{workshop_id},
+		bus_type_id=#{bus_type_id},order_id=#{order_id},material=#{material},bug_level=#{bug_level},
+		
+		<if test="description!=null and description!=''">
+			description=#{description},
+		</if>
+		<if test="bphoto!=null and bphoto!=''">
+			bphoto=#{bphoto},
+		</if>
+		<if test="tmp_measures!=null and tmp_measures!=''">
+			tmp_measures=#{tmp_measures},
+		</if>
+		<if test="fault_reason!=null and fault_reason!=''">
+			fault_reason=#{fault_reason},
+		</if>
+		<if test="fphoto!=null and fphoto!=''">
+			fphoto=#{fphoto},
+		</if>
+		fault_reason=#{fault_reason},imp_measure=#{imp_measure},resp_unit=#{resp_unit},
+		resp_person=#{resp_person},expc_finish_date=#{expc_finish_date},verifier=#{verifier},
+		verify_result=#{verify_result},
+		memo=#{memo},creater_id=#{creator_id},creat_date=#{creat_date}
+		where id=#{id}
+	</update>
+	<select id="selectLogsById" parameterType="String" resultType="com.byd.bms.quality.model.MaterialExceptionLogs">
+		select * from BMS_QM_MATERIAL_EXCEPTION_LOGS t where 1=1 
+		<if test="id!=null and id!=0">
+			and t.id=#{id}
+		</if>
+	</select>
 <!-- ======================== tj end=================================-->
 
 	

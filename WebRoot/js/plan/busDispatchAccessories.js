@@ -1,5 +1,6 @@
 var orderQty = 0;//订单数量
 var form_str = "";
+var factory_id = 0;
 $(document).ready(function () {	
 	initPage();
 	
@@ -92,10 +93,20 @@ $(document).ready(function () {
 				url:"saveOrderDispatchRecord",
 				dataType:"json",
 				data:{
-					"form_str":form_str
+					"form_str":form_str,
+					"factory_id":factory_id
 				},
 				success:function(response){
-					
+					$.gritter.add({
+						title: '系统提示：',
+						text: '<h5>交接成功！</h5>',
+						class_name: 'gritter-info'
+					});
+					$("#dispatchModal").dialog( "close" );
+					//$("#queryBtn").attr("disabled",true);
+					$("#dispatchDetail tbody").html("");
+					$("#dipatchRecord tbody").html("");
+					form_str = "";
 				}
 			});
 			
@@ -112,6 +123,7 @@ $(document).ready(function () {
 			}else{
 				$("#workcardid").val(user.staff_number);
 				$("#receiver").val(user.username);
+				factory_id = user.factory_id;
 			}
 			return false;
 		}
@@ -155,7 +167,7 @@ function ajaxQueryOrderTool(orderNo){
 		},
 		success:function(response){
 			if(response.data.length>0){
-				$("#queryBtn").attr("disabled",true);
+				//$("#queryBtn").attr("disabled",true);
 			}
 			generateRecordTable(response.data);
 			generateListTabel(response.data);
@@ -180,14 +192,14 @@ function generateListTabel(recordList){
 		}else{
 			var tr=$("<tr />");
 			var toolName_input="<input id='toolName_"+i
-							+"' style='border:0;width:100%;height:100%' class='tool_name' name='otDispatchRecordList["+i+"].tool_name'"
+							+"' style='border:0;width:100%;height:100%;height:25px' class='tool_name' name='otDispatchRecordList["+i+"].tool_name'"
 							+"value='"+value.tool_name+"' readonly>";
 			var singleUse_input="<input id='singleUse_"+i
-							+"'style='border:0;width:100%;height:100%' class='singleUse' onchange='change_singleUse(this)' name='otDispatchRecordList["+i+"].single_use_qty'"
+							+"'style='border:0;width:100%;height:100%;height:25px'  class='singleUse' onchange='change_singleUse(this)' name='otDispatchRecordList["+i+"].single_use_qty'"
 							+" value="+value.single_use_qty+" readonly >";
-			var unit_input="<input id='unit_"+i+"' style='border:0;width:100%;height:100%' name='otDispatchRecordList["+i+"].unit'"
+			var unit_input="<input id='unit_"+i+"' style='border:0;width:100%;height:100%;height:25px' name='otDispatchRecordList["+i+"].unit'"
 							+" value='"+value.unit+"' readonly>";
-			var quantity_input="<input style='border:0;width:100%;height:100%' class='quantity' onchange='change_quantity(this)' name='otDispatchRecordList["+i+"].quantity'>";
+			var quantity_input="<input style='border:0;width:100%;height:100%;height:25px' class='quantity' onchange='change_quantity(this)' name='otDispatchRecordList["+i+"].quantity'>";
 			//alert(toolName_input);
 			$("<td />").html("<i class='fa fa-times' style='cursor: pointer;color:red'></i>").appendTo(tr);
 			$("<td />").html(toolName_input).appendTo(tr);
@@ -196,10 +208,10 @@ function generateListTabel(recordList){
 			$("<td id='orderQty_"+i+"'/>").html(value.order_total).appendTo(tr);
 			$("<td id='dispatchQty_"+i+"'/>").html(value.quantity).appendTo(tr);
 			$("<td />").html(quantity_input).appendTo(tr);
-			$("<input type='hidden' name='otDispatchRecordList["+i+"].order_no' value='"+$("#orderNo").val()+"'>").appendTo(tr);
-			$("<input type='hidden' name='otDispatchRecordList["+i+"].receiver' class='receiver'>").appendTo(tr);
-			$("<input type='hidden' name='otDispatchRecordList["+i+"].workcardid' class='workcardid'>").appendTo(tr);
-			$("<input type='hidden' name='otDispatchRecordList["+i+"].department' class='department'>").appendTo(tr);
+			$("<input type='hidden' id='order_no_"+i+"'  name='otDispatchRecordList["+i+"].order_no' value='"+$("#orderNo").val()+"'>").appendTo(tr);
+			$("<input type='hidden' id='receiver_"+i+"' name='otDispatchRecordList["+i+"].receiver' class='receiver'>").appendTo(tr);
+			$("<input type='hidden' id='workcardid_"+i+"' name='otDispatchRecordList["+i+"].workcardid' class='workcardid'>").appendTo(tr);
+			$("<input type='hidden' id='department_"+i+"' name='otDispatchRecordList["+i+"].department' class='department'>").appendTo(tr);
 			$("#dispatchDetail tbody").append(tr);
 			i++;
 		}	
