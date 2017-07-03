@@ -323,6 +323,26 @@ public class OrderReviewController extends BaseController{
 		model.addAllAttributes(result);
 		return model;
     }
+    @RequestMapping("/showOrderDetailList")
+	@ResponseBody
+	public ModelMap showOrderDetailList(){
+		model=new ModelMap();
+		Map<String,Object> conditionMap=new HashMap<String,Object>();
+		if (request.getParameter("search_order_no") != null) conditionMap.put("search_order_no", request.getParameter("search_order_no"));
+		if ((request.getParameter("search_factory") != "")&&(request.getParameter("search_factory") != null)) conditionMap.put("search_factory", Integer.valueOf(request.getParameter("search_factory")));
+		if (request.getParameter("order_id") != null){
+			conditionMap.put("order_id", request.getParameter("order_id"));
+		}
+		if (request.getParameter("start") != null){
+			conditionMap.put("start",request.getParameter("start"));
+			conditionMap.put("length",request.getParameter("length"));
+		}
+		List datalist=new ArrayList();
+		datalist=reviewService.getOrderDetailList(conditionMap);	
+		
+		model.put("data", datalist);
+		return model;
+	}
     /**
      * 
      * 

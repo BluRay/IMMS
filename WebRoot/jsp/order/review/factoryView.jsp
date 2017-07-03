@@ -32,9 +32,9 @@
 					</tr>
 					<tr role="row" class="odd">
 						<td>&nbsp;资料需求节点：</td>
-						<td>&nbsp;${item['qualityNode'] }</td>
+						<td>&nbsp;${item['factoryNode'] }</td>
 						<td>&nbsp;其他：</td>
-						<td>&nbsp;${item['qualityInfo'] }</td>
+						<td>&nbsp;${item['factoryInfo'] }</td>
 <!-- 						<td class="td_table_2" colspan="3"> -->
 <%-- 							    &nbsp;${item['technical.operator'] } --%>
 <!-- 							</td> -->

@@ -125,7 +125,8 @@
 		materialcontrol_node,materialcontrol_info,plandep_node,plandep_info,revisiondetail_node,
 		revisionsop_node,revisionbom_node,revisionsip_node,revisionpartsonline_date,revisionweldingonline_date,
 		revisionpaintonline_date,revisionchassisonline_date,revisionassemblyonline_date,revisionwarehousing_date,
-		f.production_qty production_qty,o.order_type order_type,o.delivery_date delivery_date,a.factory_name factory_name,
+		f.production_qty production_qty,o.order_type order_type,o.delivery_date delivery_date,
+		a.factory_name factory_name,a.capacity,o.customer,t.bus_type_code,
 		(select u.username from wf_hist_task t1,BMS_BASE_USER u where t1.operator=u.id and t1.order_id=r.wf_order_id and t1.task_name='apply') apply_operator,
 	    (select create_time from wf_hist_task t1 where t1.order_id=r.wf_order_id and t1.task_name='apply') apply_create_time,
 	    (select u.username from wf_hist_task t1,BMS_BASE_USER u where t1.operator=u.id and t1.order_id=r.wf_order_id and t1.task_name='technical') technical_operator,
@@ -146,6 +147,7 @@
 		LEFT JOIN BMS_OR_ORDER o on o.id=r.order_id			
 		LEFT JOIN BMS_OR_FACTORY_ORDER f ON f.order_id = o.id and f.order_id=r.order_id and f.factory_id=r.factory_id
 		LEFT JOIN BMS_BASE_FACTORY a ON f.factory_id = a.id and r.factory_id=a.id
+		LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id = t.id
 		where 1=1
 		
 		<if test="_parameter !=null and _parameter !=''"> 
@@ -153,16 +155,21 @@
 
 		</if>
 	</select>
-	<select id="getOrderReviewNodeList" parameterType="Map" resultType="Map">
-		SELECT * FROM BMS_OR_ORDER_REVIEW_NODE where 1=1
-		<if test="orderId !=null and orderId !=''">
-			and order_id=#{orderId}  
+	<select id="getOrderDetailList" parameterType="Map" resultType="Map">
+		select  d.production_qty,d.factory_id factory_id,o.order_no order_no,o.order_name order_name,
+	    o.order_type order_type,o.order_qty order_qty,t.bus_type_code bus_type_code,o.customer,
+		d.order_id order_id,o.delivery_date delivery_date,f.factory_name,f.capacity
+		from BMS_OR_FACTORY_ORDER d
+		left join BMS_BASE_FACTORY f on f.id=d.factory_id
+		left join BMS_OR_ORDER o on o.id=d.order_id
+		left join BMS_BASE_BUS_TYPE t on o.bus_type_id = t.id
+		where 1=1
+		<if test="search_order_no!=null">
+			and o.order_no like CONCAT('%',#{search_order_no},'%')   
 		</if>
-		<if test="factoryId !=null and factoryId !=''">
-			and factory_Id=#{factoryId}   
-		</if>
-		<if test="node !=null and node !=''">
-			and node = #{node} 
+		
+		<if test="search_factory!=null">
+			and find_in_set(d.factory_id ,#{search_factory} )
 		</if>	
 	</select>
 </mapper>

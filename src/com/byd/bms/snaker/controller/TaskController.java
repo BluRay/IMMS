@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.byd.bms.setting.service.ISettingService;
 import com.byd.bms.snaker.engine.SnakerEngineFacets;
+import com.byd.bms.util.model.BmsBaseUser;
 
 /**
  * Snaker流程引擎常用Controller
@@ -30,7 +32,8 @@ import com.byd.bms.snaker.engine.SnakerEngineFacets;
 public class TaskController {
 	@Autowired
 	private SnakerEngineFacets facets;
-	
+	@Autowired
+	protected ISettingService settingService;
 	@RequestMapping(value = "active", method=RequestMethod.GET)
 	public String homeTaskList(Model model) {
 		String[] assignees = new String[]{"2","3","admin","test","snaker"};
@@ -105,7 +108,8 @@ public class TaskController {
             if(task.getTaskName().equalsIgnoreCase(taskName)) {
                 String[] actors = facets.getEngine().query().getTaskActorsByTaskId(task.getId());
                 for(String actor : actors) {
-                    builder.append(actor).append(",");
+                	BmsBaseUser user=settingService.getUserByid(actor);
+                    builder.append(user.getUsername()).append(",");
                 }
                 createTime = task.getCreateTime();
             }

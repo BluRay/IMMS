@@ -20,7 +20,7 @@ public interface IReviewService {
 	public int updateBmsOrderReviewResults(Map<String,Object> bmsOrderReviewResultsMap);
 	public BmsOrderReviewResults getOrderReview(Map<String,Object> condMap);
 	public Map<String,Object> getOrderReviewById(String id);
-	
+	public List<Map<String,Object>> getOrderDetailList(Map<String, Object> conditionMap);
 	public boolean isPermission(Map<String,Object> map); 
 	public String getNextOperator(Map<String,Object> map);
 }

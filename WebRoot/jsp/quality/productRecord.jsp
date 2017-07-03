@@ -68,9 +68,9 @@
 								<td><input style="height: 30px;width:130px;" type="text" class="input-medium revise" placeholder="车号..." id="search_bus_number" /></td> 	
 								
 								<td style="padding-left:5px;">
-								<label class=""> <input name="test_result" value="0" type="checkbox">一次检验合格
-								</label> <label class=""> <input name="test_result" value="1" type="checkbox">返工/返修合格
-								</label> <label class=""> <input name="test_result" value="2" type="checkbox">让步放行
+								<label class=""> <input name="search_test_result" value="0" type="checkbox">一次检验合格
+								</label> <label class=""> <input name="search_test_result" value="1" type="checkbox">返工/返修合格
+								</label> <label class=""> <input name="search_test_result" value="2" type="checkbox">让步放行
 								</label>
 								</td>
 								<td><input type="button" class="btn btn-sm btn-primary" id="btnQuery" value="查询" style="margin-left: 2px;"></input>						
@@ -113,7 +113,7 @@
 							</td>										
 							<td colspan=2>
 								<input class="btn btn-sm btn-primary" id="btnShowTpl" value="确定" style="margin-left: 2px;" type="button">
-								<input class="btn btn-sm btn-success" id="btnSave" value="保存" style="margin-left: 2px;" type="button">
+								<!-- <input class="btn btn-sm btn-success" id="btnSave" value="保存" style="margin-left: 2px;" type="button"> -->
 							</td>
 						</tr>
 					</table>
@@ -121,7 +121,7 @@
 				</div>
 				<div class="row" style="margin-top:10px;">
 					<div class="col-xs-12" id="scroll_div" >
-						<table id="tableDetail" class="table table-striped table-bordered table-hover " style="font-size: 12px;width:2000px;overflow:auto;" >
+						<table id="tableDetail" class="table table-striped table-bordered table-hover " style="font-size: 12px;width:2000px;overflow:auto;text-align:center" >
 						</table>	
 					</div>
 				</div>
@@ -146,20 +146,24 @@
 					</td>
 					<td>缺陷分类：</td>
 					<td><input class="input-medium revise" id="fault_type" type="text" style="height:30px;width:100px"></td>
-					<td><input class="btn btn-sm btn-primary" id="btnLibQuery" value="查询" style="margin-left: 2px;" type="button"></td>
+					<td><input class="btn btn-sm btn-primary" id="btnLibQuery" value="查询" style="margin-left: 2px;" type="button">
+					</td>
 				</tr>
-			</table>
+				</table>
 			<div class="row" style="margin-top:10px;">
 					<div class="col-xs-12" id="scroll_div" >
-						<table id="faultLibTable" class="table table-striped table-bordered table-hover " style="font-size: 12px;width:100%;" >
+						<table id="faultLibTable" class="table table-striped table-bordered table-hover " style="font-size: 12px;width:730px;text-align:center" >
 						</table>	
 					</div>
 				</div>
 		</div>
-		
+			<select style="display:none" id="workshop_tmpl">
+			
+			</select>
 		</div>
 			<!-- /.main-container -->
 		</div>
+	</div>
 	
 	<script src="../js/datePicker/WdatePicker.js"></script>
 	<script src="../assets/js/jquery.dataTables.min.js"></script>
@@ -174,5 +178,4 @@
 	<script src="../js/common.js"></script>
 	<script src="../js/quality/productRecord.js"></script>
 </body>
-
 </html>

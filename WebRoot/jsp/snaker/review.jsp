@@ -1,5 +1,8 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html> -->
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%String path = request.getContextPath();String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";%>
+<c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html lang="zh-CN">
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -7,12 +10,11 @@
 <title>BMS 订单内部评审</title>
 <meta name="description" content="Common Buttons &amp; Icons" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-
-<link rel="stylesheet" href="../../assets/css/fixedColumns.bootstrap.min.css" />
-<link rel="stylesheet" href="../../assets/css/fixedColumns.dataTables.min.css" />
-<link rel="stylesheet" href="../../assets/css/jquery-ui.min.css" />
-<link rel="stylesheet" href="../../assets/css/jquery.gritter.css" />
-<link rel="stylesheet" href="../../assets/css/ace.min.css" id="main-ace-style" />
+<link rel="stylesheet" href="<%=basePath%>/assets/css/jquery-ui.min.css" />
+<link rel="stylesheet" href="<%=basePath%>/assets/css/jquery.gritter.css" />
+<%-- <link rel="stylesheet" href="<%=basePath%>/assets/css/ace.min.css" id="main-ace-style" /> --%>
+<link rel="stylesheet" href="<%=basePath%>/snaker/css/style.css" type="text/css" media="all" />
+<link rel="stylesheet" href="<%=basePath%>/snaker/css/snaker.css" type="text/css" media="all" />
 </head>
 <body class="no-skin" style="font-family: 'Microsoft YaHei';">
 	<!-- 头 -->
@@ -64,8 +66,8 @@
 								
 							</tr>
 						</table>
-						<br>
-<!-- 					</div> -->
+	                    <div id="snakerflow" style="border: 1px solid #d2dde2; margin-top:8px; margin-left:1px; margin-bottom:8px; width:100%;height:65px">
+				        </div>
 					<div class="row">
 						<div class="col-xs-12">
 <!-- 							<table id="tableData" class="table table-striped table-bordered table-hover" style="font-size: 12px;"> -->
@@ -94,48 +96,36 @@
 		<!-- /.main-container -->
 	</div>
 	<script src="../../assets/js/jquery-ui.min.js"></script>
-	<script src="../../assets/js/jquery.gritter.min.js"></script>
-	<script src="../../assets/js/jquery.dataTables.min.js"></script>
-	<script src="../../assets/js/jquery.dataTables.bootstrap.js"></script>
-	<script src="../../assets/js/dataTables.fixedColumns.min.js"></script>
-	<script src="../../assets/js/ace/elements.onpage-help.js"></script>
-	<script src="../../assets/js/ace/ace.onpage-help.js"></script>
-	<script src="../../assets/js/bootstrap3-typeahead.js"></script>
-	<script src="../../assets/js/ace-extra.min.js"></script>
 	<script src="../../js/jsrender.min.js"></script>
 	<script src="../../js/common.js"></script>
 	<script src="../../js/browser.js"></script>
-	<script src="../../snaker/CleverTabs/scripts/jquery.contextMenu.js" type="text/javascript"></script>
-    <script src="../../snaker/CleverTabs/scripts/jquery.cleverTabs.js" type="text/javascript"></script>
-    <script src="../../assets/js/ace-elements.min.js"></script>
+<!--     <script src="../../assets/js/ace-elements.min.js"></script> -->
+    <script src="<%=basePath%>/snaker/raphael-min.js" type="text/javascript"></script>
+	<script src="<%=basePath%>/snaker/snaker.designer.js" type="text/javascript"></script>
+	<script src="<%=basePath%>/snaker/snaker.model.js" type="text/javascript"></script>
 	<script type="text/javascript">
 	//$(document).ready(function(){
 		var tabs;
 	    var taskName = "${task.taskName}";
 	    var orderNo="${orderNo}";
 	    var factoryId="${factoryId}";
-	    tabs = $('#tabs').cleverTabs();
 	    // 加载订单明细
+	    $.ajax({
+			type:'GET',
+			url:"/IMMS/snaker/process/json",
+			data:"processId=${processId}&orderId=${orderId}",
+			async: false,
+			globle:false,
+			error: function(){
+				alert('数据处理错误！');
+				return false;
+			},
+			success: function(data){
+				data = eval("(" + data + ")");
+				display(data.process, data.active);
+			}
+		});
 	    queryOrderInfo(orderNo,factoryId);
-	    $(window).bind('resize', function () {
-	        tabs.resizePanelContainer();
-	    });
-// 		   var diagramTab = tabs.add({
-// 		   	url: '/IMMS/snaker/process/diagram?processId=${processId}&orderId=${orderId}',
-// 		   	label: '流程图',
-// 		   	locked: true
-// 		   });
-// 		   diagramTab.activate();
-//         var iframeUrl="/IMMS/snaker/process/diagram?processId=${processId}&orderId=${orderId}";
-//         var tabli="<li class='new_task'><a href='#new_task' data-toggle='tab' style='font-size: 14px; color: #333;display:inline-block'><span>流程图</span>"
-// 					+"</a></li>";
-					
-// 		$("#new_tab").append(tabli);
-		
-// 		var tabContent="<div class=\"tab-pane\" role=\"tabpanel\" style=\"height:320px\" id=\"new_task\">";
-// 		tabContent+="<iframe src="+iframeUrl+" style=\"width:100%;height:100%;frameborder:no;border:0;scrolling:no\"></iframe>";
-// 		tabContent+="</div>";
-//		$(tabContent).appendTo($("#new_accordion"));
 	    $.ajax({
 			type:'GET',
 			url:"/IMMS/snaker/flow/node",
@@ -172,14 +162,13 @@
 					
 					$("#new_tab li:eq("+i+")").before(tabli);
 					
-					var tabContent="<div class=\"tab-pane\" role=\"tabpanel\" style=\"height:320px\" id=\"new_task"+i+"\">";
+					var tabContent="<div class=\"tab-pane\" role=\"tabpanel\" style=\"height:300px\" id=\"new_task"+i+"\">";
 					tabContent+="<iframe src="+iframeUrl+" style=\"width:100%;height:100%;frameborder:no;border:0;scrolling:no\"></iframe>";
 					tabContent+="</div>";
 	
 					$(tabContent).appendTo($("#new_accordion"));
 					
 				}
-				//if(curTab) curTab.activate();
 				$("#"+curTab).addClass("active");
 				$("."+curTab).addClass("active");
 			}
@@ -200,7 +189,7 @@
 	function queryOrderInfo(orderNo,factoryId){
 		$.ajax({
 			type:'GET',
-			url:"/IMMS/order/showOrderDetailList",
+			url:"/IMMS/order/review/showOrderDetailList",
 			data:{
 				"search_order_no":orderNo,
 				"search_factory":factoryId
@@ -220,11 +209,34 @@
 						$("#factoryName").text(value.factory_name);
 						$("#productionQty").text(value.production_qty);
 						$("#deliveryDate").text(value.delivery_date);
-						$("#deliveryDate").text(value.delivery_date);
+						$("#capacity").text(value.capacity);
+						$("#customer").text(value.customer);
 					}
 				});
 			}
 		});
+	}
+	function addTaskActor(taskName) {
+    	alert("qq");
+        var url = '${ctx}/snaker/task/actor/add?orderId=${orderId}&taskName=' + taskName;
+        var returnValue = window.showModalDialog(url,window,'dialogWidth:500px;dialogHeight:300px');
+        if(returnValue) {
+            $('#currentActorDIV').append(',' + returnValue);
+        }
+    }
+	function display(process, active) {
+		/** view*/
+		$('#snakerflow').snakerflow($.extend(true,{
+			basePath : "${ctx}/snaker/",
+            ctxPath : "${ctx}",
+            orderId : "${orderId}",
+			restore : eval('(' + process + ')')
+			,
+			editable : false
+			},eval("(" + active + ")")
+		));
+		$("svg").attr("width",1100);
+		$("svg").attr("height",350);
 	}
 	</script>
 </body>

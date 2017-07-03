@@ -123,6 +123,7 @@ public class CommonController extends BaseController {
 		condMap.put("staff_number", staff_number);
 		condMap.put("function_url", function_url);
 		condMap.put("factory", factory);
+		condMap.put("workshop", request.getParameter("workshop"));
 		model=new ModelMap();
 		model.put("data", commonService.getWorkshopSelectAuth(condMap));
 
@@ -248,6 +249,48 @@ public class CommonController extends BaseController {
 		List<Map<String,String>> selectList =commonService.getBusNumberList(bus_input);
 		model=new ModelMap();
 		model.put("data",selectList);
+		return model;
+	}
+	
+	/**
+	 * added by xjw for 查询班组下拉列表(ORG表获取)
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/getWorkgroupSelect")
+	@ResponseBody
+	public ModelMap getWorkgroupSelect(){
+
+		String factory = request.getParameter("factory");
+		String workshop = request.getParameter("workshop");
+		String workgroup_input= request.getParameter("workgroup");
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("factory", factory);
+		condMap.put("workshop", workshop);
+		condMap.put("workgroup", workgroup_input);
+		model=new ModelMap();
+		model.put("data", commonService.getWorkgroupSelect(condMap));
+
+		return model;
+	}
+	
+	/**
+	 * added by xjw for 查询各个车间下的班组下拉列表(ORG表获取)
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/getWorkgroupSelectAll")
+	@ResponseBody
+	public ModelMap getWorkgroupSelectAll(){
+
+		String factory = request.getParameter("factory");
+		String workshop_list = request.getParameter("workshop_list");
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("factory", factory);
+		condMap.put("workshop_list", workshop_list);
+		model=new ModelMap();
+		model.put("data", commonService.getWorkgroupSelectAll(condMap));
+
 		return model;
 	}
 }

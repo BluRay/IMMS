@@ -49,4 +49,8 @@ public interface ICommonDao {
 
 	List<Map<String, String>> queryBusNumberList(String bus_input);
 	
+	List<Map<String,Object>> queryWorkgroupList(Map<String,Object>condMap);
+	
+	List<Map<String,Object>> queryWorkgroupListAll(Map<String,Object>condMap);
+	
 }

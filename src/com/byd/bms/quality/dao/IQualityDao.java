@@ -63,7 +63,17 @@ public interface IQualityDao {
 	void updatePrdRcdOrderTplHeader(Map<String, Object> condMap);
 	
 	public List<StdFaultLibBean> getFaultLibFuzzyList(Map<String, Object> conditionMap);
+	
+	void deleteProductRecord(Map<String, Object> condMap);
 
+	void insertProductRecord(Map<String, Object> condMap);
+	
+	List<Map<String, Object>> queryProductRecordList(Map<String,Object> condMap);
+
+	int queryProductRecordCount(Map<String, Object> condMap);
+	
+	List<Map<String, Object>> queryProductRecordDetail(Map<String,Object> condMap);
+	
 	//======================== xjw end=================================//
 	
 	

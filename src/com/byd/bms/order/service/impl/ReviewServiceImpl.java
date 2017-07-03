@@ -139,4 +139,11 @@ public class ReviewServiceImpl implements IReviewService {
 		return result;
 	}
 
+	@Override
+	public List getOrderDetailList(Map<String, Object> conditionMap) {
+		List datalist=new ArrayList();
+		datalist=reviewDao.getOrderDetailList(conditionMap);
+		return datalist;
+	}
+
 }

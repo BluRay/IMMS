@@ -106,13 +106,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				            <th class="sorting_disabled center" rowspan="1" style="width: 96px;">产能/天</th>
 						 </tr>
 						 <tr role="row" class="odd">
-						    <td id="custom" ></td>
-						    <td id="busType" ></td>
-						    <td id="productionQty"></td>
-						    <td id="factoryName"></td>
-				            <td id="order_type"></td>
-							<td id="delveryDate"></td>
-							<td id=""></td>
+						    <td id="customer" class="center"></td>
+						    <td id="busType"  class="center"></td>
+						    <td id="productionQty" class="center"></td>
+						    <td id="factoryName" class="center"></td>
+				            <td id="order_type" class="center"></td>
+							<td id="delveryDate" class="center"></td>
+							<td id="capacity" class="center"></td>
 						</tr>
 						 <tr role="row" class="odd">
 						    <th class="sorting_disabled center" rowspan="2" style="width: 96px;">订单启动节点</th>
@@ -124,12 +124,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<th class="sorting_disabled center" rowspan="1" style="width: 96px;">全部入库</th>
 						</tr>
 						<tr>
-							<td id="partsonlineDate"></td>
-							<td id="weldingonlineDate"></td>
-							<td id="paintonlineDate"></td>
-							<td id="chassisonlineDate"></td>
-							<td id="assemblyonlineDate"></td>
-							<td id="warehousingDate"></td>
+							<td id="partsonlineDate" class="center"></td>
+							<td id="weldingonlineDate" class="center"></td>
+							<td id="paintonlineDate" class="center"></td>
+							<td id="chassisonlineDate" class="center"></td>
+							<td id="assemblyonlineDate" class="center"></td>
+							<td id="warehousingDate" class="center"></td>
 						</tr>
 					    <tr>
 					        <th class="sorting_disabled center" rowspan="2" style="width: 96px;">资料需求节点</th>
@@ -141,12 +141,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<th class="sorting_disabled center" style="width: 96px;">SIP</th>
 						</tr>
 						<tr role="row" class="odd">
-						    <td id="modelexportDate" ></td>
-						    <td id="detaildemandNode"></td>
-						    <td id="bomdemandNode"></td>
-				            <td id="drawingexportDate"></td>
-							<td id="sopdemandNode"></td>
-							<td id="sipdemandNode"></td>
+						    <td id="modelexportDate" class="center" ></td>
+						    <td id="detaildemandNode" class="center"></td>
+						    <td id="bomdemandNode" class="center"></td>
+				            <td id="drawingexportDate" class="center"></td>
+							<td id="sopdemandNode" class="center"></td>
+							<td id="sipdemandNode" class="center"></td>
 						</tr>
 						<tr>
 						    <th class="sorting_disabled center" rowspan="4" style="width: 96px;">技术部</th>
@@ -158,11 +158,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<th class="sorting_disabled center" style="width: 96px;">采购明细</th>
 						</tr>
 						<tr>
-						    <td id="configTable"></td>
-						    <td id="proximatematter"></td>
-				            <td id="modeljudging"></td>
-							<td id="drawingearlierjudging"></td>
-							<td id="purchasedetail"></td>
+						    <td id="configTable" class="center"></td>
+						    <td id="proximatematter" class="center"></td>
+				            <td id="modeljudging" class="center"></td>
+							<td id="drawingearlierjudging" class="center"></td>
+							<td id="purchasedetail" class="center"></td>
 						</tr>
 						<tr>
 						    <th class="sorting_disabled center" style="width: 96px;">资料需求节点</th>
@@ -258,11 +258,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							
 						</tr>
 						<tr>
-							<td id="revisionpartsonlineDate"></td>
-							<td id="revisionweldingonlineDate"></td>
-							<td id="revisionpaintonlineDate"></td>
-							<td id="revisionchassisonlineDate"></td>
-							<td id="revisionassemblyonlineDate"></td>
+							<td id="revisionpartsonlineDate" class="center"></td>
+							<td id="revisionweldingonlineDate" class="center"></td>
+							<td id="revisionpaintonlineDate" class="center"></td>
+							<td id="revisionchassisonlineDate" class="center"></td>
+							<td id="revisionassemblyonlineDate" class="center"></td>
 							
 						</tr>
 					    <tr>
@@ -274,11 +274,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<th class="sorting_disabled center" style="width: 96px;">SIP</th>
 						</tr>
 						<tr role="row" class="odd">
-						    <td id="revisionwarehousingDate"></td>
-						    <td id="revisiondetailNode"></td>
-						    <td id="revisionbomNode"></td>
-							<td id="revisionsopNode"></td>
-							<td id="revisionsipNode"></td>
+						    <td id="revisionwarehousingDate" class="center"></td>
+						    <td id="revisiondetailNode" class="center"></td>
+						    <td id="revisionbomNode" class="center"></td>
+							<td id="revisionsopNode" class="center"></td>
+							<td id="revisionsipNode" class="center"></td>
 						</tr>
 					</table>
 				</div>

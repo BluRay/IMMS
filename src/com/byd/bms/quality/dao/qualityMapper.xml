@@ -282,6 +282,96 @@
 
 	</select>
      
+     <update id="deleteProductRecord" parameterType="Map">
+     	delete from BMS_QM_TEST_CARD
+     	where bus_number=#{bus_number} and test_node=#{test_node}
+     </update>
+     
+     <insert id="insertProductRecord" parameterType="Map" useGeneratedKeys="true" keyProperty="id">
+     	<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into BMS_QM_TEST_CARD 
+		(bus_number,factory_id,test_node_id,test_node,order_id,order_config_id,result,test_card_template_head_id,test_card_template_detail_id,fault_id,
+		test_result,result_judge,rework,tester,workshop_id,workgroup_id,editor_id,edit_date,test_date,memo)
+		values
+		<foreach collection="detail_list" item="detail" index="index" separator=",">
+			(#{detail.bus_number},#{detail.factory_id},#{detail.test_node_id},#{detail.test_node},#{detail.order_id},#{detail.order_config_id},#{detail.result},#{detail.test_card_template_head_id},
+			#{detail.test_card_template_detail_id},#{detail.fault_id},#{detail.test_result},#{detail.result_judge},#{detail.rework},#{detail.tester},
+			#{detail.workshop_id},#{detail.workgroup_id},#{editor_id},#{edit_date},#{detail.test_date},#{detail.memo})
+		</foreach>	
+     </insert>
+     
+     <select id="queryProductRecordList" parameterType="Map"  resultType="Map">
+     	select c.bus_number,c.test_node,f.factory_name,c.factory_id,concat(o.order_no,o.order_name,t.bus_type_code,' ',o.order_qty,'台') order_desc,
+     	c.test_date,c.test_node_id, c.order_id,c.order_config_id, c.tester,c.test_card_template_head_id,
+     	case c.result when '0' then '一次交检合格' when '1' then '返工/返修合格' else '让步放行' end as result,u.username editor,c.edit_date
+		from BMS_QM_TEST_CARD c
+		left join BMS_BASE_FACTORY f on c.factory_id=f.id
+		left join BMS_OR_ORDER o on c.order_id=o.id
+		left join BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id
+		left join BMS_BASE_USER u on u.id=c.editor_id
+		where 1=1
+		<if test="factory_id !=null and factory_id !=''">
+			and c.factory_id=#{factory_id}
+		</if>
+		<if test="test_node_id !=null and test_node_id !=''">
+			and c.test_node_id=#{test_node_id}
+		</if>
+		<if test="order_no !=null and order_no !=''">
+			and o.order_no=#{order_no}
+		</if>
+		<if test="bus_number !=null and bus_number !=''">
+			and c.bus_number like concat('%',#{bus_number},'%')
+		</if>
+		<if test="result !=null and result !=''">
+			and c.result in (#{result})
+		</if>
+			group by c.bus_number,c.test_node
+			order by c.edit_date desc
+    	<if test="start !=null">
+			limit #{start},#{length}
+		</if>
+     </select>
+     
+     <select id="queryProductRecordCount" parameterType="Map" resultType="int">
+     	select count(*) from (
+     	select c.bus_number,c.test_node
+		from BMS_QM_TEST_CARD c
+		left join BMS_OR_ORDER o on c.order_id=o.id
+		where 1=1
+		<if test="factory_id !=null and factory_id !=''">
+			and c.factory_id=#{factory_id}
+		</if>
+		<if test="test_node_id !=null and test_node_id !=''">
+			and c.test_node_id=#{test_node_id}
+		</if>
+		<if test="order_no !=null and order_no !=''">
+			and o.order_no=#{order_no}
+		</if>
+		<if test="bus_number !=null and bus_number !=''">
+			and c.bus_number like concat('%',#{bus_number},'%')
+		</if>
+		<if test="result !=null and result !=''">
+			and c.result in (#{result})
+		</if>
+		group by c.bus_number,c.test_node) tmp
+     </select>
+     
+     <select id="queryProductRecordDetail" parameterType="Map" resultType="Map">
+     	select d.test_item,d.test_standard,d.test_standard_no,d.test_request,d.is_null, c.bus_number,c.factory_id,c.test_node_id,c.test_node,c.order_id,c.order_config_id,
+		c.result,c.test_card_template_head_id,c.test_card_template_detail_id,c.fault_id,c.test_result,c.result_judge,c.rework,c.tester,c.workshop_id,c.workgroup_id,c.memo,
+		d.id,d.test_card_template_id, w.workshop_name workshop,g.workgroup_name workgroup
+		from BMS_QM_TEST_CARD_TEMPLATE_HEADER h 
+		left join BMS_QM_TEST_CARD_TEMPLATE_DETAILS d on d.test_card_template_id=h.id
+		left join BMS_QM_TEST_CARD c  on d.id=c.test_card_template_detail_id
+		and c.bus_number= #{bus_number} and c.test_node=#{test_node} and c.factory_id=#{factory_id}
+		left join BMS_BASE_WORKSHOP w on w.id=c.workshop_id
+		left join BMS_BASE_STANDARD_WORKGROUP g on g.id=c.workgroup_id
+		where h.id=#{test_card_template_head_id}
+		order by cast(test_standard_no as signed)
+     </select>
 <!-- ======================== xjw end=================================-->
 
 <!-- ======================== yk start=================================-->

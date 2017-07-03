@@ -40,6 +40,12 @@ public interface IQualityService {
 	void getPrdRcdOrderTpl(Map<String, Object> condMap, ModelMap model);
 
 	void getFaultLibFuzzyList(Map<String, Object> condMap, ModelMap model);
+
+	void saveProductRecord(Map<String,Object> condMap, ModelMap model);
+
+	void getProductRecordList(Map<String, Object> condMap, ModelMap model);
+
+	void getProductRecordDetail(Map<String, Object> condMap, ModelMap model);
 	//======================== xjw end=================================//
 		
 	

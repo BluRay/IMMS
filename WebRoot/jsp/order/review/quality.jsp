@@ -99,11 +99,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             			success: function (response) {
             				if(response.success){
             					alert("提交成功");
-// 						    	$.gritter.add({
-// 									title: '系统提示：',
-// 									text: '<h5>提交成功！</h5>',
-// 									class_name: 'gritter-info'
-// 								});
+            					$("#btnSave").attr("disabled",true);
+            				}else{
+            					alert("提交失败");
             				}
             			}
             		})

@@ -104,6 +104,9 @@
 		RP.function_id = (SELECT ID FROM BMS_BASE_FUNCTION F WHERE F.function_url = #{function_url}))) = '')
 		)
 		</if>
+		<if test="workshop !=null and workshop !=''">
+			and o.name like concat('%',#{workshop},'%')
+		</if>
 	</select>
 	
 	<select id="getAllReasonType" parameterType="int" resultType="Map">
@@ -175,5 +178,25 @@
 		where b.bus_number LIKE CONCAT('%',#{bus_input},'%')
 		order by b.bus_number desc
 		limit 50
+	</select>
+	
+	<select id="queryWorkgroupList" parameterType="Map" resultType="Map">
+		SELECT o.foreign_id id,o.name 
+		FROM BMS_BASE_ORG o
+		LEFT JOIN BMS_BASE_ORG o1 ON o.parent_id=o1.id
+		LEFT JOIN BMS_BASE_ORG o2 on o1.parent_id=o2.id
+		WHERE o.org_type='7' and o1.name = #{workshop} and o.deleted='0' and o2.name=#{factory}
+		<if test="workgroup !=null and workgorup !=''">
+			and o.name like concat('%',#{workgroup},'%')
+		</if>
+	</select>
+	
+	<select id="queryWorkgroupListAll" parameterType="Map" resultType="Map">
+		SELECT concat('{"workshop":"',o1.name,'","workgroup_list":[',group_concat('{"id":"',o.foreign_id,'","name":"',o.name,'"}'),']}') workgroup_list
+		FROM BMS_BASE_ORG o
+		LEFT JOIN BMS_BASE_ORG o1 ON o.parent_id=o1.id
+		LEFT JOIN BMS_BASE_ORG o2 on o1.parent_id=o2.id
+		WHERE o.org_type='7' and find_in_set(o1.name,#{workshop_list})>0 and o.deleted='0' and o2.name=#{factory}
+		group by o1.name
 	</select>
 </mapper>

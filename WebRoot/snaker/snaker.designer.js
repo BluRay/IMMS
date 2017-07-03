@@ -162,8 +162,8 @@
             tipDIV.id = "tipDIV";
             tipDIV.style.styleFloat="left";
             tipDIV.style.overflow="hidden";
-            tipDIV.style.left=document.getElementById('snakerflow').offsetLeft+rect.attr('x');
-            tipDIV.style.top=document.getElementById('snakerflow').offsetTop+rect.attr('y')+52;
+            tipDIV.style.left=parseInt(document.getElementById('snakerflow').offsetLeft)+parseInt(rect.attr('x'))+250;
+            tipDIV.style.top=parseInt(document.getElementById('snakerflow').offsetTop)+parseInt(rect.attr('y'))+80;
             tipDIV.style.width=180;
             tipDIV.style.height=60;
             tipDIV.style.position="absolute";
@@ -178,9 +178,11 @@
                     return false;
                 },
                 success: function(data){
+                	data=eval('(' + data + ')')
                     //tipDIV.innerHTML="<div style='width:180px; height:20px;border: 1px solid #d2dde2;'><a href='javascript:void(0)' onclick='addTaskActor(\"" + name + "\");' class='btnAdd'></a><a href='javascript:void(0)' class='btnClock'></a><a href='javascript:void(0)' onclick='document.body.removeChild(document.getElementById(\"tipDIV\"))' class='btnDel'></a></div><div style='width:180px; height:40px;border: 1px solid #d2dde2;'><div id='currentActorDIV' style='width:180px; height:20px;'>参与者:" + data.actors + "</div><div id='arrivalDIV' style='width:180px; height:20px;'>抵达时间:" + data.createTime + "</div></div>";
-                	tipDIV.innerHTML="<div style='width:180px; height:20px;border: 1px solid #d2dde2;'><a href='javascript:void(0)' onclick='document.body.removeChild(document.getElementById(\"tipDIV\"))' class='btnDel'></a></div><div style='width:180px; height:40px;border: 1px solid #d2dde2;'><div id='currentActorDIV' style='width:180px; height:20px;'>参与者:" + data.actors + "</div><div id='arrivalDIV' style='width:180px; height:20px;'>抵达时间:" + data.createTime + "</div></div>";
-                    document.body.appendChild(tipDIV);
+                	tipDIV.innerHTML="<div style='width:180px; height:20px;border: 1px solid #d2dde2;align:right'><a href='javascript:void(0)' onclick='document.body.removeChild(document.getElementById(\"tipDIV\"))' class='btnDel'></a></div><div style='width:180px; height:40px;border: 1px solid #d2dde2;'><div id='currentActorDIV' style='width:180px; height:20px;'>参与者:" + data.actors + "</div><div id='arrivalDIV' style='width:180px; height:20px;'>抵达时间:" + data.createTime + "</div></div>";
+                	
+                	document.body.appendChild(tipDIV);
                 }
             });
         }

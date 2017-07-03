@@ -37,6 +37,7 @@ import com.byd.bms.util.ExcelModel;
 import com.byd.bms.util.ExcelTool;
 import com.byd.bms.util.controller.BaseController;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 /**
@@ -492,6 +493,87 @@ public class QualityController extends BaseController {
 		return model;
 	}
 	
+	/**
+	 * 保存成品记录信息
+	 * @return
+	 */
+	@RequestMapping("saveProductRecord")
+	@ResponseBody	
+	public ModelMap saveProductRecord(){
+		model.clear();
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat df_v = new SimpleDateFormat("yyyyMMddHHmmss");
+		String curTime = df.format(new Date());
+		int userid=(int) session.getAttribute("user_id");
+		String bus_number=request.getParameter("bus_number");
+		String test_node=request.getParameter("test_node");
+		String record_detail=request.getParameter("record_detail");
+		
+		List<Map<String,Object>> detail_list=new ArrayList<Map<String,Object>>();		
+		if(record_detail.contains("{")){
+			JSONArray jsa=JSONArray.fromObject(record_detail);
+			detail_list=JSONArray.toList(jsa, Map.class);
+		}
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("bus_number", bus_number);
+		condMap.put("test_node",test_node);
+		condMap.put("editor_id", userid);
+		condMap.put("edit_date", curTime);
+		condMap.put("detail_list", detail_list);
+		qualityService.saveProductRecord(condMap,model);
+		return model;
+	}
+	
+	/**
+	 * 查询成品记录表列表
+	 * @return
+	 */
+	@RequestMapping("getProductRecordList")
+	@ResponseBody
+	public ModelMap getProductRecordList(){
+			model.clear();
+			int draw=Integer.parseInt(request.getParameter("draw"));//jquerydatatables 
+			int start=Integer.parseInt(request.getParameter("start"));//分页数据起始数
+			int length=Integer.parseInt(request.getParameter("length"));//每一页数据条数
+			String bus_number=request.getParameter("bus_number");
+			String order_no=request.getParameter("order_no");
+			String test_node_id=request.getParameter("test_node_id");
+			String factory_id=request.getParameter("factory_id");
+			String result=request.getParameter("result");
+			Map<String,Object> condMap=new HashMap<String,Object>();
+			condMap.put("draw", draw);
+			condMap.put("start", start);
+			condMap.put("length", length);
+			condMap.put("bus_number", bus_number);
+			condMap.put("order_no", order_no);
+			condMap.put("test_node_id", test_node_id);
+			condMap.put("factory_id", factory_id);
+			condMap.put("result", result);
+			qualityService.getProductRecordList(condMap,model);
+			return model;
+	}
+	
+	/**
+	 * 根据车号、工厂、检验节点查询成品记录表数据
+	 * @return
+	 */
+	@RequestMapping("getProductRecordDetail")
+	@ResponseBody
+	public ModelMap getProductRecordDetail(){
+		model.clear();
+		String bus_number=request.getParameter("bus_number");
+		String test_node=request.getParameter("test_node");
+		String factory_id=request.getParameter("factory_id");
+		String test_card_template_head_id=request.getParameter("test_card_template_head_id");
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("bus_number", bus_number);
+		condMap.put("test_node", test_node);
+		condMap.put("factory_id", factory_id);
+		condMap.put("test_card_template_head_id", test_card_template_head_id);
+		
+		qualityService.getProductRecordDetail(condMap,model);
+		return model;
+	}
 	//======================== xjw end=================================//
 	
 	

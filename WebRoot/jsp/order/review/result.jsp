@@ -29,7 +29,7 @@
 					<input type="hidden" id="taskId" name="taskId" value="${taskId}" />
 					<input type="hidden" id="reviewResultId" name="reviewResultId" value="${reviewResultId }" />
 					<table id="tableData" class="table table-striped table-bordered table-hover dataTable no-footer"
-					            style="font-size: 14px;width:800px" role="grid" aria-describedby="tableData_info">
+					            style="font-size: 14px;" role="grid">
 						 <tr role="row" class="odd">
 				            <th class="sorting_disabled center" rowspan="1" colspan="6" style="width: 96px;">订单启动节点</th>
 						 </tr>
@@ -116,11 +116,9 @@
             			success: function (response) {
             				if(response.success){
             					alert("提交成功");
-// 						    	$.gritter.add({
-// 									title: '系统提示：',
-// 									text: '<h5>提交成功！</h5>',
-// 									class_name: 'gritter-info'
-// 								});
+            					$("#btnSave").attr("disabled",true);
+            				}else{
+            					alert("提交失败");
             				}
             			}
             		})

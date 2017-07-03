@@ -163,6 +163,8 @@ public class FlowController extends BaseController{
             model.addAttribute("task", facets.getEngine().query().getTask(taskId));
         }
         //return "snaker/all";
+        model.addAttribute("processId", processId);
+        model.addAttribute("orderId", orderId);
         mv.setViewName("snaker/review");
 		return mv;
     }
@@ -233,12 +235,15 @@ public class FlowController extends BaseController{
         	String technicaldatanode= request.getParameter("technicaldatanode");
         	String technical_operator= request.getParameter("technical.operator");
         	String technology_operator= request.getParameter("technology.operator");
+        	String mintechInfo= request.getParameter("mintechInfo");
+        	
         	params.put("configTable", configTable);
         	params.put("proximatematter", proximatematter);
         	params.put("modeljudging", modeljudging);
         	params.put("drawingearlierjudging", drawingearlierjudging);
         	params.put("purchasedetail", purchasedetail);
         	params.put("technicaldatanode", technicaldatanode);
+        	params.put("mintechInfo", mintechInfo);
         	params.put("technical.operator", technical_operator);
         	params.put("technology.operator", technology_operator);
     	}

@@ -150,11 +150,11 @@ function ajaxSearch(id){
 			$("#mintechInfo").text(data.mintech_info);
 			$("#technical_operator").text(data.technical_operator);
 			$("#technical_create_time").text(data.technical_create_time);
-			
+			$("#technicaldatanode").text(data.technicaldatanode);
 			$('#technicsNode').text(data.technics_node);
 			$('#technicsInfo').text(data.technics_info);
-			$("#technogoly_operator").text(data.technogoly_operator);
-			$("#technogoly_create_time").text(data.technogoly_create_time);
+			$("#technology_operator").text(data.technology_operator);
+			$("#technology_create_time").text(data.technology_create_time);
 			$('#qualityNode').text(data.quality_node);
 			$('#qualityInfo').text(data.quality_info);
 			$("#quality_operator").text(data.quality_operator);
@@ -170,7 +170,7 @@ function ajaxSearch(id){
 			$('#plandepNode').text(data.plandep_node);
 			$('#plandepInfo').text(data.plandep_info);
 			$("#plandep_operator").text(data.plandep_operator);
-			$("#plandep_create_time").text(data.plandepcreate_time);
+			$("#plandep_create_time").text(data.plandep_create_time);
 			$('#revisionpartsonlineDate').text(data.revisionpartsonline_date);
 			$("#revisionweldingonlineDate").text(data.revisionweldingonline_date);
 			
@@ -182,11 +182,13 @@ function ajaxSearch(id){
 			$("#revisionbomNode").text(data.revisionbom_node);
 			$('#revisionsopNode').text(data.revisionsop_node);
 			$("#revisionsipNode").text(data.revisionsip_node);
-			$('#busType').text("");
+			$('#busType').text(data.bus_type_code);
 			$("#productionQty").text(data.production_qty);
 			$('#factoryName').text(data.factory_name);
-			$("#orderType").text(data.orderType);
+			$("#order_type").text(data.order_type);
 			$("#delveryDate").text(data.delivery_date);
+			$("#capacity").text(data.capacity);
+			$("#customer").text(data.customer);
 		}
 	})
 	var dialog = $( "#dialog-edit" ).removeClass('hide').dialog({

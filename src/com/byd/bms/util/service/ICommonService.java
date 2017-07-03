@@ -45,4 +45,8 @@ public interface ICommonService {
 	public List<Map<String,String>> getPartsSelect(String parts);
 
 	List<Map<String, String>> getBusNumberList(@Param(value="bus_input") String bus_input);
+	
+	List<Map<String,Object>> getWorkgroupSelect(Map<String,Object> condMap);
+	
+	List<Map<String,Object>> getWorkgroupSelectAll(Map<String,Object> condMap);
 }

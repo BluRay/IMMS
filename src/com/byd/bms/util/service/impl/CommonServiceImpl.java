@@ -99,5 +99,15 @@ public class CommonServiceImpl implements ICommonService {
 	public List<Map<String, String>> getBusNumberList(String bus_input) {
 		return commonDao.queryBusNumberList(bus_input);
 	}
+	@Override
+	public List<Map<String, Object>> getWorkgroupSelect(
+			Map<String, Object> condMap) {
+		return commonDao.queryWorkgroupList(condMap);
+	}
+	@Override
+	public List<Map<String, Object>> getWorkgroupSelectAll(
+			Map<String, Object> condMap) {
+		return commonDao.queryWorkgroupListAll(condMap);
+	}
 
 }

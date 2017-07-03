@@ -1,31 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<process displayName="十九部订单评审流程" instanceUrl="/snaker/flow/all" name="orderReview">
-<start displayName="开始" layout="-12,24,50,50" name="start">
-<transition g="" name="path12" offset="0,-10" to="apply"/>
+<process name="orderReview" displayName="十九部订单评审流程" instanceUrl="/snaker/flow/all" >
+<start layout="-164,0,50,50" name="start" displayName="开始" >
+<transition offset="0,-10" to="apply" name="path12" />
 </start>
-<task assignee="apply.operator" displayName="计划部发起评审" form="/order/review/apply" layout="72,23,105,50" name="apply">
-<transition g="" name="path14" offset="0,-10" to="technical"/>
+<task layout="-93,8,96,40" name="apply" displayName="计划部发起评审" form="/order/review/apply" assignee="apply.operator" taskType="Major" performType="ANY" >
+<transition offset="0,-10" to="technical" name="path14" />
 </task>
-<task assignee="technical.operator" displayName="技术部评审" form="/order/review/technical" layout="221,22,130,50" name="technical">
-<transition g="" name="path15" offset="0,-10" to="technology"/>
+<task layout="25,9,78,39" name="technical" displayName="技术部评审" form="/order/review/technical" assignee="technical.operator" taskType="Major" performType="ANY" >
+<transition offset="0,-10" to="technology" name="path15" />
 </task>
-<task assignee="technology.operator" displayName="工艺部评审" form="/order/review/technology" layout="380,21,121,50" name="technology">
-<transition g="" name="path16" offset="0,-10" to="quality"/>
+<task layout="126,10,80,38" name="technology" displayName="工艺部评审" form="/order/review/technology" assignee="technology.operator" taskType="Major" performType="ANY" >
+<transition offset="0,-10" to="quality" name="path16" />
 </task>
-<task assignee="quality.operator" displayName="品质部评审" form="/order/review/quality" layout="529,24,120,50" name="quality">
-<transition g="" name="path17" offset="0,-10" to="factory"/>
+<task layout="231,10,79,37" name="quality" displayName="品质部评审" form="/order/review/quality" assignee="quality.operator" taskType="Major" performType="ANY" >
+<transition offset="0,-10" to="factory" name="path17" />
 </task>
-<task assignee="factory.operator" displayName="工厂内部评审" form="/order/review/factory" layout="530,91,118,50" name="factory">
-<transition g="" name="path18" offset="0,-10" to="planning"/>
+<task layout="333,10,93,36" name="factory" displayName="工厂内部评审" form="/order/review/factory" assignee="factory.operator" taskType="Major" performType="ANY" >
+<transition offset="0,-10" to="planning" name="path18" />
 </task>
-<task assignee="planning.operator" displayName="综合计划部物控评审" form="/order/review/planning" layout="379,91,123,50" name="planning">
-<transition g="" name="transition1" offset="0,0" to="plandep"/>
+<task layout="448,8,115,39" name="planning" displayName="综合计划部物控评审" form="/order/review/planning" assignee="planning.operator" taskType="Major" performType="ANY" >
+<transition offset="0,0" to="plandep" name="transition1" />
 </task>
-<task assignee="result.operator" displayName="评审结果修正" form="/order/review/result" layout="72,90,105,50" name="result">
-<transition g="" name="path20" offset="0,-10" to="end"/>
+<task layout="729,8,105,37" name="result" displayName="评审结果修正" form="/order/review/result" assignee="result.operator" taskType="Major" performType="ANY" >
+<transition offset="0,-10" to="end" name="path20" />
 </task>
-<end displayName="结束" layout="-13,92,50,50" name="end"/>
-<task assignee="plandep.operator" displayName="综合计划部计划评审" form="/order/review/plandep" layout="221,89,131,52" name="plandep" performType="ANY">
-<transition g="" name="transition2" offset="0,0" to="result"/>
+<end layout="854,3,36,44" name="end" displayName="结束" >
+</end>
+<task layout="587,8,117,39" name="plandep" displayName="综合计划部计划评审" form="/order/review/plandep" assignee="plandep.operator" taskType="Major" performType="ANY" >
+<transition offset="0,0" to="result" name="transition2" />
 </task>
-</process>
+</process> 

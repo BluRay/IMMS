@@ -245,6 +245,44 @@ public class QualityServiceImpl implements IQualityService {
 		model.put("data", qualityDao.getFaultLibFuzzyList(condMap));
 		
 	}
+	
+	@Override
+	@Transactional
+	public void saveProductRecord(Map<String,Object> condMap, ModelMap model) {
+		try{
+			//根据车号、检验节点删除旧的成品记录数据
+			qualityDao.deleteProductRecord(condMap);
+			
+			//插入新的成品记录数据
+			qualityDao.insertProductRecord(condMap);
+			model.put("success", true);
+			model.put("message", "保存成功！");
+		}catch(Exception e){
+			model.put("success", false);
+			model.put("message", "保存失败！"+e.getMessage());
+			throw new RuntimeException(e.getMessage());
+		}
+		
+	}
+	
+	@Override
+	public void getProductRecordList(Map<String, Object> condMap, ModelMap model) {
+		int totalCount=0;
+		List<Map<String, Object>> datalist=qualityDao.queryProductRecordList(condMap);
+		totalCount=qualityDao.queryProductRecordCount(condMap);
+		Map<String, Object> result=new HashMap<String,Object>();
+		result.put("draw", condMap.get("draw"));
+		result.put("recordsTotal", totalCount);
+		result.put("recordsFiltered", totalCount);
+		result.put("data", datalist);
+		model.addAllAttributes(result);	
+	}
+	
+	@Override
+	public void getProductRecordDetail(Map<String, Object> condMap,
+			ModelMap model) {
+		model.put("data",qualityDao.queryProductRecordDetail(condMap));
+	}
 	//======================== xjw end=================================//
 		
 	
