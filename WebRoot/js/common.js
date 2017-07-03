@@ -564,7 +564,25 @@ function getOrderConfigSelect(order_id,selectval,selectId,selectType,valName) {
 	});
 }
 
-
+function getUserInfoByCard(cardId){
+	var user;
+	$.ajax({
+		type : "get",// 使用get方法访问后台
+		dataType : "json",// 返回json格式的数据
+		async : false,
+		url : "/IMMS/common/getUserInfoByCard",
+		data : {
+			"card_no" : cardId
+		},
+		success : function(response) {
+			var list = response.data;
+			if (list.length > 0) {
+				user = list[0];
+			}
+		}
+	})
+	return user;
+}
 
 /*
  * 查号模糊查询 submitId： 用于提交的元素的id

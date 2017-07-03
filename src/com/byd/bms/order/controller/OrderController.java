@@ -521,4 +521,19 @@ public class OrderController extends BaseController{
 		orderService.getOrderConfigTotalQty(order_id,model);
 		return model;
 	}
+	/**
+	 * 根据订单编号查询订单信息
+	 * @return
+	 */
+	@RequestMapping("/getOrderByNo")
+	@ResponseBody
+	public ModelMap getOrderByNo(){
+		model.clear();
+		String order_no=request.getParameter("order_no");
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("orderNo", order_no);
+		Map map=orderService.getOrderByNo(condMap);
+		model.put("data", map);
+		return model;
+	}
 }

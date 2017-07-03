@@ -1214,4 +1214,22 @@
 		WHERE id=#{id};
 	</update>
 	
+	<select id="getOrderDispatchList" parameterType="Map" resultType="Map">
+		SELECT d.*,d.single_use_qty*o.order_qty order_total,u.display_name AS editor
+		FROM
+		BMS_PLAN_ORDER_TOOLS_DISPATCH d 
+		LEFT JOIN BMS_OR_ORDER o on d.order_no = o.order_no
+		LEFT JOIN BMS_BASE_USER u ON d.editor_id = u.id
+		WHERE d.order_no=#{orderNo}
+		AND d.tool_name like CONCAT('%',#{dis_name},'%')
+		AND d.receiver like CONCAT('%',#{dis_receiver},'%')
+		<if test="dis_date_start!=''">
+			and d.edit_date >= CONCAT(#{dis_date_start},' 00:00:00')
+		</if>
+		<if test="dis_date_end!=''">
+			and d.edit_date &lt;= CONCAT(#{dis_date_end},' 23:59:59')
+		</if>
+		order by d.tool_name
+	</select>
+	
 </mapper>

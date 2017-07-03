@@ -53,4 +53,6 @@ public interface ICommonDao {
 	
 	List<Map<String,Object>> queryWorkgroupListAll(Map<String,Object>condMap);
 	
+	public List<Map<String,String>> getUserInfoByCard(String string);//刷厂牌获取用户信息
+	
 }

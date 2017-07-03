@@ -109,5 +109,9 @@ public class CommonServiceImpl implements ICommonService {
 			Map<String, Object> condMap) {
 		return commonDao.queryWorkgroupListAll(condMap);
 	}
+	@Override
+	public List<Map<String, String>> getUserInfoByCard(String card_no) {
+		return commonDao.getUserInfoByCard(card_no);
+	}
 
 }

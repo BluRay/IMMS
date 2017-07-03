@@ -306,4 +306,9 @@ public class OrderServiceImpl implements IOrderService {
 		model.put("data", orderDao.queryOrderConfigTotalQty(order_id));
 	}
 
+	@Override
+	public Map<String, Object> getOrderByNo(Map<String, Object> queryMap) {
+		return orderDao.getOrderByNo(queryMap);
+	}
+
 }

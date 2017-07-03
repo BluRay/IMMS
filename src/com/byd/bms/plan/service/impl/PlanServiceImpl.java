@@ -1196,4 +1196,9 @@ public class PlanServiceImpl implements IPlanService {
 		return planDao.editDispatchPlan(planBusDispatchPlan);
 	}
 
+	@Override
+	public List<Map<String, String>> getOrderDispatchList(Map<String, Object> conditionMap) {
+		return planDao.getOrderDispatchList(conditionMap);
+	}
+
 }

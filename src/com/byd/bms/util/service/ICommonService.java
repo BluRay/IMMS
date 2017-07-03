@@ -35,7 +35,6 @@ public interface ICommonService {
 	
 	List<Map<String,Object>> getLineSelectAuth(Map<String, Object> condMap);
 
-	
 	List<BmsBaseProcess> queryProcessList(Map<String, Object> condMap);
 	
 	List<Map<String,String>> getWorkshopSelect_Key();
@@ -49,4 +48,6 @@ public interface ICommonService {
 	List<Map<String,Object>> getWorkgroupSelect(Map<String,Object> condMap);
 	
 	List<Map<String,Object>> getWorkgroupSelectAll(Map<String,Object> condMap);
+	
+	public List<Map<String,String>> getUserInfoByCard(String string);//刷厂牌获取用户信息
 }

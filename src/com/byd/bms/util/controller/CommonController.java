@@ -108,6 +108,14 @@ public class CommonController extends BaseController {
 		return model;
 	}
 	
+	@RequestMapping("/getUserInfoByCard")
+	@ResponseBody
+	public ModelMap getUserInfoByCard(){
+		model=new ModelMap();
+		model.put("data", commonService.getUserInfoByCard(request.getParameter("card_no")));
+		return model;
+	}
+	
 	/**
 	 * added by xjw for 查询车间下拉列表(权限控制，ORG表获取)
 	 * 

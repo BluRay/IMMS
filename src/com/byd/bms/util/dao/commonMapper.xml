@@ -199,4 +199,8 @@
 		WHERE o.org_type='7' and find_in_set(o1.name,#{workshop_list})>0 and o.deleted='0' and o2.name=#{factory}
 		group by o1.name
 	</select>
+	
+	<select id="getUserInfoByCard" parameterType="String" resultType="Map">
+		select * from BMS_BASE_USER where card_8H10D=#{cardId}
+	</select>
 </mapper>

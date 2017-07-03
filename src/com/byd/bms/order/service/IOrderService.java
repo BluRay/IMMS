@@ -17,7 +17,7 @@ public interface IOrderService {
 	public List getOrderDetailList(Map<String, Object> conditionMap);
 	@Transactional
 	public void editOrder(JSONArray jel_del, JSONArray jel, Map<String,String> odermap);
-	
+	public Map<String,Object> getOrderByNo(Map<String,Object> queryMap);
 	public String getOrderSerial(String year);
 	@Transactional
 	public void createOrder(BmsOrder order, String factoryOrderNum);

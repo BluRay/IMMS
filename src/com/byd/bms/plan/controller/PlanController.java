@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import org.apache.log4j.Logger;
@@ -39,7 +40,7 @@ public class PlanController extends BaseController{
 	static Logger logger = Logger.getLogger("PLAN");
 	@Autowired
 	protected IPlanService planService;
-	
+
 	@RequestMapping("/importMaster")
 	public ModelAndView importMaster(){ 		//总计划导入
 		mv.setViewName("plan/importMaster");
@@ -1267,6 +1268,29 @@ public class PlanController extends BaseController{
 		Map<String, Object> datalist  = planService.showPlanSearchDetail(conditionMap);
 		initModel(true,null,datalist);
 		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/getQueryOrderTool")
+	@ResponseBody
+	public ModelMap getQueryOrderTool(){
+		Map<String,Object> conditionMap=new HashMap<String,Object>();
+		conditionMap.put("orderNo", request.getParameter("orderNo"));
+		conditionMap.put("dis_name", request.getParameter("dis_name"));
+		conditionMap.put("dis_receiver", request.getParameter("dis_receiver"));
+		conditionMap.put("dis_date_start", request.getParameter("dis_date_start"));
+		conditionMap.put("dis_date_end", request.getParameter("dis_date_end"));
+		List<Map<String, String>> datalist  = planService.getOrderDispatchList(conditionMap);
+		initModel(true,null,datalist);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/saveOrderDispatchRecord")
+	@ResponseBody
+	public ModelMap saveOrderDispatchRecord(){
+		String form_str = request.getParameter("form_str");
+		
 		return model;
 	}
 
