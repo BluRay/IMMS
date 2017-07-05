@@ -549,5 +549,9 @@ public class ProductionController extends BaseController {
 		return model;
 	}
 	
-	
+	@RequestMapping("/productionsearchbusinfo")
+	public ModelAndView productionsearchbusinfo(){
+		mv.setViewName("production/productionsearchbusinfo");
+		return mv;
+	}
 }

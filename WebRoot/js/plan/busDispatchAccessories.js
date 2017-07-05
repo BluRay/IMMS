@@ -13,13 +13,14 @@ $(document).ready(function () {
 			$("#dispatchDetail tbody").html("");
 			$("#dipatchRecord tbody").html("");
 		});
-		
+
+		$("#querydisBtn").prop("disabled","disabled"); 
+		$("#dispatchBtn").prop("disabled","disabled"); 
 	}
 	
 	//点击查询，查询订单附件信息
 	$("#queryBtn").click(function(){
 		ajaxQueryOrderTool($("#orderNo").val());
-		$("#querydisBtn").attr("disabled",false);
 	});
 	
 	$("#querydisBtn").click(function(){
@@ -168,6 +169,8 @@ function ajaxQueryOrderTool(orderNo){
 		success:function(response){
 			if(response.data.length>0){
 				//$("#queryBtn").attr("disabled",true);
+				$("#querydisBtn").attr("disabled",false);
+				$("#dispatchBtn").attr("disabled",false);
 			}
 			generateRecordTable(response.data);
 			generateListTabel(response.data);

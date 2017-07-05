@@ -606,9 +606,11 @@
 <!-- ======================== yk end=================================-->
 
 <!-- ======================== tj start=================================-->
-<select id="getKeyPartsTraceList" parameterType="Map" resultType="Map">
-		select f.id factory_id,f.factory_name,t.workshop,t.bus_number,o.order_no,o.order_name,
-		ty.bus_type_code,c.order_config_name,u.username,t.edit_date from BMS_QM_KEY_PARTS t
+    <select id="getKeyPartsTraceList" parameterType="Map" resultType="Map">
+		select f.id factory_id,f.factory_name,t.workshop,t.bus_number,o.order_no,
+		o.order_name,ty.bus_type_code,c.order_config_name,u.username,t.edit_date,
+		o.id order_id,ty.id bustype_id,c.id orderconfig_id 
+		    from BMS_QM_KEY_PARTS t
 		    LEFT JOIN BMS_PLAN_BUS b on t.bus_number=b.bus_number
 		    LEFT JOIN BMS_OR_ORDER o on o.id=b.order_id
 		    LEFT JOIN BMS_OR_ORDER_CONFIG c on c.order_id=o.id and b.order_config_id=c.id
@@ -673,20 +675,23 @@
 		</if>
 		editor_id=#{editor_id}, 
 		edit_date=#{edit_date}
-		WHERE id = #{id};
+		WHERE id = #{keypartsId}
 	</update>
      <select id="getBusNumberDetailList" parameterType="Map" resultType="Map">
-		select t.*,b.size,b.3C_components from BMS_QM_KEY_PARTS t 
-		    LEFT JOIN BMS_QM_KEY_PARTS_TEMPLATE_DETAILS b on t.key_parts_template_details_id=b.id
+		select t.*,b.id as keypartsId,
+		   case 3C_components WHEN '是' THEN t.3C_no WHEN '否' THEN b.batch end  as batch
+		    from BMS_QM_KEY_PARTS_TEMPLATE_DETAILS  t 
+		    LEFT JOIN BMS_QM_KEY_PARTS_TEMPLATE_HEADER h on h.id=t.key_components_template_id
+		    LEFT JOIN BMS_QM_KEY_PARTS b on b.key_parts_template_details_id=t.id
 			 where 1=1  
-		<if test="busNumber!=null and busNumber!=''">
-			and t.bus_number=#{busNumber}
+		<if test="orderId!=null and orderId!=''">
+			and h.order_id=#{orderId}
 		</if>
-		<if test="factoryId!=null and factoryId!=''">
-			and t.factory_id=#{factoryId}
+		<if test="bustypeId!=null and bustypeId!=''">
+			and h.bus_type_id=#{bustypeId}
 		</if>
-		<if test="workshop!=null and workshop!=''">
-			and t.workshop=#{workshop}
+		<if test="orderconfigId!=null and orderconfigId!=''">
+			and h.order_config_id=#{orderconfigId}
 		</if>
 	</select>
 	
@@ -802,6 +807,20 @@
 			and t.id=#{id}
 		</if>
 	</select>
+	<insert id="saveParts" parameterType="Map"  useGeneratedKeys="true" keyProperty="id">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into BMS_QM_KEY_PARTS
+		(bus_number,factory_id,key_parts_template_details_id,workshop,process_number,process_name,parts_no,parts_name,vendor,batch,editor_id,edit_date)
+		values
+		(#{bus_number},#{factory_id},#{key_parts_template_detail_id},#{workshop},#{process_number},#{process_name},
+		#{parts_no} ,#{parts_name},#{vendor},#{batch},#{editor_id},#{edit_date}
+		)
+
+	</insert>
+	
 <!-- ======================== tj end=================================-->
 
 	

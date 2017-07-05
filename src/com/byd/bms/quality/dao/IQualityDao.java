@@ -108,6 +108,8 @@ public interface IQualityDao {
 	
 	public int updateKeyParts(Map<String,Object> conditionMap);
 	
+	public int saveParts(Map<String,Object> conditionMap);
+	
     public List<Map<String,Object>> getBusNumberDetailList(Map<String,Object> conditionMap);
 	
     public List<Map<String,Object>> getMaterialExceptionLogsList(Map<String,Object> conditionMap);

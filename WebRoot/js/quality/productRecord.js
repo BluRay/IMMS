@@ -795,7 +795,7 @@ function showEditPage(row){
 	if(row.result=='让步放行'){
 		result=2;
 	}
-	$("#btnShowTpl").show();
+	$("#btnShowTpl").hide();
 	$("#bus_number").val(row.bus_number).attr("disabled",true);
 	$("#bus_number").attr("order_id",row.order_id);
 	$("#bus_number").attr("order_config_id",row.order_config_id);

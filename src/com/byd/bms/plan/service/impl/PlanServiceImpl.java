@@ -1228,4 +1228,50 @@ public class PlanServiceImpl implements IPlanService {
 		return result;
 	}
 
+	@Override
+	public PlanBus getBusInfoByBusNo(Map<String, Object> conditionMap) {
+		return planDao.getBusInfoByBusNo(conditionMap);
+	}
+
+	@Override
+	public List<Map<String, Object>> getBusToolList() {
+		return planDao.getBusToolList();
+	}
+
+	@Override
+	@Transactional
+	public Map<String, Object> saveDispatchRecord(String curTime, String edit_user, String form_str,String plan_status) {
+		String[] form_date = form_str.split("\\u007C");
+		for (int i = 0 ; i <form_date.length ; i++ ) {
+			String recode_str = form_date[i];
+			String[] recode = recode_str.split("\\u005E",-1);
+			Map<String, Object> recode_map = new HashMap<String,Object>();
+			recode_map.put("dispatch_plan_id", recode[0]);
+			recode_map.put("bus_number", recode[1]);
+			recode_map.put("dispatcher_id", recode[2]);
+			recode_map.put("receiver", recode[3]);
+			recode_map.put("workcardid", recode[4]);
+			recode_map.put("batch_desc", recode[5]);
+			recode_map.put("flag_3c", recode[6]);
+			recode_map.put("number_3c", recode[7]);
+			recode_map.put("qtys", recode[8]);
+			recode_map.put("curTime", curTime);
+			recode_map.put("edit_user", edit_user);
+			recode_map.put("plan_status", plan_status);
+			planDao.insertDispatchRecord(recode_map);
+			planDao.updateBusDispatchDate(recode_map);
+			planDao.updateDispatchPlanStatus(recode_map);
+			
+		}
+		return null;
+	}
+
+	@Override
+	@Transactional
+	public Map<String, Object> saveDispatchRecordKD(Map<String, Object> conditionMap) {
+		planDao.insertDispatchRecord(conditionMap);
+		planDao.updateBusDispatchDate(conditionMap);
+		return null;
+	}
+
 }

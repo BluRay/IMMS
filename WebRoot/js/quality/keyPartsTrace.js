@@ -1,6 +1,6 @@
 var pageSize=1;
 var table;
-var table_height = $(window).height()-250;
+var table_height = $(window).height()-280;
 $(document).ready(function(){
 	initPage();
 	$("#breadcrumbs").resize(function() {
@@ -160,9 +160,9 @@ function showBusNumberDetail(json){
 		},
 		ajax:function (data, callback, settings) {
 			var param ={
-				"busNumber":json.bus_number,
-				"factoryId":json.factory_id,
-				"workshop":json.workshop
+				"orderId":json.order_id,
+				"bustypeId":json.bustype_id,
+				"orderconfigId":json.orderconfig_id
 			};
            
             $.ajax({
@@ -176,6 +176,7 @@ function showBusNumberDetail(json){
                 	$("#busNumber").text(json.bus_number);
                 	$("#workshop").text(json.workshop);
                 	$("#factory").text(json.factory_name);
+                	$("#factoryId").val(json.factory_id);
                 	$("#busType").text(json.bus_type_code);
                 	$("#orderName").text(json.order_no+" "+json.order_name);
                 	$("#configTable").text(json.order_config_name);
@@ -183,7 +184,8 @@ function showBusNumberDetail(json){
         				resizable: false,
         				title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 关键零部件编辑</h4></div>',
         				title_html: true,
-        				width:'1000px',
+        				width:'900px',
+        				height:'600',
         				modal: true,
         				buttons: [{
         							text: "关闭",
@@ -218,11 +220,12 @@ function showBusNumberDetail(json){
 					{"title":"材料/规格","class":"center","data":"size","defaultContent": ""},
 					{"title":"供应商名称","class":"center","data":"vendor","defaultContent": ""},
 					{"title":"装配车间","class":"center","data":"workshop","defaultContent": ""},
-					{"title":"工序","class":"center","data":"process_name","defaultContent": ""},
+					{"title":"工序","class":"center","data":"process","defaultContent": ""},
 					{"title":"3C件","class":"center","data":"3C_components","defaultContent": ""},					
 					{"title":"批次","class":"center","data":"batch","defaultContent": "","render":function(data,type,row){
 						return "<input style='border:0;width:50px;text-align:center' class='batch' " +
-								" value='"+(data!=undefined ? data : '')+"'/><input type='hidden' class='id' " +
+								" value='"+(data!=undefined ? data : '')+"'/><input type='hidden' class='keypartsId' " +
+								" value='"+(row.keypartsId!=undefined ? row.keypartsId : '')+"'/><input type='hidden' class='id' " +
 								" value='"+row.id+"'/>";
 					}
 					},
@@ -291,48 +294,64 @@ function getWorkshopSelect(url,factory,selectval,selectId,selectType,valName){
 function ajaxEdit(){
 
 	var trs=$("#tableDataDetail tbody").children("tr");
-	var arr_config_allot=[];
-	var total_allot_qty=0;
-	var save_flag=true;
 	var arr=[];
+	var busNumber=$("#busNumber").text();
+	var factoryId=$("#factoryId").val();
 	$.each(trs,function(index,tr){
 		var tds=$(tr).children("td");
+		var parts_no=tds.eq(1).text();
+		var parts_name=tds.eq(2).text();
+		var size=tds.eq(3).text();
+		var vendor=tds.eq(4).text();
+		var workshop=tds.eq(5).text();
+		var process_name=tds.eq(6).text();
 		var id=tds.eq(8).find(".id").val();
+		var keypartsId=tds.eq(8).find(".keypartsId").val();
 		var batch=tds.eq(8).find(".batch").val();
 		var obj={};
-		obj.id=id;
+		obj.key_parts_template_detail_id=id;
+		obj.key_parts_id=keypartsId;
 		obj.batch=batch;
+		obj.parts_no=parts_no;
+		obj.parts_name=parts_name;
+		obj.size=size;
+		obj.vendor=vendor;
+		obj.workshop=workshop;
+		obj.process_name=process_name;
+		obj.factory_id=factoryId;
+		obj.bus_number=busNumber;
 		arr.push(obj);
 	});
-	
-	if(save_flag){
-		$.ajax({
-			url: "updateKeyParts",
-			dataType: "json",
-			data: {
-				"key_parts_list":JSON.stringify(arr)
-			},
-			async: false,
-			error: function () {alertError();},
-			success: function (response) {
-				if(response.success){
-			    	$.gritter.add({
+    console.log("param",JSON.stringify(arr));
+   // return false;
+	$.ajax({
+		type:"post",
+		url: "addKeyParts",
+		dataType: "json",
+		data: {
+			"key_parts_list":JSON.stringify(arr)
+		},
+		async: false,
+		error: function () {alertError();},
+		success: function (response) {
+			if(response.success){
+		    	$.gritter.add({
+					title: '系统提示：',
+					text: '<h5>保存成功！</h5>',
+					class_name: 'gritter-info'
+				});
+		    	ajaxQuery();
+		    	}else{
+		    		$.gritter.add({
 						title: '系统提示：',
-						text: '<h5>保存成功！</h5>',
+						text: '<h5>保存失败！</h5><br>'+response.message,
 						class_name: 'gritter-info'
 					});
-			    	ajaxQuery();
-			    	}else{
-			    		$.gritter.add({
-							title: '系统提示：',
-							text: '<h5>保存失败！</h5><br>'+response.message,
-							class_name: 'gritter-info'
-						});
-			    	}
-				$( "#dialog-config" ).dialog("close");
-				
-			}
-		})
-	}
+		    	}
+			$( "#dialog-edit" ).dialog("close");
+			
+		}
+	})
+	
 ;	
 }

@@ -124,7 +124,7 @@
 				</form>
 			</div>
 			
-			<div id="dialog-edit" class="hide" style="align:center;width:1200px;height:600px">
+			<div id="dialog-edit" class="hide" style="align:center;width:1200px;height:350px">
 				<table class="table table-striped table-bordered table-hover dataTable no-footer"
 					               style="font-size: 12px;margin-bottom:3px" >
 					<tr>
@@ -146,7 +146,10 @@
 				</table>
 				<div class = "div-dialog">
 					<form id="form_edit">
-						<table id="tableDataDetail" class="table table-striped table-bordered table-hover" style="overflow-x:auto;font-size: 12px;">
+					    <input type='hidden' id="factoryId">
+<!-- 						<table id="tableDataDetail" class="table table-striped table-bordered table-hover" style="overflow-x:auto;font-size: 12px;"> -->
+						<table id="tableDataDetail" class="table table-striped table-bordered table-hover dataTable no-footer"
+					            style="font-size: 12px;" role="grid" aria-describedby="tableData_info">
 						</table>
 					</form>
 				</div>

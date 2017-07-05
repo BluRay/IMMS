@@ -1239,4 +1239,28 @@
 	#{edit_date}, #{tool_name}, #{unit}, #{single_use_qty});
 	</insert>
 	
+	<select id="getBusInfoByBusNo" parameterType="Map" resultType="com.byd.bms.plan.model.PlanBus">
+		select b.*,f.factory_name from BMS_PLAN_BUS b 
+		left join BMS_BASE_FACTORY f on b.factory_id=f.id		
+		where b.bus_number=#{busNo} and
+		b.order_id=#{orderId}
+	</select>
+	<select id="getBusToolList" resultType="Map">
+		select name,quantity,unit from BMS_PLAN_BUS_TOOLS
+	</select>
+	
+	<insert id="insertDispatchRecord" useGeneratedKeys="true" keyProperty="id" parameterType="Map">
+		INSERT INTO BMS_PLAN_BUS_DISPATCH
+		(dispatch_plan_id, bus_number, dispatch_date, dispatcher_id, receiver, 
+		workcardid, batch_desc, flag_3c, 3c_number, qtys)
+		VALUES(#{dispatch_plan_id},#{bus_number},#{curTime},#{dispatcher_id},#{receiver},
+		#{workcardid},#{batch_desc},#{flag_3c},#{number_3c},#{qtys})
+	</insert>
+	<update id="updateBusDispatchDate" parameterType="Map">
+		UPDATE BMS_PLAN_BUS SET dispatch_date = #{curTime} where bus_number = #{bus_number}
+	</update>
+	<update id="updateDispatchPlanStatus" parameterType="Map">
+		UPDATE BMS_PLAN_BUS_DISPATCH_PLAN SET status=#{plan_status} WHERE id=#{dispatch_plan_id}
+	</update>
+	
 </mapper>

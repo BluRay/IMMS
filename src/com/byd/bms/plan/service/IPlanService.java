@@ -3,6 +3,7 @@ package com.byd.bms.plan.service;
 import java.util.List;
 import java.util.Map;
 import com.byd.bms.util.ExcelModel;
+import com.byd.bms.plan.model.PlanBus;
 import com.byd.bms.plan.model.PlanBusDispatchPlan;
 import com.byd.bms.plan.model.PlanConfigIssedQty;
 import com.byd.bms.plan.model.PlanIssuance;
@@ -58,4 +59,8 @@ public interface IPlanService {
 	public int editDispatchPlan(PlanBusDispatchPlan planBusDispatchPlan);
 	public List<Map<String,String>> getOrderDispatchList(Map<String, Object> conditionMap);//根据订单编号查询该订单下附件交接记录
 	public Map<String,Object> saveOrderDispatchRecord(String curTime,String edit_user,String factory_id,String form_str);
+	public PlanBus getBusInfoByBusNo(Map<String, Object> conditionMap);
+	public List<Map<String,Object>> getBusToolList();
+	public Map<String,Object> saveDispatchRecord(String curTime,String edit_user,String form_str,String plan_status);
+	public Map<String,Object> saveDispatchRecordKD(Map<String, Object> conditionMap);
 }

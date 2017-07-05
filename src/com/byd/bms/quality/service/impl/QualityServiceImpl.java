@@ -310,10 +310,16 @@ public class QualityServiceImpl implements IQualityService {
 		return result;
 	}
 	@Override
+	@Transactional
 	public int updateKeyParts(List<Map<String, Object>> list) {
 		int result=0;
 		for(Map map : list){
-			result=qualityDao.updateKeyParts(map);
+			if("".equals((String)map.get("keypartsId"))){
+				result=qualityDao.saveParts(map);
+			}else{
+				result=qualityDao.updateKeyParts(map);
+			}
+			
 		}
 		return result;
 	}

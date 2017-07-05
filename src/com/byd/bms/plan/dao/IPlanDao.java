@@ -100,4 +100,9 @@ public interface IPlanDao {
 	public int editDispatchPlan(PlanBusDispatchPlan planBusDispatchPlan);
 	public List<Map<String,String>> getOrderDispatchList(Map<String, Object> conditionMap);//根据订单编号查询该订单下附件交接记录
 	public int insertOrderDispatchRecord(Map<String,Object> queryMap);
+	public PlanBus getBusInfoByBusNo(Map<String, Object> conditionMap);
+	public List<Map<String,Object>> getBusToolList();
+	public int insertDispatchRecord(Map<String, Object> conditionMap);
+	public int updateBusDispatchDate(Map<String, Object> conditionMap);
+	public int updateDispatchPlanStatus(Map<String, Object> conditionMap);
 }

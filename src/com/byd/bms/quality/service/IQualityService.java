@@ -72,7 +72,7 @@ public interface IQualityService {
 			
 	//========================tj start=================================//
 
-public Map<String,Object> getKeyPartsTraceList(Map<String,Object> conditionMap);
+    public Map<String,Object> getKeyPartsTraceList(Map<String,Object> conditionMap);
     
     public int updateKeyParts(List<Map<String,Object>> list);
     

@@ -1299,5 +1299,59 @@ public class PlanController extends BaseController{
 		model = mv.getModelMap();
 		return model;
 	}
+	
+	@RequestMapping("/getBusInfo")
+	@ResponseBody
+	public ModelMap getBusInfo(){
+		Map<String,Object> conditionMap=new HashMap<String,Object>();
+		conditionMap.put("busNo", request.getParameter("busNo"));
+		conditionMap.put("orderId", request.getParameter("orderId"));
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("busInfo", planService.getBusInfoByBusNo(conditionMap));
+		result.put("toolList", planService.getBusToolList());
+		initModel(true,null,result);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/saveDispatchRecord")
+	@ResponseBody
+	public ModelMap saveDispatchRecord(){
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String staff_number = request.getSession().getAttribute("staff_number") + "";
+		String plan_status = request.getParameter("plan_status");
+		String form_str = request.getParameter("form_str");
+		Map<String, Object> result = planService.saveDispatchRecord(curTime,staff_number,form_str,plan_status);
+		initModel(true,null,result);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/saveDispatchRecordKD")
+	@ResponseBody
+	public ModelMap saveDispatchRecordKD(){
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String staff_number = request.getSession().getAttribute("staff_number") + "";
+		Map<String,Object> conditionMap=new HashMap<String,Object>();
+		
+		conditionMap.put("dispatch_plan_id", request.getParameter("patch_plan_id"));
+		conditionMap.put("bus_number", request.getParameter("bus_number"));
+		conditionMap.put("dispatcher_id", request.getParameter("cardNumber"));
+		conditionMap.put("receiver", request.getParameter("username"));
+		conditionMap.put("workcardid", request.getParameter("cardNumber"));
+		conditionMap.put("qtys", request.getParameter("qtys"));
+		conditionMap.put("cardNumber", request.getParameter("cardNumber"));
+		conditionMap.put("username", request.getParameter("username"));
+		conditionMap.put("plan_status", request.getParameter("plan_status"));
+		conditionMap.put("curTime", curTime);
+		conditionMap.put("edit_user", staff_number);
+		
+		Map<String, Object> result = planService.saveDispatchRecordKD(conditionMap);
+		initModel(true,null,result);
+		model = mv.getModelMap();
+		return model;
+	}
 
 }

@@ -990,9 +990,9 @@ public class QualityController extends BaseController {
 
 		return model;
 	}
-	@RequestMapping("/updateKeyParts")
+	@RequestMapping("/addKeyParts")
 	@ResponseBody
-	public ModelMap updateKeyParts() {
+	public ModelMap addKeyParts() {
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String curTime = df.format(new Date());
 		int userid=(int) session.getAttribute("user_id");
@@ -1006,15 +1006,23 @@ public class QualityController extends BaseController {
 		while(it.hasNext()){
 			JSONObject el=(JSONObject) it.next();	
 			Map<String,Object> map=new HashMap<String,Object>();
-			map.put("id", el.get("id"));
+			map.put("keypartsId", el.get("key_parts_id"));
 			map.put("batch", el.get("batch"));
-			map.put("editor_id",userid);
+			map.put("bus_number", el.get("bus_number"));
+			map.put("parts_no",el.get("parts_no"));
+			map.put("parts_name",el.get("parts_name"));
+			map.put("vendor",el.get("vendor"));
+			map.put("size",el.get("size"));
+			map.put("process_name",el.get("process_name"));
+			map.put("factory_id",el.get("factory_id"));
+			map.put("key_parts_template_detail_id",el.get("key_parts_template_detail_id"));
 			map.put("edit_date",curTime);
+			map.put("editor_id",userid);
 			list.add(map);
 		}
 		//调用service保存数据
 		try{
-			qualityService.updateKeyParts(list);
+			int result=qualityService.updateKeyParts(list);
 			initModel(true,"保存成功！",null);
 		}catch(Exception e){
 			initModel(false,"保存失败!",null);
@@ -1025,14 +1033,13 @@ public class QualityController extends BaseController {
 	@ResponseBody
 	public ModelMap getBusNumberDetailList() {
 		Map conditionMap = new HashMap();
-		String busType = request.getParameter("busType");
-		String factoryId = request.getParameter("factoryId");
-		String workshop = request.getParameter("workshop");
-		String busNumber = request.getParameter("busNumber");
+		String bustypeId = request.getParameter("bustypeId");
+		String orderId = request.getParameter("orderId");
+		String orderconfigId = request.getParameter("orderconfigId");
 		// 封装查询条件
-		conditionMap.put("factoryId", factoryId);
-        conditionMap.put("workshop", workshop);
-		conditionMap.put("busNumber", busNumber);
+		conditionMap.put("bustypeId", bustypeId);
+        conditionMap.put("orderId", orderId);
+		conditionMap.put("orderconfigId", orderconfigId);
 		
 		Map<String, Object> result = qualityService.getBusNumberDetailList(conditionMap);
 
