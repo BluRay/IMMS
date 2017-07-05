@@ -8,6 +8,9 @@ $(document).ready(function(){
 	});
 	function initPage(){
 		getBusType();
+		getOrderNoSelect("#search_orderno","#orderId");
+		getOrderNoSelect("#new_orderNo","#orderId");
+		getOrderNoSelect("#edit_orderNo","#orderId");
 		getFactorySelect("quality/materialExceptionLogs",'',"#search_factory","全部",'id');
 		getWorkshopSelect("quality/materialExceptionLogs",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
 		$('#new_bphoto,#new_fphoto,#edit_bphoto,#edit_fphoto').ace_file_input({
@@ -31,13 +34,13 @@ $(document).ready(function(){
 		return false;
 	});
 	$('#search_factory').change(function(){ 
-		getWorkshopSelect("quality/problemImprove",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
+		getWorkshopSelect("quality/materialExceptionLogs",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
 	});
 	$('#new_factory').change(function(){ 
-		getWorkshopSelect("quality/problemImprove",$("#new_factory :selected").text(),"","#new_workshop",null,"id");
+		getWorkshopSelect("quality/materialExceptionLogs",$("#new_factory :selected").text(),"","#new_workshop",null,"id");
 	});
 	$('#edit_factory').change(function(){ 
-		getWorkshopSelect("quality/problemImprove",$("#edit_factory :selected").text(),"","#edit_workshop",null,"id");
+		getWorkshopSelect("quality/materialExceptionLogs",$("#edit_factory :selected").text(),"","#edit_workshop",null,"id");
 	});
 	
 	
@@ -72,7 +75,7 @@ $(document).ready(function(){
 	
 });
 
-function showProcessFault(id){
+function showExceptionLogs(id){
 	clear();
 	getBusType();
 	getFactorySelect("quality/materialExceptionLogs",'',"#edit_factory",null,'id');
@@ -139,10 +142,10 @@ function showProcessFault(id){
 	})
 }
 
-function editProcessFault(id){
+function editExceptionLogs(id){
 	getBusType();
-	getFactorySelect("quality/processFault",'',"#edit_factory",null,'id');
-	getWorkshopSelect("quality/processFault",$("#edit_factory :selected").text(),"","#edit_workshop",null,"id");
+	getFactorySelect("quality/materialExceptionLogs",'',"#edit_factory",null,'id');
+	getWorkshopSelect("quality/materialExceptionLogs",$("#edit_factory :selected").text(),"","#edit_workshop",null,"id");
 
 	$(".div-dialog input").prop("disabled",false);  
     $(".div-dialog select").prop("disabled",false); 
@@ -189,7 +192,7 @@ function editProcessFault(id){
 				resizable: false,
 				title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 编辑制程异常</h4></div>',
 				title_html: true,
-				width:'550px',
+				width:'600px',
 				modal: true,
 				buttons: [{
 							text: "关闭",
@@ -435,9 +438,9 @@ function ajaxQuery(){
 		            {"title":"发生日期",width:'120',"class":"center","data":"occur_date","defaultContent": ""},
 		            {"title":"操作",width:'80',"class":"center","data":null,"defaultContent": "",
 		            	"render": function ( data, type, row ) {
-		            		return "<i class=\"glyphicon glyphicon-search bigger-130 showbus\" title=\"查看\" onclick='showProcessFault(" 
+		            		return "<i class=\"glyphicon glyphicon-search bigger-130 showbus\" title=\"查看\" onclick='showExceptionLogs(" 
 		            		+ row['id'] + ")' style='color:blue;cursor: pointer;'></i>" + 
-		            		"&nbsp;&nbsp;&nbsp;<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"编辑\" onclick='editProcessFault(" 
+		            		"&nbsp;&nbsp;&nbsp;<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"编辑\" onclick='editExceptionLogs(" 
 		            		+ row['id'] + ")' style='color:blue;cursor: pointer;'></i>"
 		            	},
 		            }

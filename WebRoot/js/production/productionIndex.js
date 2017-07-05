@@ -45,3 +45,12 @@ $(document).ready(function () {
 			}
 		});
 	}
+	
+	
+function imgFoward(name,workshop){
+		
+	if(name=='VIN'){
+		window.location.href='/IMMS/production/showVinPrint';
+	}
+	
+}

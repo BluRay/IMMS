@@ -395,6 +395,7 @@ function formatDate(date) {
 function getAllFromOptions(elementId,valName){
 	var selectVal="";
 	var selectVal_ALL="";
+	var selectName=$(elementId+" :selected").text();
 	$(elementId+" option").each(function(){
 		if(valName=="name"){
 			selectVal_ALL+=$(this).text()+",";
@@ -402,7 +403,7 @@ function getAllFromOptions(elementId,valName){
 			selectVal_ALL+=$(this).val()+",";		
 	});
 	if(valName=="name"){
-		selectVal=($(elementId+" :selected").text()=="全部"||$(elementId+" :selected").text()=="请选择")?selectVal_ALL:$(elementId+" :selected").text();
+		selectVal=(selectName=="全部"||selectName=="请选择"||selectName=="")?selectVal_ALL:$(elementId+" :selected").text();
 	}else
 		selectVal=$(elementId).val()==""?selectVal_ALL:$(elementId).val();
 	

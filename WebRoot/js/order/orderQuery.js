@@ -125,8 +125,11 @@ function ajaxQuery(){
 		            {"title":"车辆详情","class":"center","data":"","defaultContent":"","render":function(data,type,row){
 		            	return "<i class=\"ace-icon fa fa-search bigger-130 editorder\" onclick = 'ajaxShowBusNumber(" + row.id+ ","+row.factory_id+","+row.order_config_id+");' style='color:blue;cursor: pointer;'></i>";
 		            }},
-		            {"title":"评审结果","class":"center","data":"","defaultContent": ""},
-		          ],
+		            
+		            {"title":"评审结果",width:'80',"class":"center","data":"review_result","render":function(data,type,row){
+		            	return data=="2"?"已评审":(data=="1"?"评审中":"未评审")},"defaultContent":""
+		            },
+		            ],
 	});
 	$("#tableOrder_info").addClass('col-xs-6');
 	$("#tableOrder_paginate").addClass('col-xs-6');

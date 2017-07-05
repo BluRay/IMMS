@@ -237,7 +237,50 @@ public class ProductionServiceImpl implements IProductionService {
 		Map<String,Object> nextProcess=productionDao.queryNextProcess(condMap);
 		return nextProcess;
 	}
-	
-	
 
+	@Override
+	public List<Map<String, String>> getProductionSearchBusinfo(String bus_number) {
+		return productionDao.getProductionSearchBusinfo(bus_number);
+	}
+
+	/*******************  tangjin start **************************/
+	@Override
+	public Map<String, Object> getVinPrintList(Map<String, Object> conditionMap) {
+		int totalCount=0;
+		List<Map<String, Object>> datalist=productionDao.getVinPrintList(conditionMap);
+		totalCount=productionDao.getVinPrintCount(conditionMap);
+		Map<String, Object> result=new HashMap<String,Object>();
+		result.put("draw", conditionMap.get("draw"));
+		result.put("recordsTotal", totalCount);
+		result.put("recordsFiltered", totalCount);
+		result.put("data", datalist);
+		return result;
+	}
+
+	@Override
+	public int updateVinPrint(Map<String, Object> conditionMap) {
+		return productionDao.updateVinPrint(conditionMap);
+	}
+
+	@Override
+	public int updateBusMotorNumber(Map<String, Object> buslist) {
+		return productionDao.updateBusMotorNumber(buslist);
+	}
+
+	@Override
+	public int updateVinMotorNumber(Map<String, Object> buslist) {
+		return productionDao.updateVinMotorNumber(buslist);
+	}
+	@Override
+	public List<Map<String, String>> getVinList(Map<String, Object> conditionMap) {
+		return productionDao.getVinList(conditionMap);
+	}
+
+	@Override
+	public List<Map<String, String>> getBusNumberByVin(
+			Map<String, Object> conditionMap) {
+		return productionDao.getBusNumberByVin(conditionMap);
+	}
+
+	/*******************  tangjin end  **************************/
 }

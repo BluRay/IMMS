@@ -1,6 +1,5 @@
 package com.byd.bms.production.service;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -32,17 +31,33 @@ public interface IProductionService {
 
 	public void getSupplyTotalCount(Map<String, Object> condMap, ModelMap model);
 
-	public void saveUpdateWorkshopSupply(Map<String, Object> condMap,
-			ModelMap model);
+	public void saveUpdateWorkshopSupply(Map<String, Object> condMap,ModelMap model);
 
 	public Map<String, Object> getWorkshopSupplyList(Map<String, Object> condMap);
 
 	public void getPartsFinishCount(Map<String, Object> condMap, ModelMap model);
 
-	public void saveUpdatePartsOnOffRecord(Map<String, Object> condMap,
-			ModelMap model);
+	public void saveUpdatePartsOnOffRecord(Map<String, Object> condMap,ModelMap model);
 
 	public Map<String,Object> getPartsOnOffList(Map<String, Object> condMap);
 	
 	public Map<String,Object> getNextProcess(Map<String,Object> condMap);
+	
+	public List<Map<String,String>> getProductionSearchBusinfo(String bus_number);
+	
+	/******************* tangjin start**************************/
+	
+	public Map<String,Object> getVinPrintList(Map<String,Object> conditionMap);
+	
+	public int updateVinPrint(Map<String,Object> conditionMap);
+	
+	public int updateBusMotorNumber(Map<String, Object> buslist);
+	
+	public int updateVinMotorNumber(Map<String, Object> buslist);
+	
+	public List<Map<String,String>> getVinList(Map<String, Object> conditionMap);
+	
+	public List<Map<String,String>> getBusNumberByVin(Map<String, Object> conditionMap);//根据vin码查询BusNumber
+
+	/******************* tangjin end**************************/
 }

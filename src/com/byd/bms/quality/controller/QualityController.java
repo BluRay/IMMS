@@ -509,6 +509,8 @@ public class QualityController extends BaseController {
 		String bus_number=request.getParameter("bus_number");
 		String test_node=request.getParameter("test_node");
 		String record_detail=request.getParameter("record_detail");
+		String test_card_template_detail_id=request.getParameter("test_card_template_detail_id");
+		String test_card_template_head_id=request.getParameter("test_card_template_head_id");
 		
 		List<Map<String,Object>> detail_list=new ArrayList<Map<String,Object>>();		
 		if(record_detail.contains("{")){
@@ -518,6 +520,8 @@ public class QualityController extends BaseController {
 		Map<String,Object> condMap=new HashMap<String,Object>();
 		condMap.put("bus_number", bus_number);
 		condMap.put("test_node",test_node);
+		condMap.put("test_card_template_detail_id", test_card_template_detail_id);
+		condMap.put("test_card_template_head_id",test_card_template_head_id);
 		condMap.put("editor_id", userid);
 		condMap.put("edit_date", curTime);
 		condMap.put("detail_list", detail_list);
@@ -585,6 +589,22 @@ public class QualityController extends BaseController {
 		mv.setViewName("quality/productRecord_Mobile");
 		return mv;
 	} 
+	
+	/**
+	 * 标准故障库模糊查询
+	 * @return
+	 */
+	@RequestMapping("getFaultListFuzzy")
+	@ResponseBody
+	public ModelMap getFaultListFuzzy(){
+		model.clear();
+		String bug=request.getParameter("bug");
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("bug", bug);
+		qualityService.getFaultLibFuzzyList(condMap, model);
+		
+		return model;
+	}
 	//======================== xjw end=================================//
 	
 	

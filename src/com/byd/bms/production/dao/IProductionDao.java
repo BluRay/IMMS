@@ -64,5 +64,21 @@ public interface IProductionDao {
 	List<Map<String, Object>> queryPartsOnOffList(Map<String, Object> condMap);
 
 	int queryPartsOnOffCount(Map<String, Object> condMap);
+	/******************* tangjin start**************************/
+	public List<Map<String,Object>> getVinPrintList(Map<String,Object> conditionMap);
 	
+	public List<Map<String,String>> getProductionSearchBusinfo(String bus_number);
+	
+	public int getVinPrintCount(Map<String,Object> conditionMap);
+	/*** 打印后更新VIN表打印次数，打印人，打印时间，打印状态*/
+	public int updateVinPrint(Map<String,Object> conditionMap);
+	/*** 保存左右电机号到bus表*/
+	public int updateBusMotorNumber(Map<String, Object> buslist);
+	/**保存左右电机号到Vin表*/
+	public int updateVinMotorNumber(Map<String, Object> buslist);
+	
+	public List<Map<String,String>> getVinList(Map<String, Object> conditionMap);
+	
+	public List<Map<String,String>> getBusNumberByVin(Map<String, Object> conditionMap);//根据vin码查询BusNumber
+	/******************* tangjin end**************************/
 }

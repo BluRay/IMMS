@@ -1,5 +1,8 @@
 var test_item_list=[];
 var test_standard_list={};
+var workshop_list=null;
+var workgroup_list=[];
+
 $(document).ready(function(){
 	initPage();
 	
@@ -31,6 +34,14 @@ $(document).ready(function(){
 		if(info.step == 2&&info.direction=='next') {
 			//$(".btn-next").css("visibility","hidden");
 			//$("#save").css("visibility","visible");
+			var standard=$('input:radio[name="check_strd"]:checked').val();
+			if(standard==null){
+				fadeMessageAlert(null,'请选择检验标准！','gritter-warning');
+				return false;
+			}
+			getWorkshopSelect('',$("#factory :selected").text(),"","#workshop","","id");
+			var workshop_all=getAllFromOptions("#workshop","name");
+			getWorkgroupSelectAll(workshop_all);
 			$(".btn-next").attr("disabled","disabled");
 			$("#save").removeAttr("disabled","");
 		}else if(info.step == 2&&info.direction=='previous'){
@@ -78,23 +89,76 @@ $(document).ready(function(){
     	$("#test_standard_list").html(strd_html);
     })
     
+    $("#test_result").on("input",function(){
+    	$(this).attr("fault_id","");
+    	$("#fault_type").html("");
+		$("#fault_level").html("")
+    });
+   
+    $('#bus_number').on("input",function(){
+    	$(this).attr("order_id","")
+    	$(this).attr("order_config_id","")
+    })
+    
+	$(document).on("change","#workshop",function(e){
+		var element=$("#workgroup");
+		var workshop=$(this).find("option:selected").text();
+		//alert(JSON.stringify(workgroup_list[workshop]))
+		getSelects(workgroup_list[workshop], "", element,"","id");
+	});
+	
+	$("#save").on("click",function(){
+		ajaxSave();
+	})
 })
 
 function initPage(){
 	$("#bus_number").val("");
+	$("#tester").val("");
+	$("#test_result").val("");
+	$("#workshop").val("");
+	$("#workgroup").val("");
 	getFactorySelect("quality/prdRcdIn","","#factory","请选择","id")
 	$(".btn-next").show();
-/*	getBusNumberSelect("#bus_number", "",function(obj){
-		var factory_id=obj.factory_id+"";
-		var all_factory_ids=getAllFromOptions("#factory","id");
-		if(all_factory_ids.indexOf(factory_id)<0){
-			alert('抱歉，您没有该车辆的操作权限！');		
-			$("#bus_number").val("");
-		}else{
-			$("#factory").val(factory_id)
-			getFactorySelect("quality/prdRcdIn",factory_id,"#factory","","id");
-		}
-	});*/
+	
+	$("#test_result").typeahead({
+			source : function(input, process) {
+				$.get("/IMMS/quality/getFaultListFuzzy", {
+					"bug" : input
+				}, function(response) {
+					faultlist = response.data;
+					var results = new Array();
+					$.each(response.data, function(index, value) {
+						results.push(value.bug);
+					})
+					return process(results);
+				}, 'json');
+			},
+			matcher : function(item) {
+				return true;
+				
+			},
+			items : 20,
+			updater : function(item) {
+				var selectId = "";
+				var bugType="";
+				var faultLevel="";
+				$.each(faultlist, function(index, value) {
+					if (value.bug == item) {
+						selectId = value.id;		
+						bugType=value.bugType;
+						faultLevel=value.faultLevel;
+					}
+				})
+
+				// alert(selectId);
+				$("#test_result").attr("fault_id", selectId);
+				$("#fault_type").html(bugType||"");
+				$("#fault_level").html(faultLevel||"")
+				return item;
+			}
+		});
+	
 	getKeysSelect("CHECK_NODE", "", "#check_node","请选择","id");
 }
 
@@ -185,13 +249,127 @@ function ajaxValidate (){
                 }else if(bus.factory_name.indexOf(getAllFromOptions("#factotry","name"))<0){
                 	fadeMessageAlert(null,'抱歉，该车辆属于'+bus.factory_name+'，您没有操作权限！','gritter-error');
                 	$("#bus_number").val("");
+                	$("#bus_number").attr("order_id","");
+            		$("#bus_number").attr("order_config_id","");
                 	return false;
                 }else{           		
             		//选中工厂、车间、线别、工序
             		$("#factory").val(bus.factory_id).attr("disabled",true);
+            		$("#bus_number").attr("order_id",bus.order_id);
+            		$("#bus_number").attr("order_config_id",bus.order_config_id);
             		$("#order").html(bus.order_desc);
                 }
         },
         error:function(){alertError();}
    });
+}
+
+function getWorkgroupSelectAll(workshop_list){
+	workgroup_list=[];
+	$.ajax({
+		url:"/IMMS/common/getWorkgroupSelectAll",
+		async:false,
+		type:"post",
+		dataType:"json",
+		data:{
+			"factory":$("#factory :selected").text(),
+			"workshop_list":workshop_list
+		},
+		success:function(response){
+			//workgroup_list=response.data
+			$.each(response.data,function(index,value){
+				var item=JSON.parse(value.workgroup_list);
+				workgroup_list[item.workshop]=item.workgroup_list
+			})
+		}
+	})	
+}
+
+function ajaxSave(){
+	var detail_list_submit=[];
+	var test_result=$("#test_result").val();
+	var result=$("#result").val();
+	var fault_id=$("#test_result").attr("fault_id");
+	var test_card_template_detail_id=$('input:radio[name="check_strd"]:checked').attr("tpl_detail_id");
+	var test_card_template_head_id=$('input:radio[name="check_strd"]:checked').attr("tpl_head_id");
+	var order_id=$("#bus_number").attr("order_id");
+	var test_node_id=$("#check_node").val();
+	var test_date=$("#test_date").val();
+	var tester=$("#tester").val();
+	var workshop_id=$("#workshop").val()||"";
+	var workgroup_id=$("#workgroup").val()||"";
+	
+	if(order_id==null||order_id==""){
+		fadeMessageAlert(null,'请输入有效车号！','gritter-error');
+		return false;
+	}
+	if(test_node_id==null||test_node_id==""){
+		fadeMessageAlert(null,'请选择检验节点！','gritter-error');
+		return false;
+	}
+	if(test_date.trim().length==0){
+		fadeMessageAlert(null,'请输入检验日期！','gritter-error');
+		return false;
+	}
+	if(tester.trim().length==0){
+		fadeMessageAlert(null,'请输入检验员！','gritter-error');
+		return false;
+	}
+	if(result.trim().length==0){
+		fadeMessageAlert(null,'请输入检验结果！','gritter-error');
+		return false;
+	}
+	if(workshop_id==null||workshop_id==""){
+		fadeMessageAlert(null,'请选择责任车间！','gritter-error');
+		return false;
+	}
+	if(workgroup_id==null||workgroup_id==""){
+		fadeMessageAlert(null,'请选择责任班组！','gritter-error');
+		return false;
+	}
+	
+	
+	var obj={};
+	obj.test_card_template_detail_id=test_card_template_detail_id;
+	obj.test_card_template_head_id=test_card_template_head_id;
+	obj.test_date=test_date;
+	obj.bus_number=$("#bus_number").val();
+	obj.factory_id=$("#factory").val();
+	obj.order_id=$("#bus_number").attr("order_id");
+	obj.order_config_id=$("#bus_number").attr("order_config_id");
+	obj.test_node_id=test_node_id;
+	obj.test_node=$("#check_node :selected").text();
+	obj.result=result;
+	obj.fault_id=fault_id||"";
+	obj.test_result=test_result;
+	obj.result_judge=$("#judge").val();
+	obj.rework=$("#rework").val();
+	obj.tester=tester;
+	obj.workshop_id=workshop_id;
+	obj.workgroup_id=workgroup_id;
+
+	
+	detail_list_submit.push(obj);
+	
+	$.ajax({
+		url:"saveProductRecord",
+		async:false,
+		type:"post",
+		dataType:"json",
+		data:{
+			"bus_number":$("#bus_number").val(),
+			"test_node":$("#check_node :selected").text(),
+			"test_card_template_detail_id":test_card_template_detail_id,
+			"test_card_template_head_id":test_card_template_head_id,
+			"record_detail":JSON.stringify(detail_list_submit)
+		},
+		success:function(response){
+			fadeMessageAlert(null,response.message,'gritter-success');
+			var wizard = $('#fuelux-wizard-container').data('wizard');
+			wizard.currentStep = 2;
+			wizard.setState();
+			$("#save").attr("disabled","disabled");
+			$(".btn-next").removeAttr("disabled","");
+		}
+	})	
 }

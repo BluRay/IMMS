@@ -416,7 +416,8 @@
 		(SELECT COUNT(b.id) FROM BMS_PLAN_BUS b WHERE b.assembly_online_date >0 AND b.order_id = o.id AND b.factory_id = fo.factory_id) as assembly_online_count,
 		(SELECT COUNT(b.id) FROM BMS_PLAN_BUS b WHERE b.assembly_offline_date >0 AND b.order_id = o.id AND b.factory_id = fo.factory_id) as assembly_offline_count,
 		(SELECT COUNT(b.id) FROM BMS_PLAN_BUS b WHERE b.warehousing_date>0 AND b.order_id = o.id AND b.factory_id = fo.factory_id) as warehousing_count,
-		(SELECT COUNT(b.id) FROM BMS_PLAN_BUS b WHERE b.dispatch_date>0 AND b.order_id = o.id AND b.factory_id = fo.factory_id) as dispatch_count
+		(SELECT COUNT(b.id) FROM BMS_PLAN_BUS b WHERE b.dispatch_date>0 AND b.order_id = o.id AND b.factory_id = fo.factory_id) as dispatch_count,
+		(select review_status from BMS_OR_ORDER_REVIEW_RESULTS r where fo.factory_id=r.factory_id and fo.order_id=r.order_id) as review_result
 		from BMS_OR_ORDER o
 		left join BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id
 		left join BMS_OR_FACTORY_ORDER fo on fo.order_id=o.id

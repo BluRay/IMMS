@@ -2,6 +2,7 @@ package com.byd.bms.production.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -559,4 +560,129 @@ public class ProductionController extends BaseController {
 		mv.setViewName("production/productionsearchbusinfo");
 		return mv;
 	}
+	
+	@RequestMapping("/getProductionSearchBusInfo")
+	@ResponseBody
+	public ModelMap getProductionSearchBusInfo(){
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("bus_number", request.getParameter("bus_number"));
+		
+		return model;
+	}
+	
+	/**************************** TANGJIN  ************************/
+	
+	/**打印VIN码*/
+	@RequestMapping("/showVinPrint")
+	public ModelAndView showVinPrint(){
+		mv.setViewName("production/showVinPrint");
+		return mv;
+	}
+	@RequestMapping("/getVinPrintList")
+	@ResponseBody
+	public ModelMap getVinPrintList(){
+		model.clear();
+		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
+		int start=(request.getParameter("start")!=null)?Integer.parseInt(request.getParameter("start")):0;		//分页数据起始数
+		int length=(request.getParameter("length")!=null)?Integer.parseInt(request.getParameter("length")):20;	//每一页数据条数
+		String factory_id=String.valueOf(session.getAttribute("factory_id"));
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("orderNo", request.getParameter("orderNo"));
+		condMap.put("busNo", request.getParameter("busNumber"));
+		condMap.put("factoryId", factory_id);
+		condMap.put("draw", draw);
+		condMap.put("start", start);
+		condMap.put("length", length);
+		Map<String,Object> list = productionService.getVinPrintList(condMap);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(list);
+		model = mv.getModelMap();
+		return model;
+	}
+	@RequestMapping("/saveMotorNumber")
+	@ResponseBody
+	public ModelMap saveMotorNumber(){
+		model.clear();
+		Map<String, Object> result = new HashMap<String, Object>();
+		String conditions=request.getParameter("conditions");
+		JSONArray jsonArray=JSONArray.fromObject(conditions);
+		List<Map<String,Object>> buslist=new ArrayList<Map<String,Object>>();
+		for(int i=0;i<jsonArray.size();i++){
+			 JSONObject object = (JSONObject)jsonArray.get(i);		
+			 Map<String, Object> map = (Map<String, Object>) object;
+			 buslist.add(map);
+		}
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("buslist", buslist);
+		int a=productionService.updateBusMotorNumber(condMap);
+		int b=productionService.updateVinMotorNumber(condMap);
+		if(a>0&&b>0){
+			result.put("success", true);
+			result.put("message", "保存成功");
+		}else{
+			result.put("success", false);
+			result.put("message", "打印失败");
+		}
+		model.addAllAttributes(result);
+		return model;
+	}
+	@RequestMapping("/afterVinPrint")
+	@ResponseBody
+	public ModelMap afterVinPrint(){
+		model.clear();
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String userid=String.valueOf(session.getAttribute("user_id"));
+		Map<String, Object> result = new HashMap<String, Object>();
+		List<String> vinList= new ArrayList<String>();
+		String conditions=request.getParameter("conditions");
+		vinList=Arrays.asList(conditions.split(","));
+		Map<String, Object> conditionMap = new HashMap<String, Object>();
+		conditionMap.put("vinList", vinList);
+		conditionMap.put("printer", userid);
+		conditionMap.put("printDate", curTime);
+		int i=productionService.updateVinPrint(conditionMap);
+		if(i>0){
+			result.put("success", true);
+			result.put("message", "打印成功");
+		}else{
+			result.put("success", false);
+			result.put("message", "打印失败");
+		}
+		model.addAllAttributes(result);
+		return model;
+	}
+	/**
+	 * 检查vin码是否在PD_VIN表中存在，存在为有效，否则无效
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/validateVin")
+	@ResponseBody
+	public ModelMap validateVin() {
+		model.clear();
+		String vin=request.getParameter("vin");
+		Map conditionMap=new HashMap<String,Object>();
+		conditionMap.put("vin", vin);
+		List selectList = productionService.getVinList(conditionMap);
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("data", selectList);
+		model.addAllAttributes(result);
+		return model;
+	}
+	@RequestMapping("/getBusNumberByVin")
+	@ResponseBody
+	public ModelMap getBusNumberByVin() {
+		model.clear();
+		String vin=request.getParameter("vin");
+		Map conditionMap=new HashMap<String,Object>();
+		conditionMap.put("vin", vin);
+		List selectList = productionService.getBusNumberByVin(conditionMap);
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("data", selectList);
+		model.addAllAttributes(result);
+		return model;
+	}
+
+	/****************************  TANGJIN ***************************/
 }

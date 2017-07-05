@@ -285,6 +285,12 @@
      <update id="deleteProductRecord" parameterType="Map">
      	delete from BMS_QM_TEST_CARD
      	where bus_number=#{bus_number} and test_node=#{test_node}
+     	<if test="test_card_template_detail_id !=null and test_card_template_detail_id !=''">
+     		and test_card_template_detail_id=#{test_card_template_detail_id}
+     	</if>
+     	<if test="test_card_template_head_id !=null and test_card_template_head_id !=''">
+     		and test_card_template_head_id=#{test_card_template_head_id}
+     	</if>
      </update>
      
      <insert id="insertProductRecord" parameterType="Map" useGeneratedKeys="true" keyProperty="id">

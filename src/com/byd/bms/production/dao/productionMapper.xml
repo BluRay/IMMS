@@ -459,7 +459,122 @@
 		</if>
 	</select>
 	
+<<<<<<< .mine
+	<select id="getProductionSearchBusinfo" parameterType="String" resultType="Map">
+		SELECT
+		b.id,o.order_no,o.order_name,t.bus_type_code,o.order_qty,f.factory_name,b.bus_number,b.vin,c.order_config_name,c.customer,
+		b.productive_date,b.left_motor_number,b.right_motor_number,
+		b.bus_color,b.bus_seats,b.production_status,c.config_file,b.dispatch_date,b.customer_number,
+		b.welding_online_date,b.welding_offline_date,b.fiberglass_offline_date,b.painting_online_date,
+		b.painting_offline_date,b.chassis_online_date,b.chassis_offline_date,b.assembly_online_date,
+		b.assembly_offline_date,b.debugarea_online_date,b.debugarea_offline_date,b.testline_online_date,
+		b.testline_offline_date,b.warehousing_date
+		FROM BMS_PLAN_BUS b
+		LEFT JOIN BMS_OR_ORDER o ON b.order_id = o.id
+		LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id = t.id
+		LEFT JOIN BMS_BASE_FACTORY f ON b.factory_id = f.id
+		LEFT JOIN BMS_ORDER_CONFIG c ON b.order_cofig_id = c.id
+		WHERE b.bus_number = #{bus_number} OR b.vin = #{bus_number}
+	</select>
+	
+	
+||||||| .r442
 	
 	
 	
+=======
+	<!-- VIN码打印 -->
+	<select id="getVinPrintList" parameterType="Map" resultType="Map">
+		select b.bus_number,b.vin,CONCAT(o.order_name,'
+		',t.bus_type_code,o.order_qty+'','辆') order_desc,
+		CONCAT(t.bus_type_code,'-',o.order_code,'-',o.order_qty)
+		order_code_desc,
+		case v.print_sign
+		when
+		'1' then '已打印' else '未打印' end as print_sign ,
+		b.left_motor_number,b.right_motor_number,u.username
+		printer,v.print_date,v.print_times
+		from BMS_PLAN_BUS b left join
+		BMS_OR_ORDER o on b.order_id=o.id
+		left join BMS_BASE_BUS_TYPE t on
+		o.bus_type_id=t.id
+		left join BMS_PD_VIN v on v.vin = b.vin
+		left join
+		BMS_BASE_USER u on v.printer_id=u.id
+		where 1=1 and
+		 b.chassis_online_date is not
+		null and b.chassis_offline_date is null
+		and b.factory_id=#{factoryId}
+<!-- 		and b.factory_id=#{factoryId} -->
+		<if test="orderNo !=null and orderNo !=''">
+			and o.order_no=#{orderNo}
+		</if>
+		<if test="busNo !=null and busNo !=''">
+			and b.bus_number=#{busNo}
+		</if>
+		<if test="start !=null">
+			LIMIT #{start} ,#{length} 
+		</if>
+	</select>
+	<select id="getVinPrintCount" parameterType="Map" resultType="int">
+		select count(b.bus_number)
+		from BMS_PLAN_BUS b left join BMS_OR_ORDER o on
+		b.order_id=o.id
+		left join BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id
+		left join BMS_PD_VIN v on v.vin = b.vin
+		left join BMS_BASE_USER u on
+		v.printer_id=u.id
+		where 1=1 and
+		b.chassis_online_date is
+		not null and
+		b.chassis_offline_date is null
+		and b.factory_id=#{factoryId}
+		<if test="orderNo !=null and orderNo !=''">
+			and o.order_no=#{orderNo}
+		</if>
+		<if test="busNo !=null and busNo !=''">
+			and b.bus_number=#{busNo}
+		</if>
+	</select>
+	<update id="updateVinPrint" parameterType="Map">
+		update BMS_PD_VIN
+		<set>
+			print_sign='1',printer_id=#{printer},print_date=#{printDate},print_times=ifnull(print_times,0)+1
+		</set>
+		where vin in
+		<foreach collection="vinList" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</update>
+	<update id="updateBusMotorNumber" parameterType="map">
+		<foreach collection="buslist" item="detail" index="index"
+			separator=";">
+			update BMS_PLAN_BUS
+			<set>
+				left_motor_number=#{detail.left_motor_number},right_motor_number=#{detail.right_motor_number},vin=#{detail.vin}
+			</set>
+			where bus_number=#{detail.bus_number}
+		</foreach>
+	</update>
+	<update id="updateVinMotorNumber" parameterType="map">
+		<foreach collection="buslist" item="detail" index="index"
+			separator="">
+			<if test="detail.vin !=null and detail.vin !=''">
+				update BMS_PD_VIN
+				<set>
+					left_motor_number=#{detail.left_motor_number},right_motor_number=#{detail.right_motor_number}
+				</set>
+				where vin=#{detail.vin};
+			</if>
+		</foreach>
+	</update>
+	<select id="getVinList" parameterType="Map" resultType="Map">
+		select
+		vin from BMS_PD_VIN where vin=#{vin}
+	</select>
+	<select id="getBusNumberByVin" parameterType="Map" resultType="Map">
+		select bus_number from BMS_PLAN_BUS where vin=#{vin}
+	</select>
+>>>>>>> .r452
 </mapper>

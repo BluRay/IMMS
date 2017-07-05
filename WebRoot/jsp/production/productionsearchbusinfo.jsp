@@ -66,7 +66,39 @@
 						
 						<div class="tab-content" id="tab-content">
 							<div id="div_1" class="tab-pane fade in active">
-								div_1
+								<table id="table01" style="text-align:center;table-layout:fixed;font-size:12px;width:850px" class="table table-bordered table-striped">
+									<tr>
+										<td width="105px">生产订单：</td><td id="tab01_order_no"></td><td width="105px">车号：</td><td id="tab01_bus_number"></td><td width="105px">VIN：</td><td id="tab01_vin"></td>
+									</tr>
+									<tr>
+										<td>生产工厂：</td><td id="tab01_factory_name"></td><td>车辆配置：</td><td id="tab01_order_config_name"></td><td>客户名称：</td><td id="tab01_customer"></td>
+									</tr>
+									<tr>
+										<td>生产日期：</td><td id="tab01_productive_date"></td><td>左电机号：</td><td id="tab01_left_motor_number"></td><td>右电机号：</td><td id="tab01_right_motor_number"></td>
+									</tr>
+									<tr>
+										<td>车辆颜色：</td><td id="tab01_bus_color"></td><td>座位数量：</td><td id="tab01_bus_seats"></td><td>车辆状态：</td><td id="tab01_production_status"></td>
+									</tr>
+									<tr>
+										<td>客户自编号：</td><td id="tab01_customer_number"></td><td>焊装上线日期：</td><td id="tab01_welding_online_date"></td><td>焊装下线日期：</td><td id="tab01_welding_offline_date"></td>
+									</tr>
+									<tr>
+										<td>玻璃钢下线：</td><td id="tab01_fiberglass_offline_date"></td><td>涂装上线日期：</td><td id="tab01_painting_online_date"></td><td>涂装下线日期：</td><td id="tab01_painting_offline_date"></td>
+									</tr>
+									<tr>
+										<td>底盘上线日期：</td><td id="tab01_chassis_online_date"></td><td>底盘下线日期：</td><td id="tab01_chassis_offline_date"></td><td>总装上线日期：</td><td id="tab01_assembly_online_date"></td>
+									</tr>
+									<tr>
+										<td>总装下线日期：</td><td id="tab01_assembly_offline_date"></td><td>调试区上线：</td><td id="tab01_debugarea_online_date"></td><td>调试区下线：</td><td id="tab01_debugarea_offline_date"></td>
+									</tr>
+									<tr>
+										<td>检测线上线：</td><td id="tab01_testline_online_date"></td><td>检测线下线：</td><td id="tab01_testline_offline_date"></td><td>入库日期：</td><td id="tab01_warehousing_date"></td>
+									</tr>
+									<tr>
+										<td>出厂日期：</td><td id="tab01_dispatch_date"></td><td>配置附件：</td><td id="tab01_config_file"></td><td></td><td></td>
+									</tr>
+								
+								</table>
 							</div>
 							
 							<div id="div_2" style="overflow:auto" class="tab-pane fade">
