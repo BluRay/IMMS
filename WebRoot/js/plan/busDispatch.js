@@ -143,6 +143,11 @@ $(document).ready(function () {
 	});
 	
 	function btnDispatchKDConfirm(){
+		if($("#receiverKD").val() == ""){
+			alert("请先刷厂牌！");
+			$("#workcardidKD").focus();
+			return false;
+		}
 		var qtys = parseInt($("#kdForm").data("qtys"));
 		var plan_id = parseInt($("#kdForm").data("plan_id"));
 		
@@ -184,6 +189,11 @@ $(document).ready(function () {
 	}
 	
 	function btnDispatchConfirm(){
+		if($("#workcardid").val() == ""){
+			alert("请先刷厂牌！");
+			$("#workcardid").focus();
+			return false;
+		}
 		var busDispatchQty=$("#dispatchDetail tbody").find("tr").length;
 		var plan_status="1";//发车中
 		if(busDispatchQty==planLeft){

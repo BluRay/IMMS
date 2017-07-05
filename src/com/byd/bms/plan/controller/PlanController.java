@@ -7,7 +7,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import org.apache.log4j.Logger;
@@ -1350,6 +1349,47 @@ public class PlanController extends BaseController{
 		
 		Map<String, Object> result = planService.saveDispatchRecordKD(conditionMap);
 		initModel(true,null,result);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/busDispatchQuery")
+	@ResponseBody
+	public ModelMap busDispatchQuery(){
+		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
+		int start=(request.getParameter("start")!=null)?Integer.parseInt(request.getParameter("start")):0;		//分页数据起始数
+		int length=(request.getParameter("length")!=null)?Integer.parseInt(request.getParameter("length")):500;	//每一页数据条数
+		Map<String, Object> conditionMap = new HashMap<String, Object>();
+		conditionMap.put("draw", draw);
+		conditionMap.put("start", start);
+		conditionMap.put("length", length);
+		conditionMap.put("order", request.getParameter("order_no"));
+		conditionMap.put("dispatchStart", request.getParameter("dispatchStart"));
+		conditionMap.put("dispatchEnd", request.getParameter("dispatchEnd"));
+		Map<String, Object> result = planService.busDispatchQuery(conditionMap);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(result);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/busDispatchDescQuery")
+	@ResponseBody
+	public ModelMap busDispatchDescQuery(){
+		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
+		int start=(request.getParameter("start")!=null)?Integer.parseInt(request.getParameter("start")):0;		//分页数据起始数
+		int length=(request.getParameter("length")!=null)?Integer.parseInt(request.getParameter("length")):500;	//每一页数据条数
+		Map<String, Object> conditionMap = new HashMap<String, Object>();
+		conditionMap.put("draw", draw);
+		conditionMap.put("start", start);
+		conditionMap.put("length", length);
+		conditionMap.put("orderNo", request.getParameter("orderNo"));
+		conditionMap.put("busNoVin", request.getParameter("busNoVin"));
+		conditionMap.put("dispatchStart", request.getParameter("dispatchStart"));
+		conditionMap.put("dispatchEnd", request.getParameter("dispatchEnd"));
+		Map<String, Object> result = planService.busDispatchDescQuery(conditionMap);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(result);
 		model = mv.getModelMap();
 		return model;
 	}

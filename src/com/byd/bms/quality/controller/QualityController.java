@@ -447,7 +447,7 @@ public class QualityController extends BaseController {
 	}
 	
 	/**
-	 * 订单成品记录表模板页面
+	 * 订单成品记录表录入页面
 	 * @return
 	 */
 	@RequestMapping("/prdRcdIn")
@@ -575,6 +575,16 @@ public class QualityController extends BaseController {
 		qualityService.getProductRecordDetail(condMap,model);
 		return model;
 	}
+	
+	/**
+	 * 订单成品记录表模板页面
+	 * @return
+	 */
+	@RequestMapping("/prdRcdMobile")
+	public ModelAndView productRecordMobile(){
+		mv.setViewName("quality/productRecord_Mobile");
+		return mv;
+	} 
 	//======================== xjw end=================================//
 	
 	

@@ -1274,4 +1274,28 @@ public class PlanServiceImpl implements IPlanService {
 		return null;
 	}
 
+	@Override
+	public Map<String, Object> busDispatchQuery(Map<String, Object> conditionMap) {
+		List<Map<String,Object>> datalist = planDao.getBusDispatchTotalList(conditionMap);
+		int totalCount = planDao.getBusDispatchTotalCount(conditionMap);
+		Map<String, Object> result = new HashMap<String,Object>();
+		result.put("draw", conditionMap.get("draw"));
+		result.put("recordsTotal", totalCount);
+		result.put("recordsFiltered", totalCount);
+		result.put("data", datalist);
+		return result;
+	}
+
+	@Override
+	public Map<String, Object> busDispatchDescQuery(Map<String, Object> conditionMap) {
+		List<Map<String,Object>> datalist = planDao.getBusDispatchDetailList(conditionMap);
+		int totalCount = planDao.getBusDispatchDetailCount(conditionMap);
+		Map<String, Object> result = new HashMap<String,Object>();
+		result.put("draw", conditionMap.get("draw"));
+		result.put("recordsTotal", totalCount);
+		result.put("recordsFiltered", totalCount);
+		result.put("data", datalist);
+		return result;
+	}
+
 }

@@ -402,9 +402,9 @@ function getAllFromOptions(elementId,valName){
 			selectVal_ALL+=$(this).val()+",";		
 	});
 	if(valName=="name"){
-		selectVal=$(elementId+" :selected").text()=="全部"?selectVal_ALL:$(elementId+" :selected").text();
+		selectVal=($(elementId+" :selected").text()=="全部"||$(elementId+" :selected").text()=="请选择")?selectVal_ALL:$(elementId+" :selected").text();
 	}else
-		selectVal=$(elementId+" :selected").text()=="全部"?selectVal_ALL:$(elementId).val();
+		selectVal=$(elementId).val()==""?selectVal_ALL:$(elementId).val();
 	
 	return selectVal;
 	
@@ -424,6 +424,8 @@ function fadeMessageAlert(title,message, alertClass) {
 	});*/
 	$.gritter.add({
 		title: title,
+		time: 1000,  
+	    speed:500,
 		text: '<h5>'+message+'</h5>',
 		class_name: alertClass
 	});

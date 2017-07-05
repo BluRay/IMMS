@@ -10,6 +10,7 @@ $(document).ready(function(){
 		getFactorySelect("quality/keyPartsTrace",'',"#search_factory","全部",'id');
 		getBusTypeSelect("","#search_bus_type","全部","id");
 		getWorkshopSelect("",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
+		getOrderNoSelect("#search_order","#orderId");
 		ajaxQuery();
 	}
 	

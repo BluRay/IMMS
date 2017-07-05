@@ -10,6 +10,7 @@ $(document).ready(function () {
 		getOrderNoSelect("#edit_order_no","#edit_orderId",orderNoBackEdit);
 		getOrderNoSelect("#search_order_no","#orderId");
 		getBusType();
+		ajaxQuery();
 	}
 	
 	$("#btnQuery").on('click', function(e) {	

@@ -57,8 +57,17 @@
 						</table>
 					</div>	
 					
+					<table id="tableData" class="table table-striped table-bordered table-hover" style="font-size: 12px;">
+					</table>
+					
 					</div>
 			</div><!-- /.main-content -->
+			
+			<div id="patchModal" class="hide" style="align:center;">
+			<table id="tableData2" class="table table-striped table-bordered table-hover" style="width:1500px;text-align: center">
+			
+			</table>
+			</div>
 
 			<!-- 脚 -->
 			<%-- <jsp:include page="footer.jsp" flush="true"/> --%>

@@ -63,4 +63,6 @@ public interface IPlanService {
 	public List<Map<String,Object>> getBusToolList();
 	public Map<String,Object> saveDispatchRecord(String curTime,String edit_user,String form_str,String plan_status);
 	public Map<String,Object> saveDispatchRecordKD(Map<String, Object> conditionMap);
+	public Map<String, Object> busDispatchQuery(Map<String, Object> conditionMap);
+	public Map<String, Object> busDispatchDescQuery(Map<String, Object> conditionMap);
 }

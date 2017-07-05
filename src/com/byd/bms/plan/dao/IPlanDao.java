@@ -105,4 +105,8 @@ public interface IPlanDao {
 	public int insertDispatchRecord(Map<String, Object> conditionMap);
 	public int updateBusDispatchDate(Map<String, Object> conditionMap);
 	public int updateDispatchPlanStatus(Map<String, Object> conditionMap);
+	public List<Map<String,Object>> getBusDispatchTotalList(Map<String, Object> conditionMap);//查询发车记录订单汇总
+	public int getBusDispatchTotalCount(Map<String, Object> conditionMap);
+	public List<Map<String,Object>> getBusDispatchDetailList(Map<String, Object> conditionMap);//查询发车记录明细
+	public int getBusDispatchDetailCount(Map<String, Object> conditionMap);
 }

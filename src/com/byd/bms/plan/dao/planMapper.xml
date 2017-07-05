@@ -1263,4 +1263,128 @@
 		UPDATE BMS_PLAN_BUS_DISPATCH_PLAN SET status=#{plan_status} WHERE id=#{dispatch_plan_id}
 	</update>
 	
+	<select id="getBusDispatchTotalList" parameterType="Map" resultType="Map">
+		select order_no,CONCAT(order_name,'',bus_type,'',order_qty,'辆') order_desc,order_qty,sum(plan_done_qty)
+		order_done_qty,order_qty-sum(plan_dispatch_qty) order_left,sum(plan_dispatch_qty) order_dispatch
+		from(
+		select p.*,sum(qtys)
+		plan_done_qty,o.order_no,o.order_name,o.order_qty,f.factory_name,o.bus_type_id,b.internal_name bus_type
+		from BMS_PLAN_BUS_DISPATCH_PLAN p
+		left join BMS_PLAN_BUS_DISPATCH d on p.id=d.dispatch_plan_id
+		left join BMS_OR_ORDER o on p.order_id=o.id
+		left join BMS_BASE_BUS_TYPE b on o.bus_type_id= b.id
+		left join BMS_BASE_FACTORY f on p.factory_id=f.id
+		group by p.id
+		) tmp
+		where 1=1
+		<if test="order !=null and order !=''">
+			and (tmp.order_no like CONCAT('%',#{order},'%') or
+			tmp.order_name like CONCAT('%',#{order},'%'))
+		</if>
+		<if test="dispatchStart !=null and dispatchStart !=''">
+		 <![CDATA[  
+		 	and tmp.dispatch_date>=#{dispatchStart}
+		 ]]>
+		</if>
+		<if test="dispatchEnd !=null and dispatchEnd !=''">
+		 <![CDATA[  
+		 	and tmp.dispatch_date<#{dispatchEnd}
+		 ]]>
+		</if>
+		group by tmp.order_no
+		<if test="start !=null">
+			LIMIT #{start} ,#{length} 
+		</if>
+	</select>
+	<select id="getBusDispatchTotalCount" parameterType="Map" resultType="int">
+		SELECT COUNT(t.order_no) FROM (
+		select order_no,CONCAT(order_name,'',bus_type,'',order_qty,'辆') order_desc,order_qty,sum(plan_done_qty)
+		order_done_qty,order_qty-sum(plan_dispatch_qty) order_left,sum(plan_dispatch_qty) order_dispatch
+		from(
+		select p.*,sum(qtys)
+		plan_done_qty,o.order_no,o.order_name,o.order_qty,f.factory_name,o.bus_type_id,b.internal_name bus_type
+		from BMS_PLAN_BUS_DISPATCH_PLAN p
+		left join BMS_PLAN_BUS_DISPATCH d on p.id=d.dispatch_plan_id
+		left join BMS_OR_ORDER o on p.order_id=o.id
+		left join BMS_BASE_BUS_TYPE b on o.bus_type_id= b.id
+		left join BMS_BASE_FACTORY f on p.factory_id=f.id
+		group by p.id
+		) tmp
+		where 1=1
+		<if test="order !=null and order !=''">
+			and (tmp.order_no like CONCAT('%',#{order},'%') or
+			tmp.order_name like CONCAT('%',#{order},'%'))
+		</if>
+		<if test="dispatchStart !=null and dispatchStart !=''">
+		 <![CDATA[  
+		 	and tmp.dispatch_date>=#{dispatchStart}
+		 ]]>
+		</if>
+		<if test="dispatchEnd !=null and dispatchEnd !=''">
+		 <![CDATA[  
+		 	and tmp.dispatch_date<#{dispatchEnd}
+		 ]]>
+		</if>
+		group by tmp.order_no
+		) t
+	</select>
+	
+	<select id="getBusDispatchDetailList" parameterType="Map" resultType="Map">
+		select d.bus_number,IFNULL(b.vin,'') vin,IFNULL(CONCAT(b.left_motor_number,'/',b.right_motor_number),'') motor_number,
+		case d.flag_3c when '0' then '无' else '有' end as flag_3c,IFNULL(d.batch_desc,'') batch_desc,IFNULL(b.customer_number,'') customer_number,
+		IFNULL(d.dispatch_date,'') dispatch_date,IFNULL(d.receiver,'') receiver, u.display_name dispatcher
+		from BMS_PLAN_BUS_DISPATCH d
+		left join BMS_PLAN_BUS_DISPATCH_PLAN p on d.dispatch_plan_id=p.id
+		left join BMS_PLAN_BUS b on d.bus_number = b.bus_number
+		left join BMS_BASE_USER u on d.dispatcher_id=u.staff_number
+		left join BMS_OR_ORDER o on p.order_id=o.id
+		where 1=1
+		<if test="orderNo !=null and orderNo !=''">
+			and o.order_no=#{orderNo}
+		</if>
+		<if test="busNoVin !=null and busNoVin !=''">
+			and (d.bus_number like CONCAT('%',#{busNoVin},'%') or
+			b.vin like CONCAT('%',#{busNoVin},'%'))
+		</if>
+		<if test="dispatchStart !=null and dispatchStart !=''">
+		 <![CDATA[  
+		 	and d.dispatch_date>=#{dispatchStart}
+		 ]]>
+		</if>
+		<if test="dispatchEnd !=null and dispatchEnd !=''">
+		 <![CDATA[  
+		 	and d.dispatch_date<#{dispatchEnd}
+		 ]]>
+		</if>
+		<if test="start !=null">
+			LIMIT #{start} ,#{length} 
+		</if>
+	</select>
+	<select id="getBusDispatchDetailCount" parameterType="Map" resultType="int">
+		select count(d.bus_number) 
+		from BMS_PLAN_BUS_DISPATCH d
+		left join BMS_PLAN_BUS_DISPATCH_PLAN p on d.dispatch_plan_id=p.id
+		left join BMS_PLAN_BUS b on d.bus_number = b.bus_number
+		left join BMS_BASE_USER u on d.dispatcher_id=u.id
+		left join BMS_OR_ORDER o on p.order_id=o.id
+		where 1=1
+		<if test="orderNo !=null and orderNo !=''">
+			and o.order_no=#{orderNo}
+		</if>
+		<if test="busNoVin !=null and busNoVin !=''">
+			and (d.bus_number like CONCAT('%',#{busNoVin},'%') or
+			b.vin like CONCAT('%',#{busNoVin},'%'))
+		</if>
+		<if test="dispatchStart !=null and dispatchStart !=''">
+		 <![CDATA[  
+		 	and d.dispatch_date>=#{dispatchStart}
+		 ]]>
+		</if>
+		<if test="dispatchEnd !=null and dispatchEnd !=''">
+		 <![CDATA[  
+		 	and d.dispatch_date<#{dispatchEnd}
+		 ]]>
+		</if>
+	</select>
+	
 </mapper>

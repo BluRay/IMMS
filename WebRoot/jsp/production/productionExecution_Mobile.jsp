@@ -57,9 +57,8 @@ label {
 		<div class="main-content">
 			<!-- 路径和搜索框 -->
 				<div class="breadcrumbs breadcrumbs-fixed" id="breadcrumbs">
-					<ul class="breadcrumb">
-						<li><i class="ace-icon fa fa-home home-icon"></i><a
-							href="<%=request.getContextPath()%>/index_mobile">BMS</a></li>
+					<ul class="breadcrumb" style="font-size:14px;">
+					<li><a href="<%=request.getContextPath()%>/index_mobile"><i class="ace-icon fa fa-home home-icon bigger-160"></i>BMS</a></li>
 						<li><a href="#">生产扫描</a></li>
 					</ul>
 					<!-- /.breadcrumb -->

@@ -25,19 +25,17 @@
 			<!-- 主体 -->
 			<div class="main-content">			
 			<!-- 路径和搜索框 -->
-			<div class="breadcrumbs breadcrumbs-fixed" id="breadcrumbs">
-					<ul class="breadcrumb">
-						<li><i class="ace-icon fa fa-home home-icon"></i><a href="<%=request.getContextPath()%>/index_mobile">BMS</a></li>
+			<div class="breadcrumbs breadcrumbs-fixed" id="breadcrumbs" >
+					<ul class="breadcrumb" style="font-size:14px;">
+						<li><a href="<%=request.getContextPath()%>/index_mobile"><i class="ace-icon fa fa-home home-icon bigger-160"></i>BMS</a></li>
 					</ul><!-- /.breadcrumb -->
 
 					<!-- #section:basics/content.searchbox -->
-				<!-- 	<div class="nav-search" id="nav-search">
-						<form class="form-search">
-							<span class="input-icon">
-								<input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" /><i class="ace-icon fa fa-search nav-search-icon"></i>
-							</span>
-						</form>
-					</div>/.nav-search -->
+				 	<div class="nav-search" id="nav-search" style="top: 10px;font-size:14px;">
+						<a href="/IMMS/logout">
+								<i class="ace-icon fa fa-power-off bigger-160" ></i>登出
+						</a>
+					</div>
 				</div>
 				
 			<div class="page-content">
@@ -51,7 +49,7 @@
 										<img id="scan" class="img " src="images/scan.png" style="width:100%;height:100%;" onclick="javascript: return pageForward('execution');">							
 									</div>
 									<div class="col-xs-6">
-										<img id="scan" class="img " src="images/prdRcd.png" style="width:100%;height:100%;" onclick="javascript: return pageForward('execution');">
+										<img id="scan" class="img " src="images/prdRcd.png" style="width:100%;height:100%;" onclick="javascript: return pageForward('prdRcd');">
 									</div>
 								</div>
 							</div>			
@@ -112,7 +110,9 @@
 			if(flag=='exception'){
 				url="/IMMS/production/exception_mobile"
 			}
-			
+			if(flag=='prdRcd'){
+				url="/IMMS/quality/prdRcdMobile"
+			}
 			window.location=url
 		}
 	</script>
