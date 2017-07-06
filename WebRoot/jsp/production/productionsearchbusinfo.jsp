@@ -215,7 +215,26 @@
 							</div>
 							
 							<div id="div_9" style="overflow:auto" class="tab-pane fade">
-								div_9
+								<table id="table09" style="text-align:center;table-layout:fixed;font-size:12px;width:1150px" class="table table-bordered table-striped">
+									<thead>
+										<tr id="0">
+											<th style="width:60px;text-align:center;">序号</th>
+											<th style="width:130px;text-align:center;">车辆车号</th>
+											<th style="text-align:center;">生产工厂</th>
+											<th style="text-align:center;">生产车间</th>
+											<th style="text-align:center;">生产线别</th>
+											<th style="text-align:center;">生产工序</th>
+											<th style="text-align:center;">严重等级</th>
+											<th style="text-align:center;">处理措施</th>
+											<th style="text-align:center;">异常记录点</th>
+											<th style="text-align:center;">异常原因</th>
+											<th style="text-align:center;">责任部门</th>
+											<th style="text-align:center;">状态</th>
+										</tr>
+									</thead>
+									<tbody>	
+									</tbody>
+								</table>
 							</div>
 							
 							<div id="div_10" style="overflow:auto" class="tab-pane fade">

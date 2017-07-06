@@ -497,6 +497,18 @@
 		t.bus_type_code=substr(b.bus_number,1,LOCATE('-',b.bus_number)-1)
 		WHERE b.bus_number = #{bus_number} OR b.vin = #{bus_number}
 	</select>	
+	<select id="getProductionSearchException" parameterType="String" resultType="Map">
+		SELECT
+		e.id,e.factory,e.workshop,e.line,e.process,e.bus_number,e.severity_level_id,
+		k.key_name AS reason_type,y.key_name AS duty_department,e.measures_id,e.status FROM BMS_PD_PRODUCTION_EXCEPTION e
+		LEFT JOIN BMS_BASE_KEY k ON e.reason_type_id = k.value AND k.key_code = 'ABNORMAL_REASON'
+		LEFT JOIN BMS_BASE_KEY y ON e.duty_department_id = y.value AND y.key_code =  'EXCEPTION_RESPONSIBILITY_DEPARTMENT'
+		WHERE e.bus_number =
+		(SELECT b.bus_number FROM BMS_PLAN_BUS b WHERE b.bus_number =
+		#{bus_number} OR b.vin = #{bus_number})
+	</select>
+	
+	
 	<!-- VIN码打印 -->
 	<select id="getVinPrintList" parameterType="Map" resultType="Map">
 		select b.bus_number,b.vin,CONCAT(o.order_name,'

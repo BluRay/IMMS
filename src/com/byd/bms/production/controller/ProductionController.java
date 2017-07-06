@@ -664,8 +664,12 @@ public class ProductionController extends BaseController {
 	@RequestMapping("/getProductionSearchException")
 	@ResponseBody
 	public ModelMap getProductionSearchException(){
-		
-		
+		List<Map<String, String>> datalist = productionService.getProductionSearchException(request.getParameter("bus_number"));
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("data", datalist);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(result);
+		model = mv.getModelMap();
 		return model;
 	}
 	

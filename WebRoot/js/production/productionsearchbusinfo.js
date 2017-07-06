@@ -37,10 +37,10 @@ $(document).ready(function () {
 			ajaxQueryTab07();
 		}else if(this.id == "div8"){
 			cur_tab = "08";
-			
+			ajaxQueryTab08();
 		}else if(this.id == "div9"){
 			cur_tab = "09";
-			
+			ajaxQueryTab09();
 		}else if(this.id == "div10"){
 			cur_tab = "10";
 			
@@ -201,6 +201,50 @@ function ajaxQueryTab07(){
 	    		$("#tab07_max_speed").html((typeof(value.max_speed) == "undefined")?'':value.max_speed+'km/h ');
 	    		$("#tab07_light_downdip").html(value.light_downdip);
 	    		$("#tab07_passenger").html(value.passenger_num);
+    		});	
+	    }
+	});
+}
+
+function ajaxQueryTab08(){
+	
+}
+
+function ajaxQueryTab09(){
+	$.ajax({
+	    url: "getProductionSearchException",
+	    dataType: "json",
+		type: "get",
+	    data: {
+	    	"bus_number": $('#search_busnumber').val()
+	    },
+	    success:function(response){
+	    	$("#table09 tbody").html("");
+	    	$.each(response.data,function (index,value) {
+	    		var tr = $("<tr height='30px' id= '"+value.id+"'/>");
+    			$("<td style=\"text-align:center;padding:3px\" />").html(index + 1).appendTo(tr);
+    			$("<td style=\"text-align:center;padding:3px\" />").html(value.bus_number).appendTo(tr);
+    			$("<td style=\"text-align:center;padding:3px\" />").html(value.factory_name).appendTo(tr);
+    			$("<td style=\"text-align:center;padding:3px\" />").html(value.workshop_name).appendTo(tr);
+    			$("<td style=\"text-align:center;padding:3px\" />").html(value.line).appendTo(tr);
+    			$("<td style=\"text-align:center;padding:3px\" />").html(value.process_name).appendTo(tr);
+    			//severity_level 0:不影响;1:普通;2:严重
+    			var severity_level = "不影响";
+    			if(value.severity_level_id == "1")severity_level = "普通";
+    			if(value.severity_level_id == "2")severity_level = "严重";
+    			$("<td style=\"text-align:center;padding:3px\" />").html(severity_level).appendTo(tr);
+    			var measures = "忽略";
+    			//处理措施measures  0忽略、1异常、2停线
+    			if(value.measures_id == "1")measures = "异常";
+    			if(value.measures_id == "2")measures = "停线";
+    			$("<td style=\"text-align:center;padding:3px\" />").html(measures).appendTo(tr);
+    			$("<td style=\"text-align:center;padding:3px\" />").html(value.process_code).appendTo(tr);
+    			$("<td style=\"text-align:center;padding:3px\" />").html(value.reason_type).appendTo(tr);
+    			$("<td style=\"text-align:center;padding:3px\" />").html(value.duty_department).appendTo(tr);
+    			var status = "处理中";
+    			if(value.status == "1")status = "处理完成";
+    			$("<td style=\"text-align:center;padding:3px\" />").html(status).appendTo(tr);
+    			$("#table09 tbody").append(tr);
     		});	
 	    }
 	});
