@@ -186,7 +186,32 @@
 							</div>
 							
 							<div id="div_8" style="overflow:auto" class="tab-pane fade">
-								div_8
+								<table id="table08" style="text-align:center;table-layout:fixed;font-size:12px;width:850px" class="table table-bordered table-striped">
+									<tr>
+										<td width="130px" style="text-align: right;">车身号：</td><td id="tab08_bus_number"></td><td width="130px" style="text-align: right;">VIN码：</td><td id="tab08_vin"></td>
+									</tr>
+									<tr>
+										<td width="130px" style="text-align: right;">底盘型号：</td><td id="tab08_chassis_model"></td><td width="130px" style="text-align: right;">整车型号：</td><td id="tab08_vehicle_model"></td>
+									</tr>
+									<tr>
+										<td width="130px" style="text-align: right;">电机型号：</td><td id="tab08_motor_model"></td><td width="130px" style="text-align: right;">电机号：</td><td id="tab08_motor_number"></td>
+									</tr>
+									<tr>
+										<td width="130px" style="text-align: right;">颜色：</td><td id="tab08_bus_color"></td><td width="130px" style="text-align: right;">座位数：</td><td id="tab08_bus_seats"></td>
+									</tr>
+									<tr>
+										<td width="130px" style="text-align: right;">轮胎规格：</td><td id="tab08_tire_type"></td><td width="130px" style="text-align: right;">弹簧片数：</td><td id="tab08_plates"></td>
+									</tr>
+									<tr>
+										<td width="130px" style="text-align: right;">额定载客人数：</td><td id="tab08_passengers"></td><td width="130px" style="text-align: right;">CCC证书签发日期：</td><td id="tab08_ccc_date"></td>
+									</tr>
+									<tr>
+										<td width="130px" style="text-align: right;">底盘公告生效日期：</td><td id="tab08_chassis_notice_date"></td><td width="130px" style="text-align: right;">整车公告生效日期：</td><td id="tab08_production_notice_date"></td>
+									</tr>
+									<tr>
+										<td width="130px" style="text-align: right;">底盘生产日期：</td><td id="tab08_chassis_date"></td><td width="130px" style="text-align: right;">整车生产日期：</td><td id="tab08_production_date"></td>
+									</tr>
+								</table>
 							</div>
 							
 							<div id="div_9" style="overflow:auto" class="tab-pane fade">

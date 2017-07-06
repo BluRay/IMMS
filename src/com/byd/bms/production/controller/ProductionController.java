@@ -23,6 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.byd.bms.production.model.ProductionException;
 import com.byd.bms.production.service.IProductionService;
 import com.byd.bms.util.controller.BaseController;
+import com.byd.bms.util.model.BmsBaseUser;
 /**
  * 生产模块Controller
  * @author xiong.jianwu 2017/5/2
@@ -34,7 +35,8 @@ public class ProductionController extends BaseController {
 	static Logger logger = Logger.getLogger(ProductionController.class.getName());
 	@Autowired
 	protected IProductionService productionService;
-	
+
+	/****************************  xiongjianwu ***************************/
 	/**
 	 * 生产模块首页
 	 * @return
@@ -392,6 +394,68 @@ public class ProductionController extends BaseController {
 	}
 	
 	/**
+	 * 铭牌打印页面
+	 * @return
+	 */
+	@RequestMapping("/nameplatePrint")
+	public ModelAndView nameplatePrint(){
+		mv.setViewName("production/nameplatePrint");
+		return mv;
+	}
+	
+	/**
+	 * 获取铭牌打印列表数据
+	 * @return
+	 */
+	@RequestMapping("/getNameplatePrintList")
+	@ResponseBody
+	public ModelMap getNameplatePrintList(){
+		model.clear();
+		String conditions=request.getParameter("conditions");
+		JSONObject jo = JSONObject.fromObject(conditions);
+		Map<String, Object> conditionMap = new HashMap<String, Object>();	
+		for (Iterator it = jo.keys(); it.hasNext();) {
+			String key = (String) it.next();
+			logger.info(key);
+			conditionMap.put(key, jo.get(key));
+		}
+		
+		int factoryId=Integer.parseInt(session.getAttribute("factory_id").toString());
+		conditionMap.put("factoryId", factoryId);
+		
+		productionService.getNameplatePrintList(conditionMap,model);
+		
+		return model;
+	}
+	
+	/**
+	 * 铭牌打印后更新状态
+	 * @return
+	 */
+	@RequestMapping("/afterNameplatePrint")
+	@ResponseBody
+	public ModelMap afterNameplatePrint(){
+		model.clear();
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String userid=String.valueOf(session.getAttribute("user_id"));
+		String conditions=request.getParameter("conditions");
+		JSONObject jo = JSONObject.fromObject(conditions);
+		String busNOListString=jo.getString("busNoList");
+
+		List<String> busNoList= new ArrayList<String>();
+		busNoList=Arrays.asList(busNOListString.split(","));
+		Map<String, Object> conditionMap = new HashMap<String, Object>();
+		conditionMap.put("busNoList", busNoList);
+		conditionMap.put("printer", userid);
+		conditionMap.put("printDate", curTime);
+		
+		productionService.updateNameplatePrint(conditionMap,model);
+		return model;
+	}
+	/****************************  xiongjianwu ***************************/
+	
+	/**
 	 *	车间供货页面
 	 * @return
 	 */
@@ -597,6 +661,14 @@ public class ProductionController extends BaseController {
 		return model;
 	}
 	
+	@RequestMapping("/getProductionSearchException")
+	@ResponseBody
+	public ModelMap getProductionSearchException(){
+		
+		
+		return model;
+	}
+	
 	/**************************** TANGJIN  ************************/
 	
 	/**打印VIN码*/
@@ -710,6 +782,82 @@ public class ProductionController extends BaseController {
 		model.addAllAttributes(result);
 		return model;
 	}
-
+	/**打印车身号*/
+	@RequestMapping("/showBusNoPrint")
+	public ModelAndView showBusNoPrint(){
+		mv.setViewName("production/showBusNoPrint");
+		return mv;
+	}
+	@RequestMapping("/getBusNoPrintList")
+	@ResponseBody
+	public ModelMap getBusNoPrintList(){
+		model.clear();
+		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
+		int start=(request.getParameter("start")!=null)?Integer.parseInt(request.getParameter("start")):0;		//分页数据起始数
+		int length=(request.getParameter("length")!=null)?Integer.parseInt(request.getParameter("length")):20;	//每一页数据条数
+		String factory_id=String.valueOf(session.getAttribute("factory_id"));
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("orderNo", request.getParameter("orderNo"));
+		condMap.put("busNo", request.getParameter("busNumber"));
+		condMap.put("planStart", request.getParameter("planStart"));
+		condMap.put("planEnd", request.getParameter("planEnd"));
+		condMap.put("factoryId", factory_id);
+		condMap.put("draw", draw);
+		condMap.put("start", start);
+		condMap.put("length", length);
+		Map<String,Object> list = productionService.getBusNoPrintList(condMap);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(list);
+		model = mv.getModelMap();
+		return model;
+	}
+	@RequestMapping("/getOrderConfigList")
+	@ResponseBody
+	public ModelMap getOrderConfigList() {
+		model.clear();
+		String search_order_no=request.getParameter("search_order_no");
+		String factory_id=request.getParameter("factory_id");
+		Map conditionMap=new HashMap<String,Object>();
+		conditionMap.put("search_order_no", search_order_no);
+		conditionMap.put("factory_id", factory_id);
+		List selectList = productionService.getOrderConfigList(conditionMap);
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("data", selectList);
+		model.addAllAttributes(result);
+		return model;
+	}
+	@RequestMapping("/afterBusNoPrint")
+	@ResponseBody
+	public ModelMap afterBusNoPrint(){
+		model.clear();
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String userid=String.valueOf(session.getAttribute("user_id"));
+		Map<String, Object> result = new HashMap<String, Object>();
+		List<String> vinList= new ArrayList<String>();
+		String conditions=request.getParameter("conditions");
+		JSONObject jo = JSONObject.fromObject(conditions);
+		String bus_no_list=jo.getString("busNoList");
+		String changed_config_id=jo.getString("changedConfigId");
+		List<String> busNoList= new ArrayList<String>();
+		busNoList=Arrays.asList(bus_no_list.split(","));
+		vinList=Arrays.asList(conditions.split(","));
+		Map<String, Object> conditionMap = new HashMap<String, Object>();
+		conditionMap.put("busNoList", busNoList);
+		conditionMap.put("changedConfigId",changed_config_id);
+		conditionMap.put("printer", userid);
+		conditionMap.put("printDate", curTime);
+		int i=productionService.updateBusPrint(conditionMap);
+		i=productionService.updateBusConfig(conditionMap);
+		if(i>0){
+			result.put("success", true);
+			result.put("message", "打印成功");
+		}else{
+			result.put("success", false);
+			result.put("message", "打印失败");
+		}
+		model.addAllAttributes(result);
+		return model;
+	}
 	/****************************  TANGJIN ***************************/
 }

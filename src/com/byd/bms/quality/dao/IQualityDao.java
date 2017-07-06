@@ -75,6 +75,8 @@ public interface IQualityDao {
 	
 	List<Map<String, Object>> queryProductRecordDetail(Map<String,Object> condMap);
 	
+	int insertProductRecordNoFault(Map<String, Object> condMap);
+	
 	//======================== xjw end=================================//
 	
 	
@@ -132,10 +134,6 @@ public interface IQualityDao {
 	public int getStdRecordCount(Map<String,Object> conditionMap);
 	
 	//======================== tj end=================================//
-	
-
-	
-	
 
 	public List<Map<String, String>> getFaultLibList(Map<String, Object> conditionMap);	
 

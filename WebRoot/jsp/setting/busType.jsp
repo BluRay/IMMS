@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <meta charset="utf-8" />
-<title>BMS 标题</title>
+<title>BMS 车型</title>
 <meta name="description" content="Common Buttons &amp; Icons" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 <link rel="stylesheet" href="../assets/css/fixedColumns.bootstrap.min.css" />
@@ -65,7 +65,7 @@
 					<div class="col-xs-12"  style="width:100%">
 						<table id="tableData" 
 							class="table table-striped table-bordered table-hover"
-							style="font-size: 12px; width:1500px;overflow-x:auto" >
+							style="font-size: 12px; width:1600px;overflow-x:auto" >
 						</table>
 					</div>
 				</div>

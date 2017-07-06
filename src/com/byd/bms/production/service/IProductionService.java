@@ -2,13 +2,11 @@ package com.byd.bms.production.service;
 
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
-
 import com.byd.bms.production.model.ProductionException;
-
 public interface IProductionService {
+	/*****************************xiong jianwu start  *****************************/
 	public List getLineProcessList(Map<String,Object> condMap);
 	
 	List<Map<String,Object>> getProcessMonitorSelect(Map<String, Object> condMap);
@@ -49,6 +47,14 @@ public interface IProductionService {
 	
 	public List<Map<String,String>> getNamePlateInfo(String bus_number);
 	
+	public List<Map<String,String>> getProductionSearchException(String bus_number);
+
+	public void getNameplatePrintList(Map<String, Object> conditionMap, ModelMap model);
+
+	public void updateNameplatePrint(Map<String, Object> conditionMap, ModelMap model);
+	
+	/*****************************xiong jianwu end  *****************************/
+
 	/******************* tangjin start**************************/
 	
 	public Map<String,Object> getVinPrintList(Map<String,Object> conditionMap);
@@ -63,5 +69,15 @@ public interface IProductionService {
 	
 	public List<Map<String,String>> getBusNumberByVin(Map<String, Object> conditionMap);//根据vin码查询BusNumber
 
+	/*** 查询车号打印列表*/
+	public Map<String,Object> getBusNoPrintList(Map<String, Object> conditionMap);
+	/**工厂、订单、配置查询bus表中已分配的车号数量*/
+	public int getOrderConfigDoneQty(Map<String, Object> conditionMap);
+	/** 打印后更新车号表打印次数，打印人，打印时间，打印状态*/
+	public int updateBusPrint(Map<String,Object> conditionMap);
+	/**打印后更新bus表订单配置*/
+	public int updateBusConfig(Map<String,Object> conditionMap);
+	
+	public List<Map<String,Object>> getOrderConfigList(Map<String,Object> conditionMap);
 	/******************* tangjin end**************************/
 }

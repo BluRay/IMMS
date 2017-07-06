@@ -38,9 +38,6 @@ $(document).ready(function(){
 			printFlag=false;
 		}else
 		vinList=$(tr).find(".vin").val();
-		//alert(busNoList);		
-		//$(".printConfigure").show();
-		//$(".printConfigure").addClass("toPrint");
 		 setTimeout(function (){
 			 if(printFlag){
 				 window.print();
@@ -142,7 +139,6 @@ $(document).ready(function(){
 		}
 	});
 	
-	
 	$("#btnSave").click(function(){
 		var trs=$("#tableData tbody").find("tr");
 		var msg="确认保存？";
@@ -179,142 +175,78 @@ $(document).ready(function(){
 			
 		}
 	});
-	function ajaxQuery(){
-		$("#tableData").dataTable({
-			serverSide: true,paiging:true,ordering:false,searching: false,bAutoWidth:false,
-			destroy: true,sScrollY: table_height,sScrollX:true,orderMulti:false,
-			pageLength: 25,pagingType:"full_numbers",lengthChange:false,
-			language: {
-				emptyTable:"抱歉，未查询到数据！",
-				info:"共计 _TOTAL_ 条，当前第 _PAGE_ 页 共 _PAGES_ 页",
-				infoEmpty:"",
-				paginate: { first:"首页",previous: "上一页",next:"下一页",last:"尾页",loadingRecords: "请稍等,加载中..."}
-			},
-			ajax:function (data, callback, settings) {
-				var param ={
-					"draw":1,
-					"busNumber" : $("#search_busNumber").val(),
-					"orderNo" : $("#search_order").val()
-				};
-	            param.length = data.length;					//页面显示记录条数，在页面显示每页显示多少项的时候
-	            param.start = data.start;					//开始的记录序号
-	            param.page = (data.start / data.length)+1;	//当前页码
-
-	            $.ajax({
-	                type: "post",
-	                url: "getVinPrintList",
-	                cache: false,  //禁用缓存
-	                data: param,  //传入组装的参数
-	                dataType: "json",
-	                success: function (result) {
-	                    //console.log(result);
-	                	//封装返回数据
-	                    var returnData = {};
-	                    returnData.draw = data.draw;						//这里直接自行返回了draw计数器,应该由后台返回
-	                    returnData.recordsTotal = result.recordsTotal;		//返回数据全部记录
-	                    returnData.recordsFiltered = result.recordsTotal;	//后台不实现过滤功能，每次查询均视作全部结果
-	                    returnData.data = result.data;						//返回的数据列表
-	                    callback(returnData);
-	                }
-	            });
-			},
-			columns: [
-			            {"title":"订单描述","class":"center orderCodeDesc","data":"order_desc","defaultContent": ""},
-			            {"title":"车号","class":"center busNumber","data":"bus_number","defaultContent": ""},
-			            {"title":"VIN","class":"center","data":"vin","defaultContent": "","render":function(data,type,row){
-			            	return data==undefined? "<input style='border:0;width:98%;text-align:center;background-color:white;' class='vin' " +
-									" value=''/><input class='vinHide' style='width:0px;position:absolute;margin-top:-2000px' />": 
-										"<input style='border:0;width:98%;text-align:center;background-color:white;' class='vin' " +
-									" value='"+data+"' readonly='true'/>"}
 	
-						},
-						{"title":"左电机号","class":"center","data":"left_motor_number","defaultContent": "","render":function(data,type,row,meta){ // margin-top:-2000px
-							return "<input id=leftMotor_"+(meta.row + meta.settings._iDisplayStart + 1)+" style='border:0;width:98%;text-align:center;background-color:white;' class='leftMotor' " +
-									" value='"+(data!=undefined ? data : '')+"'/><input class='leftMotorHide' style='width:0px;position:absolute; margin-top:-2000px' />";
-						}
-						},
-						{"title":"右电机号","class":"center","data":"left_motor_number","defaultContent": "","render":function(data,type,row,meta){
-							return "<input id=rightMotor_"+(meta.row + meta.settings._iDisplayStart + 1)+" style='border:0;width:98%;text-align:center;background-color:white;' class='rightMotor' " +
-									" value='"+(data!=undefined ? data : '')+"'/><input class='rightMotorHide' style='width:0px;position:absolute;margin-top:-2000px />";
-						}
-						},
-			            {"title":"打印状态","class":"center","data":"print_sign","defaultContent": ""},
-			            {"title":"最近打印人","class":"center","data":"printer","defaultContent": ""},
-			            {"title":"最近打印日期","class":"center","data":"print_date","defaultContent": ""},
-			            {"title":"打印次数","class":"center","data":"print_times","defaultContent": ""},
-			            {"title":"操作","class":"center","data":"","render":function(data,type,row){
-			            	return "<i class=\"glyphicon glyphicon-print bigger-130 btnPrint\" title=\"打印\" style='color:blue;cursor: pointer;'></i>";		            		
-			            	} 
-			            }
-//			            {"title":"操作","width":"200","class":"center","data":"","render":function(data,type,row){
-//			            	return "<input type=\"button\"  class=\"btn btn-success btnPrint\" value=\"打印\" style=\"margin-left: 1px;height:35px\"></input>";		            		
-//			            	} 
-//			            }
-			           
-//						[
-//				            {
-//				            	field: 'order_desc',title: '&nbsp;&nbsp;&nbsp;订单描述&nbsp;&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
-//				                sortable: true,visible: true,
-//				                cellStyle:function cellStyle(value, row, index, field) {
-//					        	return {css: {"padding-left": "3px", "padding-right": "2px","font-size":"13px"}};
-//					        	}
-//				            },{
-//				            	field: 'bus_number',title: '&nbsp;&nbsp;车号&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
-//				                sortable: false,visible: true,
-//				                cellStyle:function cellStyle(value, row, index, field) {
-//				    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
-//				    	        	}
-//				            },{
-//				            	field: 'vin',title: '&nbsp;&nbsp;VIN号&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
-//				                sortable: false,visible: true,
-//				                cellStyle:function cellStyle(value, row, index, field) {
-//				    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
-//				    	        	}
-//				            },{
-//				            	field: 'left_motor_number',title: '&nbsp;&nbsp;左电机号&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
-//				                sortable: false,visible: true,
-//				                cellStyle:function cellStyle(value, row, index, field) {
-//				    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
-//				    	        	},
-//				    	        formatter:function(value, row, index){
-//				    	        	var left_motor_number = (row.left_motor_number===null)?"":row.left_motor_number;
-//					        		return "<input id='left_motor_"+index+"' class='left_motor' style='font-size: 12px;color: #333333;border:0;width:100%' value='"+left_motor_number+"' old_val='"+left_motor_number+"' vin='"+row.vin+"'>";
-//					        	 }
-//				            },{
-//				            	field: 'right_motor_number',title: '&nbsp;&nbsp;右电机号&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
-//				                sortable: false,visible: true,
-//				                cellStyle:function cellStyle(value, row, index, field) {
-//				    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
-//				    	        	},
-//				    	        formatter:function(value, row, index){
-//				    	        	var right_motor_number = (row.right_motor_number===null)?"":row.right_motor_number;
-//					        		return "<input id='right_motor_"+index+"' class='right_motor' style='font-size: 12px;color: #333333;border:0;width:100%' value='"+right_motor_number+"' old_val='"+right_motor_number+"' vin='"+row.vin+"'>";
-//					        	 }
-//				            },{
-//				            	field: 'printer',title: '&nbsp;&nbsp;最近打印人&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
-//				                sortable: false,visible: true,
-//				                cellStyle:function cellStyle(value, row, index, field) {
-//				    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
-//				    	        	}
-//				            },{
-//				            	field: 'print_date',title: '&nbsp;&nbsp;打印日期&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
-//				                sortable: false,visible: true,
-//				                cellStyle:function cellStyle(value, row, index, field) {
-//				    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
-//				    	        	}
-//				            },{
-//				            	field: 'print_sign',title: '&nbsp;&nbsp;打印标志&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
-//				                sortable: false,visible: true,
-//				                cellStyle:function cellStyle(value, row, index, field) {
-//				    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
-//				    	        	}
-//				            }
-//				        ]
-			          ],
-		});
-	}
 });
+function ajaxQuery(){
+	$("#tableData").dataTable({
+		serverSide: true,paiging:true,ordering:false,searching: false,bAutoWidth:false,
+		destroy: true,sScrollY: table_height,sScrollX:true,orderMulti:false,
+		pageLength: 25,pagingType:"full_numbers",lengthChange:false,
+		language: {
+			emptyTable:"抱歉，未查询到数据！",
+			info:"共计 _TOTAL_ 条，当前第 _PAGE_ 页 共 _PAGES_ 页",
+			infoEmpty:"",
+			paginate: { first:"首页",previous: "上一页",next:"下一页",last:"尾页",loadingRecords: "请稍等,加载中..."}
+		},
+		ajax:function (data, callback, settings) {
+			var param ={
+				"draw":1,
+				"busNumber" : $("#search_busNumber").val(),
+				"orderNo" : $("#search_order").val()
+			};
+            param.length = data.length;					//页面显示记录条数，在页面显示每页显示多少项的时候
+            param.start = data.start;					//开始的记录序号
+            param.page = (data.start / data.length)+1;	//当前页码
 
+            $.ajax({
+                type: "post",
+                url: "getVinPrintList",
+                cache: false,  //禁用缓存
+                data: param,  //传入组装的参数
+                dataType: "json",
+                success: function (result) {
+                    //console.log(result);
+                	//封装返回数据
+                    var returnData = {};
+                    returnData.draw = data.draw;						//这里直接自行返回了draw计数器,应该由后台返回
+                    returnData.recordsTotal = result.recordsTotal;		//返回数据全部记录
+                    returnData.recordsFiltered = result.recordsTotal;	//后台不实现过滤功能，每次查询均视作全部结果
+                    returnData.data = result.data;						//返回的数据列表
+                    callback(returnData);
+                }
+            });
+		},
+		columns: [
+            {"title":"订单描述","class":"center orderCodeDesc","data":"order_desc","defaultContent": ""},
+            {"title":"车号","class":"center busNumber","data":"bus_number","defaultContent": ""},
+            {"title":"VIN","class":"center","data":"vin","defaultContent": "","render":function(data,type,row){
+            	return data==undefined? "<input style='border:0;width:98%;text-align:center;background-color:white;' class='vin' " +
+						" value=''/><input class='vinHide' style='width:0px;position:absolute;margin-top:-2000px' />": 
+							"<input style='border:0;width:98%;text-align:center;background-color:white;' class='vin' " +
+						" value='"+data+"' readonly='true'/>"}
+
+			},
+			{"title":"左电机号","class":"center","data":"left_motor_number","defaultContent": "","render":function(data,type,row,meta){ // margin-top:-2000px
+				return "<input id=leftMotor_"+(meta.row + meta.settings._iDisplayStart + 1)+" style='border:0;width:98%;text-align:center;background-color:white;' class='leftMotor' " +
+						" value='"+(data!=undefined ? data : '')+"'/><input class='leftMotorHide' style='width:0px;position:absolute; margin-top:-2000px' />";
+			}
+			},
+			{"title":"右电机号","class":"center","data":"left_motor_number","defaultContent": "","render":function(data,type,row,meta){
+				return "<input id=rightMotor_"+(meta.row + meta.settings._iDisplayStart + 1)+" style='border:0;width:98%;text-align:center;background-color:white;' class='rightMotor' " +
+						" value='"+(data!=undefined ? data : '')+"'/><input class='rightMotorHide' style='width:0px;position:absolute;margin-top:-2000px />";
+			}
+			},
+            {"title":"打印状态","class":"center","data":"print_sign","defaultContent": ""},
+            {"title":"最近打印人","class":"center","data":"printer","defaultContent": ""},
+            {"title":"最近打印日期","class":"center","data":"print_date","defaultContent": ""},
+            {"title":"打印次数","class":"center","data":"print_times","defaultContent": ""},
+            {"title":"操作","class":"center","data":"","render":function(data,type,row){
+            	return "<i class=\"glyphicon glyphicon-print bigger-130 btnPrint\" title=\"打印\" style='color:blue;cursor: pointer;'></i>";		            		
+            	} 
+            }
+          ],
+	});
+}
 //打印后更新打印信息
 function ajaxUpdatePrint(busNoList){
 	$.ajax({

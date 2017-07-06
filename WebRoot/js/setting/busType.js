@@ -10,11 +10,6 @@ var max_num = 0;		var sum_num = 0;
 var edit_max_num = 0;	var edit_sum_num = 0;
 var del_order_list=new Array();
 var dt;
-/*$.extend( true, $.fn.dataTable.defaults, {
-    "searching": false,
-    "ordering": false,
-    "rowsGroup":[0,1,2,3,4,5]
-} );*/
 $(document).ready(function(){
 	cur_year = new Date().getFullYear();
 	
@@ -48,122 +43,6 @@ $(document).ready(function(){
 			]
 		});
 	}); 
-	
-	$(document).on("click",".close.add",function(e){
-		prod_year=$("#new_productive_year").val();
-		$(e.target).closest("tr").remove();		
-		//var latest_num_start=Number($("#newModal").data("bus_num_start"));
-		//获取cur_year下的最新流水起始号（最大流水号+1）
-		var order_type=$("#newOrderType").val();
-		var latest_num_start=0;
-		if(order_type !='KD件'){
-			latest_num_start=getLatestSeris(prod_year);
-		}
-		$("#dialog_add").data("bus_num_start",latest_num_start);
-		//alert(latest_num_start);
-		//更新流水号
-		var maxOrderNo = latest_num_start;	
-		var factoryOrder_parameters=$("#new_factoryOrder_parameters").find("tr");
-		$.each(factoryOrder_parameters,function(index,param){
-			var tds=$(param).children("td");
-			$(tds[3]).find("input").val(maxOrderNo);
-			$(tds[4]).find("input").val(Number(maxOrderNo) + Number($(tds[2]).find("input").val()) - 1);
-			maxOrderNo = Number(maxOrderNo) + Number($(tds[2]).find("input").val());
-		});
-	});
-	
-	$(document).on("click",".close.edit",function(e){
-		var order_type=$("#editOrderType").val();
-		var tr=$(e.target).closest("tr");
-		if(order_type !='KD件'){
-			/**判断该工厂订单下是否已经产生了车号，是则不能删除
-			 */
-			if($(tr).data("min_busnum")!='0'&&$(tr).data("min_busnum")!=undefined){
-				alert("该工厂订单下已生成了车号，不能删除！");
-			}else /*if($(tr).data("production_qty")==undefined)*/{//新增的产地分配，删除后，合并剩余可用流水段列表;//已存在的产地分配，删除后，合并剩余可用流水段列表
-				var series={};
-				series.num_start=$(tr).find("td").eq(3).find("input").val();
-				series.num_end=$(tr).find("td").eq(4).find("input").val();
-				mergeReduceSeriesList(series);
-				if($(tr).data("factory_order_id")!=undefined){
-					var obj={};
-					obj.factory_order_id=$(tr).data("factory_order_id");
-					//obj.order_detail_id=$(tr).data("order_detail_id");
-					obj.production_qty=$(tr).data("production_qty");
-					del_order_list.push(obj);
-				}
-				$(tr).remove();	
-			}
-		}else{
-			if($(tr).data("factory_order_id")!=undefined){
-				var obj={};
-				obj.factory_order_id=$(tr).data("factory_order_id");
-				//obj.order_detail_id=$(tr).data("order_detail_id");
-				obj.production_qty=$(tr).data("production_qty");
-				del_order_list.push(obj);
-			}
-			$(tr).remove();	
-			var maxOrderNo = 0;	
-			var factoryOrder_parameters=$("#edit_factoryOrder_parameters").find("tr");
-			$.each(factoryOrder_parameters,function(index,param){
-				var tds=$(param).children("td");
-				$(tds[3]).find("input").val(maxOrderNo);
-				$(tds[4]).find("input").val(Number(maxOrderNo) + Number($(tds[2]).find("input").val()) - 1);
-				maxOrderNo = Number(maxOrderNo) + Number($(tds[2]).find("input").val());
-			});
-		}
-		
-	});
-	$(document).on("click",".editBusType",function(){
-        
-		var dialog = $( "#dialog-edit" ).removeClass('hide').dialog({
-			width:600,
-			/*height:500,*/
-			modal: true,
-			title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-gear green"></i> 编辑车型</h4></div>',
-			title_html: true,
-			buttons: [ 
-				{
-					text: "取消",
-					"class" : "btn btn-minier",
-					click: function() {
-						$( this ).dialog( "close" ); 
-						$("#editForm")[0].reset();
-					} 
-				},
-				{
-					text: "确定",
-					"class" : "btn btn-primary btn-minier",
-					click: function() {
-						if($("#edit_busTypeCode").val()===""){
-							alert("车型编码不能为空！");
-							$("#edit_busTypeCode").focus();
-							return false;
-						}
-						if($("#edit_internalName").val()===""){
-							alert("车辆内部名称不能为空！");
-							$("#edit_internalName").focus();
-							return false;
-						}
-//						if($("#edit_vinPrefix").val()===""){
-//							alert("VIN前八位不能为空！");
-//							$("#edit_vinPrefix").focus();
-//							return false;
-//						}
-//						if($("#edit_numberSize").val()===""){
-//							alert("生成序列号位数不能为空！");
-//							$("#edit_numberSize").focus();
-//							return false;
-//						}
-						
-					
-					$( this ).dialog( "close" ); 
-					} 
-				}
-			]
-		});
-	}); 
-	
 });
 
 function ajaxQuery(){
@@ -173,13 +52,13 @@ function ajaxQuery(){
             leftColumns: 2,
             rightColumns:1
         },
-        rowsGroup:[0,1,2,3,4,5],
+        serverSide: true,
 		paiging:true,
 		ordering:false,
 		searching: false,
-		autoWidth:false,
+		bAutoWidth:false,
 		destroy: true,
-		scrollY: $(window).height()-245,
+		sScrollY: $(window).height()-250,
 		scrollX: true,
 		/*scrollCollapse: true,*/
 		pageLength: 20,
@@ -227,9 +106,6 @@ function ajaxQuery(){
 		
 		},
 		columns: [
-//					{"title":"<input type='checkbox' id='selectAll' onclick='selectAll()'/>","class":"center","data":"id","render": function ( data, type, row ) {
-//					    return "<input id='id' value='"+data+"' type='hidden' /><input type='checkbox' fid='cb_"+data+"'>";
-//					},"defaultContent": ""},
 		            {"title":"车型编号","class":"center","data":"busTypeCode","defaultContent": ""},
 		            {"title":"车型内部名称","class":"center","data":"internalName","defaultContent": ""},
 		            {"title":"品牌","class":"center","data":"brand","defaultContent": ""},
@@ -248,7 +124,7 @@ function ajaxQuery(){
 		            {"title":"电池型号","class":"center","data": "batteryModel","defaultContent": ""},
 		            {"title":"电池容量","class":"center","data":"","defaultContent": ""},
 		            {"title":"额定电压","class":"center","data":"","defaultContent": ""},		            
-		            {"title":"维护人","class":"center","data": "editorId","defaultContent": ""},
+		            {"title":"维护人","class":"center","data": "editor","defaultContent": ""},
 		            {"title":"维护时间","class":"center","data":"editDate","defaultContent": ""},
 		            //{"title":"编辑","class":"center","data":null,"defaultContent": "<i onclick = 'ajaxEdit(" + row.id+ ");' class=\"ace-icon fa fa-pencil bigger-130 editBusType\" style='color:green;cursor: pointer;'></i>"}
 		            {"title":"编辑","class":"center","data":null,"render":function(data,type,row){
@@ -296,39 +172,87 @@ function ajaxEditConfirm (argument){
 	    success:function (response) {
 	    	$("#btnEditConfirm").removeAttr("disabled");
 	    	
-    		if(factoryOrderDetail==""){
-    			alert("订单数据编辑成功！");
-    		}else{
-    			alert("订单数据编辑成功，请重新发布该订单今天及以后的计划！");
-    		}
     		$( "#dialog-order" ).dialog( "close" );
     		ajaxQuery();
 	     
 	    },
-	    error:function(){alertError();$("#btnEditConfirm").removeAttr("disabled");}
+	    error:function(){$("#btnEditConfirm").removeAttr("disabled");}
 	});
 	
 }
 
 function ajaxAdd (argument) {
 	if($("#add_busTypeCode").val()===""){
-		alert("车型编码不能为空！");
+		alert("车辆型号不能为空！");
 		$("#add_busTypeCode").focus();
 		return false;
 	}
-	if($("#edit_internalName").val()===""){
+	if($("#add_internalName").val()===""){
 		alert("车辆内部名称不能为空！");
-		$("#edit_internalName").focus();
+		$("#add_internalName").focus();
 		return false;
 	}
+	if($("#add_vehicleModel").val()===""){
+		alert("车辆型号不能为空！");
+		$("#add_vehicleModel").focus();
+		return false;
+	}
+	if($("#add_driveMotor").val()===""){
+		alert("驱动电机不能为空！");
+		$("#add_driveMotor").focus();
+		return false;
+	}
+	
+	if($("#add_chassisModel").val()===""){
+		alert("底盘型号不能为空！");
+		$("#add_chassisModel").focus();
+		return false;
+	}
+	if($("#add_motorModel").val()===""){
+		alert("电机型号不能为空！");
+		$("#add_motorModel").focus();
+		return false;
+	}
+	
 	if($("#add_vehicleLength").val()===""){
-		alert("车型长度不能为空！");
+		alert("车辆长度不能为空！");
 		$("#add_vehicleLength").focus();
 		return false;
 	}
-	if($("#edit_wheelbase").val()===""){
-		alert("轴距称不能为空！");
-		$("#edit_wheelbase").focus();
+	if($("#add_motorPower").val()===""){
+		alert("电机最大功率不能为空！");
+		$("#add_motorPower").focus();
+		return false;
+	}
+	if($("#add_wheelbase").val()===""){
+		alert("轴距不能为空！");
+		$("#add_wheelbase").focus();
+		return false;
+	}
+	if($("#add_batteryModel").val()===""){
+		alert("电池型号不能为空！");
+		$("#add_batteryModel").focus();
+		return false;
+	}
+	if($("#add_passengerNum").val()===""){
+		alert("乘员数不能为空！");
+		$("#add_passengerNum").focus();
+		return false;
+	}
+	if($("#edit_maxWeight").val()===""){
+		alert("最大允许质量不能为空！");
+		$("#edit_maxWeight").focus();
+		return false;
+	}
+	
+	if($("#add_maxSpeed").val()===""){
+		alert("最大车速不能为空！");
+		$("#add_maxSpeed").focus();
+		return false;
+	}
+	if($("#add_lightDowndip").val()===""){
+		alert("灯光倾下值不能为空！");
+		$("#add_lightDowndip").focus();
 		return false;
 	}
     $.ajax({
@@ -378,7 +302,6 @@ function ajaxEdit(id){
 		async: false,
 		error: function () {alertError();},
 		success: function (response) {			
-
 			$('#editId').val(id);
 			$('#edit_busTypeCode').val(response.data.busTypeCode);
 			$('#edit_internalName').val(response.data.internalName);
@@ -391,6 +314,9 @@ function ajaxEdit(id){
 			$('#edit_motorModel').val(response.data.motorModel);
 			$('#edit_motorPower').val(response.data.motorPower);
 			$('#edit_batteryModel').val(response.data.batteryModel);
+			$('#edit_driveMotor').val(response.data.driveMotor);
+			$('#edit_maxSpeed').val(response.data.maxSpeed);
+			$('#edit_lightDowndip').val(response.data.lightDowndip);
 
 			var dialog = $( "#dialog-edit" ).removeClass('hide').dialog({
 				width:600,
@@ -410,8 +336,80 @@ function ajaxEdit(id){
 						text: "确定",
 						"class" : "btn btn-primary btn-minier",
 						click: function() {
-							//$( this ).dialog( "close" );
-							//ajaxEditConfirm();
+							if($("#edit_busTypeCode").val()===""){
+								alert("车辆型号不能为空！");
+								$("#edit_busTypeCode").focus();
+								return false;
+							}
+							if($("#edit_internalName").val()===""){
+								alert("车辆内部名称不能为空！");
+								$("#edit_internalName").focus();
+								return false;
+							}
+							
+							if($("#edit_vehicleModel").val()===""){
+								alert("车辆型号不能为空！");
+								$("#edit_vehicleModel").focus();
+								return false;
+							}
+							if($("#edit_driveMotor").val()===""){
+								alert("驱动电机不能为空！");
+								$("#edit_driveMotor").focus();
+								return false;
+							}
+							
+							if($("#edit_chassisModel").val()===""){
+								alert("底盘型号不能为空！");
+								$("#edit_chassisModel").focus();
+								return false;
+							}
+							if($("#edit_motorModel").val()===""){
+								alert("电机型号不能为空！");
+								$("#edit_motorModel").focus();
+								return false;
+							}
+							if($("#edit_vehicleLength").val()===""){
+								alert("车辆长度不能为空！");
+								$("#edit_vehicleLength").focus();
+								return false;
+							}
+							if($("#edit_motorPower").val()===""){
+								alert("电机最大功率不能为空！");
+								$("#edit_motorPower").focus();
+								return false;
+							}
+							if($("#edit_wheelbase").val()===""){
+								alert("轴距不能为空！");
+								$("#edit_wheelbase").focus();
+								return false;
+							}
+							if($("#edit_batteryModel").val()===""){
+								alert("电池型号不能为空！");
+								$("#edit_batteryModel").focus();
+								return false;
+							}
+							if($("#edit_passengerNum").val()===""){
+								alert("乘员数不能为空！");
+								$("#edit_passengerNum").focus();
+								return false;
+							}
+							if($("#edit_maxWeight").val()===""){
+								alert("最大允许质量不能为空！");
+								$("#edit_maxWeight").focus();
+								return false;
+							}
+							
+							if($("#edit_maxSpeed").val()===""){
+								alert("最大车速不能为空！");
+								$("#edit_maxSpeed").focus();
+								return false;
+							}
+							if($("#edit_lightDowndip").val()===""){
+								alert("灯光倾下值不能为空！");
+								$("#edit_lightDowndip").focus();
+								return false;
+							}
+						
 							$.ajax({
 							    url: "updateBusType",
 							    dataType: "json",

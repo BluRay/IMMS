@@ -52,5 +52,8 @@ function imgFoward(name,workshop){
 	if(name=='VIN'){
 		window.location.href='/IMMS/production/showVinPrint';
 	}
+	if(name=='车身号'){
+		window.location.href='/IMMS/production/showBusNoPrint';
+	}
 	
 }

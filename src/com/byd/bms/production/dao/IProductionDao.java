@@ -2,14 +2,12 @@ package com.byd.bms.production.dao;
 
 import java.util.List;
 import java.util.Map;
-
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
-
 import com.byd.bms.production.model.ProductionException;
 @Repository(value="productionDao")
 public interface IProductionDao {
-
+	/*****************************xiong jianwu start  *****************************/
 	List queryLineProcessList(Map<String, Object> condMap);
 
 	List<Map<String, Object>> queryProcessMonitorList(Map<String, Object> condMap);
@@ -69,6 +67,16 @@ public interface IProductionDao {
 	
 	public List<Map<String,String>> getNamePlateInfo(String bus_number);
 	
+	public List<Map<String,String>> getProductionSearchException(String bus_number);
+	
+	List<Map<String, Object>> getNameplatePrintList(Map<String, Object> condMap);
+
+	int getNameplatePrintCount(Map<String, Object> condMap);
+
+	int updateNameplatePrint(Map<String, Object> conditionMap);
+	
+	/*****************************xiong jianwu end  *****************************/
+
 	/******************* tangjin start**************************/
 	public List<Map<String,Object>> getVinPrintList(Map<String,Object> conditionMap);
 	

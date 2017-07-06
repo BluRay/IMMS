@@ -81,9 +81,9 @@ $(document).ready(function(){
 			strd_html+="<div class=\"col-xs-12\"><label class=\"col-xs-3 control-label no-padding-right\"></label>"+
 			 "<div class=\"col-xs-9\" style=\"margin-bottom: 0;padding-top: 3px;color: #657ba0;\">"+
 			 "<input type=\"radio\" name=\"check_strd\" tpl_detail_id="+standard.id+
-			 " tpl_head_id="+standard.test_card_template_id+"></input>";
+			 " tpl_head_id="+standard.test_card_template_id+">";
 			strd_html+=standard.test_standard;
-			strd_html+="</div></div>";
+			strd_html+="</input></div></div>";
 		})
     	
     	$("#test_standard_list").html(strd_html);
@@ -215,9 +215,9 @@ function ajaxGetStandard(){
 					strd_html+="<div class=\"col-xs-12\"><label class=\"col-xs-3 control-label no-padding-right\"></label>"+
 					 "<div class=\"col-xs-9\" style=\"margin-bottom: 0;padding-top: 3px;color: #657ba0;\">"+
 					 "<input type=\"radio\" name=\"check_strd\" tpl_detail_id="+standard.id+
-					 " tpl_head_id="+standard.test_card_template_id+"></input>";
+					 " tpl_head_id="+standard.test_card_template_id+">";
 					strd_html+=standard.test_standard;
-					strd_html+="</div></div>";
+					strd_html+="</input></div></div>";
 				})
 				
 				$("#test_standard_list").html(strd_html);

@@ -512,7 +512,7 @@ public class QualityController extends BaseController {
 		String test_card_template_detail_id=request.getParameter("test_card_template_detail_id");
 		String test_card_template_head_id=request.getParameter("test_card_template_head_id");
 		
-		List<Map<String,Object>> detail_list=new ArrayList<Map<String,Object>>();		
+		List<Map<String,Object>> detail_list=null;	
 		if(record_detail.contains("{")){
 			JSONArray jsa=JSONArray.fromObject(record_detail);
 			detail_list=JSONArray.toList(jsa, Map.class);

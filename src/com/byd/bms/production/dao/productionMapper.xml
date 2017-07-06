@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.byd.bms.production.dao.IProductionDao">
 
+<!-- ########################### xiong jianwu start#############################-->
 	<select id="queryLineProcessList" parameterType="Map" resultType="Map">
 		SELECT p.line line_name,p.workshop workshop_name,p.factory factory_name,
 		concat('[',group_concat('{"id":',p.id,',"code":"',TRIM(p.process_code),'","monitor_flag":"',p.monitory_point_flag,'","name":"',TRIM(p.process_name),'"}' order by p.id),']') process_list
@@ -495,9 +496,7 @@
 		LEFT JOIN BMS_BASE_BUS_TYPE t ON t.vehicle_model=oc.bus_vehicle_type and
 		t.bus_type_code=substr(b.bus_number,1,LOCATE('-',b.bus_number)-1)
 		WHERE b.bus_number = #{bus_number} OR b.vin = #{bus_number}
-	</select>
-	
-	
+	</select>	
 	<!-- VIN码打印 -->
 	<select id="getVinPrintList" parameterType="Map" resultType="Map">
 		select b.bus_number,b.vin,CONCAT(o.order_name,'
@@ -561,6 +560,61 @@
 			#{item}
 		</foreach>
 	</update>
+	
+	<select id="getNameplatePrintList" parameterType="Map" resultType="Map">
+		select b.bus_number,b.vin,b.zc_production_date productive_date,t.brand,t.*,u.username printer,
+		case when b.nameplate_print_date is null then '未打印' else '已打印' end as print_flag,
+		substring(b.nameplate_print_date,1,10) print_date
+		from BMS_PLAN_BUS b
+		left join BMS_OR_ORDER o on b.order_id=o.id
+		left join BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id
+		left join BMS_BASE_USER u on b.nameplate_printer_id=u.id
+		where 1=1 and b.factory_id=#{factoryId}
+		<if test="orderNo !=null and orderNo !=''">
+			and o.order_no=#{orderNo}
+		</if>
+		<if test="busNoStart !=null and busNoStart !=''">
+			<![CDATA[and substring_index(b.bus_number,'-',-1)>=cast(#{busNoStart} as signed)]]>
+		</if>
+		<if test="busNoEnd !=null and busNoEnd !=''">
+			<![CDATA[and substring_index(b.bus_number,'-',-1)<=cast(#{busNoEnd} as signed)]]>
+		</if>
+		<if test="start !=null">
+			LIMIT #{start} ,#{length} 
+		</if>
+
+	</select>
+	<select id="getNameplatePrintCount" parameterType="Map" resultType="int">
+		select count(b.bus_number)
+		from BMS_PLAN_BUS b
+		left join BMS_OR_ORDER o on b.order_id=o.id
+		left join BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id
+		where 1=1 and b.factory_id=#{factoryId}
+		<if test="orderNo !=null and orderNo !=''">
+			and o.order_no=#{orderNo}
+		</if>
+		<if test="busNoStart !=null and busNoStart !=''">
+			<![CDATA[and substring_index(b.bus_number,'-',-1)>=cast(#{busNoStart} as signed)]]>
+		</if>
+		<if test="busNoEnd !=null and busNoEnd !=''">
+			<![CDATA[and substring_index(b.bus_number,'-',-1)<=cast(#{busNoEnd} as signed)]]>
+		</if>
+	</select>
+	
+	<update id="updateNameplatePrint" parameterType="Map">
+		update BMS_PLAN_BUS
+		<set>
+			nameplate_printer_id=#{printer},nameplate_print_date=#{printDate}
+		</set>
+		where bus_number in
+		<foreach collection="busNoList" index="index" item="item"
+			open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</update>
+	
+<!-- ########################### xiong jianwu end#############################-->
+
 	<update id="updateBusMotorNumber" parameterType="map">
 		<foreach collection="buslist" item="detail" index="index"
 			separator=";">
@@ -590,14 +644,15 @@
 	<select id="getBusNumberByVin" parameterType="Map" resultType="Map">
 		select bus_number from BMS_PLAN_BUS where vin=#{vin}
 	</select>
+
 	<!-- 车身号打印 -->
 	<select id="getBusNoPrintList" parameterType="Map" resultType="Map">
 		select
 		n.bus_number,o.id order_id,o.order_no,o.order_name,o.order_qty,p.plan_date,o.order_code,
 		case n.print_sign when '0' then '未打印' when '1' then '已打印' end as
 		print_sign ,
-		n.print_times,u.username
-		printer,n.print_date,t.bus_type_code,g.order_config_name,g.customer,b.factory_id,b.order_id
+		n.print_times,u.username,c.product_qty allot_qty,g.id order_config_id,
+		n.printer_id,n.print_date,t.bus_type_code,g.order_config_name,g.customer,b.factory_id,b.order_id
 		from BMS_PLAN_BUS_NUMBER n 
 		left join BMS_PLAN_BUS b on n.bus_number =b.bus_number
 		left join BMS_PLAN_PRODUCTION_PLAN p on b.production_plan_id=p.id
@@ -605,6 +660,7 @@
 		left join BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id
 		left join BMS_OR_ORDER_CONFIG g on b.order_config_id=g.id
 		left join BMS_BASE_USER u on n.printer_id=u.id
+		left join BMS_OR_FACTORY_ORDER_CONFIG c ON c.order_config_id=g.id and c.order_id=o.id and c.factory_id=b.factory_id
 		where 1=1 and b.factory_id=#{factoryId}
 		<if test="busNo !=null and busNo !=''">
 			and n.bus_number=#{busNo}
@@ -614,12 +670,12 @@
 		</if>
 		<if test="planStart !=null and planStart !=''">
 		 <![CDATA[  
-		 	and p.plan_date>=replace(#{planStart},'-','')
+		 	and p.plan_date>=#{planStart}
 		 ]]>
 		</if>
 		<if test="planEnd !=null and planEnd !=''">
 		 <![CDATA[  
-		 	and p.plan_date<=replace(#{planEnd},'-','')
+		 	and p.plan_date<=#{planEnd}
 		 ]]>
 		</if>
 		order by o.order_no,right(n.bus_number,4)
@@ -631,7 +687,7 @@
 		resultType="int">
 		select count(bus_number) from BMS_PLAN_BUS where
 		factory_id=#{factoryId} and order_id=#{orderId} and
-		order_cofig_id=#{configId} and welding_online_date is not null
+		order_config_id=#{configId} and (welding_online_date is not null or welding_online_date!='')
 	</select>
 	<select id="getBusNoPrintCount" parameterType="Map" resultType="int">
 		select count(n.bus_number) from BMS_PLAN_BUS_NUMBER n 
@@ -641,6 +697,7 @@
 		left join BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id
 		left join BMS_OR_ORDER_CONFIG g on b.order_config_id=g.id
 		left join BMS_BASE_USER u on n.printer_id=u.id
+		left join BMS_OR_FACTORY_ORDER_CONFIG c ON c.order_config_id=g.id and c.order_id=o.id and c.factory_id=b.factory_id
 		where 1=1 and b.factory_id=#{factoryId}
 		<if test="busNo !=null and busNo !=''">
 			and n.bus_number=#{busNo}
@@ -650,12 +707,12 @@
 		</if>
 		<if test="planStart !=null and planStart !=''">
 		 <![CDATA[  
-		 	and p.plan_date>=replace(#{planStart},'-','')
+		 	and p.plan_date>=#{planStart}
 		 ]]>
 		</if>
 		<if test="planEnd !=null and planEnd !=''">
 		 <![CDATA[  
-		 	and p.plan_date<=replace(#{planEnd},'-','')
+		 	and p.plan_date<=#{planEnd}
 		 ]]>
 		</if>
 	</select>
@@ -671,7 +728,7 @@
 		</foreach>
 	</update>
 	<update id="updateBusConfig" parameterType="Map">
-		update BMS_PLAN_BUS set order_cofig_id=#{changedConfigId} where
+		update BMS_PLAN_BUS set order_config_id=#{changedConfigId} where
 		bus_number in
 		<foreach collection="busNoList" index="index" item="item"
 			open="(" separator="," close=")">
@@ -694,4 +751,5 @@
 		</if>
 		ORDER BY o.id DESC
 	</select>
+	
 </mapper>

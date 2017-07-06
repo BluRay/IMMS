@@ -26,6 +26,8 @@ import com.byd.bms.production.service.IProductionService;
 public class ProductionServiceImpl implements IProductionService {
 	@Resource(name="productionDao")
 	private IProductionDao productionDao;
+	
+	/*****************************xiong jianwu start  *****************************/
 	/**
 	 * 查询线别工序列表
 	 */
@@ -252,7 +254,38 @@ public class ProductionServiceImpl implements IProductionService {
 	public List<Map<String,String>> getNamePlateInfo(String bus_number){
 		return productionDao.getNamePlateInfo(bus_number);
 	}
+	
+	@Override
+	public List<Map<String,String>> getProductionSearchException(String bus_number){
+		return productionDao.getProductionSearchException(bus_number);
+	}
 
+	@Override
+	public void getNameplatePrintList(Map<String, Object> condMap, ModelMap model) {
+		int totalCount=0;
+		List<Map<String, Object>> datalist=productionDao.getNameplatePrintList(condMap);
+		totalCount=productionDao.getNameplatePrintCount(condMap);
+		model.put("draw", condMap.get("draw"));
+		model.put("recordsTotal", totalCount);
+		model.put("recordsFiltered", totalCount);
+		model.put("data", datalist);	
+	}
+
+	@Override
+	public void updateNameplatePrint(Map<String, Object> conditionMap,
+			ModelMap model) {
+		try{
+			int i=productionDao.updateNameplatePrint(conditionMap);
+			model.put("success", true);
+			model.put("message", "打印成功");
+		}catch(Exception e){
+			model.put("success", false);
+			model.put("message", e.getMessage());
+		}
+		
+	}
+	/*****************************xiong jianwu end  *****************************/
+	
 	/*******************  tangjin start **************************/
 	@Override
 	public Map<String, Object> getVinPrintList(Map<String, Object> conditionMap) {
@@ -290,6 +323,42 @@ public class ProductionServiceImpl implements IProductionService {
 	public List<Map<String, String>> getBusNumberByVin(
 			Map<String, Object> conditionMap) {
 		return productionDao.getBusNumberByVin(conditionMap);
+	}
+
+	@Override
+	public Map<String, Object> getBusNoPrintList(
+			Map<String, Object> conditionMap) {
+		int totalCount=0;
+		List<Map<String, Object>> datalist=productionDao.getBusNoPrintList(conditionMap);
+		totalCount=productionDao.getBusNoPrintCount(conditionMap);
+		Map<String, Object> result=new HashMap<String,Object>();
+		result.put("draw", conditionMap.get("draw"));
+		result.put("recordsTotal", totalCount);
+		result.put("recordsFiltered", totalCount);
+		result.put("data", datalist);
+		return result;
+	}
+
+	@Override
+	public int getOrderConfigDoneQty(Map<String, Object> conditionMap) {
+		return productionDao.getOrderConfigDoneQty(conditionMap);
+	}
+
+	@Override
+	public int updateBusPrint(Map<String, Object> conditionMap) {
+		return productionDao.updateBusPrint(conditionMap);
+	}
+
+	@Override
+	public int updateBusConfig(Map<String, Object> conditionMap) {
+		return productionDao.updateBusConfig(conditionMap);
+	}
+
+	@Override
+	public List<Map<String,Object>> getOrderConfigList(
+			Map<String, Object> conditionMap) {
+		List<Map<String, Object>> datalist=productionDao.getOrderConfigList(conditionMap);
+		return datalist;
 	}
 
 	/*******************  tangjin end  **************************/
