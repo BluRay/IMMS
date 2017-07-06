@@ -309,6 +309,19 @@
 		</foreach>	
      </insert>
      
+     <insert id="insertProductRecordNoFault" parameterType="Map" useGeneratedKeys="true" keyProperty="id">
+     	<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into BMS_QM_TEST_CARD 
+		(bus_number,factory_id,test_node_id,test_node,order_id,order_config_id,result,test_card_template_head_id,editor_id,edit_date,test_date)
+		values
+		(#{bus_number},#{detail.factory_id},#{detail.test_node_id},#{detail.test_node},#{detail.order_id},#{detail.order_config_id},#{detail.result},#{detail.test_card_template_head_id},
+		#{editor_id},#{edit_date},#{detail.test_date})
+
+     </insert>
+     
      <select id="queryProductRecordList" parameterType="Map"  resultType="Map">
      	select c.bus_number,c.test_node,f.factory_name,c.factory_id,concat(o.order_no,o.order_name,t.bus_type_code,' ',o.order_qty,'台') order_desc,
      	c.test_date,c.test_node_id, c.order_id,c.order_config_id, c.tester,c.test_card_template_head_id,

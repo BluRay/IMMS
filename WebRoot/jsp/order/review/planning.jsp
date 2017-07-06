@@ -80,6 +80,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<script type="text/javascript">
             $(function(){
             	$("#btnSave").click(function(){
+            		if($("#plandep_operator").val()==""){
+            			alert("暂未给用户分配【综合计划部计划评审】角色,无法进行评审");
+            			return false;
+            		}
             		$.ajax({
             			url: "/IMMS/snaker/flow/process",
             			dataType: "json",

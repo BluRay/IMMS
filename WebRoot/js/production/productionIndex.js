@@ -45,15 +45,33 @@ $(document).ready(function () {
 			}
 		});
 	}
-	
-	
-function imgFoward(name,workshop){
+
+	function imgFoward(name,workshop){
 		
-	if(name=='VIN'){
-		window.location.href='/IMMS/production/showVinPrint';
-	}
-	if(name=='车身号'){
-		window.location.href='/IMMS/production/showBusNoPrint';
+		if(name=='VIN'){
+			window.location.href='/IMMS/production/showVinPrint';
+		}
+		if(name=='铭牌'){
+			window.location.href='/IMMS/production/nameplatePrint';
+		}
+		if(name=='合格证'){
+			window.location.href='production!certification.action';
+		}
+		if(name=='发车'){
+			window.location.href='busDispatch!planListPage.action';
+		}
+		if(name=='车身号'){
+			window.location.href='/IMMS/production/showBusNoPrint';
+		}
+		if(name=='车身颜色'){
+			window.location.href='production!bodycolor.action';
+		}
+		if(name=='座位数'){
+			window.location.href='production!busseats.action';
+		}
+		if(name=='在制'){
+			window.location.href="production!productionsearch.action?workshop="+workshop+"&factory="+$("#search_factory").val();
+		}
+		
 	}
 	
-}

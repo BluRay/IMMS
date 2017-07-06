@@ -79,6 +79,10 @@
 		<script type="text/javascript">
             $(function(){
             	$("#btnSave").click(function(){
+            		if($("#quality_operator").val()==""){
+            			alert("暂未给用户分配【品质部评审】角色,无法进行评审");
+            			return false;
+            		}
             		$.ajax({
             			url: "/IMMS/snaker/flow/process",
             			dataType: "json",

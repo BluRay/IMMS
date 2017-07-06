@@ -12,11 +12,6 @@ $(document).ready(function(){
 			$("#tableDetail").dataTable().fnClearTable();
 		}*/
 		$("#btnShowTpl").show();
-		getWorkshopSelect('',$("#factory :selected").text(),"","#workshop_tmpl","","id");
-		/*alert($("#workshop_tmpl").html());*/
-		var workshop_all=getAllWorkshops("#workshop_tmpl","name");
-		//alert(workshop_all)
-		getWorkgroupSelectAll(workshop_all);
 		
 		drawTplDetailTable("#tableDetail",null,true);
 		
@@ -130,6 +125,11 @@ function initPage(){
 		}else{
 			$("#btnShowTpl").attr("disabled",false);
 			getFactorySelect("quality/prdRcdIn",factory_id,"#factory","","id");
+			getWorkshopSelect('',$("#factory :selected").text(),"","#workshop_tmpl","","id");
+			/*alert($("#workshop_tmpl").html());*/
+			var workshop_all=getAllWorkshops("#workshop_tmpl","name");
+			//alert(workshop_all)
+			getWorkgroupSelectAll(workshop_all);
 		}
 			
 	});
@@ -243,7 +243,7 @@ function drawTplDetailTable(tableId,data,editable){
         {
             "targets": [8],
             "render":function(data,type,row,meta){
-            	var el= "<input  class=\"input-medium memo\" style='text-align:center;height:30px'  type=\"text\" value=\""+(data||"")+"\">";
+            	var el="<select  class=\"input-medium workgroup\" style='text-align:center;width:100%'><select>";
             	if(!editable){
             		el=data;
             	}
@@ -261,6 +261,16 @@ function drawTplDetailTable(tableId,data,editable){
         			$(td).find(".workgroup").val(rowData.workgroup_id)
         		}
              }
+        },
+        {
+       	 "targets":[9],
+       	 "render":function(data,type,row,meta){
+	       		var el= "<input  class=\"input-medium memo\" style='text-align:center;height:30px'  type=\"text\" value=\""+(data||"")+"\">";
+	        	if(!editable){
+	        		el=data;
+	        	}
+	        	return el;
+	            }
         }],
 		data:data||{},
 		columns: [
@@ -573,7 +583,7 @@ function ajaxSave(){
 		save_flag=false;
 		return false;
 	}
-	
+	var test_card_template_head_id=$(trs[0]).find(".workshop").parent("td").data("test_card_template_head_id");
 	$.each(trs,function(i,tr){
 		var test_result=$(tr).find(".test_result").val();
 		var fault_id=$(tr).find(".test_result").attr("fault_id")=="undefined"?"0":$(tr).find(".test_result").attr("fault_id");
@@ -585,8 +595,13 @@ function ajaxSave(){
 		var memo=$(tr).find(".memo").val();
 		var is_null=$(tr).find(".is_null").html();
 		var test_card_template_detail_id=$(tr).find(".workshop").parent("td").data("test_card_template_detail_id");
-		var test_card_template_head_id=$(tr).find(".workshop").parent("td").data("test_card_template_head_id");
 		
+		if((workshop_id==null||workshop_id=="")){
+			workshop_id=0;
+		}
+		if((workgroup_id==null||workgroup_id=="")){
+			workgroup_id=0;
+		}
 		
 		if(is_null=="是"&&test_result.trim().length==0){
 			alert("第"+(i+1)+"行是必填项，请填写检验结果！");
@@ -615,13 +630,27 @@ function ajaxSave(){
 			obj.result_judge=result_judge;
 			obj.rework=rework;
 			obj.tester=tester;
-			obj.workshop_id=workshop_id||"";
-			obj.workgroup_id=workgroup_id||"";
+			obj.workshop_id=workshop_id;
+			obj.workgroup_id=workgroup_id;
 			obj.memo=memo;
 			
 			detail_list_submit.push(obj);
 		}
 	})
+	if(detail_list_submit.length==0){
+		var obj={};
+		obj.test_card_template_head_id=test_card_template_head_id;
+		obj.test_date=test_date;
+		obj.bus_number=$("#bus_number").val();
+		obj.factory_id=$("#factory").val();
+		obj.order_id=$("#bus_number").attr("order_id");
+		obj.order_config_id=$("#bus_number").attr("order_config_id");
+		obj.test_node_id=$("#check_node").val();
+		obj.test_node=$("#check_node :selected").text();
+		obj.result=result;
+		
+		detail_list_submit.push(obj);
+	}
 	
 	if(save_flag==true){
 		//alert(JSON.stringify(detail_list_submit))
@@ -668,7 +697,7 @@ function ajaxQuery(){
 		searching: false,
 		bAutoWidth:false,
 		destroy: true,
-		sScrollY: $(window).height()-270,
+		sScrollY: $(window).height()-250,
 		scrollX: true,
 		/*scrollCollapse: true,*/
 		pageLength: 20,

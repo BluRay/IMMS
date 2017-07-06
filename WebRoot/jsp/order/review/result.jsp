@@ -55,16 +55,16 @@
 						 </tr>
 						 <tr>
 							<td>&nbsp;下料明细：</td>
-							<td><input id="revisiondetailNode" name="S_detaildemandNode" placeholder="下料明细..." style="width:120px" class="col-sm-10" type="text"></td>
+							<td><input id="revisiondetailNode" name="S_revisiondetailNode" onClick="WdatePicker({el:'revisiondetailNode',dateFmt:'yyyy-MM-dd'});" placeholder="下料明细..." style="width:120px" class="col-sm-10" type="text"></td>
 							<td>&nbsp;BOM：</td>
-							<td><input id="revisionbomNode" name="S_bomdemandNode" placeholder="BOM..." style="width:120px" class="col-sm-10" type="text"></td>
+							<td><input id="revisionbomNode" name="S_revisionbomNode" onClick="WdatePicker({el:'revisionbomNode',dateFmt:'yyyy-MM-dd'});" placeholder="BOM..." style="width:120px" class="col-sm-10" type="text"></td>
 						    <td></td><td></td>
 						</tr>
 						 <tr role="row" class="odd">
 							<td>&nbsp;SOP：</td>
-							<td><input id="revisionsopNode" placeholder="SOP..." style="width:120px" class="col-sm-10" type="text"></td>
+							<td><input id="revisionsopNode" name="S_revisionsopNode" onClick="WdatePicker({el:'revisionsopNode',dateFmt:'yyyy-MM-dd'});" placeholder="SOP..." style="width:120px" class="col-sm-10" type="text"></td>
 							<td>&nbsp;SIP：</td>
-							<td><input id="revisionsipNode" placeholder="SIP..." style="width:120px" class="col-sm-10" type="text"></td>
+							<td><input id="revisionsipNode" name="S_revisionsipNode" onClick="WdatePicker({el:'revisionsipNode',dateFmt:'yyyy-MM-dd'});" placeholder="SIP..." style="width:120px" class="col-sm-10" type="text"></td>
 						
 						    <td colspan=2 style="align:right">
 						        <input type="hidden"  id="result_operator" class="input_240" name="S_result.operator" value="${operator }" />

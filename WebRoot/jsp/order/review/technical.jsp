@@ -100,6 +100,10 @@
 		<script type="text/javascript">
             $(function(){
             	$("#btnSave").click(function(){
+            		if($("#technology_operator").val()==""){
+            			alert("暂未给用户分配【工艺部评审】角色,无法进行评审");
+            			return false;
+            		}
             		$.ajax({
             			url: "/IMMS/snaker/flow/process",
             			dataType: "json",

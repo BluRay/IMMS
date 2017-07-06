@@ -28,7 +28,6 @@ $(document).ready(function(){
 				fadeMessageAlert(null,'请输入检验日期！','gritter-warning');
 				return false;
 			}
-				return ajaxGetStandard();
 				
 		}
 		if(info.step == 2&&info.direction=='next') {
@@ -68,7 +67,12 @@ $(document).ready(function(){
         if (event.keyCode == "13"){	
             if(jQuery.trim($('#bus_number').val()) != ""){
                 ajaxValidate();
+                //输入有效车号以后，如何选择了检验节点则更新检验项目和标准
+                if($("#check_node").val().trim().length>0){
+                	ajaxGetStandard();
+                }
             }
+            
             return false;
         }  
     });
@@ -106,7 +110,15 @@ $(document).ready(function(){
 		//alert(JSON.stringify(workgroup_list[workshop]))
 		getSelects(workgroup_list[workshop], "", element,"","id");
 	});
-	
+	/**
+	 * 改变检验节点，如何已输入有效车号则更新检验项目和标准
+	 */
+    $(document).on("change","#check_node",function(e){
+    	 if($("#bus_number").val().trim().length>0){
+         	ajaxGetStandard();
+         }
+	});
+    
 	$("#save").on("click",function(){
 		ajaxSave();
 	})
@@ -118,6 +130,7 @@ function initPage(){
 	$("#test_result").val("");
 	$("#workshop").val("");
 	$("#workgroup").val("");
+	$("#save").removeAttr("disabled","");
 	getFactorySelect("quality/prdRcdIn","","#factory","请选择","id")
 	$(".btn-next").show();
 	
@@ -180,13 +193,14 @@ function ajaxGetStandard(){
 		success:function(response){
 			$("#test_item").html("");
 			$("#test_standard_list").html("");
+			test_standard_list={};
+			
 			if(response.success){
 				detail=response.data;
 				var item_html="";
 				var test_item="";
 				var strd_list=[];
 				test_item_list=[];
-				test_standard_list={};
 				$.each(detail,function(i,value){
 					var obj={};
 					obj.test_standard=value.test_standard;
@@ -286,18 +300,24 @@ function getWorkgroupSelectAll(workshop_list){
 }
 
 function ajaxSave(){
+	if(JSON.stringify(test_standard_list) == "{}"){
+		fadeMessageAlert(null,'抱歉未匹配到模板！','gritter-error');
+		return false;
+	}
+	var standard_default=test_standard_list[test_item_list[0]][0];
 	var detail_list_submit=[];
 	var test_result=$("#test_result").val();
 	var result=$("#result").val();
 	var fault_id=$("#test_result").attr("fault_id");
 	var test_card_template_detail_id=$('input:radio[name="check_strd"]:checked').attr("tpl_detail_id");
-	var test_card_template_head_id=$('input:radio[name="check_strd"]:checked').attr("tpl_head_id");
+	var test_card_template_head_id=standard_default.test_card_template_id/*$('input:radio[name="check_strd"]:checked').attr("tpl_head_id");*/
 	var order_id=$("#bus_number").attr("order_id");
 	var test_node_id=$("#check_node").val();
 	var test_date=$("#test_date").val();
 	var tester=$("#tester").val();
-	var workshop_id=$("#workshop").val()||"";
-	var workgroup_id=$("#workgroup").val()||"";
+	var workshop_id=$("#workshop").val();
+	var workgroup_id=$("#workgroup").val();
+
 	
 	if(order_id==null||order_id==""){
 		fadeMessageAlert(null,'请输入有效车号！','gritter-error');
@@ -311,19 +331,21 @@ function ajaxSave(){
 		fadeMessageAlert(null,'请输入检验日期！','gritter-error');
 		return false;
 	}
-	if(tester.trim().length==0){
+	if(tester.trim().length==0&&fault_id>0){
 		fadeMessageAlert(null,'请输入检验员！','gritter-error');
 		return false;
 	}
-	if(result.trim().length==0){
+	if(result.trim().length==0&&fault_id>0){
 		fadeMessageAlert(null,'请输入检验结果！','gritter-error');
 		return false;
 	}
-	if(workshop_id==null||workshop_id==""){
+	if((workshop_id==null||workshop_id=="")&&test_result.trim().length>0){
+		workshop_id=0;
 		fadeMessageAlert(null,'请选择责任车间！','gritter-error');
 		return false;
 	}
-	if(workgroup_id==null||workgroup_id==""){
+	if((workgroup_id==null||workgroup_id=="")&&test_result.trim().length>0){
+		workgroup_id=0;
 		fadeMessageAlert(null,'请选择责任班组！','gritter-error');
 		return false;
 	}
@@ -331,7 +353,7 @@ function ajaxSave(){
 	
 	var obj={};
 	obj.test_card_template_detail_id=test_card_template_detail_id;
-	obj.test_card_template_head_id=test_card_template_head_id;
+	obj.test_card_template_head_id=test_card_template_head_id||$('input:radio[name="check_strd"] :eq(0)').attr("tpl_head_id");;
 	obj.test_date=test_date;
 	obj.bus_number=$("#bus_number").val();
 	obj.factory_id=$("#factory").val();
@@ -340,7 +362,7 @@ function ajaxSave(){
 	obj.test_node_id=test_node_id;
 	obj.test_node=$("#check_node :selected").text();
 	obj.result=result;
-	obj.fault_id=fault_id||"";
+	obj.fault_id=fault_id;
 	obj.test_result=test_result;
 	obj.result_judge=$("#judge").val();
 	obj.rework=$("#rework").val();
@@ -359,17 +381,21 @@ function ajaxSave(){
 		data:{
 			"bus_number":$("#bus_number").val(),
 			"test_node":$("#check_node :selected").text(),
-			"test_card_template_detail_id":test_card_template_detail_id,
-			"test_card_template_head_id":test_card_template_head_id,
+			"test_card_template_detail_id":test_card_template_detail_id||"",
+			"test_card_template_head_id":test_card_template_head_id||"",
 			"record_detail":JSON.stringify(detail_list_submit)
 		},
 		success:function(response){
 			fadeMessageAlert(null,response.message,'gritter-success');
 			var wizard = $('#fuelux-wizard-container').data('wizard');
-			wizard.currentStep = 2;
+			if(wizard.currentStep==3){
+				wizard.currentStep = 2;
+				$("#save").attr("disabled","disabled");
+				$(".btn-next").removeAttr("disabled","");
+			}
+			
 			wizard.setState();
-			$("#save").attr("disabled","disabled");
-			$(".btn-next").removeAttr("disabled","");
+			
 		}
 	})	
 }

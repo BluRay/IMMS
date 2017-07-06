@@ -60,17 +60,17 @@
 						    <td>&nbsp;数模输出时间：</td>
 							<td><input id="modelexportDate" name="S_modelexportDate" onClick="WdatePicker({el:'modelexportDate',dateFmt:'yyyy-MM-dd'});" placeholder="数模输出时间..." style="width:120px" class="col-sm-10" type="text"></td>
 							<td>&nbsp;下料明细：</td>
-							<td><input id="detaildemandNode" name="S_detaildemandNode" placeholder="下料明细..." style="width:120px" class="col-sm-10" type="text"></td>
+							<td><input id="detaildemandNode" name="S_detaildemandNode" onClick="WdatePicker({el:'detaildemandNode',dateFmt:'yyyy-MM-dd'});" placeholder="下料明细时间..." style="width:120px" class="col-sm-10" type="text"></td>
 							<td>&nbsp;BOM：</td>
-							<td><input id="bomdemandNode" name="S_bomdemandNode" placeholder="BOM..." style="width:120px" class="col-sm-10" type="text"></td>
+							<td><input id="bomdemandNode" name="S_bomdemandNode" onClick="WdatePicker({el:'bomdemandNode',dateFmt:'yyyy-MM-dd'});" placeholder="BOM时间..." style="width:120px" class="col-sm-10" type="text"></td>
 						</tr>
 						 <tr role="row" class="odd">
 				            <td>&nbsp;图纸输出时间：</td>
 							<td><input id="drawingexportDate" name="S_drawingexportDate" onClick="WdatePicker({el:'drawingexportDate',dateFmt:'yyyy-MM-dd'});"placeholder="图纸输出时间..." style="width:120px" class="col-sm-10" type="text"></td>
 							<td>&nbsp;SOP：</td>
-							<td><input id="sopdemandNode" name="S_sopdemandNode" placeholder="SOP..." style="width:120px" class="col-sm-10" type="text"></td>
+							<td><input id="sopdemandNode" name="S_sopdemandNode" onClick="WdatePicker({el:'sopdemandNode',dateFmt:'yyyy-MM-dd'});" placeholder="SOP时间..." style="width:120px" class="col-sm-10" type="text"></td>
 							<td>&nbsp;SIP：</td>
-							<td><input id="sipdemandNode" name="S_sipdemandNode" placeholder="SIP..." style="width:120px" class="col-sm-10" type="text"></td>
+							<td><input id="sipdemandNode" name="S_sipdemandNode" onClick="WdatePicker({el:'sipdemandNode',dateFmt:'yyyy-MM-dd'});" placeholder="SIP时间..." style="width:120px" class="col-sm-10" type="text"></td>
 						</tr>
 						
                         <tr>
@@ -99,6 +99,10 @@
         <script type="text/javascript">
             $(function(){
             	$("#btnSave").click(function(){
+            		if($("#technical_operator").val()==""){
+            			alert("暂未给用户分配【技术部评审】角色,无法发起评审");
+            			return false;
+            		}
             		$.ajax({
             			url: "/IMMS/snaker/flow/process",
             			dataType: "json",

@@ -257,9 +257,9 @@ public class QualityServiceImpl implements IQualityService {
 			qualityDao.deleteProductRecord(condMap);
 			
 			//插入新的成品记录数据
-			if(condMap.get("detail_list")==null){
+			/*if(condMap.get("detail_list")==null){
 				qualityDao.insertProductRecordNoFault(condMap);
-			}else
+			}else*/
 				qualityDao.insertProductRecord(condMap);
 			model.put("success", true);
 			model.put("message", "保存成功！");
