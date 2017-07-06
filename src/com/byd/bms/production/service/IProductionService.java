@@ -45,6 +45,10 @@ public interface IProductionService {
 	
 	public List<Map<String,String>> getProductionSearchBusinfo(String bus_number);
 	
+	public List<Map<String,String>> getProductionSearchScan(String bus_number);
+	
+	public List<Map<String,String>> getNamePlateInfo(String bus_number);
+	
 	/******************* tangjin start**************************/
 	
 	public Map<String,Object> getVinPrintList(Map<String,Object> conditionMap);

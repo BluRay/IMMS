@@ -43,7 +43,7 @@
 						<table>
 							<tr>
 								<td>车号/VIN号：</td>
-								<td><input id="search_order_no" placeholder="请输入车号/VIN号..." style="width:200px" type="text"></td>
+								<td><input id="search_busnumber" placeholder="请输入车号/VIN号..." style="width:200px" type="text"></td>
 								<td><input id="btnQuery" type="button" class="btn btn-sm btn-success" value="查询" style="margin-left: 2px;"></td>
 								<td></td>
 							</tr>
@@ -102,7 +102,23 @@
 							</div>
 							
 							<div id="div_2" style="overflow:auto" class="tab-pane fade">
-								div_2
+								<table id="table02" style="text-align:center;table-layout:fixed;font-size:12px" class="table table-bordered table-striped">
+									<thead>
+										<tr id="0">
+											<th style="width:60px;text-align:center;">序号</th>
+											<th style="text-align:center;">车辆车号</th>
+											<th style="text-align:center;">生产工厂</th>
+											<th style="text-align:center;">生产车间</th>
+											<th style="text-align:center;">生产线别</th>
+											<th style="text-align:center;">生产工序</th>
+											<th style="text-align:center;">扫描时间</th>
+											<th style="text-align:center;">车辆状态</th>
+											<th style="text-align:center;">扫描人</th>
+										</tr>
+									</thead>
+									<tbody>	
+									</tbody>
+								</table>
 							</div>
 							
 							<div id="div_3" style="overflow:auto" class="tab-pane fade">
@@ -118,11 +134,55 @@
 							</div>
 							
 							<div id="div_6" style="overflow:auto" class="tab-pane fade">
-								div_6
+								<table id="table06" style="text-align:center;table-layout:fixed;font-size:12px;width:850px" class="table table-bordered table-striped">
+									<tr>
+										<td width="130px;" style="text-align: right;">车辆识别代号：</td><td id="tab06_VIN"></td><td width="130px" style="text-align: right;">生产序号：</td><td id="tab06_sequence"></td>
+									</tr>
+									<tr>
+										<td width="130px" style="text-align: right;">底盘型号：</td><td id="tab06_chassis_model"></td><td width="130px" style="text-align: right;">品牌：</td><td id="tab06_brand"></td>
+									</tr>
+									<tr>
+										<td width="130px" style="text-align: right;">电机型号：</td><td id="tab06_motor_model"></td><td width="130px" style="text-align: right;">电机最大功率：</td><td id="tab06_motor_power"></td>
+									</tr>
+									<tr>
+										<td width="130px" style="text-align: right;">乘员数：</td><td id="tab06_passenger"></td><td width="130px" style="text-align: right;">最大允许总质量：</td><td id="tab06_max_weight"></td>
+									</tr>
+									<tr>
+										<td width="130px" style="text-align: right;">电池型号：</td><td id="tab06_battery_model"></td><td width="130px" style="text-align: right;">电池容量：</td><td id="tab06_battery_capacity"></td>
+									</tr>
+									<tr>
+										<td width="130px" style="text-align: right;">最高车速：</td><td id="tab06_max_speed"></td><td width="130px" style="text-align: right;">灯光下倾值：</td><td id="tab06_light_downdip"></td>
+									</tr>
+									<tr>
+										<td width="130px" style="text-align: right;">额定电压：</td><td id="tab06_rated_voltage"></td><td width="130px" style="text-align: right;">生产日期：</td><td id="tab06_productive_date"></td>
+									</tr>
+								</table>
 							</div>
 							
 							<div id="div_7" style="overflow:auto" class="tab-pane fade">
-								div_7
+								<table id="table07" style="text-align:center;table-layout:fixed;font-size:12px;width:850px" class="table table-bordered table-striped">
+									<tr>
+										<td width="130px;" style="text-align: right;">车辆识别代号：</td><td id="tab07_VIN"></td><td width="130px" style="text-align: right;">生产序号：</td><td id="tab07_sequence"></td>
+									</tr>
+									<tr>
+										<td width="130px" style="text-align: right;">车辆型号：</td><td id="tab07_vehicle_model"></td><td width="130px" style="text-align: right;">品牌：</td><td id="tab07_brand"></td>
+									</tr>
+									<tr>
+										<td width="130px" style="text-align: right;">电机型号：</td><td id="tab07_motor_model"></td><td width="130px" style="text-align: right;">电机最大功率：</td><td id="tab07_motor_power"></td>
+									</tr>
+									<tr>
+										<td width="130px" style="text-align: right;">乘员数：</td><td id="tab07_passenger"></td><td width="130px" style="text-align: right;">最大允许总质量：</td><td id="tab07_max_weight"></td>
+									</tr>
+									<tr>
+										<td width="130px" style="text-align: right;">电池型号：</td><td id="tab07_battery_model"></td><td width="130px" style="text-align: right;">电池容量：</td><td id="tab07_battery_capacity"></td>
+									</tr>
+									<tr>
+										<td width="130px" style="text-align: right;">最高车速：</td><td id="tab07_max_speed"></td><td width="130px" style="text-align: right;">灯光下倾值：</td><td id="tab07_light_downdip"></td>
+									</tr>
+									<tr>
+										<td width="130px" style="text-align: right;">额定电压：</td><td id="tab07_rated_voltage"></td><td width="130px" style="text-align: right;">生产日期：</td><td id="tab07_productive_date"></td>
+									</tr>
+								</table>
 							</div>
 							
 							<div id="div_8" style="overflow:auto" class="tab-pane fade">

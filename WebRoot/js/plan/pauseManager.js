@@ -12,7 +12,7 @@ $(document).ready(function () {
 		getOrderNoSelect("#search_order_no","#orderId");
 		getWorkshopSelect("plan/pauseManager",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
 		getReasonTypeSelect();
-		getKeysSelect("EXCEPTION_RESPONSIBILITY_DEPARTMENT", "", "#edit_dep_id","noall","value");
+		getKeysSelect("EXCEPTION_RESPONSIBILITY_DEPARTMENT", "", "#edit_dep_id",null,"value");
 	}
 	
 	$('#search_factory').change(function(){ 

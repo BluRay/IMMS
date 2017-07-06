@@ -242,6 +242,16 @@ public class ProductionServiceImpl implements IProductionService {
 	public List<Map<String, String>> getProductionSearchBusinfo(String bus_number) {
 		return productionDao.getProductionSearchBusinfo(bus_number);
 	}
+	
+	@Override
+	public List<Map<String,String>> getProductionSearchScan(String bus_number){
+		return productionDao.getProductionSearchScan(bus_number);
+	}
+	
+	@Override
+	public List<Map<String,String>> getNamePlateInfo(String bus_number){
+		return productionDao.getNamePlateInfo(bus_number);
+	}
 
 	/*******************  tangjin start **************************/
 	@Override

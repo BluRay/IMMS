@@ -563,10 +563,37 @@ public class ProductionController extends BaseController {
 	
 	@RequestMapping("/getProductionSearchBusInfo")
 	@ResponseBody
-	public ModelMap getProductionSearchBusInfo(){
-		Map<String,Object> condMap=new HashMap<String,Object>();
-		condMap.put("bus_number", request.getParameter("bus_number"));
-		
+	public ModelMap getProductionSearchBusInfo(){		
+		List<Map<String, String>> datalist = productionService.getProductionSearchBusinfo(request.getParameter("bus_number"));
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("data", datalist);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(result);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/getProductionSearchScan")
+	@ResponseBody
+	public ModelMap getProductionSearchScan(){
+		List<Map<String, String>> datalist = productionService.getProductionSearchScan(request.getParameter("bus_number"));
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("data", datalist);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(result);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/getNamePlateInfo")
+	@ResponseBody
+	public ModelMap getNamePlateInfo(){
+		List<Map<String, String>> datalist = productionService.getNamePlateInfo(request.getParameter("bus_number"));
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("data", datalist);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(result);
+		model = mv.getModelMap();
 		return model;
 	}
 	

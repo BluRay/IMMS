@@ -39,7 +39,7 @@ function ajaxQuery(){
 }
 
 function confirm(exception_id){
-	getKeysSelect("EXCEPTION_RESPONSIBILITY_DEPARTMENT", "", "#confirm_duty_department","noall","value");
+	getKeysSelect("EXCEPTION_RESPONSIBILITY_DEPARTMENT", "", "#confirm_duty_department",null,"value");
 	getReasonTypeSelect();
 	
 	$("#dialog-confirm").removeClass('hide').dialog({

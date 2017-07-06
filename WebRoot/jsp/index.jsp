@@ -35,11 +35,129 @@
 				
 			<div class="page-content">
 					<!-- 设置小部件 -->
-					<jsp:include page="settings.jsp" flush="true"/>
+					<%-- <jsp:include page="settings.jsp" flush="true"/> --%>
 					<!-- /section:settings.box -->
 					<div class="page-content-area">
+						<div class="row">
+							<div class="col-xs-12 col-sm-6 widget-container-col ui-sortable">
+										<!-- #section:custom/widget-box -->
+										<div class="widget-box ui-sortable-handle">
+											<div class="widget-header">
+												<h5 class="widget-title">工厂日计划达成</h5>
+
+												<!-- #section:custom/widget-box.toolbar -->
+												<div class="widget-toolbar">
+													<div class="widget-menu">
+														<a href="#" data-action="settings" data-toggle="dropdown">
+															<i class="ace-icon fa fa-bars"></i>
+														</a>
+
+														<ul class="dropdown-menu dropdown-menu-right dropdown-light-blue dropdown-caret dropdown-closer">
+															<li>
+																<a data-toggle="tab" href="#dropdown1">Option#1</a>
+															</li>
+
+															<li>
+																<a data-toggle="tab" href="#dropdown2">Option#2</a>
+															</li>
+														</ul>
+													</div>
+
+													<a href="#" data-action="fullscreen" class="orange2">
+														<i class="ace-icon fa fa-expand"></i>
+													</a>
+
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+
+													<a href="#" data-action="close">
+														<i class="ace-icon fa fa-times"></i>
+													</a>
+												</div>
+
+												<!-- /section:custom/widget-box.toolbar -->
+											</div>
+
+											<div class="widget-body">
+												<div class="widget-main">
+													<p class="alert alert-info">
+														Nunc aliquam enim ut arcu aliquet adipiscing. Fusce dignissim volutpat justo non consectetur. Nulla fringilla eleifend consectetur.
+													</p>
+													<p class="alert alert-success">
+														Raw denim you probably haven't heard of them jean shorts Austin.
+													</p>
+												</div>
+											</div>
+										</div>
+
+										<!-- /section:custom/widget-box -->
+									</div>
+									
+									<div class="col-xs-12 col-sm-6 widget-container-col ui-sortable">
+										<!-- #section:custom/widget-box -->
+										<div class="widget-box ui-sortable-handle">
+											<div class="widget-header">
+												<h5 class="widget-title">订单情况(事业部)</h5>
+
+												<!-- #section:custom/widget-box.toolbar -->
+												<div class="widget-toolbar">
+													<div class="widget-menu">
+														<a href="#" data-action="settings" data-toggle="dropdown">
+															<i class="ace-icon fa fa-bars"></i>
+														</a>
+
+														<ul class="dropdown-menu dropdown-menu-right dropdown-light-blue dropdown-caret dropdown-closer">
+															<li>
+																<a data-toggle="tab" href="#dropdown1">Option#1</a>
+															</li>
+
+															<li>
+																<a data-toggle="tab" href="#dropdown2">Option#2</a>
+															</li>
+														</ul>
+													</div>
+
+													<a href="#" data-action="fullscreen" class="orange2">
+														<i class="ace-icon fa fa-expand"></i>
+													</a>
+
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+
+													<a href="#" data-action="close">
+														<i class="ace-icon fa fa-times"></i>
+													</a>
+												</div>
+
+												<!-- /section:custom/widget-box.toolbar -->
+											</div>
+
+											<div class="widget-body">
+												<div class="widget-main">
+													<p class="alert alert-info">
+														Nunc aliquam enim ut arcu aliquet adipiscing. Fusce dignissim volutpat justo non consectetur. Nulla fringilla eleifend consectetur.
+													</p>
+													<p class="alert alert-success">
+														Raw denim you probably haven't heard of them jean shorts Austin.
+													</p>
+												</div>
+											</div>
+										</div>
+
+										<!-- /section:custom/widget-box -->
+									</div>
+						</div>
 					
-					<!-- 东西放这里！ -->		
 					
 					</div>
 			</div><!-- /.main-content -->
@@ -49,5 +167,8 @@
 			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse"><i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i></a>
 		</div><!-- /.main-container -->
 	</div>
+	<script src="assets/js/jquery-ui.custom.min.js"></script>
+	<script src="js/index.js"></script>
+	
 	</body>
 </html>
