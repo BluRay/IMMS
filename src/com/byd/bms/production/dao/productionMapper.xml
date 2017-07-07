@@ -507,6 +507,27 @@
 		(SELECT b.bus_number FROM BMS_PLAN_BUS b WHERE b.bus_number =
 		#{bus_number} OR b.vin = #{bus_number})
 	</select>
+	<select id="getCertificationInfo" parameterType="String" resultType="Map">
+		select t.bus_type_code,t.brand,t.vehicle_model,oc.tire_type,t.motor_model,t.chassis_model,t.motor_power,
+		t.max_weight,t.battery_model,b.sequence,t.battery_capacity,concat(t.passengers,'/',b.bus_seats) passengers,
+		b.nameplate_print_date AS productive_date,t.rated_voltage,b.bus_number,b.vin,b.ccczs_date,b.dpgg_date,b.zcgg_date,
+		b.dp_production_date,b.zc_production_date,
+		case when b.right_motor_number is not null then CONCAT(b.left_motor_number,'/',b.right_motor_number)
+		else b.left_motor_number end as motor_number,
+		b.bus_color,b.bus_seats
+		from BMS_PLAN_BUS b
+		LEFT JOIN BMS_OR_ORDER_CONFIG oc ON b.order_config_id = oc.id
+		LEFT JOIN BMS_BASE_BUS_TYPE t ON t.vehicle_model=oc.bus_vehicle_type and
+		t.bus_type_code=substr(b.bus_number,1,LOCATE('-',b.bus_number)-1)
+		WHERE b.bus_number = #{bus_number} OR b.vin = #{bus_number}
+	</select>
+	<select id="getEcnTasksByBusNumber" parameterType="String" resultType="Map">
+		SELECT F.bus_number,T.task_content,T.tech_order_no,F.factory,F.workshop,U.display_name,F.confirmor_date FROM BMS_TECH_TASK_FOLLOW F
+		LEFT OUTER JOIN BMS_BASE_USER U ON F.confirmor_id = U.staff_number
+		LEFT OUTER JOIN BMS_TECH_TASK T ON F.tech_task_id = T.id
+		WHERE (F.bus_number = #{bus_number} OR 
+		F.bus_number = (SELECT B.bus_number FROM BMS_PLAN_BUS B WHERE B.VIN = #{bus_number}))
+	</select>
 	
 	
 	<!-- VIN码打印 -->
@@ -625,6 +646,47 @@
 		</foreach>
 	</update>
 	
+	<select id="getCertificationList" parameterType="Map" resultType="Map">
+		SELECT b.id,b.bus_number,b.vin,b.bus_color,b.bus_seats,concat(b.left_motor_number,'/',b.right_motor_number) motor_number,f.factory_name, 
+		t.vehicle_model,t.chassis_model,t.motor_model,b.zc_production_date as productive_date,b.dp_production_date,
+		b.tire_type,o.order_no,concat(t.passengers,'/',b.bus_seats) passengers,b.spring_num,b.dp_zzd,b.zc_zzd,b.hgz_note
+		FROM BMS_PLAN_BUS b
+		LEFT JOIN BMS_OR_ORDER o ON b.order_id = o.id
+		LEFT JOIN BMS_BASE_FACTORY f ON b.factory_id = f.id
+		LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id = t.id
+		WHERE b.factory_id =#{factory_id} and b.vin IS NOT NULL and b.left_motor_number IS NOT NULL 
+		and b.right_motor_number IS NOT NULL
+		<if test="order_no!=''">
+			and o.order_no= #{order_no}
+		</if>
+		<if test="bus_number_size!=0">
+			and b.bus_number in
+			<foreach item="item" index="index" collection="bus_number"
+				open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="start !=null">
+			LIMIT #{start} ,#{length} 
+		</if>
+	</select>
+	<select id="getCertificationCount" parameterType="Map" resultType="int">
+		SELECT count(b.id) FROM BMS_PLAN_BUS b
+		LEFT OUTER JOIN BMS_OR_ORDER o ON b.order_id = o.id
+		LEFT OUTER JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id = t.id
+		WHERE b.factory_id = #{factory_id} and b.vin IS NOT NULL and
+		b.left_motor_number IS NOT NULL and b.right_motor_number IS NOT NULL
+		<if test="order_no!=''">
+			and o.order_no= #{order_no}
+		</if>
+		<if test="bus_number_size!=0">
+			and b.bus_number in
+			<foreach item="item" index="index" collection="bus_number"
+				open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+	</select>
 <!-- ########################### xiong jianwu end#############################-->
 
 	<update id="updateBusMotorNumber" parameterType="map">

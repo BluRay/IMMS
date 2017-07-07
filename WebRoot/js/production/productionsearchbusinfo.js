@@ -43,7 +43,7 @@ $(document).ready(function () {
 			ajaxQueryTab09();
 		}else if(this.id == "div10"){
 			cur_tab = "10";
-			
+			ajaxQueryTab10();
 		}
 	});
 	
@@ -57,6 +57,9 @@ $(document).ready(function () {
 		
 		if(cur_tab == "06")ajaxQueryTab06();
 		if(cur_tab == "07")ajaxQueryTab07();
+		if(cur_tab == "08")ajaxQueryTab08();
+		if(cur_tab == "09")ajaxQueryTab09();
+		if(cur_tab == "10")ajaxQueryTab10();
 	});
 	
 });
@@ -207,7 +210,37 @@ function ajaxQueryTab07(){
 }
 
 function ajaxQueryTab08(){
-	
+	$.ajax({
+	    url: "getCertificationInfo",
+	    dataType: "json",
+		type: "get",
+	    data: {
+	    	"bus_number": $('#search_busnumber').val()
+	    },
+	    success:function(response){
+	    	$.each(response.data,function (index,value) {
+    			$("#tab08_bus_number").html(value.bus_number);
+    			$("#tab08_vin").html(value.vin);
+    			$("#tab08_chassis_model").html(value.chassis_model);
+    			$("#tab08_vehicle_model").html(value.vehicle_model);
+	    		$("#tab08_motor_model").html(value.motor_model);
+	    		$("#tab08_motor_number").html(value.motor_number);
+	    		$("#tab08_bus_color").html(value.bus_color);
+	    		$("#tab08_bus_seats").html(value.bus_seats);
+	    		$("#tab08_battery_model").html(value.battery_model);
+	    		$("#tab08_passengers").html(value.passengers);
+	    		$("#tab08_productive_date").html(value.productive_date);
+	    		$("#tab08_plates").html(value.spring_num);
+	    		$("#tab08_tire_type").html(value.tire_type);
+	    		$("#tab08_chassis_notice_date").html(value.dpgg_date);
+	    		$("#tab08_ccc_date").html(value.ccczs_date);
+	    		$("#tab08_production_notice_date").html(value.zcgg_date);
+	    		$("#tab08_chassis_date").html(value.dp_production_date);
+	    		$("#tab08_production_date").html(value.zc_production_date);
+	    		
+    		});	
+	    }
+	});
 }
 
 function ajaxQueryTab09(){
@@ -248,6 +281,32 @@ function ajaxQueryTab09(){
     		});	
 	    }
 	});
+}
+
+function ajaxQueryTab10(){
+	$.ajax({
+	    url: "queryTechSingleCarNolist",
+	    dataType: "json",
+		type: "get",
+	    data: {
+	    	"bus_number": $('#search_busnumber').val()
+	    },
+	    success:function(response){
+	    	$("#table10 tbody").html("");
+	    	$.each(response.data,function (index,value) {
+	    		var tr = $("<tr height='30px' id= '"+value.id+"'/>");
+    			$("<td style=\"text-align:center;padding:3px\" />").html(index + 1).appendTo(tr);
+    			$("<td style=\"text-align:center;padding:3px\" />").html(value.task_content).appendTo(tr);
+    			$("<td style=\"text-align:center;padding:3px\" />").html(value.tech_order_no).appendTo(tr);
+    			$("<td style=\"text-align:center;padding:3px\" />").html(value.workshop).appendTo(tr);
+    			$("<td style=\"text-align:center;padding:3px\" />").html(value.factory).appendTo(tr);
+    			$("<td style=\"text-align:center;padding:3px\" />").html(value.display_name).appendTo(tr);
+    			$("<td style=\"text-align:center;padding:3px\" />").html(value.confirmor_date).appendTo(tr);
+    			$("#table10 tbody").append(tr);
+    		});	
+	    }
+	});
+	
 }
 
 function Request(strName){  

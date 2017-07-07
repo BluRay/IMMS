@@ -55,7 +55,7 @@ $(document).ready(function () {
 			window.location.href='/IMMS/production/nameplatePrint';
 		}
 		if(name=='合格证'){
-			window.location.href='production!certification.action';
+			window.location.href='/IMMS/production/certificationPrint';
 		}
 		if(name=='发车'){
 			window.location.href='busDispatch!planListPage.action';

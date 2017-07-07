@@ -2,8 +2,10 @@ package com.byd.bms.production.service;
 
 import java.util.List;
 import java.util.Map;
+
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
+
 import com.byd.bms.production.model.ProductionException;
 public interface IProductionService {
 	/*****************************xiong jianwu start  *****************************/
@@ -48,10 +50,18 @@ public interface IProductionService {
 	public List<Map<String,String>> getNamePlateInfo(String bus_number);
 	
 	public List<Map<String,String>> getProductionSearchException(String bus_number);
+	
+	public List<Map<String,String>> getCertificationInfo(String bus_number);
+	
+	public List<Map<String,String>> getEcnTasksByBusNumber(String bus_number);
 
 	public void getNameplatePrintList(Map<String, Object> conditionMap, ModelMap model);
 
 	public void updateNameplatePrint(Map<String, Object> conditionMap, ModelMap model);
+
+	public void getCertificationList(Map<String, Object> conditionMap, ModelMap model);
+
+	public void transferDataToHGZSys(List<Map<String, Object>> buslist, ModelMap model);
 	
 	/*****************************xiong jianwu end  *****************************/
 
@@ -80,4 +90,6 @@ public interface IProductionService {
 	
 	public List<Map<String,Object>> getOrderConfigList(Map<String,Object> conditionMap);
 	/******************* tangjin end**************************/
+
+
 }

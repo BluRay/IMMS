@@ -435,10 +435,10 @@ function fadeMessageAlert(title,message, alertClass) {
 //表格下复选框全选、反选;checkall:true全选、false反选
 function check_All_unAll(tableId, checkall) {
 	if (checkall) {
-		$(tableId + " tbody :checkbox").prop("checked", true);
+		$(tableId + " tbody :checkbox").not(':disabled').prop("checked", true);
 		//alert("选中");
 	} else {
-		$(tableId + " tbody :checkbox").prop("checked",false);
+		$(tableId + " tbody :checkbox ").prop("checked",false);
 	}
 }
 

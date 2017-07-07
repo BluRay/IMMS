@@ -21,7 +21,7 @@
 		<!-- 头 -->
 		<jsp:include page="../top.jsp" flush="true"/>
 		<!-- 身 -->
-		<div class="main-container notPrintable" id="main-container" >
+		<div class="main-container"  id="main-container" >
 			<!-- 左边菜单 -->
 			<jsp:include page="../left.jsp" flush="true"/>
 			<!-- 主体 -->
@@ -54,9 +54,11 @@
 								<td>
 								<input type="text" class="input-medium revise" id="search_order_no" style="height: 30px;" />
 								</td>
-								<td><input class="btn btn-danger" id="btnBuslist" value="指定车号" style="margin-left: 2px;" type="button">
-					<input class="btn btn-success" id="btnImport" value="传输打印"  style="margin-left: 2px;" type="button">
-					<input type="text" style="display:none;width:400px" class="input-large revise" id="bus_number_str"></input>
+								<td>
+								<input type="button" class="btn btn-sm  btn-primary" id="btnQuery" value="查询" style="margin-left: 2px;"></input>
+								<input class="btn btn-sm btn-danger" id="btnBuslist" value="指定车号" style="margin-left: 2px;" type="button">
+								<input class="btn btn-sm  btn-success" id="btnImport" value="传输打印"  style="margin-left: 2px;" type="button">
+								<input type="text" style="display:none;width:400px" class="input-large revise" id="bus_number_str"></input>
 								</td>							
 							</tr>
 
@@ -70,14 +72,18 @@
 					</div>
 					</div>
 					
+					<div id="dialog-config" class="hide">
+					<form id="  " class="form-horizontal">
+						<div class="form-group">
+							<label class="col-sm-2 control-label no-padding-right no-padding-right" for="vin">车号：</label>
+							<div class="col-sm-9">
+								<textarea rows="6" id="search_bus_number" style="width:300px" placeholder="每行输入一个车号后回车！"></textarea>
+							</div>
+						</div>
+					</form>
+				</div>
 			</div><!-- /.main-content -->
-
-	</div>
-	</div>
-	<div id="printarea" class="printConfigure printable toPrint">
-			<table id="tablePrint" class="table table-bordered">
-		
-			</table>
+		</div>
 	</div>
 	</body>
 	<script src="../assets/js/fuelux/fuelux.tree.min.js"></script>
@@ -92,5 +98,5 @@
 	<script type="text/javascript" src="../assets/js/bootstrap3-typeahead.js"></script>
 	<script type="text/javascript" src="../js/jsrender.min.js"></script>
 	<script type="text/javascript" src="../js/jquery-barcode.js"></script>
-	<script type="text/javascript" src="../js/production/nameplatePrint.js"></script>
+	<script type="text/javascript" src="../js/production/certificationPrint.js"></script>
 </html>

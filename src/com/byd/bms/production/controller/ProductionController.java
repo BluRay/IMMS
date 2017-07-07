@@ -1,5 +1,9 @@
 package com.byd.bms.production.controller;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -453,7 +457,6 @@ public class ProductionController extends BaseController {
 		productionService.updateNameplatePrint(conditionMap,model);
 		return model;
 	}
-	/****************************  xiongjianwu ***************************/
 	
 	/**
 	 *	车间供货页面
@@ -619,6 +622,63 @@ public class ProductionController extends BaseController {
 		return model;
 	}
 	
+	/**
+	 *	合格证打印页面
+	 * @return
+	 */
+	@RequestMapping("/certificationPrint")
+	public ModelAndView certificationPrint(){
+		mv.setViewName("production/certificationPrint");
+		return mv;
+	}
+	/**
+	 * 获取合格证打印列表数据
+	 * @return
+	 */
+	@RequestMapping("/getCertificationList")
+	@ResponseBody
+	public ModelMap getCertificationList(){
+		model.clear();
+		
+		String conditions=request.getParameter("conditions");
+		logger.info("合格证查询条件:"+conditions);
+		JSONObject jo = JSONObject.fromObject(conditions);
+		Map<String, Object> conditionMap = new HashMap<String, Object>();	
+		for (Iterator it = jo.keys(); it.hasNext();) {
+			String key = (String) it.next();
+			conditionMap.put(key, jo.get(key));
+		}
+		String bus_number=conditionMap.get("bus_number").toString();
+		String[] busNumberList =bus_number.split("\n");
+		int bus_number_size = busNumberList.length;
+		if (bus_number.equals(""))bus_number_size=0;
+		conditionMap.put("bus_number", busNumberList);
+		conditionMap.put("bus_number_size", bus_number_size);
+		
+		productionService.getCertificationList(conditionMap,model);
+		return model;
+	}
+	
+	/**
+	 * added by xjw 2017/03/10
+	 * 合格证信息传输到合格证系统打印
+	 * @return
+	 */
+	@RequestMapping("/certificatePrint")
+	@ResponseBody
+	public ModelMap certificatePrint(){
+		model.clear();
+		String conditions=request.getParameter("conditions");
+		JSONArray jsa=JSONArray.fromObject(conditions);
+		List<Map<String,Object>> buslist=JSONArray.toList(jsa,Map.class);
+		
+		productionService.transferDataToHGZSys(buslist,model);
+		
+		return model;
+	}
+	
+	/****************************  xiongjianwu ***************************/
+	
 	@RequestMapping("/productionsearchbusinfo")
 	public ModelAndView productionsearchbusinfo(){
 		mv.setViewName("production/productionsearchbusinfo");
@@ -665,6 +725,31 @@ public class ProductionController extends BaseController {
 	@ResponseBody
 	public ModelMap getProductionSearchException(){
 		List<Map<String, String>> datalist = productionService.getProductionSearchException(request.getParameter("bus_number"));
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("data", datalist);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(result);
+		model = mv.getModelMap();
+		return model;
+	}
+
+	
+	@RequestMapping("/getCertificationInfo")
+	@ResponseBody
+	public ModelMap getCertificationInfo(){
+		List<Map<String, String>> datalist = productionService.getCertificationInfo(request.getParameter("bus_number"));
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("data", datalist);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(result);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/queryTechSingleCarNolist")
+	@ResponseBody
+	public ModelMap queryTechSingleCarNolist(){
+		List<Map<String, String>> datalist = productionService.getEcnTasksByBusNumber(request.getParameter("bus_number"));
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("data", datalist);
 		mv.clear();

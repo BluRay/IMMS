@@ -215,7 +215,7 @@
 							</div>
 							
 							<div id="div_9" style="overflow:auto" class="tab-pane fade">
-								<table id="table09" style="text-align:center;table-layout:fixed;font-size:12px;width:1150px" class="table table-bordered table-striped">
+								<table id="table09" style="text-align:center;table-layout:fixed;font-size:12px;" class="table table-bordered table-striped">
 									<thead>
 										<tr id="0">
 											<th style="width:60px;text-align:center;">序号</th>
@@ -238,7 +238,21 @@
 							</div>
 							
 							<div id="div_10" style="overflow:auto" class="tab-pane fade">
-								div_10
+								<table id="table10" style="text-align:center;font-size:12px" class="table table-bordered table-striped">
+									<thead>
+											<tr>
+												<th style="text-align:center;">序号</th>
+												<th style="text-align:center;">技改任务</th>
+												<th style="text-align:center;">技改单编号</th>
+												<th style="text-align:center;">技改工厂</th>
+												<th style="text-align:center;">技改车间</th>
+												<th style="text-align:center;">确认人</th>
+												<th style="text-align:center;">确认时间</th>
+											</tr>
+										</thead>
+										<tbody>
+										</tbody>
+									</table>
 							</div>
 							
 						</div>

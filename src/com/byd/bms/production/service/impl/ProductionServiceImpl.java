@@ -3,6 +3,10 @@
  */
 package com.byd.bms.production.service.impl;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +21,7 @@ import org.springframework.ui.ModelMap;
 import com.byd.bms.production.dao.IProductionDao;
 import com.byd.bms.production.model.ProductionException;
 import com.byd.bms.production.service.IProductionService;
+import com.sun.media.jfxmedia.logging.Logger;
 
 /**
  * @author xiong.jianwu
@@ -259,6 +264,16 @@ public class ProductionServiceImpl implements IProductionService {
 	public List<Map<String,String>> getProductionSearchException(String bus_number){
 		return productionDao.getProductionSearchException(bus_number);
 	}
+	
+	@Override
+	public List<Map<String,String>> getCertificationInfo(String bus_number){
+		return productionDao.getCertificationInfo(bus_number);
+	}
+	
+	@Override
+	public List<Map<String,String>> getEcnTasksByBusNumber(String bus_number){
+		return productionDao.getEcnTasksByBusNumber(bus_number);
+	}
 
 	@Override
 	public void getNameplatePrintList(Map<String, Object> condMap, ModelMap model) {
@@ -284,8 +299,117 @@ public class ProductionServiceImpl implements IProductionService {
 		}
 		
 	}
-	/*****************************xiong jianwu end  *****************************/
 	
+	@Override
+	public void getCertificationList(Map<String, Object> condMap, ModelMap model) {
+		int totalCount=0;
+		List<Map<String, Object>> datalist=productionDao.getCertificationList(condMap);
+		totalCount=productionDao.getCertificationCount(condMap);
+		model.put("draw", condMap.get("draw"));
+		model.put("recordsTotal", totalCount);
+		model.put("recordsFiltered", totalCount);
+		model.put("data", datalist);	
+	}
+
+	@Override
+	public void transferDataToHGZSys(List<Map<String, Object>> buslist,ModelMap model) {
+		String JDriver="com.microsoft.sqlserver.jdbc.SQLServerDriver";//SQL数据库引擎
+		String connectDB="jdbc:sqlserver://10.3.12.134;DatabaseName=HGZ_DATABASE";//数据源
+		String user="TEST";
+		String password="byd123456";
+	
+		List<Map<String,Object>> updateList=new ArrayList<Map<String,Object>>();
+		List<Map<String,Object>> insertList=new ArrayList<Map<String,Object>>();
+		Connection con=null;
+		try
+		{
+			Class.forName(JDriver);//加载数据库引擎，返回给定字符串名的类
+			con=DriverManager.getConnection(connectDB,user,password);//连接数据库对象		
+			con.setAutoCommit(false);
+			System.out.println("连接数据库成功");
+			Statement stmt=con.createStatement();//创建SQL命令对象
+			
+			for(Map<String,Object> bus:buslist){
+				String sql_q="select VIN from PRINT_TABLE where VIN='"+bus.get("vin")+"'";
+				ResultSet rs=stmt.executeQuery(sql_q);
+				if(rs.next()){
+					updateList.add(bus);
+				}else{
+					insertList.add(bus);
+				}
+			}
+			
+			for(Map<String,Object>bus:updateList){
+				StringBuffer sb=new StringBuffer("update PRINT_TABLE set ");
+				sb.append("CLXH='").append(bus.get("vehicle_model")).append("',");
+				sb.append("FDJH='").append(bus.get("motor_model")).append(" ")
+				.append(bus.get("motor_number")).append("',");
+				sb.append("Leavedate='").append(bus.get("productive_date")).append("',");
+				sb.append("CLYS='").append(bus.get("bus_color")).append("',");
+				sb.append("Ltgg='").append(bus.get("tire_type")).append("',");
+				sb.append("NOTE='").append(bus.get("hgz_note")).append("',");
+				sb.append("SCD='").append(bus.get("zc_zzd")).append("'");
+				sb.append(" where VIN='").append(bus.get("vin")).append("'").append(" and DATATYPE='1'");
+				stmt.addBatch(sb.toString());
+				
+				StringBuffer sb1=new StringBuffer("update PRINT_TABLE set ");
+				sb1.append("CLXH='").append(bus.get("chassis_model")).append("',");
+				sb1.append("FDJH='").append(bus.get("motor_model")).append(" ")
+				.append(bus.get("motor_number")).append("',");
+				sb1.append("Leavedate='").append(bus.get("dp_production_date")).append("',");
+				sb1.append("CLYS='").append(bus.get("bus_color")).append("',");
+				sb1.append("Ltgg='").append(bus.get("tire_type")).append("',");
+				sb1.append("NOTE='").append(bus.get("hgz_note")).append("',");
+				sb1.append("SCD='").append(bus.get("dp_zzd")).append("'");
+				sb1.append(" where VIN='").append(bus.get("vin")).append("'").append(" and DATATYPE='0'");;
+				stmt.addBatch(sb1.toString());
+			}
+			
+			for(Map<String,Object>bus:insertList){
+				StringBuffer sb=new StringBuffer("insert into PRINT_TABLE (VIN,CLXH,FDJH,Leavedate,CLYS,Ltgg,NOTE,SCD,DATATYPE) values(");
+				sb.append("'").append(bus.get("vin")).append("',");
+				sb.append("'").append(bus.get("vehicle_model")).append("',");
+				sb.append("'").append(bus.get("motor_model")).append(" ")
+				.append(bus.get("motor_number")).append("',");
+				sb.append("'").append(bus.get("productive_date")).append("',");
+				sb.append("'").append(bus.get("bus_color")).append("',");
+				sb.append("'").append(bus.get("tire_type")).append("',");
+				sb.append("'").append(bus.get("hgz_note")).append("',");
+				sb.append("'").append(bus.get("zc_zzd")).append("',");
+				sb.append("'1')");
+				stmt.addBatch(sb.toString());
+				
+				StringBuffer sb1=new StringBuffer("insert into PRINT_TABLE (VIN,CLXH,FDJH,Leavedate,CLYS,Ltgg,NOTE,SCD,DATATYPE) values(");
+				sb1.append("'").append(bus.get("vin")).append("',");
+				sb1.append("'").append(bus.get("chassis_model")).append("',");
+				sb1.append("'").append(bus.get("motor_model")).append(" ")
+				.append(bus.get("motor_number")).append("',");
+				sb1.append("'").append(bus.get("dp_production_date")).append("',");
+				sb1.append("'").append(bus.get("bus_color")).append("',");
+				sb1.append("'").append(bus.get("tire_type")).append("',");
+				sb1.append("'").append(bus.get("hgz_note")).append("',");
+				sb1.append("'").append(bus.get("dp_zzd")).append("',");
+				sb1.append("'0')");
+				stmt.addBatch(sb1.toString());
+			}
+			
+			stmt.executeBatch();
+			stmt.close();
+			con.commit();
+			con.close();
+			model.put("success", true);
+			model.put("message", "传输打印成功！");
+		}catch(Exception e)
+		{
+			model.put("success", false);
+			model.put("message", e.getMessage());
+		}
+		
+	}
+	
+	/*****************************xiong jianwu end  *****************************/
+
+
 	/*******************  tangjin start **************************/
 	@Override
 	public Map<String, Object> getVinPrintList(Map<String, Object> conditionMap) {
