@@ -167,11 +167,8 @@ function ajaxQueryOrderTool(orderNo){
 			"dis_date_end":$("#dis_date_end").val()
 		},
 		success:function(response){
-			if(response.data.length>0){
-				//$("#queryBtn").attr("disabled",true);
-				$("#querydisBtn").attr("disabled",false);
-				$("#dispatchBtn").attr("disabled",false);
-			}
+			$("#querydisBtn").attr("disabled",false);
+			$("#dispatchBtn").attr("disabled",false);
 			generateRecordTable(response.data);
 			generateListTabel(response.data);
 		}

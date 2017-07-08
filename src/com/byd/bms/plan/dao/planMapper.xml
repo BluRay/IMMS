@@ -1158,7 +1158,7 @@
 			AND P.factory_id = #{factory}
 		</if>
 		<if test="bustype !=null and bustype !=''">
-			AND O.bus_type_id = #{bustype}
+			AND T.bus_type_code = #{bustype}
 		</if>
 		<if test="order_no !=null and order_no !=''">
 			AND O.order_no = #{order_no}

@@ -54,9 +54,9 @@
 						<ul class="nav nav-tabs" id="myTab">
 							<li id="div1" class="active"><a data-toggle="tab" href="#div_1">基本信息</a></li>
 							<li id="div2"><a data-toggle="tab" href="#div_2">生产信息</a></li>
-							<li id="div3"><a data-toggle="tab" href="#div_3">检验流程卡</a></li>
+							<li id="div3"><a data-toggle="tab" href="#div_3">成品纪录表</a></li>
 							<li id="div4"><a data-toggle="tab" href="#div_4">关键零部件</a></li>
-							<li id="div5"><a data-toggle="tab" href="#div_5">订单配置一致性</a></li>
+							<!-- <li id="div5"><a data-toggle="tab" href="#div_5">订单配置一致性</a></li>-->
 							<li id="div6"><a data-toggle="tab" href="#div_6">底盘铭牌</a></li>
 							<li id="div7"><a data-toggle="tab" href="#div_7">整车铭牌</a></li>
 							<li id="div8"><a data-toggle="tab" href="#div_8">合格证</a></li>
@@ -122,7 +122,22 @@
 							</div>
 							
 							<div id="div_3" style="overflow:auto" class="tab-pane fade">
-								div_3
+								<table id="table03" class="table table-bordered" style="font-size: 12px;">
+									<thead>
+										<tr>
+											<th style="text-align:center;">序号</th>
+											<th style="text-align:center;">车号</th>
+											<th style="text-align:center;">节点</th>
+											<th style="text-align:center;">检测结果</th>
+											<th style="text-align:center;">结果判定</th>
+											<th style="text-align:center;">返工/返修</th>
+											<th style="text-align:center;">检验员</th>
+											<th style="text-align:center;">检验日期</th>
+										</tr>
+									</thead>
+									<tbody>
+									</tbody>
+								</table>
 							</div>
 							
 							<div id="div_4" style="overflow:auto" class="tab-pane fade">

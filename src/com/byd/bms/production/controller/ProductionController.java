@@ -758,6 +758,18 @@ public class ProductionController extends BaseController {
 		return model;
 	}
 	
+	@RequestMapping("/getQmTestCardList")
+	@ResponseBody
+	public ModelMap getQmTestCardList(){	//车辆信息查询 成品纪录表 TEST_CARD
+		List<Map<String, String>> datalist = productionService.getQmTestCardList(request.getParameter("bus_number"));
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("data", datalist);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(result);
+		model = mv.getModelMap();
+		return model;
+	}
+	
 	/**************************** TANGJIN  ************************/
 	
 	/**打印VIN码*/

@@ -273,6 +273,11 @@ public class ProductionServiceImpl implements IProductionService {
 	public List<Map<String,String>> getEcnTasksByBusNumber(String bus_number){
 		return productionDao.getEcnTasksByBusNumber(bus_number);
 	}
+	
+	@Override
+	public List<Map<String,String>> getQmTestCardList(String bus_number){
+		return productionDao.getQmTestCardList(bus_number);
+	}
 
 	@Override
 	public void getNameplatePrintList(Map<String, Object> condMap, ModelMap model) {

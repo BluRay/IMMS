@@ -22,7 +22,7 @@ $(document).ready(function () {
 			ajaxQueryTab02();
 		}else if(this.id == "div3"){
 			cur_tab = "03";
-			
+			ajaxQueryTab03();
 		}else if(this.id == "div4"){
 			cur_tab = "04";
 			
@@ -54,6 +54,7 @@ $(document).ready(function () {
 		}
 		if(cur_tab == "01")ajaxQuery();
 		if(cur_tab == "02")ajaxQueryTab02();
+		if(cur_tab == "03")ajaxQueryTab03();
 		
 		if(cur_tab == "06")ajaxQueryTab06();
 		if(cur_tab == "07")ajaxQueryTab07();
@@ -141,6 +142,33 @@ function ajaxQueryTab02(){
     			$("<td style=\"text-align:center;padding:3px\" />").html(status).appendTo(tr);
     			$("<td style=\"text-align:center;padding:3px\" />").html(value.display_name).appendTo(tr);
     			$("#table02 tbody").append(tr);
+	    	});
+	    }
+	});
+	
+}
+
+function ajaxQueryTab03(){
+	$.ajax({
+	    url: "getQmTestCardList",
+	    dataType: "json",
+		type: "get",
+	    data: {
+	    	"bus_number": $('#search_busnumber').val()
+	    },
+	    success:function(response){
+	    	$("#table03 tbody").html("");
+	    	$.each(response.data,function (index,value) {
+	    		var tr = $("<tr height='30px' id= '"+value.id+"'/>");
+    			$("<td style=\"text-align:center;padding:3px\" />").html(index + 1).appendTo(tr);
+    			$("<td style=\"text-align:center;padding:3px\" />").html(value.bus_number).appendTo(tr);
+    			$("<td style=\"text-align:center;padding:3px\" />").html(value.test_node).appendTo(tr);
+    			$("<td style=\"text-align:center;padding:3px\" />").html(value.test_result).appendTo(tr);
+    			$("<td style=\"text-align:center;padding:3px\" />").html(value.result_judge).appendTo(tr);
+    			$("<td style=\"text-align:center;padding:3px\" />").html(value.rework).appendTo(tr);
+    			$("<td style=\"text-align:center;padding:3px\" />").html(value.tester).appendTo(tr);
+    			$("<td style=\"text-align:center;padding:3px\" />").html(value.test_date).appendTo(tr);
+    			$("#table03 tbody").append(tr);
 	    	});
 	    }
 	});
