@@ -600,9 +600,12 @@
 	</update>
 	
 	<select id="getNameplatePrintList" parameterType="Map" resultType="Map">
-		select b.bus_number,b.vin,b.zc_production_date productive_date,t.brand,t.*,u.username printer,
+		select b.bus_number,b.vin,b.zc_production_date productive_date,u.username printer,
 		case when b.nameplate_print_date is null then '未打印' else '已打印' end as print_flag,
-		substring(b.nameplate_print_date,1,10) print_date
+		t.battery_model,t.max_weight,t.chassis_model,
+		substring(b.nameplate_print_date,1,10) print_date,t.brand,t.motor_model,t.motor_power,
+		case when t.rated_voltage&lt;=0 then b.rated_voltage end as rated_voltage,
+		case when t.battery_capacity&lt;=0 then b.battery_capacity end as battery_capacity
 		from BMS_PLAN_BUS b
 		left join BMS_OR_ORDER o on b.order_id=o.id
 		left join BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id

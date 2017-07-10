@@ -203,4 +203,25 @@
 	<select id="getUserInfoByCard" parameterType="String" resultType="Map">
 		select * from BMS_BASE_USER where card_8H10D=#{cardId}
 	</select>
+	
+	<select id="queryIndexOrderData" parameterType="String" resultType="Map">
+		select * from
+		(select count(b.bus_number) warehouse_qty
+		from BMS_OR_ORDER o
+		left join BMS_PLAN_BUS b on b.order_id=o.id and b.warehousing_date>0
+		where o.productive_year=#{actYear}) a,
+		(select  (sum(o.order_qty)-count(b.bus_number)) unstart_qty
+		from BMS_OR_ORDER o
+		left join BMS_PLAN_BUS b on b.order_id=o.id and b.welding_online_date>0
+		where o.productive_year=#{actYear}) b,
+		(select count(b.bus_number) producting_qty
+		from BMS_OR_ORDER o
+		left join BMS_PLAN_BUS b on b.order_id=o.id and b.welding_online_date>0 and b.warehousing_date&lt;=0
+		where o.productive_year=#{actYear}) c,
+		(select count(b.bus_number) dispatch_qty
+		from BMS_OR_ORDER o
+		left join BMS_PLAN_BUS b on b.order_id=o.id and b.dispatch_date>0
+		where o.productive_year=#{actYear}) d
+	</select>
+	
 </mapper>

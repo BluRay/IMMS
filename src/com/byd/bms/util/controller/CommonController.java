@@ -1,13 +1,17 @@
 package com.byd.bms.util.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.byd.bms.util.service.ICommonService;
 
 @Controller
@@ -301,4 +305,21 @@ public class CommonController extends BaseController {
 
 		return model;
 	}
+	
+	/**
+	 * @author xiong.jianwu
+	 * 获取首页订单情况数据
+	 * @return
+	 */
+	@RequestMapping("/getIndexOrderData")
+	@ResponseBody
+	public ModelMap getIndexOrderData(){
+		model.clear();
+		SimpleDateFormat df = new SimpleDateFormat("yyyy");
+		String actYear = df.format(new Date());
+		commonService.getIndexOrderData(actYear,model);
+		return model;
+	}
+	
+	
 }

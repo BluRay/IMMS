@@ -38,7 +38,7 @@ function ajaxQuery(){
 		scrollY: $(window).height()-245,
 		scrollX: $(window).width(),
 		/*scrollCollapse: true,*/
-		pageLength: 15,
+		pageLength: 20,
 		pagingType:"full_numbers",
 		lengthChange:false,
 		orderMulti:false,

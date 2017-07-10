@@ -55,6 +55,9 @@ public class BmsOrderReviewResults {
 	private String editDate;
 	private String wfOrderId;
 	private String wfProcessId;
+	private String orderNo;
+	private String factoryName;
+	
 	public int getId() {
 		return id;
 	}
@@ -350,5 +353,17 @@ public class BmsOrderReviewResults {
 	}
 	public void setPlandepNode(String plandepNode) {
 		this.plandepNode = plandepNode;
+	}
+	public String getOrderNo() {
+		return orderNo;
+	}
+	public void setOrderNo(String orderNo) {
+		this.orderNo = orderNo;
+	}
+	public String getFactoryName() {
+		return factoryName;
+	}
+	public void setFactoryName(String factoryName) {
+		this.factoryName = factoryName;
 	}
 }

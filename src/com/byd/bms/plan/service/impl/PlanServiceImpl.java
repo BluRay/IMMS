@@ -1248,7 +1248,7 @@ public class PlanServiceImpl implements IPlanService {
 			Map<String, Object> recode_map = new HashMap<String,Object>();
 			recode_map.put("dispatch_plan_id", recode[0]);
 			recode_map.put("bus_number", recode[1]);
-			recode_map.put("dispatcher_id", recode[2]);
+			recode_map.put("dispatcher_id", edit_user);
 			recode_map.put("receiver", recode[3]);
 			recode_map.put("workcardid", recode[4]);
 			recode_map.put("batch_desc", recode[5]);

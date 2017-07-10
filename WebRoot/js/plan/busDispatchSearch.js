@@ -66,9 +66,9 @@ function ajaxQuery(){
 		            {"title":"计划发车数量","class":"center","data": "order_dispatch","defaultContent": ""},
 		            {"title":"实际发车数量","class":"center","data": "order_done_qty","defaultContent": ""},                
 		            {"title":"剩余数量","class":"center","data": "order_left","defaultContent": "-"},
-		            {"title":"操作","class":"center","data": null,"id":"staff_number",
+		            {"title":"车辆详情","class":"center","data": null,"id":"staff_number",
 		            	"render": function ( data, type, row ) {
-		                    return "<i class=\"glyphicon glyphicon-zoom-in bigger-130 showbus\" title=\"发车\" onclick='fun_dispatch(\""+row['order_no']+"\")' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;";
+		                    return "<i class=\"glyphicon glyphicon-zoom-in bigger-130 showbus\" title=\"车辆详情\" onclick='fun_dispatch(\""+row['order_no']+"\")' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;";
 		                },
 		            }
 		          ],
@@ -106,8 +106,8 @@ function fun_dispatch(order_no){
 			var param ={
 				"draw":1,
 				"orderNo":order_no,
-				"dispatchStart":$("#start_date").val(),
-				"dispatchEnd":$("#end_date").val(),
+				"dispatchStart":'',
+				"dispatchEnd":'',
 				"orderColumn":"id"
 			};
             param.length = data.length;					//页面显示记录条数，在页面显示每页显示多少项的时候

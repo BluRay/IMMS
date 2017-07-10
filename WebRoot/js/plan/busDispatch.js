@@ -8,6 +8,7 @@ $(document).ready(function () {
 	initPage();
 	
 	function initPage(){
+		getBusNumberSelect('#busNo');
 		getFactorySelect("plan/busDispatchPlan",'',"#search_factory",null,'id');
 		getOrderNoSelect("#search_order_no","#orderId");
 		$("#dispatchBtn").prop("disabled","disabled");
@@ -68,6 +69,7 @@ $(document).ready(function () {
 		})
 		if(tr_count == 0)doDispatch=false;
 		if(doDispatch){
+		$("#receiver").val();
 		$("#dispatchModal").removeClass('hide').dialog({
 			resizable: false,
 			title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 请刷厂牌</h4></div>',
@@ -117,7 +119,8 @@ $(document).ready(function () {
 		$("#kdForm").data("qtys",count);
 		var KDNo = $("#dis_order_no_kd").val()+"-"+$("#customerNoStart").val()+"_"+$("#customerNoEnd").val();
 		$("#kdForm").data("bus_number",KDNo);
-		
+
+		$("#receiverKD").val();
 		$("#dispatchKDModal").removeClass('hide').dialog({
 			resizable: false,
 			title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 请刷厂牌</h4></div>',
@@ -146,6 +149,11 @@ $(document).ready(function () {
 		if($("#receiverKD").val() == ""){
 			alert("请先刷厂牌！");
 			$("#workcardidKD").focus();
+			return false;
+		}
+		if($("#receiver").val() == ""){
+			alert("请先刷厂牌获取接收人信息！");
+			$("#workcardid").focus();
 			return false;
 		}
 		var qtys = parseInt($("#kdForm").data("qtys"));
@@ -191,6 +199,11 @@ $(document).ready(function () {
 	function btnDispatchConfirm(){
 		if($("#workcardid").val() == ""){
 			alert("请先刷厂牌！");
+			$("#workcardid").focus();
+			return false;
+		}
+		if($("#receiver").val() == ""){
+			alert("请先刷厂牌获取接收人信息！");
 			$("#workcardid").focus();
 			return false;
 		}
@@ -594,4 +607,10 @@ function fun_dispatch(planLeftqty,planId,orderId,customer_number_flag,factory_id
 	});
 }
 
+function close_form(){
+	$("#busNoForm").css("display", "none");
+}
+function close_form_kd(){
+	$("#kdForm").css("display", "none");
+}
 

@@ -1265,7 +1265,7 @@
 	
 	<select id="getBusDispatchTotalList" parameterType="Map" resultType="Map">
 		select order_no,CONCAT(order_name,'',bus_type,'',order_qty,'辆') order_desc,order_qty,sum(plan_done_qty)
-		order_done_qty,order_qty-sum(plan_dispatch_qty) order_left,sum(plan_dispatch_qty) order_dispatch
+		order_done_qty,order_qty-sum(plan_dispatch_qty) order_left,sum(plan_dispatch_qty) order_dispatch,dispatch_date
 		from(
 		select p.*,sum(qtys)
 		plan_done_qty,o.order_no,o.order_name,o.order_qty,f.factory_name,o.bus_type_id,b.internal_name bus_type
@@ -1288,7 +1288,7 @@
 		</if>
 		<if test="dispatchEnd !=null and dispatchEnd !=''">
 		 <![CDATA[  
-		 	and tmp.dispatch_date<#{dispatchEnd}
+		 	and tmp.dispatch_date<=#{dispatchEnd}
 		 ]]>
 		</if>
 		group by tmp.order_no

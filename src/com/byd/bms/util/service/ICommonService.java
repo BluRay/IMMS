@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
+import org.springframework.ui.ModelMap;
 
 import com.byd.bms.util.model.BmsBaseProcess;
 
@@ -50,4 +51,12 @@ public interface ICommonService {
 	List<Map<String,Object>> getWorkgroupSelectAll(Map<String,Object> condMap);
 	
 	public List<Map<String,String>> getUserInfoByCard(String string);//刷厂牌获取用户信息
+
+	/**
+	 * @author xiong.jianwu
+	 * @param actYear
+	 * @param model 
+	 */
+	void getIndexOrderData(String actYear, ModelMap model);
+	
 }

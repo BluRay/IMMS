@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.ui.ModelMap;
 
 import com.byd.bms.util.dao.ICommonDao;
 import com.byd.bms.util.model.BmsBaseProcess;
@@ -113,5 +114,8 @@ public class CommonServiceImpl implements ICommonService {
 	public List<Map<String, String>> getUserInfoByCard(String card_no) {
 		return commonDao.getUserInfoByCard(card_no);
 	}
-
+	@Override
+	public void getIndexOrderData(String actYear,ModelMap model) {
+		model.put("data", commonDao.queryIndexOrderData(actYear));		
+	}
 }

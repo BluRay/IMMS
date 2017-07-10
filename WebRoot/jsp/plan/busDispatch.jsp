@@ -59,6 +59,8 @@
 						</table>
 					</div>
 					<div id="busNoForm" style="display:none" class="well">
+						<div id="colse_a" style="display:block;float:right"><a href="#" style="text-align:right;" onclick="close_form();" data-action="close"><i class="ace-icon fa fa-times bigger-130"></i></a></div>
+						
 						<table>
 							<tr>
 								<td>发车订单：</td>
@@ -74,6 +76,7 @@
 					</div>
 					
 					<div id="kdForm" style="display:none" class="well">
+						<div id="colse_a_kd" style="display:block;float:right"><a href="#" style="text-align:right;" onclick="close_form_kd();" data-action="close"><i class="ace-icon fa fa-times bigger-130"></i></a></div>
 						<label>发车订单(KD件)：</label>
 						<input type="text" id="dis_order_no_kd" disabled="disabled" class="input-medium"> &nbsp;&nbsp;
 						<label>流水号：</label>
@@ -120,7 +123,7 @@
 						<td width="100px"></td><td align="right">工号：</td><td colspan=3><input type="text" class="input-large" id="workcardid"/></td>
 					</tr>
 					<tr style="height:40px">
-						<td></td><td align="right">姓名：</td><td colspan=3><input type="text" class="input-large" id="receiver"/></td>
+						<td></td><td align="right">姓名：</td><td colspan=3><input type="text" disabled="disabled" class="input-large" id="receiver"/></td>
 					</tr>
 				</table>
 			</form>
@@ -132,7 +135,7 @@
 						<td width="100px"></td><td align="right">工号：</td><td colspan=3><input type="text" class="input-large" id="workcardidKD"/></td>
 					</tr>
 					<tr style="height:40px">
-						<td></td><td align="right">姓名：</td><td colspan=3><input type="text" class="input-large" id="receiverKD"/></td>
+						<td></td><td align="right">姓名：</td><td colspan=3><input type="text" disabled="disabled" class="input-large" id="receiverKD"/></td>
 					</tr>
 				</table>
 			</form>

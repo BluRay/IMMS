@@ -97,20 +97,25 @@
 		where id=#{id}
 	</update>
 	<select id='getOrderReview' parameterType="Map" resultType="com.byd.bms.order.model.BmsOrderReviewResults">
-		select id,order_id orderId,factory_id factoryId,partsonline_date partsonlineDate,
+		select r.id,order_id orderId,factory_id factoryId,partsonline_date partsonlineDate,
 		weldingonline_date weldingonlineDate,paintonline_date paintonlineDate,
 		chassisonline_date chassisonlineDate,assemblyonline_date assemblyonlineDate,
 		warehousing_date warehousingDate,modelexport_date modelexportDate,
 		drawingexport_date drawingexportDate,detaildemand_node detaildemandNode,
 		sopdemand_node sopdemandNode,bomdemand_node bomdemandNode,sipdemand_node sipdemandNode,
-		wf_order_id wfOrderId,wf_process_id wfProcessId
-		from BMS_OR_ORDER_REVIEW_RESULTS 
+		wf_order_id wfOrderId,wf_process_id wfProcessId,o.order_no as orderNo,f.factory_name factoryName
+		from BMS_OR_ORDER_REVIEW_RESULTS r
+		left join BMS_OR_ORDER o on r.order_id=o.id
+		left join BMS_BASE_FACTORY f on r.factory_id=f.id
 		where 1=1
 		<if test="orderId !=null and orderId !=''"> 
 			and order_id=#{orderId}
 		</if>
 		<if test="factoryId !=null and factoryId !=''"> 
 			and factory_id=#{factoryId}
+		</if>
+		<if test="wfOrderId !=null and wfOrderId !=''"> 
+			and wf_order_id=#{wfOrderId}
 		</if>
 		<if test="id !=null and id !=''"> 
 			and id=#{id}

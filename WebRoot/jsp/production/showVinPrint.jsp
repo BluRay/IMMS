@@ -10,6 +10,7 @@
 		<link rel="stylesheet" href="../assets/css/jquery-ui.min.css" />
 		<link rel="stylesheet" href="../assets/css/jquery-ui.custom.min.css" />
 		<link rel="stylesheet" href="../assets/css/jquery.gritter.css" />
+		<link rel="stylesheet" href="../css/printable.css" type="text/css" media="print">
 		<style type="text/css" media="screen">
 	        .printable{
 	            display: none;
@@ -20,7 +21,7 @@
 		<!-- 头 -->
 		<jsp:include page="../top.jsp" flush="true"/>
 		<!-- 身 -->
-		<div class="main-container" id="main-container">
+		<div class="main-container notPrintable" id="main-container">
 			<!-- 左边菜单 -->
 			<jsp:include page="../left.jsp" flush="true"/>
 			<!-- 主体 -->
@@ -73,7 +74,7 @@
 			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse"><i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i></a>
 		</div><!-- /.main-container -->
 	</div>
-	<div id="printarea" >
+	<div id="printarea" class="printConfigure printable toPrint">
 	
     </div>
 	</body>
