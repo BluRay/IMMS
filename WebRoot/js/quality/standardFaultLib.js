@@ -56,6 +56,12 @@ function btnNewConfirm(){
 		alert("请输入有效的零部件！");
 		return false;
 	}**/
+	
+	if($("#new_bug_type").val()==''||($("#new_bug_type").val().trim()).length==0){
+		alert("缺陷类别不能为空");
+		$("#new_bug_type").focus();
+		return false;
+	}
 	if($("#new_bug").val()==''||($("#new_bug").val().trim()).length==0){
 		alert("缺陷名称不能为空");
 		return false;

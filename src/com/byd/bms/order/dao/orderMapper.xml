@@ -4,7 +4,7 @@
 
 	<select id="getOrderList" parameterType="Map" resultType="Map">
 		SELECT f.production_qty,f.busnum_start,f.busnum_end,a.area,a.id AS 'factory_id',a.factory_name,f.edit_date,u.display_name as 'user_name',
-		t.bus_type_code,o.*,CONCAT(o.order_name,t.bus_type_code,o.order_qty,'台') AS 'order_name_str',f.status,
+		t.bus_type_code,o.*,CONCAT(o.order_name,t.bus_type_code,o.order_qty,'台') AS 'order_name_str',f.status,a.factory_code,
 		f.bus_number_start,(f.bus_number_start+f.busnum_end-f.busnum_start) bus_number_end
 		FROM BMS_OR_ORDER o			
 		LEFT JOIN BMS_OR_FACTORY_ORDER f ON f.order_id = o.id
@@ -17,6 +17,9 @@
 		</if>
 		<if test="orderName !=null and orderName !=''">
 			and o.order_name like CONCAT('%',#{orderName},'%')   
+		</if>
+		<if test="orderId !=null and orderId !=''">
+			and o.id = #{orderId} 
 		</if>
 		<if test="orderStatus !=null and orderStatus !=''">
 			and f.status = #{orderStatus} 

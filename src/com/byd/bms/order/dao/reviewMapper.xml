@@ -103,7 +103,8 @@
 		warehousing_date warehousingDate,modelexport_date modelexportDate,
 		drawingexport_date drawingexportDate,detaildemand_node detaildemandNode,
 		sopdemand_node sopdemandNode,bomdemand_node bomdemandNode,sipdemand_node sipdemandNode,
-		wf_order_id wfOrderId,wf_process_id wfProcessId,o.order_no as orderNo,f.factory_name factoryName
+		wf_order_id wfOrderId,wf_process_id wfProcessId,o.order_no as orderNo,
+		f.factory_name factoryName,f.factory_code factoryCode
 		from BMS_OR_ORDER_REVIEW_RESULTS r
 		left join BMS_OR_ORDER o on r.order_id=o.id
 		left join BMS_BASE_FACTORY f on r.factory_id=f.id

@@ -118,6 +118,32 @@ $(document).ready(function () {
 	
 	//查询菜单数据
 	ajaxQueryMenu();
+	$.ajax({
+		type:'GET',
+		url:"<%=basePath%>/common/getTaskList",
+		data:{},
+		async: false,
+		globle:false,
+		error: function(){
+			alert('数据处理错误！');
+			return false;
+		},
+		success: function(data){
+			data = eval("(" + data + ")");
+ 			$("#taskcount").html(data.count);
+ 			$("#task").html("需处理任务数 "+data.count+" 个");
+			var str="";
+            console.log("object",data);
+			$.each(data.datalist,function(index,item){
+				var url="<%=basePath%>/"+item.url;
+				if(item.params!=null && item.params!=undefined){
+					url+=item.params;
+				}
+				str+="<a href="+url+"><div class='clearfix'><span class='pull-left'>"+item.task_type_name+"["+item.count+"-"+item.finish_count+"]</span><span class='pull-right'>"+item.percent+"%</span></div><div class='progress progress-mini'><div style='width:"+item.percent+"%' class='progress-bar'></div></div></a>";
+			});
+			$("#foreach").html(str);
+		}
+	});
 	//生成菜单树
 	if(s.length>0){
 		$.each(s, function (index, value) {

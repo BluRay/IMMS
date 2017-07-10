@@ -321,5 +321,23 @@ public class CommonController extends BaseController {
 		return model;
 	}
 	
-	
+	/**
+	 * added by tj for 查询当前任务
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/getTaskList")
+	@ResponseBody
+	public ModelMap getTaskList(){
+
+		String user_id = request.getSession().getAttribute("user_id") + "";
+		String staff_number = request.getSession().getAttribute("staff_number") + "";
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("user_id", user_id);
+		condMap.put("staff_number", staff_number);
+		model=new ModelMap();
+		Map map=commonService.getTaskList(condMap);
+		model.addAllAttributes(map);
+		return model;
+	}
 }

@@ -43,29 +43,23 @@ String display_name = (String)session.getAttribute("display_name");
 						<li class="grey">
 							<a data-toggle="dropdown" class="dropdown-toggle" href="#">
 								<i class="ace-icon fa fa-tasks"></i>
-								<span class="badge badge-grey">4</span>
+								<span class="badge badge-grey" id="taskcount"></span>
 							</a>
 
 							<ul class="dropdown-menu-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
-								<li class="dropdown-header">
+								<li class="dropdown-header" id="task">
 									<i class="ace-icon fa fa-check"></i>
-									4 Tasks to complete
+<!-- 									4 Tasks to complete -->
 								</li>
 
-								<li>
-									<a href="#">
-										<div class="clearfix">
-											<span class="pull-left">Software Update</span>
-											<span class="pull-right">65%</span>
-										</div>
-
-										<div class="progress progress-mini">
-											<div style="width:65%" class="progress-bar"></div>
-										</div>
+								<li id="foreach">
+									<a href="#" id="taskUrl">
+										<div class="clearfix"><span class="pull-left" id="taskName"></span><span class="pull-right" id="taskFinishRadio"></span></div>
+                                        <div class="progress progress-mini"><div class="progress-bar" id="process"></div></div>
 									</a>
 								</li>
 
-								<li>
+								<!--  li>
 									<a href="#">
 										<div class="clearfix">
 											<span class="pull-left">Hardware Upgrade</span>
@@ -102,14 +96,14 @@ String display_name = (String)session.getAttribute("display_name");
 											<div style="width:90%" class="progress-bar progress-bar-success"></div>
 										</div>
 									</a>
-								</li>
+								</li>-->
 
-								<li class="dropdown-footer">
+								<!-- li class="dropdown-footer">
 									<a href="#">
 										See tasks with details
 										<i class="ace-icon fa fa-arrow-right"></i>
 									</a>
-								</li>
+								</li> -->
 							</ul>
 						</li>
 

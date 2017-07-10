@@ -315,7 +315,10 @@ function initTable() {
                 sortable: false,visible: true,footerFormatter: totalTextFormatter,
                 cellStyle:function cellStyle(value, row, index, field) {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
-    	        	}
+    	        	},
+	        	formatter:function(value, row, index){
+	        		return (value == "1")?"已打印":"未打印";
+	        	}
             }
         ]
     ]

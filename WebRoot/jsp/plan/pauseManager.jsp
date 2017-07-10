@@ -110,7 +110,7 @@
 								<td>&nbsp;车间：</td>
 								<td><select id="search_workshop" class="input-small" style="width:80px"></select></td>
 								<td>&nbsp;线别：</td>
-								<td><select id="search_line" class="input-small" style="width:60px"><option value='A'>A线</option><option value='B'>B线</option></select></td>
+								<td><select id="search_line" class="input-small" style="width:60px"><option value=''>全部</option><option value='A'>A线</option><option value='B'>B线</option></select></td>
 								<td>&nbsp;订单：</td>
 								<td><input id="search_order_no" placeholder="请输入订单编号..." style="width:110px" type="text"></td>
 								<td>&nbsp;原因：</td>

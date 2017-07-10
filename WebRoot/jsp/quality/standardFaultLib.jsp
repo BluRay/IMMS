@@ -78,11 +78,11 @@
 				<form>
 					<table>
 					<tr style="height:40px">
-						<td align="right" style="width:100px">缺陷类别：</td><td style="width:150px"><input type="text" class="input-medium" id="new_bug_type" style="width:150px"/></td>
+						<td align="right" style="width:100px">*缺陷类别：</td><td style="width:150px"><input type="text" class="input-medium" id="new_bug_type" style="width:150px"/></td>
 						<td></td><td></td>
 					</tr>
 					<tr style="height:40px">
-						<td align="right" style="width:100px">严重等级：</td><td style="width:150px">
+						<td align="right" style="width:100px">*严重等级：</td><td style="width:150px">
 							<select class="input-medium" id="new_faultlevel" style="width:150px">
 								<option value="S">S</option>
 								<option value="A">A</option>
@@ -94,7 +94,7 @@
 						</td>
 					</tr>
 					<tr style="height:40px">
-						<td align="right" style="width:100px">缺陷名称：</td><td colspan=3><input type="text" class="input-medium" id="new_bug" style="width:400px"/></td>
+						<td align="right" style="width:100px">*缺陷名称：</td><td colspan=3><input type="text" class="input-medium" id="new_bug" style="width:400px"/></td>
 					</tr>
 					
 					</table>

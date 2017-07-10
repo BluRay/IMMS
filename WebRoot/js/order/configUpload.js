@@ -58,6 +58,8 @@ function initPage(){
 	getOrderNoSelect("#order","#order_id",function(value){
 		$("#order").attr("order_qty",value.orderQty);
 	});
+	var orderNo = getParamValue("orderNo");
+	$("#search_order_no").val(orderNo);
 	ajaxQuery();
 }
 

@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.byd.bms.util.model.BmsBaseProcess;
+import com.byd.bms.util.model.BmsBaseTask;
 
 @Repository(value="commonDao")
 public interface ICommonDao {
@@ -56,5 +57,13 @@ public interface ICommonDao {
 	public List<Map<String,String>> getUserInfoByCard(String string);//刷厂牌获取用户信息
 
 	Map<String, String> queryIndexOrderData(@Param("actYear") String actYear);
+	
+	List<Map<String,Object>> queryTaskList(Map<String,Object>condMap);
+	
+	Map<String,Object> queryTaskType(Map<String,Object>condMap);
+	
+	public int addTask(Map map);
+	
+	public int updateTask(Map map);
 	
 }

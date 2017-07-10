@@ -203,6 +203,56 @@
 	<select id="getUserInfoByCard" parameterType="String" resultType="Map">
 		select * from BMS_BASE_USER where card_8H10D=#{cardId}
 	</select>
+	<select id="queryTaskList" parameterType="Map" resultType="Map">
+		select CONCAT(t.id,'') id,r.staff_number,t.factory_code,p.task_type,sum(t.count) count,
+		sum(t.finish_count) finish_count,p.url,t.param from BMS_BASE_TASK t 
+		left join BMS_BASE_TASK_TYPE p on t.task_type_id=p.id
+		left join BMS_BASE_USER_ROLE r on t.role_id=r.role_id
+		 where t.count!=t.finish_count  
+		<if test="staff_number !=null and staff_number !=''"> 
+		    <!-- 默认 permission_key=1 对应工厂权限-->
+			and r.staff_number=#{staff_number} and r.permission_key='1'
+		</if>
+		<if test="task_type !=null and task_type !=''"> 
+			and p.task_type=#{task_type}
+		</if>
+		<if test="param !=null and param !=''"> 
+			and t.param=#{param}
+		</if>
+		  group by r.staff_number,t.factory_code,p.task_type,p.url,t.param
+	</select>
+	<select id="queryTaskType" parameterType="Map" resultType="Map">
+		select t.id as task_type_id,t.url,t.task_type,r.id as role_id from BMS_BASE_TASK_TYPE t
+		left join BMS_BASE_ROLE r on t.role_name=r.role_name where t.task_type=#{task_type}
+	</select>
+	<insert id="addTask" parameterType="Map"  useGeneratedKeys="true">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into BMS_BASE_TASK
+		(task_type_id,url,param,count,finish_count,role_id,factory_code,editor_id,edit_date)
+		values
+		(#{task_type_id},#{url},#{param},#{count},#{finish_count},#{role_id},#{factory_code},#{editor_id},#{edit_date})
+	</insert>
+	<update id='updateTask' parameterType="Map">
+		update BMS_BASE_TASK set
+		<if test="count !=null and count !=''"> 
+			count=CAST(count AS SIGNED)+CAST(#{count} AS SIGNED),
+			editor_id=#{editorId},edit_date=#{editDate}
+		</if> 
+		<if test="finish_count !=null and finish_count !=''"> 
+			finish_count=CAST(finish_count AS SIGNED)+CAST(#{finish_count} AS SIGNED),
+			handler=#{handler},finish_date=#{finish_date}
+		</if> 
+		where 1=1 and count!=finish_count
+		<if test="task_type_name !=null and task_type_name !=''"> 
+			and task_type_id=(select id from BMS_BASE_TASK_TYPE t where t.task_type=#{task_type_name})
+		</if>
+		<if test="id !=null and id !=''"> 
+			and id=${id}
+		</if>
+	</update>
 	
 	<select id="queryIndexOrderData" parameterType="String" resultType="Map">
 		select * from

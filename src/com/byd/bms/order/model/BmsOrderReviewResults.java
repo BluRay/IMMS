@@ -57,6 +57,7 @@ public class BmsOrderReviewResults {
 	private String wfProcessId;
 	private String orderNo;
 	private String factoryName;
+	private String factoryCode;
 	
 	public int getId() {
 		return id;
@@ -365,5 +366,11 @@ public class BmsOrderReviewResults {
 	}
 	public void setFactoryName(String factoryName) {
 		this.factoryName = factoryName;
+	}
+	public String getFactoryCode() {
+		return factoryCode;
+	}
+	public void setFactoryCode(String factoryCode) {
+		this.factoryCode = factoryCode;
 	}
 }

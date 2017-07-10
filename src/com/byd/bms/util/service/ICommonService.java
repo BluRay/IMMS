@@ -59,4 +59,11 @@ public interface ICommonService {
 	 */
 	void getIndexOrderData(String actYear, ModelMap model);
 	
+
+    Map<String,Object> getTaskList(Map<String, Object> condMap);
+	
+	public int createTask(String task_type,String count,String param,String factoryCode);
+	
+	public int updateTask(String task_type,String finish_count);
+	
 }

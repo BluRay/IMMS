@@ -22,6 +22,11 @@ function initPage(){
 	$("#search_productive_year").html('<option value="'+cur_year+'">'+cur_year+'</option><option value="'+(cur_year-1)+'">'+(cur_year-1)+'</option><option value="'+(cur_year+1)+'">'+(cur_year+1)+'</option><option value="'+(cur_year+2)+'">'+(cur_year+2)+'</option>');	
 	getOrderNoSelect("#search_order_no","#orderId");
 	getFactorySelect("order/configAllot","","#search_factory","全部","id")
+	// 通过top页面任务栏进入，设置查询条件
+	var orderNo = getParamValue("orderNo");
+	var factory = getParamValue("factory");
+	$("#search_factory").find("option[value='"+factory+"']").attr("selected",true);
+	$("#search_order_no").val(orderNo);
 	ajaxQuery();
 	
 }

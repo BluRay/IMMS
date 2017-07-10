@@ -8,9 +8,9 @@ $(document).ready(function () {
 	initPage();
 	
 	function initPage(){
-		getFactorySelect("plan/pauseManager",'',"#search_factory",null,'id');
+		getFactorySelect("plan/pauseManager",'',"#search_factory","全部",'id');
 		getOrderNoSelect("#search_order_no","#orderId");
-		getWorkshopSelect("plan/pauseManager",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
+		getWorkshopSelect("plan/pauseManager",$("#search_factory :selected").text(),"","#search_workshop","全部","id");
 		getReasonTypeSelect();
 		getKeysSelect("EXCEPTION_RESPONSIBILITY_DEPARTMENT", "", "#edit_dep_id",null,"value");
 	}
