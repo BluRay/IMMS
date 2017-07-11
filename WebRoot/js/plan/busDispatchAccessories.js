@@ -5,6 +5,7 @@ $(document).ready(function () {
 	initPage();
 	
 	function initPage(){
+		getBusNumberSelect('#nav-search-input');
 		getOrderNoSelect("#orderNo","#orderId",function(obj){
 			$("#orderName").html(obj.name);
 			$("#busType").html(obj.busType);

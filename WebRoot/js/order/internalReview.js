@@ -15,6 +15,7 @@ $(document).ready(function(){
 	cur_year = new Date().getFullYear();
 	ajaxQuery();
 	getFactorySelect();
+	getOrderNoSelect("#search_order_no","#orderId");
 	$(".btnQuery").on("click",function(){
 		ajaxQuery();
 	}); 

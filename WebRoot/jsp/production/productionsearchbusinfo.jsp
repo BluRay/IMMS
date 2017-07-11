@@ -29,7 +29,7 @@
 					<div class="nav-search" id="nav-search">
 						<form class="form-search">
 							<span class="input-icon">
-								<input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" /><i class="ace-icon fa fa-search nav-search-icon"></i>
+								<input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" onkeydown="EnterPress()" autocomplete="off" /><i class="ace-icon fa fa-search nav-search-icon"></i>
 							</span>
 						</form>
 					</div><!-- /.nav-search -->
@@ -62,6 +62,7 @@
 							<li id="div8"><a data-toggle="tab" href="#div_8">合格证</a></li>
 							<li id="div9"><a data-toggle="tab" href="#div_9">异常信息</a></li>
 							<li id="div10"><a data-toggle="tab" href="#div_10">技改信息</a></li>
+							<li id="div11"><a data-toggle="tab" href="#div_11">车辆监控信息</a></li>
 						</ul>
 						
 						<div class="tab-content" id="tab-content">
@@ -268,6 +269,61 @@
 										<tbody>
 										</tbody>
 									</table>
+							</div>
+							
+							<div id="div_11" style="overflow:auto" class="tab-pane fade">
+								<table id="table08" style="text-align:center;table-layout:fixed;font-size:12px;width:1000px" class="table table-bordered table-striped">
+									<tr>
+										<td width="220px" style="text-align: right;">VIN号：</td><td id=""></td>
+										<td width="180px" style="text-align: right;">车牌号：</td><td id=""></td>
+										<td width="180px" style="text-align: right;">动力电池电压（V）：</td><td id=""></td>
+									</tr>
+									<tr>
+										<td style="text-align: right;">电池组当前总电流（A）：</td><td id=""></td>
+										<td style="text-align: right;">SOC（%）：</td><td id=""></td>
+										<td style="text-align: right;">输出电流（A）：</td><td id=""></td>
+									</tr>
+									<tr>
+										<td style="text-align: right;">所有单体电池端电压最小值（V）：</td><td id=""></td>
+										<td style="text-align: right;">最低电压电池号（#）：</td><td id=""></td>
+										<td style="text-align: right;">总里程（km）：</td><td id=""></td>
+									</tr>
+									<tr>
+										<td style="text-align: right;">所有单体电池端电压最大值（V）：</td><td id=""></td>
+										<td style="text-align: right;">最高电压电池号（#）：</td><td id=""></td>
+										<td style="text-align: right;">动力电池最低温度（°C）：</td><td id=""></td>
+									</tr>
+									<tr>
+										<td style="text-align: right;">最低温度电池号（#）：</td><td id=""></td>
+										<td style="text-align: right;">动力电池最高温度（°C）：</td><td id=""></td>
+										<td style="text-align: right;">最高温度电池号（#）：</td><td id=""></td>
+									</tr>
+									<tr>
+										<td style="text-align: right;">电机转速（rpm）：</td><td id=""></td>
+										<td style="text-align: right;">档位：</td><td id=""></td>
+										<td style="text-align: right;">车速：</td><td id=""></td>
+									</tr>
+									<tr>
+										<td style="text-align: right;">手刹信号：</td><td id=""></td>
+										<td style="text-align: right;">驻车制动开关：</td><td id=""></td>
+										<td style="text-align: right;">制动开关：</td><td id=""></td>
+									</tr>
+									<tr>
+										<td style="text-align: right;">制动踏板深度（%）：</td><td id=""></td>
+										<td style="text-align: right;">加速踏板深度（%）：</td><td id=""></td>
+										<td style="text-align: right;">近光灯：</td><td id=""></td>
+									</tr>
+									<tr>
+										<td style="text-align: right;">左转向灯：</td><td id=""></td>
+										<td style="text-align: right;">倒车灯：</td><td id=""></td>
+										<td style="text-align: right;">远光灯：</td><td id=""></td>
+									</tr>
+									<tr>
+										<td style="text-align: right;">右转向灯：</td><td id=""></td>
+										<td style="text-align: right;">刹车灯：</td><td id=""></td>
+										<td style="text-align: right;">前雾灯：</td><td id=""></td>
+									</tr>
+								</table>
 							</div>
 							
 						</div>

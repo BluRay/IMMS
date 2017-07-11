@@ -58,6 +58,8 @@ public interface ICommonDao {
 
 	Map<String, String> queryIndexOrderData(@Param("actYear") String actYear);
 	
+	List<Map<String,Object>> queryIndexFactoryDailyData(Map<String,Object>condMap);
+	
 	List<Map<String,Object>> queryTaskList(Map<String,Object>condMap);
 	
 	Map<String,Object> queryTaskType(Map<String,Object>condMap);

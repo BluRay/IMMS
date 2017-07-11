@@ -5,6 +5,7 @@ $(document).ready(function () {
 	initPage();
 	
 	function initPage(){
+		getBusNumberSelect('#nav-search-input');
 		getFactorySelect("plan/busDispatchPlan",'',"#search_factory",null,'id');
 		getFactorySelect("plan/busDispatchPlan",'',"#edit_factory",null,'id');
 		getOrderNoSelect("#edit_order_no","#edit_orderId",orderNoBackEdit);

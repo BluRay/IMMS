@@ -139,7 +139,7 @@ $(document).ready(function () {
 				if(item.params!=null && item.params!=undefined){
 					url+=item.params;
 				}
-				str+="<a href="+url+"><div class='clearfix'><span class='pull-left'>"+item.task_type_name+"["+item.count+"-"+item.finish_count+"]</span><span class='pull-right'>"+item.percent+"%</span></div><div class='progress progress-mini'><div style='width:"+item.percent+"%' class='progress-bar'></div></div></a>";
+				str+="<a href="+url+"><div class='clearfix'><span class='pull-left'>"+item.task_type_name+" [ "+item.count+"-"+item.finish_count+" ]</span><span class='pull-right'>"+item.percent+"%</span></div><div class='progress progress-mini'><div style='width:"+item.percent+"%' class='progress-bar'></div></div></a>";
 			});
 			$("#foreach").html(str);
 		}

@@ -2,6 +2,7 @@ $(document).ready(function () {
 	initPage();
 	
 	function initPage(){
+		getBusNumberSelect('#nav-search-input');
 		getFactorySelect("plan/exceptionManager",'',"#search_factory",null,'id');
 		getWorkshopSelect("plan/exceptionManager",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
 		setSelects();

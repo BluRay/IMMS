@@ -322,6 +322,24 @@ public class CommonController extends BaseController {
 	}
 	
 	/**
+	 * @author xiong.jianwu
+	 * 获取首页工厂日计划达成数据
+	 * @return
+	 */
+	@RequestMapping("/getIndexFactoryDailyData")
+	@ResponseBody
+	public ModelMap getIndexFactoryDailyData(){
+		model.clear();
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		String query_date = df.format(new Date());
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("query_date", query_date);
+		condMap.put("factory_id", request.getParameter("factory_id"));
+		commonService.getIndexFactoryDailyData(condMap,model);
+		return model;
+	}
+	
+	/**
 	 * added by tj for 查询当前任务
 	 * 
 	 * @return

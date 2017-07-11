@@ -58,6 +58,12 @@ public interface ICommonService {
 	 * @param model 
 	 */
 	void getIndexOrderData(String actYear, ModelMap model);
+	/**
+	 * @author xiong.jianwu
+	 * @param condMap
+	 * @param model
+	 */
+	void getIndexFactoryDailyData(Map<String, Object> condMap, ModelMap model);
 	
 
     Map<String,Object> getTaskList(Map<String, Object> condMap);

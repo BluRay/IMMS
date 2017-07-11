@@ -6,6 +6,7 @@ $(document).ready(function () {
 	initPage();
 	
 	function initPage(){
+		getBusNumberSelect('#nav-search-input');
 		cur_tab = "01";
 		if(Request("bus_number")!=""){
 			$("#search_busnumber").val(Request("bus_number"));
@@ -347,7 +348,7 @@ function Request(strName){
 		if(arrTemp[0].toUpperCase() == strName.toUpperCase()) return arrTemp[1];  
 	}  
 	return "";  
-} 
+}
 
 function clear_baseinfo(){
 	$("#tab01_order_no").html("");

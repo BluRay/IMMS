@@ -5,6 +5,7 @@ $(document).ready(function () {
 	initPage();
 	
 	function initPage(){
+		getBusNumberSelect('#nav-search-input');
 		getOrderNoSelect("#search_order_no","#orderId");
 		ajaxQuery();
 	}

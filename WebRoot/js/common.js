@@ -662,3 +662,12 @@ function getParamValue(name) {
     }
     return null;
 }
+
+function EnterPress(e){ //传入 event 
+	var e = e || window.event; 
+	if(e.keyCode == 13){ 
+		//alert("-->EnterPress!!!" + $("#bus-search-input").val());
+		window.open("/IMMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+		return false;
+	} 
+}

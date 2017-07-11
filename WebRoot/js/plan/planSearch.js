@@ -4,6 +4,7 @@ $(document).ready(function () {
 	initPage();
 	
 	function initPage(){
+		getBusNumberSelect('#nav-search-input');
 		getFactorySelect("plan/planSearch",'',"#search_factory",null,'id');
 		getOrderNoSelect("#search_order_no","#orderId");
 		getWorkshopSelect("plan/planSearch",$("#search_factory :selected").text(),"","#search_workshop",'全部',"id");

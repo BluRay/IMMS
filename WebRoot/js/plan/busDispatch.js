@@ -8,6 +8,7 @@ $(document).ready(function () {
 	initPage();
 	
 	function initPage(){
+		getBusNumberSelect('#nav-search-input');
 		getBusNumberSelect('#busNo');
 		getFactorySelect("plan/busDispatchPlan",'',"#search_factory",null,'id');
 		getOrderNoSelect("#search_order_no","#orderId");

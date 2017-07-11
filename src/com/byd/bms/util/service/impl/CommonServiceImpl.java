@@ -139,7 +139,11 @@ public class CommonServiceImpl implements ICommonService {
 	public void getIndexOrderData(String actYear,ModelMap model) {
 		model.put("data", commonDao.queryIndexOrderData(actYear));		
 	}
-	
+	@Override
+	public void getIndexFactoryDailyData(Map<String, Object> condMap,
+			ModelMap model) {
+		model.put("data", commonDao.queryIndexFactoryDailyData(condMap));			
+	}
 	@Override
 	public Map<String, Object> getTaskList(Map<String, Object> condMap) {
 		Map<String, Object> result=new HashMap<String, Object>();
@@ -163,7 +167,8 @@ public class CommonServiceImpl implements ICommonService {
 						+"&factoryId="+review.getFactoryId()+"&orderNo="+review.getOrderNo();
 				task.setUrl(url);
 				task.setParams(params);
-				task.setCount(majorWorks.size()+"");
+				task.setCount("1");
+				task.setFinish_count("0");
 				task.setTask_type_name(majorWork.getTaskName()+review.getOrderNo()+" "+review.getFactoryCode());
 				task.setPercent("0");
 				taskList.add(task);
@@ -177,8 +182,10 @@ public class CommonServiceImpl implements ICommonService {
 			BmsBaseTask task=new BmsBaseTask();
 			task.setUrl((String)m.get("url"));
 			task.setParams((String)m.get("param"));
-			task.setCount(m.get("count")+"");
-			task.setFinish_count(m.get("finish_count")+"");
+			String countstr=String.valueOf(m.get("count"));
+			task.setCount(countstr.substring(0,countstr.indexOf(".")));
+			String finishcountStr=String.valueOf(m.get("finish_count"));
+			task.setFinish_count(finishcountStr.substring(0,finishcountStr.indexOf(".")));
 			if((String)m.get("factory_code")!=null){
 				task.setTask_type_name((String)m.get("task_type")+" "+(String)m.get("factory_code"));
 			}else{
@@ -191,7 +198,7 @@ public class CommonServiceImpl implements ICommonService {
 
 			numberFormat.setMaximumFractionDigits(0);
 
-			String percent = numberFormat.format((double)m.get("finish_count") / (double)m.get("count") * 100);
+			String percent = numberFormat.format(Double.parseDouble(finishcountStr) / Double.parseDouble(countstr) * 100);
 			task.setPercent(percent);
 			taskList.add(task);
 			count++;

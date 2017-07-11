@@ -8,6 +8,7 @@ $(document).ready(function () {
 	initPage();
 	
 	function initPage(){
+		getBusNumberSelect('#nav-search-input');
 		getFactorySelect("plan/pauseManager",'',"#search_factory","全部",'id');
 		getOrderNoSelect("#search_order_no","#orderId");
 		getWorkshopSelect("plan/pauseManager",$("#search_factory :selected").text(),"","#search_workshop","全部","id");

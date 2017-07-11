@@ -1,6 +1,7 @@
 $(document).ready(function () {	
 	initPage();
 	function initPage(){
+		getBusNumberSelect('#nav-search-input');
 		$("#divBulkAdd").hide();
 		getOrderNoSelect("#search_order_no","#orderId");
 		getFactorySelect("plan/generateVin",'',"#search_factory",null,'id');

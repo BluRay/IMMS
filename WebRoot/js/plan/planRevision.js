@@ -5,6 +5,7 @@ $(document).ready(function () {
 	initPage();
 	
 	function initPage(){
+		getBusNumberSelect('#nav-search-input');
 		$("#btnSave").attr("disabled","disabled");
 		getOrderNoSelect("#search_order_no","#orderId");
 		getFactorySelect("plan/planRevision",'',"#search_factory",null,'id');

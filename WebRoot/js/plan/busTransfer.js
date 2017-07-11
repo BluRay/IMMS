@@ -4,6 +4,7 @@ $(document).ready(function () {
 	initPage();
 	
 	function initPage(){
+		getBusNumberSelect('#nav-search-input');
 		getFactorySelect("plan/busTransfer",'',"#transfer_out_factory",null,'id');
 		getFactorySelect("plan/busTransfer",'',"#transfer_in_factory",null,'id');
 		getFactorySelect("plan/busTransfer",'',"#transfer_in_factory2",null,'id');
