@@ -67,5 +67,11 @@ public interface ICommonDao {
 	public int addTask(Map map);
 	
 	public int updateTask(Map map);
+
+	List<Map<String, Object>> queryIndexFactoryPrdOrdData(@Param("factory_id") String factory_id);
+
+	List<Map<String, Object>> queryIndexOutputData_Bustype(@Param("actYear")String actYear);
+	
+	List<Map<String, Object>> queryIndexOutputData_Factory(@Param("actYear")String actYear);
 	
 }

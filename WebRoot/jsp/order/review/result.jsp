@@ -115,8 +115,10 @@
             			error: function () {},
             			success: function (response) {
             				if(response.success){
-            					alert("提交成功");
-            					$("#btnSave").attr("disabled",true);
+            					var url="<%=basePath%>/order/review/internalReview?message=success";
+            					window.open(url,"_parent");
+//             					alert("提交成功");
+//             					$("#btnSave").attr("disabled",true);
             				}else{
             					alert("提交失败");
             				}

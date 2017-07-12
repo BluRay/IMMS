@@ -46,13 +46,13 @@ String display_name = (String)session.getAttribute("display_name");
 								<span class="badge badge-grey" id="taskcount"></span>
 							</a>
 
-							<ul class="dropdown-menu-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
-								<li class="dropdown-header" id="task">
+							<ul class="dropdown-menu-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close" style="height:100px">
+								<li class="dropdown-header" id="task" style="width:280px;">
 									<i class="ace-icon fa fa-check"></i>
 <!-- 									4 Tasks to complete -->
 								</li>
 
-								<li id="foreach">
+								<li id="foreach" style="width:280px">
 									<a href="#" id="taskUrl">
 										<div class="clearfix"><span class="pull-left" id="taskName"></span><span class="pull-right" id="taskFinishRadio"></span></div>
                                         <div class="progress progress-mini"><div class="progress-bar" id="process"></div></div>

@@ -18,6 +18,13 @@ $(document).ready(function () {
 		$("#querydisBtn").prop("disabled","disabled"); 
 		$("#dispatchBtn").prop("disabled","disabled"); 
 	}
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/IMMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	
 	//点击查询，查询订单附件信息
 	$("#queryBtn").click(function(){

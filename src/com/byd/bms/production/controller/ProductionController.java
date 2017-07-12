@@ -16,6 +16,7 @@ import java.util.Map;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -99,6 +100,12 @@ public class ProductionController extends BaseController {
 	@RequestMapping("/execution_mobile")
 	public ModelAndView execution_mobile(){
 		mv.setViewName("production/productionExecution_Mobile");
+		return mv;
+	}
+	
+	@RequestMapping("/productionsearch")
+	public ModelAndView productionsearch(){
+		mv.setViewName("production/productionsearch");
 		return mv;
 	}
 	
@@ -701,6 +708,87 @@ public class ProductionController extends BaseController {
 	@ResponseBody
 	public ModelMap getProductionSearchScan(){
 		List<Map<String, String>> datalist = productionService.getProductionSearchScan(request.getParameter("bus_number"));
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("data", datalist);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(result);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/getProductionSearch")
+	@ResponseBody
+	public ModelMap getProductionSearch(){
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		Map<String,Object> conditionMap=new HashMap<String,Object>();
+		conditionMap.put("factory_id", request.getParameter("factory_id"));
+		conditionMap.put("workshop_id", request.getParameter("workshop_id"));
+		conditionMap.put("line_id", request.getParameter("line_id"));
+		conditionMap.put("exception_type", request.getParameter("exception_type"));
+		conditionMap.put("order_no", request.getParameter("order_no"));
+		conditionMap.put("cur_date", curTime.substring(0, 10));
+		conditionMap.put("onoff", request.getParameter("onoff"));
+		conditionMap.put("start_date", request.getParameter("start_date"));
+		conditionMap.put("end_date", request.getParameter("end_date"));
+		
+		List<Map<String,String>> datalist = productionService.getProductionSearch(conditionMap);
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("data", datalist);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(result);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/getProductionSearchCarinfo")
+	@ResponseBody
+	public ModelMap getProductionSearchCarinfo(){
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String wipFlg=request.getParameter("wip_flg");
+		Map<String,Object> conditionMap=new HashMap<String,Object>();
+		conditionMap.put("factory_id", request.getParameter("factory_id"));
+		conditionMap.put("onoff", request.getParameter("onoff"));
+		conditionMap.put("start_date", request.getParameter("start_date"));
+		conditionMap.put("end_date", request.getParameter("end_date"));
+		conditionMap.put("wip_flg", wipFlg);
+		if(request.getParameter("workshop").equals("全部")){
+			conditionMap.put("workshop","");
+		}else if(request.getParameter("workshop").equals("焊装")){
+			conditionMap.put("workshop","welding");
+		}else if(request.getParameter("workshop").equals("玻璃钢")){
+			conditionMap.put("workshop","fiberglass");
+		}else if(request.getParameter("workshop").equals("涂装")){
+			conditionMap.put("workshop","painting");
+		}else if(request.getParameter("workshop").equals("底盘")){
+			conditionMap.put("workshop","chassis");
+		}else if(request.getParameter("workshop").equals("总装")){
+			conditionMap.put("workshop","assembly");
+		}else if(request.getParameter("workshop").equals("调试区")){
+			conditionMap.put("workshop","debugarea");
+		}else if(request.getParameter("workshop").equals("检测线")){
+			conditionMap.put("workshop","testline");
+		}else if(request.getParameter("workshop").equals("成品库")){
+			conditionMap.put("workshop","warehousing");
+		}
+		if(request.getParameter("line").equals("全部")){
+			conditionMap.put("line","");
+		}else{
+			conditionMap.put("line",request.getParameter("line"));
+		}		
+		conditionMap.put("exception_type", request.getParameter("exception_type"));
+		conditionMap.put("order_no", request.getParameter("order_no"));
+		conditionMap.put("bus_number", request.getParameter("bus_number"));
+		conditionMap.put("cur_date", curTime.substring(0, 10));
+		List<Map<String,String>> datalist=new ArrayList<Map<String,String>>();
+		if(StringUtils.isNotEmpty(wipFlg)){
+			datalist = productionService.getProductionWIPBusInfo(conditionMap);
+		}else{
+			datalist = productionService.getProductionSearchCarinfo(conditionMap);
+		}
+		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("data", datalist);
 		mv.clear();

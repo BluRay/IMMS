@@ -119,5 +119,7 @@ public interface IProductionDao {
 	public List<Map<String,Object>> getOrderConfigList(Map<String, Object> conditionMap);
 	/******************* tangjin end**************************/
 
-
+	public List<Map<String,String>> getProductionSearch(Map<String,Object> queryMap);
+	public List<Map<String,String>> getProductionWIPBusInfo(Map<String,Object> queryMap);
+	public List<Map<String,String>> getProductionSearchCarinfo(Map<String,Object> queryMap);
 }

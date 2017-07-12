@@ -17,6 +17,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <link rel="stylesheet" href="<%=basePath%>/assets/css/fixedColumns.dataTables.min.css" />
 <link rel="stylesheet" href="<%=basePath%>/assets/css/jquery-ui.min.css" />
 <link rel="stylesheet" href="<%=basePath%>/assets/css/jquery.gritter.css" /> 
+<style type="text/css" media="screen">
+      .english{
+          font-size:14px;
+          font-family: "Times New Roman", Times, serif;
+      }
+      .Chinese{
+	      margin:0px;
+	      padding:0px;
+	      font-family:"微软雅黑","黑体","仿宋";
+	      font-size:14px;
+
+	  }
+</style> 
 </head>
 <body class="no-skin" style="font-family: 'Microsoft YaHei';">
 	<!-- 头 -->
@@ -92,9 +105,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</div>
 				<div id="dialog-edit" class="hide">
 					<table id="tableData" class="table table-striped table-bordered table-hover dataTable no-footer"
-					            style="font-size: 14px;width:800px" role="grid" aria-describedby="tableData_info">
+					            style="font-size: 14px;width:900px" role="grid" aria-describedby="tableData_info">
 						 <tr role="row" class="odd">
-				            <th class="sorting_disabled center" rowspan="1" colspan=7 style="width: 96px;">十九事业部订单评审评估表</th>
+				            <th class="sorting_disabled center" rowspan="1" colspan=7 style="width: 96px;font-size:18px">十九事业部订单评审评估表</th>
 						 </tr>
 						 <tr role="row" class="odd">
 				            <th class="sorting_disabled center" rowspan="1" style="width: 96px;">客户</th>
@@ -106,179 +119,179 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				            <th class="sorting_disabled center" rowspan="1" style="width: 96px;">产能/天</th>
 						 </tr>
 						 <tr role="row" class="odd">
-						    <td id="customer" class="center"></td>
-						    <td id="busType"  class="center"></td>
-						    <td id="productionQty" class="center"></td>
-						    <td id="factoryName" class="center"></td>
-				            <td id="order_type" class="center"></td>
-							<td id="delveryDate" class="center"></td>
-							<td id="capacity" class="center"></td>
+						    <td id="customer" class="center Chinese"></td>
+						    <td id="busType"  class="center english"></td>
+						    <td id="productionQty" class="center english"></td>
+						    <td id="factoryName" class="center Chinese"></td>
+				            <td id="order_type" class="center Chinese"></td>
+							<td id="delveryDate" class="center english"></td>
+							<td id="capacity" class="center english"></td>
 						</tr>
 						 <tr role="row" class="odd">
 						    <th class="sorting_disabled center" rowspan="2" style="width: 96px;">订单启动节点</th>
-				            <th class="sorting_disabled center" rowspan="1" style="width: 96px;">部件上线</th>
-							<th class="sorting_disabled center" rowspan="1" style="width: 96px;">焊装上线</th>
-							<th class="sorting_disabled center" rowspan="1" style="width: 96px;">涂装上线</th>
-							<th class="sorting_disabled center" rowspan="1" style="width: 96px;">底盘上线</th>
-							<th class="sorting_disabled center" rowspan="1" style="width: 96px;">总装上线</th>
-							<th class="sorting_disabled center" rowspan="1" style="width: 96px;">全部入库</th>
+				            <td class="sorting_disabled center" rowspan="1" style="width: 96px;">部件上线</td>
+							<td class="sorting_disabled center" rowspan="1" style="width: 96px;">焊装上线</td>
+							<td class="sorting_disabled center" rowspan="1" style="width: 96px;">涂装上线</td>
+							<td class="sorting_disabled center" rowspan="1" style="width: 96px;">底盘上线</td>
+							<td class="sorting_disabled center" rowspan="1" style="width: 96px;">总装上线</td>
+							<td class="sorting_disabled center" rowspan="1" style="width: 96px;">全部入库</td>
 						</tr>
 						<tr>
-							<td id="partsonlineDate" class="center"></td>
-							<td id="weldingonlineDate" class="center"></td>
-							<td id="paintonlineDate" class="center"></td>
-							<td id="chassisonlineDate" class="center"></td>
-							<td id="assemblyonlineDate" class="center"></td>
-							<td id="warehousingDate" class="center"></td>
+							<td id="partsonlineDate" class="center english"></td>
+							<td id="weldingonlineDate" class="center english"></td>
+							<td id="paintonlineDate" class="center english"></td>
+							<td id="chassisonlineDate" class="center english"></td>
+							<td id="assemblyonlineDate" class="center english"></td>
+							<td id="warehousingDate" class="center english"></td>
 						</tr>
 					    <tr>
 					        <th class="sorting_disabled center" rowspan="2" style="width: 96px;">资料需求节点</th>
-						    <th class="sorting_disabled center" style="width: 96px;">&nbsp;数模输出时间</th>
-							<th class="sorting_disabled center" style="width: 96px;">下料明细</th>
-							<th class="sorting_disabled center" style="width: 96px;">BOM</th>
-							<th class="sorting_disabled center" style="width: 96px;">图纸输出时间</th>
-							<th class="sorting_disabled center" style="width: 96px;">SOP</th>
-							<th class="sorting_disabled center" style="width: 96px;">SIP</th>
+						    <td class="sorting_disabled center" style="width: 96px;font-size:13px">&nbsp;数模输出时间</td>
+							<td class="sorting_disabled center" style="width: 96px;">下料明细</td>
+							<td class="sorting_disabled center english" style="width: 96px;">BOM</td>
+							<td class="sorting_disabled center" style="width: 96px;font-size:13px">图纸输出时间</td>
+							<td class="sorting_disabled center english" style="width: 96px;">SOP</td>
+							<td class="sorting_disabled center english" style="width: 96px;">SIP</td>
 						</tr>
 						<tr role="row" class="odd">
-						    <td id="modelexportDate" class="center" ></td>
-						    <td id="detaildemandNode" class="center"></td>
-						    <td id="bomdemandNode" class="center"></td>
-				            <td id="drawingexportDate" class="center"></td>
-							<td id="sopdemandNode" class="center"></td>
-							<td id="sipdemandNode" class="center"></td>
+						    <td id="modelexportDate" class="center english" ></td>
+						    <td id="detaildemandNode" class="center english"></td>
+						    <td id="bomdemandNode" class="center english"></td>
+				            <td id="drawingexportDate" class="center english"></td>
+							<td id="sopdemandNode" class="center english"></td>
+							<td id="sipdemandNode" class="center english"></td>
 						</tr>
 						<tr>
 						    <th class="sorting_disabled center" rowspan="4" style="width: 96px;">技术部</th>
-						    <th class="sorting_disabled center" rowspan="4" style="width: 96px;">技术资料完善及可行性</th>
-							<th class="sorting_disabled center" style="width: 96px;">配置表</th>
-							<th class="sorting_disabled center" style="width: 96px;">型材清单</th>
-							<th class="sorting_disabled center" style="width: 96px;">数模评审</th>
-							<th class="sorting_disabled center" style="width: 96px;">图纸受控前评审</th>
-							<th class="sorting_disabled center" style="width: 96px;">采购明细</th>
+						    <td class="sorting_disabled center" rowspan="4" style="width: 96px;">技术资料完善及可行性</td>
+							<td class="sorting_disabled center" style="width: 96px;">配置表</td>
+							<td class="sorting_disabled center" style="width: 96px;">型材清单</td>
+							<td class="sorting_disabled center" style="width: 96px;">数模评审</td>
+							<td class="sorting_disabled center" style="width: 96px;font-size:13px">图纸受控前评审</td>
+							<td class="sorting_disabled center" style="width: 96px;">采购明细</td>
 						</tr>
 						<tr>
-						    <td id="configTable" class="center"></td>
-						    <td id="proximatematter" class="center"></td>
-				            <td id="modeljudging" class="center"></td>
-							<td id="drawingearlierjudging" class="center"></td>
-							<td id="purchasedetail" class="center"></td>
+						    <td id="configTable" class="center Chinese"></td>
+						    <td id="proximatematter" class="center Chinese"></td>
+				            <td id="modeljudging" class="center english"></td>
+							<td id="drawingearlierjudging" class="center english"></td>
+							<td id="purchasedetail" class="center english"></td>
 						</tr>
 						<tr>
-						    <th class="sorting_disabled center" style="width: 96px;">资料需求节点</th>
-						    <td id="technicaldatanode"></td>
-				            <th class="sorting_disabled center" style="width: 96px;">其他</th>
-							<td colspan=2 id="mintechInfo"></td>
+						    <td class="sorting_disabled center" style="width: 96px;">资料需求节点</td>
+						    <td id="technicaldatanode" class="english"></td>
+				            <td class="sorting_disabled center" style="width: 96px;">其他</td>
+							<td colspan=2 id="mintechInfo" class="Chinese"></td>
 						</tr>
 						<tr>
-						    <th class="sorting_disabled center" style="width: 96px;">签字</th>
-						    <td id="technical_operator"></td>
-				            <th class="sorting_disabled center" style="width: 96px;">日期</th>
-							<td colspan=2 id="technical_create_time"></td>
+						    <td class="sorting_disabled center" style="width: 96px;">签字</td>
+						    <td id="technical_operator" class="Chinese"></td>
+				            <td class="sorting_disabled center" style="width: 96px;">日期</td>
+							<td colspan=2 id="technical_create_time" class="english"></td>
 						</tr>
 						<tr>
 						    <th class="sorting_disabled center" rowspan="2" style="width: 96px;">工艺部</th>
-						    <th class="sorting_disabled center" rowspan="2" style="width: 96px;">是否有新增工装、模具、工艺等</th>
-							<th class="sorting_disabled center" style="width: 96px;">资料需求节点</th>
-							<td id="technicsNode"></td>
-							<th class="sorting_disabled center" style="width: 96px;">其他</th>
-							<td colspan=2 id="technicsInfo"></td>
+						    <td class="sorting_disabled center" rowspan="2" style="width: 96px;">是否有新增工装、模具、工艺等</td>
+							<td class="sorting_disabled center" style="width: 96px;">资料需求节点</td>
+							<td id="technicsNode" class="english"></td>
+							<td class="sorting_disabled center" style="width: 96px;">其他</td>
+							<td colspan=2 id="technicsInfo" class="Chinese"></td>
 						</tr>
 						<tr>
-						    <th class="sorting_disabled center" style="width: 96px;">签字</th>
-						    <td id="technology_operator"></td>
-				            <th class="sorting_disabled center" style="width: 96px;">日期</th>
-							<td colspan=2 id="technology_create_time"></td>
+						    <td class="sorting_disabled center" style="width: 96px;">签字</td>
+						    <td id="technology_operator" class="Chinese"></td>
+				            <td class="sorting_disabled center" style="width: 96px;">日期</td>
+							<td colspan=2 id="technology_create_time"  class="english"></td>
 						</tr>
 						<tr>
 						    <th class="sorting_disabled center" rowspan=2 style="width: 96px;">品质部</th>
-						    <th class="sorting_disabled center" rowspan=2 style="width: 96px;">首车生产是否有指导文件</th>
-							<th class="sorting_disabled center" style="width: 96px;">资料需求节点</th>
-							<td id="qualityNode"></td>
-							<th class="sorting_disabled center" style="width: 96px;">其他</th>
-							<td colspan=2 id="qualityInfo"></td>
+						    <td class="sorting_disabled center" rowspan=2 style="width: 96px;">首车生产是否有指导文件</td>
+							<td class="sorting_disabled center" style="width: 96px;">资料需求节点</td>
+							<td id="qualityNode" class="english"></td>
+							<td class="sorting_disabled center" style="width: 96px;">其他</td>
+							<td colspan=2 id="qualityInfo" class="Chinese"></td>
 						</tr>
 						<tr>
-						    <th class="sorting_disabled center" style="width: 96px;">签字</th>
-						    <td id="quality_operator"></td>
-				            <th class="sorting_disabled center" style="width: 96px;">日期</th>
-							<td colspan=2 id="quality_create_time"></td>
+						    <td class="sorting_disabled center" style="width: 96px;">签字</td>
+						    <td id="quality_operator" class="Chinese"></td>
+				            <td class="sorting_disabled center" style="width: 96px;">日期</td>
+							<td colspan=2 id="quality_create_time"  class="english"></td>
 						</tr>
 						<tr>
 						    <th class="sorting_disabled center" rowspan=2 style="width: 96px;">工厂内部</th>
-						    <th class="sorting_disabled center" rowspan=2 style="width: 96px;">人员、场地、设备等</th>
-							<th class="sorting_disabled center" style="width: 96px;">资料需求节点</th>
-							<td id="factoryNode"></td>
-							<th class="sorting_disabled center" style="width: 96px;">其他</th>
-							<td colspan=2 id="factoryInfo"></td>
+						    <td class="sorting_disabled center" rowspan=2 style="width: 96px;">人员、场地、设备等</td>
+							<td class="sorting_disabled center" style="width: 96px;">资料需求节点</td>
+							<td id="factoryNode" class="english"></td>
+							<td class="sorting_disabled center" style="width: 96px;">其他</td>
+							<td colspan=2 id="factoryInfo" class="Chinese"></td>
 						</tr>
 						<tr>
-						    <th class="sorting_disabled center" style="width: 96px;">签字</th>
-						    <td id="factory_operator"></td>
-				            <th class="sorting_disabled center" style="width: 96px;">日期</th>
-							<td colspan=2 id="factory_create_time"></td>
+						    <td class="sorting_disabled center" style="width: 96px;">签字</td>
+						    <td id="factory_operator" class="Chinese"></td>
+				            <td class="sorting_disabled center" style="width: 96px;">日期</td>
+							<td colspan=2 id="factory_create_time" class="english"></td>
 						</tr>
 						<tr>
 						    <th class="sorting_disabled center" rowspan=2 style="width: 96px;">综合计划部物控</th>
-						    <th class="sorting_disabled center" rowspan=2 style="width: 96px;">物料风险</th>
-							<th class="sorting_disabled center" style="width: 96px;">资料需求节点</th>
-							<td id="materialcontrolNode"></td>
-							<th class="sorting_disabled center" style="width: 96px;">其他</th>
-							<td colspan=2 id="materialcontrolInfo"></td>
+						    <td class="sorting_disabled center" rowspan=2 style="width: 96px;">物料风险</td>
+							<td class="sorting_disabled center" style="width: 96px;">资料需求节点</td>
+							<td id="materialcontrolNode" class="english"></td>
+							<td class="sorting_disabled center" style="width: 96px;">其他</td>
+							<td colspan=2 id="materialcontrolInfo" class="Chinese"></td>
 						</tr>
 						<tr>
-						    <th class="sorting_disabled center" style="width: 96px;">签字</th>
-						    <td id="planning_operator"></td>
-				            <th class="sorting_disabled center" style="width: 96px;">日期</th>
-							<td colspan=2 id="planning_create_time"></td>
+						    <td class="sorting_disabled center" style="width: 96px;">签字</td>
+						    <td id="planning_operator" class="Chinese"></td>
+				            <td class="sorting_disabled center" style="width: 96px;">日期</td>
+							<td colspan=2 id="planning_create_time" class="english"></td>
 						</tr>
 						
 						<tr>
 						    <th class="sorting_disabled center" rowspan=2 style="width: 96px;">综合计划部计划</th>
-						    <th class="sorting_disabled center" rowspan=2 style="width: 96px;">计划风险</th>
-							<th class="sorting_disabled center" style="width: 96px;">资料需求节点</th>
-							<td id="plandepNode"></td>
-							<th class="sorting_disabled center" style="width: 96px;">其他</th>
-							<td colspan=2 id="plandepInfo"></td>
+						    <td class="sorting_disabled center" rowspan=2 style="width: 96px;">计划风险</td>
+							<td class="sorting_disabled center" style="width: 96px;">资料需求节点</td>
+							<td id="plandepNode" class="english"></td>
+							<td class="sorting_disabled center" style="width: 96px;">其他</td>
+							<td colspan=2 id="plandepInfo" class="Chinese"></td>
 						</tr>
 						<tr>
-						    <th class="sorting_disabled center" style="width: 96px;">签字</th>
-						    <td id="plandep_operator"></td>
-				            <th class="sorting_disabled center" style="width: 96px;">日期</th>
-							<td colspan=2 id="plandep_create_time"></td>
+						    <td class="sorting_disabled center" style="width: 96px;">签字</td>
+						    <td id="plandep_operator" class="Chinese"></td>
+				            <td class="sorting_disabled center" style="width: 96px;">日期</td>
+							<td colspan=2 id="plandep_create_time" class="english"></td>
 						</tr>
 						<tr role="row" class="odd">
 					    	<th class="sorting_disabled center" style="width: 96px;" rowspan=4>评审结果修正</th>
-						    <th class="sorting_disabled center" style="width: 96px;" rowspan=2>订单启动节点</th>
-				            <th class="sorting_disabled center" style="width: 96px;">部件上线</th>
-							<th class="sorting_disabled center" style="width: 96px;">焊装上线</th>
-							<th class="sorting_disabled center" style="width: 96px;">涂装上线</th>
-							<th class="sorting_disabled center" style="width: 96px;">底盘上线</th>
-							<th class="sorting_disabled center" style="width: 96px;">总装上线</th>
+						    <td class="sorting_disabled center" style="width: 96px;" rowspan=2>订单启动节点</td>
+				            <td class="sorting_disabled center" style="width: 96px;">部件上线</td>
+							<td class="sorting_disabled center" style="width: 96px;">焊装上线</td>
+							<td class="sorting_disabled center" style="width: 96px;">涂装上线</td>
+							<td class="sorting_disabled center" style="width: 96px;">底盘上线</td>
+							<td class="sorting_disabled center" style="width: 96px;">总装上线</td>
 							
 						</tr>
 						<tr>
-							<td id="revisionpartsonlineDate" class="center"></td>
-							<td id="revisionweldingonlineDate" class="center"></td>
-							<td id="revisionpaintonlineDate" class="center"></td>
-							<td id="revisionchassisonlineDate" class="center"></td>
-							<td id="revisionassemblyonlineDate" class="center"></td>
+							<td id="revisionpartsonlineDate" class="center english"></td>
+							<td id="revisionweldingonlineDate" class="center english"></td>
+							<td id="revisionpaintonlineDate" class="center english"></td>
+							<td id="revisionchassisonlineDate" class="center english"></td>
+							<td id="revisionassemblyonlineDate" class="center english"></td>
 							
 						</tr>
 					    <tr>
-					        <th class="sorting_disabled center" style="width: 96px;" rowspan=2>修正资料需求节点</th>
-							<th class="sorting_disabled center" style="width: 96px;">全部入库</th>
-							<th class="sorting_disabled center" style="width: 96px;">下料明细</th>
-							<th class="sorting_disabled center" style="width: 96px;">BOM</th>
-							<th class="sorting_disabled center" style="width: 96px;">SOP</th>
-							<th class="sorting_disabled center" style="width: 96px;">SIP</th>
+					        <td class="sorting_disabled center" style="width: 96px;" rowspan=2>修正资料需求节点</td>
+							<td class="sorting_disabled center" style="width: 96px;">全部入库</td>
+							<td class="sorting_disabled center" style="width: 96px;">下料明细</td>
+							<td class="sorting_disabled center english" style="width: 96px;">BOM</td>
+							<td class="sorting_disabled center english" style="width: 96px;">SOP</td>
+							<td class="sorting_disabled center english" style="width: 96px;">SIP</td>
 						</tr>
 						<tr role="row" class="odd">
-						    <td id="revisionwarehousingDate" class="center"></td>
-						    <td id="revisiondetailNode" class="center"></td>
-						    <td id="revisionbomNode" class="center"></td>
-							<td id="revisionsopNode" class="center"></td>
-							<td id="revisionsipNode" class="center"></td>
+						    <td id="revisionwarehousingDate" class="center english"></td>
+						    <td id="revisiondetailNode" class="center english"></td>
+						    <td id="revisionbomNode" class="center english"></td>
+							<td id="revisionsopNode" class="center english"></td>
+							<td id="revisionsipNode" class="center english"></td>
 						</tr>
 					</table>
 				</div>

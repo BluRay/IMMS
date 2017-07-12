@@ -828,6 +828,8 @@ public class BaseDataController extends BaseController {
             busType.setMaxSpeed(request.getParameter("maxSpeed"));
             busType.setMaxWeight(request.getParameter("maxWeight"));
             busType.setMotorModel(request.getParameter("motorModel"));
+            busType.setBatteryCapacity(request.getParameter("batteryCapacity"));
+            busType.setRatedVoltage(request.getParameter("ratedVoltage"));
             busType.setMotorPower(request.getParameter("motorPower"));
             busType.setPassengerNum(request.getParameter("passengerNum"));
             busType.setVehicleLength(request.getParameter("vehicleLength"));
@@ -860,6 +862,8 @@ public class BaseDataController extends BaseController {
             busType.setBrand(request.getParameter("brand"));
             busType.setManufacturer(request.getParameter("manufacturer"));
             busType.setBatteryModel(request.getParameter("batteryModel"));
+            busType.setBatteryCapacity(request.getParameter("batteryCapacity"));
+            busType.setRatedVoltage(request.getParameter("ratedVoltage"));
             busType.setChassisModel(request.getParameter("chassisModel"));
             busType.setDriveMotor(request.getParameter("driveMotor"));
             busType.setLightDowndip(request.getParameter("lightDowndip"));

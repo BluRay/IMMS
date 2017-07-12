@@ -15,6 +15,13 @@ $(document).ready(function () {
 		getReasonTypeSelect();
 		getKeysSelect("EXCEPTION_RESPONSIBILITY_DEPARTMENT", "", "#edit_dep_id",null,"value");
 	}
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/IMMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	
 	$('#search_factory').change(function(){ 
 		getWorkshopSelect("plan/pauseManager",$("#search_factory :selected").text(),"","#search_workshop",null,"id");

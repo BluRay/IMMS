@@ -3,7 +3,11 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
-<%String path = request.getContextPath();String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";%>
+<%
+String path = request.getContextPath();
+String rqip= request.getRemoteAddr();
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path;
+%>
 <html lang="zh-CN">
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -26,7 +30,7 @@
 			<div class="main-content-inner">
 				
 				<div class="page-content">
-					<form action="<%=basePath%>snaker/flow/process" method="post"> <!-- b103b4fc137743979aa248307c4bf553 -->
+					<form action="<%=basePath%>/snaker/flow/process" method="post"> <!-- b103b4fc137743979aa248307c4bf553 -->
 					<input type="hidden" id="processId" name="processId" value="${processId}" />
 					<input type="hidden" id="orderId" name="orderId" value="${orderId}" />
 					<input type="hidden" id="taskId" name="taskId" value="${taskId}" />
@@ -133,8 +137,11 @@
             			error: function () {},
             			success: function (response) {
             				if(response.success){
-            					alert("提交成功");
-            					$("#btnSave").attr("disabled",true);
+//             					var orderId=$("#reviewOrderId").val();
+//             					var factoryId=$("#factoryId").val();
+//             					orderId="+orderId+"&factoryId="+factoryId+"&
+            					var url="<%=basePath%>/order/review/internalReview?message=success";
+            					window.open(url,"_parent");
             				}else{
             					alert("提交失败");
             				}
@@ -142,7 +149,7 @@
             		})
             	});
             	$("#btnBack").click(function(){
-            		window.open("/IMMS/order/review/internalReview","_parent");
+            		window.open("<%=basePath%>/order/review/internalReview","_parent");
                 });
             })
         </script>

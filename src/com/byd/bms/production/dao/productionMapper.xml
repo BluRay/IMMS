@@ -834,5 +834,677 @@
 		ORDER BY o.id DESC
 	</select>
 	
+	<select id="getProductionSearch" parameterType="Map" resultType="Map">
+		select * from
+		(SELECT count(b.bus_number) welding_count FROM BMS_PLAN_BUS b
+		left join BMS_OR_ORDER o on b.order_id=o.id
+		where b.factory_id=#{factory_id} 
+		<if test="onoff=='上线'">
+			and b.welding_online_date is not null
+			<if test="start_date !=null and start_date !=''">
+				and b.welding_online_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+			</if>
+			<if test="end_date !=null and end_date !=''">
+				and b.welding_online_date &lt;=CONCAT(#{end_date},' 17:10:00')
+			</if>
+		</if>
+		<if test="onoff=='下线'">
+			and b.welding_offline_date is not null
+			<if test="start_date !=null and start_date !=''">
+				and b.welding_offline_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+			</if>
+			<if test="end_date !=null and end_date !=''">
+				and b.welding_offline_date &lt;=CONCAT(#{end_date},' 17:10:00')
+			</if>
+		</if>
+		<if test="onoff==''">
+			and b.welding_online_date is not null and b.welding_offline_date is null
+		</if>
+		<if test="order_no !=null and order_no !=''">
+			and b.order_id=#{order_no}
+		</if>
+		) a,
+		(SELECT count(b.bus_number) fiberglass_count FROM BMS_PLAN_BUS b
+		left join BMS_OR_ORDER o on b.order_id=o.id where
+		b.factory_id=#{factory_id}
+		<if test="onoff=='下线'">
+			and b.fiberglass_offline_date is not null
+			<if test="start_date !=null and start_date !=''">
+				and b.fiberglass_offline_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+			</if>
+			<if test="end_date !=null and end_date !=''">
+				and b.fiberglass_offline_date &lt;=CONCAT(#{end_date},' 17:10:00')
+			</if>
+		</if>
+		<if test="onoff==''">
+			and b.welding_offline_date is not null and b.fiberglass_offline_date is null
+		</if>
+		<if test="order_no !=null and order_no !=''"> 
+			and b.order_id=#{order_no}
+		</if>
+		) b,
+		(SELECT count(b.bus_number) painting_count FROM BMS_PLAN_BUS b
+		left join BMS_OR_ORDER o on b.order_id=o.id where b.factory_id=#{factory_id}
+		<if test="onoff=='上线'">
+			and b.painting_online_date is not null
+			<if test="start_date !=null and start_date !=''">
+				and b.painting_online_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+			</if>
+			<if test="end_date !=null and end_date !=''">
+				and b.painting_online_date &lt;=CONCAT(#{end_date},' 17:10:00')
+			</if>
+		</if>
+		<if test="onoff=='下线'">
+			and b.painting_offline_date is not null
+			<if test="start_date !=null and start_date !=''">
+				and b.painting_offline_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+			</if>
+			<if test="end_date !=null and end_date !=''">
+				and b.painting_offline_date &lt;=CONCAT(#{end_date},' 17:10:00')
+			</if>
+		</if>
+		<if test="onoff=='' or onoff ==null">
+			and b.painting_online_date is not null and b.painting_offline_date is null
+		</if>
+		<if test="order_no !=null and order_no !=''">
+			and b.order_id=#{order_no}
+		</if>
+		) c,
+		(SELECT count(b.bus_number) chassis_count FROM BMS_PLAN_BUS b
+		left join BMS_OR_ORDER o on b.order_id=o.id where b.factory_id=#{factory_id}
+		<if test="onoff=='上线'">
+			and b.chassis_online_date is not null
+			<if test="start_date !=null and start_date !=''">
+				and b.chassis_online_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+			</if>
+			<if test="end_date !=null and end_date !=''">
+				and b.chassis_online_date &lt;=CONCAT(#{end_date},' 17:10:00')
+			</if>
+		</if>
+		<if test="onoff=='下线'">
+			and b.chassis_offline_date is not null
+			<if test="start_date !=null and start_date !=''">
+				and b.chassis_offline_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+			</if>
+			<if test="end_date !=null and end_date !=''">
+				and b.chassis_offline_date &lt;=CONCAT(#{end_date},' 17:10:00')
+			</if>
+		</if>
+		<if test="onoff=='' or onoff ==null">
+			and b.chassis_online_date is not null and b.chassis_offline_date is null
+		</if>
+		<if test="order_no !=null and order_no !=''">
+			and b.order_id=#{order_no}
+		</if>
+		) d,
+		(SELECT count(b.bus_number) assembly_count FROM BMS_PLAN_BUS b
+		left join BMS_OR_ORDER o on b.order_id=o.id where b.factory_id=#{factory_id}
+		<if test="onoff=='上线'">
+			and b.assembly_online_date is not null
+			<if test="start_date !=null and start_date !=''">
+				and b.assembly_online_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+			</if>
+			<if test="end_date !=null and end_date !=''">
+				and b.assembly_online_date &lt;=CONCAT(#{end_date},' 17:10:00')
+			</if>
+		</if>
+		<if test="onoff=='下线'">
+			and b.assembly_offline_date is not null
+			<if test="start_date !=null and start_date !=''">
+				and b.assembly_offline_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+			</if>
+			<if test="end_date !=null and end_date !=''">
+				and b.assembly_offline_date &lt;=CONCAT(#{end_date},' 17:10:00')
+			</if>
+		</if>
+		<if test="onoff=='' or onoff ==null">
+			and b.assembly_online_date is not null and b.assembly_offline_date is null
+		</if>
+		<if test="order_no !=null and order_no !=''">
+			and b.order_id=#{order_no}
+		</if>
+		) e,
+		(SELECT count(b.bus_number) debugarea_count FROM BMS_PLAN_BUS b
+		left join BMS_OR_ORDER o on b.order_id=o.id
+		where b.factory_id=#{factory_id}
+		<if test="onoff=='上线'">
+			and b.debugarea_online_date is not null
+			<if test="start_date !=null and start_date !=''">
+				and b.debugarea_online_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+			</if>
+			<if test="end_date !=null and end_date !=''">
+				and b.debugarea_online_date &lt;=CONCAT(#{end_date},' 17:10:00')
+			</if>
+		</if>
+		<if test="onoff=='下线'">
+			and b.debugarea_offline_date is not null
+			<if test="start_date !=null and start_date !=''">
+				and b.debugarea_offline_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+			</if>
+			<if test="end_date !=null and end_date !=''">
+				and b.debugarea_offline_date &lt;=CONCAT(#{end_date},' 17:10:00')
+			</if>
+		</if>
+		<if test="onoff=='' or onoff ==null">
+			and b.debugarea_online_date is not null and b.debugarea_offline_date is null
+		</if>
+		<if test="order_no !=null and order_no !=''">
+			and b.order_id=#{order_no}
+		</if>
+		) f,
+		(SELECT count(b.bus_number) testline_count FROM BMS_PLAN_BUS b
+		left join BMS_OR_ORDER o on b.order_id=o.id
+		where b.factory_id=#{factory_id}
+		<if test="onoff=='上线'">
+			and b.testline_online_date is not null
+			<if test="start_date !=null and start_date !=''">
+				and b.testline_online_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+			</if>
+			<if test="end_date !=null and end_date !=''">
+				and b.testline_online_date &lt;=CONCAT(#{end_date},' 17:10:00')
+			</if>
+		</if>
+		<if test="onoff=='下线'">
+			and b.testline_offline_date is not null
+			<if test="start_date !=null and start_date !=''">
+				and b.testline_offline_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+			</if>
+			<if test="end_date !=null and end_date !=''">
+				and b.testline_offline_date &lt;=CONCAT(#{end_date},' 17:10:00')
+			</if>
+		</if>
+		<if test="onoff=='' or onoff ==null">
+			and b.testline_online_date is not null and
+			b.testline_offline_date is null
+		</if>
+		<if test="order_no !=null and order_no !=''">
+			and b.order_id=#{order_no}
+		</if>
+		) g,
+		(SELECT count(b.bus_number) warehousing_count
+		FROM BMS_PLAN_BUS b left join BMS_OR_ORDER o on b.order_id=o.id
+		where
+		b.factory_id=#{factory_id} and b.warehousing_date is not null and b.dispatch_date is null
+		<if test="order_no !=null and order_no !=''">
+			and b.order_id=#{order_no}
+		</if>
+		) h,
+		(SELECT count(b.bus_number) wp_wpi_count FROM BMS_PLAN_BUS b
+		left join BMS_OR_ORDER o on b.order_id=o.id
+		where b.factory_id=#{factory_id} and b.welding_offline_date is not null and b.painting_online_date is null
+		<if test="order_no !=null and order_no !=''">and b.order_id=#{order_no}</if>
+		) a_w,
+		(SELECT count(b.bus_number) pc_wpi_count FROM BMS_PLAN_BUS b
+		left join BMS_OR_ORDER o on b.order_id=o.id
+		where b.factory_id=#{factory_id} and b.painting_offline_date is not null and b.chassis_online_date is null
+		<if test="order_no !=null and order_no !=''">and b.order_id=#{order_no}</if>
+		) b_w,
+		(SELECT count(b.bus_number) ca_wpi_count FROM BMS_PLAN_BUS b
+		left join BMS_OR_ORDER o on b.order_id=o.id
+		where b.factory_id=#{factory_id} and b.chassis_offline_date is not null and b.assembly_online_date is null
+		<if test="order_no !=null and order_no !=''">and b.order_id=#{order_no}</if>
+		) c_w,
+		(SELECT count(b.bus_number) ad_wpi_count FROM BMS_PLAN_BUS b
+		left join BMS_OR_ORDER o on b.order_id=o.id 
+		where b.factory_id=#{factory_id} and b.assembly_offline_date is not null and b.debugarea_online_date is null
+		<if test="order_no !=null and order_no !=''">and b.order_id=#{order_no}</if>
+		) d_w
+	</select>
+	<select id="getProductionWIPBusInfo" parameterType="Map" resultType="Map">
+		SELECT o.order_no,o.order_name,t.bus_type_code,o.order_qty,b.bus_number,
+		<if test="wip_flg=='wp'">
+			b.welding_offline_date
+		</if>
+		<if test="wip_flg=='pc'">
+			b.painting_offline_date
+		</if>
+		<if test="wip_flg=='ca'">
+			b.chassis_offline_date
+		</if>
+		AS enterdate,CONCAT(p.process_code ,' ', p.process_name) AS process,s.line_name line,s.workshop_name AS workshop,b.production_status 
+		FROM BMS_PLAN_BUS b
+		LEFT JOIN BMS_OR_ORDER o ON b.order_id = o.id
+		LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id = t.id
+		LEFT JOIN BMS_BASE_PROCESS p ON b.latest_process_id = p.id
+		LEFT JOIN BMS_PD_SCAN s on b.latest_process_id=s.process_id and s.bus_number=b.bus_number and s.repair='0' and s.ecn='0'
+		WHERE b.factory_id =#{factory_id}
+		<if test="wip_flg=='wp'">
+			AND welding_offline_date IS NOT NULL AND painting_online_date IS NULL
+		</if>
+		<if test="wip_flg=='pc'">
+			AND painting_offline_date IS NOT NULL AND chassis_online_date IS NULL
+		</if>
+		<if test="wip_flg=='ca'">
+			AND chassis_offline_date IS NOT NULL AND assembly_online_date IS NULL
+		</if>
+	</select>
+	<select id="getProductionSearchCarinfo" parameterType="Map" resultType="Map">
+		<if test="workshop =='welding'">
+			SELECT o.order_no,o.order_name,t.bus_type_code,o.order_qty,b.bus_number,b.welding_online_date
+			AS enterdate, CONCAT(p.process_code ,' ', p.process_name) AS process,p.line,'welding' AS workshop,b.production_status
+			FROM BMS_PLAN_BUS b
+			LEFT JOIN BMS_OR_ORDER o ON b.order_id = o.id
+			LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id = t.id
+			LEFT JOIN BMS_BASE_PROCESS p ON b.latest_process_id = p.id
+			WHERE factory_id = #{factory_id}
+			<if test="order_no !=''">
+				AND order_id = (SELECT id FROM BMS_OR_ORDER WHERE order_no=#{order_no})
+			</if>
+			<if test="line !=null and line !=''">
+				AND p.line like CONCAT('%',#{line},'%')
+			</if>
+			<if test="onoff =='上线'">
+				and welding_online_date is not null
+				<if test="start_date !=null and start_date !=''">
+					and b.welding_online_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+				</if>
+				<if test="end_date !=null and end_date !=''">
+					and b.welding_online_date &lt;=CONCAT(#{end_date},' 17:10:00')
+				</if>
+			</if>
+			<if test="onoff=='下线'">
+				and welding_offline_date is not null
+				<if test="start_date !=null and start_date !=''">
+					and b.welding_offline_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+				</if>
+				<if test="end_date !=null and end_date !=''">
+					and b.welding_offline_date &lt;=CONCAT(#{end_date},' 17:10:00')
+				</if>
+			</if>
+			<if test="onoff=='' or onoff ==null">
+				AND welding_online_date IS NOT NULL AND welding_offline_date IS NULL
+			</if>
+			<if test="bus_number !=null and bus_number !=''">
+				AND b.bus_number LIKE CONCAT('%',#{bus_number},'%')
+			</if>
+
+		</if>
+		<if test="workshop =='fiberglass'">
+			SELECT o.order_no,o.order_name,t.bus_type_code,o.order_qty,b.bus_number,b.welding_offline_date
+			AS enterdate,CONCAT(p.process_code ,' ', p.process_name) AS
+			process,p.line,'fiberglass' AS workshop,b.production_status FROM BMS_PLAN_BUS b
+			LEFT JOIN BMS_OR_ORDER o ON b.order_id = o.id
+			LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id = t.id
+			LEFT JOIN BMS_BASE_PROCESS p ON b.latest_process_id = p.id
+			WHERE factory_id = #{factory_id}
+			<if test="order_no !=''">
+				AND order_id = (SELECT id FROM BMS_OR_ORDER WHERE order_no=#{order_no})
+			</if>
+			<if test="line !=null and line !=''">
+				AND p.line like CONCAT('%',#{line},'%')
+			</if>
+			AND welding_offline_date IS NOT NULL AND fiberglass_offline_date IS NULL
+			<if test="bus_number !=null and bus_number !=''">
+				AND b.bus_number LIKE CONCAT('%',#{bus_number},'%')
+			</if>
+		</if>
+		<if test="workshop =='painting'">
+			SELECT o.order_no,o.order_name,t.bus_type_code,o.order_qty,b.bus_number,b.painting_online_date
+			AS enterdate,CONCAT(p.process_code ,' ', p.process_name) AS
+			process,p.line,'painting' AS workshop,b.production_status FROM BMS_PLAN_BUS b
+			LEFT JOIN BMS_OR_ORDER o ON b.order_id = o.id
+			LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id = t.id
+			LEFT JOIN BMS_BASE_PROCESS p ON b.latest_process_id = p.id
+			WHERE factory_id = #{factory_id}
+			<if test="order_no !=''">
+				AND order_id = (SELECT id FROM BMS_OR_ORDER WHERE order_no=#{order_no})
+			</if>
+			<if test="line !=null and line !=''">
+				AND p.line like CONCAT('%',#{line},'%')
+			</if>
+			<if test="onoff =='上线'">
+				and painting_online_date is not null
+				<if test="start_date !=null and start_date !=''">
+					and b.painting_online_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+				</if>
+				<if test="end_date !=null and end_date !=''">
+					and b.painting_online_date &lt;=CONCAT(#{end_date},' 17:10:00')
+				</if>
+			</if>
+			<if test="onoff=='下线'">
+				and painting_offline_date is not null
+				<if test="start_date !=null and start_date !=''">
+					and b.painting_offline_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+				</if>
+				<if test="end_date !=null and end_date !=''">
+					and b.painting_offline_date &lt;=CONCAT(#{end_date},' 17:10:00')
+				</if>
+			</if>
+			<if test="onoff=='' or onoff ==null">
+				AND painting_online_date IS NOT NULL AND painting_offline_date IS NULL
+			</if>
+			<if test="bus_number !=null and bus_number !=''">
+				AND b.bus_number LIKE CONCAT('%',#{bus_number},'%')
+			</if>
+		</if>
+		<if test="workshop =='chassis'">
+			SELECT o.order_no,o.order_name,t.bus_type_code,o.order_qty,b.bus_number,b.chassis_online_date
+			AS enterdate,CONCAT(p.process_code ,' ', p.process_name) AS
+			process,p.line,'chassis' AS workshop,b.production_status FROM BMS_PLAN_BUS b
+			LEFT JOIN BMS_OR_ORDER o ON b.order_id = o.id
+			LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id = t.id
+			LEFT JOIN BMS_BASE_PROCESS p ON b.latest_process_id = p.id
+			WHERE factory_id = #{factory_id}
+			<if test="order_no !=''">
+				AND order_id = (SELECT id FROM BMS_OR_ORDER WHERE order_no=#{order_no})
+			</if>
+			<if test="line !=null and line !=''">
+				AND p.line like CONCAT('%',#{line},'%')
+			</if>
+			<if test="onoff =='上线'">
+				and chassis_online_date is not null
+				<if test="start_date !=null and start_date !=''">
+					and b.chassis_online_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+				</if>
+				<if test="end_date !=null and end_date !=''">
+					and b.chassis_online_date &lt;=CONCAT(#{end_date},' 17:10:00')
+				</if>
+			</if>
+			<if test="onoff=='下线'">
+				and chassis_offline_date is not null
+				<if test="start_date !=null and start_date !=''">
+					and b.chassis_offline_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+				</if>
+				<if test="end_date !=null and end_date !=''">
+					and b.chassis_offline_date &lt;=CONCAT(#{end_date},' 17:10:00')
+				</if>
+			</if>
+			<if test="onoff=='' or onoff ==null">
+				AND chassis_online_date IS NOT NULL AND chassis_offline_date IS NULL
+			</if>
+			<if test="bus_number !=null and bus_number !=''">
+				AND b.bus_number LIKE CONCAT('%',#{bus_number},'%')
+			</if>
+		</if>
+		<if test="workshop =='assembly'">
+			SELECT o.order_no,o.order_name,t.bus_type_code,o.order_qty,b.bus_number,b.assembly_online_date
+			AS enterdate,CONCAT(p.process_code ,' ', p.process_name) AS
+			process,p.line,'assembly' AS workshop,b.production_status FROM
+			BMS_PLAN_BUS b LEFT JOIN BMS_OR_ORDER o ON b.order_id = o.id
+			LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id = t.id
+			LEFT JOIN BMS_BASE_PROCESS p ON b.latest_process_id = p.id
+			WHERE factory_id = #{factory_id}
+			<if test="order_no !=''">
+				AND order_id = (SELECT id FROM BMS_OR_ORDER WHERE order_no=#{order_no})
+			</if>
+			<if test="line !=null and line !=''">
+				AND p.line like CONCAT('%',#{line},'%')
+			</if>
+			<if test="onoff =='上线'">
+				and assembly_online_date is not null
+				<if test="start_date !=null and start_date !=''">
+					and b.assembly_online_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+				</if>
+				<if test="end_date !=null and end_date !=''">
+					and b.assembly_online_date &lt;=CONCAT(#{end_date},' 17:10:00')
+				</if>
+			</if>
+			<if test="onoff=='下线'">
+				and assembly_offline_date is not null
+				<if test="start_date !=null and start_date !=''">
+					and b.assembly_offline_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+				</if>
+				<if test="end_date !=null and end_date !=''">
+					and b.assembly_offline_date &lt;=CONCAT(#{end_date},' 17:10:00')
+				</if>
+			</if>
+			<if test="onoff=='' or onoff ==null">
+				AND assembly_online_date IS NOT NULL AND assembly_offline_date IS NULL
+			</if>
+			<if test="bus_number !=null and bus_number !=''">
+				AND b.bus_number LIKE CONCAT('%',#{bus_number},'%')
+			</if>
+		</if>
+		<if test="workshop =='debugarea'">
+			SELECT o.order_no,o.order_name,t.bus_type_code,o.order_qty,b.bus_number,b.debugarea_online_date
+			AS enterdate,CONCAT(p.process_code ,' ', p.process_name) AS
+			process,p.line,'debugarea' AS workshop,b.production_status FROM BMS_PLAN_BUS b
+			LEFT JOIN BMS_OR_ORDER o ON b.order_id = o.id
+			LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id = t.id
+			LEFT JOIN BMS_BASE_PROCESS p ON b.latest_process_id = p.id
+			WHERE factory_id = #{factory_id}
+			<if test="order_no !=''">
+				AND order_id = (SELECT id FROM BMS_OR_ORDER WHERE order_no=#{order_no})
+			</if>
+			<if test="line !=null and line !=''">
+				AND p.line like CONCAT('%',#{line},'%')
+			</if>
+			<if test="onoff =='上线'">
+				and debugarea_online_date is not null
+				<if test="start_date !=null and start_date !=''">
+					and b.debugarea_online_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+				</if>
+				<if test="end_date !=null and end_date !=''">
+					and b.debugarea_online_date &lt;=CONCAT(#{end_date},' 17:10:00')
+				</if>
+			</if>
+			<if test="onoff=='下线'">
+				and debugarea_offline_date is not null
+				<if test="start_date !=null and start_date !=''">
+					and b.debugarea_offline_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+				</if>
+				<if test="end_date !=null and end_date !=''">
+					and b.debugarea_offline_date &lt;=CONCAT(#{end_date},' 17:10:00')
+				</if>
+			</if>
+			<if test="onoff=='' or onoff ==null">
+				AND debugarea_online_date IS NOT NULL AND debugarea_offline_date IS NULL
+			</if>
+			<if test="bus_number !=null and bus_number !=''">
+				AND b.bus_number LIKE CONCAT('%',#{bus_number},'%')
+			</if>
+		</if>
+		<if test="workshop =='testline'">
+			SELECT o.order_no,o.order_name,t.bus_type_code,o.order_qty,b.bus_number,b.testline_online_date
+			AS enterdate,CONCAT(p.process_code ,' ', p.process_name) AS
+			process,p.line,'testline' AS workshop,b.production_status FROM BMS_PLAN_BUS b
+			LEFT JOIN BMS_OR_ORDER o ON b.order_id = o.id
+			LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id = t.id
+			LEFT JOIN BMS_BASE_PROCESS p ON b.latest_process_id = p.id
+			WHERE factory_id = #{factory_id}
+			<if test="order_no !=''">
+				AND order_id = (SELECT id FROM BMS_OR_ORDER WHERE order_no=#{order_no})
+			</if>
+			<if test="line !=null and line !=''">
+				AND p.line like CONCAT('%',#{line},'%')
+			</if>
+			<if test="onoff =='上线'">
+				and testline_online_date is not null
+				<if test="start_date !=null and start_date !=''">
+					and b.testline_online_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+				</if>
+				<if test="end_date !=null and end_date !=''">
+					and b.testline_online_date &lt;=CONCAT(#{end_date},' 17:10:00')
+				</if>
+			</if>
+			<if test="onoff=='下线'">
+				and testline_offline_date is not null
+				<if test="start_date !=null and start_date !=''">
+					and b.testline_offline_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+				</if>
+				<if test="end_date !=null and end_date !=''">
+					and b.testline_offline_date &lt;=CONCAT(#{end_date},' 17:10:00')
+				</if>
+			</if>
+			<if test="onoff=='' or onoff ==null">
+				AND testline_online_date IS NOT NULL AND testline_offline_date IS NULL
+			</if>
+			<if test="bus_number !=null and bus_number !=''">
+				AND b.bus_number LIKE CONCAT('%',#{bus_number},'%')
+			</if>
+		</if>
+		<if test="workshop =='warehousing'">
+			SELECT o.order_no,o.order_name,t.bus_type_code,o.order_qty,b.bus_number,b.warehousing_date
+			AS enterdate,CONCAT(p.process_code ,' ', p.process_name) AS
+			process,p.line,'warehousing' AS workshop,b.production_status FROM BMS_PLAN_BUS b
+			LEFT JOIN BMS_OR_ORDER o ON b.order_id = o.id
+			LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id = t.id
+			LEFT JOIN BMS_BASE_PROCESS p ON b.latest_process_id = p.id
+			WHERE factory_id = #{factory_id}
+			<if test="order_no !=''">
+				AND order_id = (SELECT id FROM BMS_OR_ORDER WHERE order_no=#{order_no})
+			</if>
+			<if test="line !=null and line !=''">
+				AND p.line like CONCAT('%',#{line},'%')
+			</if>
+			AND warehousing_date IS NOT NULL AND dispatch_date IS NULL
+			<if test="bus_number !=null and bus_number !=''">
+				AND b.bus_number LIKE CONCAT('%',#{bus_number},'%')
+			</if>
+		</if>
+		<if test="workshop ==''">
+			(SELECT o.order_no,o.order_name,t.bus_type_code,o.order_qty,b.bus_number,b.welding_online_date
+			AS enterdate,CONCAT(p.process_code ,' ', p.process_name) AS
+			process,p.line,'welding' AS workshop,b.production_status FROM BMS_PLAN_BUS b
+			LEFT JOIN BMS_OR_ORDER o ON b.order_id = o.id
+			LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id = t.id
+			LEFT JOIN BMS_BASE_PROCESS p ON b.latest_process_id = p.id
+			WHERE factory_id = #{factory_id}
+			<if test="order_no !=''">
+				AND order_id = (SELECT id FROM BMS_OR_ORDER WHERE order_no=#{order_no})
+			</if>
+			<if test="line !=null and line !=''">
+				AND p.line like CONCAT('%',#{line},'%')
+			</if>
+			AND welding_online_date IS NOT NULL AND welding_offline_date IS NULL
+			<if test="bus_number !=null and bus_number !=''">
+				AND b.bus_number LIKE CONCAT('%',#{bus_number},'%')
+			</if>
+			)
+			UNION ALL
+			(SELECT o.order_no,o.order_name,t.bus_type_code,o.order_qty,b.bus_number,b.welding_offline_date
+			AS enterdate,CONCAT(p.process_code ,' ', p.process_name) AS process,p.line,'fiberglass' AS workshop,b.production_status FROM
+			BMS_PLAN_BUS b
+			LEFT JOIN BMS_OR_ORDER o ON b.order_id = o.id
+			LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id = t.id
+			LEFT JOIN BMS_BASE_PROCESS p ON b.latest_process_id = p.id
+			WHERE factory_id = #{factory_id}
+			<if test="order_no !=''">
+				AND order_id = (SELECT id FROM BMS_OR_ORDER WHERE order_no=#{order_no})
+			</if>
+			<if test="line !=null and line !=''">
+				AND p.line like CONCAT('%',#{line},'%')
+			</if>
+			AND welding_offline_date IS NOT NULL AND fiberglass_offline_date IS NULL
+			<if test="bus_number !=null and bus_number !=''">
+				AND b.bus_number LIKE CONCAT('%',#{bus_number},'%')
+			</if>
+			)
+			UNION ALL (SELECT
+			o.order_no,o.order_name,t.bus_type_code,o.order_qty,b.bus_number,b.painting_online_date
+			AS enterdate,CONCAT(p.process_code ,' ', p.process_name) AS
+			process,p.line,'painting' AS workshop,b.production_status FROM BMS_PLAN_BUS b
+			LEFT JOIN BMS_OR_ORDER o ON b.order_id = o.id
+			LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id = t.id
+			LEFT JOIN BMS_BASE_PROCESS p ON b.latest_process_id = p.id
+			WHERE factory_id = #{factory_id}
+			<if test="order_no !=''">
+				AND order_id = (SELECT id FROM BMS_OR_ORDER WHERE order_no=#{order_no})
+			</if>
+			<if test="line !=null and line !=''">
+				AND p.line like CONCAT('%',#{line},'%')
+			</if>
+			AND painting_online_date IS NOT NULL AND painting_offline_date IS NULL
+			<if test="bus_number !=null and bus_number !=''">
+				AND b.bus_number LIKE CONCAT('%',#{bus_number},'%')
+			</if>
+			)
+			UNION ALL (SELECT
+			o.order_no,o.order_name,t.bus_type_code,o.order_qty,b.bus_number,b.chassis_online_date
+			AS enterdate,CONCAT(p.process_code ,' ', p.process_name) AS process,p.line,'chassis' AS workshop,b.production_status FROM
+			BMS_PLAN_BUS b
+			LEFT JOIN BMS_OR_ORDER o ON b.order_id = o.id
+			LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id = t.id
+			LEFT JOIN BMS_BASE_PROCESS p ON b.latest_process_id = p.id
+			WHERE factory_id = #{factory_id}
+			<if test="order_no !=''">
+				AND order_id = (SELECT id FROM BMS_OR_ORDER WHERE order_no=#{order_no})
+			</if>
+			<if test="line !=null and line !=''">
+				AND p.line like CONCAT('%',#{line},'%')
+			</if>
+			AND chassis_online_date IS NOT NULL AND chassis_offline_date IS NULL
+			<if test="bus_number !=null and bus_number !=''">
+				AND b.bus_number LIKE CONCAT('%',#{bus_number},'%')
+			</if>
+			)
+			UNION ALL (SELECT
+			o.order_no,o.order_name,t.bus_type_code,o.order_qty,b.bus_number,b.assembly_online_date
+			AS enterdate,CONCAT(p.process_code ,' ', p.process_name) AS
+			process,p.line,'assembly' AS workshop,b.production_status FROM BMS_PLAN_BUS b
+			LEFT JOIN BMS_OR_ORDER o ON b.order_id = o.id
+			LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id = t.id
+			LEFT JOIN BMS_BASE_PROCESS p ON b.latest_process_id = p.id
+			WHERE factory_id = #{factory_id}
+			<if test="order_no !=''">
+				AND order_id = (SELECT id FROM BMS_OR_ORDER WHERE order_no=#{order_no})
+			</if>
+			<if test="line !=null and line !=''">
+				AND p.line like CONCAT('%',#{line},'%')
+			</if>
+			AND assembly_online_date IS NOT NULL AND assembly_offline_date IS NULL
+			<if test="bus_number !=null and bus_number !=''">
+				AND b.bus_number LIKE CONCAT('%',#{bus_number},'%')
+			</if>
+			)
+			UNION ALL (SELECT
+			o.order_no,o.order_name,t.bus_type_code,o.order_qty,b.bus_number,b.debugarea_online_date
+			AS enterdate,CONCAT(p.process_code ,' ', p.process_name) AS
+			process,p.line,'debugarea' AS workshop,b.production_status FROM BMS_PLAN_BUS b
+			LEFT JOIN BMS_OR_ORDER o ON b.order_id = o.id
+			LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id = t.id
+			LEFT JOIN BMS_BASE_PROCESS p ON b.latest_process_id = p.id
+			WHERE factory_id = #{factory_id}
+			<if test="order_no !=''">
+				AND order_id = (SELECT id FROM BMS_OR_ORDER WHERE order_no=#{order_no})
+			</if>
+			<if test="line !=null and line !=''">
+				AND p.line like CONCAT('%',#{line},'%')
+			</if>
+			AND debugarea_online_date IS NOT NULL AND debugarea_offline_date IS NULL
+			<if test="bus_number !=null and bus_number !=''">
+				AND b.bus_number LIKE CONCAT('%',#{bus_number},'%')
+			</if>
+			)
+			UNION ALL (SELECT
+			o.order_no,o.order_name,t.bus_type_code,o.order_qty,b.bus_number,b.testline_online_date
+			AS enterdate,CONCAT(p.process_code ,' ', p.process_name) AS
+			process,p.line,'testline' AS workshop,b.production_status FROM BMS_PLAN_BUS b
+			LEFT JOIN BMS_OR_ORDER o ON b.order_id = o.id
+			LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id = t.id
+			LEFT JOIN BMS_BASE_PROCESS p ON b.latest_process_id = p.id
+			WHERE factory_id = #{factory_id}
+			<if test="order_no !=''">
+				AND order_id = (SELECT id FROM BMS_OR_ORDER WHERE order_no=#{order_no})
+			</if>
+			<if test="line !=null and line !=''">
+				AND p.line like CONCAT('%',#{line},'%')
+			</if>
+			AND testline_online_date IS NOT NULL AND testline_offline_date IS NULL
+			<if test="bus_number !=null and bus_number !=''">
+				AND b.bus_number LIKE CONCAT('%',#{bus_number},'%')
+			</if>
+			)
+			UNION ALL (SELECT
+			o.order_no,o.order_name,t.bus_type_code,o.order_qty,b.bus_number,b.warehousing_date
+			AS enterdate,CONCAT(p.process_code ,' ', p.process_name) AS
+			process,p.line,'warehousing' AS workshop,b.production_status FROM BMS_PLAN_BUS b
+			LEFT JOIN BMS_OR_ORDER o ON b.order_id = o.id
+			LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id = t.id
+			LEFT JOIN BMS_BASE_PROCESS p ON b.latest_process_id = p.id
+			WHERE factory_id = #{factory_id}
+			<if test="order_no !=''">
+				AND order_id = (SELECT id FROM BMS_OR_ORDER WHERE 	order_no=#{order_no})
+			</if>
+			<if test="line !=null and line !=''">
+				AND p.line like CONCAT('%',#{line},'%')
+			</if>
+			AND warehousing_date LIKE CONCAT('%',#{cur_date},'%')
+			<if test="bus_number !=null and bus_number !=''">
+				AND b.bus_number LIKE CONCAT('%',#{bus_number},'%')
+			</if>
+			)
+		</if>
+	</select>
 	
 </mapper>

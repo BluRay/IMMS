@@ -8,6 +8,13 @@ $(document).ready(function () {
 		getFactorySelect("plan/generateVin",'',"#vin_factory",null,'id');
 		$("#btnPrint").attr("disabled","disabled"); 
 	};
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/IMMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	
 	$("#btnQuery").click (function () {
 		$("#divBulkAdd").hide();

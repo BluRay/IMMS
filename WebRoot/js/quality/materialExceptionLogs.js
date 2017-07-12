@@ -370,7 +370,7 @@ function getBusType(){
 		    $("#search_bustype").append("<option value=''>全部</option>" + strs);
 		    $("#new_bus_type").append(strs);
 		    $("#edit_bus_type").append(strs);
-		    $("#search_bustype").append(strs);
+		    //$("#search_bustype").append(strs);
 		}
 	})
 }

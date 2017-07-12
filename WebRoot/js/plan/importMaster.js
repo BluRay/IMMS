@@ -11,6 +11,13 @@ $(document).ready(function () {
 		getFactorySelect("plan/planRevision",'',"#search_factory",null,'id');
 		ajaxQuery();
 	}
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/IMMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	
 	$("#btnBulkAdd").click (function () {
 		$("#divBulkAdd").show();

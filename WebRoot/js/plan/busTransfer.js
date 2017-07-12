@@ -17,6 +17,13 @@ $(document).ready(function () {
 		$("#in").css("height",div_height);
 		$("#his").css("height",div_height);
 	}
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/IMMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	
 	$("li").click(function(e){
 		if(this.id == "div1"){

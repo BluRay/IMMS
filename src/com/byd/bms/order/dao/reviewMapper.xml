@@ -16,6 +16,9 @@
 		<if test="orderNo !=null and orderNo !=''">
 			and o.order_no like CONCAT('%',#{orderNo},'%')   
 		</if>
+		<if test="orderId !=null and orderId !=''">
+			and o.id=#{orderId}   
+		</if>
 		<if test="reviewStatus !=null and reviewStatus !=''">
 			and r.review_Status=#{reviewStatus}   
 		</if>
@@ -25,7 +28,7 @@
 		<if test="factory !=null and factory !=''">
 			and find_in_set(f.factory_id ,#{factory} )
 		</if>
-		
+		ORDER BY o.order_no DESC
 		<if test="start !=null">
 			LIMIT #{start} ,#{length} 
 		</if>			

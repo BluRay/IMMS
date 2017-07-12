@@ -358,4 +358,33 @@ public class CommonController extends BaseController {
 		model.addAllAttributes(map);
 		return model;
 	}
+	
+	/**
+	 * @author xiong.jianwu
+	 * 查询首页工厂在制订单报表数据
+	 * @return
+	 */
+	@RequestMapping("/getIndexFactoryPrdOrdData")
+	@ResponseBody
+	public ModelMap getIndexFactoryPrdOrdData(){
+		model.clear();
+		commonService.getIndexFactoryPrdOrdData(request.getParameter("factory_id"),model);
+		
+		return model;
+	}
+	
+	/**
+	 * @author xiong.jianwu
+	 * 查询首页产量报表数据
+	 * @return
+	 */
+	@RequestMapping("/getIndexOutputData")
+	@ResponseBody
+	public ModelMap getIndexOutputData(){
+		model.clear();
+		SimpleDateFormat df = new SimpleDateFormat("yyyy");
+		String actYear = df.format(new Date());
+		commonService.getIndexOutputData(actYear,model);
+		return model;
+	}
 }

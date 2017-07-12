@@ -490,4 +490,17 @@ public class ProductionServiceImpl implements IProductionService {
 	}
 
 	/*******************  tangjin end  **************************/
+	@Override
+	public List<Map<String,String>> getProductionSearch(Map<String,Object> queryMap){
+		return productionDao.getProductionSearch(queryMap);
+	}
+	@Override
+	public List<Map<String,String>> getProductionWIPBusInfo(Map<String,Object> queryMap){
+		return productionDao.getProductionWIPBusInfo(queryMap);
+	}
+	@Override
+	public List<Map<String,String>> getProductionSearchCarinfo(Map<String,Object> queryMap){
+		return productionDao.getProductionSearchCarinfo(queryMap);
+	}
+	
 }

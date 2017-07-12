@@ -15,6 +15,13 @@ $(document).ready(function () {
 		$("#dispatchBtn").prop("disabled","disabled");
 		ajaxQuery();
 	}
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/IMMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	
 	$("#btnQuery").on('click', function(e) {	
 		ajaxQuery();

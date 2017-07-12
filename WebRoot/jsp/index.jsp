@@ -7,6 +7,22 @@
 		<title>BMS</title>
 		<meta name="description" content="Common Buttons &amp; Icons" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+	<style>	
+			.myselect {
+		border: 0px none;
+		-moz-appearance:none;
+		-webkit-appearance:none;
+		font-size: 100%;
+		margin-bottom: 3px;
+		color: #555;
+		background-color:#f5f5f5;
+		width: 80px;
+		padding: 0px;
+		height:27px;
+		cursor: pointer;
+		margin-left: -8px;
+		}
+	</style>
 	</head>
 	<body class="no-skin" style="font-family: 'Microsoft YaHei';">
 		<!-- 头 -->
@@ -21,6 +37,9 @@
 			<div class="breadcrumbs breadcrumbs-fixed" id="breadcrumbs">
 					<ul class="breadcrumb">
 						<li><i class="ace-icon fa fa-home home-icon"></i><a href="<%=request.getContextPath()%>/index">首页</a></li>
+						<li class="active">
+						<select name="" id="search_factory" class="myselect">
+						</select>
 					</ul><!-- /.breadcrumb -->
 
 					<!-- #section:basics/content.searchbox -->
@@ -37,9 +56,9 @@
 					<!-- 设置小部件 -->
 					<%-- <jsp:include page="settings.jsp" flush="true"/> --%>
 					<!-- /section:settings.box -->
-					<div class="page-content-area">
+					<div class="page-content-area ">
 						<div class="row">
-							<div class="col-xs-12 col-sm-6 widget-container-col ui-sortable">
+								<div class="col-xs-12 col-sm-5 widget-container-col ui-sortable" >
 										<!-- #section:custom/widget-box -->
 										<div class="widget-box ui-sortable-handle">
 											<div class="widget-header">
@@ -47,11 +66,10 @@
 
 												<!-- #section:custom/widget-box.toolbar -->
 												<div class="widget-toolbar">
-													<div class="widget-menu">
+													<!-- <div class="widget-menu">
 														<a href="#" data-action="settings" data-toggle="dropdown">
 															<i class="ace-icon fa fa-bars"></i>
 														</a>
-
 														<ul class="dropdown-menu dropdown-menu-right dropdown-light-blue dropdown-caret dropdown-closer">
 															<li>
 																<a data-toggle="tab" href="#dropdown1">Option#1</a>
@@ -61,7 +79,7 @@
 																<a data-toggle="tab" href="#dropdown2">Option#2</a>
 															</li>
 														</ul>
-													</div>
+													</div> -->
 
 													<a href="#" data-action="fullscreen" class="orange2">
 														<i class="ace-icon fa fa-expand"></i>
@@ -71,96 +89,215 @@
 														<i class="ace-icon fa fa-refresh"></i>
 													</a>
 
-													<a href="#" data-action="collapse">
+													<!-- <a href="#" data-action="collapse">
 														<i class="ace-icon fa fa-chevron-up"></i>
-													</a>
-
-													<a href="#" data-action="close">
-														<i class="ace-icon fa fa-times"></i>
-													</a>
+													</a> -->
 												</div>
 
 												<!-- /section:custom/widget-box.toolbar -->
 											</div>
 
 											<div class="widget-body">
-												<div class="widget-main">
-													<p class="alert alert-info">
-														Nunc aliquam enim ut arcu aliquet adipiscing. Fusce dignissim volutpat justo non consectetur. Nulla fringilla eleifend consectetur.
-													</p>
-													<p class="alert alert-success">
-														Raw denim you probably haven't heard of them jean shorts Austin.
-													</p>
-												</div>
-											</div>
+												<div class="widget-main" style="height:210px">
+													<div class="row">
+															<div class="col-xs-6" >
+																<div class="col-xs-6 center" style="line-height:20px;height:75px;top:10px;">
+																	<p style="color:green;font-size:24px;" id="welding_plan_done"></p>
+																	<p style="font-size:15px;">焊装上线</p>
+																</div>
+																<div class="col-xs-6 center">
+																	<div id='welding_percent' class="easy-pie-chart percentage" data-percent="0" data-color="#D15B47">
+																	<span class="percent" >0</span>%
+																	</div>
+																</div>	
+															</div>											
+															<div class="col-xs-6 ">
+																<div class="col-xs-6 center" style="line-height:20px;height:75px;top:10px;">
+																	<p style="color:green;font-size:24px;" id="painting_plan_done"></p>
+																	<p style="font-size:15px;">涂装上线</p>
+																</div>
+																<div class="col-xs-6 center">
+																	<div id='painting_percent'  class="easy-pie-chart percentage" data-percent="0" data-color="#D15B47">
+																	<span class="percent">0</span>%
+																</div>
+																</div>														
+															</div>												
+													</div>
+													<hr>
+													<div class="row">
+															<div class="col-xs-6 " >
+																<div class="col-xs-6 center" style="line-height:20px;height:75px;top:10px;top:10px;">
+																	<p style="color:green;font-size:24px;" id="chassis_plan_done"></p>
+																	<p style="font-size:15px;">底盘上线</p>
+																</div>
+																<div class="col-xs-6 center">
+																	<div id="chassis_percent" class="easy-pie-chart percentage" data-percent="0" data-color="#D15B47">
+																	<span class="percent">0</span>%
+																	</div>
+																</div>	
+															</div>											
+															<div class="col-xs-6 ">
+																<div class="col-xs-6 center" style="line-height:20px;height:75px;top:10px;">
+																	<p style="color:green;font-size:24px;" id="assembly_plan_done"></p>
+																	<p style="font-size:15px;">总装上线</p>
+																</div>
+																<div class="col-xs-6 center">
+																	<div id="assembly_percent" class="easy-pie-chart percentage" data-percent="0" data-color="#D15B47">
+																	<span class="percent">0</span>%
+																</div>
+																</div>														
+															</div>												
+													</div>
 										</div>
-
-										<!-- /section:custom/widget-box -->
 									</div>
-									
-									<div class="col-xs-12 col-sm-6 widget-container-col ui-sortable">
-										<!-- #section:custom/widget-box -->
-										<div class="widget-box ui-sortable-handle">
-											<div class="widget-header">
-												<h5 class="widget-title">订单情况(事业部)</h5>
+						</div>	
+					</div>
+					
+					<div class="col-xs-12 col-sm-7 widget-container-col ui-sortable" >
+								<div class="widget-box ui-sortable-handle">
+									<div class="widget-header">
+										<h5 class="widget-title">订单情况(事业部)</h5>
 
-												<!-- #section:custom/widget-box.toolbar -->
-												<div class="widget-toolbar">
-													<div class="widget-menu">
-														<a href="#" data-action="settings" data-toggle="dropdown">
-															<i class="ace-icon fa fa-bars"></i>
-														</a>
+										<!-- #section:custom/widget-box.toolbar -->
+										<div class="widget-toolbar">
+											<a href="#" data-action="fullscreen" class="orange2">
+												<i class="ace-icon fa fa-expand"></i>
+											</a>
 
-														<ul class="dropdown-menu dropdown-menu-right dropdown-light-blue dropdown-caret dropdown-closer">
-															<li>
-																<a data-toggle="tab" href="#dropdown1">Option#1</a>
-															</li>
+											<a href="#" data-action="reload">
+												<i class="ace-icon fa fa-refresh"></i>
+											</a>
 
-															<li>
-																<a data-toggle="tab" href="#dropdown2">Option#2</a>
-															</li>
-														</ul>
-													</div>
-
-													<a href="#" data-action="fullscreen" class="orange2">
-														<i class="ace-icon fa fa-expand"></i>
-													</a>
-
-													<a href="#" data-action="reload">
-														<i class="ace-icon fa fa-refresh"></i>
-													</a>
-
-													<a href="#" data-action="collapse">
-														<i class="ace-icon fa fa-chevron-up"></i>
-													</a>
-
-													<a href="#" data-action="close">
-														<i class="ace-icon fa fa-times"></i>
-													</a>
-												</div>
-
-												<!-- /section:custom/widget-box.toolbar -->
-											</div>
-
-											<div class="widget-body">
-												<div class="widget-main">
-													<p class="alert alert-info">
-														Nunc aliquam enim ut arcu aliquet adipiscing. Fusce dignissim volutpat justo non consectetur. Nulla fringilla eleifend consectetur.
-													</p>
-													<p class="alert alert-success">
-														Raw denim you probably haven't heard of them jean shorts Austin.
-													</p>
-												</div>
-											</div>
 										</div>
+									</div>
 
-										<!-- /section:custom/widget-box -->
+									<div class="widget-body" id="chart1">
+										<div class="widget-main" id="container" style="height:210px">												
+										</div>
+									</div>
+								</div>
+					</div>
+									
+			</div>
+			
+			<div class="row">
+				<div class="col-xs-12 col-sm-5 widget-container-col ui-sortable">
+					<div class="widget-box ui-sortable-handle">
+								<div class="widget-header">
+									<h5 class="widget-title">工厂在制订单</h5>
+									<div class="widget-toolbar">
+										<a href="#" data-action="fullscreen" class="orange2">
+											<i class="ace-icon fa fa-expand"></i>
+										</a>
+										<a href="#" data-action="reload">
+											<i class="ace-icon fa fa-refresh"></i>
+										</a>
+									</div>
+								</div>
+
+								<div class="widget-body"  >
+								<div  class="widget-main" style="height:210px;overflow:hidden">
+									<div style="overflow:hidden" id="factory_act_order">
+										<!-- <div class="factory_act_order">
+											<div class="row">
+												<label class="col-xs-12 " style="margin-left:100px;font-weight:bold">深圳K8 100台</label>	
+											</div>		
+											<div class="row">	
+												<div class="col-xs-8 " >												
+													<div class="row">
+														<label class="col-xs-3 control-label no-padding-right">南京：</label>
+														<div class="progress pos-rel" data-percent="66%">
+															<div class="progress-bar progress-bar-success" style="width:66%;"></div>
+														</div>
+													</div>
+													<div class="row">
+														<label class="col-xs-3 control-label no-padding-right">长沙：</label>
+														<div class="progress pos-rel" data-percent="46%">
+															<div class="progress-bar" style="width:46%;"></div>
+														</div>
+													</div>
+												</div>
+												<div class="col-xs-4  center" >												
+													<div class="easy-pie-chart percentage" data-percent="60" data-color="#D15B47" style="top:20%">
+															<span class="percent">60</span>%
+													</div>
+												</div>
+											</div>	
+										</div> -->
+									</div>
+								</div>									
+								</div>
+						</div>
+				</div>
+				
+				<div class="col-xs-12 col-sm-7 widget-container-col ui-sortable" >
+					<div class="widget-box ui-sortable-handle" >
+								<div class="widget-header">
+									<h5 class="widget-title">产量（事业部）</h5>
+									<div class="widget-toolbar">
+										<a href="#" data-action="fullscreen" class="orange2">
+											<i class="ace-icon fa fa-expand"></i>
+										</a>
+										<a href="#" data-action="reload">
+											<i class="ace-icon fa fa-refresh"></i>
+										</a>
+									</div>
+								</div>
+
+								<div class="widget-body" id="chart2">
+									<div class="widget-main" id="container2" style="height:210px">												
+									</div>
+								</div>
+						</div>
+				</div>
+			
+			</div>
+			
+				<div class="row">
+				<div class="col-xs-12 col-sm-5 widget-container-col ui-sortable">
+					<div class="widget-box ui-sortable-handle">
+								<div class="widget-header">
+									<h5 class="widget-title">工厂在制订单</h5>
+									<div class="widget-toolbar">
+										<a href="#" data-action="fullscreen" class="orange2">
+											<i class="ace-icon fa fa-expand"></i>
+										</a>
+										<a href="#" data-action="reload">
+											<i class="ace-icon fa fa-refresh"></i>
+										</a>
+									</div>
+								</div>
+
+								<div class="widget-body">
+									<div class="widget-main"  style="height:210px">		
+																			
+									</div>
+								</div>
+						</div>
+				</div>
+				
+				<div class="col-xs-12 col-sm-7 widget-container-col ui-sortable" >
+					<div class="widget-box ui-sortable-handle" >
+								<div class="widget-header">
+									<h5 class="widget-title">产量（事业部）</h5>
+									<div class="widget-toolbar">
+										<a href="#" data-action="fullscreen" class="orange2">
+											<i class="ace-icon fa fa-expand"></i>
+										</a>
+										<a href="#" data-action="reload">
+											<i class="ace-icon fa fa-refresh"></i>
+										</a>
+									</div>
+								</div>
+
+								<div class="widget-body" id="">
+										<div class="widget-main" id="" style="height:210px">												
+										</div>
 									</div>
 						</div>
-					
-					
-					</div>
-			</div><!-- /.main-content -->
+				</div>
+			
+			</div>
 
 			<!-- 脚 -->
 			<%-- <jsp:include page="footer.jsp" flush="true"/> --%>
@@ -168,6 +305,9 @@
 		</div><!-- /.main-container -->
 	</div>
 	<script src="assets/js/jquery-ui.custom.min.js"></script>
+	<script src="assets/js/jquery.easypiechart.min.js"></script>
+	<script src="js/highcharts.js"></script>
+	<script src="js/common.js"></script>
 	<script src="js/index.js"></script>
 	
 	</body>

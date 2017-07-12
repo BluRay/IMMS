@@ -271,6 +271,7 @@ public class OrderReviewController extends BaseController{
 		int start=Integer.parseInt(request.getParameter("start"));//分页数据起始数
 		int length=Integer.parseInt(request.getParameter("length"));//每一页数据条数
 		String orderNo=request.getParameter("orderNo");//订单编号
+		String orderId=request.getParameter("orderId");
 		String reviewStatus=request.getParameter("reviewStatus");//评审状态
 		String actYear=request.getParameter("actYear");//生产年份
 		String factory=request.getParameter("factory");//工厂
@@ -282,6 +283,7 @@ public class OrderReviewController extends BaseController{
 		condMap.put("reviewStatus", reviewStatus);
 		condMap.put("actYear",actYear);
 		condMap.put("factory", factory);
+		condMap.put("orderId", orderId);
 		condMap.put("orderColumn", orderColumn);
 		condMap.put("userId", userId);
 		Map<String,Object> result=reviewService.getOrderReviewListPage(condMap);

@@ -300,4 +300,47 @@
 		) b on b.key_name=a.key_name
 	</select>
 	
+	<select id="queryIndexFactoryPrdOrdData" parameterType="String" resultType="Map">
+		select tmp.order_desc,round(sum(tmp.finished_qty)/sum(tmp.production_qty)*100,2) as order_rate,
+		group_concat('{"factory_name":"',tmp.factory_name,'","factory_rate":"',round(tmp.finished_qty/tmp.production_qty*100,2),'"}') factory_rate_list
+		from(
+		select count(distinct b.bus_number) finished_qty,fo.production_qty,fo.order_id,f.factory_name,concat(o.order_name,t.bus_type_code,' ',o.order_qty,'台') order_desc
+		from BMS_OR_FACTORY_ORDER fo
+		left join BMS_OR_ORDER o on fo.order_id=o.id
+		left join BMS_BASE_BUS_TYPE t on t.id=o.bus_type_id
+		left join BMS_PLAN_BUS b on fo.order_id=b.order_id and fo.factory_id=b.factory_id and b.warehousing_date>0
+		left join BMS_BASE_FACTORY f on f.id=fo.factory_id
+		where  fo.order_id in(
+		select order_id from
+		(select count(distinct b.id) finished_qty,fo.production_qty,fo.order_id
+		from BMS_OR_FACTORY_ORDER fo
+		left join BMS_PLAN_BUS b on fo.order_id=b.order_id and fo.factory_id=b.factory_id and b.warehousing_date>0
+		where  fo.factory_id=#{factory_id}
+		group by fo.order_id,fo.factory_id) tmp
+		where tmp.finished_qty&lt;tmp.production_qty
+		)
+		group by fo.order_id,fo.factory_id
+		order by fo.order_id) tmp
+		group by tmp.order_id
+	</select>
+	
+	<select id="queryIndexOutputData_Bustype" parameterType="String" resultType="Map">
+		select group_concat(a.month,':',a.finished_qty order by a.month separator ',') month_count,a.bus_type
+		from(select count(b.bus_number) finished_qty,substr(b.bus_number,1,2) bus_type,cast(substr(substring_index(b.warehousing_date,'-',2),-2) as signed) month
+		from BMS_PLAN_BUS b
+		where  b.warehousing_date like concat('%',#{actYear},'%')
+		group by substr(b.bus_number,1,2),substr(substring_index(b.warehousing_date,'-',2),-2)) a
+		group by a.bus_type
+	</select>
+	
+	<select id="queryIndexOutputData_Factory" parameterType="String" resultType="Map">
+		select group_concat(a.factory_name,':',a.finished_qty order by a.month separator ',') factory_count,a.month
+		from(select count(b.bus_number) finished_qty,f.factory_name,cast(substr(substring_index(b.warehousing_date,'-',2),-2) as signed) month
+		from BMS_PLAN_BUS b
+		left join BMS_BASE_FACTORY f on f.id=b.factory_id
+		where  b.warehousing_date like '%2017%'
+		group by b.factory_id,substr(substring_index(b.warehousing_date,'-',2),-2)) a
+		group by a.month
+	</select>
+	
 </mapper>

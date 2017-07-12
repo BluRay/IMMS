@@ -1,5 +1,7 @@
 package com.byd.bms.util.service.impl;
 
+import java.lang.reflect.Array;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -277,5 +279,54 @@ public class CommonServiceImpl implements ICommonService {
 			result=commonDao.updateTask(task);
 		}
     	return result;
-    }	
+    }
+    
+    /**
+     * @author xiong.jianwu
+     * @param factory_id
+     * @param model
+     */
+	@Override
+	public void getIndexFactoryPrdOrdData(String factory_id, ModelMap model) {
+		List<Map<String,Object>> datalist=new ArrayList<Map<String,Object>>();
+/*		 DecimalFormat df = new DecimalFormat("#.00");*/
+		datalist=commonDao.queryIndexFactoryPrdOrdData(factory_id);
+		model.put("data", datalist);
+	}
+	
+	/**
+	 * @author xiong.jianwu
+	 */
+	@Override
+	public void getIndexOutputData(String actYear, ModelMap model) {
+		List<Map<String,Object>> datalist=new ArrayList<Map<String,Object>>();
+		List<Map<String,Object>> datalist_f=new ArrayList<Map<String,Object>>();
+		datalist=commonDao.queryIndexOutputData_Bustype(actYear);
+		datalist_f=commonDao.queryIndexOutputData_Factory(actYear);
+		String[] factory_data={"","","","","","","","","","","",""};
+		List<Map<String,Object>> series=new ArrayList<Map<String,Object>>();
+		for(Map<String,Object> m :datalist){
+			int[] a= {0,0,0,0,0,0,0,0,0,0,0,0};
+			Map<String,Object> serie=new HashMap<String,Object>();
+			serie.put("name", m.get("bus_type"));
+			String month_count=m.get("month_count").toString();
+			for(String s:month_count.split(",")){
+				int month=Integer.parseInt(s.split(":")[0]);
+				int finished_qty=Integer.parseInt(s.split(":")[1]);
+				a[month-1]=finished_qty;
+			}
+			serie.put("data", a);
+			series.add(serie);
+		}
+		
+		for(Map<String,Object> m:datalist_f){
+			int month=Integer.parseInt(m.get("month").toString());
+			factory_data[month-1]=m.get("factory_count").toString();
+		}
+		model.put("series", series);
+		model.put("factory_data", factory_data);
+		
+	}	
+
+	
 }

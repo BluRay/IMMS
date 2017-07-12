@@ -268,15 +268,16 @@ $(document).ready(function(){
     	changeArea($(this),"edit");
 	});
     function changeArea(param,type){
-    	var areaVal=$(param).val();
-    	if(areaVal=='52'){  // 中国 WMI扩展代码 默认 为空
+    	var areaVal=$(param).find("option:selected").text(); 
+        if(areaVal=='中国'){  // 中国 WMI扩展代码 默认 为空
     		$("#add_wmiExtension").val("");
     		$("#edit_wmiExtension").val("");
-    		
-    	}
-    	if(areaVal=='53'){ // 美国 WMI扩展代码 默认 038
+    	}else if(areaVal=='美国'){ // 美国 WMI扩展代码 默认 038
     		$("#edit_wmiExtension").val("038");
     		$("#add_wmiExtension").val("038");
+    	}else{
+    		$("#add_wmiExtension").val("");
+    		$("#edit_wmiExtension").val("");
     	}
     	$("#edit_wmiExtension").attr("readonly",true);
     	$("#add_wmiExtension").attr("readonly",true);

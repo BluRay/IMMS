@@ -4,22 +4,26 @@ var select_str = "";
 var select_str1 = "";
 var select_str2 = "";
 var cur_year="";
-var original = "";
-var reduce_series_list=new Array();
-var max_num = 0;		var sum_num = 0;
-var edit_max_num = 0;	var edit_sum_num = 0;
-var del_order_list=new Array();
 var dt;
 
 $(document).ready(function(){
 	cur_year = new Date().getFullYear();
-	ajaxQuery();
+	
 	getFactorySelect();
 	getOrderNoSelect("#search_order_no","#orderId");
 	$(".btnQuery").on("click",function(){
 		ajaxQuery();
 	}); 
-	
+	//评审页面进入到评审查询页面，设置查询条件
+	var message = getParamValue("message");
+	if(message=="success"){
+    	$.gritter.add({
+			title: '系统提示：',
+			text: '<h5>评审提交成功！</h5>',
+			class_name: 'gritter-info'
+		});
+    }
+	ajaxQuery();
 });
 
 
@@ -59,6 +63,7 @@ function ajaxQuery(){
 			var param ={
 				"draw":1,
 				"orderNo":$("#search_order_no").val(),
+				"orderId":$("#search_order_id").val(),
 				"reviewStatus":$("#search_review_status").val(),
 				"actYear":$("#search_productive_year").val(),
 				"factory":getAllFromOptions("#search_factory","val"),
@@ -129,6 +134,7 @@ function ajaxSearch(id){
 		},
 		dataType:"json",
 		success:function(response){
+			$('#tableData tr').unbind("mouseover mouseout");
 			var data=response.data;
 			$('#partsonlineDate').text(data.partsonline_date);
 			$('#weldingonlineDate').text(data.weldingonline_date);
@@ -193,8 +199,8 @@ function ajaxSearch(id){
 		}
 	})
 	var dialog = $( "#dialog-edit" ).removeClass('hide').dialog({
-	width:850,
-	height:500,
+	width:950,
+	height:550,
 	modal: true,
 	title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-gear green"></i> 评审结果</h4></div>',
 	title_html: true,

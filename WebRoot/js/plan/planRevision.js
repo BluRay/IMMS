@@ -17,6 +17,13 @@ $(document).ready(function () {
 			$("#search_month").val(new Date().getMonth()+1);
 		}
 	};
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/IMMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	
 	$("#btnQuery").click (function () {
 		if($('#search_order_no').val() == ""){

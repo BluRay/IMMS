@@ -446,12 +446,14 @@
 		</selectKey>
 		insert into BMS_BASE_BUS_TYPE (bus_type_code,internal_name,brand,manufacturer,
 		  bus_vehicle_type,fuel_type,bus_body_type,drive_motor_type,vehicle_model,drive_motor,
-		  chassis_model,motor_model,vehicle_length,motor_power,wheelbase,battery_model,max_weight,
+		  chassis_model,motor_model,vehicle_length,motor_power,wheelbase,battery_model,
+		  battery_capacity,rated_voltage,max_weight,
 		  passenger_num,max_speed,light_downdip,editor_id,edit_date)
 		values
 			(#{busTypeCode},#{internalName},#{brand},#{manufacturer},#{busVehicleTypeId},#{fuelType},
 			#{busBodyTypeId},#{driveMotorTypeId},#{vehicleModel},#{driveMotor},#{chassisModel},
-			#{motorModel},#{vehicleLength},#{motorPower},#{wheelbase},#{batteryModel},#{maxWeight},
+			#{motorModel},#{vehicleLength},#{motorPower},#{wheelbase},#{batteryModel},#{batteryCapacity},
+			#{ratedVoltage},#{maxWeight},
 			#{passengerNum},#{maxSpeed},#{lightDowndip},#{editorId},#{editDate})
 	</insert>
 	<select id="getBusTypeList" parameterType="Map" resultType="com.byd.bms.setting.model.BmsBaseBusType">
@@ -460,7 +462,8 @@
 		  bus_vehicle_type busVehicleTypeId,fuel_type fuelType,bus_body_type busBodyTypeId,
 		  drive_motor_type driveMotorTypeId,vehicle_model vehicleModel,drive_motor driveMotor,
 		  chassis_model chassisModel,motor_model motorModel,vehicle_length vehicleLength,
-		  motor_power motorPower,wheelbase wheelbase,battery_model batteryModel,max_weight maxWeight,
+		  motor_power motorPower,wheelbase wheelbase,battery_model batteryModel,
+		  battery_capacity batteryCapacity,rated_voltage ratedVoltage,max_weight maxWeight,
 		  passenger_num passengerNum,max_speed maxSpeed,light_downdip lightDowndip,u.username editor,edit_date editDate
 		  from BMS_BASE_BUS_TYPE t
 		  left join BMS_BASE_USER u ON t.editor_id=u.id
@@ -476,7 +479,8 @@
 		  bus_vehicle_type busVehicleTypeId,fuel_type fuelType,bus_body_type busBodyTypeId,
 		  drive_motor_type driveMotorTypeId,vehicle_model vehicleModel,drive_motor driveMotor,
 		  chassis_model chassisModel,motor_model motorModel,vehicle_length vehicleLength,
-		  motor_power motorPower,wheelbase wheelbase,battery_model batteryModel,max_weight maxWeight,
+		  motor_power motorPower,wheelbase wheelbase,battery_model batteryModel,
+		  battery_capacity batteryCapacity,rated_voltage ratedVoltage,max_weight maxWeight,
 		  passenger_num passengerNum,max_speed maxSpeed,light_downdip lightDowndip
 		  from BMS_BASE_BUS_TYPE where 1=1 
 		<if test="busTypeCode !=null and busTypeCode !=''">
@@ -499,7 +503,8 @@
 		bus_type_code=#{busTypeCode},internal_name=#{internalName},brand=#{brand},manufacturer=#{manufacturer},
 		vehicle_model=#{vehicleModel},drive_motor=#{driveMotor},chassis_model=#{chassisModel},
 		motor_model=#{motorModel},vehicle_length=#{vehicleLength},motor_power=#{motorPower},
-		wheelbase=#{wheelbase},battery_model=#{batteryModel},max_weight=#{maxWeight},passenger_num=#{passengerNum},
+		wheelbase=#{wheelbase},battery_model=#{batteryModel},battery_capacity=#{batteryCapacity},
+		rated_voltage=#{ratedVoltage},max_weight=#{maxWeight},passenger_num=#{passengerNum},
 		max_speed=#{maxSpeed},light_downdip=#{lightDowndip},editor_id=#{editorId},edit_date=#{editDate}
 		where id=#{id}
 	</update>

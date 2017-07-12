@@ -160,6 +160,20 @@
 					</div>
 					<div class="form-group">
 					    <div style="float:left;width:45%">
+							<label style="float:left;width:30%" class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newBatteryCapacity">*&nbsp;电池容量</label>
+							<div style="float:left;width:70%" class="col-sm-8">
+								<input type="text" class="input-medium" placeholder="电池容量..." id="edit_batteryCapacity" />
+							</div>
+						</div>
+						<div  style="float:left;width:55%">
+							<label style="float:left;width:40%" class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newRatedVoltage">*&nbsp;额定电压</label>
+							<div style="float:left;width:60%" class="col-sm-8">
+								<input type="text" class="input-medium" placeholder="额定电压..." id="edit_ratedVoltage" />
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+					    <div style="float:left;width:45%">
 							<label style="float:left;width:30%" class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newPassengerNum">*&nbsp;乘员数(人)</label>
 							<div style="float:left;width:70%" class="col-sm-8">
 								<input type="text" class="input-medium" placeholder="乘员数..." id="edit_passengerNum" />
@@ -301,6 +315,20 @@
 							<label style="float:left;width:40%" class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newBatteryModel">*&nbsp;电池型号</label>
 							<div style="float:left;width:60%" class="col-sm-8">
 								<input type="text" class="input-medium" placeholder="电池型号..." id="add_batteryModel" />
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+					    <div style="float:left;width:45%">
+							<label style="float:left;width:30%" class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newBatteryCapacity">*&nbsp;电池容量</label>
+							<div style="float:left;width:70%" class="col-sm-8">
+								<input type="text" class="input-medium" placeholder="电池容量..." id="add_batteryCapacity" />
+							</div>
+						</div>
+						<div  style="float:left;width:55%">
+							<label style="float:left;width:40%" class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newRatedVoltage">*&nbsp;额定电压</label>
+							<div style="float:left;width:60%" class="col-sm-8">
+								<input type="text" class="input-medium" placeholder="额定电压..." id="add_ratedVoltage" />
 							</div>
 						</div>
 					</div>

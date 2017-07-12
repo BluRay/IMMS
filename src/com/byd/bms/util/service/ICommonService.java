@@ -71,5 +71,18 @@ public interface ICommonService {
 	public int createTask(String task_type,String count,String param,String factoryCode);
 	
 	public int updateTask(String task_type,String finish_count);
+
+	/**
+	 * @author xiong.jianwu
+	 * @param factory_id
+	 * @param model
+	 */
+	void getIndexFactoryPrdOrdData(String factory_id, ModelMap model);
+	/**
+	 * @author xiong.jianwu
+	 * @param actYear
+	 * @param model
+	 */
+	void getIndexOutputData(String actYear, ModelMap model);
 	
 }
