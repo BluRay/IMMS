@@ -516,7 +516,7 @@ public class OrderController extends BaseController{
 	@RequestMapping("/getOrderConfigTotalQty")
 	@ResponseBody
 	public ModelMap getOrderConfigTotalQty(){
-		model.clear();
+		model=new ModelMap();
 		String order_id=request.getParameter("order_id");
 		orderService.getOrderConfigTotalQty(order_id,model);
 		return model;
@@ -528,7 +528,7 @@ public class OrderController extends BaseController{
 	@RequestMapping("/getOrderByNo")
 	@ResponseBody
 	public ModelMap getOrderByNo(){
-		model.clear();
+		model=new ModelMap();
 		String order_no=request.getParameter("order_no");
 		Map<String,Object> condMap=new HashMap<String,Object>();
 		condMap.put("orderNo", order_no);

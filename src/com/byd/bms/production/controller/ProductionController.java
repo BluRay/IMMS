@@ -216,7 +216,7 @@ public class ProductionController extends BaseController {
 	@RequestMapping("/enterExecution")
 	@ResponseBody
 	public ModelMap enterExecution(){
-		model.clear();
+		model=new ModelMap();
 		Map<String,Object> condMap=new HashMap<String,Object>();
 		/**
 		 * 封装service 参数
@@ -299,7 +299,7 @@ public class ProductionController extends BaseController {
 	@RequestMapping("/enterException")
 	@ResponseBody
 	public ModelMap enterException(){
-		model.clear();
+		model=new ModelMap();
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String curTime = df.format(new Date());
 		String userid=String.valueOf(session.getAttribute("user_id"));
@@ -351,7 +351,7 @@ public class ProductionController extends BaseController {
 	@RequestMapping("/getBusInfoList")
 	@ResponseBody
 	public ModelMap getBusInfoList(){
-		model.clear();
+		model=new ModelMap();
 		int draw=Integer.parseInt(request.getParameter("draw"));//jquerydatatables 
 		int start=Integer.parseInt(request.getParameter("start"));//分页数据起始数
 		int length=Integer.parseInt(request.getParameter("length"));//每一页数据条数
@@ -376,7 +376,7 @@ public class ProductionController extends BaseController {
 	@RequestMapping("/updateBusInfo")
 	@ResponseBody
 	public ModelMap updateBusInfo(){
-		model.clear();
+		model=new ModelMap();
 		Map<String,Object> condMap=new HashMap<String,Object>();
 		condMap.put("factory_id",request.getParameter("factory_id")) ;
 		condMap.put("order_id",request.getParameter("order_id")) ;
@@ -421,7 +421,7 @@ public class ProductionController extends BaseController {
 	@RequestMapping("/getNameplatePrintList")
 	@ResponseBody
 	public ModelMap getNameplatePrintList(){
-		model.clear();
+		model=new ModelMap();
 		String conditions=request.getParameter("conditions");
 		JSONObject jo = JSONObject.fromObject(conditions);
 		Map<String, Object> conditionMap = new HashMap<String, Object>();	
@@ -446,7 +446,7 @@ public class ProductionController extends BaseController {
 	@RequestMapping("/afterNameplatePrint")
 	@ResponseBody
 	public ModelMap afterNameplatePrint(){
-		model.clear();
+		model=new ModelMap();
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String curTime = df.format(new Date());
 		String userid=String.valueOf(session.getAttribute("user_id"));
@@ -482,7 +482,7 @@ public class ProductionController extends BaseController {
 	@RequestMapping("/getSupplyTotalCount")
 	@ResponseBody
 	public ModelMap getSupplyTotalCount(){
-		model.clear();
+		model=new ModelMap();
 		String factory_id=request.getParameter("factory_id");
 		String order_no=request.getParameter("order_no");
 		String supply_workshop=request.getParameter("supply_workshop");
@@ -504,7 +504,7 @@ public class ProductionController extends BaseController {
 	@RequestMapping("/saveUpdateWorkshopSupply")
 	@ResponseBody
 	public ModelMap saveUpdateWorkshopSupply(){
-		model.clear();
+		model=new ModelMap();
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String curTime = df.format(new Date());
 		String userid=String.valueOf(session.getAttribute("user_id"));
@@ -530,7 +530,7 @@ public class ProductionController extends BaseController {
 	@RequestMapping("/getWorkshopSupplyList")
 	@ResponseBody
 	public ModelMap getWorkshopSupplyList(){
-		model.clear();
+		model=new ModelMap();
 		int draw=Integer.parseInt(request.getParameter("draw"));//jquerydatatables 
 		int start=Integer.parseInt(request.getParameter("start"));//分页数据起始数
 		int length=Integer.parseInt(request.getParameter("length"));//每一页数据条数
@@ -567,7 +567,7 @@ public class ProductionController extends BaseController {
 	@RequestMapping("/getPartsFinishCount")
 	@ResponseBody
 	public ModelMap getPartsFinishCount(){
-		model.clear();
+		model=new ModelMap();
 		Map<String,Object> condMap=new HashMap<String,Object>();
 		condMap.put("order_no", request.getParameter("order_no"));
 		condMap.put("factory_id", request.getParameter("factory_id"));
@@ -584,7 +584,7 @@ public class ProductionController extends BaseController {
 	@RequestMapping("/saveUpdatePartsOnOffRecord")
 	@ResponseBody
 	public ModelMap saveUpdatePartsOnOffRecord(){
-		model.clear();
+		model=new ModelMap();
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String curTime = df.format(new Date());
 		String userid=String.valueOf(session.getAttribute("user_id"));
@@ -610,7 +610,7 @@ public class ProductionController extends BaseController {
 	@RequestMapping("/getPartsOnOffList")
 	@ResponseBody
 	public ModelMap getPartsOnOffList(){
-		model.clear();
+		model=new ModelMap();
 		int draw=Integer.parseInt(request.getParameter("draw"));//jquerydatatables 
 		int start=Integer.parseInt(request.getParameter("start"));//分页数据起始数
 		int length=Integer.parseInt(request.getParameter("length"));//每一页数据条数
@@ -645,7 +645,7 @@ public class ProductionController extends BaseController {
 	@RequestMapping("/getCertificationList")
 	@ResponseBody
 	public ModelMap getCertificationList(){
-		model.clear();
+		model=new ModelMap();
 		
 		String conditions=request.getParameter("conditions");
 		logger.info("合格证查询条件:"+conditions);
@@ -674,7 +674,7 @@ public class ProductionController extends BaseController {
 	@RequestMapping("/certificatePrint")
 	@ResponseBody
 	public ModelMap certificatePrint(){
-		model.clear();
+		model=new ModelMap();
 		String conditions=request.getParameter("conditions");
 		JSONArray jsa=JSONArray.fromObject(conditions);
 		List<Map<String,Object>> buslist=JSONArray.toList(jsa,Map.class);
@@ -869,7 +869,7 @@ public class ProductionController extends BaseController {
 	@RequestMapping("/getVinPrintList")
 	@ResponseBody
 	public ModelMap getVinPrintList(){
-		model.clear();
+		model=new ModelMap();
 		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
 		int start=(request.getParameter("start")!=null)?Integer.parseInt(request.getParameter("start")):0;		//分页数据起始数
 		int length=(request.getParameter("length")!=null)?Integer.parseInt(request.getParameter("length")):20;	//每一页数据条数
@@ -890,7 +890,7 @@ public class ProductionController extends BaseController {
 	@RequestMapping("/saveMotorNumber")
 	@ResponseBody
 	public ModelMap saveMotorNumber(){
-		model.clear();
+		model=new ModelMap();
 		Map<String, Object> result = new HashMap<String, Object>();
 		String conditions=request.getParameter("conditions");
 		JSONArray jsonArray=JSONArray.fromObject(conditions);
@@ -917,7 +917,7 @@ public class ProductionController extends BaseController {
 	@RequestMapping("/afterVinPrint")
 	@ResponseBody
 	public ModelMap afterVinPrint(){
-		model.clear();
+		model=new ModelMap();
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String curTime = df.format(new Date());
 		String userid=String.valueOf(session.getAttribute("user_id"));
@@ -948,7 +948,7 @@ public class ProductionController extends BaseController {
 	@RequestMapping("/validateVin")
 	@ResponseBody
 	public ModelMap validateVin() {
-		model.clear();
+		model=new ModelMap();
 		String vin=request.getParameter("vin");
 		Map conditionMap=new HashMap<String,Object>();
 		conditionMap.put("vin", vin);
@@ -961,7 +961,7 @@ public class ProductionController extends BaseController {
 	@RequestMapping("/getBusNumberByVin")
 	@ResponseBody
 	public ModelMap getBusNumberByVin() {
-		model.clear();
+		model=new ModelMap();
 		String vin=request.getParameter("vin");
 		Map conditionMap=new HashMap<String,Object>();
 		conditionMap.put("vin", vin);
@@ -980,7 +980,7 @@ public class ProductionController extends BaseController {
 	@RequestMapping("/getBusNoPrintList")
 	@ResponseBody
 	public ModelMap getBusNoPrintList(){
-		model.clear();
+		model=new ModelMap();
 		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
 		int start=(request.getParameter("start")!=null)?Integer.parseInt(request.getParameter("start")):0;		//分页数据起始数
 		int length=(request.getParameter("length")!=null)?Integer.parseInt(request.getParameter("length")):20;	//每一页数据条数
@@ -1003,7 +1003,7 @@ public class ProductionController extends BaseController {
 	@RequestMapping("/getOrderConfigList")
 	@ResponseBody
 	public ModelMap getOrderConfigList() {
-		model.clear();
+		model=new ModelMap();
 		String search_order_no=request.getParameter("search_order_no");
 		String factory_id=request.getParameter("factory_id");
 		Map conditionMap=new HashMap<String,Object>();
@@ -1018,7 +1018,7 @@ public class ProductionController extends BaseController {
 	@RequestMapping("/afterBusNoPrint")
 	@ResponseBody
 	public ModelMap afterBusNoPrint(){
-		model.clear();
+		model=new ModelMap();
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String curTime = df.format(new Date());
 		String userid=String.valueOf(session.getAttribute("user_id"));

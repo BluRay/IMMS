@@ -125,7 +125,7 @@ public class BaseDataController extends BaseController {
 			String vin_assembly_code = request.getParameter("vin_assembly_code") == null ? "" : request.getParameter("vin_assembly_code");
 			String memo = request.getParameter("memo") == null ? "" : request.getParameter("memo");
 
-			String editor_id = request.getSession().getAttribute("user_name") + "";
+			String editor_id = request.getSession().getAttribute("staff_number") + "";
 			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String edit_date = df.format(new Date());
 
@@ -164,7 +164,7 @@ public class BaseDataController extends BaseController {
 			String vin_assembly_code = request.getParameter("vin_assembly_code") == null ? "" : request.getParameter("vin_assembly_code");
 			String memo = request.getParameter("memo") == null ? "" : request.getParameter("memo");
 
-			String editor_id = request.getSession().getAttribute("user_name") + "";
+			String editor_id = request.getSession().getAttribute("staff_number") + "";
 			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String edit_date = df.format(new Date());
 
@@ -256,7 +256,7 @@ public class BaseDataController extends BaseController {
 			String workshop_code = request.getParameter("workshop_code") == null ? "" : request.getParameter("workshop_code");
 			String memo = request.getParameter("memo") == null ? "" : request.getParameter("memo");
 
-			String editor_id = request.getSession().getAttribute("user_name") + "";
+			String editor_id = request.getSession().getAttribute("staff_number") + "";
 			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String edit_date = df.format(new Date());
 
@@ -287,7 +287,7 @@ public class BaseDataController extends BaseController {
 			String workshop_code = request.getParameter("workshop_code") == null ? "" : request.getParameter("workshop_code");
 			String memo = request.getParameter("memo") == null ? "" : request.getParameter("memo");
 
-			String editor_id = request.getSession().getAttribute("user_name") + "";
+			String editor_id = request.getSession().getAttribute("staff_number") + "";
 			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String edit_date = df.format(new Date());
 
@@ -361,7 +361,7 @@ public class BaseDataController extends BaseController {
 			
 			String memo = request.getParameter("memo") == null ? "" : request.getParameter("memo");
 
-			String editor_id = request.getSession().getAttribute("user_name") + "";
+			String editor_id = request.getSession().getAttribute("staff_number") + "";
 			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String edit_date = df.format(new Date());
 
@@ -390,7 +390,7 @@ public class BaseDataController extends BaseController {
 			String lineName = request.getParameter("lineName") == null ? "" : request.getParameter("lineName");
 			String memo = request.getParameter("memo") == null ? "" : request.getParameter("memo");
 
-			String editor_id = request.getSession().getAttribute("user_name") + "";
+			String editor_id = request.getSession().getAttribute("staff_number") + "";
 			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String edit_date = df.format(new Date());
 

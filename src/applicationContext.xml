@@ -28,8 +28,8 @@
         </property> 
     </bean>  
     
-	<!-- 配置数据源 -->
-	<bean name="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+    <!-- 配置数据源Master 读写-->
+    <bean name="dataSourceMaster" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
 		<property name="url" value="${jdbc.url}" />
 		<property name="username" value="${jdbc.user}" />
 		<property name="password" value="${jdbc.pwd}" />	
@@ -48,7 +48,35 @@
 		<property name="timeBetweenEvictionRunsMillis" value="60000" />
 		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
 		<property name="minEvictableIdleTimeMillis" value="25200000" />
-	</bean> 
+    </bean>    
+    <!-- 配置数据源Slave 读-->
+    <bean name="dataSourceSlave" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <property name="url" value="${jdbc.url_1}" />
+		<property name="username" value="${jdbc.user_1}" />
+		<property name="password" value="${jdbc.pwd_1}" />	
+        <!-- 初始化连接大小 -->
+        <property name="initialSize" value="0" />
+        <!-- 连接池最大使用连接数量 -->
+        <property name="maxActive" value="20" />
+        <!-- 连接池最大空闲 -->
+        <property name="maxIdle" value="20" />
+        <!-- 连接池最小空闲 -->
+        <property name="minIdle" value="0" />
+        <!-- 获取连接最大等待时间 -->
+        <property name="maxWait" value="60000" />
+    </bean>    
+    <bean id="dataSource" class="com.byd.bms.util.ThreadLocalRountingDataSource">
+    	<!-- 这里可以指定默认的数据源 -->
+        <property name="defaultTargetDataSource" ref="dataSourceMaster" />
+        <property name="targetDataSources">
+            <map key-type="com.byd.bms.util.DataSources">
+                <entry key="MASTER" value-ref="dataSourceMaster"/>
+                <entry key="SLAVE" value-ref="dataSourceSlave"/>
+                <!-- 这里还可以加多个dataSource -->
+            </map>
+        </property>
+    </bean> 
+  
   
   	<bean id="messageSource"  
         class="org.springframework.context.support.ResourceBundleMessageSource">  

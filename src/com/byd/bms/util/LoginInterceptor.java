@@ -77,7 +77,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter{
 				String paraName=(String)enu.nextElement();  
 				str_request += paraName + ":" + request.getParameter(paraName) + " ";  
 			}
-			logger.info("-->" + request.getSession().getAttribute("user_name") + " " + request.getRemoteAddr() + " " + uri + " " + str_request);
+			logger.info("-->" + request.getSession().getAttribute("staff_number") + " " + request.getRemoteAddr() + " " + uri + " " + str_request);
 			
 			return true;
 		}

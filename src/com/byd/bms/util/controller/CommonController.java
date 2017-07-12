@@ -314,7 +314,7 @@ public class CommonController extends BaseController {
 	@RequestMapping("/getIndexOrderData")
 	@ResponseBody
 	public ModelMap getIndexOrderData(){
-		model.clear();
+		model=new ModelMap();
 		SimpleDateFormat df = new SimpleDateFormat("yyyy");
 		String actYear = df.format(new Date());
 		commonService.getIndexOrderData(actYear,model);
@@ -329,7 +329,7 @@ public class CommonController extends BaseController {
 	@RequestMapping("/getIndexFactoryDailyData")
 	@ResponseBody
 	public ModelMap getIndexFactoryDailyData(){
-		model.clear();
+		model=new ModelMap();
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		String query_date = df.format(new Date());
 		Map<String,Object> condMap=new HashMap<String,Object>();
@@ -367,7 +367,7 @@ public class CommonController extends BaseController {
 	@RequestMapping("/getIndexFactoryPrdOrdData")
 	@ResponseBody
 	public ModelMap getIndexFactoryPrdOrdData(){
-		model.clear();
+		model=new ModelMap();
 		commonService.getIndexFactoryPrdOrdData(request.getParameter("factory_id"),model);
 		
 		return model;
@@ -381,7 +381,7 @@ public class CommonController extends BaseController {
 	@RequestMapping("/getIndexOutputData")
 	@ResponseBody
 	public ModelMap getIndexOutputData(){
-		model.clear();
+		model=new ModelMap();
 		SimpleDateFormat df = new SimpleDateFormat("yyyy");
 		String actYear = df.format(new Date());
 		commonService.getIndexOutputData(actYear,model);

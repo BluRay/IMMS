@@ -530,6 +530,7 @@
 		<if test="parentId!=null and parentId!=''">
 			and t.parent_id=#{parentId}
 		</if>
+		order by workgroup_no
 	</select>
 	<insert id="addWorkgroup" parameterType="com.byd.bms.setting.model.BmsBaseStandardWorkgroup">
 		<selectKey resultType="int" keyProperty="id" order="AFTER">

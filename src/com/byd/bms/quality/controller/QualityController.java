@@ -71,7 +71,7 @@ public class QualityController extends BaseController {
 	@RequestMapping("/getOrderConfigList")
 	@ResponseBody
 	public ModelMap getOrderConfigList(){
-		model.clear();;
+		model=new ModelMap();;
 		Map<String,Object> condMap=new HashMap<String,Object>();
 		int draw=Integer.parseInt(request.getParameter("draw"));//jquerydatatables 
 		int start=Integer.parseInt(request.getParameter("start"));//分页数据起始数
@@ -193,7 +193,7 @@ public class QualityController extends BaseController {
 	@RequestMapping("getKeyPartsList")
 	@ResponseBody
 	public ModelMap getKeyPartsList(){
-		model.clear();
+		model=new ModelMap();
 		String order_id=request.getParameter("order_id");//订单
 		String order_config_id=request.getParameter("order_config_id");//订单配置
 		String bus_type_id=request.getParameter("bus_type_id");//车型
@@ -224,7 +224,7 @@ public class QualityController extends BaseController {
 	@RequestMapping("getPrdRcdBusTypeTplList")
 	@ResponseBody
 	public ModelMap getPrdRcdBusTypeTplList(){
-		model.clear();
+		model=new ModelMap();
 		String bus_type_id=request.getParameter("bus_type_id");//车型
 		String test_node_id=request.getParameter("test_node_id");
 		int draw=Integer.parseInt(request.getParameter("draw"));//jquerydatatables 
@@ -341,7 +341,7 @@ public class QualityController extends BaseController {
 	@RequestMapping("getPrdRcdBusTypeTplDetail")
 	@ResponseBody
 	public ModelMap getPrdRcdBusTypeTplDetail(){
-		model.clear();
+		model=new ModelMap();
 		String tpl_header_id=request.getParameter("tpl_header_id");
 		qualityService.getPrdRcdBusTypeTplDetail(tpl_header_id,model);
 		return model;
@@ -364,7 +364,7 @@ public class QualityController extends BaseController {
 	@RequestMapping("getPrdRcdOrderTplList")
 	@ResponseBody
 	public ModelMap getPrdRcdOrderTplList(){
-		model.clear();
+		model=new ModelMap();
 		String bus_type_id=request.getParameter("bus_type_id");//车型
 		String test_node_id=request.getParameter("test_node_id");
 		String order_id=request.getParameter("order_id");
@@ -392,7 +392,7 @@ public class QualityController extends BaseController {
 	@RequestMapping("getPrdRcdBusTypeTplDetailLatest")
 	@ResponseBody
 	public ModelMap getPrdRcdBusTypeTplDetailLatest(){
-		model.clear();
+		model=new ModelMap();
 		HashMap<String, Object> condMap =new HashMap<String,Object>();
 		condMap.put("bus_type_id", request.getParameter("bus_type_id"));
 		condMap.put("test_node_id", request.getParameter("test_node_id"));
@@ -440,7 +440,7 @@ public class QualityController extends BaseController {
 	@RequestMapping("getPrdRcdOrderTplDetail")
 	@ResponseBody
 	public ModelMap getPrdRcdOrderTplDetail(){
-		model.clear();
+		model=new ModelMap();
 		String tpl_header_id=request.getParameter("tpl_header_id");
 		qualityService.getPrdRcdOrderTplDetail(tpl_header_id,model);
 		return model;
@@ -463,7 +463,7 @@ public class QualityController extends BaseController {
 	@RequestMapping("getPrdRcdOrderTpl")
 	@ResponseBody
 	public ModelMap getPrdRcdOrderTpl(){
-		model.clear();
+		model=new ModelMap();
 		String bus_number=request.getParameter("bus_number");
 		String test_node=request.getParameter("test_node");
 		Map<String,Object> condMap=new HashMap<String,Object>();
@@ -480,7 +480,7 @@ public class QualityController extends BaseController {
 	@RequestMapping("getFaultLibFuzzyList")
 	@ResponseBody
 	public ModelMap getFaultLibFuzzyList(){
-		model.clear();
+		model=new ModelMap();
 		String bugType=request.getParameter("bugType");
 		String bug=request.getParameter("bug");
 		String seriousLevel=request.getParameter("seriousLevel");
@@ -501,7 +501,7 @@ public class QualityController extends BaseController {
 	@RequestMapping("saveProductRecord")
 	@ResponseBody	
 	public ModelMap saveProductRecord(){
-		model.clear();
+		model=new ModelMap();
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		SimpleDateFormat df_v = new SimpleDateFormat("yyyyMMddHHmmss");
 		String curTime = df.format(new Date());
@@ -536,7 +536,7 @@ public class QualityController extends BaseController {
 	@RequestMapping("getProductRecordList")
 	@ResponseBody
 	public ModelMap getProductRecordList(){
-			model.clear();
+			model=new ModelMap();
 			int draw=Integer.parseInt(request.getParameter("draw"));//jquerydatatables 
 			int start=Integer.parseInt(request.getParameter("start"));//分页数据起始数
 			int length=Integer.parseInt(request.getParameter("length"));//每一页数据条数
@@ -565,7 +565,7 @@ public class QualityController extends BaseController {
 	@RequestMapping("getProductRecordDetail")
 	@ResponseBody
 	public ModelMap getProductRecordDetail(){
-		model.clear();
+		model=new ModelMap();
 		String bus_number=request.getParameter("bus_number");
 		String test_node=request.getParameter("test_node");
 		String factory_id=request.getParameter("factory_id");
@@ -597,7 +597,7 @@ public class QualityController extends BaseController {
 	@RequestMapping("getFaultListFuzzy")
 	@ResponseBody
 	public ModelMap getFaultListFuzzy(){
-		model.clear();
+		model=new ModelMap();
 		String bug=request.getParameter("bug");
 		Map<String,Object> condMap=new HashMap<String,Object>();
 		condMap.put("bug", bug);
