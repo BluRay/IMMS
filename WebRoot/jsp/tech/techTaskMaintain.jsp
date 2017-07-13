@@ -58,9 +58,9 @@
 							<td><input type="text" style="height: 30px;" class="input-medium revise" placeholder="请输入技改任务..." value="" id="search_tech_task_content" /></td>
 							<td>&nbsp;技改单日期：</td>
 							<td>
-							<input id="search_tech_date_start" name="search_tech_date_start" placeholder="开始时间..." style="width:110px" type="text" onClick="WdatePicker({el:'search_tech_date_start',dateFmt:'yyyy-MM-dd'});"> - <input id="search_tech_date_end" name="search_tech_date_end" placeholder="结束时间..." style="width:110px" type="text" onClick="WdatePicker({el:'search_tech_date_end',dateFmt:'yyyy-MM-dd'});">
+							<input id="search_tech_date_start" name="search_tech_date_start" placeholder="开始时间..." style="height: 30px;width:110px" type="text" onClick="WdatePicker({el:'search_tech_date_start',dateFmt:'yyyy-MM-dd'});"> - <input id="search_tech_date_end" name="search_tech_date_end" placeholder="结束时间..." style="height: 30px;width:110px" type="text" onClick="WdatePicker({el:'search_tech_date_end',dateFmt:'yyyy-MM-dd'});">
 							<td>&nbsp;状态：</td>
-							<td><select class="input-medium carType" id="search_tech_task_status" style="width: 80px">
+							<td><select class="input-medium carType" id="search_tech_task_status" style="height: 30px;width: 80px">
 											<option value="">全部</option>
 											<option value="已创建">已创建</option>
 											<option value="已分配">已分配</option>

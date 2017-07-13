@@ -41,18 +41,18 @@
 						<table>
 							<tr>
 								<td>工厂：</td>
-								<td><select id="search_factory" class="input-small" style="width:120px"></select></td>
+								<td><select id="search_factory" class="input-small" style="height: 30px;width:120px"></select></td>
 								<td>&nbsp;订单：</td>
-								<td><input id="search_order_no" placeholder="请输入订单编号..." style="width:110px" type="text"></td>
+								<td><input id="search_order_no" placeholder="请输入订单编号..." style="height: 30px;width:110px" type="text"></td>
 								<td>&nbsp;技改单编号：</td>
-								<td><input id="search_tech_order_no" placeholder="技改单编号..." style="width:110px" type="text"></td>
+								<td><input id="search_tech_order_no" placeholder="技改单编号..." style="height: 30px;width:110px" type="text"></td>
 								<td>&nbsp;技改任务：</td>
-								<td><input id="search_tech_task_content" placeholder="技改任务..." style="width:110px" type="text"></td>
+								<td><input id="search_tech_task_content" placeholder="技改任务..." style="height: 30px;width:110px" type="text"></td>
 							</tr>
 							<tr>
 								<td>&nbsp;状态：</td>
 								<td>
-									<select class="input-small" id="status" style="width:120px">
+									<select class="input-small" id="status" style="height: 30px;width:120px">
 										<option value="全部">全部</option>
 										<option value="已创建" selected>已创建</option>
 										<option value="已分配">已分配</option>
@@ -61,7 +61,7 @@
 									</select>
 								</td>
 								<td>&nbsp;技改单日期：</td>
-								<td colspan=3><input id="search_date_start" placeholder="开始时间..." style="width:110px" type="text" onClick="WdatePicker({el:'search_date_start',dateFmt:'yyyy-MM-dd'});"> - <input id="search_date_end" placeholder="结束时间..." style="width:110px" type="text" onClick="WdatePicker({el:'search_date_end',dateFmt:'yyyy-MM-dd'});"></td>
+								<td colspan=3><input id="search_date_start" placeholder="开始时间..." style="height: 30px;width:110px" type="text" onClick="WdatePicker({el:'search_date_start',dateFmt:'yyyy-MM-dd'});"> - <input id="search_date_end" placeholder="结束时间..." style="height: 30px;width:110px" type="text" onClick="WdatePicker({el:'search_date_end',dateFmt:'yyyy-MM-dd'});"></td>
 								<td><input id="btnQuery" type="button" class="btn btn-sm btn-success" value="查询" style="margin-left: 2px;"></input></td>
 							</tr>
 						</table>

@@ -85,7 +85,7 @@
 														<i class="ace-icon fa fa-expand"></i>
 													</a>
 
-													<a href="#" data-action="reload">
+													<a href="#" data-action="reload" onclick="reload('1');">
 														<i class="ace-icon fa fa-refresh"></i>
 													</a>
 
@@ -160,11 +160,11 @@
 
 										<!-- #section:custom/widget-box.toolbar -->
 										<div class="widget-toolbar">
-											<a href="#" data-action="fullscreen" class="orange2">
+											<a href="#" data-action="fullscreen" class="orange2" >
 												<i class="ace-icon fa fa-expand"></i>
 											</a>
 
-											<a href="#" data-action="reload">
+											<a href="#" data-action="reload" onclick="reload('2');">
 												<i class="ace-icon fa fa-refresh"></i>
 											</a>
 
@@ -189,7 +189,7 @@
 										<a href="#" data-action="fullscreen" class="orange2">
 											<i class="ace-icon fa fa-expand"></i>
 										</a>
-										<a href="#" data-action="reload">
+										<a href="#" data-action="reload" onclick="reload('3');">
 											<i class="ace-icon fa fa-refresh"></i>
 										</a>
 									</div>
@@ -197,33 +197,7 @@
 
 								<div class="widget-body"  >
 								<div  class="widget-main" style="height:210px;overflow:hidden">
-									<div style="overflow:hidden" id="factory_act_order">
-										<!-- <div class="factory_act_order">
-											<div class="row">
-												<label class="col-xs-12 " style="margin-left:100px;font-weight:bold">深圳K8 100台</label>	
-											</div>		
-											<div class="row">	
-												<div class="col-xs-8 " >												
-													<div class="row">
-														<label class="col-xs-3 control-label no-padding-right">南京：</label>
-														<div class="progress pos-rel" data-percent="66%">
-															<div class="progress-bar progress-bar-success" style="width:66%;"></div>
-														</div>
-													</div>
-													<div class="row">
-														<label class="col-xs-3 control-label no-padding-right">长沙：</label>
-														<div class="progress pos-rel" data-percent="46%">
-															<div class="progress-bar" style="width:46%;"></div>
-														</div>
-													</div>
-												</div>
-												<div class="col-xs-4  center" >												
-													<div class="easy-pie-chart percentage" data-percent="60" data-color="#D15B47" style="top:20%">
-															<span class="percent">60</span>%
-													</div>
-												</div>
-											</div>	
-										</div> -->
+									<div style="overflow:hidden" id="factory_act_order">									
 									</div>
 								</div>									
 								</div>
@@ -235,10 +209,10 @@
 								<div class="widget-header">
 									<h5 class="widget-title">产量（事业部）</h5>
 									<div class="widget-toolbar">
-										<a href="#" data-action="fullscreen" class="orange2">
+										<a href="#" data-action="fullscreen" class="orange2" >
 											<i class="ace-icon fa fa-expand"></i>
 										</a>
-										<a href="#" data-action="reload">
+										<a href="#" data-action="reload" onclick="reload('4');">
 											<i class="ace-icon fa fa-refresh"></i>
 										</a>
 									</div>
@@ -257,20 +231,22 @@
 				<div class="col-xs-12 col-sm-5 widget-container-col ui-sortable">
 					<div class="widget-box ui-sortable-handle">
 								<div class="widget-header">
-									<h5 class="widget-title">工厂在制订单</h5>
+									<h5 class="widget-title">工厂异常停线</h5>
 									<div class="widget-toolbar">
 										<a href="#" data-action="fullscreen" class="orange2">
 											<i class="ace-icon fa fa-expand"></i>
 										</a>
-										<a href="#" data-action="reload">
+										<a href="#" data-action="reload" onclick="reload('5');">
 											<i class="ace-icon fa fa-refresh"></i>
 										</a>
 									</div>
 								</div>
 
 								<div class="widget-body">
-									<div class="widget-main"  style="height:210px">		
-																			
+									<div class="widget-main"  style="height:210px;overflow:hidden">		
+											<ul id="exception">
+											
+											</ul>								
 									</div>
 								</div>
 						</div>
@@ -279,19 +255,19 @@
 				<div class="col-xs-12 col-sm-7 widget-container-col ui-sortable" >
 					<div class="widget-box ui-sortable-handle" >
 								<div class="widget-header">
-									<h5 class="widget-title">产量（事业部）</h5>
+									<h5 class="widget-title">人员分布（事业部）</h5>
 									<div class="widget-toolbar">
-										<a href="#" data-action="fullscreen" class="orange2">
+										<a href="#" data-action="fullscreen" class="orange2" >
 											<i class="ace-icon fa fa-expand"></i>
 										</a>
-										<a href="#" data-action="reload">
+										<a href="#" data-action="reload" onclick="reload('6');">
 											<i class="ace-icon fa fa-refresh"></i>
 										</a>
 									</div>
 								</div>
 
 								<div class="widget-body" id="">
-										<div class="widget-main" id="" style="height:210px">												
+										<div class="widget-main" id="container3"  style="height:210px">												
 										</div>
 									</div>
 						</div>

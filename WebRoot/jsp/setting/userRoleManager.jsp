@@ -43,7 +43,7 @@
 				<div class="row">
 					<div class="col-xs-12">
 						<div class="row">
-							<div class="col-sm-3">
+							<div class="col-sm-4">
 								<div id="div_tree1" class="widget-box widget-color-blue2" style="height:350px;OVERFLOW-X:auto;OVERFLOW-Y:auto;OVERFLOW:auto">
 									<div class="widget-header">
 										<h4 class="widget-title lighter smaller">选择用户&nbsp;&nbsp;&nbsp;&nbsp;</h4>
@@ -58,7 +58,7 @@
 									</div>
 								</div>
 							</div>
-							<div class="col-sm-3">
+							<div class="col-sm-4">
 								<div id="div_tree2" class="widget-box widget-color-blue2" style="height:350px;OVERFLOW-X:auto;OVERFLOW-Y:auto;OVERFLOW:auto">
 									<div class="widget-header">
 										<h4 class="widget-title lighter smaller">选择角色&nbsp;&nbsp;&nbsp;&nbsp;</h4>
@@ -70,7 +70,7 @@
 									</div>
 								</div>
 							</div>
-							<div class="col-sm-6">
+							<div class="col-sm-4">
 								<div id="div_tree3" class="widget-box widget-color-green2" style="height:350px;OVERFLOW-X:auto;OVERFLOW-Y:auto;OVERFLOW:auto">
 									<div class="widget-header">
 										<h4 class="widget-title lighter smaller">查看程序权限 <span id="role_name2"></span></h4>

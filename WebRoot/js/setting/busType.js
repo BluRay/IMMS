@@ -136,69 +136,69 @@ function ajaxAdd (argument) {
 		$("#add_internalName").focus();
 		return false;
 	}
-	if($("#add_vehicleModel").val()===""){
-		alert("车辆型号不能为空！");
-		$("#add_vehicleModel").focus();
-		return false;
-	}
-	if($("#add_driveMotor").val()===""){
-		alert("驱动电机不能为空！");
-		$("#add_driveMotor").focus();
-		return false;
-	}
-	
-	if($("#add_chassisModel").val()===""){
-		alert("底盘型号不能为空！");
-		$("#add_chassisModel").focus();
-		return false;
-	}
-	if($("#add_motorModel").val()===""){
-		alert("电机型号不能为空！");
-		$("#add_motorModel").focus();
-		return false;
-	}
-	
-	if($("#add_vehicleLength").val()===""){
-		alert("车辆长度不能为空！");
-		$("#add_vehicleLength").focus();
-		return false;
-	}
-	if($("#add_motorPower").val()===""){
-		alert("电机最大功率不能为空！");
-		$("#add_motorPower").focus();
-		return false;
-	}
-	if($("#add_wheelbase").val()===""){
-		alert("轴距不能为空！");
-		$("#add_wheelbase").focus();
-		return false;
-	}
-	if($("#add_batteryModel").val()===""){
-		alert("电池型号不能为空！");
-		$("#add_batteryModel").focus();
-		return false;
-	}
-	if($("#add_passengerNum").val()===""){
-		alert("乘员数不能为空！");
-		$("#add_passengerNum").focus();
-		return false;
-	}
-	if($("#add_maxWeight").val()===""){
-		alert("最大允许质量不能为空！");
-		$("#add_maxWeight").focus();
-		return false;
-	}
-	
-	if($("#add_maxSpeed").val()===""){
-		alert("最大车速不能为空！");
-		$("#add_maxSpeed").focus();
-		return false;
-	}
-	if($("#add_lightDowndip").val()===""){
-		alert("灯光倾下值不能为空！");
-		$("#add_lightDowndip").focus();
-		return false;
-	}
+//	if($("#add_vehicleModel").val()===""){
+//		alert("车辆类型不能为空！");
+//		$("#add_vehicleModel").focus();
+//		return false;
+//	}
+//	if($("#add_driveMotor").val()===""){
+//		alert("驱动电机不能为空！");
+//		$("#add_driveMotor").focus();
+//		return false;
+//	}
+//	
+//	if($("#add_chassisModel").val()===""){
+//		alert("底盘型号不能为空！");
+//		$("#add_chassisModel").focus();
+//		return false;
+//	}
+//	if($("#add_motorModel").val()===""){
+//		alert("电机型号不能为空！");
+//		$("#add_motorModel").focus();
+//		return false;
+//	}
+//	
+//	if($("#add_vehicleLength").val()===""){
+//		alert("车辆长度不能为空！");
+//		$("#add_vehicleLength").focus();
+//		return false;
+//	}
+//	if($("#add_motorPower").val()===""){
+//		alert("电机最大功率不能为空！");
+//		$("#add_motorPower").focus();
+//		return false;
+//	}
+//	if($("#add_wheelbase").val()===""){
+//		alert("轴距不能为空！");
+//		$("#add_wheelbase").focus();
+//		return false;
+//	}
+//	if($("#add_batteryModel").val()===""){
+//		alert("电池型号不能为空！");
+//		$("#add_batteryModel").focus();
+//		return false;
+//	}
+//	if($("#add_passengerNum").val()===""){
+//		alert("乘员数不能为空！");
+//		$("#add_passengerNum").focus();
+//		return false;
+//	}
+//	if($("#add_maxWeight").val()===""){
+//		alert("最大允许质量不能为空！");
+//		$("#add_maxWeight").focus();
+//		return false;
+//	}
+//	
+//	if($("#add_maxSpeed").val()===""){
+//		alert("最大车速不能为空！");
+//		$("#add_maxSpeed").focus();
+//		return false;
+//	}
+//	if($("#add_lightDowndip").val()===""){
+//		alert("灯光倾下值不能为空！");
+//		$("#add_lightDowndip").focus();
+//		return false;
+//	}
     $.ajax({
 		type: "post",
 		dataType: "json",
@@ -295,68 +295,68 @@ function ajaxEdit(id){
 								return false;
 							}
 							
-							if($("#edit_vehicleModel").val()===""){
-								alert("车辆型号不能为空！");
-								$("#edit_vehicleModel").focus();
-								return false;
-							}
-							if($("#edit_driveMotor").val()===""){
-								alert("驱动电机不能为空！");
-								$("#edit_driveMotor").focus();
-								return false;
-							}
-							
-							if($("#edit_chassisModel").val()===""){
-								alert("底盘型号不能为空！");
-								$("#edit_chassisModel").focus();
-								return false;
-							}
-							if($("#edit_motorModel").val()===""){
-								alert("电机型号不能为空！");
-								$("#edit_motorModel").focus();
-								return false;
-							}
-							if($("#edit_vehicleLength").val()===""){
-								alert("车辆长度不能为空！");
-								$("#edit_vehicleLength").focus();
-								return false;
-							}
-							if($("#edit_motorPower").val()===""){
-								alert("电机最大功率不能为空！");
-								$("#edit_motorPower").focus();
-								return false;
-							}
-							if($("#edit_wheelbase").val()===""){
-								alert("轴距不能为空！");
-								$("#edit_wheelbase").focus();
-								return false;
-							}
-							if($("#edit_batteryModel").val()===""){
-								alert("电池型号不能为空！");
-								$("#edit_batteryModel").focus();
-								return false;
-							}
-							if($("#edit_passengerNum").val()===""){
-								alert("乘员数不能为空！");
-								$("#edit_passengerNum").focus();
-								return false;
-							}
-							if($("#edit_maxWeight").val()===""){
-								alert("最大允许质量不能为空！");
-								$("#edit_maxWeight").focus();
-								return false;
-							}
-							
-							if($("#edit_maxSpeed").val()===""){
-								alert("最大车速不能为空！");
-								$("#edit_maxSpeed").focus();
-								return false;
-							}
-							if($("#edit_lightDowndip").val()===""){
-								alert("灯光倾下值不能为空！");
-								$("#edit_lightDowndip").focus();
-								return false;
-							}
+//							if($("#edit_vehicleModel").val()===""){
+//								alert("车辆类型不能为空！");
+//								$("#edit_vehicleModel").focus();
+//								return false;
+//							}
+//							if($("#edit_driveMotor").val()===""){
+//								alert("驱动电机不能为空！");
+//								$("#edit_driveMotor").focus();
+//								return false;
+//							}
+//							
+//							if($("#edit_chassisModel").val()===""){
+//								alert("底盘型号不能为空！");
+//								$("#edit_chassisModel").focus();
+//								return false;
+//							}
+//							if($("#edit_motorModel").val()===""){
+//								alert("电机型号不能为空！");
+//								$("#edit_motorModel").focus();
+//								return false;
+//							}
+//							if($("#edit_vehicleLength").val()===""){
+//								alert("车辆长度不能为空！");
+//								$("#edit_vehicleLength").focus();
+//								return false;
+//							}
+//							if($("#edit_motorPower").val()===""){
+//								alert("电机最大功率不能为空！");
+//								$("#edit_motorPower").focus();
+//								return false;
+//							}
+//							if($("#edit_wheelbase").val()===""){
+//								alert("轴距不能为空！");
+//								$("#edit_wheelbase").focus();
+//								return false;
+//							}
+//							if($("#edit_batteryModel").val()===""){
+//								alert("电池型号不能为空！");
+//								$("#edit_batteryModel").focus();
+//								return false;
+//							}
+//							if($("#edit_passengerNum").val()===""){
+//								alert("乘员数不能为空！");
+//								$("#edit_passengerNum").focus();
+//								return false;
+//							}
+//							if($("#edit_maxWeight").val()===""){
+//								alert("最大允许质量不能为空！");
+//								$("#edit_maxWeight").focus();
+//								return false;
+//							}
+//							
+//							if($("#edit_maxSpeed").val()===""){
+//								alert("最大车速不能为空！");
+//								$("#edit_maxSpeed").focus();
+//								return false;
+//							}
+//							if($("#edit_lightDowndip").val()===""){
+//								alert("灯光倾下值不能为空！");
+//								$("#edit_lightDowndip").focus();
+//								return false;
+//							}
 						
 							$.ajax({
 							    url: "updateBusType",

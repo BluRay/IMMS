@@ -65,7 +65,7 @@
 					<div class="col-xs-12"  style="width:100%">
 						<table id="tableData" 
 							class="table table-striped table-bordered table-hover"
-							style="font-size: 12px; width:1600px;overflow-x:auto" >
+							style="font-size: 12px; width:1700px;overflow-x:auto" >
 						</table>
 					</div>
 				</div>
@@ -104,9 +104,9 @@
 					</div>
 					<div class="form-group">
 					    <div style="float:left;width:45%">
-							<label style="float:left;width:30%" class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newVehicleModel">*&nbsp;车辆型号</label>
+							<label style="float:left;width:30%" class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newVehicleModel">*&nbsp;车辆类型</label>
 							<div style="float:left;width:70%" class="col-sm-8">
-								<input type="text" class="input-medium" placeholder="车辆型号..." id="edit_vehicleModel" />
+								<input type="text" class="input-medium" placeholder="车辆类型..." id="edit_vehicleModel" />
 							</div>
 						</div>
 						<div  style="float:left;width:55%">
@@ -263,9 +263,9 @@
 					</div-->
 					<div class="form-group">
 					    <div style="float:left;width:45%">
-							<label style="float:left;width:30%" class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newVehicleModel">*&nbsp;车辆型号</label>
+							<label style="float:left;width:30%" class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newVehicleModel">*&nbsp;车辆类型</label>
 							<div style="float:left;width:70%" class="col-sm-8">
-								<input type="text" class="input-medium" placeholder="车辆型号..." id="add_vehicleModel" />
+								<input type="text" class="input-medium" placeholder="车辆类型..." id="add_vehicleModel" />
 							</div>
 						</div>
 						<div  style="float:left;width:55%">

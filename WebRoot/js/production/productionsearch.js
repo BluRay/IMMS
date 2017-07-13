@@ -46,6 +46,8 @@ $(document).ready(function () {
 		getWorkshopSelect(workshop);
 		
 		getOrderNoSelect("#search_order_no","#orderId");
+		
+		ajaxQuery();
 	}
 	
 	$('#search_factory').change(function(){
@@ -130,11 +132,12 @@ function ajaxQuery(){
     			$("<td style=\"text-align:center;padding:3px\" />").html("车辆数").appendTo(tr);
     			$("<td style=\"text-align:center;padding:3px\" />").html(value.welding_count).appendTo(tr);
     			//目前只有长沙工厂有玻璃钢车间
+    			/**
     			if($('#search_factory').val() == '16'&&$("#on_offline").val()==''){
     				$("<td style=\"text-align:center;padding:3px\" />").html(value.fiberglass_count).appendTo(tr);
     			}else{
     				//$("<td style=\"text-align:center;padding:3px\" />").html('-').appendTo(tr);
-    			}
+    			}**/
     			if($("#on_offline").val()==''){
     				$("<td style=\"text-align:center;padding:3px\" />").html("<span style='cursor:pointer;color:blue' onclick='ajaxGetWIP(\"wp\");'>"+value.wp_wpi_count+"</span>").appendTo(tr);
     			}
@@ -248,7 +251,7 @@ function getWorkshopSelect(workshop) {
 			alert(response.message)
 		},
 		success : function(response) {
-			getSelects(response.data, workshop, "#search_workshop");			
+			getSelects(response.data, workshop, "#search_workshop","全部");			
 		}
 	});
 }

@@ -1,5 +1,6 @@
 var chart1;
 var chart2;
+var chart3;
 var colors=[  '#a8ef9d','#24CBE5','#629b58', '#058DC7', '#FF9655','#50B432', '#FFF263','#ED561B', '#DDDF00', '#6AF9C4'];
 $(document).ready(function() {				
 			//初始化页面
@@ -16,43 +17,69 @@ $(document).ready(function() {
 				if(chart_id=='chart2'){
 					chart2.setSize(ui.item.context.clientWidth-20,190)
 				}
-				
+				if(chart_id=='chart3'){
+					chart3.setSize(ui.item.context.clientWidth-20,190)
+				}
 			});
 			
 			setInterval(function () {			
 				drawFactoryDailyChart();			
-				ajaxGetOrderChartData();			
+				ajaxGetOrderChartData();		
+				drawFactoryOrderChart();
 				drawOutputChart();				
-			},1000*60*5);
+			},1000*60*20);
+			
+			setInterval(function () {			
+				drawFactoryException();			
+			},1000*60*10);
 			
 		$("#search_factory").change(function(){
 			drawFactoryDailyChart();
 			drawFactoryOrderChart();
+			drawFactoryException();
 		})
 		
 		//$('.factory_act_order').eq(0).siblings().hide();
-		setInterval(function(){
-			$("#factory_act_order").animate({
-				marginTop: '-=1'
-			},10,function(){
-				var s = Math.abs(parseInt($(this).css("margin-top")));
-				var c_height=$(this).find(".factory_act_order").eq(0).outerHeight(true);
-				if(s>=c_height){
-					//alert(c_height)
-					$(this).find(".factory_act_order").slice(0, 1).appendTo($(this));
-					$(this).css("margin-top", 0);
-				}
-			});
-		},100)	
+		var interval_1=setInterval("moveActOrderChart()",100)	
+		
+		var interval_2=setInterval("moveExceptionChart()",200)	
+		
+		$("#factory_act_order").mouseover(function(){
+			if(interval_1){
+		        clearInterval(interval_1);
+		        interval_1 = null;
+		    }
+		}).mouseout(function(){
+			 if(interval_1){
+			        clearInterval(interval_1);
+			        interval_1 = null;
+			    }
+			 interval_1 = setInterval("moveActOrderChart()",100)
+		});
+		
+		$("#exception").mouseover(function(){
+			if(interval_2){
+		        clearInterval(interval_2);
+		        interval_2 = null;
+		    }
+		}).mouseout(function(){
+			if(interval_2){
+		        clearInterval(interval_2);
+		        interval_2 = null;
+		    }
+		 interval_2 = setInterval("moveExceptionChart()",200)
+		})
 
 	})
 	
 	function initPage(){
 	getFactorySelect("","","#search_factory",null,"id");
-	drawFactoryDailyChart();	
 	ajaxGetOrderChartData();	
-	drawOutputChart();
 	drawFactoryOrderChart();
+	drawOutputChart();
+	drawFactoryDailyChart();
+	drawFactoryException();
+	drawStaffCountChart();
 	
 	$('.widget-container-col').sortable({
 		connectWith : '.widget-container-col',
@@ -78,7 +105,7 @@ $(document).ready(function() {
 	});
 	
 	$('.page-content').ace_scroll({
-		size: 560
+		size: $(window).height()*0.85
     });
 	
 	}
@@ -90,6 +117,8 @@ $(document).ready(function() {
 			url:'/IMMS/common/getIndexOrderData',
 			type:'get',
 			dataType:'json',
+			cache:false,
+			async:false,
 			data:{},
 			success:function(response){
 				var data=response.data;
@@ -202,6 +231,8 @@ function drawOutputChart(){
 		url:'/IMMS/common/getIndexOutputData',
 		type:'get',
 		dataType:'json',
+		cache:false,
+		async:false,
 		data:{
 		},
 		success:function(response){
@@ -314,9 +345,7 @@ function drawOutputChart(){
 					});
 		}
 	});
-	
-
-	}
+}
 
 	function drawFactoryDailyChart(){
 
@@ -324,6 +353,8 @@ function drawOutputChart(){
 			url:'/IMMS/common/getIndexFactoryDailyData',
 			type:'get',
 			dataType:'json',
+			cache:false,
+			async:false,
 			data:{
 				factory_id:$("#search_factory").val()
 			},
@@ -393,6 +424,8 @@ function drawOutputChart(){
 			url:'/IMMS/common/getIndexFactoryPrdOrdData',
 			type:'get',
 			dataType:'json',
+			cache:false,
+			async:false,
 			data:{
 				factory_id:$("#search_factory").val()
 			},
@@ -438,3 +471,184 @@ function drawOutputChart(){
 			});
 	}
 	
+	function drawFactoryException(){
+		$("#exception").html("");
+		$.ajax({
+			url:'/IMMS/common/getIndexExceptionData',
+			type:'get',
+			dataType:'json',
+			cache:false,
+			async:false,
+			data:{
+				factory:$("#search_factory :selected").text()
+			},
+			success:function(response){
+				$.each(response.data,function(i,value){
+					$("<li style='color:red'>").html(value.message).appendTo($("#exception"))
+				})
+			}
+			})
+	}
+	
+	function moveActOrderChart(){
+		$("#factory_act_order").animate({
+			marginTop: '-=1'
+		},10,function(){
+			var s = Math.abs(parseInt($(this).css("margin-top")));
+			var c_height=$(this).find(".factory_act_order").eq(0).outerHeight(true);
+			if(s>c_height){
+				//alert(c_height)
+				$(this).find(".factory_act_order").slice(0, 1).appendTo($(this));
+				$(this).css("margin-top", 0);
+			}
+		});
+	}
+	
+	function moveExceptionChart(){
+		$("#exception").animate({
+			marginTop: '-=1'
+		},20,function(){
+			var s = Math.abs(parseInt($(this).css("margin-top")));
+			var c_height=$(this).find("li").eq(0).outerHeight(true);
+			if(s>c_height){
+				//alert(c_height)
+				$(this).find("li").slice(0, 1).appendTo($(this));
+				$(this).css("margin-top", 0);
+			}
+		});
+	}
+	
+function drawStaffCountChart(){
+
+	var series=[];
+	var factory_data_list=[];
+	$.ajax({
+		url:'/IMMS/common/getIndexStaffCountData',
+		type:'get',
+		dataType:'json',
+		cache:false,
+		async:false,
+		data:{
+		},
+		success:function(response){
+			$.each(response.series,function(i,data){
+				var arr=[data.plant_org,data.staff_count]
+				series.push(arr);
+			})
+			factory_data_list=response.factory_data;
+			
+			chart3=Highcharts.chart("container3",
+					{
+						credits: 
+						{
+					            enabled: false
+					    },
+					    title:{
+					    	text:null
+					    },
+		/*			    subtitle : {
+							text: '<b>一季度：</b><span style="color: green">20</sapn>'+'   <b>二季度：</b><span style="color: green">30  </span>'+
+							'<b>三季度：</b><span style="color: green">50  </span><b>四季度：</b><span style="color: green">50  </span>'+
+							'<b>年度：</b><span style="color: green">150</span>'
+						},*/
+						chart : {
+							type : 'column',
+							height : 190					
+						},
+						colors: ['#058DC7', '#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4'],
+						tooltip:{
+							formatter: function () {
+								var plant_org=this.points[0].key;
+								var staff_count_detail;
+				                var s= '<b>' + plant_org+ '</b><br/>' 
+				                $.each(factory_data_list,function(i,detail){
+				                	if(detail.plant_org==plant_org){
+				                		staff_count_detail=detail.staff_count_detail;
+				                		return false;
+				                	}			                	 
+				                })
+				                staff_count_detail=staff_count_detail||"";
+				                $.each(staff_count_detail.split(","),function(i,data){
+					                	var d='';				  
+					                	if((i+1)%2==0){
+					                		d=data+'<br />';
+					                	}
+					                	if((i+1)%2!=0&&data!=''){
+					                		d=data+'   ';	
+					                	}		                	
+					                	s+=d;		
+						          })
+				                return s;
+				            },
+				            shared: true
+						},
+						legend: {
+					            enabled: false
+					     },
+						xAxis : {
+							 type: 'category',
+					            labels: {
+					                rotation: -45,
+					                style: {
+					                    fontSize: '11px',
+					                    fontFamily: 'Verdana, sans-serif'
+					                }
+					            }
+						},
+						yAxis : {
+							title:{
+								text:null
+							}
+						},
+						series : [
+						          {
+						        	  data:series,
+						        	  dataLabels:{
+							                enabled: true,
+							                color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray',
+							                align: 'center',
+							                format: '{point.y}', // one decimal
+							                y: 10, // 10 pixels down from the top
+							                style: {
+							                    fontSize: '11px',
+							                    fontFamily: 'Verdana, sans-serif'
+							                }
+							            }  
+						          }
+						          
+						 ],
+						 responsive: {
+							 rules:[{
+					                condition: {
+					                    maxWidth: 1000,
+					                    minWidth:200
+					                }
+							 }]
+						 }
+				
+					});
+		}
+	});
+}
+
+function reload(flag){
+	//alert(flag);
+	if(flag=='1'){
+		drawFactoryDailyChart();
+	}
+	if(flag=='2'){
+		ajaxGetOrderChartData();				
+	}
+	if(flag=='3'){
+		drawFactoryOrderChart();
+	}
+	if(flag=='4'){
+		drawOutputChart();	
+	}
+	if(flag=='5'){
+		drawFactoryException();
+	}
+	if(flag=='6'){
+		drawStaffCountChart();
+	}
+}

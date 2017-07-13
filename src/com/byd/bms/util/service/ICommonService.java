@@ -90,5 +90,22 @@ public interface ICommonService {
 	 * @param model
 	 */
 	void getIndexExceptionData(String factory, ModelMap model);
+	/**
+	 * @author xiong.jianwu
+	 * @param model
+	 */
+	void getIndexStaffCountData(ModelMap model);
+	/**
+	 * @author xiong.jianwu
+	 * @param conditionMap
+	 * @param model
+	 */
+	void getProductionIndexData(Map<String, Object> conditionMap, ModelMap model);
+	/**
+	 * @author xiong.jianwu
+	 * @param conditionMap
+	 * @param model
+	 */
+	void getMonitorBoardInfo(Map<String, Object> conditionMap, ModelMap model);
 	
 }

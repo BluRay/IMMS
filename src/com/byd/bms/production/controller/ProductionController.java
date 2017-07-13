@@ -683,7 +683,15 @@ public class ProductionController extends BaseController {
 		
 		return model;
 	}
-	
+	/**
+	 * 车间监控板
+	 * @return
+	 */
+	@RequestMapping("/monitorBoard")
+	public ModelAndView monitorBoard(){
+		mv.setViewName("production/monitorBoard");
+		return mv;
+	}
 	/****************************  xiongjianwu ***************************/
 	
 	@RequestMapping("/productionsearchbusinfo")

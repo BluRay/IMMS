@@ -43,7 +43,7 @@
 						<table>
 							<tr>
 								<td>车号/VIN号：</td>
-								<td><input id="search_busnumber" placeholder="请输入车号/VIN号..." style="width:200px" type="text"></td>
+								<td><input id="search_busnumber" placeholder="请输入车号/VIN号..." style="height: 30px;width:200px" type="text"></td>
 								<td><input id="btnQuery" type="button" class="btn btn-sm btn-success" value="查询" style="margin-left: 2px;"></td>
 								<td></td>
 							</tr>

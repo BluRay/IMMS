@@ -335,6 +335,60 @@ public class CommonServiceImpl implements ICommonService {
 		List<Map<String,Object>> datalist=new ArrayList<Map<String,Object>>();
 		datalist=commonDao.queryIndexExceptionData(factory);
 		model.put("data", datalist);
+	}
+	/**
+	 * @author xiong.jianwu
+	 */
+	@Override
+	public void getIndexStaffCountData(ModelMap model) {
+		List<Map<String,Object>> datalist=new ArrayList<Map<String,Object>>();
+		List<Map<String,Object>> datalist_f=new ArrayList<Map<String,Object>>();
+		datalist=commonDao.queryIndexStaffCountData();
+		datalist_f=commonDao.queryIndexStaffCountData_Factory();
+		model.put("series", datalist);
+		model.put("factory_data", datalist_f);
+	}
+	/**
+	 * @author xiong.jianwu
+	 */
+	@Override
+	public void getProductionIndexData(Map<String,Object>condMap, ModelMap model) {
+		List<Map<String,Object>> datalist=new ArrayList<Map<String,Object>>();
+		datalist=commonDao.queryProductionIndexData(condMap);
+		model.put("data", datalist);	
+	}
+	/**
+	 * @author xiong.jianwu
+	 */
+	@Override
+	public void getMonitorBoardInfo(Map<String, Object> conditionMap, ModelMap model) {
+		Map<String, Object> conditionMap1 = new HashMap<String, Object>();
+		Map<String, Object> conditionMap2 = new HashMap<String, Object>();
+		Map<String, Object> conditionMap3 = new HashMap<String, Object>();
+		Map<String, Object> conditionMap4 = new HashMap<String, Object>();
+		Map<String, Object> conditionMap5 = new HashMap<String, Object>();
+		conditionMap1.putAll(conditionMap);
+		conditionMap1.put("workshop", "焊装");
+		conditionMap2.putAll(conditionMap);
+		conditionMap2.put("workshop", "涂装");
+		conditionMap3.putAll(conditionMap);
+		conditionMap3.put("workshop", "底盘");
+		conditionMap4.putAll(conditionMap);
+		conditionMap4.put("workshop", "总装");
+		conditionMap5.putAll(conditionMap);
+		conditionMap5.put("workshop", "检测线");
+		model.put("exceptionList", commonDao.getIndexExceptionList(conditionMap));
+		model.put("weldingList", commonDao.getIndexWorkshopProduction(conditionMap1));
+		model.put("paintingList", commonDao.getIndexWorkshopProduction(conditionMap2));
+		model.put("bottomList", commonDao.getIndexWorkshopProduction(conditionMap3));
+		model.put("assemblyList", commonDao.getIndexWorkshopProduction(conditionMap4));
+		model.put("testlineList", commonDao.getIndexWorkshopProduction(conditionMap5));
+		model.put("dupList", commonDao.queryIndexDpuData(conditionMap1));
+		model.put("passRateList", commonDao.queryIndexPassRateData(conditionMap1));
+		model.put("productionInfo", commonDao.getProductionSearch(conditionMap));
+		model .put("partsBalance", commonDao.getPartsBalance(conditionMap));
+		model.put("pauseList", commonDao.getPauseList(conditionMap));
+		
 	}	
 
 	

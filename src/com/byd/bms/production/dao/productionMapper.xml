@@ -1077,6 +1077,9 @@
 		<if test="wip_flg=='ca'">
 			AND chassis_offline_date !='' AND assembly_online_date =''
 		</if>
+		<if test="order_no !=null and order_no !=''">
+			AND o.order_no = #{order_no}
+		</if>
 	</select>
 	<select id="getProductionSearchCarinfo" parameterType="Map" resultType="Map">
 		<if test="workshop =='welding'">
@@ -1371,25 +1374,7 @@
 				AND b.bus_number LIKE CONCAT('%',#{bus_number},'%')
 			</if>
 			)
-			UNION ALL
-			(SELECT o.order_no,o.order_name,t.bus_type_code,o.order_qty,b.bus_number,b.welding_offline_date
-			AS enterdate,CONCAT(p.process_code ,' ', p.process_name) AS process,p.line,'fiberglass' AS workshop,b.production_status FROM
-			BMS_PLAN_BUS b
-			LEFT JOIN BMS_OR_ORDER o ON b.order_id = o.id
-			LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id = t.id
-			LEFT JOIN BMS_BASE_PROCESS p ON b.latest_process_id = p.id
-			WHERE factory_id = #{factory_id}
-			<if test="order_no !=''">
-				AND order_id = (SELECT id FROM BMS_OR_ORDER WHERE order_no=#{order_no})
-			</if>
-			<if test="line !=null and line !=''">
-				AND p.line like CONCAT('%',#{line},'%')
-			</if>
-			AND welding_offline_date !='' AND fiberglass_offline_date =''
-			<if test="bus_number !=null and bus_number !=''">
-				AND b.bus_number LIKE CONCAT('%',#{bus_number},'%')
-			</if>
-			)
+			
 			UNION ALL (SELECT
 			o.order_no,o.order_name,t.bus_type_code,o.order_qty,b.bus_number,b.painting_online_date
 			AS enterdate,CONCAT(p.process_code ,' ', p.process_name) AS

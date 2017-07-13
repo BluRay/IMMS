@@ -43,33 +43,32 @@
 					<table>
 						<tr>
 							<td>工厂：</td>
-							<td><select id="search_factory" class="input-small" style="width:150px"></select></td>
+							<td><select id="search_factory" class="input-small" style="height: 30px;width:150px"></select></td>
 							<td>&nbsp;车间：</td>
-							<td><select id="search_workshop" class="input-small" style="width:150px"></select></td>
+							<td><select id="search_workshop" class="input-small" style="height: 30px;width:150px"></select></td>
 							<td>&nbsp;线别：</td>
-							<td><select id="search_line" class="input-small"><option value=''>全部</option><option value='A'>A线</option><option value='B'>B线</option></select></td>
+							<td><select id="search_line" style="height: 30px;" class="input-small"><option value=''>全部</option><option value='A'>A线</option><option value='B'>B线</option></select></td>
 							<td id="onoff_lable">&nbsp;上/下线：</td>
-							<td id="onoff_td"><select name="" id="on_offline" style="width:60px" class="input-small">
+							<td id="onoff_td"><select name="" id="on_offline" style="height: 30px;width:60px" class="input-small">
 							<option value=''>全部</option><option value='上线'>上线</option><option value='下线'>下线</option>
 							</select>
 							</td>
 							<td id='date_lable' style="display:none">&nbsp;日期范围</td>
 							<td style="display:none" id="date_td">
-							<input type="text" id="date_start" style="width:100px" class="input-small" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+							<input type="text" id="date_start" style="height: 30px;width:100px" class="input-small" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
 							<span>-</span>
-							<input type="text" id="date_end" style="width:100px" class="input-small" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+							<input type="text" id="date_end" style="height: 30px;width:100px" class="input-small" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
 							</td>							
 							
 						</tr>
 						<tr>
 							<td>订单编号：</td>
-							<td><input style="height: 30px;" type="text" style="width:180px" class="input-medium revise" placeholder="订单编号..." id="search_order_no" /></td>
+							<td><input style="height: 30px;" type="text" style="height: 30px;width:180px" class="input-medium revise" placeholder="订单编号..." id="search_order_no" /></td>
 							<td>&nbsp;车号：</td>
-							<td><input class="input-medium" placeholder="车号..." id="search_busnumber"  style="width:150px" type="text"></td>
+							<td><input class="input-medium" placeholder="车号..." id="search_busnumber"  style="height: 30px;width:150px" type="text"></td>
 							
 							<td id="exce_lable">&nbsp;异常信息：</td>
-							<td id="exce_td"><select name="" id="search_exception" class="input-small carType"><option value='0'>全部</option><option value='1'>正常</option><option value='2'>异常已处理</option><option value='3'>异常未处理</option></select></td>
-							
+							<td id="exce_td"><select name="" id="search_exception" style="height: 30px;" class="input-small carType"><option value='0'>全部</option><option value='1'>正常</option><option value='2'>异常已处理</option><option value='3'>异常未处理</option></select></td>						
 							
 							<td><input type="button" class="btn btn-sm btn-success" id="btnQuery" value="查询" style="margin-left: 2px;"></input>&nbsp;</td>
 							<td>
@@ -84,7 +83,6 @@
 							<tr id="0">
 								<th style="text-align:center;">车间</th>
 								<th style="text-align:center;">焊装</th>
-								<th style="text-align:center;">玻璃钢</th>
 								<th style="text-align:center;">WIP</th>
 								<th style="text-align:center;">涂装</th>
 								<th style="text-align:center;">WIP</th>

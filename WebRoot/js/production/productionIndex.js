@@ -63,15 +63,149 @@ $(document).ready(function () {
 		if(name=='车身号'){
 			window.location.href='/IMMS/production/showBusNoPrint';
 		}
-		if(name=='车身颜色'){
-			window.location.href='production!bodycolor.action';
-		}
-		if(name=='座位数'){
-			window.location.href='production!busseats.action';
-		}
 		if(name=='在制'){
-			window.location.href="production!productionsearch.action?workshop="+workshop+"&factory="+$("#search_factory").val();
+			window.location.href="productionsearch?workshop="+workshop+"&factory="+$("#search_factory").val();
 		}
 		
 	}
+	function ajaxQuery(){
+		$("#node-online-w-a").html("");
+		$("#node-online-w-b").html("");
+		$("#node-offline-w-a").html("");
+		$("#node-offline-w-b").html("");
+		$("#node-online-p").html("");
+		$("#node-offline-p").html("");
+		$("#node-online-b-a").html("");
+		$("#node-online-b-b").html("");
+		$("#node-offline-b-a").html("");
+		$("#node-offline-b-b").html("");
+		$("#node-online-a-a").html("");
+		$("#node-online-a-b").html("");
+		$("#node-offline-a-a").html("");
+		$("#node-offline-a-b").html("");
+		$("#node-warehouse").html("");
+		$("#node-prod-w").html("");
+		$("#node-prod-p").html("");
+		$("#node-prod-b").html("");
+		$("#node-prod-a").html("");
+		$("#node-wip-1").html("");
+		$("#node-wip-2").html("");
+		$("#node-wip-3").html("");
 	
+		var factoryId=$("#search_factory").val();
+		$.ajax({
+			type : "get",// 使用get方法访问后台
+			dataType : "json",// 返回json格式的数据
+			url : "/IMMS/common/getProductionIndexData",
+			async :false,
+			data : {
+				"factoryId" : factoryId,
+			},
+			success : function(response) {
+				if(response.data){
+					$.each(response.data,function(i,data){
+						
+						if(data.process_node=='焊装上线'){
+							if(data.line.indexOf('A')>=0){
+								$("#node-online-w-a").html(data.process_num);
+							}
+							if(data.line.indexOf('B')>=0){
+								$("#node-online-w-b").html(data.process_num);
+							}
+						}
+						if(data.process_node=='焊装下线'){
+							if(data.line.indexOf('A')>=0){
+								$("#node-offline-w-a").html(data.process_num);
+							}
+							if(data.line.indexOf('B')>=0){
+								$("#node-offline-w-b").html(data.process_num);
+							}
+						}
+						
+						if(data.process_node=='涂装上线'){
+							if(data.line.indexOf('A')>=0){
+								$("#node-online-p").html(data.process_num);
+							}
+							/*if(data.line.indexOf('B')>=0){
+								$("#node-online-p").html(data.process_num);
+							}*/
+						}
+						if(data.process_node=='涂装下线'){
+							if(data.line.indexOf('A')>=0){
+								$("#node-offline-p").html(data.process_num);
+							}
+							/*if(data.line.indexOf('B')>=0){
+								$("#node-offline-p-b").html(data.process_num);
+							}*/
+						}
+						
+						if(data.process_node=='底盘上线'){
+							if(data.line.indexOf('A')>=0){
+								$("#node-online-b-a").html(data.process_num);
+							}
+							if(data.line.indexOf('B')>=0){
+								$("#node-online-b-b").html(data.process_num);
+							}
+						}
+						if(data.process_node=='底盘下线'){
+							if(data.line.indexOf('A')>=0){
+								$("#node-offline-b-a").html(data.process_num);
+							}
+							if(data.line.indexOf('B')>=0){
+								$("#node-offline-b-b").html(data.process_num);
+							}
+						}
+						
+						if(data.process_node=='总装上线'){
+							if(data.line.indexOf('A')>=0){
+								$("#node-online-a-a").html(data.process_num);
+							}
+							if(data.line.indexOf('B')>=0){
+								$("#node-online-a-b").html(data.process_num);
+							}
+						}
+						if(data.process_node=='总装下线'){
+							if(data.line.indexOf('A')>=0){
+								$("#node-offline-a-a").html(data.process_num);
+							}
+							if(data.line.indexOf('B')>=0){
+								$("#node-offline-a-b").html(data.process_num);
+							}
+						}
+						
+						if(data.process_node=='入库'){
+							$("#node-warehouse").html(data.process_num);
+						}
+						
+						if(data.process_node=='焊装在制'){
+							$("#node-prod-w").html(data.process_num);
+						}
+						
+						if(data.process_node=='涂装在制'){
+							$("#node-prod-p").html(data.process_num);
+						}
+						
+						if(data.process_node=='底盘在制'){
+							$("#node-prod-b").html(data.process_num);
+						}
+						
+						if(data.process_node=='总装在制'){
+							$("#node-prod-a").html(data.process_num);
+						}
+						
+						if(data.process_node=='WIP_WP'){
+							$("#node-wip-1").html(data.process_num);
+						}
+						
+						if(data.process_node=='WIP_PC'){
+							$("#node-wip-2").html(data.process_num);
+						}
+						
+						if(data.process_node=='WIP_CA'){
+							$("#node-wip-3").html(data.process_num);
+						}
+					})
+				}
+			}
+		});
+	}

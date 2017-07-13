@@ -75,5 +75,27 @@ public interface ICommonDao {
 	List<Map<String, Object>> queryIndexOutputData_Factory(@Param("actYear")String actYear);
 
 	List<Map<String, Object>> queryIndexExceptionData(@Param("factory") String factory);
+
+	List<Map<String, Object>> queryIndexStaffCountData();
+
+	List<Map<String, Object>> queryIndexStaffCountData_Factory();
+
+	List<Map<String, Object>> queryProductionIndexData(String factoryId);
+
+	List<Map<String, Object>> queryProductionIndexData( Map<String, Object> condMap);
+
+	List<Map<String, Object>> getIndexWorkshopProduction(Map<String, Object> conditionMap);
+
+	List<Map<String, Object>> getIndexExceptionList(Map<String, Object> conditionMap);
+
+	List<Map<String, Object>> queryIndexDpuData(Map<String, Object> conditionMap);
+
+	List<Map<String, Object>> getProductionSearch(Map<String, Object> conditionMap);
+
+	List<Map<String, Object>> queryIndexPassRateData(Map<String, Object> conditionMap);
+
+	List<Map<String, Object>> getPartsBalance(Map<String, Object> conditionMap);
+
+	List<Map<String, Object>> getPauseList(Map<String, Object> conditionMap);
 	
 }

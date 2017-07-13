@@ -5,13 +5,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.byd.bms.util.service.ICommonService;
 
 @Controller
@@ -401,4 +400,75 @@ public class CommonController extends BaseController {
 		commonService.getIndexExceptionData(factory,model);
 		return model;
 	}
+	
+	/**
+	 * @author xiong.jianwu
+	 * @return
+	 */
+	@RequestMapping("/getIndexStaffCountData")
+	@ResponseBody
+	public ModelMap getIndexStaffCountData(){
+		model.clear();
+		commonService.getIndexStaffCountData(model);
+		return model;
+	}
+	
+	/**
+	 * @author xiong.jianwu
+	 * @return
+	 */
+	@RequestMapping("/getProductionIndexData")
+	@ResponseBody
+	public ModelMap getProductionIndexData(){
+		model.clear();
+		String factoryId=request.getParameter("factoryId");
+		factoryId=factoryId==null?String.valueOf(session.getAttribute("factory_id")):factoryId;
+		Map<String, Object> conditionMap = new HashMap<String, Object>();	
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curdate = df.format(new Date());
+		
+		conditionMap.put("factoryId", factoryId);
+		conditionMap.put("curDate", curdate);
+		
+		commonService.getProductionIndexData(conditionMap,model);
+		return model;
+	}
+	
+	/**
+	 * @author xiong.jianwu
+	 * @return
+	 */
+	@RequestMapping("/getMonitorBoardInfo")
+	@ResponseBody
+	public ModelMap getMonitorBoardInfo(){
+		model.clear();
+		String factoryId=request.getParameter("factoryId");
+		factoryId=factoryId==null?String.valueOf(session.getAttribute("factory_id")):factoryId;
+		String workshop = request.getParameter("workshop");
+		Map<String, Object> conditionMap = new HashMap<String, Object>();
+		conditionMap.put("factoryId", factoryId);
+		if (!StringUtils.isEmpty(workshop)) {
+			conditionMap.put("workshop", workshop);
+		}
+		commonService.getMonitorBoardInfo(conditionMap,model);
+		return model;
+	}
+	
+	/**
+	 * 动态获取车间监控面板工厂和时间
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/getWorkshopBoardHeadInfo")
+	@ResponseBody
+	public ModelMap getWorkshopBoardHeadInfo() {
+		model.clear();
+		String factory=session.getAttribute("factory").toString();
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		model.put("factory", factory);
+		model.put("curTime", curTime);
+		return model;
+	}
+	
 }
