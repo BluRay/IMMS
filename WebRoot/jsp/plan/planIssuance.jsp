@@ -43,11 +43,11 @@
 					<table>
 						<tr>
 						<td>生产工厂：</td>
-						<td><select id="search_factory" class="input-small" style="width:120px"></select></td>
+						<td><select id="search_factory" class="input-small" style="height: 30px;width:120px"></select></td>
 						<td>&nbsp;订单编号：</td>
-						<td><input id="search_order_no" placeholder="请输入订单编号..." style="width:120px" class="col-sm-10" type="text"></td>
+						<td><input id="search_order_no" placeholder="请输入订单编号..." style="height: 30px;width:120px" class="col-sm-10" type="text"></td>
 						<td>&nbsp;生产日期：</td>
-						<td><input type="text" style="width:120px" class="col-sm-10" placeholder="请输入生产日期..." id="issuance_date" onClick="WdatePicker({el:'issuance_date',dateFmt:'yyyy-MM-dd'});" />
+						<td><input type="text" style="height: 30px;width:120px" class="col-sm-10" placeholder="请输入生产日期..." id="issuance_date" onClick="WdatePicker({el:'issuance_date',dateFmt:'yyyy-MM-dd'});" />
 						</td>
 						<td><input type="button" class="btn btn-sm btn-success" id="btnQuery" value="查询" style="margin-left: 2px;"></input>&nbsp;</td>
 						<td><input type="button" class="btn btn-sm btn-info" id="btnSave" value="发布" style="margin-left: 2px;"></input>&nbsp;</td>

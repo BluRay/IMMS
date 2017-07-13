@@ -46,19 +46,19 @@
 						<table>
 							<tr>
 								<td>工厂：</td>
-								<td><select id="search_factory" class="input-small" style="width:120px"></select></td>
+								<td><select id="search_factory" class="input-small" style="height: 30px;width:120px"></select></td>
 								<td>&nbsp;订单：</td>
-								<td><input id="search_order_no" placeholder="请输入订单编号..." style="width:110px" type="text"></td>
+								<td><input id="search_order_no" placeholder="请输入订单编号..." style="height: 30px;width:110px" type="text"></td>
 								<td>&nbsp;变更类型：</td>
 								<td>
-									<select id="change_type" class="input-small" style="width:90px">
+									<select id="change_type" class="input-small" style="height: 30px;width:90px">
 									<option value="重大变更">重大变更</option>
 									<option value="顾客变更">顾客变更</option>
 									<option value="重复变更">重复变更</option>
 									</select>
 								</td>
 								<td>&nbsp;技改单日期：</td>
-								<td colspan=3><input id="search_date_start" placeholder="开始时间..." style="width:110px" type="text" onClick="WdatePicker({el:'search_date_start',dateFmt:'yyyy-MM-dd'});"> - <input id="search_date_end" placeholder="结束时间..." style="width:110px" type="text" onClick="WdatePicker({el:'search_date_end',dateFmt:'yyyy-MM-dd'});"></td>
+								<td colspan=3><input id="search_date_start" placeholder="开始时间..." style="height: 30px;width:110px" type="text" onClick="WdatePicker({el:'search_date_start',dateFmt:'yyyy-MM-dd'});"> - <input id="search_date_end" placeholder="结束时间..." style="height: 30px;width:110px" type="text" onClick="WdatePicker({el:'search_date_end',dateFmt:'yyyy-MM-dd'});"></td>
 								<td><input id="btnQuery" type="button" class="btn btn-sm btn-success" value="查询" style="margin-left: 2px;"></input></td>
 							</tr>
 						</table>

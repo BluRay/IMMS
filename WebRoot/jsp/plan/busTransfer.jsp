@@ -58,11 +58,11 @@
 								<table>
 									<tr>
 									<td>车号：</td>
-									<td><textarea style="width: 450px;" placeholder="车号,每行一个车号..."  class="input-xlarge" onkeyup="this.value = this.value.slice(0, 1000)" id="transfer_out_busnumber" rows="3"></textarea></td>
+									<td><textarea style="height: 30px;width: 450px;" placeholder="车号,每行一个车号..."  class="input-xlarge" onkeyup="this.value = this.value.slice(0, 1000)" id="transfer_out_busnumber" rows="3"></textarea></td>
 									</tr>
 								<tr>
 									<td>调入工厂：</td>
-									<td><select id="transfer_out_factory" class="input-small" style="width:150px"></select></td>
+									<td><select id="transfer_out_factory" class="input-small" style="height: 30px;width:150px"></select></td>
 									<td>
 									<input id="btnTransferOutQuery" type="button" class="btn btn-sm btn-primary" value="查询" style="margin-left: 2px;"></input>
 									<input id="btnTransferOut" type="button" class="btn btn-sm btn-primary" value="调出" style="margin-left: 2px;"></input>
@@ -95,13 +95,13 @@
 								<table>
 									<tr>
 									<td>车号：</td>
-									<td colspan=3><textarea style="width: 450px;" placeholder="车号,每行一个车号..."  class="input-xlarge" onkeyup="this.value = this.value.slice(0, 1000)" id="transfer_in_busnumber" rows="3"></textarea></td>
+									<td colspan=3><textarea style="height: 30px;width: 450px;" placeholder="车号,每行一个车号..."  class="input-xlarge" onkeyup="this.value = this.value.slice(0, 1000)" id="transfer_in_busnumber" rows="3"></textarea></td>
 									</tr>
 								<tr>
 									<td>调出工厂：</td>
-									<td><select id="transfer_in_factory" class="input-small" style="width:150px"></select></td>
+									<td><select id="transfer_in_factory" class="input-small" style="height: 30px;width:150px"></select></td>
 									<td>调入工厂：</td>
-									<td><select id="transfer_in_factory2" class="input-small" style="width:150px"></select></td>
+									<td><select id="transfer_in_factory2" class="input-small" style="height: 30px;width:150px"></select></td>
 									<td>
 									<input id="btnTransferInQuery" type="button" class="btn btn-sm btn-primary" value="查询" style="margin-left: 2px;"></input>
 									<input id="btnTransferIn" type="button" class="btn btn-sm btn-primary" value="调入" style="margin-left: 2px;"></input>
@@ -135,18 +135,18 @@
 								<table>
 									<tr>
 									<td>车号：</td>
-									<td><input id="transfer_his_busnumber" placeholder="请输入车号..." style="width:150px" type="text"></td>
+									<td><input id="transfer_his_busnumber" placeholder="请输入车号..." style="height: 30px;width:150px" type="text"></td>
 									<td>VIN号：</td>
-									<td><input id="transfer_his_vin" placeholder="请输入VIN号..." style="width:150px" type="text"></td>
+									<td><input id="transfer_his_vin" placeholder="请输入VIN号..." style="height: 30px;width:150px" type="text"></td>
 									<td>&nbsp;订单编号：</td>
 									<td><input style="height: 30px;" type="text" class="input-medium revise" placeholder="订单编号..." id="transfer_his_orderno" /></td>
 									</tr>
 									<tr>
 									<td>调出工厂：</td>
-									<td colspan=3><select id="transfer_his_out_factory" style="width:100px;height:32px"></select>
+									<td colspan=3><select id="transfer_his_out_factory" style="width:100px;height:30px"></select>
 									<input id="start_date" placeholder="开始时间..." style="width:85px" type="text" onClick="WdatePicker({el:'start_date',dateFmt:'yyyy-MM-dd'});"> - <input id="end_date" placeholder="结束时间..." style="width:85px" type="text" onClick="WdatePicker({el:'end_date',dateFmt:'yyyy-MM-dd'});"></td>
 									<td>&nbsp;调入工厂：</td>
-									<td colspan=3><select id="transfer_his_in_factory" style="width:100px;height:32px"></select>
+									<td colspan=3><select id="transfer_his_in_factory" style="width:100px;height:30px"></select>
 									<input id="start_date2" placeholder="开始时间..." style="width:85px" type="text" onClick="WdatePicker({el:'start_date2',dateFmt:'yyyy-MM-dd'});"> - <input id="end_date2" placeholder="结束时间..." style="width:85px" type="text" onClick="WdatePicker({el:'end_date2',dateFmt:'yyyy-MM-dd'});">
 									<input id="btnTransferHisQuery" type="button" class="btn btn-sm btn-primary" value="查询" style="margin-left: 2px;"></input>
 									</td>

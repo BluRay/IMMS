@@ -46,7 +46,7 @@
 						<table>
 						<tr>
 							<td>生产工厂：</td>
-							<td><select id="search_factory" class="input-small" style="width:150px"></select></td>
+							<td><select id="search_factory" class="input-small" style="height: 30px;width:150px"></select></td>
 							<td>&nbsp;订单编号：</td>
 							<td><input style="height: 30px;" type="text" class="input-medium revise" placeholder="订单编号..." id="search_order_no" /></td>
 							<td></td>
@@ -58,9 +58,9 @@
 						</tr>
 						<tr>
 							<td>&nbsp;VIN号：</td>
-							<td><input id="search_bus_vin" placeholder="请输入VIN号..." style="width:150px" type="text"></td>
+							<td><input id="search_bus_vin" placeholder="请输入VIN号..." style="height: 30px;width:150px" type="text"></td>
 							<td>&nbsp;车号：</td>
-							<td><input id="search_bus_number" placeholder="请输入车号..." style="width:150px" type="text"></td>
+							<td><input id="search_bus_number" placeholder="请输入车号..." style="height: 30px;width:150px" type="text"></td>
 							<td></td>
 							<td></td>
 							<td>

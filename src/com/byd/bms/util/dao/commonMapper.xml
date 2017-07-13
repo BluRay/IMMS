@@ -343,4 +343,20 @@
 		group by a.month
 	</select>
 	
+	<select id="queryIndexExceptionData" parameterType="String" resultType="Map">
+		SELECT concat(f.factory_name,w.workshop_name,'车间',st.line,'线从',st.start_time,'开始停线，',
+		case when st.pend_time&gt;0 then concat('预计',st.pend_time,'恢复，') else '' end, '停线原因：',st.detailed_reason) message
+		FROM BMS_PLAN_STOPLINE st
+		LEFT JOIN BMS_BASE_FACTORY f on f.id=st.factory_id
+		LEFT JOIN BMS_BASE_WORKSHOP w on st.workshop_id=w.id
+		WHERE st.end_time&lt;=0 and f.factory_name=#{factory}
+		UNION ALL
+		SELECT concat(e.factory,e.workshop,'车间',e.line,'车号为：',e.bus_number,'车辆因',k.key_name,'发生异常，异常从',e.start_time,'开始，',
+		case when e.pfinish_time>0 then concat('预计',e.pfinish_time,'恢复，') else '' end, '异常详细原因：',e.detailed_reasons) message
+		FROM BMS_PD_PRODUCTION_EXCEPTION e
+		LEFT JOIN BMS_BASE_KEY k on k.id=e.reason_type_id
+		WHERE e.status='0' and e.factory=#{factory}
+	</select>
+
+
 </mapper>

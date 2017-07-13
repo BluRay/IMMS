@@ -84,5 +84,11 @@ public interface ICommonService {
 	 * @param model
 	 */
 	void getIndexOutputData(String actYear, ModelMap model);
+	/**
+	 * @author xiong.jianwu
+	 * @param factory_id
+	 * @param model
+	 */
+	void getIndexExceptionData(String factory, ModelMap model);
 	
 }

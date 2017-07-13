@@ -50,7 +50,7 @@
 
 										<div class="widget-body">
 											<div class="widget-main padding-8">
-												<div id="tree2" class="tree"></div>
+												<div id="tree2" class="tree tree-unselectable"></div>
 											</div>
 										</div>
 									</div>
@@ -65,7 +65,7 @@
 
 										<div class="widget-body">
 											<div class="widget-main padding-8">
-											<div id="tree1" class="tree">
+											<div class="form-group">
 											    <table id="tableData" class="table table-striped table-bordered table-hover" style="font-size: 12px;"></table>
 											</div>
 											</div>

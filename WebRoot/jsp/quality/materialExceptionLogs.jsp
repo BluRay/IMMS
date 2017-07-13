@@ -200,7 +200,7 @@
 					</tr>
 					<tr style="height:33px">
 						<td align="right" style="width:100px">改善前图片：</td>
-						<td colspan=3>
+						<td colspan=3 style="width: 360px;">
 							<input name="edit_bphoto" type="file" id="edit_bphoto" />
 							<a target="blank" id="bphoto">查看</a>
 						</td>

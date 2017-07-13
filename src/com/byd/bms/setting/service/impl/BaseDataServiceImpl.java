@@ -279,6 +279,15 @@ public class BaseDataServiceImpl implements IBaseDataService {
 		for(Object id : ids){
 			if(id!=null){
 				baseDataDao.deleteWorkgroup((String)id);
+				Map<String,Object>condMap=new HashMap<String,Object>();
+				// 删除子节点记录
+				condMap.put("parentId", (String)id);
+				List<BmsBaseStandardWorkgroup> list=baseDataDao.getWorkgroupList(condMap);
+				if(list.size()>0){
+					for(BmsBaseStandardWorkgroup bean : list){
+						baseDataDao.deleteWorkgroup(bean.getId()+"");
+					}
+				}
 			}
 		}
 	}

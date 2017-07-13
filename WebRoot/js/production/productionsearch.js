@@ -202,7 +202,7 @@ function ajaxGetWIP(wip_flg){
     			if(!(($('#search_factory').val() != '16')&&(workshop == "玻璃钢"))){
         			$("<td style=\"text-align:center;padding:3px\" />").html(count).appendTo(tr);
         			$("<td style=\"text-align:center;padding:3px\" />").html(value.order_no + " " + value.order_name + value.bus_type_code +" "+ value.order_qty + "辆").appendTo(tr);
-        			$("<td style=\"text-align:center;padding:3px\" />").html('<a href = "production!productionsearchbusinfo.action?bus_number='+value.bus_number+'">'+value.bus_number+'</a>').appendTo(tr);
+        			$("<td style=\"text-align:center;padding:3px\" />").html('<a href = "productionsearchbusinfo?bus_number='+value.bus_number+'">'+value.bus_number+'</a>').appendTo(tr);
         			$("<td style=\"text-align:center;padding:3px\" />").html(workshop).appendTo(tr);
         			$("<td style=\"text-align:center;padding:3px\" />").html(value.line).appendTo(tr);
         			$("<td style=\"text-align:center;padding:3px\" />").html(value.process).appendTo(tr);

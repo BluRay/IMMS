@@ -43,9 +43,9 @@
 						<table>
 							<tr>
 								<td>生产工厂：</td>
-								<td><select id="search_factory" class="input-small" style="width:120px"></select></td>
+								<td><select id="search_factory" class="input-small" style="height: 30px;width:120px"></select></td>
 								<td>&nbsp;订单编号：</td>
-								<td><input id="search_order_name" placeholder="请输入订单编号..." class="col-sm-10" type="text"></td>
+								<td><input id="search_order_name" style="height: 30px;" placeholder="请输入订单编号..." class="col-sm-10" type="text"></td>
 								<td>&nbsp;<input type="button" class="btn btn-sm btn-success" id="btnQuery" value="查询" style="margin-left: 2px;"></input>&nbsp;</td>
 								<td>&nbsp;<input id="btnBulkAdd" class="btn btn-sm btn-info" value="批量导入" type="button">&nbsp;</td>
 							</tr>

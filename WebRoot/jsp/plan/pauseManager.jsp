@@ -106,23 +106,23 @@
 						<table>
 							<tr>
 								<td>工厂：</td>
-								<td><select id="search_factory" class="input-small" style="width:100px"></select></td>
+								<td><select id="search_factory" class="input-small" style="height: 30px;width:100px"></select></td>
 								<td>&nbsp;车间：</td>
-								<td><select id="search_workshop" class="input-small" style="width:80px"></select></td>
+								<td><select id="search_workshop" class="input-small" style="height: 30px;width:80px"></select></td>
 								<td>&nbsp;线别：</td>
-								<td><select id="search_line" class="input-small" style="width:60px"><option value=''>全部</option><option value='A'>A线</option><option value='B'>B线</option></select></td>
+								<td><select id="search_line" class="input-small" style="height: 30px;width:60px"><option value=''>全部</option><option value='A'>A线</option><option value='B'>B线</option></select></td>
 								<td>&nbsp;订单：</td>
-								<td><input id="search_order_no" placeholder="请输入订单编号..." style="width:110px" type="text"></td>
+								<td><input id="search_order_no" placeholder="请输入订单编号..." style="height: 30px;width:110px" type="text"></td>
 								<td>&nbsp;原因：</td>
-								<td><select id="search_reason" class="input-small" style="width:120px"></select></td>
+								<td><select id="search_reason" class="input-small" style="height: 30px;width:120px"></select></td>
 								<td></td>
 								<td></td>
 							</tr>
 							<tr>
 								<td>停线时间：</td>
-								<td colspan=3><input id="pause_date_start" placeholder="开始时间..." style="width:125px" type="text" onClick="WdatePicker({el:'pause_date_start',dateFmt:'yyyy-MM-dd'});"> - <input id="pause_date_end" placeholder="结束时间..." style="width:125px" type="text" onClick="WdatePicker({el:'pause_date_end',dateFmt:'yyyy-MM-dd'});"></td>
+								<td colspan=3><input id="pause_date_start" placeholder="开始时间..." style="height: 30px;width:125px" type="text" onClick="WdatePicker({el:'pause_date_start',dateFmt:'yyyy-MM-dd'});"> - <input id="pause_date_end" placeholder="结束时间..." style="height: 30px;width:125px" type="text" onClick="WdatePicker({el:'pause_date_end',dateFmt:'yyyy-MM-dd'});"></td>
 								<td>&nbsp;恢复时间：</td>
-								<td colspan=3><input id="resume_date_start" placeholder="开始时间..." style="width:125px" type="text" onClick="WdatePicker({el:'resume_date_start',dateFmt:'yyyy-MM-dd'});"> - <input id="resume_date_end" placeholder="结束时间..." style="width:125px" type="text" onClick="WdatePicker({el:'resume_date_end',dateFmt:'yyyy-MM-dd'});"></td>								
+								<td colspan=3><input id="resume_date_start" placeholder="开始时间..." style="height: 30px;width:125px" type="text" onClick="WdatePicker({el:'resume_date_start',dateFmt:'yyyy-MM-dd'});"> - <input id="resume_date_end" placeholder="结束时间..." style="height: 30px;width:125px" type="text" onClick="WdatePicker({el:'resume_date_end',dateFmt:'yyyy-MM-dd'});"></td>								
 								<td></td>
 								<td><input id="btnQuery" type="button" class="btn btn-sm btn-success" value="查询" style="margin-left: 2px;"></input>&nbsp;&nbsp;<input id="btnAdd" class="btn btn-sm btn-info" value="增加" type="button">&nbsp;</td>
 								<td></td>

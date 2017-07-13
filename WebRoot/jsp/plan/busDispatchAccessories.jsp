@@ -46,7 +46,7 @@
 						<table>
 							<tr>
 								<td>订单编号：</td>
-								<td><input id="orderNo" placeholder="请输入订单编号..." style="width:160px" type="text"></td>
+								<td><input id="orderNo" placeholder="请输入订单编号..." style="height: 30px;width:160px" type="text"></td>
 								<td>
 									<input id="queryBtn" type="button" class="btn btn-sm btn-success" value="查询" style="margin-left: 2px;">
 									<input id="dispatchBtn" type="button" class="btn btn-sm btn-info" value="交接" style="margin-left: 2px;">
@@ -84,12 +84,12 @@
 						<table>
 							<tr>
 								<td>附件名称：</td>
-								<td><input type="text" id="dis_name" placeholder="附件名称..." class="input-medium"></td>
+								<td><input type="text" style="height: 30px;" id="dis_name" placeholder="附件名称..." class="input-medium"></td>
 								<td>交接人：</td>
-								<td><input type="text" id="dis_receiver" placeholder="交接人..." class="input-medium"></td>
+								<td><input type="text" style="height: 30px;" id="dis_receiver" placeholder="交接人..." class="input-medium"></td>
 								<td>交接时间：</td>
-								<td><input type="text" id="dis_date_start" placeholder="开始时间..."  onclick="WdatePicker({el:'dis_date_start',dateFmt:'yyyy-MM-dd'});" class="input-medium"> 
-	               				-<input type="text" id="dis_date_end" placeholder="结束时间..." onclick="WdatePicker({el:'dis_date_end',dateFmt:'yyyy-MM-dd'});" class="input-medium"></td>
+								<td><input type="text" style="height: 30px;" id="dis_date_start" placeholder="开始时间..."  onclick="WdatePicker({el:'dis_date_start',dateFmt:'yyyy-MM-dd'});" class="input-medium"> 
+	               				-<input type="text" style="height: 30px;" id="dis_date_end" placeholder="结束时间..." onclick="WdatePicker({el:'dis_date_end',dateFmt:'yyyy-MM-dd'});" class="input-medium"></td>
 								<td>
 									<input id="querydisBtn" type="button" class="btn btn-sm btn-info" value="查询">
 								</td>

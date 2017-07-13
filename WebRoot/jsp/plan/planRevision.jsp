@@ -43,12 +43,12 @@
 						<table>
 							<tr>
 								<td>生产工厂：</td>
-								<td><select id="search_factory" class="input-small" style="width:120px"></select></td>
+								<td><select id="search_factory" class="input-small" style="height: 30px;width:120px"></select></td>
 								<td>&nbsp;订单编号：</td>
-								<td><input id="search_order_no" placeholder="请输入订单编号..." style="width:120px" class="col-sm-10" type="text"></td>
+								<td><input id="search_order_no" placeholder="请输入订单编号..." style="height: 30px;width:120px" class="col-sm-10" type="text"></td>
 								<td>&nbsp;订单年月：</td>
-								<td width="200px"><select id="search_year" style="width:80px"></select> - 
-								<select id="search_month" style="width:60px">
+								<td width="200px"><select id="search_year" style="height: 30px;width:80px"></select> - 
+								<select id="search_month" style="height: 30px;width:60px">
 									<option value="01">1月</option><option value="02">2月</option><option value="03">3月</option><option value="04">4月</option>
 									<option value="05">5月</option><option value="06">6月</option><option value="07">7月</option><option value="08">8月</option>
 									<option value="09">9月</option><option value="10">10月</option><option value="11">11月</option><option value="12">12月</option>

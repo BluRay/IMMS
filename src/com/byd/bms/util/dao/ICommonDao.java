@@ -73,5 +73,7 @@ public interface ICommonDao {
 	List<Map<String, Object>> queryIndexOutputData_Bustype(@Param("actYear")String actYear);
 	
 	List<Map<String, Object>> queryIndexOutputData_Factory(@Param("actYear")String actYear);
+
+	List<Map<String, Object>> queryIndexExceptionData(@Param("factory") String factory);
 	
 }

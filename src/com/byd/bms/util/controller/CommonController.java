@@ -387,4 +387,18 @@ public class CommonController extends BaseController {
 		commonService.getIndexOutputData(actYear,model);
 		return model;
 	}
+	
+	/**
+	 * @author xiong.jianwu
+	 * 查询首页工厂停线异常信息
+	 * @return
+	 */
+	@RequestMapping("/getIndexExceptionData")
+	@ResponseBody
+	public ModelMap getIndexExceptionData(){
+		model.clear();
+		String factory=request.getParameter("factory");
+		commonService.getIndexExceptionData(factory,model);
+		return model;
+	}
 }

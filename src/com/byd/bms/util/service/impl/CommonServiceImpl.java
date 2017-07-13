@@ -326,6 +326,15 @@ public class CommonServiceImpl implements ICommonService {
 		model.put("series", series);
 		model.put("factory_data", factory_data);
 		
+	}
+	/***
+	 * @author xiong.jianwu
+	 */
+	@Override
+	public void getIndexExceptionData(String factory, ModelMap model) {
+		List<Map<String,Object>> datalist=new ArrayList<Map<String,Object>>();
+		datalist=commonDao.queryIndexExceptionData(factory);
+		model.put("data", datalist);
 	}	
 
 	

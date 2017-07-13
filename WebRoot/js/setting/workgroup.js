@@ -95,23 +95,23 @@ jQuery(function($) {
 		    		if(value.parent_id === '0'){
 		    			var id=value.id.substring(1,value.id.length);
 		    			if(value.sub_count === 0){
-
-		    				fun_str += '"'+value.id+'" : {"name": "<i class=\'fa fa-pencil-square-o blue\'></i><a href=# onClick=getWorkgroupListById('+id+','+id+',0)>'+value.workshop_name+'</a>","id":"'+value.id+'", "type": "item" ' + ((jQuery.inArray(value.id+'', "") >= 0)?',"additionalParameters" : {"item-selected": true}':'') +'},';
-
+                            var name='<i></i><a class=\'a\' onClick=getWorkgroupListById('+id+','+id+',0)'+value.workshop_name+'</a>';
+		    				fun_str += '"'+value.id+'" : {"name":"<i class=\'\'></i><a class=\'a\' onClick=getWorkgroupListById('+id+','+id+',0)> '+value.workshop_name+'</a>","id":"'+value.id+'", "type": "item" ' + ((jQuery.inArray(value.id+'', "") >= 0)?',"additionalParameters" : {"item-selected": false}':'') +'},';
+                           // console.log("fun_str",fun_str);
 		    			}else{
-		    				fun_str += '"'+value.id+'" : {"name": "<i class=\'fa fa-pencil-square-o blue\'></i><a href=# onClick=getWorkgroupListById('+id+','+id+',0)> '+value.workshop_name+'</a>","id":"'+value.id+'", "type": "folder"},';   				
+		    				fun_str += '"'+value.id+'" : {"name": "<i class=\'\'></i><a class=\'a\' onClick=getWorkgroupListById('+id+','+id+',0)> '+value.workshop_name+'</a>","id":"'+value.id+'", "type": "folder"},';   				
 		    				var subFun_str = '{"children" : {';
 		    				var cur_id = value.id + '';
 		    				$.each(funs, function(i, v) {
 		    					if(v.parent_id === cur_id){
 		    						if(v.sub_count === 0){
-		    							subFun_str += '"'+v.id+'" : {"name": "<i class=\'fa fa-pencil-square-o blue\'></i><a href=# onClick=getWorkgroupListById('+v.id+','+id+',1)> '+v.workshop_name+'</a>","id":"'+v.id+'", "type": "item" ' + ((jQuery.inArray(v.id+'', "") >= 0)?',"additionalParameters" : {"item-selected": true}':'') +'},';
+		    							subFun_str += '"'+v.id+'" : {"name": "<i class=\'\'></i><a class=\'a\' onClick=getWorkgroupListById('+v.id+','+id+',1)> '+v.workshop_name+'</a>","id":"'+v.id+'", "type": "item" ' + ((jQuery.inArray(v.id+'', "") >= 0)?',"additionalParameters" : {"item-selected": false}':'') +'},';
 		    						}else{
-		    							subFun_str += '"'+v.id+'" : {"name": "<i class=\'fa fa-pencil-square-o blue\'></i><a href=# onClick=getWorkgroupListById('+v.id+','+id+',1)> '+v.workshop_name+'</a>","id":"'+v.id+'", "type": "folder"},';
+		    							subFun_str += '"'+v.id+'" : {"name": "<i class=\'\'></i><a class=\'a\' onClick=getWorkgroupListById('+v.id+','+id+',1)> '+v.workshop_name+'</a>","id":"'+v.id+'", "type": "folder"},';
 		    							var subFun_str2 = '{"children" : {';
 		    							var cur_id2 = v.id + '';
 		    							$.each(funs, function(i2, v2) {
-		    								if(v2.parent_id === cur_id2)subFun_str2 += '"'+v2.id+'" : {"name": "<i class=\'fa fa-pencil-square-o blue\' <a href=# onClick=getWorkgroupListById('+v2.id+','+id+',2)></i> '+v2.workshop_name+'","id":"'+v2.id+'", "type": "item" ' + ((jQuery.inArray(v2.id+'', "") >= 0)?',"additionalParameters" : {"item-selected": true}':'') +'},';
+		    								if(v2.parent_id === cur_id2)subFun_str2 += '"'+v2.id+'" : {"name": "<i class=\'fa fa-pencil-square-o blue\' <a href=# onClick=getWorkgroupListById('+v2.id+','+id+',2)></i> '+v2.workshop_name+'","id":"'+v2.id+'", "type": "item" ' + ((jQuery.inArray(v2.id+'', "") >= 0)?',"additionalParameters" : {"item-selected": false}':'') +'},';
 		    							})
 		    							subFun_str2 = subFun_str2.substring(0,subFun_str2.length-1) + '}}';
 		    							subFun2[v.id] = eval('(' + subFun_str2 + ')');
@@ -145,18 +145,18 @@ jQuery(function($) {
 					multiSelect : false,
 					cacheItems: true,
 					loadingHTML : '<div class="tree-loading"><i class="ace-icon fa fa-refresh fa-spin blue"></i></div>',
-					'open-icon' : 'ace-icon tree-minus',
-					'close-icon' : 'ace-icon tree-plus',
-					'selectable' : true,
+					'open-icon' : 'blue ace-icon fa fa-folder-open',
+					'close-icon' : 'blue ace-icon fa fa-folder',
+					'selectable' : false,
 					'selected-icon' : 'ace-icon fa fa-check',
 					'unselected-icon' : 'ace-icon fa fa-check'
 				});
-		    	$("#tree2").find(".tree-folder-header").each(function(){  
-				    if($(this).parent().css("display")=="block"){  
-
-				        $(this).trigger("click");
-				    }
-				}); 
+//		    	$("#tree2").find(".tree-folder-header").each(function(){  
+//				    if($(this).parent().css("display")=="block"){  
+//
+//				        $(this).trigger("click");
+//				    }
+//				}); 
 
 
 
@@ -176,6 +176,9 @@ jQuery(function($) {
 		.on('closed', function(e) {
 		});
 	}
+	$(".a").on('mousedown', function(e) {
+		alert("a");
+	});
 	$.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
 		_title: function(title) {
 			var $title = this.options.title || '&nbsp;'
@@ -200,49 +203,6 @@ jQuery(function($) {
 		
 	});
 	
-	$("#btn_save").on('click', function(e) {
-		var function_ids = "";var permission_ids = "";
-		if($('#tree2').tree('selectedItems').length > 0){
-			$.each($('#tree2').tree('selectedItems'), function(index, value) {
-				function_ids += value.id + ",";
-			});
-			alert(function_ids);
-			if("" === function_ids){
-				$.gritter.add({
-					title: '系统提示：',
-					text: '<h5>请选择角色对应的权限信息！</h5>',
-					class_name: 'gritter-error'
-				});
-				return false;
-			}
-			
-			$.ajax({
-			    url: "saveRole",
-			    dataType: "json",
-				type: "get",
-			    data: {
-			    	"role_id" : $('#tree1').tree('selectedItems')[0].id,
-			    	"function_ids" : function_ids.substring(0,function_ids.length-1),
-			    	"permission_ids" : permission_ids.substring(0,permission_ids.length-1)
-			    },
-			    success:function(response){
-			    	$.gritter.add({
-						title: '系统提示：',
-						text: '<h5>保存成功！</h5>',
-						class_name: 'gritter-info'
-					});
-			    }
-			});
-			
-		}else{
-			$.gritter.add({
-				title: '系统提示：',
-				text: '<h5>请选择要保存的角色！</h5>',
-				class_name: 'gritter-error'
-			});
-			return false;
-		}
-	});
 	$(document).on("click",".editWorkgroup",function(){
 		
 		$('#editId').val($(this).closest('tr').find('td').eq(0).find('input').eq(0).val());
@@ -299,7 +259,8 @@ jQuery(function($) {
 								text: '<h5>编辑成功！</h5>',
 								class_name: 'gritter-info'
 							});
-					    	$("#editForm")[0].reset();
+					    	showtree2();
+					    	getWorkgroupListById($("#new_parentId").val(),$("#new_workshopId").val());
 
 					    	}else{
 					    		$.gritter.add({
@@ -345,8 +306,8 @@ jQuery(function($) {
 		    success:function(response){
 
 		    	$("#dialog-confirm").dialog("close");
-		    	showtree2();
-		    	getWorkgroupListById($("#new_parentId").val(),$("#new_showshopId").val());
+		    	showtree2();  
+		    	getWorkgroupListById($("#new_parentId").val(),$("#new_workshopId").val());
 		    }
 		});
 	});
@@ -354,12 +315,55 @@ jQuery(function($) {
 	$("#btn_cancel").on('click', function(e) {
 		$("#dialog-confirm").dialog("close");
 	});
-	
+	function ajaxDelete(){
+		var ids = '';
+		$(":checkbox").each(function(){
+			if($(this).prop("checked")){
+				if($(this).attr('fid')){
+					ids += $(this).attr('fid').split('_')[1] + ',';
+				}
+			}
+		});
+		if(ids===''){
+			$.gritter.add({
+				title: '系统提示：',
+				text: '<h5>请至少勾选一条记录！</h5>',
+				class_name: 'gritter-info'
+			});
+			return false;
+		}
+		$.ajax({
+		    url: "deleteWorkgroup",
+		    dataType: "json",
+			type: "get",
+		    data: {
+		    	"ids" : ids.substring(0,ids.length-1)
+		    },
+		    success:function(response){
+		    	if(response.success){
+			    	$.gritter.add({
+						title: '系统提示：',
+						text: '<h5>删除成功！</h5>',
+						class_name: 'gritter-info'
+					});
+			    	showtree2();
+			    	getWorkgroupListById($("#new_parentId").val(),$("#new_workshopId").val());
+		    	}else{
+		    		$.gritter.add({
+						title: '系统提示：',
+						text: '<h5>删除失败！</h5><br>'+response.message,
+						class_name: 'gritter-info'
+					});
+		    	}
+		    }
+		});
+	}
 });
 function getWorkgroupListById(id,workshopId,nodeLayer){
 	if(nodeLayer===0){
 		id="t"+id;
 	}
+//	alert("id="+id+"; workshopId="+workshopId);
 	var nodeName=getNodeName(id);
     $("#new_parentId").val(id);
     $("#new_workshopId").val(workshopId);
@@ -440,48 +444,7 @@ function getWorkgroupListById(id,workshopId,nodeLayer){
 		
 	});
 }
-function ajaxDelete(){
-	var ids = '';
-	$(":checkbox").each(function(){
-		if($(this).prop("checked")){
-			if($(this).attr('fid')){
-				ids += $(this).attr('fid').split('_')[1] + ',';
-			}
-		}
-	});
-	if(ids===''){
-		$.gritter.add({
-			title: '系统提示：',
-			text: '<h5>请至少勾选一条记录！</h5>',
-			class_name: 'gritter-info'
-		});
-		return false;
-	}
-	$.ajax({
-	    url: "deleteWorkgroup",
-	    dataType: "json",
-		type: "get",
-	    data: {
-	    	"ids" : ids.substring(0,ids.length-1)
-	    },
-	    success:function(response){
-	    	if(response.success){
-		    	$.gritter.add({
-					title: '系统提示：',
-					text: '<h5>删除成功！</h5>',
-					class_name: 'gritter-info'
-				});
-		    	showtree2();
-	    	}else{
-	    		$.gritter.add({
-					title: '系统提示：',
-					text: '<h5>删除失败！</h5><br>'+response.message,
-					class_name: 'gritter-info'
-				});
-	    	}
-	    }
-	});
-}
+
 function getNodeName(id){
 	var nodeName="";
 	$.ajax({
@@ -500,4 +463,12 @@ function getNodeName(id){
 		}
 	})
 	return nodeName;
+}
+//复选框全选或反选
+function selectAll() {
+    if ($("#selectAll").prop("checked")) {
+        $(":checkbox").prop("checked", true);
+    } else {
+        $(":checkbox").prop("checked", false);
+    }
 }

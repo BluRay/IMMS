@@ -42,13 +42,13 @@
 						<table>
 							<tr>
 								<td>生产工厂：</td>
-								<td><select id="search_factory" class="input-small" style="width:120px"></select></td>
+								<td><select id="search_factory" class="input-small" style="height: 30px;width:120px"></select></td>
 								<td>&nbsp;订单编号：</td>
-								<td><input id="search_order_no" placeholder="请输入订单编号..." style="width:120px" class="col-sm-10" type="text"></td>
+								<td><input id="search_order_no" placeholder="请输入订单编号..." style="height: 30px;width:120px" class="col-sm-10" type="text"></td>
 								<td>&nbsp;计划月份：</td>
-								<td width="80px"><input id="search_plan_month" placeholder="计划月份..." onClick="WdatePicker({el:'search_plan_month',dateFmt:'yyyyMM'});" style="width:80px" type="text"></td>
+								<td width="80px"><input id="search_plan_month" placeholder="计划月份..." onClick="WdatePicker({el:'search_plan_month',dateFmt:'yyyyMM'});" style="height: 30px;width:80px" type="text"></td>
 								<td>&nbsp;计划版本：</td>
-								<td><input id="search_plan_version" placeholder="请输入计划版本..." class="col-sm-12" type="text"></td>
+								<td><input id="search_plan_version" style="height: 30px;" placeholder="请输入计划版本..." class="col-sm-12" type="text"></td>
 								<td><input type="button" class="btn btn-sm btn-success" id="btnQuery" value="查询" style="margin-left: 2px;"></input>&nbsp;</td>
 								<td></td>
 							</tr>
