@@ -846,5 +846,41 @@ public class TechController extends BaseController{
 		return model;
 	}
 	
+	/**
+	 * @author xiong.jianwu
+	 * 技改跟进（移动端）
+	 */
+	@RequestMapping("/techFollowMobile")
+	public ModelAndView techFollowMobile(){
+		mv.setViewName("tech/techFollow_Mobile");
+        return mv; 
+	}
 	
+	/**
+	 * @author xiong.jianwu
+	 * 跟进车号查询需要跟进的技改任务
+	 * @return
+	 */
+	@RequestMapping("/getTechtaskListByBus")
+	@ResponseBody
+	public ModelMap getTechtaskListByBus(){
+		model.clear();
+		String bus_number=request.getParameter("bus_number");
+		techService.getTechtaskListByBus(bus_number,model);
+		return model;
+	}
+	
+	/**
+	 * @author xiong.jianwu
+	 * 跟进车号查询需要跟进的技改任务
+	 * @return
+	 */
+	@RequestMapping("/followTechTaskByBus")
+	@ResponseBody
+	public ModelMap followTechTaskByBus(){
+		model.clear();
+		String bus_number=request.getParameter("bus_number");
+		techService.getTechtaskListByBus(bus_number,model);
+		return model;
+	}
 }

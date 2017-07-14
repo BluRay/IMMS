@@ -1106,6 +1106,13 @@
 		order by d.order_no
 		) tt
 	</select>
+	
+	<select id="queryTechTaskFollowList" parameterType="String" resultType="Map">
+		select f.id,t.task_content,f.factory,f.workshop
+		from BMS_TECH_TASK_FOLLOW f
+		left join BMS_TECH_TASK t on t.id=f.tech_task_id
+		where f.bus_number=#{bus_number}  and (f.confirmor_date&lt;=0 or f.confirmor_date is null)
+	</select>
 <!--  ###################  by xjw  end  ###############  -->
 	
 	

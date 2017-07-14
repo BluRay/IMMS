@@ -396,7 +396,7 @@ function ajaxQuery(){
 		            {"title":"VIN号",width:'80',"class":"center","data":"vin","defaultContent": ""},
 		            {"title":"车牌",width:'90',"class":"center","data":"license_number","defaultContent": ""},
 		            {"title":"里程",width:'50',"class":"center","data":"fault_mils","defaultContent": ""},
-		            {"title":"故障现象",width:'140',"class":"center","data":"fault_phenomenon","defaultContent": ""},
+		            {"title":"故障现象",width:'190',"class":"center","data":"fault_phenomenon","defaultContent": ""},
 		            {"title":"解决方法",width:'140',"class":"center","data":"resolve_method","defaultContent": ""},
 		            {"title":"处理时间",width:'90',"class":"center","data":"resolve_date","defaultContent": ""},
 		            {"title":"状态",width:'60',"class":"center","data":"is_closed","defaultContent": "",

@@ -17,6 +17,7 @@ import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.ModelMap;
 
 import com.byd.bms.tech.dao.ITechDao;
 import com.byd.bms.tech.service.ITechService;
@@ -473,7 +474,13 @@ public class TechServiceImpl implements ITechService {
 	public int queryChangeTypeReportCount(Map<String, Object> conditionMap) {
 		return techDao.queryChangeTypeReportCount(conditionMap);
 	}
-	
-	
-	
+
+	@Override
+	public void getTechtaskListByBus(String bus_number, ModelMap model) {
+		List<Map<String, String>> dataList = new ArrayList<Map<String, String>>();
+		dataList=techDao.queryTechTaskFollowList(bus_number);
+		model.put("data", dataList);
+	}
+
+		
 }

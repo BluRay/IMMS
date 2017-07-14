@@ -56,12 +56,12 @@
 								<td>&nbsp;问题主题：</td>
 								<td><input id="search_fault_description" placeholder="问题主题..." style="width:150px" type="text"></td>
 								<td>&nbsp;关闭情况：</td>
-								<td><select id="search_is_closed" class="form-control" style="width:80px"><option value="0">未关闭</option><option value="1">已关闭</option></select></td>
+								<td><select id="search_is_closed" class="form-control" style="width:80px"><option value="">全部</option><option value="0">未关闭</option><option value="1">已关闭</option></select></td>
 								<td><input id="btnQuery" type="button" class="btn btn-sm btn-primary" value="查询" style="margin-left: 2px;"></input><input id="btnAdd" type="button" class="btn btn-sm btn-success" value="新增" style="margin-left: 2px;"></input></td>
 							</tr>
 						</table>	
 					</div>	
-					<table id="tableData" class="table table-striped table-bordered table-hover" style="overflow-x:auto;font-size: 12px;">
+					<table id="tableData" class="table table-striped table-bordered table-hover" style="width:1600px;overflow-x:auto;overflow-y:scroll;font-size: 12px;">
 					</table>
 					</div>
 			</div><!-- /.main-content -->

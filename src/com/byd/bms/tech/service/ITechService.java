@@ -3,6 +3,8 @@ package com.byd.bms.tech.service;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.ui.ModelMap;
+
 public interface ITechService {
 	
 	/**
@@ -67,4 +69,6 @@ public interface ITechService {
 
 	public List<Map<String, Object>> queryChangeTypeReport(Map<String, Object> conditionMap);
 	public int queryChangeTypeReportCount(Map<String, Object> conditionMap);
+	
+	public void getTechtaskListByBus(String bus_number, ModelMap model);
 }

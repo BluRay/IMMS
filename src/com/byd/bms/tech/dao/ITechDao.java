@@ -2,6 +2,8 @@ package com.byd.bms.tech.dao;
 
 import java.util.List;
 import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository(value="techDao")
@@ -64,4 +66,5 @@ public interface ITechDao {
 	public int queryTechTaskReportCount2(Map<String, Object> conditionMap);
 	public List<Map<String, Object>> queryChangeTypeReport(Map<String, Object> conditionMap);
 	public int queryChangeTypeReportCount(Map<String, Object> conditionMap);
+	public List<Map<String, String>> queryTechTaskFollowList(@Param(value="bus_number")String bus_number);
 }
