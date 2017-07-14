@@ -140,10 +140,12 @@ public class CommonServiceImpl implements ICommonService {
 		return commonDao.getUserInfoByCard(card_no);
 	}
 	@Override
+	@DataSource("dataSourceSlave")
 	public void getIndexOrderData(String actYear,ModelMap model) {
 		model.put("data", commonDao.queryIndexOrderData(actYear));		
 	}
 	@Override
+	@DataSource("dataSourceSlave")
 	public void getIndexFactoryDailyData(Map<String, Object> condMap,
 			ModelMap model) {
 		model.put("data", commonDao.queryIndexFactoryDailyData(condMap));			
@@ -289,6 +291,7 @@ public class CommonServiceImpl implements ICommonService {
      * @param model
      */
 	@Override
+	@DataSource("dataSourceSlave")
 	public void getIndexFactoryPrdOrdData(String factory_id, ModelMap model) {
 		List<Map<String,Object>> datalist=new ArrayList<Map<String,Object>>();
 /*		 DecimalFormat df = new DecimalFormat("#.00");*/
@@ -300,6 +303,7 @@ public class CommonServiceImpl implements ICommonService {
 	 * @author xiong.jianwu
 	 */
 	@Override
+	@DataSource("dataSourceSlave")
 	public void getIndexOutputData(String actYear, ModelMap model) {
 		List<Map<String,Object>> datalist=new ArrayList<Map<String,Object>>();
 		List<Map<String,Object>> datalist_f=new ArrayList<Map<String,Object>>();
@@ -333,6 +337,7 @@ public class CommonServiceImpl implements ICommonService {
 	 * @author xiong.jianwu
 	 */
 	@Override
+	@DataSource("dataSourceSlave")
 	public void getIndexExceptionData(String factory, ModelMap model) {
 		List<Map<String,Object>> datalist=new ArrayList<Map<String,Object>>();
 		datalist=commonDao.queryIndexExceptionData(factory);
@@ -342,6 +347,7 @@ public class CommonServiceImpl implements ICommonService {
 	 * @author xiong.jianwu
 	 */
 	@Override
+	@DataSource("dataSourceSlave")
 	public void getIndexStaffCountData(ModelMap model) {
 		List<Map<String,Object>> datalist=new ArrayList<Map<String,Object>>();
 		List<Map<String,Object>> datalist_f=new ArrayList<Map<String,Object>>();

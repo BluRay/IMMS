@@ -195,7 +195,11 @@
 		WHERE m.plan_month = #{month} AND m.order_id = #{order_id}
 		AND m.factory_id = #{factory_id}
 		AND m.flag = (SELECT MAX(flag+0) FROM BMS_PLAN_MASTER_PLAN n WHERE
-		n.plan_month = #{month} AND n.order_id = #{order_id} AND n.factory_id = #{factory_id})		
+		n.plan_month = #{month} AND n.order_id = #{order_id} AND n.factory_id = #{factory_id}
+		AND version = (SELECT max(version) FROM BMS_PLAN_MASTER_PLAN WHERE factory_id = #{factory_id}
+		and order_id = #{order_id}
+		and plan_month = #{month})
+		)		
 		AND version = (SELECT max(version) FROM BMS_PLAN_MASTER_PLAN WHERE factory_id = #{factory_id} 
 		and order_id =#{order_id}
 		and plan_month = #{month}) order by (key_value + 0)
@@ -802,7 +806,7 @@
 		left join 
 		(select f.order_id,sum(f1.online_real_qty) real_qty,sum(f.online_real_qty) total_qty
 		from BMS_PD_PARTS_PLAN_FINISH f 
-		left join BMS_BASE_PARTS p1 on p1.id=f.parts_id 
+		left join BMS_BASE_KEY p1 on p1.value=f.parts_id AND p1.key_code ='BASE_PARTS'
 		left join BMS_PD_PARTS_PLAN_FINISH f1 on f.id=f1.id 
 		<if test="start_date !=null and start_date !=''">
 			and f1.prod_date >= #{start_date}
@@ -810,7 +814,7 @@
 		<if test="end_date !=null and end_date !=''">
 			and f1.prod_date &lt;= #{end_date}
 		</if>	
-		where f.factory_id=#{factory_id}  and p1.parts_name='中段车架总成' and p1.workshop_name='部件' group by f.order_id ) tmp
+		where f.factory_id=#{factory_id}  and p1.key_name='中段车架总成' group by f.order_id ) tmp
 		on tmp.order_id=fo.order_id	 
 		where fo.factory_id=#{factory_id} and fo.order_id is not null and fo.status='0'
 		<if test="order_no !=null and order_no !=''">
@@ -825,8 +829,8 @@
 		left join BMS_BASE_BUS_TYPE  t on o.bus_type_id=t.id
 		left join 
 		(select f.order_id,sum(f1.offline_real_qty) real_qty,sum(f.offline_real_qty) total_qty
-		from BMS_PD_PARTS_PLAN_FINISH f 
-		left join BMS_BASE_PARTS p1 on p1.id=f.parts_id 
+		from BMS_PD_PARTS_PLAN_FINISH f
+		left join BMS_BASE_KEY p1 on p1.value=f.parts_id AND p1.key_code ='BASE_PARTS'
 		left join BMS_PD_PARTS_PLAN_FINISH f1 on f.id=f1.id 
 		<if test="start_date !=null and start_date !=''">
 			and f1.prod_date >= #{start_date}
@@ -834,7 +838,7 @@
 		<if test="end_date !=null and end_date !=''">
 			and f1.prod_date &lt;= #{end_date}
 		</if>	
-		where f.factory_id=#{factory_id}  and p1.parts_name='喷砂' and p1.workshop_name='部件' group by f.order_id ) tmp
+		where f.factory_id=#{factory_id}  and p1.key_name='喷砂' group by f.order_id ) tmp
 		on tmp.order_id=fo.order_id	 
 		where fo.factory_id=#{factory_id} and fo.order_id is not null and fo.status='0'
 		<if test="order_no !=null and order_no !=''">

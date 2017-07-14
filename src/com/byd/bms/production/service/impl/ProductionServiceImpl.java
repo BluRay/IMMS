@@ -247,36 +247,43 @@ public class ProductionServiceImpl implements IProductionService {
 	}
 
 	@Override
+	@DataSource("dataSourceSlave")
 	public List<Map<String, String>> getProductionSearchBusinfo(String bus_number) {
 		return productionDao.getProductionSearchBusinfo(bus_number);
 	}
 	
 	@Override
+	@DataSource("dataSourceSlave")
 	public List<Map<String,String>> getProductionSearchScan(String bus_number){
 		return productionDao.getProductionSearchScan(bus_number);
 	}
 	
 	@Override
+	@DataSource("dataSourceSlave")
 	public List<Map<String,String>> getNamePlateInfo(String bus_number){
 		return productionDao.getNamePlateInfo(bus_number);
 	}
 	
 	@Override
+	@DataSource("dataSourceSlave")
 	public List<Map<String,String>> getProductionSearchException(String bus_number){
 		return productionDao.getProductionSearchException(bus_number);
 	}
 	
 	@Override
+	@DataSource("dataSourceSlave")
 	public List<Map<String,String>> getCertificationInfo(String bus_number){
 		return productionDao.getCertificationInfo(bus_number);
 	}
 	
 	@Override
+	@DataSource("dataSourceSlave")
 	public List<Map<String,String>> getEcnTasksByBusNumber(String bus_number){
 		return productionDao.getEcnTasksByBusNumber(bus_number);
 	}
 	
 	@Override
+	@DataSource("dataSourceSlave")
 	public List<Map<String,String>> getQmTestCardList(String bus_number){
 		return productionDao.getQmTestCardList(bus_number);
 	}
@@ -493,14 +500,17 @@ public class ProductionServiceImpl implements IProductionService {
 
 	/*******************  tangjin end  **************************/
 	@Override
+	@DataSource("dataSourceSlave")
 	public List<Map<String,String>> getProductionSearch(Map<String,Object> queryMap){
 		return productionDao.getProductionSearch(queryMap);
 	}
 	@Override
+	@DataSource("dataSourceSlave")
 	public List<Map<String,String>> getProductionWIPBusInfo(Map<String,Object> queryMap){
 		return productionDao.getProductionWIPBusInfo(queryMap);
 	}
 	@Override
+	@DataSource("dataSourceSlave")
 	public List<Map<String,String>> getProductionSearchCarinfo(Map<String,Object> queryMap){
 		return productionDao.getProductionSearchCarinfo(queryMap);
 	}

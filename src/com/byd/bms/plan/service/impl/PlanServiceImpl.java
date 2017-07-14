@@ -154,6 +154,7 @@ public class PlanServiceImpl implements IPlanService {
 	}
 
 	@Override
+	@DataSource("dataSourceSlave")
 	public List<PlanMasterPlan> showPlanMasterList(Map<String, Object> queryMap) {
 		List<PlanMasterPlan> datalist = planDao.getPlanMasterList(queryMap);
 		return datalist;
@@ -729,11 +730,13 @@ public class PlanServiceImpl implements IPlanService {
 	}
 
 	@Override
+	@DataSource("dataSourceSlave")
 	public List<Map<String, String>> getPlanSerach(Map<String, Object> queryMap) {
 		return planDao.getPlanSerach(queryMap);
 	}
 
 	@Override
+	@DataSource("dataSourceSlave")
 	public Map<String, Object> showPlanSearchDetail(Map<String, Object> queryMap) {
 		Map<String, Object> result=new HashMap<String,Object>();
 		String date_array = queryMap.get("date_array").toString();

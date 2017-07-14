@@ -44,7 +44,6 @@ public class OrderServiceImpl implements IOrderService {
 	@Autowired 
 	private HttpSession session;
 	@Override
-	@DataSource("dataSourceSlave")
 	public Map<String, Object> getOrderListPage(Map<String, Object> condMap) {
 		int totalCount=0;
 		List<Map<String, Object>> datalist=orderDao.getOrderList(condMap);
@@ -197,6 +196,7 @@ public class OrderServiceImpl implements IOrderService {
 	}
 
 	@Override
+	@DataSource("dataSourceSlave")
 	public List getBusNumberByOrder(Map<String, Object> conditionMap) {
 		List datalist=new ArrayList();
 		datalist=orderDao.queryBusNumberByOrder(conditionMap);
@@ -319,6 +319,7 @@ public class OrderServiceImpl implements IOrderService {
 	}
 
 	@Override
+	@DataSource("dataSourceSlave")
 	public ModelMap getOrderQueryData(Map<String, Object> condMap) {
 		List datalist=new ArrayList();
 		datalist=orderDao.queryOrderQueryList(condMap);

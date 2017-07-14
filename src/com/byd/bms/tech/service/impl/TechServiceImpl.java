@@ -8,14 +8,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import javax.annotation.Resource;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import com.byd.bms.tech.dao.ITechDao;
 import com.byd.bms.tech.service.ITechService;
+import com.byd.bms.util.DataSource;
 
 @Service
 public class TechServiceImpl implements ITechService {
@@ -349,6 +354,7 @@ public class TechServiceImpl implements ITechService {
 
 	@SuppressWarnings("rawtypes")
 	@Override
+	@DataSource("dataSourceSlave")
 	public Map<String, Object> searchTaskList(String conditions) {
 		JSONObject jo=JSONObject.fromObject(conditions);
 		Map<String,Object> conditionMap=new HashMap<String,Object>();
@@ -438,6 +444,7 @@ public class TechServiceImpl implements ITechService {
 	}
 
 	@Override
+	@DataSource("dataSourceSlave")
 	public Map<String, Object> checkTaskReport(Map<String, Object> conditionMap) {
 		String tab_index = conditionMap.get("tab_index").toString();
 		List<Map<String, String>> dataList = new ArrayList<Map<String, String>>();;
@@ -456,11 +463,13 @@ public class TechServiceImpl implements ITechService {
 	}
 
 	@Override
+	@DataSource("dataSourceSlave")
 	public List<Map<String, Object>> queryChangeTypeReport(Map<String, Object> conditionMap) {
 		return techDao.queryChangeTypeReport(conditionMap);
 	}
 
 	@Override
+	@DataSource("dataSourceSlave")
 	public int queryChangeTypeReportCount(Map<String, Object> conditionMap) {
 		return techDao.queryChangeTypeReportCount(conditionMap);
 	}
