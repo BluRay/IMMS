@@ -618,7 +618,10 @@
 		SELECT * FROM BMS_QM_PROCESS_PROBLEM WHERE id = #{id}
 	</select>
 	<select id="showProblemImproveInfo" parameterType="int" resultType="com.byd.bms.quality.model.ProblemImproveBean">
-		SELECT * FROM BMS_QM_IMPROVE_PROBLEM WHERE id = #{id}
+		SELECT id,fault_description,factory_id,customer_name,report_status,vin,order_id,order_describe,license_number,fault_phenomenon,
+		fault_components,fault_date,bus_type,fault_mils,fault_level_id,response_workshop,fault_reason,resolve_method,resolve_date,
+		risk_evaluate,keystone_attention,fault_pic_path,8D_REPORT_PATH AS eightD_report_path,close_evidenc_path,is_closed,
+		memo,editor_id,edit_date FROM BMS_QM_IMPROVE_PROBLEM WHERE id = #{id}
 	</select>
 	
 	

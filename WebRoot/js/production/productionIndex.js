@@ -68,6 +68,15 @@ $(document).ready(function () {
 		}
 		
 	}
+
+	/**
+	 *	监控图页面跳转
+	 */
+	function monitorFoward(workshop){
+		window.location.href='monitorBoard?workshop='+workshop+'&factory='+$("#search_factory").val()
+		+'&factory_name='+$("#search_factory :selected").text();
+	}
+	
 	function ajaxQuery(){
 		$("#node-online-w-a").html("");
 		$("#node-online-w-b").html("");

@@ -1292,8 +1292,10 @@ public class PlanController extends BaseController{
 		String curTime = df.format(new Date());
 		String staff_number = request.getSession().getAttribute("staff_number") + "";
 		String form_str = request.getParameter("form_str");
+		String cardNumber = request.getParameter("cardNumber");
+		String receiver = request.getParameter("receiver");
 		String factory_id = request.getParameter("factory_id");
-		Map<String, Object> result = planService.saveOrderDispatchRecord(curTime,staff_number,factory_id,form_str);
+		Map<String, Object> result = planService.saveOrderDispatchRecord(curTime,staff_number,factory_id,form_str,cardNumber,receiver);
 		initModel(true,null,result);
 		model = mv.getModelMap();
 		return model;

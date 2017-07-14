@@ -167,7 +167,7 @@ $(document).ready(function () {
 				var i = $('<i class="'+value.icon+'"></i>');
 			}
 			i.appendTo(a);
-			var span = $('<span class="menu-text"> '+value.name+' </span>');
+			var span = $('<span class="menu-text">'+value.name+' </span>');
 			span.appendTo(a);
 			if(value.list.length>0){
 				a.addClass('dropdown-toggle');
@@ -272,7 +272,7 @@ function traverseTree(node,parentli,two){
 		if(two){
 			a.append('<span><i class="'+value.icon+'" style="margin-right:3px;"></i>'+value.name+'</span>');
 		}else{
-			a.append(value.name);
+			a.append('&nbsp;&nbsp;&nbsp;'+value.name);
 		}
 		a.appendTo(li);
 		var b1 = $('<b class="arrow"></b>');

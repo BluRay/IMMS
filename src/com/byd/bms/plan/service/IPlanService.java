@@ -58,7 +58,7 @@ public interface IPlanService {
 	public int getOrderDispatchQty(int orderId);
 	public int editDispatchPlan(PlanBusDispatchPlan planBusDispatchPlan);
 	public List<Map<String,String>> getOrderDispatchList(Map<String, Object> conditionMap);//根据订单编号查询该订单下附件交接记录
-	public Map<String,Object> saveOrderDispatchRecord(String curTime,String edit_user,String factory_id,String form_str);
+	public Map<String,Object> saveOrderDispatchRecord(String curTime,String edit_user,String factory_id,String form_str,String cardNumber,String receiver);
 	public PlanBus getBusInfoByBusNo(Map<String, Object> conditionMap);
 	public List<Map<String,Object>> getBusToolList();
 	public Map<String,Object> saveDispatchRecord(String curTime,String edit_user,String form_str,String plan_status);

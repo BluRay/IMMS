@@ -646,13 +646,14 @@
 		]]>
 	</select>
 	<select id="getBusTransferInList" parameterType="Map" resultType="Map">
-		SELECT t.bus_number,t.tfrom_factory_id,b.vin,b.status,o.id order_id,o.order_no,o.order_name,c.order_config_name,c.customer,f.factory_name
+		SELECT t.bus_number,t.tfrom_factory_id,b.vin,b.status,o.id order_id,o.order_no,o.order_name,c.order_config_name,c.customer,f.factory_name,p.process_name
 		FROM BMS_PLAN_BUS_TRANSFER_LOG t
 		LEFT OUTER JOIN BMS_PLAN_BUS b ON
 		t.bus_number = b.bus_number
 		LEFT OUTER JOIN BMS_OR_ORDER o ON b.order_id =
 		o.id LEFT OUTER JOIN BMS_OR_ORDER_CONFIG c ON b.order_config_id = c.id
 		LEFT OUTER JOIN BMS_BASE_FACTORY f ON b.factory_id = f.id
+		LEFT OUTER JOIN BMS_BASE_PROCESS p ON b.latest_process_id = p.id
 		WHERE
 		tto_factory_id = #{factory_id_in} AND b.status = 1 and tto_people_id=0
 		<if test="bus_numbers != null ">
@@ -1219,7 +1220,7 @@
 		FROM
 		BMS_PLAN_ORDER_TOOLS_DISPATCH d 
 		LEFT JOIN BMS_OR_ORDER o on d.order_no = o.order_no
-		LEFT JOIN BMS_BASE_USER u ON d.editor_id = u.id
+		LEFT JOIN BMS_BASE_USER u ON d.editor_id = u.staff_number
 		WHERE d.order_no=#{orderNo}
 		AND d.tool_name like CONCAT('%',#{dis_name},'%')
 		AND d.receiver like CONCAT('%',#{dis_receiver},'%')

@@ -178,7 +178,7 @@ $(document).ready(function () {
 		    		tr = $("<tr id =\""+value.bus_number+"\" />");
 					$("<td style=\"text-align:center;\" />").html("<input id=\"check_"+value.bus_number+"\" type=\"checkbox\">").appendTo(tr);
 					$("<td style=\"text-align:center;\" />").html(value.bus_number).appendTo(tr);
-	    			$("<td style=\"text-align:center;\" />").html(value.ORDER_NAME).appendTo(tr);
+	    			$("<td style=\"text-align:center;\" />").html(value.order_no).appendTo(tr);
 	    			$("<td style=\"text-align:center;\" />").html(value.bus_number.substr(0,value.bus_number.indexOf("-"))).appendTo(tr);
 	    			var bus_numberstr = value.bus_number.substr(value.bus_number.indexOf("-")+1,value.bus_number.length);
 	    			var bus_numberstr2 = bus_numberstr.substr(bus_numberstr.indexOf("-")+1,bus_numberstr.length);
@@ -187,7 +187,7 @@ $(document).ready(function () {
 	    			$("<td style=\"text-align:center;\" />").html(value.order_config_name).appendTo(tr);
 	    			$("<td style=\"text-align:center;\" />").html(value.vin).appendTo(tr);
 	    			$("<td style=\"text-align:center;\" />").html(value.factory_name).appendTo(tr);
-	    			$("<td style=\"text-align:center;\" />").html("").appendTo(tr);
+	    			$("<td style=\"text-align:center;\" />").html(value.process_name).appendTo(tr);
 	    			$("<td style=\"text-align:center;\" />").html((value.status==0)?"正常":"冻结").appendTo(tr);
 	    			$(tr).data("order_id",value.order_id);
 	    			$(tr).data("order_no",value.order_no);

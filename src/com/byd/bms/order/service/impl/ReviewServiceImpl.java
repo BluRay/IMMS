@@ -25,12 +25,14 @@ import com.byd.bms.order.service.IReviewService;
 import com.byd.bms.setting.dao.IBaseDataDao;
 import com.byd.bms.setting.dao.ISettingDao;
 import com.byd.bms.setting.model.BmsBaseFactory;
+import com.byd.bms.util.DataSource;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 @Service
+@DataSource("dataSourceMaster")
 public class ReviewServiceImpl implements IReviewService {
 	@Resource(name="reviewDao")
 	private IReviewDao reviewDao;

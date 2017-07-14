@@ -20,7 +20,9 @@ import com.byd.bms.setting.model.BmsBaseStandardWorkgroup;
 import com.byd.bms.setting.model.BmsBaseVinRule;
 import com.byd.bms.setting.model.BmsBaseWorkshop;
 import com.byd.bms.setting.service.IBaseDataService;
+import com.byd.bms.util.DataSource;
 @Service
+@DataSource("dataSourceMaster")
 public class BaseDataServiceImpl implements IBaseDataService {
 	@Resource(name="baseDataDao")
 	private IBaseDataDao baseDataDao;

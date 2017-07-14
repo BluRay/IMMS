@@ -286,10 +286,10 @@ function ajaxQueryTab09(){
 	    		var tr = $("<tr height='30px' id= '"+value.id+"'/>");
     			$("<td style=\"text-align:center;padding:3px\" />").html(index + 1).appendTo(tr);
     			$("<td style=\"text-align:center;padding:3px\" />").html(value.bus_number).appendTo(tr);
-    			$("<td style=\"text-align:center;padding:3px\" />").html(value.factory_name).appendTo(tr);
-    			$("<td style=\"text-align:center;padding:3px\" />").html(value.workshop_name).appendTo(tr);
+    			$("<td style=\"text-align:center;padding:3px\" />").html(value.factory).appendTo(tr);
+    			$("<td style=\"text-align:center;padding:3px\" />").html(value.workshop).appendTo(tr);
     			$("<td style=\"text-align:center;padding:3px\" />").html(value.line).appendTo(tr);
-    			$("<td style=\"text-align:center;padding:3px\" />").html(value.process_name).appendTo(tr);
+    			$("<td style=\"text-align:center;padding:3px\" />").html(value.process).appendTo(tr);
     			//severity_level 0:不影响;1:普通;2:严重
     			var severity_level = "不影响";
     			if(value.severity_level_id == "1")severity_level = "普通";

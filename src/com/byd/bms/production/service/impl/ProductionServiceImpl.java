@@ -21,12 +21,14 @@ import org.springframework.ui.ModelMap;
 import com.byd.bms.production.dao.IProductionDao;
 import com.byd.bms.production.model.ProductionException;
 import com.byd.bms.production.service.IProductionService;
+import com.byd.bms.util.DataSource;
 
 /**
  * @author xiong.jianwu
  *	生产模块service实现
  */
 @Service
+@DataSource("dataSourceMaster")
 public class ProductionServiceImpl implements IProductionService {
 	@Resource(name="productionDao")
 	private IProductionDao productionDao;

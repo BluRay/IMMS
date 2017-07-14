@@ -123,7 +123,7 @@
 						<td width="100px"></td><td align="right">工号：</td><td colspan=3><input type="text" class="input-large" id="workcardid"/></td>
 					</tr>
 					<tr style="height:40px">
-						<td></td><td align="right">姓名：</td><td colspan=3><input type="text" class="input-large" id="receiver"/></td>
+						<td></td><td align="right">姓名：</td><td colspan=3><input type="text" disabled="disabled" class="input-large" id="receiver"/></td>
 					</tr>
 				</table>
 			</form>

@@ -24,11 +24,13 @@ import org.springframework.ui.ModelMap;
 import com.byd.bms.order.dao.IReviewDao;
 import com.byd.bms.order.model.BmsOrderReviewResults;
 import com.byd.bms.snaker.engine.SnakerEngineFacets;
+import com.byd.bms.util.DataSource;
 import com.byd.bms.util.dao.ICommonDao;
 import com.byd.bms.util.model.BmsBaseProcess;
 import com.byd.bms.util.model.BmsBaseTask;
 import com.byd.bms.util.service.ICommonService;
 @Service
+@DataSource("dataSourceMaster")
 public class CommonServiceImpl implements ICommonService {
 	@Resource
 	private ICommonDao commonDao;

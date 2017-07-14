@@ -5,11 +5,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.annotation.Resource;
+
 import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import com.byd.bms.order.model.BmsOrder;
 import com.byd.bms.plan.dao.IPlanDao;
 import com.byd.bms.plan.model.PlanMasterPlan;
@@ -27,10 +31,12 @@ import com.byd.bms.plan.model.PlanIssuanceTotal;
 import com.byd.bms.plan.model.PlanMasterIndex;
 import com.byd.bms.plan.service.IPlanService;
 import com.byd.bms.production.model.ProductionException;
+import com.byd.bms.util.DataSource;
 import com.byd.bms.util.ExcelModel;
 import com.byd.bms.util.model.BmsBaseOperateChangeLog;
 
 @Service
+@DataSource("dataSourceMaster")
 public class PlanServiceImpl implements IPlanService {
 	static Logger logger = Logger.getLogger("PLAN");
 	private static final Map<String,String> vinYearMap=new HashMap<String,String>();
@@ -1203,7 +1209,7 @@ public class PlanServiceImpl implements IPlanService {
 
 	@Override
 	@Transactional
-	public Map<String, Object> saveOrderDispatchRecord(String curTime, String edit_user,String factory_id, String form_str) {
+	public Map<String, Object> saveOrderDispatchRecord(String curTime, String edit_user,String factory_id, String form_str,String cardNumber,String receiver) {
 		//form_str:aaaaa,1,d,4,D2017007,,,; bbbbb,2,d,10,D2017007,,,
 		String[] form_date = form_str.split(";");
 		for (int i = 0 ; i <form_date.length ; i++ ) {
@@ -1215,8 +1221,8 @@ public class PlanServiceImpl implements IPlanService {
 			recode_map.put("unit", recode[2]);
 			recode_map.put("quantity", recode[3]);
 			recode_map.put("order_no", recode[4]);
-			recode_map.put("receiver", recode[5]);
-			recode_map.put("workcardid", recode[6]);
+			recode_map.put("receiver", receiver);
+			recode_map.put("workcardid", cardNumber);
 			recode_map.put("department", recode[7]);
 			recode_map.put("factory_id", factory_id);
 			recode_map.put("editor_id", edit_user);

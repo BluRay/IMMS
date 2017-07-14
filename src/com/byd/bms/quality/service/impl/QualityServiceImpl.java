@@ -24,7 +24,9 @@ import com.byd.bms.quality.model.ProblemImproveBean;
 import com.byd.bms.quality.model.ProcessFaultBean;
 import com.byd.bms.quality.model.QualityTargetBean;
 import com.byd.bms.quality.model.StdFaultLibBean;
+import com.byd.bms.util.DataSource;
 @Service
+@DataSource("dataSourceMaster")
 public class QualityServiceImpl implements IQualityService {
 	@Resource(name="qualityDao")
 	private IQualityDao qualityDao;

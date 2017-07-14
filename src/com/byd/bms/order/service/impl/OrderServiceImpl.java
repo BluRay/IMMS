@@ -26,6 +26,7 @@ import com.byd.bms.order.model.BmsOrder;
 import com.byd.bms.order.model.BmsOrderConfigAllot;
 import com.byd.bms.order.model.BmsOrderConfigDetail;
 import com.byd.bms.order.service.IOrderService;
+import com.byd.bms.util.DataSource;
 import com.byd.bms.util.dao.ICommonDao;
 import com.byd.bms.util.model.BmsBaseTask;
 import com.google.gson.Gson;
@@ -34,6 +35,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 @Service
+@DataSource("dataSourceMaster")
 public class OrderServiceImpl implements IOrderService {
 	@Resource(name="orderDao")
 	private IOrderDao orderDao;
@@ -42,6 +44,7 @@ public class OrderServiceImpl implements IOrderService {
 	@Autowired 
 	private HttpSession session;
 	@Override
+	@DataSource("dataSourceSlave")
 	public Map<String, Object> getOrderListPage(Map<String, Object> condMap) {
 		int totalCount=0;
 		List<Map<String, Object>> datalist=orderDao.getOrderList(condMap);
@@ -129,10 +132,8 @@ public class OrderServiceImpl implements IOrderService {
 				orderDao.updateFactoryOrder(factoryorder);//更新工厂订单production_qty 加上新的产地分配数量
 			}
 		}
-		
 		//当production_qty减少为0时删除该factory_order
 		orderDao.deleteFactoryOrderNoProduction(Integer.parseInt(ordermap.get("order_id")));
-		
 	}
 
 	@Override

@@ -450,39 +450,238 @@
 				FROM BMS_PLAN_BUS b
 				left join BMS_OR_ORDER o on b.order_id=o.id
 				where b.factory_id=#{factoryId}
-				and b.welding_offline_date is not null and b.painting_online_date is null
+				and b.welding_offline_date>0 and b.painting_online_date &lt;=0
 		union all
 		SELECT 'WIP_PC' process_code,count(b.bus_number) process_num,'' line
 				FROM BMS_PLAN_BUS b
 				left join BMS_OR_ORDER o on b.order_id=o.id
 				where b.factory_id=#{factoryId}
-				and b.painting_offline_date is not null and b.chassis_online_date is null
+				and b.painting_offline_date >0 and b.chassis_online_date &lt;=0
 		union all
 		SELECT 'WIP_CA' process_code,count(b.bus_number) process_num,'' line
 				FROM BMS_PLAN_BUS b
 				left join BMS_OR_ORDER o on b.order_id=o.id
 				where b.factory_id=#{factoryId}
-				and b.chassis_offline_date is not null and b.assembly_online_date is null
+				and b.chassis_offline_date >0 and b.assembly_online_date &lt;=0
 		union all
 		SELECT  '焊装在制' process_code,COUNT(id) AS process_num,'' line 
 				FROM BMS_PLAN_BUS
 				WHERE factory_id = #{factoryId}
-				AND welding_online_date IS NOT NULL AND welding_offline_date IS NULL
+				AND welding_online_date >0 AND welding_offline_date &lt;=0
 		union all
 		SELECT  '涂装在制' process_code,COUNT(id) AS process_num,'' line 
 				FROM BMS_PLAN_BUS
 				WHERE factory_id = #{factoryId}
-				AND painting_online_date IS NOT NULL AND painting_offline_date IS NULL
+				AND painting_online_date >0 AND painting_offline_date &lt;=0
 		union all
 		SELECT  '底盘在制' process_code,COUNT(id) AS process_num,'' line 
 				FROM BMS_PLAN_BUS
 				WHERE factory_id = #{factoryId}
-				AND chassis_online_date IS NOT NULL AND chassis_offline_date IS NULL
+				AND chassis_online_date >0 AND chassis_offline_date&lt;=0
 		union all
 		SELECT  '总装在制' process_code,COUNT(id) AS process_num,'' line 
 				FROM BMS_PLAN_BUS
 				WHERE factory_id = #{factoryId}
-				AND assembly_online_date IS NOT NULL AND assembly_offline_date IS NULL	
+				AND assembly_online_date >0 AND assembly_offline_date &lt;=0
 	</select>
+<select id="getIndexExceptionList" parameterType="Map"
+		resultType="Map">
+		SELECT e.bus_number,k.key_name reason,e.workshop workshop_name,e.process
+		FROM BMS_PD_PRODUCTION_EXCEPTION e 
+		left join BMS_BASE_KEY k on e.reason_type_id=k.id
+		where e.status='0'
+		<if test="factory !=null ">
+			and e.factory=#{factory}
+		</if>
+		<if test="workshop !=null and workshop !=''">
+			and e.workshop=#{workshop}
+		</if>
+		order by e.edit_date desc
+		limit 0,10
+	</select>
+	<select id="getPauseList" parameterType="Map" resultType="Map">
+		SELECT w.workshop_name,k.key_name reason,concat(s.line,'线') line
+		FROM BMS_PLAN_STOPLINE s
+		left join BMS_BASE_KEY k on s.reason_type_id=k.id
+		left join BMS_BASE_WORKSHOP w on w.id=s.workshop_id
+		where s.end_time&lt;=0
+		<if test="factoryId !=null">
+			and s.factory_id=#{factoryId}
+		</if>
+		<if test="workshop !=null and workshop !=''">
+			and w.workshop_name=#{workshop}
+		</if>
+		order by s.create_time desc
+		limit 0,1
+	</select>
+	<select id="getIndexWorkshopProduction" parameterType="Map"
+		resultType="Map">
+		select tmp2.process_node,ifnull(tmp1.plan_total,0) plan_total,ifnull(tmp2.online_num,0) done_num 
+		from(
+		select sum(p.plan_qty) plan_total,k.key_name process_node 
+		from BMS_PLAN_PRODUCTION_PLAN p 
+		left join BMS_BASE_KEY k on p.plan_code_value=k.value and k.key_code='PLAN_CODE'
+		where p.factory_id=#{factoryId} and p.plan_date=#{curDate} and k.key_name = CONCAT(#{workshop},'上线')
+		group by k.key_name) tmp1
+		right join
+		(
+		select
+		CONCAT(#{workshop},'上线') process_node,count(b.bus_number) online_num
+		from BMS_PLAN_BUS
+		b where
+		<if test="workshop=='焊装'">
+		<![CDATA[
+			b.welding_online_date <=CONCAT(#{curDate},' 17:10:00') 
+			and b.welding_online_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:10:00') 
+		]]>
+		</if>
+		<if test="workshop=='涂装'">
+		<![CDATA[
+			b.painting_online_date <=CONCAT(#{curDate},' 17:10:00') 
+			and b.painting_online_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:10:00')			
+		]]>
+		</if>
+		<if test="workshop=='底盘'">
+		<![CDATA[
+			b.chassis_online_date <=CONCAT(#{curDate},' 17:10:00') 
+			and b.chassis_online_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:10:00')
+		]]>
+		</if>
+		<if test="workshop=='总装'">
+		<![CDATA[
+			b.assembly_online_date <=CONCAT(#{curDate},' 17:10:00') 
+			and b.assembly_online_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:10:00')
+		]]>
+		</if>
+		<if test="workshop=='检测线'">
+		<![CDATA[
+			b.testline_online_date <=CONCAT(#{curDate},' 17:10:00') 
+			and b.testline_online_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:10:00')
+		]]>
+		</if>
 
+		and b.factory_id=#{factoryId}
+		)tmp2 on tmp1.process_node=tmp2.process_node
+		union all
+		select tmp3.process_node,ifnull(tmp1.plan_total,0) plan_tota,ifnull(tmp3.offline_num,0) done_num 
+		from(
+		select sum(p.plan_qty) plan_total,k.key_name process_node 
+		from BMS_PLAN_PRODUCTION_PLAN p 
+		left join BMS_BASE_KEY k on p.plan_code_value=k.value and k.key_code='PLAN_CODE'
+		where p.plan_date=#{curDate} and k.key_name = CONCAT(#{workshop},'下线')
+		<if test="factoryId !=null">
+			and p.factory_id=#{factoryId}
+		</if>
+		group by k.key_name) tmp1
+		right join
+		(
+		select CONCAT(#{workshop},'下线')
+		process_node,count(b.bus_number) offline_num from BMS_PLAN_BUS
+		b where
+		<if test="workshop=='焊装'">
+		<![CDATA[
+			b.welding_offline_date <=CONCAT(#{curDate},' 17:10:00') 
+			and b.welding_offline_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:10:00')
+		]]>
+		</if>
+		<if test="workshop=='涂装'">
+		<![CDATA[
+			b.painting_offline_date <=CONCAT(#{curDate},' 17:10:00') 
+			and b.painting_offline_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:10:00')
+		]]>
+		</if>
+		<if test="workshop=='底盘'">
+		<![CDATA[
+			b.chassis_offline_date <=CONCAT(#{curDate},' 17:10:00') 
+			and b.chassis_offline_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:10:00')
+		]]>
+		</if>
+		<if test="workshop=='总装'">
+		<![CDATA[
+			b.assembly_offline_date <=CONCAT(#{curDate},' 17:10:00') 
+			and b.assembly_offline_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:10:00')
+		]]>
+		</if>
+		<if test="workshop=='检测线'">
+		<![CDATA[
+			b.testline_offline_date <=CONCAT(#{curDate},' 17:10:00') 
+			and b.testline_offline_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:10:00')
+		]]>
+		</if>
+		<if test="workshop=='玻璃钢'">
+		<![CDATA[
+			b.fiberglass_offline_date <=CONCAT(#{curDate},' 17:10:00') 
+			and b.fiberglass_offline_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:10:00')			
+		]]>
+		</if>
+		<if test="factoryId !=null">
+			and b.factory_id=#{factoryId}
+		</if>
+		)tmp3 on tmp1.process_node=tmp3.process_node;
+
+	</select>
+	<!-- 查询首页DUP -->
+	<select id="queryIndexDpuData" parameterType="Map" resultType="Map">
+		select  t.result_judge, t.bus_number,t.edit_date item,k.key_name workshop_name,t.factory_id,t.test_node_id
+		from BMS_QM_TEST_CARD t
+		left join BMS_BASE_KEY k on k.id=t.test_node_id
+		where t.result_judge ='不合格' and t.test_date=#{curDate} and t.factory_id=#{factoryId}
+		group by t.test_date,k.key_name ,t.factory_id
+	</select>
+	<!-- 查询首页一次校检合格率 -->
+	<select id="queryIndexPassRateData" parameterType="Map"
+		resultType="Map">
+		select  round(count(t1.bus_number)/count(t.bus_number)*100,2) pass_rate,
+		t.factory_id,k.key_name workshop_name,t.edit_date item
+		from BMS_QM_TEST_CARD t
+		left join BMS_QM_TEST_CARD t1 on t.id=t1.id and t1.result='0'
+		left join BMS_BASE_KEY k on k.id=t.test_node_id
+		where t.test_date=#{curDate} and t.factory_id=#{factoryId}
+		group by t.factory_id,k.key_name,t.edit_date
+	</select>
+	<!-- 生产结存查询 -->
+	<select id="getProductionSearch" parameterType="Map" resultType="Map">
+		SELECT * FROM
+		(SELECT COUNT(id) AS welding_count FROM BMS_PLAN_BUS
+		WHERE factory_id = #{factoryId}
+		AND welding_online_date IS NOT NULL AND welding_offline_date IS NULL) a,
+		(SELECT COUNT(id) AS fiberglass_count FROM BMS_PLAN_BUS WHERE
+		factory_id = #{factoryId}
+		AND welding_offline_date IS NOT NULL AND fiberglass_offline_date IS NULL)
+		b,
+		(SELECT COUNT(id) AS painting_count FROM BMS_PLAN_BUS WHERE
+		factory_id = #{factoryId}
+		AND painting_online_date IS NOT NULL AND painting_offline_date IS NULL)
+		c,
+		(SELECT COUNT(id) AS chassis_count FROM BMS_PLAN_BUS WHERE
+		factory_id = #{factoryId}
+		AND chassis_online_date IS NOT NULL AND chassis_offline_date IS NULL) d,
+		(SELECT COUNT(id) AS assembly_count FROM BMS_PLAN_BUS WHERE factory_id
+		= #{factoryId}
+		AND assembly_online_date IS NOT NULL AND assembly_offline_date IS NULL)
+		e,
+		(SELECT COUNT(id) AS debugarea_count FROM BMS_PLAN_BUS WHERE
+		factory_id = #{factoryId}
+		AND debugarea_online_date IS NOT NULL AND debugarea_offline_date IS NULL)
+		f,
+		(SELECT COUNT(id) AS testline_count FROM BMS_PLAN_BUS WHERE
+		factory_id = #{factoryId}
+		AND testline_online_date IS NOT NULL AND testline_offline_date IS NULL)
+		g,
+		(SELECT COUNT(id) AS warehousing_count FROM BMS_PLAN_BUS WHERE
+		factory_id = #{factoryId}
+		AND warehousing_date IS NOT NULL AND dispatch_date IS NULL ) h
+	</select>
+	<!-- 部件结存查询 -->
+	<select id="getPartsBalance" parameterType="Map" resultType="Map">
+		select t1.online_total-t2.offline_total as balance from
+		(select ifnull(sum(offline_real_qty),0) online_total
+		from BMS_PD_PARTS_PLAN_FINISH f
+		left join BMS_BASE_KEY k on f.parts_id=k.id
+		where k.key_name='喷砂' and f.factory_id=#{factoryId}) t1,
+		(select ifnull(count(distinct b.bus_number),0) offline_total
+		from BMS_PLAN_BUS b
+		where b.factory_id=#{factoryId} and b.welding_online_date is not null) t2
+	</select>
+	
 </mapper>

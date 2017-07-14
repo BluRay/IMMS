@@ -97,13 +97,22 @@ $(document).ready(function () {
 	});
 	
 	function btnConfirm(){
+		if($("#receiver").val() == ""){
+			alert("请先刷厂牌获取接收人信息！");
+			$("#workcardid").focus();
+			return false;
+		}
+		var cardNumber=$("#workcardid").val();
+		var receiver=$("#receiver").val();
 		if(confirm("确认交接？")){
 			$.ajax({
 				url:"saveOrderDispatchRecord",
 				dataType:"json",
 				data:{
 					"form_str":form_str,
-					"factory_id":factory_id
+					"factory_id":factory_id,
+					"cardNumber":cardNumber,
+					"receiver":receiver
 				},
 				success:function(response){
 					$.gritter.add({
@@ -116,6 +125,7 @@ $(document).ready(function () {
 					$("#dispatchDetail tbody").html("");
 					$("#dipatchRecord tbody").html("");
 					form_str = "";
+					ajaxQueryOrderTool($("#orderNo").val());
 				}
 			});
 			

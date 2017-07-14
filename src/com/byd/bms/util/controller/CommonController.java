@@ -424,7 +424,7 @@ public class CommonController extends BaseController {
 		String factoryId=request.getParameter("factoryId");
 		factoryId=factoryId==null?String.valueOf(session.getAttribute("factory_id")):factoryId;
 		Map<String, Object> conditionMap = new HashMap<String, Object>();	
-		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		String curdate = df.format(new Date());
 		
 		conditionMap.put("factoryId", factoryId);
@@ -442,15 +442,22 @@ public class CommonController extends BaseController {
 	@ResponseBody
 	public ModelMap getMonitorBoardInfo(){
 		model.clear();
-		String factoryId=request.getParameter("factoryId");
+		String factoryId=request.getParameter("factory_id");
+		String factory=request.getParameter("factory_name");/*session.getAttribute("factory").toString();*/
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		String curDate = df.format(new Date());
 		factoryId=factoryId==null?String.valueOf(session.getAttribute("factory_id")):factoryId;
+		factory=factory==null?session.getAttribute("factory").toString():factory;
 		String workshop = request.getParameter("workshop");
 		Map<String, Object> conditionMap = new HashMap<String, Object>();
 		conditionMap.put("factoryId", factoryId);
+		conditionMap.put("factory", factory);
 		if (!StringUtils.isEmpty(workshop)) {
 			conditionMap.put("workshop", workshop);
 		}
+		conditionMap.put("curDate", curDate);
 		commonService.getMonitorBoardInfo(conditionMap,model);
+		model.put("factory", factory);
 		return model;
 	}
 	

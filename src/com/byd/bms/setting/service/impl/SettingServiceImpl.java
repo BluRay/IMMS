@@ -18,9 +18,11 @@ import com.byd.bms.setting.model.BmsBaseRole;
 import com.byd.bms.setting.model.BmsBaseRolePermission;
 import com.byd.bms.setting.model.BmsUserRole;
 import com.byd.bms.setting.service.ISettingService;
+import com.byd.bms.util.DataSource;
 import com.byd.bms.util.model.BmsBaseUser;
 
 @Service
+@DataSource("dataSourceMaster")
 public class SettingServiceImpl implements ISettingService {
 	@Resource(name="settingDao")
 	private ISettingDao settingDao;
