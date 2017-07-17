@@ -1354,10 +1354,7 @@
                     sprintf('<span class="btn-group %s">',
                         this.options.paginationVAlign === 'top' || this.options.paginationVAlign === 'both' ?
                             'dropdown' : 'dropup'),
-                    '<button type="button" class="btn' +
-                    sprintf(' btn-%s', this.options.buttonsClass) +
-                    sprintf(' btn-%s', this.options.iconSize) +
-                    ' dropdown-toggle" data-toggle="dropdown">',
+                    '<button type="button" class="dropdown-toggle" data-toggle="dropdown">',
                     '<span class="page-size">',
                     $allSelected ? this.options.formatAllRows() : this.options.pageSize,
                     '</span>',

@@ -1,7 +1,5 @@
 package com.byd.bms.util.service.impl;
 
-import java.lang.reflect.Array;
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -138,7 +136,7 @@ public class CommonServiceImpl implements ICommonService {
 	@Override
 	public List<Map<String, String>> getUserInfoByCard(String card_no) {
 		return commonDao.getUserInfoByCard(card_no);
-	}
+	}	
 	@Override
 	@DataSource("dataSourceSlave")
 	public void getIndexOrderData(String actYear,ModelMap model) {

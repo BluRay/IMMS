@@ -440,7 +440,7 @@
 		<if test="status !=null and status !=''">
 			and fo.status=#{status}
 		</if>
-		 order by o.id desc
+		 order by o.id,fo.factory_id desc
 		<if test="start !=null">
 			limit #{start},#{length}
 		</if>

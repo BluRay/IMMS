@@ -217,7 +217,7 @@ function ajaxAdd(){
 			order_id:$("#order_id").val(),
 			parts_id:$("#parts").val(),
 			online_num:$("#online_num").val(),
-			offline_num:$("#online_num").val(),
+			offline_num:$("#offline_num").val(),
 			prod_date:$("#prod_date").val()
 		},
 		success:function(response){

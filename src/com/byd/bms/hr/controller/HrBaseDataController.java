@@ -1,5 +1,8 @@
 package com.byd.bms.hr.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
@@ -8,14 +11,21 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import com.byd.bms.hr.service.IHrBaseDataService;
+import com.byd.bms.util.ExcelModel;
+import com.byd.bms.util.ExcelTool;
 import com.byd.bms.util.controller.BaseController;
 /**
  * HR基础数据Controller
@@ -386,6 +396,7 @@ public class HrBaseDataController extends BaseController {
 			this.nodes = nodes;
 		}
 	}
+	/****************START YangKe**************************************************/
 	@RequestMapping("/staffManager")
 	public ModelAndView staffManager(){ 		//基础数据 员工库
 		mv.setViewName("hr/staffManager");
@@ -397,5 +408,178 @@ public class HrBaseDataController extends BaseController {
 		mv.setViewName("hr/workgroupPrice");
         return mv;  
     }
-
+	
+	@RequestMapping("/getStaffList")
+	@ResponseBody
+	public ModelMap getStaffList(){
+		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
+		int start=(request.getParameter("start")!=null)?Integer.parseInt(request.getParameter("start")):0;		//分页数据起始数
+		int length=(request.getParameter("length")!=null)?Integer.parseInt(request.getParameter("length")):20;	//每一页数据条数
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("draw", draw);
+		condMap.put("start", start);
+		condMap.put("length", length);
+		condMap.put("org_id", request.getParameter("org_id"));
+		condMap.put("orgType", request.getParameter("orgType"));
+		condMap.put("staff_number", request.getParameter("staff_number"));
+		condMap.put("staff_level", request.getParameter("staff_level"));
+		condMap.put("salary_type", request.getParameter("salary_type"));
+		condMap.put("job_type", request.getParameter("job_type"));
+		condMap.put("job", request.getParameter("job"));
+		condMap.put("workplace", request.getParameter("workplace"));
+		condMap.put("status", request.getParameter("status"));
+		condMap.put("orgStr", request.getParameter("orgStr"));
+		
+		Map<String,Object> list = hrBaseDataService.getStaffList(condMap);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(list);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value="/uploadStaff",method=RequestMethod.POST)
+	@ResponseBody
+	public ModelMap uploadStaff(@RequestParam(value="file",required=false) MultipartFile file){
+		String fileFileName = "uploadStaff.xls";
+		//int result = 0;
+		ExcelModel excelModel =new ExcelModel();
+		excelModel.setReadSheets(1);
+		excelModel.setStart(1);
+		Map<String,Integer> dataType = new HashMap<String,Integer>();
+		dataType.put("0", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("1", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("2", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("3", ExcelModel.CELL_TYPE_DATE);
+		dataType.put("4", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("5", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("6", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("7", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("8", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("9", ExcelModel.CELL_TYPE_DATE);
+		dataType.put("10", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("11", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("12", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("13", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("14", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("15", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("16", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("17", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("18", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("19", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("20", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("21", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("22", ExcelModel.CELL_TYPE_DATE);
+		dataType.put("23", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("24", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("25", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("26", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("27", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("28", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("29", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("30", ExcelModel.CELL_TYPE_CANNULL);
+		excelModel.setDataType(dataType);
+		excelModel.setPath(fileFileName);
+		
+		try {
+			File staffFile = new File(fileFileName);
+			file.transferTo(staffFile);
+			InputStream is = new FileInputStream(staffFile);
+			ExcelTool excelTool = new ExcelTool();
+			excelTool.readExcel(is, excelModel);
+			
+			if(excelModel.getData().size()>500){
+				initModel(false,"不能同时导入500条以上数据！",null);
+				model = mv.getModelMap();
+				return model;
+			}else{
+				StringBuffer staff_numbers = new StringBuffer();
+				String result = "";
+				boolean success = true;
+				int i = 1;
+				List<Map<String, Object>> queryOrgList = new ArrayList<Map<String,Object>>();
+				List staffNumberList = new ArrayList();
+				for(Object[] data : excelModel.getData()){
+					++i;
+					if(null != data[0] && StringUtils.isNotBlank(data[0].toString().trim())){
+						String staff_number = data[0].toString().trim();
+						if(!staffNumberList.contains(staff_number)){
+							staff_numbers.append(staff_number);
+							staff_numbers.append(",");
+							staffNumberList.add(staff_number);
+						}else{
+							result = result+"第"+i+"行工号信息！\n";
+						}
+					}else{
+						//用户填写的工厂、车间、班组、小班组信息有误
+						success = false;
+						result = result+"第"+i+"行工号信息为必填项！\n";
+					}
+					//工厂/部	科室	车间	班组	小班组
+					if(null == data[13] || StringUtils.isBlank(data[13].toString().trim())){
+						//工厂/部为必填值
+						success = false;
+						result = result+"第"+i+"行工厂/部门、科室、车间、班组、小班组信息为必填项！\n";
+					}
+					//组织结构信息校验
+					Map queryOrgMap = new HashMap<String, Object>();
+					queryOrgMap.put("plant_org", data[13].toString());
+					
+					if(StringUtils.isEmpty(data[14].toString().trim())&&"计件".equals(data[12].toString().trim())){
+						success = false;
+						result = result+"第"+i+"行工厂/部门、科室、车间、班组、小班组信息为必填项！\n";
+					}
+					if(StringUtils.isEmpty(data[15].toString().trim())&&"计件".equals(data[12].toString().trim())){
+						success = false;
+						result = result+"第"+i+"行工厂/部门、科室、车间、班组、小班组信息为必填项！\n";
+					}
+					if(StringUtils.isEmpty(data[16].toString().trim())&&"计件".equals(data[12].toString().trim())){
+						success = false;
+						result = result+"第"+i+"行工厂/部门、科室、车间、班组、小班组信息为必填项！\n";
+					}
+					if(StringUtils.isEmpty(data[17].toString().trim())&&"计件".equals(data[12].toString().trim())){
+						success = false;
+						result = result+"第"+i+"行工厂/部门、科室、车间、班组、小班组信息为必填项！\n";
+					}
+					
+					if(null!=data[14] && !"".equals(data[14].toString().trim())){
+						queryOrgMap.put("dept_org", data[14]==null?null:data[14].toString());
+					}
+					if(null!=data[15] && !"".equals(data[15].toString().trim())){
+						queryOrgMap.put("workshop_org", data[15]==null?null:data[15].toString());
+					}
+					if(null!=data[16] && !"".equals(data[16].toString().trim())){
+						queryOrgMap.put("workgroup_org", data[16]==null?null:data[16].toString());
+					}
+					if(null!=data[17] && !"".equals(data[17].toString().trim())){
+						queryOrgMap.put("team_org", data[17]==null?null:data[17].toString());
+					}
+					
+					queryOrgList.add(queryOrgMap);
+				}
+				//根据用户填写的组织结构信息查询bms_base_org表
+				List<Map<String, Object>> orgResultList = hrBaseDataService.getOrg(queryOrgList);
+				
+				if(success){
+					for(Object[] data : excelModel.getData()){
+						System.out.println("-->" + data[1].toString().trim());
+					}
+					
+				}
+				
+			}
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+			initModel(false,"导入文件的格式有误！",null);
+			model = mv.getModelMap();
+			return model;
+		}
+		
+		initModel(true,"导入成功！",null);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	/****************END YangKe**************************************************/
 }

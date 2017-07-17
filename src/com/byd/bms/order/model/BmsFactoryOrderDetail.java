@@ -23,6 +23,7 @@ public class BmsFactoryOrderDetail {
 	private int bus_number_count;
 	private int editor_id;
 	private String edit_date;
+	private String memo;
 	
 	public int getId() {
 		return id;
@@ -155,6 +156,12 @@ public class BmsFactoryOrderDetail {
 	}
 	public void setMinbusnum(int minbusnum) {
 		this.minbusnum = minbusnum;
+	}
+	public String getMemo() {
+		return memo;
+	}
+	public void setMemo(String memo) {
+		this.memo = memo;
 	}
 
 }

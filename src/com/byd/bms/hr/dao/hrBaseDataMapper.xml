@@ -56,4 +56,211 @@
 			where id=#{id}
 		]]>
 	</update>
+	
+	<select id="getStaffList" resultType="Map" parameterType='Map'>
+		SELECT s.* FROM BMS_HR_STAFF s WHERE 1=1
+		<if test="orgType!='' ">
+			and FIND_IN_SET(s.plant_org,#{orgStr})>0
+		</if>
+		<if test="orgType=='0' ">
+			and FIND_IN_SET(s.plant_org,#{orgStr})>0
+		</if>
+		<if test="orgType=='1' or orgType=='2'">
+			and FIND_IN_SET(s.plant_org,#{orgStr})>0
+		</if>
+		<if test="orgType=='3' ">
+			and case when ISNULL(s.plant_org) THEN 1=1 else
+			FIND_IN_SET(s.plant_org,#{orgStr})>0 end
+			and FIND_IN_SET(s.dept_org,#{orgStr})>0
+		</if>
+		<if test="orgType=='4' ">
+			and case when ISNULL(s.plant_org) THEN 1=1 else
+			FIND_IN_SET(s.plant_org,#{orgStr})>0 end
+			and case when ISNULL(s.dept_org) THEN 1=1 else
+			FIND_IN_SET(s.dept_org,#{orgStr})>0 end
+			and FIND_IN_SET(s.workshop_org,#{orgStr})>0
+		</if>
+		<if test="orgType=='5' ">
+			and case when ISNULL(s.plant_org) THEN 1=1 else
+			FIND_IN_SET(s.plant_org,#{orgStr})>0 end
+			and case when ISNULL(s.dept_org) THEN 1=1 else
+			FIND_IN_SET(s.dept_org,#{orgStr})>0 end
+			and case when ISNULL(s.workshop_org) THEN 1=1 else
+			FIND_IN_SET(s.workshop_org,#{orgStr})>0 end
+			and FIND_IN_SET(s.workgroup_org,#{orgStr})>0
+		</if>
+		<if test="orgType=='6' ">
+			and case when ISNULL(s.plant_org) THEN 1=1 else
+			FIND_IN_SET(s.plant_org,#{orgStr})>0 end
+			and case when ISNULL(s.dept_org) THEN 1=1 else
+			FIND_IN_SET(s.dept_org,#{orgStr})>0 end
+			and case when ISNULL(s.workshop_org) THEN 1=1 else
+			FIND_IN_SET(s.workshop_org,#{orgStr})>0 end
+			and case when ISNULL(s.workgroup_org) THEN 1=1 else
+			FIND_IN_SET(s.workgroup_org,#{orgStr})>0 end
+			and FIND_IN_SET(s.team_org,#{orgStr})>0
+		</if>
+
+		<if test="staff_number!=null and staff_number!=''">
+			AND( LOCATE(s.staff_number,#{staff_number})>0 OR
+			LOCATE(s.name,#{staff_number})>0 )
+		</if>
+		<if test="salary_type!=null and salary_type!=''">
+			AND s.salary_type = #{salary_type}
+		</if>
+		<if test="job!=null and job!=''">
+			AND s.job LIKE CONCAT('%',#{job},'%')
+		</if>
+		<if test="workplace!=null and workplace!=''">
+			AND s.workplace LIKE CONCAT('%',#{workplace},'%')
+		</if>
+		<if test="status!=null and status!=''">
+			AND s.status = #{status}
+		</if>
+		
+		<if test="start !=null">
+			LIMIT #{start} ,#{length} 
+		</if>	
+	</select>
+	<select id="getStaffCount" resultType="int" parameterType='Map'>
+		SELECT COUNT(s.id) FROM BMS_HR_STAFF s WHERE 1=1
+		<if test="orgType!='' ">
+			and FIND_IN_SET(s.plant_org,#{orgStr})>0
+		</if>
+		<if test="orgType=='0' ">
+			and FIND_IN_SET(s.plant_org,#{orgStr})>0
+		</if>
+		<if test="orgType=='1' or orgType=='2'">
+			and FIND_IN_SET(s.plant_org,#{orgStr})>0
+		</if>
+		<if test="orgType=='3' ">
+			and case when ISNULL(s.plant_org) THEN 1=1 else
+			FIND_IN_SET(s.plant_org,#{orgStr})>0 end
+			and FIND_IN_SET(s.dept_org,#{orgStr})>0
+		</if>
+		<if test="orgType=='4' ">
+			and case when ISNULL(s.plant_org) THEN 1=1 else
+			FIND_IN_SET(s.plant_org,#{orgStr})>0 end
+			and case when ISNULL(s.dept_org) THEN 1=1 else
+			FIND_IN_SET(s.dept_org,#{orgStr})>0 end
+			and FIND_IN_SET(s.workshop_org,#{orgStr})>0
+		</if>
+		<if test="orgType=='5' ">
+			and case when ISNULL(s.plant_org) THEN 1=1 else
+			FIND_IN_SET(s.plant_org,#{orgStr})>0 end
+			and case when ISNULL(s.dept_org) THEN 1=1 else
+			FIND_IN_SET(s.dept_org,#{orgStr})>0 end
+			and case when ISNULL(s.workshop_org) THEN 1=1 else
+			FIND_IN_SET(s.workshop_org,#{orgStr})>0 end
+			and FIND_IN_SET(s.workgroup_org,#{orgStr})>0
+		</if>
+		<if test="orgType=='6' ">
+			and case when ISNULL(s.plant_org) THEN 1=1 else
+			FIND_IN_SET(s.plant_org,#{orgStr})>0 end
+			and case when ISNULL(s.dept_org) THEN 1=1 else
+			FIND_IN_SET(s.dept_org,#{orgStr})>0 end
+			and case when ISNULL(s.workshop_org) THEN 1=1 else
+			FIND_IN_SET(s.workshop_org,#{orgStr})>0 end
+			and case when ISNULL(s.workgroup_org) THEN 1=1 else
+			FIND_IN_SET(s.workgroup_org,#{orgStr})>0 end
+			and FIND_IN_SET(s.team_org,#{orgStr})>0
+		</if>
+
+		<if test="staff_number!=null and staff_number!=''">
+			AND( LOCATE(s.staff_number,#{staff_number})>0 OR
+			LOCATE(s.name,#{staff_number})>0 )
+		</if>
+		<if test="salary_type!=null and salary_type!=''">
+			AND s.salary_type = #{salary_type}
+		</if>
+		<if test="job!=null and job!=''">
+			AND s.job LIKE CONCAT('%',#{job},'%')
+		</if>
+		<if test="workplace!=null and workplace!=''">
+			AND s.workplace LIKE CONCAT('%',#{workplace},'%')
+		</if>
+		<if test="status!=null and status!=''">
+			AND s.status = #{status}
+		</if>
+	</select>
+	
+	<select id="getOrg" parameterType="List" resultType="Map">
+			<foreach collection="list" index="index" item="item"
+				 separator="UNION ALL" >
+					SELECT o1.name plant_org
+						<if test="item.dept_org!=null">
+							,o2.name dept_org
+						</if>
+						<if test="item.dept_org==null">
+							,'' dept_org
+						</if>
+						<if test="item.workshop_org!=null">
+							,o3.name workshop_org
+						</if>
+						<if test="item.workshop_org ==null">
+							,'' workshop_org
+						</if>
+						<if test="item.workgroup_org!=null">
+							,o4.name workgroup_org
+						</if>
+						<if test="item.workgroup_org ==null">
+							,'' workgroup_org
+						</if>
+						<if test="item.team_org!=null">
+							,o5.name team_org 
+						</if>
+						<if test="item.team_org ==null">
+							,'' team_org 
+						</if>
+						FROM BMS_BASE_ORG o1
+						<if test="item.dept_org!=null">
+							LEFT JOIN BMS_BASE_ORG o2 on o1.id = o2.parent_id and o2.deleted = '0' and o2.name = #{item.dept_org}
+						</if>
+						<if test="item.workshop_org!=null">
+							LEFT JOIN BMS_BASE_ORG o3 on 
+							<if test="item.dept_org!=null">
+							o2.id = o3.parent_id 
+							</if>
+							<if test="item.dept_org==null">
+							o1.id = o3.parent_id 
+							</if>
+							and o3.deleted = '0' and o3.name = #{item.workshop_org}
+						</if>
+						<if test="item.workgroup_org!=null">
+							LEFT JOIN BMS_BASE_ORG o4 on 
+							<if test="item.workshop_org!=null">
+								o3.id = o4.parent_id 
+							</if>
+							<if test="item.workshop_org ==null and item.dept_org!=null">
+								o2.id = o4.parent_id 
+							</if>
+							<if test="item.workshop_org ==null and item.dept_org ==null">
+								o1.id = o4.parent_id 
+							</if>
+							and o4.deleted = '0' and o4.name = #{item.workgroup_org}
+						</if>
+						<if test="item.team_org!=null">
+							LEFT JOIN BMS_BASE_ORG o5 on 
+							<if test="item.workgroup_org!=null">
+								o4.id = o5.parent_id 
+							</if>
+							<if test="item.workgroup_org ==null and item.workshop_org!=null">
+								o3.id = o5.parent_id 
+							</if>
+							<if test="item.workgroup_org ==null and item.workshop_org ==null and item.dept_org!=null">
+								o2.id = o5.parent_id 
+							</if>
+							<if test="item.workgroup_org ==null and item.workshop_org ==null and item.dept_org ==null">
+								o1.id = o5.parent_id 
+							</if>
+							and o5.deleted = '0' and o5.name = #{item.team_org}
+						</if>
+					WHERE o1.name = #{item.plant_org} AND o1.deleted = '0'
+			</foreach>
+	</select>
+	<select id="getStaffListByStaffNumbers" resultType="String" parameterType='Map'>
+		SELECT s.staff_number FROM BMS_HR_STAFF s
+		WHERE FIND_IN_SET(s.staff_number,#{staff_numbers})>0
+	</select>
+	
 </mapper>

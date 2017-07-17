@@ -257,12 +257,11 @@
      </update>
      
      <select id="getFaultLibFuzzyList" parameterType="Map" resultMap="faultLibMap">
-		select f.id,f.parts_id,p.parts_name
-		parts,f.bug_type,f.bug,f.serious_level,f.fault_type,
+		select f.id,<!-- f.parts_id,p.parts_name parts, -->f.bug_type,f.bug,f.serious_level,f.fault_type,
 		f.workshop_name,f.workgroup_name,f.editor_id,u.username,f.edit_date
-		from BMS_QM_STANDARD_FAULT_LIBRARY f left join BMS_BASE_USER u on
-		f.editor_id=u.id
-		left join BMS_BASE_PARTS p on f.parts_id=p.id
+		from BMS_QM_STANDARD_FAULT_LIBRARY f 
+		left join BMS_BASE_USER u on f.editor_id=u.id
+		<!-- left join BMS_BASE_PARTS p on f.parts_id=p.id -->
 		where 1=1
 		<if test="bugType !=null and  bugType !=''">
 			and f.bug_type like CONCAT('%',#{bugType},'%')

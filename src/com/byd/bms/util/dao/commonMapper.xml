@@ -90,7 +90,7 @@
 		SELECT o.foreign_id id,o.name 
 		FROM BMS_BASE_ORG o
 		LEFT JOIN BMS_BASE_ORG o1 ON o.parent_id=o1.id
-		WHERE o.org_type='5' and o1.name=#{factory} and o.deleted='0'
+		WHERE o.org_type='2' and o1.name=#{factory} and o.deleted='0'
 		<if test="function_url !=null and  function_url !=''">
 		AND (locate(o.org_code,
 		(SELECT GROUP_CONCAT(R.permission_value) FROM BMS_BASE_USER_ROLE R WHERE R.staff_number = #{staff_number} AND R.permission_key = '2'

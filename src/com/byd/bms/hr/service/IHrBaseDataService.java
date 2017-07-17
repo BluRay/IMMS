@@ -14,4 +14,9 @@ public interface IHrBaseDataService {
 	public int editOrgData(Map<String,Object> queryMap);
 	
 	public int deleteOrgData(Map<String,Object> conditionMap);
+	
+	public Map<String,Object> getStaffList(Map<String, Object> conditionMap);
+
+	public List<Map<String,Object>> getOrg(List<Map<String,Object>> conditionMap);
+	public List<String> getStaffListByStaffNumbers(Map<String, Object> conditionMap);
 }

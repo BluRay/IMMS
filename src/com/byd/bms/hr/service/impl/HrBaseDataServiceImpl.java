@@ -1,5 +1,6 @@
 package com.byd.bms.hr.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,5 +32,23 @@ public class HrBaseDataServiceImpl implements IHrBaseDataService {
 	
 	public int deleteOrgData(Map<String,Object> conditionMap){
 		return hrBaseDataDao.deleteOrgData(conditionMap);
+	}
+	@Override
+	public Map<String,Object> getStaffList(Map<String, Object> conditionMap) {
+		int totalCount=0;
+		List<Map<String,Object>> datalist = hrBaseDataDao.getStaffList(conditionMap);
+		totalCount = hrBaseDataDao.getStaffCount(conditionMap);		
+		Map<String, Object> result = new HashMap<String,Object>();
+		result.put("total", totalCount);
+		result.put("rows", datalist);
+		return result;
+	}
+	@Override
+	public List<Map<String, Object>> getOrg(List<Map<String, Object>> conditionMap) {
+		return hrBaseDataDao.getOrg(conditionMap);
+	}
+	@Override
+	public List<String> getStaffListByStaffNumbers(Map<String, Object> conditionMap) {
+		return hrBaseDataDao.getStaffListByStaffNumbers(conditionMap);
 	}
 }
