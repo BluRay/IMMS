@@ -482,5 +482,32 @@ public class TechServiceImpl implements ITechService {
 		model.put("data", dataList);
 	}
 
+	@Override
+	@Transactional
+	public void followTechTaskByBus(String bus_number, String tech_task_follow_ids,int userid,String curTime,ModelMap model) {
+		List<Map<String, String>> taskList = new ArrayList<Map<String, String>>();
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("tech_task_follow_ids", tech_task_follow_ids);
+		condMap.put("confirmor_id", userid);
+		condMap.put("confirmor_date", curTime);
+		
+		try{		
+		//更新跟进日期和跟进人
+		techDao.updateTechTaskFollow(condMap);
+		 //根据车号查询各工厂技改任务的技改跟进明细 
+		taskList=techDao.queryTechTaskDetailByBus(bus_number);
+		//更新BMS_TECH_TASK_DETAIL status_list字段
+		techDao.updateTechTaskStatus(taskList);
+		
+		model.put("success", true);
+		model.put("message","跟进成功！");
+		}catch(Exception e){
+			model.put("success", false);
+			model.put("message","跟进失败！");
+			throw new RuntimeException("技改跟进异常!"+e.getMessage());
+		}
+		
+	}
+
 		
 }

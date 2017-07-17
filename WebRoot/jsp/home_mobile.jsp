@@ -71,7 +71,7 @@
 							<div class="row" style="margin-top:20px;">
 								<div class="col-xs-12">
 									<div class="col-xs-6">
-										<img id="scan" class="img " src="images/keyparts.png" style="width:100%;height:100%;" onclick="javascript: return pageForward('key_parts');">							
+										<img id="scan" class="img " src="images/keyparts.png" style="width:100%;height:100%;" onclick="javascript: return pageForward('tech_follow');">							
 									</div>
 									<div class="col-xs-6">
 										<img id="scan" class="img " src="images/exception.png" style="width:100%;height:100%;" onclick="javascript: return pageForward('exception');">
@@ -82,7 +82,7 @@
 								<div class="col-xs-12">
 									<div class="col-xs-6" style="text-align:center">
 										<label>
-										关键零部件
+										技改跟进
 										</label>
 									</div>
 									<div class="col-xs-6" style="text-align:center">
@@ -112,6 +112,9 @@
 			}
 			if(flag=='prdRcd'){
 				url="/IMMS/quality/prdRcdMobile"
+			}
+			if(flag=='tech_follow'){
+				url="/IMMS/tech/techFollowMobile"
 			}
 			window.location=url
 		}

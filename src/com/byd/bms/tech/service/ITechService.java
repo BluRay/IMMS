@@ -71,4 +71,6 @@ public interface ITechService {
 	public int queryChangeTypeReportCount(Map<String, Object> conditionMap);
 	
 	public void getTechtaskListByBus(String bus_number, ModelMap model);
+	
+	public void followTechTaskByBus(String bus_number, String tech_task_follow_ids,int userid,String curTime,ModelMap model);
 }

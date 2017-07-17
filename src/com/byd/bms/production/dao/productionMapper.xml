@@ -62,7 +62,7 @@
 			and r1.process_name=#{process_name} and r1.order_type=#{order_type}
 		) and r.order_type=#{order_type} ) and s.bus_number=#{bus_number} -->
 		SELECT s.id,s.process_name,s.scan_time
-		FROM BMS_PD_SCAN s where s.process_id=#{last_process_id} and s.bus_number=#{bus_number}
+		FROM BMS_PD_SCAN s where s.process_name=#{last_process_name} and s.bus_number=#{bus_number}
 	</select>
 	
 	<select id="queryLastPlanNode" parameterType="Map" resultType="Map">

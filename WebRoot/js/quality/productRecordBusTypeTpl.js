@@ -304,15 +304,15 @@ function showInfoPage(row){
 		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i>车型成品记录表模板查看</h4></div>",
 		title_html: true,
 		buttons: [ 
-			{
+		/*	{
 				text: "取消",
 				"class" : "btn btn-minier",
 				click: function() {
 					$( this ).dialog( "close" ); 
 				} 
-			},
+			},*/
 			{
-				text: "确定",
+				text: "关闭",
 				"class" : "btn btn-primary btn-minier",
 				click: function() {
 					$( this ).dialog( "close" ); 

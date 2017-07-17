@@ -193,7 +193,7 @@ public class OrderController extends BaseController{
 		order.setProductive_year(request.getParameter("data_productive_year"));
 		order.setDelivery_date(request.getParameter("delivery_date"));
 		order.setMemo(request.getParameter("memo"));
-		order.setCustomer(request.getParameter("customer"));
+		order.setCustomer(request.getParameter("data_customer"));
 		order.setEditor_id(userid);
 		order.setEdit_date(curTime);
 		

@@ -27,6 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.byd.bms.production.model.ProductionException;
 import com.byd.bms.production.service.IProductionService;
+import com.byd.bms.util.HttpUtil;
 import com.byd.bms.util.controller.BaseController;
 import com.byd.bms.util.model.BmsBaseUser;
 /**
@@ -691,6 +692,27 @@ public class ProductionController extends BaseController {
 	public ModelAndView monitorBoard(){
 		mv.setViewName("production/monitorBoard");
 		return mv;
+	}
+	
+	/**
+	 *@author xiong.jianwu
+	 * 校验VIN与对应的车载终端是否绑定成功
+	 * @return
+	 */
+	public ModelMap gpsValidate(){
+		model.clear();
+		String conditions=request.getParameter("conditions");
+		JSONObject jo = JSONObject.fromObject(conditions);
+		Map<String, Object> conditionMap = new HashMap<String, Object>();	
+		for (Iterator it = jo.keys(); it.hasNext();) {
+			String key = (String) it.next();
+			conditionMap.put(key, jo.get(key));
+		}
+		String jsonstr=HttpUtil.post("http://10.9.32.67:8082/i.dbhttpservice_bms/auto/validateVin",
+		        JSONObject.fromObject(conditionMap).toString());
+		model.put("data", jsonstr);
+		
+		return model;
 	}
 	/****************************  xiongjianwu ***************************/
 	

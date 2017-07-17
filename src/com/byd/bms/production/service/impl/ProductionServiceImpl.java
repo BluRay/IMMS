@@ -93,7 +93,7 @@ public class ProductionServiceImpl implements IProductionService {
 				productionDao.saveScanRecord(condMap);
 				productionDao.updateBusProcess(condMap);
 			}else{
-				condMap.put("last_process_id", lastPlanNode.get("process_id"));
+				condMap.put("last_process_name", lastPlanNode.get("process_name"));
 				Map<String,Object> scanRecord=productionDao.queryScanLastPlanNode(condMap);
 				if(scanRecord==null){
 					rMap.put("success", false);

@@ -13,7 +13,7 @@ $(document).ready(function(){
 			width:450,
 			height:380,
 			modal: true,
-			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i> 车间供货登记</h4></div>",
+			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i> 部件上下线登记</h4></div>",
 			title_html: true,
 			buttons: [ 
 				{

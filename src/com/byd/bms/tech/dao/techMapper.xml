@@ -1113,6 +1113,36 @@
 		left join BMS_TECH_TASK t on t.id=f.tech_task_id
 		where f.bus_number=#{bus_number}  and (f.confirmor_date&lt;=0 or f.confirmor_date is null)
 	</select>
+	
+	<select id="queryTechTaskDetailByBus" parameterType="String" resultType="Map">
+		select tmp.tech_task_id,tmp.factory,group_concat(tmp.workshop,':',tmp.follow_num) follow_detail
+		from(
+		select f.tech_task_id,f.factory,f.workshop,count(f.bus_number) follow_num
+		from BMS_TECH_TASK_FOLLOW f
+		where f.tech_task_id in(
+		select distinct tech_task_id
+		from BMS_TECH_TASK_FOLLOW f
+		where f.bus_number=#{bus_number}
+		) and f.confirmor_date>0
+		group by f.tech_task_id,f.factory,f.workshop) tmp
+		group by tmp.tech_task_id,tmp.factory
+	</select>
+	
+	<update id="updateTechTaskStatus" parameterType="List">
+		<foreach collection="taskList" item="detail" index="index"
+			separator=";">
+			update BMS_TECH_TASK_DETAIL
+			<set>
+				status_list=#{detail.follow_detail}
+			</set>
+			where tech_task_id=#{detail.tech_task_id} and factory=#{detail.factory}
+		</foreach>
+	</update>
+	
+	<update id="updateTechTaskFollow" parameterType="Map">
+		update BMS_TECH_TASK_FOLLOW set confirmor_date=#{confirmor_date}, confirmor_id=#{confirmor_id}
+		where find_in_set (id,#{tech_task_follow_ids})>0
+	</update>
 <!--  ###################  by xjw  end  ###############  -->
 	
 	

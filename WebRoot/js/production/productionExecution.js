@@ -85,6 +85,56 @@ $(document).ready(function () {
 			 }
 		}
 		
+		/**
+		 * 增加校验逻辑：总装下线校验VIN与车载终端是否绑定成功
+		 */
+		if(cur_key_name.indexOf("下线")>=0&&$('#exec_workshop :selected').text()=='总装'){
+			//alert(cur_key_name);
+			var conditions={};
+			conditions.vin=$('#vinText').data("vin");
+			//conditions.flag=Number($('#clientFlag').val());
+			/*$("#gpsModal").modal("hide");*/
+			 $.ajax({
+				 type:"post",
+				 dataType:"json",
+				 async:false,
+				 url:"gpsValidate",
+				 data:{
+					 "conditions":JSON.stringify(conditions)
+				 },
+				 success: function(response){
+					 //alert(JSON.parse(response.data).rebackResut);
+					 var reback_data=JSON.parse(response.data);
+					 var reabck_msg="";
+					 reabck_msg+="企标绑定结果："+reback_data.rebackDesc+"\n";
+					 reabck_msg+="国标绑定结果："+reback_data.rebackDesc_gb+"\n";
+					 if(!reback_data.rebackResut){
+						 enterflag=false;
+						// reabck_msg+=reback_data.rebackDesc+"\n";
+						 //alert(reback_data.rebackDesc);
+					 }
+					 if(!reback_data.rebackResut_gb){
+						 enterflag=false;						 
+						 //alert(reback_data.rebackDesc);
+						 //reabck_msg+=reback_data.rebackDesc_gb+"\n";
+					 }
+				/*	 if(enterflag){
+						 reabck_msg="成功！";
+					 }*/
+					 alert(reabck_msg);
+					 
+				 },
+				 error:function(){
+					 enterflag=false;
+				 }
+			 });
+			 if(!enterflag){
+				 $("#btnSubmit").attr("disabled",false);
+				 return false;
+			 }
+		}	
+		
+		
 		if(plan_node.indexOf("下线")>=0&&$('#exec_workshop :selected').text()=='检测线'){
 			//alert(cur_key_name);
 			$.each(parts_list,function(i,parts){

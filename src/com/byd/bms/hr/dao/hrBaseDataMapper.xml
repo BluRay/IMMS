@@ -5,7 +5,8 @@
 		SELECT
          id,CONCAT(parent_id,'') parent_id,name_en as name,name as display_name,org_code as short_name,
          manager,org_type,org_kind,responsibilities,
-         (SELECT COUNT(1) FROM BMS_BASE_ORG f2 WHERE f2.parent_id = t.id) AS sub_count
+         (SELECT COUNT(1) FROM BMS_BASE_ORG f2 WHERE f2.parent_id = t.id) AS sub_count,
+         (SELECT name FROM BMS_BASE_ORG f2 WHERE f2.id = t.parent_id) AS parent_name
           FROM BMS_BASE_ORG t WHERE t.deleted = 0 
          <if test="id!=null">
              AND t.id=#{id} 
@@ -15,5 +16,44 @@
          </if>
          ORDER BY sort_number ASC	
 	</select>
-	
+	<select id="getOrgDataByParentId" parameterType="Map" resultType="Map">
+		SELECT id,CONCAT(parent_id,'') parent_id,name_en as name,name as display_name,
+		   org_code as short_name,manager,org_type,org_kind,responsibilities,
+		   (SELECT name FROM BMS_BASE_ORG f2 WHERE f2.id = t.parent_id) AS parent_name
+          from BMS_BASE_ORG t where 1=1 and t.deleted='0'
+		<if test="id!=null and id!=''">
+			and t.id=#{id}
+		</if>
+		<if test="parent_id!=null and parent_id!=''">
+			and t.parent_id=#{parent_id}
+		</if>
+		order by sort_number ASC
+	</select>
+	<!-- 添加组织结构 -->
+	<insert id="addOrgData" useGeneratedKeys="true">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		<![CDATA[
+			insert into BMS_BASE_ORG(parent_id,org_type,org_kind,name,name_en,org_code,sort_number,manager,responsibilities,deleted,editor_id,edit_date) 
+			values(#{parent_id},#{org_type},#{org_kind},#{name},#{name_en},#{org_code},#{sort_number},#{manager},#{responsibilities},#{deleted},#{editor_id},#{edit_date})
+		]]>
+	</insert>
+	<!-- 编辑组织结构 -->
+	<update id="editOrgData">
+			update BMS_BASE_ORG set 
+			<if test="parent_id!=''">
+			parent_id=#{parent_id},
+			</if>
+			org_type=#{org_type},org_kind=#{org_kind},name=#{name},name_en=#{name_en},org_code=#{org_code}<!-- ,sort_number=#{sort_number} -->,manager=#{manager},responsibilities=#{responsibilities},deleted=#{deleted},editor_id=#{editor_id},edit_date=#{edit_date}  
+			where id=#{id}
+	</update>
+	<!--删除组织结构 -->
+	<update id="deleteOrgData">
+		<![CDATA[
+			update BMS_BASE_ORG set deleted='1',editor_id=#{editor_id},edit_date=#{edit_date}  
+			where id=#{id}
+		]]>
+	</update>
 </mapper>

@@ -9,7 +9,8 @@
     <link href="../css/workshopBoard_assembly.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
-    <div class="main">
+  	
+    <div class="main" >
     	<div class="div_head">
     		<div id="board_logo"><img id="byd_logo" src="../images/byd_logo.png" alt="BYD AUTO"></img></div>
     		<div id="board_title">长沙工厂欢迎您 </div>
@@ -110,6 +111,12 @@
     	<div class="div_foot" id="board_exception">
     		暂无异常信息
     	</div>
+    </div>
+    <div id="page2" style="display:none;text-align:center">
+    	<div style="color:red;font-size:60px; margin-top:200px;font-weight: bold;">
+    		<span id="welcome"></span>
+    	</div>
+    	
     </div>
     <script src="../assets/js/jquery.min.js"></script>
     <script src="../js/common.js"></script>

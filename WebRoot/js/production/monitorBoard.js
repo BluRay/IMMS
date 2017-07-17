@@ -5,17 +5,39 @@ var exceptionInfo;
 var factory_id;
 var factory_name;
 var workshop;
+var welcome="欢迎长沙市政府各位领导来长沙工厂指导工作！";
+
 $(document).ready(function() {
 	factory_id=getQueryString("factory")||"";
 	factory_name=getQueryString("factory_name")||"";
 	workshop=getQueryString("workshop")||"";
 	$("#board_title").html(factory_name+"欢迎您");
+	$("#welcome").html(welcome)
 	showClock();
 	ajaxQueryBoardInfo();
 	ajaxQueryExceptionInfo();
 	intervalTimeInfo();
 	interValBoardInfo();
 	intervalExceptionInfo();
+	
+	setInterval(function(){
+		if($(".main").css("display")=="none"){
+			$("#page2").fadeOut("2000");
+			$(".main").fadeIn("2000");
+			return;
+		}
+		if($("#page2").css("display")=="none"){
+			$(".main").fadeOut("3000");
+			$("#page2").fadeIn("3000");
+			return;
+		}
+		
+	},5000)
+/*	$(".main").toggle(function(){
+		$(".main").fadeOut(3000);
+		},function(){
+		$("#page2").fadeIn(3000);
+		}); */
 });
 
 function interValBoardInfo() {

@@ -11,7 +11,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.ServletContext;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,12 +27,15 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ModelAndView;
+
 import com.byd.bms.tech.service.ITechService;
 import com.byd.bms.util.ExcelModel;
 import com.byd.bms.util.ExcelTool;
 import com.byd.bms.util.controller.BaseController;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+
 import org.apache.commons.lang.StringUtils;
 /**
  * 工程变更Controller
@@ -879,8 +884,14 @@ public class TechController extends BaseController{
 	@ResponseBody
 	public ModelMap followTechTaskByBus(){
 		model.clear();
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		int userid=(int) session.getAttribute("user_id");
 		String bus_number=request.getParameter("bus_number");
-		techService.getTechtaskListByBus(bus_number,model);
+		String tech_task_follow_ids=request.getParameter("tech_task_follow_ids");
+
+		
+		techService.followTechTaskByBus(bus_number,tech_task_follow_ids,userid,curTime,model);
 		return model;
 	}
 }

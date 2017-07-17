@@ -67,4 +67,7 @@ public interface ITechDao {
 	public List<Map<String, Object>> queryChangeTypeReport(Map<String, Object> conditionMap);
 	public int queryChangeTypeReportCount(Map<String, Object> conditionMap);
 	public List<Map<String, String>> queryTechTaskFollowList(@Param(value="bus_number")String bus_number);
+	public void updateTechTaskStatus(@Param(value="taskList")List<Map<String, String>> taskList);
+	public List<Map<String, String>> queryTechTaskDetailByBus(@Param(value="bus_number")String bus_number);
+	public void updateTechTaskFollow(Map<String, Object> condMap);
 }
