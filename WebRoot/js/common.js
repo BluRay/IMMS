@@ -1,4 +1,6 @@
-
+/* ztree树对象变量 */
+var zNodes=[];
+var zTreeObj={};
 var const_email_validate=/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 /*
  * 填充下拉列表 with id=>value;包括全部选项
@@ -674,3 +676,108 @@ function EnterPress(e){ //传入 event
 		return false;
 	} 
 }**/
+
+/**
+ * 获取组织结构权限树树
+ * treeId: ulid   <ul id="treeId" class="ztree"></ul>
+ * level:设置第几层展开
+ * orgType  组织结构类型
+ * orgKind  
+ */
+function getOrgAuthTree(treeId,url,orgType,orgKind,level,nodeName_default){
+	/*  ztree 配置信息 */
+	// zTree 的参数配置，深入使用请参考 API 文档（setting 配置详解）
+	var setting = {
+		data: {
+			simpleData: {   // 简单的数据源，一般开发中都是从数据库里读取，API有介绍，这里只是本地的
+			    enable: true,  
+			    idKey: "id",  // id和pid，这里不用多说了吧，树的目录级别
+			    pIdKey: "pId",  
+			    rootPId: 0   // 根节点
+			}
+		},
+		view: {
+			fontCss : {
+			}
+		},
+		callback: {
+			beforeClick: zTreeBeforeClick,
+			onClick: zTreeOnClick
+		}
+	};
+	/*  ztree 配置信息 */
+	if(!treeId){
+		return null;
+	}
+	
+	level = level || 1;
+	orgType = orgType||"1,2,3,4,5,6";
+	orgKind = orgKind||"0,1";
+	
+	zNodes=[];
+	zTreeObj=null;
+	$.ajax({
+		url: "/IMMS/common/getOrgAuthTree",
+	    dataType: "json",
+	    async: false,
+	    type: "get",
+	    data: {
+	    	"orgType":orgType,
+	    	"orgKind":orgKind,
+	    	"url":url
+	    },
+	    success:function(response){
+	    		//zNodes.push({id:1,pId:null,name:'第十九事业部'});
+	    		if(response.data.length>0){
+	    		    $.each(response.data, function (index, dept) {
+	                    zNodes.push(
+	                    		{id:dept.id,pId:dept.parent_id,name:dept.name,is_customer:dept.is_customer,org_type:dept.org_type,org_kind:dept.org_kind,displayName:dept.name}
+	                    );
+	                });
+	                zTreeObj = $.fn.zTree.init(treeId, setting, zNodes);
+	                var nodes = zTreeObj.getNodes();
+	                var select_node=null;
+	                if (nodes.length>0) {
+	                	if(nodeName_default!=undefined&&nodeName_default.trim().length>0){
+	                		select_node = zTreeObj.getNodeByParam("name", nodeName_default);
+	                	}else{
+	                		select_node=nodes[0];
+	                	}
+	                	zTreeObj.selectNode(select_node);
+	                }
+	                //zTreeObj.expandNode(nodes[0], true, false, true);
+	                //zTreeObj.expandAll(true);
+	                //ajaxQuery(nodes[0].id);
+	                expandLevel(zTreeObj,select_node,level); 
+	    		}else{
+	    		      zNodes.push(
+	                    		{id:0,pId:0,name:'无数据权限'}
+	                    );
+	    		      zTreeObj = $.fn.zTree.init(treeId, setting, zNodes);
+	                  var nodes = zTreeObj.getNodes();
+		                if (nodes.length>0) {
+		                	zTreeObj.selectNode(nodes[0]);
+		                }
+	    		}
+               
+	    }
+	});
+}
+/**
+ * 设置展开树的按层次展开节点的方法
+ * @param treeObj 树对象
+ * @param node 树的跟节点
+ * @param level 需要展开的层级
+ */
+function expandLevel(treeObj,node,level){  
+    var childrenNodes = node.children;  
+    for(var i=0;i<childrenNodes.length;i++)  
+    {  
+        treeObj.expandNode(childrenNodes[i], true, false, false);  
+        level=level-1;  
+        if(level>0)  
+        {  
+            expandLevel(treeObj,childrenNodes[i],level);  
+        }  
+    }  
+}

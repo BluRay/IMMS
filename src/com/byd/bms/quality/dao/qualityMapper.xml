@@ -656,13 +656,13 @@
 		<if test="orderconfigId!=null and orderconfigId!=''">
 			and b.order_config_id=#{orderconfigId}
 		</if>
-		
+			group by t.bus_number,t.factory_id,t.workshop 
 		<if test="start!=null">
 			limit #{start},#{length}
 		</if>
 	</select>
 	<select id="getKeyPartsTraceCount" parameterType="Map" resultType="int">
-		select count(1)  from BMS_QM_KEY_PARTS t
+		select count(DISTINCT t.bus_number,t.factory_id,t.workshop )  from BMS_QM_KEY_PARTS t
 		    LEFT JOIN BMS_PLAN_BUS b on t.bus_number=b.bus_number
 		    LEFT JOIN BMS_OR_ORDER o on o.id=b.order_id
 		    LEFT JOIN BMS_OR_ORDER_CONFIG c on c.order_id=o.id and b.order_config_id=c.id
@@ -687,7 +687,6 @@
 		<if test="orderconfigId!=null and orderconfigId!=''">
 			and b.order_config_id=#{orderconfigId}
 		</if>
-		
      </select>
      <update id="updateKeyParts" parameterType="Map">
 		UPDATE BMS_QM_KEY_PARTS SET 

@@ -55,4 +55,14 @@ public class HrBaseDataServiceImpl implements IHrBaseDataService {
 	public int dimissionStaff(Map<String, Object> conditionMap) {
 		return hrBaseDataDao.dimissionStaff(conditionMap);
 	}
+	@Override
+	public Map<String, Object> getWorkgroupPriceList(Map<String, Object> conditionMap) {
+		int totalCount=0;
+		List<Map<String,Object>> datalist = hrBaseDataDao.getWorkgroupPriceList(conditionMap);
+		totalCount = hrBaseDataDao.getWorkgroupPriceCount(conditionMap);		
+		Map<String, Object> result = new HashMap<String,Object>();
+		result.put("total", totalCount);
+		result.put("rows", datalist);
+		return result;
+	}
 }

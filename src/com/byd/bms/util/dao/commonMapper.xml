@@ -683,5 +683,8 @@
 		from BMS_PLAN_BUS b
 		where b.factory_id=#{factoryId} and b.welding_online_date is not null) t2
 	</select>
-	
+	<!-- 获取权限组织结构树 -->
+	<select id="getOrgAuthTree" statementType="CALLABLE" resultType="Map" parameterType='Map'>
+		call P_QueryOrgTreeList(#{staff_number},#{url},#{org_type},#{org_kind})
+	</select>
 </mapper>

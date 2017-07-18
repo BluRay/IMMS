@@ -98,4 +98,5 @@ public interface ICommonDao {
 
 	List<Map<String, Object>> getPauseList(Map<String, Object> conditionMap);
 	
+	List<Map<String,Object>> getOrgAuthTree(Map<String, Object> conditionMap);//获取权限树
 }

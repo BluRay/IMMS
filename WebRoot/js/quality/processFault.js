@@ -191,6 +191,7 @@ function editProcessFault(id){
 }
 
 function btnEditConfirm(id){
+	var vinTest = /^[A-Z0-9]{17}$/;
 	if($("#edit_fault_date").val()==''){
 		alert("请输入故障反馈日期！");
 		$("#edit_fault_date").focus();
@@ -213,6 +214,11 @@ function btnEditConfirm(id){
 	}
 	if($("#edit_vin").val()==''){
 		alert("请输入VIN号！");
+		$("#edit_vin").focus();
+		return false;
+	}
+	if(!vinTest.test($("#edit_vin").val())){
+		alert("请输入长度为17位，只包含大写字母和数字的VIN号！");
 		$("#edit_vin").focus();
 		return false;
 	}
@@ -276,6 +282,8 @@ function btnEditConfirm(id){
 }
 
 function btnNewConfirm(){
+	var vinTest = /^[a-zA-Z0-9]{17}$/;
+	
 	if($("#new_fault_date").val()==''){
 		alert("请输入故障反馈日期！");
 		$("#new_fault_date").focus();
@@ -298,6 +306,11 @@ function btnNewConfirm(){
 	}
 	if($("#new_vin").val()==''){
 		alert("请输入VIN号！");
+		$("#new_vin").focus();
+		return false;
+	}
+	if(!vinTest.test($("#new_vin").val())){
+		alert("请输入长度为17位，只包含大写字母和数字的VIN号！");
 		$("#new_vin").focus();
 		return false;
 	}

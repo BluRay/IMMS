@@ -5,12 +5,14 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.byd.bms.util.service.ICommonService;
 
 @Controller
@@ -475,6 +477,24 @@ public class CommonController extends BaseController {
 		String curTime = df.format(new Date());
 		model.put("factory", factory);
 		model.put("curTime", curTime);
+		return model;
+	}
+	
+	/**
+	 * 获取组织结构权限树
+	 * @return
+	 */
+	@RequestMapping("/getOrgAuthTree")
+	@ResponseBody
+	public ModelMap getOrgAuthTree(){
+		model.clear();
+		Map<String, Object> conditionMap = new HashMap<String, Object>();
+		conditionMap.put("staff_number", session.getAttribute("staff_number"));
+		conditionMap.put("url",  request.getParameter("url"));
+		conditionMap.put("org_type", request.getParameter("orgType")); // 部门类别 (0事业部-1部门-2工厂-3科室-4车间-5班组-6小班组)
+		conditionMap.put("org_kind", request.getParameter("orgKind"));// 部门类别  (0管理型-1生产型)
+		
+		commonService.getOrgAuthTree(conditionMap,model);
 		return model;
 	}
 	

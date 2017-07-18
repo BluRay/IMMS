@@ -172,11 +172,11 @@ jQuery(function($) {
 	    						}
 	    					});
     						console.log("alert",fun_data['1']['additionalParameters']['children']['3']['additionalParameters']['children']['4']['additionalParameters']);
-	    					//fun_data[ppp_id]['additionalParameters']['children'][pp_id]['additionalParameters']['children'][value.parent_id]['additionalParameters']['children'][value.id]['additionalParameters'] = subFun3[value.id];
-	    					fun_data['1']['additionalParameters']['children']['3']
-					    					['additionalParameters']['children']['4']
-					    					['additionalParameters']['children']['18']
-					    					['additionalParameters'] = subFun3[value.id];
+	    					fun_data[ppp_id]['additionalParameters']['children'][pp_id]['additionalParameters']['children'][value.parent_id]['additionalParameters']['children'][value.id]['additionalParameters'] = subFun3[value.id];
+//	    					fun_data['1']['additionalParameters']['children']['3']
+//					    					['additionalParameters']['children']['4']
+//					    					['additionalParameters']['children']['18']
+//					    					['additionalParameters'] = subFun3[value.id];
                             
     					}
     				}
@@ -201,22 +201,20 @@ jQuery(function($) {
 				        $(this).trigger("click");
 				    }
 				}); 
-
-
-
 		    }
 		});
 		$('#tree2')
 		.on('updated', function(e, result) {
 		})
 		.on('selected', function(e,data) {
+			console.log('data',data);
 		})
 		.on('click', function(e) {
 		})
 		.on('opened', function(e) {
 			//alert('opened');
-//			var target = $(e.originalEvent.target);
-//			console.log('target',target);
+			//var target = $(e.originalEvent.target);
+			console.log('target',e);
 
 		})
 		.on('closed', function(e) {
@@ -283,7 +281,7 @@ jQuery(function($) {
     			pa.html('').html('<select id="new_name" class="input-large carType"></select>');
     			getWorkgroup($("#new_p_id").val());
     		}
-    		$("#new_org_kind").attr('disabled','disabled');
+    		//$("#new_org_kind").attr('disabled','disabled');
     		break;
     	}
     	var val=parseInt(tp)+1;
@@ -434,7 +432,7 @@ jQuery(function($) {
         });	
 	});
 	$("#btn_delete").click(function(){
-		var msg = '是否移除[]？将会同时删除当前节点的所有子节点！';
+		var msg = '是否移除选中节点、同时删除选中节点的所有子节点！';
         if(confirm(msg)) {
         	ajaxDelete();
             //ajaxQuery(data.context.parent);
@@ -479,7 +477,7 @@ jQuery(function($) {
 		    dataType: "json",
 			type: "get",
 		    data: {
-		    	"id" : ids.substring(0,ids.length-1)
+		    	"ids" : ids.substring(0,ids.length-1)
 		    },
 		    success:function(response){
 		    	if(response.success){
@@ -668,11 +666,12 @@ function getWorkshop(selectval){
 function getWorkgroup(parentId){
 	var strs="<option value=''>--请选择--<option>";
 	var id="";
-	if($("#new_org_type").val()=='4'){
+	if($("#org_type").val()=='3'){
 		id=$("#new_p_id :selected").attr('foreignid');
 	}else{
 		id="t"+$("#new_p_id :selected").attr('foreignid');
 	}
+	//alert($("#new_org_type :selected").attr('keyvalue')+" "+$("#new_p_id :selected").attr('foreignid'));
 	$.ajax({
 		url : "/IMMS/setting/getWorkgroupList",
 		dataType : "json",

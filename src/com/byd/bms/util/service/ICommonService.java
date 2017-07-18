@@ -107,5 +107,11 @@ public interface ICommonService {
 	 * @param model
 	 */
 	void getMonitorBoardInfo(Map<String, Object> conditionMap, ModelMap model);
+	/**
+	 * @author xiong.jianwu
+	 * @param conditionMap
+	 * @param model
+	 */
+	void getOrgAuthTree(Map<String, Object> conditionMap, ModelMap model);
 	
 }

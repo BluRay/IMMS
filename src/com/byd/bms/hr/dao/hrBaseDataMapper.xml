@@ -267,4 +267,68 @@
 		UPDATE BMS_HR_STAFF SET status = '离职',leave_date = #{curTime},editor_id = #{edit_user} WHERE staff_number = #{staff_number}
 	</update>
 	
+	<select id="getWorkgroupPriceList" parameterType="Map" resultType="Map">
+		select p.id,p.factory,p.workshop,p.workgroup,p.team,p.standard_price stand_price,u.username editor,
+		p.edit_date,concat(o.order_no,' ',o.order_name,t.internal_name,' ',o.order_qty,'台') as order_desc,p.effective_date
+		from BMS_HR_WORKGROUP_PRICE p
+		left join BMS_OR_ORDER o on o.id=p.order_id
+		left join BMS_BASE_BUS_TYPE t on t.id=o.bus_type_id
+		left join BMS_BASE_USER u on u.id=p.editor_id
+		where 1=1
+		<if test="factory !=null and factory !=''">
+			and p.factory =#{factory}
+		</if>
+		<if test="workshop !=null and workshop !=''">
+			and p.workshop =#{workshop}
+		</if>
+		<if test="workgroup !=null and workgroup !=''">
+			and p.workgroup =#{workgroup}
+		</if>
+		<if test="team !=null and team !=''">
+			and p.team =#{team}
+		</if>
+		<if test="effctiveDateStart !=null and effctiveDateStart !=''">
+			and p.effective_date >=#{effctiveDateStart}
+		</if>
+		<if test="effctiveDateEnd !=null and effctiveDateEnd !=''">
+			and p.effective_date &lt;=#{effctiveDateEnd}
+		</if>
+		<if test="orderId !=null and orderId !=''">
+			and p.order_id =#{orderId}
+		</if>
+		order by p.factory,p.workshop,p.workgroup,p.team,p.order_id,p.edit_date desc
+		<if test="start !=null">
+			LIMIT #{start} ,#{length} 
+		</if>	
+	</select>	
+	<select id="getWorkgroupPriceCount" parameterType="Map" resultType="int">
+		select COUNT(p.id)
+		from BMS_HR_WORKGROUP_PRICE p
+		left join BMS_OR_ORDER o on o.id=p.order_id
+		left join BMS_BASE_BUS_TYPE t on t.id=o.bus_type_id
+		left join BMS_BASE_USER u on u.id=p.editor_id
+		where 1=1
+		<if test="factory !=null and factory !=''">
+			and p.factory =#{factory}
+		</if>
+		<if test="workshop !=null and workshop !=''">
+			and p.workshop =#{workshop}
+		</if>
+		<if test="workgroup !=null and workgroup !=''">
+			and p.workgroup =#{workgroup}
+		</if>
+		<if test="team !=null and team !=''">
+			and p.team =#{team}
+		</if>
+		<if test="effctiveDateStart !=null and effctiveDateStart !=''">
+			and p.effective_date >=#{effctiveDateStart}
+		</if>
+		<if test="effctiveDateEnd !=null and effctiveDateEnd !=''">
+			and p.effective_date &lt;=#{effctiveDateEnd}
+		</if>
+		<if test="orderId !=null and orderId !=''">
+			and p.order_id =#{orderId}
+		</if>	
+	</select>	
+	
 </mapper>

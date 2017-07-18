@@ -604,5 +604,23 @@ public class HrBaseDataController extends BaseController {
 		return model;
 	}
 	
+	@RequestMapping("/getWorkgroupPriceList")
+	@ResponseBody
+	public ModelMap getWorkgroupPriceList(){
+		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
+		int start=(request.getParameter("start")!=null)?Integer.parseInt(request.getParameter("start")):0;		//分页数据起始数
+		int length=(request.getParameter("length")!=null)?Integer.parseInt(request.getParameter("length")):20;	//每一页数据条数
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("draw", draw);
+		condMap.put("start", start);
+		condMap.put("length", length);
+		
+		Map<String,Object> list = hrBaseDataService.getWorkgroupPriceList(condMap);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(list);
+		model = mv.getModelMap();
+		return model;
+	}
+	
 	/****************END YangKe**************************************************/
 }

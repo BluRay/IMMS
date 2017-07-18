@@ -20,4 +20,6 @@ public interface IHrBaseDataService {
 	public List<Map<String,Object>> getOrg(List<Map<String,Object>> conditionMap);
 	public List<String> getStaffListByStaffNumbers(Map<String, Object> conditionMap);
 	public int dimissionStaff(Map<String, Object> conditionMap);
+	
+	public Map<String,Object> getWorkgroupPriceList(Map<String, Object> conditionMap);
 }

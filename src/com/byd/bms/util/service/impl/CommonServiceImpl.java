@@ -395,7 +395,16 @@ public class CommonServiceImpl implements ICommonService {
 		model .put("partsBalance", commonDao.getPartsBalance(conditionMap));
 		model.put("pauseList", commonDao.getPauseList(conditionMap));
 		
+	}
+	/**
+	 * @author xiong.jianwu
+	 */
+	@Override
+	public void getOrgAuthTree(Map<String, Object> conditionMap, ModelMap model) {
+		List<Map<String,Object>> datalist=new ArrayList<Map<String,Object>>();
+		datalist=commonDao.getOrgAuthTree(conditionMap);
+		model.put("data", datalist);	
+		
 	}	
-
 	
 }

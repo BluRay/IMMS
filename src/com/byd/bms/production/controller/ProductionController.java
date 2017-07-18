@@ -714,6 +714,17 @@ public class ProductionController extends BaseController {
 		
 		return model;
 	}
+	
+	/**
+	 * 计件工时维护页面
+	 * @return
+	 */
+	@RequestMapping("/pieceWorkhourMtn")
+	public ModelAndView pieceWorkhourMtn(){
+		mv.getModelMap().addAttribute("workshop", request.getParameter("workshop"));
+		mv.setViewName("production/pieceWorkhourMtn");
+		return mv;
+	}
 	/****************************  xiongjianwu ***************************/
 	
 	@RequestMapping("/productionsearchbusinfo")
