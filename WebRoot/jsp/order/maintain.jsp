@@ -144,6 +144,13 @@
 						</div>
 					</div>
 					<div class="form-group">
+						<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="editOrderCode">*&nbsp;订单区域</label>
+						<div class="col-sm-9">
+							<input type="text" disabled="disabled" class="input-medium"
+								placeholder="订单区域..." id="editOrderArea" />
+						</div>
+					</div>
+					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="">*&nbsp;车型</label>
 						<div class="col-sm-9">
 							<select name="" disabled="disabled" id="editBusType"
@@ -264,6 +271,15 @@
 								placeholder="客户..." id="new_customer" />
 						</div>
 					</div> 
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="">*&nbsp;订单区域</label>
+						<div class="col-sm-9">
+							<select name="" id="newOrderArea"
+								class="input-medium orderArea">
+							</select>
+
+						</div>
+					</div>
 					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="new_productive_year">*&nbsp;生产年份</label>
 						<div class="col-sm-9">

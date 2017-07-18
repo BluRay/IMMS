@@ -83,7 +83,7 @@
 	
 	<select id="getOrderDetailList" parameterType="Map" resultType="com.byd.bms.order.model.BmsFactoryOrderDetail">
 		select d.id id,d.busnum_start busnum_start,d.busnum_end busnum_end,d.id factory_order_id,(d.busnum_end-d.busnum_start+1) production_qty,d.factory_id factory_id,o.order_no order_no,o.order_name order_name,
-		o.order_code order_code,o.order_type order_type,o.order_qty order_qty,o.productive_year productive_year,t.bus_type_code bus_type_code,o.memo,
+		o.order_code order_code,o.order_type order_type,o.order_area order_area,o.order_qty order_qty,o.productive_year productive_year,t.bus_type_code bus_type_code,o.memo,
 		(SELECT ifnull(max(cast(reverse(substr(reverse(bus_number),1,instr(reverse(bus_number),'-')-1)) as signed)),0) FROM BMS_PLAN_BUS where order_id=d.order_id and factory_id=d.factory_id and factory_order_id=d.id) maxbusnum,
 		(SELECT ifnull(min(cast(reverse(substr(reverse(bus_number),1,instr(reverse(bus_number),'-')-1)) as signed)),0) FROM BMS_PLAN_BUS where order_id=d.order_id and factory_id=d.factory_id and factory_order_id=d.id) minbusnum,
 		d.order_id order_id,o.delivery_date delivery_date,f.factory_name,d.editor_id editor_id,d.edit_date edit_date,d.bus_number_count bus_number_count,d.bus_number_start bus_number_start
@@ -157,8 +157,8 @@
 	
 	<insert id="insertOrder" useGeneratedKeys="true" keyProperty="id" parameterType="com.byd.bms.order.model.BmsOrder">
 		<![CDATA[
-			insert into BMS_OR_ORDER(order_no,order_name,order_code,order_type,bus_type_id,order_qty,productive_year,delivery_date,customer,memo,editor_id,edit_date) 
-			values(#{order_no},#{order_name},#{order_code},#{order_type},#{bus_type_id},#{order_qty},#{productive_year},#{delivery_date},#{customer},#{memo},#{editor_id},#{edit_date})
+			insert into BMS_OR_ORDER(order_no,order_name,order_code,order_type,bus_type_id,order_qty,productive_year,delivery_date,customer,order_area,memo,editor_id,edit_date) 
+			values(#{order_no},#{order_name},#{order_code},#{order_type},#{bus_type_id},#{order_qty},#{productive_year},#{delivery_date},#{customer},#{order_area},#{memo},#{editor_id},#{edit_date})
 		]]>
 	</insert>
 	
@@ -404,7 +404,7 @@
 	</update>
 	
 	<select id="queryOrderQueryList" parameterType="Map" resultType="Map">
-		select o.id,CONCAT(o.order_no,' ',o.order_name,t.bus_type_code,' ',o.order_qty,'台') AS order_desc,o.order_type,o.delivery_date,
+		select o.id,CONCAT(o.order_no,' ',o.order_name,t.bus_type_code,' ',o.order_qty,'台') AS order_desc,o.order_type,o.order_area,o.delivery_date,
 		fo.factory_id,f.factory_name,fo.production_qty,c.order_config_name,fc.product_qty,fc.sequence,c.id order_config_id,fc.product_qty config_qty,
 		(SELECT ifnull(SUM(p.quantity),0) FROM BMS_PD_WORKSHOP_SUPPLY p WHERE p.order_id = o.id AND p.factory_id = fo.factory_id AND supply_workshop ='自制件' AND receive_workshop ='部件') as zzj_offline_count,
 		(SELECT ifnull(SUM(p.online_real_qty),0) FROM BMS_PD_PARTS_PLAN_FINISH p WHERE p.order_id = o.id AND p.factory_id = fo.factory_id AND p.parts_id=58) as parts_online_count,

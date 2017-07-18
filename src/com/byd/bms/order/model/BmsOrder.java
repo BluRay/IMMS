@@ -22,6 +22,7 @@ public class BmsOrder {
 	private int editor_id;
 	private String edit_date;
 	private String customer;
+	private String order_area;
 	
 	public String getOrder_name_str() {
 		return order_name_str;
@@ -124,6 +125,12 @@ public class BmsOrder {
 	}
 	public void setCustomer(String customer) {
 		this.customer = customer;
+	}
+	public String getOrder_area() {
+		return order_area;
+	}
+	public void setOrder_area(String order_area) {
+		this.order_area = order_area;
 	}	
 
 }

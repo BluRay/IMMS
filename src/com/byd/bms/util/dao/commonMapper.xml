@@ -196,7 +196,7 @@
 		FROM BMS_BASE_ORG o
 		LEFT JOIN BMS_BASE_ORG o1 ON o.parent_id=o1.id
 		LEFT JOIN BMS_BASE_ORG o2 on o1.parent_id=o2.id
-		WHERE o.org_type='7' and find_in_set(o1.name,#{workshop_list})>0 and o.deleted='0' and o2.name=#{factory}
+		WHERE o.org_type='3' and find_in_set(o1.name,#{workshop_list})>0 and o.deleted='0' and o2.name=#{factory}
 		group by o1.name
 	</select>
 	

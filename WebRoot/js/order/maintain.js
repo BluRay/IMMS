@@ -26,7 +26,8 @@ $(document).ready(function(){
 	getBusType();
 	ajaxQuery();
 	//获取订单类型下拉列表
-	getKeysSelect("ORDER_TYPE", "标准订单", "#newOrderType","noall","keyName");
+	getKeysSelect("ORDER_TYPE", "标准订单", "#newOrderType","请选择","keyName");
+	getKeysSelect("ORDER_AREA", "订单区域", "#newOrderArea","请选择","keyName");
 	
 	$(".btnQuery").on("click",function(){
 		ajaxQuery();
@@ -479,6 +480,7 @@ function ajaxQuery(){
 	                },*/"defaultContent": ""},
 		            {"title":"订单描述","class":"center","data":"order_name_str","defaultContent": ""},
 		            {"title":"订单类型","class":"center","data":"order_type","defaultContent": ""},
+		            {"title":"订单区域","class":"center","data":"order_area","defaultContent": ""},
 		            {"title":"客户","class":"center","data":"customer","defaultContent": ""},
 		            {"title":"生产年份","class":"center","data":"productive_year","defaultContent": ""},
 		            {"title":"订单交期","class":"center","data": "delivery_date","defaultContent": ""},
@@ -771,6 +773,7 @@ function ajaxAdd (argument) {
 			"data_bus_type_id":$("#newBusType").val(),
 			"data_order_qty":$("#new_order_qty").val(),
 			"data_customer":$("#new_customer").val(),
+			"data_order_area":$("#newOrderArea").val(),
 			"data_productive_year":$("#new_productive_year").val(),
 			"delivery_date":$("#new_delivery_date").val(),
 			"status":"0",
@@ -813,6 +816,7 @@ function ajaxEdit(order_id){
 						$("#editOrderName").val(value.order_name);
 						$("#editOrderCode").val(value.order_code);
 						$("#editOrderType").val(value.order_type);
+						$("#editOrderArea").val(value.order_area);
 						//$("#editBusType").val(value.bus_type_code);
 						select_selectOption("#editBusType",value.bus_type_code)
 						$("#edit_order_qty").val(value.order_qty);

@@ -7,11 +7,11 @@ import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+
 import com.byd.bms.hr.service.IHrBaseDataService;
 import com.byd.bms.util.ExcelModel;
 import com.byd.bms.util.ExcelTool;
@@ -132,19 +133,24 @@ public class HrBaseDataController extends BaseController {
 	@RequestMapping("/deleteOrgData")
 	@ResponseBody
 	public ModelMap deleteOrgData() throws UnsupportedEncodingException {
-		
+		int result=0;
 		Map<String, Object> conditionMap = new HashMap<String, Object>();
-
-		conditionMap.put("id", request.getParameter("id"));
-
-		//生成子tree
-		TreeNode t = recursiveTree(request.getParameter("id"),this.getOrgList());
-		//递归删除子tree的所有节点
-		traverseTreeDeleteOrg(t);
-		//删除当前节点
-		int result = hrBaseDataService.deleteOrgData(conditionMap);
-
-		return null;
+		String ids=request.getParameter("ids");
+		List idlist=Arrays.asList(ids.split(","));
+		for(Object id : idlist){
+			conditionMap.put("id", (String)id);
+            //生成子tree
+			TreeNode t = recursiveTree((String)id,this.getOrgList());
+			//递归删除子tree的所有节点
+			traverseTreeDeleteOrg(t);
+			//删除当前节点
+			result = hrBaseDataService.deleteOrgData(conditionMap);
+		}
+		if(result==1){
+			conditionMap.put("success",true);
+			model.addAllAttributes(conditionMap);
+		}
+		return model;
 	}
 	public void traverseTreeDeleteOrg(TreeNode node){
 		for(TreeNode n :(List<TreeNode>)node.getNodes()){
@@ -179,6 +185,7 @@ public class HrBaseDataController extends BaseController {
 			conditionMap
 					.put("sort_number", request.getParameter("sort_number"));
 			conditionMap.put("manager", request.getParameter("manager"));
+			conditionMap.put("foreign_id", request.getParameter("foreign_id"));
 			conditionMap.put("responsibilities",
 					request.getParameter("responsibilities"));
 			conditionMap.put("deleted", "0");
@@ -433,6 +440,22 @@ public class HrBaseDataController extends BaseController {
 		Map<String,Object> list = hrBaseDataService.getStaffList(condMap);
 		mv.clear();
 		mv.getModelMap().addAllAttributes(list);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/dimissionStaff")
+	@ResponseBody
+	public ModelMap dimissionStaff(){
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String edit_user = request.getSession().getAttribute("staff_number") + "";
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("staff_number", request.getParameter("staff_number"));
+		condMap.put("curTime", curTime);
+		condMap.put("edit_user", edit_user);
+		int result = hrBaseDataService.dimissionStaff(condMap);
+		initModel(true,String.valueOf(result),null);
 		model = mv.getModelMap();
 		return model;
 	}

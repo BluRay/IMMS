@@ -17,6 +17,73 @@ jQuery(function($) {
 		$("#divBulkAdd").hide();
 	});
 	
+	$("#btnDimission").click(function () {
+		$('#edit_name').val('');
+		$('#edit_sex').val('');
+		$('#edit_plant_org').val('');
+		$('#edit_workshop_org').val('');
+		$('#edit_workgroup_org').val('');
+		$('#edit_team_org').val('');
+		$('#edit_job').val('');
+		$('#edit_staff_number').val('');
+		$('#edit_staff_number').focus();
+		$("#dialog-confirm").removeClass('hide').dialog({
+			resizable: false,
+			title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 员工离职</h4></div>',
+			title_html: true,
+			width:'500px',
+			modal: true,
+			buttons: [{
+						text: "取消",
+						"class" : "btn btn-minier",
+						click: function() {$( this ).dialog( "close" );} 
+					},
+					{
+						text: "离职",
+						id:"btn_ok",
+						"class" : "btn btn-success btn-minier",
+						click: function() {
+							btnDimissionConfirm();
+						}
+					}]
+			
+		})
+	});
+	
+	$('#edit_staff_number').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			$.ajax({
+				type : "get",
+				dataType : "json",
+				url : "getStaffList",
+				data : {
+					"staff_number":$('#edit_staff_number').val(),
+					"org_id":"",
+					"orgType":"",
+					"status":"在职",
+					"staff_level":"",
+					"job_type":"",
+					"job":"",
+					"workplace":"",
+					"orgStr":""
+				},
+				success : function(response) {
+					if(response.total == 0){
+						alert("没有此工号有员工信息或此员工已经离职！");
+					}else{
+						$('#edit_name').val(response.rows[0].name);
+						$('#edit_sex').val(response.rows[0].sex);
+						$('#edit_plant_org').val(response.rows[0].plant_org);
+						$('#edit_workshop_org').val(response.rows[0].workshop_org);
+						$('#edit_workgroup_org').val(response.rows[0].workgroup_org);
+						$('#edit_team_org').val(response.rows[0].team_org);
+						$('#edit_job').val(response.rows[0].job);
+					}
+				}
+			});
+		}
+	});
+	
 	$("#btn_upload").click (function () {
 		$("#uploadMasterPlanForm").ajaxSubmit({
 			url:"uploadStaff",
@@ -35,6 +102,32 @@ jQuery(function($) {
 	});
 	
 });
+
+function btnDimissionConfirm(){
+	if($('#edit_name').val() === ''){
+		alert("请输入正确的工号并回车获取员工信息！");
+		$('#edit_name').focus();
+		return false;
+	}
+	$.ajax({
+		type : "get",
+		dataType : "json",
+		url : "dimissionStaff",
+		data : {
+			"staff_number":$('#edit_staff_number').val()
+		},
+		success : function(response) {
+			$("#dialog-confirm").dialog( "close" );
+			$.gritter.add({
+				title: '系统提示：',
+				text: '<h5>操作成功！</h5>',
+				class_name: 'gritter-info'
+			});
+			ajaxQuery();
+		}
+	})
+	
+}
 
 function ajaxQuery(){
 	$table.bootstrapTable('refresh', {url: 'getStaffList'});
@@ -172,7 +265,7 @@ function initTable() {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
     	        	}
             },{
-            	field: 'job',title: '岗位名称',align: 'center',valign: 'middle',align: 'center',
+            	field: 'job',title: '&nbsp;&nbsp;岗位名称&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
                 sortable: false,visible: true,footerFormatter: totalTextFormatter,
                 cellStyle:function cellStyle(value, row, index, field) {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
@@ -226,7 +319,7 @@ function initTable() {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
     	        	}
             },{
-            	field: 'family_address',title: '家庭住址',align: 'center',valign: 'middle',align: 'center',
+            	field: 'family_address',title: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;家庭住址&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
                 sortable: false,visible: true,footerFormatter: totalTextFormatter,
                 cellStyle:function cellStyle(value, row, index, field) {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
@@ -238,10 +331,10 @@ function initTable() {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
     	        	}
             },{
-            	field: 'corporation',title: '法人',align: 'center',valign: 'middle',align: 'center',
+            	field: 'corporation',title: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;法人&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
                 sortable: false,visible: true,footerFormatter: totalTextFormatter,
                 cellStyle:function cellStyle(value, row, index, field) {
-    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
+    	        	return {css: {"padding-left": "2px","width":"200px","padding-right": "2px","font-size":"13px"}};
     	        	}
             },{
             	field: 'workplace',title: '工作地点',align: 'center',valign: 'middle',align: 'center',

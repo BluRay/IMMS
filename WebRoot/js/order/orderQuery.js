@@ -100,6 +100,7 @@ function ajaxQuery(){
 		columns: [
 		            {"title":"订单","width":"230","class":"center","data":"order_desc","defaultContent": ""},
 		            {"title":"订单类型","class":"center","data":"order_type","defaultContent": ""},
+		            {"title":"订单区域","class":"center","data":"order_area","defaultContent": ""},
 		            {"title":"订单交期","class":"center","data":"delivery_date","defaultContent": ""},
 		            {"title":"生产工厂","class":"center","data": "factory_name","defaultContent": ""},
 		            {"title":"生产数量","class":"center","data":"production_qty","defaultContent": ""},		            

@@ -23,4 +23,5 @@ public interface IHrBaseDataDao {
 	public int getStaffCount(Map<String, Object> conditionMap);
 	public List<Map<String,Object>> getOrg(List<Map<String,Object>> conditionMap);
 	public List<String> getStaffListByStaffNumbers(Map<String, Object> conditionMap);
+	public int dimissionStaff(Map<String, Object> conditionMap);
 }

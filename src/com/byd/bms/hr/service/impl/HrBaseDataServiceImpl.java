@@ -51,4 +51,8 @@ public class HrBaseDataServiceImpl implements IHrBaseDataService {
 	public List<String> getStaffListByStaffNumbers(Map<String, Object> conditionMap) {
 		return hrBaseDataDao.getStaffListByStaffNumbers(conditionMap);
 	}
+	@Override
+	public int dimissionStaff(Map<String, Object> conditionMap) {
+		return hrBaseDataDao.dimissionStaff(conditionMap);
+	}
 }

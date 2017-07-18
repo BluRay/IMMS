@@ -7,18 +7,19 @@
          manager,org_type,org_kind,responsibilities,
          (SELECT COUNT(1) FROM BMS_BASE_ORG f2 WHERE f2.parent_id = t.id) AS sub_count,
          (SELECT name FROM BMS_BASE_ORG f2 WHERE f2.id = t.parent_id) AS parent_name
-          FROM BMS_BASE_ORG t WHERE t.deleted = 0 
+        FROM BMS_BASE_ORG t  <!--    t left join BMS_BASE_KEY k on t.org_type=k.org_type -->
+           WHERE t.deleted = 0 
          <if test="id!=null">
              AND t.id=#{id} 
          </if>
          <if test="parent_id!=null">
              AND t.parent_id=#{parent_id} 
          </if>
-         ORDER BY sort_number ASC	
+         ORDER BY org_type ASC	
 	</select>
 	<select id="getOrgDataByParentId" parameterType="Map" resultType="Map">
 		SELECT id,CONCAT(parent_id,'') parent_id,name_en as name,name as display_name,
-		   org_code as short_name,manager,org_type,org_kind,responsibilities,
+		   org_code as short_name,manager,org_type,org_kind,responsibilities,foreign_id,
 		   (SELECT name FROM BMS_BASE_ORG f2 WHERE f2.id = t.parent_id) AS parent_name
           from BMS_BASE_ORG t where 1=1 and t.deleted='0'
 		<if test="id!=null and id!=''">
@@ -36,8 +37,8 @@
 			LAST_INSERT_ID()
 		</selectKey>
 		<![CDATA[
-			insert into BMS_BASE_ORG(parent_id,org_type,org_kind,name,name_en,org_code,sort_number,manager,responsibilities,deleted,editor_id,edit_date) 
-			values(#{parent_id},#{org_type},#{org_kind},#{name},#{name_en},#{org_code},#{sort_number},#{manager},#{responsibilities},#{deleted},#{editor_id},#{edit_date})
+			insert into BMS_BASE_ORG(parent_id,org_type,org_kind,name,name_en,foreign_id,org_code,sort_number,manager,responsibilities,deleted,editor_id,edit_date) 
+			values(#{parent_id},#{org_type},#{org_kind},#{name},#{name_en},#{foreign_id},#{org_code},#{sort_number},#{manager},#{responsibilities},#{deleted},#{editor_id},#{edit_date})
 		]]>
 	</insert>
 	<!-- 编辑组织结构 -->
@@ -262,5 +263,8 @@
 		SELECT s.staff_number FROM BMS_HR_STAFF s
 		WHERE FIND_IN_SET(s.staff_number,#{staff_numbers})>0
 	</select>
+	<update id="dimissionStaff" parameterType="Map">
+		UPDATE BMS_HR_STAFF SET status = '离职',leave_date = #{curTime},editor_id = #{edit_user} WHERE staff_number = #{staff_number}
+	</update>
 	
 </mapper>

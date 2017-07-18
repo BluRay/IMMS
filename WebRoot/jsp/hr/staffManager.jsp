@@ -88,7 +88,7 @@
 												<select id="search_stauts"><option value="在职">在职</option><option value="离职">离职</option></select>
 												</td>
 												<td align="right"><input type="button" class="btn btn-sm btn-success" id="btnQuery" value="查询" style="margin-left: 2px;"></input>&nbsp;
-												<input type="button" class="btn btn-sm btn-warning" id="btnQuit" value="离职" style="margin-left: 2px;"></input></td>
+												<input type="button" class="btn btn-sm btn-warning" id="btnDimission" value="离职" style="margin-left: 2px;"></input></td>
 												<td>&nbsp;<input id="btnBulkAdd" class="btn btn-sm btn-info" value="批量导入" type="button">&nbsp;</td>
 												
 											</tr>
@@ -122,6 +122,50 @@
 					</div>
 				</div>
 			</div><!-- /.main-content -->
+			
+			<div id="dialog-confirm" class="hide" style="width:800px;height:500px">
+				<form>
+					<fieldset>
+						<div class="form-group form-horizontal">
+							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 工号： </label>
+							<div class="col-sm-9"><input id="edit_staff_number" placeholder="请输入工号后回车..." style="width:270px" class="col-sm-9" type="text"></div>
+
+						</div>
+					</fieldset>
+					<fieldset>
+						<div style="margin-top:10px" class="form-group form-horizontal">
+							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 姓名： </label>
+							<div class="col-sm-3"><input id="edit_name" placeholder="姓名" style="width:100px" disabled="disabled" type="text"></div>
+							<label style="width:60px" for="form-field-1"> 性别： </label>
+							<input id="edit_sex" placeholder="性别" style="width:100px" disabled="disabled" type="text">
+						</div>
+					</fieldset>
+					<fieldset>
+						<div class="form-group form-horizontal">
+							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 工厂： </label>
+							<div class="col-sm-3"><input id="edit_plant_org" placeholder="工厂" style="width:100px" disabled="disabled" type="text"></div>
+							<label style="width:60px" for="form-field-1"> 车间： </label>
+							<input id="edit_workshop_org" placeholder="车间" style="width:100px" disabled="disabled" type="text">
+						</div>
+					</fieldset>
+					<fieldset>
+						<div class="form-group form-horizontal">
+							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 班组： </label>
+							<div class="col-sm-3"><input id="edit_workgroup_org" placeholder="班组" style="width:100px" disabled="disabled" type="text"></div>
+							<label style="width:60px" for="form-field-1"> 小班组： </label>
+							<input id="edit_team_org" placeholder="小班组" style="width:100px" disabled="disabled" type="text">
+						</div>
+					</fieldset>
+					<fieldset>
+						<div class="form-group form-horizontal">
+							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 岗位： </label>
+							<div class="col-sm-3"><input id="edit_job" placeholder="岗位" style="width:100px" disabled="disabled" type="text"></div>
+						</div>
+					</fieldset>
+					
+				</form>
+			
+			</div>
 
 			<!-- 脚 -->
 			<%-- <jsp:include page="footer.jsp" flush="true"/> --%>
@@ -136,8 +180,8 @@
 	.fixed-table-toolbar .bs-bars, .fixed-table-toolbar .search, .fixed-table-toolbar .columns {
 		position: absolute;
 		margin-top: 102px;
-		right: 20px;
-		top: -15px;
+		right: 12px;
+		top: -99px;
 	}
 	.btn-default {
 		color: #333;

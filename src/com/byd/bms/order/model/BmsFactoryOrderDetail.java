@@ -24,6 +24,7 @@ public class BmsFactoryOrderDetail {
 	private int editor_id;
 	private String edit_date;
 	private String memo;
+	private String order_area;
 	
 	public int getId() {
 		return id;
@@ -162,6 +163,12 @@ public class BmsFactoryOrderDetail {
 	}
 	public void setMemo(String memo) {
 		this.memo = memo;
+	}
+	public String getOrder_area() {
+		return order_area;
+	}
+	public void setOrder_area(String order_area) {
+		this.order_area = order_area;
 	}
 
 }

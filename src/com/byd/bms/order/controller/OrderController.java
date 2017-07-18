@@ -194,6 +194,7 @@ public class OrderController extends BaseController{
 		order.setDelivery_date(request.getParameter("delivery_date"));
 		order.setMemo(request.getParameter("memo"));
 		order.setCustomer(request.getParameter("data_customer"));
+		order.setOrder_area(request.getParameter("data_order_area"));
 		order.setEditor_id(userid);
 		order.setEdit_date(curTime);
 		
