@@ -7,9 +7,9 @@ $(document).ready(function(){
 		ajaxQuery();
 	});
 	function initPage(){
-		getBusType();
+		getBusType("#search_bustype");
 		getOrderNoSelect("#search_orderno","#orderId");
-		getOrderNoSelect("#new_orderNo","#orderId");
+		getOrderNoSelect("#new_orderNo","#orderId",setBusType);
 		getOrderNoSelect("#edit_orderNo","#orderId");
 		getFactorySelect("quality/materialExceptionLogs",'',"#search_factory","全部",'id');
 		getWorkshopSelect("quality/materialExceptionLogs",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
@@ -45,7 +45,7 @@ $(document).ready(function(){
 	
 	
 	$("#btnAdd").on('click', function(e) {
-		getBusType();
+		getBusType("#new_bus_type");
 		getFactorySelect("quality/materialExceptionLogs",'',"#new_factory",null,'id');
 		getWorkshopSelect("quality/materialExceptionLogs",$("#new_factory :selected").text(),"","#new_workshop",null,"id");
 		
@@ -54,7 +54,8 @@ $(document).ready(function(){
 			resizable: false,
 			title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 增加物料异常记录</h4></div>',
 			title_html: true,
-			width:'600px',
+			width:800,
+			height:600,
 			modal: true,
 			buttons: [{
 						text: "取消",
@@ -77,7 +78,7 @@ $(document).ready(function(){
 
 function showExceptionLogs(id){
 	clear();
-	getBusType();
+	getBusType("#edit_bus_type");
 	getFactorySelect("quality/materialExceptionLogs",'',"#edit_factory",null,'id');
 	getWorkshopSelect("quality/materialExceptionLogs",$("#edit_factory :selected").text(),"","#edit_workshop",null,"id");
 	
@@ -128,7 +129,8 @@ function showExceptionLogs(id){
 				resizable: false,
 				title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 查看物料异常记录</h4></div>',
 				title_html: true,
-				width:'600px',
+				width:800,
+				height:600,
 				modal: true,
 				buttons: [{
 							text: "关闭",
@@ -143,7 +145,7 @@ function showExceptionLogs(id){
 }
 
 function editExceptionLogs(id){
-	getBusType();
+	getBusType("#edit_bus_type");
 	getFactorySelect("quality/materialExceptionLogs",'',"#edit_factory",null,'id');
 	getWorkshopSelect("quality/materialExceptionLogs",$("#edit_factory :selected").text(),"","#edit_workshop",null,"id");
 
@@ -192,7 +194,8 @@ function editExceptionLogs(id){
 				resizable: false,
 				title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 编辑制程异常</h4></div>',
 				title_html: true,
-				width:'600px',
+				width:800,
+				height:600,
 				modal: true,
 				buttons: [{
 							text: "关闭",
@@ -234,7 +237,7 @@ function btnEditConfirm(id){
 		$("#edit_description").focus();
 		return false;
 	}
-	console.log("-->id = "+ id);
+	//console.log("-->id = "+ id);
 	$('#form_edit').ajaxSubmit({
 		url: "editMaterialExceptionLogs",
 		dataType : "json",
@@ -351,11 +354,18 @@ function btnNewConfirm(){
 	
 }
 
+function setBusType(order){
+	//alert(order.busType);
+	$("#new_bus_type").find("option:contains('"+order.busType+"')").attr("selected",true);
+	//$("#edit_bus_type").find("option:contains('"+order.busType+"')").attr("selected",true);
+    //$("#new_bus_type").val('3');
+   // $("#edit_bus_type").val(order.busType);
+}
 
-function getBusType(){
-	$("#search_bustype").empty();
-	$("#new_bus_type").empty();
-	$("#edit_bus_type").empty();
+function getBusType(element){
+	$(element).empty();
+	//$("#new_bus_type").empty();
+	//$("#edit_bus_type").empty();
 	$.ajax({
 		url: "../common/getBusType",
 		dataType: "json",
@@ -367,9 +377,15 @@ function getBusType(){
 		    $.each(response.data, function(index, value) {
 		    	strs += "<option value=" + value.id + ">" + value.name + "</option>";
 		    });
-		    $("#search_bustype").append("<option value=''>全部</option>" + strs);
-		    $("#new_bus_type").append(strs);
-		    $("#edit_bus_type").append(strs);
+		    if(element=="#search_bustype"){
+		    	$("#search_bustype").append("<option value=''>全部</option>" + strs);
+		    }else{
+		    	 $(element).append(strs);
+		    }
+		   
+		    //$("#search_bustype").append("<option value=''>全部</option>" + strs);
+		    //$("#new_bus_type").append(strs);
+		    //$("#edit_bus_type").append(strs);
 		    //$("#search_bustype").append(strs);
 		}
 	})

@@ -44,6 +44,49 @@ public class HrBaseDataServiceImpl implements IHrBaseDataService {
 		return result;
 	}
 	@Override
+	public int addPositionData(List<Map<String,Object>> list) {
+		int result=0;
+		for(Map<String,Object> map : list){
+			Map<String,Object> conMap=new HashMap<String,Object>();
+			conMap.put("job_no", (String)map.get("job_no"));
+			List<Map<String,Object>> plist=hrBaseDataDao.getPositionList(conMap);
+			if(plist.size()>0){
+				Map pMap=plist.get(0);
+				map.put("id", pMap.get("id"));
+				result=hrBaseDataDao.editPositionData(map);
+			}else{
+				result=hrBaseDataDao.addPositionData(map);
+			}
+		}
+		return result;
+	}
+	@Override
+	public Map<String, Object> getPositionList(
+			Map<String, Object> conditionMap) {
+		int totalCount=0;
+		List<Map<String,Object>> datalist = hrBaseDataDao.getPositionList(conditionMap);
+		totalCount = hrBaseDataDao.getPositionCount(conditionMap);		
+		Map<String, Object> result = new HashMap<String,Object>();
+		result.put("total", totalCount);
+		result.put("rows", datalist);
+		return result;
+	}
+	@Override
+	public List<Map<String, Object>> getPositionData(
+			Map<String, Object> conditionMap) {
+		return hrBaseDataDao.getPositionData(conditionMap);
+	}
+	@Override
+	public int editPositionData(Map<String, Object> conditionMap) {
+		return hrBaseDataDao.editPositionData(conditionMap);
+	}
+	@Override
+	public void deletePositionData(List<String> list) {
+		for(String id : list){
+			hrBaseDataDao.deletePositionData(id);
+		}
+	}
+	@Override
 	public List<Map<String, Object>> getOrg(List<Map<String, Object>> conditionMap) {
 		return hrBaseDataDao.getOrg(conditionMap);
 	}
@@ -51,6 +94,7 @@ public class HrBaseDataServiceImpl implements IHrBaseDataService {
 	public List<String> getStaffListByStaffNumbers(Map<String, Object> conditionMap) {
 		return hrBaseDataDao.getStaffListByStaffNumbers(conditionMap);
 	}
+	
 	@Override
 	public int dimissionStaff(Map<String, Object> conditionMap) {
 		return hrBaseDataDao.dimissionStaff(conditionMap);
@@ -64,5 +108,21 @@ public class HrBaseDataServiceImpl implements IHrBaseDataService {
 		result.put("total", totalCount);
 		result.put("rows", datalist);
 		return result;
+	}
+	@Override
+	public Map<String, Object> getOrgInfo(Map<String, Object> conditionMap) {
+		return hrBaseDataDao.getOrgInfo(conditionMap);
+	}
+	@Override
+	public Map<String, Object> queryWorkgroupPrice(Map<String, Object> map) {
+		return hrBaseDataDao.queryWorkgroupPrice(map);
+	}
+	@Override
+	public int addWorkgroupPrice(List<Map<String, Object>> addList) {
+		return hrBaseDataDao.addWorkgroupPrice(addList);
+	}
+	@Override
+	public int updateWorkgroupPrice(List<Map<String, Object>> upDateList) {
+		return hrBaseDataDao.updateWorkgroupPrice(upDateList);
 	}
 }

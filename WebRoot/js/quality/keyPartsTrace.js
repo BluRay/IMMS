@@ -163,7 +163,8 @@ function showBusNumberDetail(json){
 			var param ={
 				"orderId":json.order_id,
 				"bustypeId":json.bustype_id,
-				"orderconfigId":json.orderconfig_id
+				"orderconfigId":json.orderconfig_id,
+				"workshop":json.workshop
 			};
            
             $.ajax({

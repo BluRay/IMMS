@@ -713,6 +713,9 @@
 		<if test="orderconfigId!=null and orderconfigId!=''">
 			and h.order_config_id=#{orderconfigId}
 		</if>
+		<if test="workshop!=null and workshop!=''">
+			and t.workshop=#{workshop}
+		</if>
 	</select>
 	
 	<select id="getMaterialExceptionLogsList" parameterType="Map" resultType="Map">

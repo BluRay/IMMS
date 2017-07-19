@@ -16,10 +16,24 @@ public interface IHrBaseDataService {
 	public int deleteOrgData(Map<String,Object> conditionMap);
 	
 	public Map<String,Object> getStaffList(Map<String, Object> conditionMap);
+	
+    public int addPositionData(List<Map<String,Object>> list);
+	
+	public Map<String,Object> getPositionList(Map<String,Object> conditionMap);
+	
+	public List<Map<String,Object>> getPositionData(Map<String,Object> conditionMap);
+	
+	public int editPositionData(Map<String,Object> conditionMap);
+	
+	public void deletePositionData(List<String> list);
 
 	public List<Map<String,Object>> getOrg(List<Map<String,Object>> conditionMap);
 	public List<String> getStaffListByStaffNumbers(Map<String, Object> conditionMap);
 	public int dimissionStaff(Map<String, Object> conditionMap);
 	
 	public Map<String,Object> getWorkgroupPriceList(Map<String, Object> conditionMap);
+	public Map<String,Object> getOrgInfo(Map<String,Object> conditionMap);
+	public Map<String,Object> queryWorkgroupPrice(Map<String, Object> map);
+	public int addWorkgroupPrice(List<Map<String, Object>> addList);
+	public int updateWorkgroupPrice(List<Map<String, Object>> upDateList);
 }

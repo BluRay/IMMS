@@ -53,10 +53,10 @@
 							</tr>
 							<tr>
 								<td style="padding-right:5px"><select id="search_factory" class="form-control" style="width:100px"></select></td>
-								<td style="padding-right:5px"><select id="search_workshop"  class="form-control"  style="width:100px"></select></td>
-								<td style="padding-right:5px"><select id="search_bustype" class="form-control busType" style="width:100px"></select></td>
-								<td><input id="search_orderno" placeholder="订单..." style="width:100px" type="text">&nbsp;</td>
-								<td><input id="search_material" placeholder="物料名称..." style="width:100px" type="text">&nbsp;</td>
+								<td style="padding-right:5px"><select id="search_workshop"  class="form-control"  style="width:80px"></select></td>
+								<td style="padding-right:5px"><select id="search_bustype" class="form-control busType" style="width:80px"></select></td>
+								<td><input id="search_orderno" placeholder="订单..." style="width:120px" type="text">&nbsp;</td>
+								<td><input id="search_material" placeholder="物料名称..." style="width:120px" type="text">&nbsp;</td>
 							    <td>
 								   <input id="search_date_start" placeholder="开始时间..." style="width:90px" type="text" onClick="WdatePicker({el:'search_date_start',dateFmt:'yyyy-MM-dd'});"> -
 								   <input id="search_date_end" placeholder="结束时间..." style="width:90px" type="text" onClick="WdatePicker({el:'search_date_end',dateFmt:'yyyy-MM-dd'});">&nbsp;</td>
@@ -80,22 +80,24 @@
 			</div><!-- /.main-content -->
 			
 			<div id="dialog-add" class="hide" style="align:center;width:800px;height:450px">
-				<form id="form_add" class="">
+				<form id="form_add" class="form-horizontal">
 					<table>
-					<tr style="height:33px">
-						<td align="right" style="width:100px">*发生日期：</td>
+					<tr style="height:36px">
+						<td align="right" style="width:180px">*发生日期：</td>
 						<td style="width:150px">
-						<input type="text" class="input-medium" id="new_occurDate" name="new_occurDate" onClick="WdatePicker({el:'new_occurDate',dateFmt:'yyyy-MM-dd'});" style="width:150px"/>
+						<input type="text" class="input-medium" id="new_occurDate" name="new_occurDate" onClick="WdatePicker({el:'new_occurDate',dateFmt:'yyyy-MM-dd'});" style="width:150px;height:30px;"/>
 						</td>
-						<td align="right" style="width:100px">* 物料名称：</td>
-						<td style="width:150px"><input type="text" class="input-medium" id="new_material" name="new_license_number" style="width:150px" /></td>
+						<td align="right" style="width:180px">* 物料名称：</td>
+						<td style="width:150px"><input type="text" class="input-medium" id="new_material" name="new_license_number" style="width:150px;height:30px;" /></td>
 					</tr>
-					<tr style="height:33px">
-						<td align="right" style="width:100px">发生工厂：</td><td style="width:150px"><select id="new_factory" class="input-small" style="width:150px"></select></td>
-						<td align="right" style="width:100px">发生车间：</td><td style="width:150px"><select id="new_workshop" class="input-small" style="width:150px"></select></td>
+					<tr style="height:36px">
+						<td align="right" style="width:180px">发生工厂：</td><td style="width:150px"><select id="new_factory" class="input-small" style="width:150px;height:30px;"></select></td>
+						<td align="right" style="width:180px">发生车间：</td><td style="width:150px"><select id="new_workshop" class="input-small" style="width:150px;height:30px;"></select></td>
 					</tr>
-					<tr style="height:33px">
-					    <td align="right" style="width:100px">* 车型：</td>
+					<tr style="height:36px">
+						<td align="right" style="width:180px">*订单编号：</td>
+						<td style="width:150px"><input type="text" class="input-medium" id="new_orderNo" name="new_orderNo" style="width:150px;height:30px;"/></td>
+						<td align="right" style="width:180px">* 车型：</td>
 						<td style="width:150px">
 						    <select name="" id="new_bus_type" class="input-medium busType">
 							</select>
@@ -103,61 +105,59 @@
                             	<option value='{{:id}}'>{{:code}}</option>
                             </script>
 						</td>
-						<td align="right" style="width:100px">*订单编号：</td>
-						<td style="width:150px"><input type="text" class="input-medium" id="new_orderNo" name="new_orderNo" style="width:150px"/></td>
 					</tr>
-					<tr style="height:33px">
+					<tr style="height:36px;">
 					    <td align="right">&nbsp;异常描述：</td>
 						<td colspan=3>
-						<textarea id="new_description" name="new_description" style="width: 360px;" rows="1"></textarea>
+						<textarea id="new_description" name="new_description" style="width: 485px;margin-top: 4px;margin-bottom: 3px;" rows="1"></textarea>
 						</td>
 					</tr>
-					<tr style="height:33px">
-						<td align="right" style="width:100px">改善前图片：</td>
-						<td colspan=3><input name="new_bphoto" type="file" id="new_bphoto" /></td>
+					<tr style="height:36px">
+						<td align="right" style="width:180px">改善前图片：</td>
+						<td colspan=3><input name="new_bphoto" type="file" id="new_bphoto" style="height:30px;" /></td>
 					</tr>
-					<tr style="height:33px">
+					<tr style="height:36px">
 					    <td align="right">&nbsp;临时措施：</td>
 						<td colspan=3>
-						<textarea id="new_tmpMeasures" name="new_tmpMeasures" style="width: 360px;" rows="1"></textarea>
+						<textarea id="new_tmpMeasures" name="new_tmpMeasures" style="width: 485px;margin-top: 5px;" rows="1"></textarea>
 						</td>
 					</tr>
-					<tr style="height:33px">
+					<tr style="height:36px">
 					    <td align="right">&nbsp;原因分析：</td>
 						<td colspan=3>
-						<textarea id="new_faultReason" name="new_faultReason" style="width: 360px;" rows="1"></textarea>
+						<textarea id="new_faultReason" name="new_faultReason" style="width: 485px;margin-top: 5px;" rows="1"></textarea>
 						</td>
 					</tr>
-					<tr style="height:33px">
+					<tr style="height:36px">
 					    <td align="right">&nbsp;改善/预防措施：</td>
 						<td colspan=3>
-						<textarea id="new_impMeasures" name="new_impMeasures" style="width: 360px;" rows="1"></textarea>
+						<textarea id="new_impMeasures" name="new_impMeasures" style="width: 485px;margin-top: 5px;margin-bottom: 3px;" rows="1"></textarea>
 						</td>
 					</tr>
-					<tr style="height:33px">
-						<td align="right" style="width:100px">* 严重级别：</td>
-						<td style="width:150px"><select class="input-medium" id="new_bugLevel" style="width:150px"><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="S">S</option></select></td>
-					    <td align="right" style="width:100px">*预计完成日期：</td>
+					<tr style="height:36px">
+						<td align="right" style="width:180px">* 严重级别：</td>
+						<td style="width:150px"><select class="input-medium" id="new_bugLevel" style="width:150px;height:30px;"><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="S">S</option></select></td>
+					    <td align="right" style="width:180px">*预计完成日期：</td>
 						<td style="width:150px">
-						<input type="text" class="input-medium" id="new_expcFinishDate" name="new_expcFinishDate" onClick="WdatePicker({el:'new_expcFinishDate',dateFmt:'yyyy-MM-dd'});" style="width:150px"/>
+						<input type="text" class="input-medium" id="new_expcFinishDate" name="new_expcFinishDate" onClick="WdatePicker({el:'new_expcFinishDate',dateFmt:'yyyy-MM-dd'});" style="width:150px;height:30px;"/>
 						</td>
 					</tr>
-					<tr style="height:33px">
-						<td align="right" style="width:100px">* 责任单位：</td><td><input type="text" class="input-medium" id="new_respUnit" style="width:150px"/></td>
-						<td align="right" style="width:100px">* 责任人：</td><td><input type="text" class="input-medium" id="new_respPerson" style="width:150px"/></td>
+					<tr style="height:36px">
+						<td align="right" style="width:180px">* 责任单位：</td><td><input type="text" class="input-medium" id="new_respUnit" style="width:150px;height:30px;"/></td>
+						<td align="right" style="width:180px">* 责任人：</td><td><input type="text" class="input-medium" id="new_respPerson" style="width:150px;height:30px;"/></td>
 					</tr>
-					<tr style="height:33px">
-						<td align="right" style="width:100px">* 验证结果：</td><td><select class="input-medium" id="new_verifyResult" style="width:150px"><option value="OK">OK</option><option value="NG">NG</option></select></td>
-						<td align="right" style="width:100px">* 验证人：</td><td><input type="text" class="input-medium" id="new_verifier" style="width:150px"/></td>
+					<tr style="height:36px">
+						<td align="right" style="width:180px">* 验证结果：</td><td><select class="input-medium" id="new_verifyResult" style="width:150px;height:30px;"><option value="OK">OK</option><option value="NG">NG</option></select></td>
+						<td align="right" style="width:180px">* 验证人：</td><td><input type="text" class="input-medium" id="new_verifier" style="width:150px;height:30px;"/></td>
 					</tr>
-					<tr style="height:33px">
-						<td align="right" style="width:100px">改善后图片：</td>
+					<tr style="height:36px">
+						<td align="right" style="width:180px">改善后图片：</td>
 						<td colspan=3><input name="new_fphoto" type="file" id="new_fphoto" /></td>
 					</tr>
-					<tr style="height:33px">
+					<tr style="height:36px">
 					    <td align="right">&nbsp;备注：</td>
 						<td colspan=3>
-						<textarea id="new_memo" name="new_memo" style="width: 360px;" rows="1"></textarea>
+						<textarea id="new_memo" name="new_memo" style="width: 485px;margin-top: 5px;" rows="1"></textarea>
 						</td>
 					</tr>
 					</table>
@@ -166,22 +166,22 @@
 			
 			<div id="dialog-edit" class="hide" style="align:center;width:800px;height:600px">
 			<div class = "div-dialog">
-				<form id="form_edit">
+				<form id="form_edit" class="form-horizontal">
 					<table>
-					<tr style="height:33px">
-						<td align="right" style="width:100px">*发生日期：</td>
+					<tr style="height:36px">
+						<td align="right" style="width:180px">*发生日期：</td>
 						<td style="width:150px">
 						<input type="text" class="input-medium" id="edit_occurDate" name="new_occurDate" onClick="WdatePicker({el:'new_occurDate',dateFmt:'yyyy-MM-dd'});" style="width:150px"/>
 						</td>
-						<td align="right" style="width:100px">* 物料名称：</td>
+						<td align="right" style="width:180px">* 物料名称：</td>
 						<td style="width:150px"><input type="text" class="input-medium" id="edit_material" name="new_license_number" style="width:150px" /></td>
 					</tr>
-					<tr style="height:33px">
-						<td align="right" style="width:100px">发生工厂：</td><td style="width:150px"><select id="edit_factory" class="input-small" style="width:150px"></select></td>
-						<td align="right" style="width:100px">发生车间：</td><td style="width:150px"><select id="edit_workshop" class="input-small" style="width:150px"></select></td>
+					<tr style="height:36px">
+						<td align="right" style="width:180px">发生工厂：</td><td style="width:150px"><select id="edit_factory" class="input-small" style="width:150px"></select></td>
+						<td align="right" style="width:180px">发生车间：</td><td style="width:150px"><select id="edit_workshop" class="input-small" style="width:150px"></select></td>
 					</tr>
-					<tr style="height:33px">
-					    <td align="right" style="width:100px">* 车型：</td>
+					<tr style="height:36px">
+					    <td align="right" style="width:180px">* 车型：</td>
 						<td style="width:150px">
 						    <select name="" id="edit_bus_type" class="input-medium busType">
 							</select>
@@ -189,64 +189,66 @@
                             	<option value='{{:id}}'>{{:code}}</option>
                             </script>
 						</td>
-						<td align="right" style="width:100px">*订单编号：</td>
+						<td align="right" style="width:180px">*订单编号：</td>
 						<td style="width:150px"><input type="text" class="input-medium" id="edit_orderNo" style="width:150px"/></td>
 					</tr>
-					<tr style="height:33px">
+					<tr style="height:36px">
 					    <td align="right">&nbsp;异常描述：</td>
-						<td colspan=3>
-						<textarea id="edit_description" style="width: 360px;" placeholder="..." rows="1"></textarea>
+						<td colspan='3'>
+						<textarea id="edit_description" style="width: 360px;margin-top: 5px;" placeholder="..." rows="1"></textarea>
 						</td>
 					</tr>
-					<tr style="height:33px">
-						<td align="right" style="width:100px">改善前图片：</td>
-						<td colspan=3 style="width: 360px;">
-							<input name="edit_bphoto" type="file" id="edit_bphoto" />
-							<a target="blank" id="bphoto">查看</a>
+					<tr style="height:36px">
+						<td align="right" style="width:180px">改善前图片：</td>
+						<td colspan='2' style="width: 360px;">
+							<div style="width: 360px;margin-top: 5px;">
+							<input name="edit_bphoto" type="file"  id="edit_bphoto" />
+							</div>
 						</td>
+						<td><a target="blank" id="bphoto">查看</a></td>
 					</tr>
-					<tr style="height:33px">
+					<tr style="height:36px">
 					    <td align="right">&nbsp;临时措施：</td>
 						<td colspan=3>
-						<textarea id="edit_tmpMeasures" name="edit_tmpMeasures" style="width: 360px;" placeholder="..." rows="1"></textarea>
+						<textarea id="edit_tmpMeasures" name="edit_tmpMeasures" style="width: 360px;margin-top: 5px;" placeholder="..." rows="1"></textarea>
 						</td>
 					</tr>
-					<tr style="height:33px">
+					<tr style="height:36px">
 					    <td align="right">&nbsp;原因分析：</td>
 						<td colspan=3>
-						<textarea id="edit_faultReason" name="edit_faultReason" style="width: 360px;" placeholder="..." rows="1"></textarea>
+						<textarea id="edit_faultReason" name="edit_faultReason" style="width: 360px;margin-top: 5px;" placeholder="..." rows="1"></textarea>
 						</td>
 					</tr>
-					<tr style="height:33px">
+					<tr style="height:36px">
 					    <td align="right">&nbsp;改善/预防措施：</td>
 						<td colspan=3>
-						<textarea id="edit_impMeasures" name="edit_impMeasures" style="width: 360px;" placeholder="..." rows="1"></textarea>
+						<textarea id="edit_impMeasures" name="edit_impMeasures" style="width: 360px;margin-top: 5px;" placeholder="..." rows="1"></textarea>
 						</td>
 					</tr>
-					<tr style="height:33px">
-						<td align="right" style="width:100px">* 严重级别：</td>
+					<tr style="height:36px">
+						<td align="right" style="width:180px">* 严重级别：</td>
 						<td ><select class="input-medium" id="edit_bugLevel" style="width:150px"><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="S">S</option></select></td>
-					    <td align="right" style="width:100px">*预计完成日期：</td>
+					    <td align="right" style="width:180px">*预计完成日期：</td>
 						<td style="width:150px">
 						<input type="text" class="input-medium" id="edit_expcFinishDate" name="new_expcFinishDate" onClick="WdatePicker({el:'new_expcFinishDate',dateFmt:'yyyy-MM-dd'});" style="width:150px"/>
 						</td>
 					</tr>
-					<tr style="height:33px">
-						<td align="right" style="width:100px">* 责任单位：</td><td><input type="text" class="input-medium" id="edit_respUnit" style="width:150px"/></td>
-						<td align="right" style="width:100px">* 责任人：</td><td><input type="text" class="input-medium" id="edit_respPerson" style="width:150px"/></td>
+					<tr style="height:36px">
+						<td align="right" style="width:180px">* 责任单位：</td><td><input type="text" class="input-medium" id="edit_respUnit" style="width:150px"/></td>
+						<td align="right" style="width:180px">* 责任人：</td><td><input type="text" class="input-medium" id="edit_respPerson" style="width:150px"/></td>
 					</tr>
-					<tr style="height:33px">
-						<td align="right" style="width:100px">* 验证结果：</td><td><select class="input-medium" id="edit_verifyResult" style="width:150px"><option value="OK">OK</option><option value="NG">NG</option></select></td>
-						<td align="right" style="width:100px">* 验证人：</td><td><input type="text" class="input-medium" id="edit_verifier" style="width:150px"/></td>
+					<tr style="height:36px">
+						<td align="right" style="width:180px">* 验证结果：</td><td><select class="input-medium" id="edit_verifyResult" style="width:150px"><option value="OK">OK</option><option value="NG">NG</option></select></td>
+						<td align="right" style="width:180px">* 验证人：</td><td><input type="text" class="input-medium" id="edit_verifier" style="width:150px"/></td>
 					</tr>
-					<tr style="height:33px">
-						<td align="right" style="width:100px">改善后图片：</td>
-						<td colspan=3>
-							<input name="edit_fphoto" type="file" id="edit_fphoto" />
-							<a target="blank" id="fphoto">查看</a>
+					<tr style="height:36px">
+						<td align="right" style="width:180px">改善后图片：</td>
+						<td colspan=2>
+							<input name="edit_fphoto" type="file" style="300px;" id="edit_fphoto" />
 						</td>
+						<td><a target="blank" id="fphoto">查看</a></td>
 					</tr>
-					<tr style="height:33px">
+					<tr style="height:36px">
 					    <td align="right">&nbsp;备注：</td>
 						<td colspan=3>
 						<textarea id="edit_memo"  style="width: 360px;" rows="1"></textarea>

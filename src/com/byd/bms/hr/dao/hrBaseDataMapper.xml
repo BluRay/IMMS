@@ -57,6 +57,69 @@
 			where id=#{id}
 		]]>
 	</update>
+	<!-- 添加岗位 -->
+	<insert id="addPositionData" useGeneratedKeys="true" keyProperty="id">
+		<![CDATA[
+			insert into BMS_HR_BASE_JOB(job_no,job_name,basic_besponsibilit,requirements,skill_and_capability,required_train,deleted,editor_id,edit_date) 
+			values(#{job_no},#{job_name},#{basic_besponsibilit},#{requirements},#{skill_and_capability},#{required_train},'0',#{editor_id},#{edit_date})
+		]]>
+	</insert>
+	<!-- 编辑岗位 -->
+	<update id="editPositionData">
+			update BMS_HR_BASE_JOB set 
+			job_no=#{job_no},
+			job_name=#{job_name},
+			basic_besponsibilit=#{basic_besponsibilit},
+			requirements=#{requirements},
+			skill_and_capability=#{skill_and_capability},
+			required_train=#{required_train},
+			editor_id=#{editor_id},
+			edit_date=#{edit_date}  
+			where deleted='0' and id=#{id}
+	</update>
+	<!--删除岗位 -->
+	<update id="deletePositionData" parameterType="String">
+		<![CDATA[
+			update BMS_HR_BASE_JOB set deleted='1' where id=#{id}
+		]]>
+	</update>
+	
+	<select id="getPositionList" parameterType="Map" resultType="Map">
+		select t.id,job_no,job_name,basic_besponsibilit,requirements,skill_and_capability,
+		required_train,deleted,u.username editor,edit_date from BMS_HR_BASE_JOB t
+		left join BMS_BASE_USER u on u.id=t.editor_id
+		where 1=1 and t.deleted='0'
+		<if test="job_no!=null and job_no!=''">
+            and job_no like CONCAT('%',#{job_no},'%')
+        </if>
+        <if test="job_name!=null and job_name!=''">
+            and job_name=#{job_name}
+        </if>
+        ORDER BY t.id ASC
+        <if test="start !=null">
+			LIMIT #{start} ,#{length} 
+		</if>
+         
+	</select>
+	<select id="getPositionCount" parameterType="Map" resultType="int">
+		select count(1) from BMS_HR_BASE_JOB t where 1=1 and t.deleted='0'
+		<if test="job_no!=null and job_no!=''">
+            and job_no=#{job_no}
+        </if>
+        <if test="job_name!=null and job_name!=''">
+            and job_name=#{job_name}
+        </if>
+	</select>
+	
+	<!-- 获得岗位 -->
+	<select id="getPositionData" parameterType="Map" resultType="Map">
+		select t.id,job_no,job_name,basic_besponsibilit,requirements,skill_and_capability,
+		required_train from BMS_HR_BASE_JOB t 
+        where 1=1 and deleted='0'
+        <if test="id!=null">
+        and id=#{id}
+        </if>
+	</select>
 	
 	<select id="getStaffList" resultType="Map" parameterType='Map'>
 		SELECT s.* FROM BMS_HR_STAFF s WHERE 1=1
@@ -293,8 +356,8 @@
 		<if test="effctiveDateEnd !=null and effctiveDateEnd !=''">
 			and p.effective_date &lt;=#{effctiveDateEnd}
 		</if>
-		<if test="orderId !=null and orderId !=''">
-			and p.order_id =#{orderId}
+		<if test="order_no !=null and order_no !=''">
+			AND p.order_id= (SELECT id FROM BMS_OR_ORDER WHERE order_no = #{order_no})
 		</if>
 		order by p.factory,p.workshop,p.workgroup,p.team,p.order_id,p.edit_date desc
 		<if test="start !=null">
@@ -326,9 +389,65 @@
 		<if test="effctiveDateEnd !=null and effctiveDateEnd !=''">
 			and p.effective_date &lt;=#{effctiveDateEnd}
 		</if>
-		<if test="orderId !=null and orderId !=''">
-			and p.order_id =#{orderId}
+		<if test="order_no !=null and order_no !=''">
+			AND p.order_id= (SELECT id FROM BMS_OR_ORDER WHERE order_no = #{order_no})
 		</if>	
 	</select>	
+	<select id="getOrgInfo" parameterType="Map" resultType="Map">
+		SELECT o1.* FROM BMS_BASE_ORG o1
+			INNER JOIN BMS_BASE_ORG o2 on o1.parent_id = o2.id and o2.name = #{workgroup}
+			INNER JOIN BMS_BASE_ORG o3 on o2.parent_id = o3.id and o3.name = #{workshop}
+			INNER JOIN BMS_BASE_ORG o4 on o3.parent_id = o4.id and o4.name = #{factory}
+		WHERE o1.name = #{small_workgroup} AND o1.deleted = '0'
+	</select>
+	<select id="queryWorkgroupPrice" parameterType="Map" resultType="Map">
+		SELECT h.* FROM BMS_HR_WORKGROUP_PRICE h
+		WHERE h.deleted = '0'
+		<if test="factory !=null and factory !=''">
+			AND h.factory=#{factory}
+		</if>
+		<if test="workshop !=null and workshop !=''">
+			AND h.workshop = #{workshop}
+		</if>
+		<if test="workgroup !=null and workgroup !=''">
+			AND h.workgroup = #{workgroup}
+		</if>
+		<if test="small_workgroup !=null and small_workgroup !=''">
+			AND h.team=#{small_workgroup}
+		</if>
+		<if test="order_no !=null and order_no !=''">
+			AND h.order_id= (SELECT id FROM BMS_OR_ORDER WHERE order_no = #{order_no})
+		</if>
+		<if test="effective_date !=null and effective_date !=''">
+			AND h.effective_date =#{effective_date}
+		</if>
+	</select>
+	<insert id="addWorkgroupPrice" parameterType="List">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		<foreach collection="list" index="index" item="item"
+			separator=";">
+			INSERT INTO
+			BMS_HR_WORKGROUP_PRICE(order_id,standard_price,editor_id,edit_date,effective_date,factory,workshop,workgroup
+			<if test="item.small_workgroup!=null">
+				,team
+			</if>
+			)
+			VALUES((SELECT id FROM BMS_OR_ORDER WHERE order_no = #{item.order_no}),#{item.standard_price},#{item.editor_id},#{item.edit_date},#{item.effective_date},#{item.factory},#{item.workshop},#{item.workgroup}
+			<if test="item.small_workgroup!=null">
+				,#{item.small_workgroup}
+			</if>
+			)
+		</foreach>
+	</insert>
+	<!--修改班组承包单价 -->
+	<update id="updateWorkgroupPrice" parameterType="List">
+		<foreach collection="list" index="index" item="item" separator=";">
+			UPDATE BMS_HR_WORKGROUP_PRICE
+			SET standard_price = #{item.standard_price},editor_id = #{item.editor_id},edit_date =
+			#{item.edit_date},effective_date=#{item.effective_date} WHERE id = #{item.id}
+		</foreach>
+	</update>
 	
 </mapper>

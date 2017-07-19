@@ -240,6 +240,7 @@ jQuery(function($) {
     	
     	case "4" :
     		alert('不能为小班组增加子节点！');
+    		return false;
     		break;
     	
     	case "0" :

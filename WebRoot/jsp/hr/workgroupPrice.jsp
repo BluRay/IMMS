@@ -5,13 +5,14 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta charset="utf-8" />
 		<title>班组承包单价</title>
+		<meta name="description" content="Common Buttons &amp; Icons" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 		<link rel="stylesheet" href="../css/bootstrap-table.css">
 		<link rel="stylesheet" href="../css/bootstrap-editable.css">
 		<link rel="stylesheet" href="../assets/css/jquery-ui.min.css" />
 		<link rel="stylesheet" href="../assets/css/jquery-ui.custom.min.css" />
 		<link rel="stylesheet" href="../assets/css/jquery.gritter.css" />
-		<meta name="description" content="Common Buttons &amp; Icons" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+		<link rel="stylesheet" href="../css/zTreeStyle/metro.css" type="text/css">
 	</head>
 	<body class="no-skin" style="font-family: 'Microsoft YaHei';">
 		<!-- 头 -->
@@ -55,9 +56,10 @@
 									</div>
 									<div class="widget-body">
 										<div class="widget-main padding-8">
-											<div id="tree1" class="tree"></div>
+											<ul id="workGroupTree" class="ztree" style="padding-left:0px;"></ul>
 										</div>
 									</div>
+											
 								</div>
 							</div>
 							
@@ -71,7 +73,7 @@
 										<table>
 											<tr>
 												<td>订单：</td>
-												<td><input id="search_order_no" style="height: 30px;width:100%" placeholder="请输入工号/姓名..." class="col-sm-10" type="text"></td>
+												<td><input id="search_order_no" style="height: 30px;width:100%" placeholder="请输入订单..." class="col-sm-10" type="text"></td>
 												<td align="right">&nbsp;日期：</td>
 												<td><input id="start_date" placeholder="开始时间..." style="height: 30px;width:125px" type="text" onClick="WdatePicker({el:'start_date',dateFmt:'yyyy-MM-dd'});"> - <input id="end_date" placeholder="结束时间..." style="height: 30px;width:125px" type="text" onClick="WdatePicker({el:'end_date',dateFmt:'yyyy-MM-dd'});"></td>
 												<td align="right"><input type="button" class="btn btn-sm btn-success" id="btnQuery" value="查询" style="margin-left: 2px;"></input>&nbsp;
@@ -83,9 +85,10 @@
 									</div>
 									<div id="divBulkAdd" class="well" style="display:none;">
 									<button id="btnBulkHide" type="button" class="close"><i class="ace-icon fa fa-times"></i></button>
-										<form id="uploadMasterPlanForm" action="#" enctype="multipart/form-data" method="post">
+										<form id="uploadWorkgroupPriceForm" action="#" enctype="multipart/form-data" method="post">
 										<table>
 											<tr>
+												<td>生效日期：<input id="effective_date" type="text"  class="input-medium" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/></td>
 												<td><input id="file" type="file" name="file" accept="*.xlsx"/></td>
 												<td><input id="btn_upload" type="button" class="btn btn-sm btn-primary" value="上传并导入" onclick="javascript:return LimitAttach(this.form, this.form.file.value)"/></td>
 												<td></td><td><a href="../docs/masterPlan.xls">下载批导模板</a></td>
@@ -142,6 +145,7 @@
 	<script type="text/javascript" src="../assets/js/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="../assets/js/bootstrap3-typeahead.js"></script>
 	<script type="text/javascript" src="../js/jquery.form.js"></script>
+	<script src="../js/ztree/jquery.ztree.core-3.5.min.js"></script>
 	<script type="text/javascript" src="../js/common.js"></script>
 	<script type="text/javascript" src="../js/datePicker/WdatePicker.js"></script>
 	<script src="../js/hr/workgroupPrice.js"></script>

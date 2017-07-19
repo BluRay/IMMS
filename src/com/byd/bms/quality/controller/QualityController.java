@@ -1070,6 +1070,7 @@ public class QualityController extends BaseController {
 		conditionMap.put("bustypeId", bustypeId);
         conditionMap.put("orderId", orderId);
 		conditionMap.put("orderconfigId", orderconfigId);
+		conditionMap.put("workshop", request.getParameter("workshop"));
 		
 		Map<String, Object> result = qualityService.getBusNumberDetailList(conditionMap);
 

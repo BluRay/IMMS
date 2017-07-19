@@ -19,6 +19,18 @@ public interface IHrBaseDataDao {
 	
 	public int deleteOrgData(Map<String,Object> conditionMap);
 	
+	public int addPositionData(Map<String,Object> conditionMap);
+	
+	public List<Map<String,Object>> getPositionList(Map<String,Object> conditionMap);
+	
+	public int getPositionCount(Map<String, Object> conditionMap);
+	
+	public List<Map<String,Object>> getPositionData(Map<String,Object> conditionMap);
+	
+	public int editPositionData(Map<String,Object> conditionMap);
+	
+	public void deletePositionData(String id);
+	
 	public List<Map<String,Object>> getStaffList(Map<String, Object> conditionMap);
 	public int getStaffCount(Map<String, Object> conditionMap);
 	public List<Map<String,Object>> getOrg(List<Map<String,Object>> conditionMap);
@@ -27,4 +39,8 @@ public interface IHrBaseDataDao {
 	
 	public List<Map<String,Object>> getWorkgroupPriceList(Map<String, Object> cMap);
 	public int getWorkgroupPriceCount(Map<String, Object> cMap);
+	public Map<String,Object> getOrgInfo(Map<String,Object> conditionMap);
+	public Map<String,Object> queryWorkgroupPrice(Map<String, Object> map);
+	public int addWorkgroupPrice(List<Map<String, Object>> addList);
+	public int updateWorkgroupPrice(List<Map<String, Object>> upDateList);
 }

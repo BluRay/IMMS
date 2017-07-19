@@ -1,4 +1,20 @@
+
+var factory = '';
+var workshop = '';
+var workgroup = '';
+var team = '';
 jQuery(function($) {
+	initPage();
+	
+	function initPage() {
+		getOrderNoSelect("#search_order_no","#orderId");
+		getOrgAuthTree($("#workGroupTree"),'hrBaseData/workgroupPrice',"1,2,3,4",'1',3);
+		$('#workGroupTree').height($(window).height()-200)
+		$('#workGroupTree').ace_scroll({
+			size: $(window).height()-200
+		});
+	}
+	
 	if($(window).height() * 0.6 > 350){
 		$("#div_tree1").height($(window).height()-105);
 		$("#div_tree2").height($(window).height()-105);
@@ -8,12 +24,89 @@ jQuery(function($) {
 		eachSeries(scripts, getScript, initTable);
 		ajaxQuery();
     });
+
+	$("#btnBulkAdd").click (function () {
+		$("#divBulkAdd").show();
+	});
+	
+	$("#btnBulkHide").click (function () {
+		$("#divBulkAdd").hide();
+	});
+	
+	$("#btn_upload").click (function () {
+		if($("#search_order_no").val() ===""){
+			alert("生产订单不能为空！");
+			$("#search_order_no").focus();
+			return false;
+		}
+		if($("#effective_date").val() ===""){
+			alert("生效日期不能为空！");
+			$("#effective_date").focus();
+			return false;
+		}
+		if ($("#file").val() == "") {
+			alert("请选择文件！");
+			return false;
+		}
+		
+		$("#uploadWorkgroupPriceForm").ajaxSubmit({
+			url:"uploadWorkgroupPrice",
+			type: "post",
+			dataType:"json",
+			data:{
+				"orderId":$("#search_order_no").val(),
+				"effective_date":$("#effective_date").val()
+			},
+			success:function(response){
+				alert(response.message);
+				ajaxQuery();
+				if(response.success){					
+					//window.open("materialAbnormal!index.action","_self");
+				}else{
+					
+				}
+			}			
+		});
+	});
 	
 })
 
 function ajaxQuery(){
 	$table.bootstrapTable('refresh', {url: 'getWorkgroupPriceList'});
 }
+
+function zTreeBeforeClick(treeId, treeNode, clickFlag) {
+}
+
+function zTreeOnClick(event, treeId, treeNode) {
+	if(treeNode.org_type=='1'){
+		factory=treeNode.displayName;
+	}	
+	if(treeNode.org_type == '2'){
+		factory=treeNode.getParentNode().displayName;
+		workshop=treeNode.displayName;
+	}
+	if(treeNode.org_type == '3'){
+		factory=treeNode.getParentNode().getParentNode().displayName;
+		workshop=treeNode.getParentNode().displayName;
+		workgroup=treeNode.displayName;
+	}
+	if(treeNode.org_type == '4'){
+		factory=treeNode.getParentNode().getParentNode().getParentNode().displayName;
+		workshop=treeNode.getParentNode().getParentNode().displayName;
+		workgroup=treeNode.getParentNode().displayName;
+		team=treeNode.displayName;
+	}
+	
+	if(treeNode.org_type != '4'){
+		alert("请选择小班组！");
+		return false;
+	}
+	
+	console.log("-->" + factory + "|" + workshop + "|" + team);
+	eachSeries(scripts, getScript, initTable);
+	ajaxQuery();
+};
 
 
 //----------START bootstrap initTable ----------
@@ -27,10 +120,6 @@ function initTable() {
         fixedColumns: false,				//冻结列
         fixedNumber: 0,						//冻结列数
         queryParams:function(params) {
-        	var factory = '';
-        	var workshop = '';
-        	var workgroup = '';
-        	var team = '';
         	params["factory"] = factory; 
         	params["workshop"] = workshop; 
         	params["workgroup"] = workgroup; 

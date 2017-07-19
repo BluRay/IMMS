@@ -218,11 +218,17 @@ function editProblemImprove(id){
 }
 
 function btnEditConfirm(id){
+	var vinTest = /^[A-Z0-9]{17}$/;
 	if($("#edit_fault_description").val()==''){
 		alert("请输入问题描述！");$("#edit_fault_description").focus();return false;
 	}
 	if($("#edit_vin").val()==''){
 		alert("请输入VIN号！");$("#edit_vin").focus();return false;
+	}
+	if(!vinTest.test($("#edit_vin").val())){
+		alert("请输入长度为17位，只包含大写字母和数字的VIN号！");
+		$("#edit_vin").focus();
+		return false;
 	}
 	if($("#edit_license_number").val()==''){
 		alert("请输入车牌号码！");$("#edit_license_number").focus();return false;
@@ -281,11 +287,17 @@ function btnEditConfirm(id){
 }
 
 function btnNewConfirm(){
+	var vinTest = /^[A-Z0-9]{17}$/;
 	if($("#new_fault_description").val()==''){
 		alert("请输入问题描述！");$("#new_fault_description").focus();return false;
 	}
 	if($("#new_vin").val()==''){
 		alert("请输入VIN号！");$("#new_vin").focus();return false;
+	}
+	if(!vinTest.test($("#new_vin").val())){
+		alert("请输入长度为17位，只包含大写字母和数字的VIN号！");
+		$("#new_vin").focus();
+		return false;
 	}
 	if($("#new_license_number").val()==''){
 		alert("请输入车牌号码！");$("#new_license_number").focus();return false;

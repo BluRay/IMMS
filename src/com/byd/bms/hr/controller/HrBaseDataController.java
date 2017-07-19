@@ -54,7 +54,12 @@ public class HrBaseDataController extends BaseController {
 		mv.setViewName("hr/orgData");
 		return mv;
 	}
-	
+	//标准岗位库
+	@RequestMapping("/positionSystem")
+	public ModelAndView positionSystemPage() {
+		mv.setViewName("hr/positionSystem");
+		return mv;
+	}
 	// 获取组织架构tree型菜单
 	@RequestMapping("/getOrgDataTreeList")
 	@ResponseBody
@@ -403,6 +408,133 @@ public class HrBaseDataController extends BaseController {
 			this.nodes = nodes;
 		}
 	}
+	@RequestMapping(value="/uploadPositionSystem",method=RequestMethod.POST)
+	@ResponseBody
+	public ModelMap uploadPositionSystem(@RequestParam(value="file",required=false) MultipartFile file){
+		logger.info("uploading.....");
+		String fileName="positionSystem.xls";
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String editor_id = request.getSession().getAttribute("user_id") + "";
+		try{
+		ExcelModel excelModel = new ExcelModel();
+		excelModel.setReadSheets(1);
+		excelModel.setStart(1);
+		Map<String, Integer> dataType = new HashMap<String, Integer>();
+		dataType.put("0", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("1", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("2", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("3", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("4", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("5", ExcelModel.CELL_TYPE_CANNULL);
+		excelModel.setDataType(dataType);
+		excelModel.setPath(fileName);
+		File tempfile=new File(fileName);
+		file.transferTo(tempfile);
+		/**
+		 * 读取输入流中的excel文件，并且将数据封装到ExcelModel对象中
+		 */
+		InputStream is = new FileInputStream(tempfile);
+
+		ExcelTool excelTool = new ExcelTool();
+		excelTool.readExcel(is, excelModel);
+
+		List<Map<String, Object>> addList = new ArrayList<Map<String, Object>>();
+		for (Object[] data : excelModel.getData()) {
+			Map<String, Object> infomap = new HashMap<String, Object>();
+
+			infomap.put("job_no", data[0] == null ? null : data[0].toString().trim());
+			infomap.put("job_name", data[1] == null ? null : data[1].toString().trim());
+			infomap.put("basic_besponsibilit", data[2] == null ? null : data[2].toString().trim());
+			infomap.put("requirements", data[3] == null ? null : data[3].toString().trim());
+			infomap.put("skill_and_capability", data[4] == null ? null : data[4].toString().trim());
+			infomap.put("required_train", data[5] == null ? null : data[5].toString().trim());
+			infomap.put("editor_id", editor_id);
+			infomap.put("edit_date", curTime);
+			addList.add(infomap);
+		}
+		hrBaseDataService.addPositionData(addList);
+		initModel(true,"导入成功！",addList);
+		}catch(Exception e){
+			initModel(false,"导入失败！",null);
+		}
+		return mv.getModelMap();
+	}
+	@RequestMapping(value="/editPositionData",method=RequestMethod.POST)
+	@ResponseBody
+	public ModelMap editPositionData(){
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String editor_id = request.getSession().getAttribute("user_id") + "";
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("id",request.getParameter("id"));
+		map.put("job_no",request.getParameter("job_no"));
+		map.put("job_name", request.getParameter("job_name"));
+		map.put("basic_besponsibilit", request.getParameter("basic_besponsibilit"));
+		map.put("requirements", request.getParameter("requirements"));
+		map.put("skill_and_capability",request.getParameter("skill_and_capability"));
+		map.put("required_train",request.getParameter("required_train"));
+		map.put("editor_id", editor_id);
+		map.put("edit_date", curTime);
+		
+		int result=hrBaseDataService.editPositionData(map);
+		if(result==1){
+			initModel(true,"编辑成功！",null);
+		}
+		return mv.getModelMap();
+	}
+	@RequestMapping("/getPositionList")
+	@ResponseBody
+	public ModelMap getPositionList(){
+		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
+		int start=(request.getParameter("start")!=null)?Integer.parseInt(request.getParameter("start")):0;		//分页数据起始数
+		int length=(request.getParameter("length")!=null)?Integer.parseInt(request.getParameter("length")):20;	//每一页数据条数
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("draw", draw);
+		condMap.put("start", start);
+		condMap.put("length", length);
+		condMap.put("job_no", request.getParameter("job_no"));
+		condMap.put("orgStr", request.getParameter("orgStr"));
+		
+		Map<String,Object> list = hrBaseDataService.getPositionList(condMap);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(list);
+		model = mv.getModelMap();
+		return model;
+	}
+	@RequestMapping("/getPositionData")
+	@ResponseBody
+	public ModelMap getPositionData(){
+	
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("id", request.getParameter("id"));
+		Map<String, Object> result=new HashMap<String, Object>(); 
+		List<Map<String,Object>> list = hrBaseDataService.getPositionData(condMap);
+		if(list.size()>0){
+			result.put("data",list.get(0));
+		}
+		mv.clear();
+		mv.getModelMap().addAllAttributes(result);
+		model = mv.getModelMap();
+		return model;
+	}
+	@RequestMapping("/deletePositionData")
+	@ResponseBody
+	public ModelMap deletePositionData() {
+		try {
+			String ids = request.getParameter("ids");
+			List<String> idlist = new ArrayList<String>();
+			for(String id : ids.split(",")){
+				idlist.add(id);
+			}
+			hrBaseDataService.deletePositionData(idlist);
+			initModel(true, "success", "");
+		} catch (Exception e) {
+			initModel(false, e.getMessage(), e.toString());
+		}
+		model = mv.getModelMap();
+		return model;
+	}
 	/****************START YangKe**************************************************/
 	@RequestMapping("/staffManager")
 	public ModelAndView staffManager(){ 		//基础数据 员工库
@@ -456,6 +588,107 @@ public class HrBaseDataController extends BaseController {
 		condMap.put("edit_user", edit_user);
 		int result = hrBaseDataService.dimissionStaff(condMap);
 		initModel(true,String.valueOf(result),null);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping(value="/uploadWorkgroupPrice",method=RequestMethod.POST)
+	@ResponseBody
+	public ModelMap uploadWorkgroupPrice(@RequestParam(value="file",required=false) MultipartFile file){
+		String order_no = request.getParameter("orderId");
+		String effective_date = request.getParameter("effective_date");
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String edit_user = request.getSession().getAttribute("staff_number") + "";
+		String result = "";
+		boolean success = true;
+		String fileFileName = "uploadWorkgroupPrice.xls";
+		//int result = 0;
+		ExcelModel excelModel =new ExcelModel();
+		excelModel.setReadSheets(1);
+		excelModel.setStart(1);
+		Map<String,Integer> dataType = new HashMap<String,Integer>();
+		dataType.put("0", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("1", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("2", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("3", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("4", ExcelModel.CELL_TYPE_NUMERIC);
+		excelModel.setDataType(dataType);
+		excelModel.setPath(fileFileName);
+		try{
+			File staffFile = new File(fileFileName);
+			file.transferTo(staffFile);
+			InputStream is = new FileInputStream(staffFile);
+			ExcelTool excelTool = new ExcelTool();
+			excelTool.readExcel(is, excelModel);
+			List<String> headers=excelModel.getHeader();
+			if(!headers.get(0).equals("工厂")||!headers.get(1).equals("车间")||
+					!headers.get(2).equals("班组")||!headers.get(3).equals("小班组")||!headers.get(4).equals("承包单价")){
+				Exception e=new Exception("请使用下载的模板导入！");
+				throw e;			
+			}
+			List<Map<String, Object>> addList = new ArrayList<Map<String,Object>>();
+			List<Map<String, Object>> upDateList = new ArrayList<Map<String,Object>>();
+			int i = 1;
+			int dataFlag = 0;
+			for(Object[] data : excelModel.getData()){
+				++i;
+				Map<String, Object> info = new HashMap<String, Object>();
+				String factory = data[0].toString().trim(); 
+				info.put("factory", factory);
+				info.put("workshop", data[1] == null?null:data[1].toString().trim());
+				info.put("workgroup", data[2] == null?null:data[2].toString().trim());
+				info.put("small_workgroup", data[3] == null?null:data[3].toString().trim());
+				info.put("standard_price", data[4] == null?null:data[4].toString().trim());
+				info.put("editor_id", edit_user);
+				info.put("edit_date", curTime);
+				info.put("effective_date", effective_date);
+				info.put("order_no", order_no);
+				
+				//校验用户填写的工厂、车间、班组、小班组、车型 信息是否正确
+				Map<String,Object> orgMap =  hrBaseDataService.getOrgInfo(info);
+				if(null == orgMap){
+					++dataFlag;
+					//用户填写的工厂、车间、班组、小班组信息有误
+					success = false;
+					result = "用户填写的工厂、车间、班组、小班组信息有误!";
+					break;
+				}else{
+					info.put("org_id", orgMap.get("id"));
+					//根据工厂、车间、班组、小班组、订单、日期查询标准工时和单价
+					Map<String,Object> map = hrBaseDataService.queryWorkgroupPrice(info);
+					
+					if(null != map && Integer.parseInt(map.get("id").toString()) >0){
+						//修改
+						info.put("id", map.get("id"));
+						upDateList.add(info);
+					}else{
+						addList.add(info);
+					}
+					
+					if(dataFlag>0){
+						result = result+"行数据输入的工厂、车间、班组或小班组信息有误，请确认组织结构是否存在！\n";
+					}
+					if(success && addList.size()>0){
+						//批量新增标准工时/单价
+						hrBaseDataService.addWorkgroupPrice(addList);
+						result =  "导入成功！";
+					}
+					if(success && upDateList.size()>0){
+						//批量修改标准工时/单价
+						hrBaseDataService.updateWorkgroupPrice(upDateList);
+						result =  "导入成功！";
+					}
+				}
+			}
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+			initModel(false,"导入文件的格式有误！",null);
+			model = mv.getModelMap();
+			return model;
+		}
+		initModel(success,result,result);
 		model = mv.getModelMap();
 		return model;
 	}
@@ -614,6 +847,13 @@ public class HrBaseDataController extends BaseController {
 		condMap.put("draw", draw);
 		condMap.put("start", start);
 		condMap.put("length", length);
+		condMap.put("factory", request.getParameter("factory"));
+		condMap.put("workshop", request.getParameter("workshop"));
+		condMap.put("workgroup", request.getParameter("workgroup"));
+		condMap.put("team", request.getParameter("team"));
+		condMap.put("orderId", request.getParameter("orderId"));
+		condMap.put("effctiveDateStart", request.getParameter("effctiveDateStart"));
+		condMap.put("effctiveDateEnd", request.getParameter("effctiveDateEnd"));
 		
 		Map<String,Object> list = hrBaseDataService.getWorkgroupPriceList(condMap);
 		mv.clear();
