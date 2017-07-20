@@ -3,6 +3,7 @@ $(document).ready(function () {
 	initPage();
 	
 	function initPage(){
+		//getBusNumberSelect('#vinText2');
 		//alert(location.href.substr(location.href.indexOf("action?")+7,location.href.length));
 		//$('#rightlink').attr('href','production!execution.action?' + location.href.substr(location.href.indexOf("action?")+7,location.href.length)); 
 		getKeysSelect("ABNORMAL_REASON", "", "#reason_type"); 

@@ -344,7 +344,7 @@
 			and c.bus_number like concat('%',#{bus_number},'%')
 		</if>
 		<if test="result !=null and result !=''">
-			and c.result in (#{result})
+			and FIND_IN_SET(c.result,#{result}) 
 		</if>
 			group by c.bus_number,c.test_node
 			order by c.edit_date desc
@@ -372,7 +372,7 @@
 			and c.bus_number like concat('%',#{bus_number},'%')
 		</if>
 		<if test="result !=null and result !=''">
-			and c.result in (#{result})
+			and FIND_IN_SET(c.result,#{result}) 
 		</if>
 		group by c.bus_number,c.test_node) tmp
      </select>
@@ -628,16 +628,16 @@
 
 <!-- ======================== tj start=================================-->
     <select id="getKeyPartsTraceList" parameterType="Map" resultType="Map">
-		select f.id factory_id,f.factory_name,t.workshop,t.bus_number,o.order_no,
-		o.order_name,ty.bus_type_code,c.order_config_name,u.username,t.edit_date,
-		o.id order_id,ty.id bustype_id,c.id orderconfig_id 
+	select f.id factory_id,f.factory_name,t.workshop,t.bus_number,o.order_no,
+		o.order_name,c.order_config_name,u.username,t.edit_date,td.key_components_template_id 
 		    from BMS_QM_KEY_PARTS t
-		    LEFT JOIN BMS_PLAN_BUS b on t.bus_number=b.bus_number
-		    LEFT JOIN BMS_OR_ORDER o on o.id=b.order_id
-		    LEFT JOIN BMS_OR_ORDER_CONFIG c on c.order_id=o.id and b.order_config_id=c.id
+				LEFT JOIN BMS_QM_KEY_PARTS_TEMPLATE_DETAILS td on td.id = t.key_parts_template_details_id
+				LEFT JOIN BMS_QM_KEY_PARTS_TEMPLATE_HEADER th on th.id = td.key_components_template_id 
+				LEFT JOIN BMS_OR_ORDER_CONFIG c on c.id=th.order_config_id and c.order_id = th.order_id
+				LEFT JOIN BMS_OR_ORDER o ON o.id = c.order_id
 		    LEFT JOIN BMS_BASE_FACTORY f on f.id=t.factory_id
-		    LEFT JOIN BMS_BASE_BUS_TYPE ty on ty.id=o.bus_type_id
-		    LEFT JOIN BMS_BASE_USER u on u.id=t.editor_id where 1=1 
+		    LEFT JOIN BMS_BASE_USER u on u.id=t.editor_id 
+        	where 1=1
 		<if test="busNumber!=null and busNumber!=''">
 			and t.bus_number=#{busNumber}
 		</if>
@@ -654,21 +654,22 @@
 			and o.bus_type_id=#{bustypeId}
 		</if>
 		<if test="orderconfigId!=null and orderconfigId!=''">
-			and b.order_config_id=#{orderconfigId}
+			and c.id=#{orderconfigId}
 		</if>
-			group by t.bus_number,t.factory_id,t.workshop 
+			group by t.bus_number,t.factory_id,t.workshop
 		<if test="start!=null">
 			limit #{start},#{length}
 		</if>
 	</select>
 	<select id="getKeyPartsTraceCount" parameterType="Map" resultType="int">
-		select count(DISTINCT t.bus_number,t.factory_id,t.workshop )  from BMS_QM_KEY_PARTS t
-		    LEFT JOIN BMS_PLAN_BUS b on t.bus_number=b.bus_number
-		    LEFT JOIN BMS_OR_ORDER o on o.id=b.order_id
-		    LEFT JOIN BMS_OR_ORDER_CONFIG c on c.order_id=o.id and b.order_config_id=c.id
+		select count(DISTINCT t.bus_number,t.factory_id,t.workshop )   from BMS_QM_KEY_PARTS t
+				LEFT JOIN BMS_QM_KEY_PARTS_TEMPLATE_DETAILS td on td.id = t.key_parts_template_details_id
+				LEFT JOIN BMS_QM_KEY_PARTS_TEMPLATE_HEADER th on th.id = td.key_components_template_id 
+				LEFT JOIN BMS_OR_ORDER_CONFIG c on c.id=th.order_config_id and c.order_id = th.order_id
+				LEFT JOIN BMS_OR_ORDER o ON o.id = c.order_id
 		    LEFT JOIN BMS_BASE_FACTORY f on f.id=t.factory_id
-		    LEFT JOIN BMS_BASE_BUS_TYPE ty on ty.id=o.bus_type_id
-		    LEFT JOIN BMS_BASE_USER u on u.id=t.editor_id where 1=1 
+		    LEFT JOIN BMS_BASE_USER u on u.id=t.editor_id 
+        	where 1=1
 		<if test="busNumber!=null and busNumber!=''">
 			and t.bus_number=#{busNumber}
 		</if>
@@ -685,7 +686,7 @@
 			and o.bus_type_id=#{bustypeId}
 		</if>
 		<if test="orderconfigId!=null and orderconfigId!=''">
-			and b.order_config_id=#{orderconfigId}
+			and c.id=#{orderconfigId}
 		</if>
      </select>
      <update id="updateKeyParts" parameterType="Map">
@@ -698,20 +699,14 @@
 		WHERE id = #{keypartsId}
 	</update>
      <select id="getBusNumberDetailList" parameterType="Map" resultType="Map">
-		select t.*,b.id as keypartsId,
+		select t.*,t.3C_components as CCC_components,b.id as keypartsId,
 		   case 3C_components WHEN '是' THEN t.3C_no WHEN '否' THEN b.batch end  as batch
 		    from BMS_QM_KEY_PARTS_TEMPLATE_DETAILS  t 
 		    LEFT JOIN BMS_QM_KEY_PARTS_TEMPLATE_HEADER h on h.id=t.key_components_template_id
-		    LEFT JOIN BMS_QM_KEY_PARTS b on b.key_parts_template_details_id=t.id
+		    LEFT JOIN BMS_QM_KEY_PARTS b on b.key_parts_template_details_id=t.id AND b.bus_number = #{bus_number}
 			 where 1=1  
-		<if test="orderId!=null and orderId!=''">
-			and h.order_id=#{orderId}
-		</if>
-		<if test="bustypeId!=null and bustypeId!=''">
-			and h.bus_type_id=#{bustypeId}
-		</if>
-		<if test="orderconfigId!=null and orderconfigId!=''">
-			and h.order_config_id=#{orderconfigId}
+		<if test="key_components_template_id!=null and key_components_template_id!=''">
+			and t.key_components_template_id=#{key_components_template_id}
 		</if>
 		<if test="workshop!=null and workshop!=''">
 			and t.workshop=#{workshop}
@@ -741,7 +736,7 @@
 			and o.order_no=#{orderNo}
 		</if>
 		<if test="bugLevel!=null and bugLevel!=''">
-			and t.bug_level=#{bugLevel}
+			and FIND_IN_SET(t.bug_level,#{bugLevel}) 
 		</if>
 		<if test="occurDateStart!=null and  occurDateStart!=''">
 			<![CDATA[and t.occur_date>=#{occurDateStart}]]>
@@ -769,10 +764,10 @@
 			and t.material=#{material}
 		</if>
 		<if test="orderNo!=null and  orderNo!=''">
-			and o.order_no=#{orderNo}
+			and o.order_no=#{orderNo} 
 		</if>
 		<if test="bugLevel!=null and bugLevel!=''">
-			and t.bug_level=#{bugLevel}
+			and FIND_IN_SET(t.bug_level,#{bugLevel}) 
 		</if>
 		<if test="occurDateStart!=null and  occurDateStart!=''">
 			<![CDATA[and t.occur_date>=#{occurDateStart}]]>

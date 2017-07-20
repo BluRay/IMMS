@@ -1,12 +1,13 @@
 var pageSize=1;
 var table;
-var table_height = $(window).height()-350;
+var table_height = $(window).height()-300;
 $(document).ready(function(){
 	initPage();
 	$("#breadcrumbs").resize(function() {
 		//ajaxQuery();
 	});
 	function initPage(){
+		getBusNumberSelect('#search_busNumber');
 		getFactorySelect("quality/keyPartsTrace",'',"#search_factory","全部",'id');
 		getBusTypeSelect("","#search_bus_type","全部","id");
 		getWorkshopSelect("",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
@@ -118,11 +119,10 @@ function ajaxQuery(){
             });
 		},
 		columns: [
+		          	{"title":"车号","class":"center","data":"bus_number","defaultContent": ""},
 		            {"title":"工厂","class":"center","data":"factory_name","defaultContent": ""},
 		            {"title":"车间","class":"center","data":"workshop","defaultContent": ""},
 		            {"title":"订单","class":"center","data":"order_no","defaultContent": ""},
-		            {"title":"车号","class":"center","data":"bus_number","defaultContent": ""},
-		            {"title":"车型","class":"center","data":"bus_type_code","defaultContent": ""},
 		            {"title":"订单配置","class":"center","data":"order_config_name","defaultContent": ""},
 		            {"title":"录入人","class":"center","data":"username","defaultContent": ""},
 		            {"title":"录入时间","class":"center","data":"edit_date","defaultContent": ""},
@@ -161,10 +161,9 @@ function showBusNumberDetail(json){
 		},
 		ajax:function (data, callback, settings) {
 			var param ={
-				"orderId":json.order_id,
-				"bustypeId":json.bustype_id,
-				"orderconfigId":json.orderconfig_id,
-				"workshop":json.workshop
+				"bus_number":json.bus_number,
+				"workshop":json.workshop,
+				"key_components_template_id":json.key_components_template_id
 			};
            
             $.ajax({
@@ -186,8 +185,8 @@ function showBusNumberDetail(json){
         				resizable: false,
         				title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 关键零部件编辑</h4></div>',
         				title_html: true,
-        				width:'900px',
-        				height:'600',
+        				width:1200,
+        				height:600,
         				modal: true,
         				buttons: [{
         							text: "关闭",
@@ -225,10 +224,18 @@ function showBusNumberDetail(json){
 					{"title":"工序","class":"center","data":"process","defaultContent": ""},
 					{"title":"3C件","class":"center","data":"3C_components","defaultContent": ""},					
 					{"title":"批次","class":"center","data":"batch","defaultContent": "","render":function(data,type,row){
-						return "<input style='border:0;width:50px;text-align:center' class='batch' " +
-								" value='"+(data!=undefined ? data : '')+"'/><input type='hidden' class='keypartsId' " +
-								" value='"+(row.keypartsId!=undefined ? row.keypartsId : '')+"'/><input type='hidden' class='id' " +
-								" value='"+row.id+"'/>";
+						if(row.CCC_components=='是'){
+							return "<input style='border:0;width:100px;text-align:center' disabled='disabled' class='batch' " +
+							" value='"+(data!=undefined ? data : '')+"'/><input type='hidden' class='keypartsId' " +
+							" value='"+(row.keypartsId!=undefined ? row.keypartsId : '')+"'/><input type='hidden' class='id' " +
+							" value='"+row.id+"'/>";
+						}else{
+							return "<input style='border:0;width:100px;text-align:center' class='batch' " +
+							" value='"+(data!=undefined ? data : '')+"'/><input type='hidden' class='keypartsId' " +
+							" value='"+(row.keypartsId!=undefined ? row.keypartsId : '')+"'/><input type='hidden' class='id' " +
+							" value='"+row.id+"'/>";
+						}
+
 					}
 					},
 		          ],

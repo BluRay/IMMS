@@ -125,4 +125,30 @@ public class HrBaseDataServiceImpl implements IHrBaseDataService {
 	public int updateWorkgroupPrice(List<Map<String, Object>> upDateList) {
 		return hrBaseDataDao.updateWorkgroupPrice(upDateList);
 	}
+	@Override
+	public Map<String, Object> getStaffDistribution(Map<String, Object> conditionMap) {
+		int totalCount=0;
+		List<Map<String,Object>> datalist = hrBaseDataDao.getStaffDistribution(conditionMap);
+		totalCount = hrBaseDataDao.getStaffDistributionCount(conditionMap);		
+		Map<String, Object> result = new HashMap<String,Object>();
+		result.put("total", totalCount);
+		result.put("rows", datalist);
+		return result;
+	}
+	@Override
+	public int checkIsValidStaff(Map<String, Object> cMap) {
+		return hrBaseDataDao.checkIsValidStaff(cMap);
+	}
+	@Override
+	public Double getWorkgroupPrice(Map<String, Object> pmap) {
+		return hrBaseDataDao.getWorkgroupPrice(pmap);
+	}
+	@Override
+	public int deleteStaffDistribution(Map<String, Object> conditionMap) {
+		return hrBaseDataDao.deleteStaffDistribution(conditionMap);
+	}
+	@Override
+	public int saveStaffDistribution(List<Map<String, Object>> datalist) {
+		return hrBaseDataDao.saveStaffDistribution(datalist);
+	}
 }

@@ -57,7 +57,7 @@
 								<td>&nbsp;车号：</td>
 								<td><input id="search_busNumber" placeholder="车号..." style="width:150px" type="text" > </td>
 								<td>
-								    <input id="btnQuery" type="button" class="btn btn-sm btn-primary" value="查询" style="margin-left: 2px;"></input>
+								    <input id="btnQuery" type="button" class="btn btn-sm btn-primary" value="查询" style="margin-left: 10px;"></input>
 <!-- 								    <input id="btnAdd" type="button" class="btn btn-sm btn-success" value="新增" style="margin-left: 2px;"></input> -->
 								</td>
 							</tr>
@@ -68,7 +68,7 @@
 					</div>
 			</div><!-- /.main-content -->
 			
-			<div id="dialog-add" class="hide" style="align:center;width:800px;height:500px">
+			<div id="dialog-add" class="hide" style="align:center;width:1200px;height:600px;">
 				<form id="form_add" class="">
 					<table>
 					<tr style="height:40px">
@@ -124,7 +124,7 @@
 				</form>
 			</div>
 			
-			<div id="dialog-edit" class="hide" style="align:center;width:1200px;height:350px">
+			<div id="dialog-edit" class="hide" style="align:center;width:1200px;height:600px">
 				<table class="table table-striped table-bordered table-hover dataTable no-footer"
 					               style="font-size: 12px;margin-bottom:3px" >
 					<tr>
@@ -146,7 +146,7 @@
 				</table>
 				<div class = "div-dialog">
 					<form id="form_edit">
-					    <input type='hidden' id="factoryId">
+					    <input type='hidden'  id="factoryId">
 <!-- 						<table id="tableDataDetail" class="table table-striped table-bordered table-hover" style="overflow-x:auto;font-size: 12px;"> -->
 						<table id="tableDataDetail" class="table table-striped table-bordered table-hover dataTable no-footer"
 					            style="font-size: 12px;" role="grid" aria-describedby="tableData_info">

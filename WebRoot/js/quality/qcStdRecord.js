@@ -219,8 +219,8 @@ function ajaxQuery(){
             {"title":"记录编号","class":"center","data":"recordNo","defaultContent": ""},
             {"title":"更新内容摘要","class":"center","data":"usynopsis","defaultContent": ""},
             {"title":"标准文件编号/名称","class":"center","data":"standardfile","defaultContent": ""},
-            {"title":"编制人","class":"center","data":"editor","defaultContent": ""},
-            {"title":"编制日期","class":"center","data": "editDate","defaultContent": ""},
+            {"title":"更新人","class":"center","data":"editor","defaultContent": ""},
+            {"title":"更新时间","class":"center","data": "editDate","defaultContent": ""},
             {"title":"查看","class":"center","data":null,"defaultContent": "<i class=\"glyphicon glyphicon-search bigger-110 show\" style='color:green;cursor: pointer;'></i>"}
           ],
 	});

@@ -391,6 +391,11 @@ function getBusType(element){
 	})
 }
 function ajaxQuery(){
+	var bugLevel = [];
+	$('input[name="search_bugLevel"]:checked').each(function() {
+		bugLevel.push($(this).val());
+	});
+	bugLevel=bugLevel.join(",");
 	$("#tableData").dataTable({
 		serverSide: true,paiging:true,ordering:false,searching: false,bAutoWidth:false,
 		destroy: true,sScrollY: table_height,sScrollX:true,orderMulti:false,
@@ -412,7 +417,7 @@ function ajaxQuery(){
 				"orderNo" : $("#search_orderno").val(),
 				"occurDateStart" : $("#search_date_start").val(),
 				"occurDateEnd" : $("#search_date_end").val(),
-				"bugLevel" : $('input:radio[name="search_bugLevel"]:checked').val()
+				"bugLevel" : bugLevel
 			};
             param.length = data.length;					//页面显示记录条数，在页面显示每页显示多少项的时候
             param.start = data.start;					//开始的记录序号

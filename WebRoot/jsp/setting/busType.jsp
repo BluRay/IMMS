@@ -65,7 +65,7 @@
 					<div class="col-xs-12"  style="width:100%">
 						<table id="tableData" 
 							class="table table-striped table-bordered table-hover"
-							style="font-size: 12px; width:1700px;overflow-x:auto" >
+							style="font-size: 12px; width:2100px;overflow-x:auto" >
 						</table>
 					</div>
 				</div>

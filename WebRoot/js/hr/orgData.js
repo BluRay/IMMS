@@ -5,6 +5,8 @@ jQuery(function($) {
 	//}
 	getKeysSelect("ORG_TYPE", "", $("#new_org_type"),"全部","");
 	getKeysSelect("ORG_TYPE", "", $("#edit_org_type"),"全部",""); 
+	getKeysSelect("SALARY_MODEL", "", $("#new_salary_model"),"--请选择--","");
+	getKeysSelect("SALARY_MODEL", "", $("#edit_salary_model"),"--请选择--",""); 
 	var DataSourceTree = function(options) {
 		this._data 	= options.data;
 		this._delay = options.delay;
@@ -295,7 +297,8 @@ jQuery(function($) {
 			resizable: false,
 			title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 新增组织架构</h4></div>',
 			title_html: true,
-			width:'500px',
+			width:650,
+			height:570,
 			modal: true,
 			buttons: [ 
 						{
@@ -323,7 +326,9 @@ jQuery(function($) {
 								    	"org_kind" : $("#new_org_kind").val(),
 								    	"org_type" :$("#new_org_type :selected").attr('keyvalue'),
 								    	"parent_id" : $("#parent_id").val(),
-								    	"foreign_id" : $("#new_name").val()
+								    	"foreign_id" : $("#new_name").val(),
+								    	"salary_model" :$("#new_salary_model :selected").attr('keyvalue'),
+								    	"customer_no_flag" :$("#new_customer_no_flag :selected").val()
 								    },
 								    success:function(response){
 
@@ -354,13 +359,18 @@ jQuery(function($) {
             success: function (response) {
             	
                 if(response.success) {
-                	
             		var option="<option value='"+response.data[0].parent_id+"'>"+response.data[0].parent_name+"</option>";
             		$("#editId").val(response.data[0].id);
             		$('#p_id').html('');
             		$('#p_id').html(option);
                 	$("#edit_org_type").find("option[keyvalue="+response.data[0].org_type+"]").prop("selected",true);
                 	$("#edit_org_kind").find("option[value="+response.data[0].org_kind+"]").prop("selected",true);
+                	if(response.data[0].salary_model>=0){
+                		$("#edit_salary_model").find("option[keyvalue="+response.data[0].salary_model+"]").prop("selected",true);
+                	}else{
+                		$("#edit_salary_model").find("option[value='']").prop("selected",true);
+                	}
+                	$("#edit_customer_no_flag").find("option[value="+response.data[0].customer_no_flag+"]").prop("selected",true);
                 	$('#edit_name').val(response.data[0].display_name);
                 	$('#edit_name_en').val(response.data[0].name);
                 	$('#edit_org_code').val(response.data[0].short_name);
@@ -368,8 +378,8 @@ jQuery(function($) {
                 	$('#edit_responsibilities').val(response.data[0].responsibilities);
                 	
                 	var dialog = $("#dialog-edit").removeClass('hide').dialog({
-            			width:600,
-            			/*height:500,*/
+            			width:650,
+            			height:570,
             			modal: true,
             			title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-gear green"></i> 编辑组织架构</h4></div>',
             			title_html: true,
@@ -399,7 +409,9 @@ jQuery(function($) {
             					    	"org_code" : $("#edit_org_code").val(),
             					    	"org_kind" : $("#edit_org_kind").val(),
             					    	"org_type" :$("#edit_org_type :selected").attr('keyvalue'),
-            					    	"parent_id" : $("#p_id").val()
+            					    	"parent_id" : $("#p_id").val(),
+								    	"salary_model" :$("#edit_salary_model :selected").attr('keyvalue'),
+								    	"customer_no_flag" :$("#edit_customer_no_flag :selected").val()
             					    },
             					    success:function(response){
             					    	if(response.success){
@@ -560,6 +572,10 @@ function getWorkgroupListById(id,org_kind,org_type){
 	                    return data=="0" ? "管理型" : "生产型"
 	                },"defaultContent": ""},
 		            {"title":"英文名称","class":"center","data":"name_en","defaultContent": ""},
+		            {"title":"计资模式","class":"center","data":"salary_model","defaultContent": ""},
+		            {"title":"自编号","class":"center","data":"customer_no_flag","defaultContent": "","render": function ( data, type, row ) {
+	                    return data=="1" ? "是" : "否"}
+	                },
 		            {"title":"职责","class":"center","data":"responsibilities","defaultContent": ""},
 		            {"title":"管理者","class":"center","data":"manager","defaultContent": ""},
 		            {"title":"上级部门","class":"center","data":"parent_name","defaultContent": ""},

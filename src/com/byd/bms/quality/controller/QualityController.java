@@ -1044,6 +1044,7 @@ public class QualityController extends BaseController {
 			map.put("vendor",el.get("vendor"));
 			map.put("size",el.get("size"));
 			map.put("process_name",el.get("process_name"));
+			map.put("workshop",el.get("workshop"));
 			map.put("factory_id",el.get("factory_id"));
 			map.put("key_parts_template_detail_id",el.get("key_parts_template_detail_id"));
 			map.put("edit_date",curTime);
@@ -1063,13 +1064,11 @@ public class QualityController extends BaseController {
 	@ResponseBody
 	public ModelMap getBusNumberDetailList() {
 		Map conditionMap = new HashMap();
-		String bustypeId = request.getParameter("bustypeId");
-		String orderId = request.getParameter("orderId");
-		String orderconfigId = request.getParameter("orderconfigId");
+		String key_components_template_id = request.getParameter("key_components_template_id");
+		String bus_number = request.getParameter("bus_number");
 		// 封装查询条件
-		conditionMap.put("bustypeId", bustypeId);
-        conditionMap.put("orderId", orderId);
-		conditionMap.put("orderconfigId", orderconfigId);
+        conditionMap.put("bus_number", bus_number);
+		conditionMap.put("key_components_template_id", key_components_template_id);
 		conditionMap.put("workshop", request.getParameter("workshop"));
 		
 		Map<String, Object> result = qualityService.getBusNumberDetailList(conditionMap);

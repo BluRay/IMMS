@@ -2,6 +2,7 @@ $(document).ready(function () {
 	initPage();
 	
 	function initPage(){
+		getBusNumberSelect('#search_busnumber');
 		getBusNumberSelect('#nav-search-input');
 		
 		var d = new Date();

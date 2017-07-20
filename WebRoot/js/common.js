@@ -588,7 +588,7 @@ function getBusNumberSelect(elementId, submitId, fn_backcall) {
 				return process(results);
 			}, 'json');
 		},
-		items : 30,
+		items : 15,
 		matcher : function(item) {
 			
 			return true;
@@ -598,15 +598,13 @@ function getBusNumberSelect(elementId, submitId, fn_backcall) {
 				if (value.bus_number == item) {
 					orderId = value.order_id;
 					orderConfigId=value.order_config_id;
+					$(elementId).attr("order_id", orderId);
+					$(elementId).attr("order_config_id", orderConfigId);
 					if (typeof (fn_backcall) == "function") {
 						fn_backcall(value);
 					}
 				}
 			})
-			// alert(submitId);
-			$(elementId).attr("order_id", orderId);
-			$(elementId).attr("order_config_id", orderConfigId);
-			//$(submitId).val(selectId);
 			return item;
 		}
 	});

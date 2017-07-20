@@ -6,6 +6,7 @@ $(document).ready(function () {
 	initPage();
 	
 	function initPage(){
+		getBusNumberSelect('#search_busnumber');
 		getBusNumberSelect('#nav-search-input');
 		cur_tab = "01";
 		if(Request("bus_number")!=""){

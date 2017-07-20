@@ -42,7 +42,7 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<div class="row">
-								<div class="col-sm-5">
+								<div class="col-sm-4">
 									<div id="div_tree1" class="widget-box widget-color-blue2" style="height:800px;OVERFLOW-X:auto;OVERFLOW-Y:auto;OVERFLOW:auto">
 										<div class="widget-header">
 											<h4 class="widget-title lighter smaller">组织架构&nbsp;&nbsp;&nbsp;&nbsp;</h4>
@@ -55,7 +55,7 @@
 										</div>
 									</div>
 								</div>
-								<div class="col-sm-7">
+								<div class="col-sm-8">
 									<div id="div_tree2" class="widget-box widget-color-green2" style="height:800px;OVERFLOW-X:auto;OVERFLOW-Y:auto;OVERFLOW:auto">
 										<div class="widget-header">
 											<h4 class="widget-title lighter smaller" id="nodeName">&nbsp;</h4>
@@ -80,7 +80,7 @@
 					</div>
 			</div><!-- /.main-content -->
 			<div id="dialog-confirm" class="hide" style="width:800px;height:600px">
-				<form>
+				<form class="form-horizontal">
 			        <input type="hidden" id="org_type"><input type="hidden" id="parent_id">
 			        <input type="hidden" id="org_kind">
 					<fieldset>
@@ -90,7 +90,7 @@
 								<select name="" id="new_p_id" class="input-large carType"></select>
 							</div>
 						</div>
-					</fieldset><br/>
+					</fieldset>
 					<fieldset>
 						<div class="form-group form-horizontal">
 							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 组织层级： </label>
@@ -105,18 +105,19 @@
 								</select>
 							</div>
 						</div>
-					</fieldset><br/>
+					</fieldset>
 					<fieldset>
 						<div class="form-group form-horizontal">
 							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 组织类型： </label>
 							<div class="col-sm-9">
 								<select name="" id="new_org_kind" class="input-large carType">
+									<option value=''>--请选择--</option>
 			                    	<option value='1'>生产型</option>
 			                    	<option value='0'>管理型</option>
 								</select>
 							</div>
 						</div>
-					</fieldset><br/>
+					</fieldset>
 					<fieldset>
 						<div class="form-group form-horizontal">
 							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 组织名称： </label>
@@ -126,7 +127,7 @@
                                 onkeyup="value=value.replace(/[^\u4E00-\u9FA5]/g,'')" 
                                 onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\u4E00-\u9FA5]/g,''))"/>							</div>
 						    </div>
-					</fieldset><br/>
+					</fieldset>
 					<fieldset>
 						<div class="form-group form-horizontal">
 							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 英文名称： </label>
@@ -136,7 +137,7 @@
                                 onkeyup="value=value.replace(/[\W]/g,'') " 
                                 onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"/>							</div>
 						    </div>
-					</fieldset><br/>
+					</fieldset>
 					<fieldset>
 						<div class="form-group form-horizontal">
 							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 简称： </label>
@@ -144,7 +145,28 @@
                                 <input style="height: 30px;width:280px" type="text" class="input-large revise carType" placeholder="" id="new_org_code" />
                             </div>
                         </div>
-					</fieldset><br/>
+					</fieldset>
+					<fieldset>
+						<div class="form-group form-horizontal">
+							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 计资模式： </label>
+							<div class="col-sm-9">
+								<select name="" id="new_salary_model" class="input-large carType">
+								</select>
+                            </div>
+						</div>
+					</fieldset>
+					<fieldset>
+						<div class="form-group form-horizontal">
+							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 自编号： </label>
+							<div class="col-sm-9">
+                               	<select name="" id="new_customer_no_flag" class="input-large carType">
+                               		<option value=''>--请选择--</option>
+                               		<option value='0'>否</option>
+			                    	<option value='1'>是</option>
+								</select>
+                            </div>
+						</div>
+					</fieldset>
 					<fieldset>
 						<div class="form-group form-horizontal">
 							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 管理者： </label>
@@ -164,7 +186,7 @@
 				</form>
             </div>
 			<div id="dialog-edit" class="hide" style="width:800px;height:600px">
-				<form>
+				<form class="form-horizontal">
 					<fieldset>
 						<div class="form-group form-horizontal">
 							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 上级部门： </label>
@@ -173,7 +195,7 @@
 								<select name="" id="p_id" class="input-large carType"></select>
 							</div>
 						</div>
-					</fieldset><br/>
+					</fieldset>
 					<fieldset>
 						<div class="form-group form-horizontal">
 							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 组织层级： </label>
@@ -189,7 +211,7 @@
 								</select>
 							</div>
 						</div>
-					</fieldset><br/>
+					</fieldset>
 					<fieldset>
 						<div class="form-group form-horizontal">
 							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 组织类型： </label>
@@ -200,7 +222,7 @@
 								</select>
 							</div>
 						</div>
-					</fieldset><br/>
+					</fieldset>
 					<fieldset>
 						<div class="form-group form-horizontal">
 							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 组织名称： </label>
@@ -210,7 +232,7 @@
                                 onkeyup="value=value.replace(/[^\u4E00-\u9FA5]/g,'')" 
                                 onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\u4E00-\u9FA5]/g,''))"/>							</div>
 						    </div>
-					</fieldset><br/>
+					</fieldset>
 					<fieldset>
 						<div class="form-group form-horizontal">
 							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 英文名称： </label>
@@ -220,7 +242,7 @@
                                 onkeyup="value=value.replace(/[\W]/g,'') " 
                                 onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"/>							</div>
 						    </div>
-					</fieldset><br/>
+					</fieldset>
 					<fieldset>
 						<div class="form-group form-horizontal">
 							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 简称： </label>
@@ -228,7 +250,27 @@
                                 <input style="height: 30px;width:280px" type="text" class="input-large revise carType" placeholder="" id="edit_org_code" />
                             </div>
                         </div>
-					</fieldset><br/>
+					</fieldset>
+					<fieldset>
+						<div class="form-group form-horizontal">
+							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 计资模式： </label>
+							<div class="col-sm-9">
+								<select name="" id="edit_salary_model" class="input-large carType">
+								</select>
+                            </div>
+						</div>
+					</fieldset>
+					<fieldset>
+						<div class="form-group form-horizontal">
+							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 自编号： </label>
+							<div class="col-sm-9">
+                               	<select name="" id="edit_customer_no_flag" class="input-large carType">
+                               		<option value='0'>否</option>
+			                    	<option value='1'>是</option>
+								</select>
+                            </div>
+						</div>
+					</fieldset>
 					<fieldset>
 						<div class="form-group form-horizontal">
 							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 管理者： </label>

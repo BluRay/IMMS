@@ -918,6 +918,7 @@ function ajaxShowBusNumber(order_id,factory_id){
 			}
 			var dialog = $( "#dialog-message" ).removeClass('hide').dialog({
 				width:600,
+				height:500,
 				modal: true,
 				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i> 车辆明细</h4></div>",
 				title_html: true,

@@ -4,7 +4,7 @@
     <select id="getOrgDataTreeList" parameterType="Map" resultType="Map">
 		SELECT
          id,CONCAT(parent_id,'') parent_id,name_en as name,name as display_name,org_code as short_name,
-         manager,org_type,org_kind,responsibilities,
+         manager,org_type,org_kind,responsibilities,salary_model,customer_no_flag,
          (SELECT COUNT(1) FROM BMS_BASE_ORG f2 WHERE f2.parent_id = t.id) AS sub_count,
          (SELECT name FROM BMS_BASE_ORG f2 WHERE f2.id = t.parent_id) AS parent_name
         FROM BMS_BASE_ORG t  <!--    t left join BMS_BASE_KEY k on t.org_type=k.org_type -->
@@ -18,10 +18,13 @@
          ORDER BY org_type ASC	
 	</select>
 	<select id="getOrgDataByParentId" parameterType="Map" resultType="Map">
-		SELECT id,CONCAT(parent_id,'') parent_id,name_en as name,name as display_name,
-		   org_code as short_name,manager,org_type,org_kind,responsibilities,foreign_id,
-		   (SELECT name FROM BMS_BASE_ORG f2 WHERE f2.id = t.parent_id) AS parent_name
-          from BMS_BASE_ORG t where 1=1 and t.deleted='0'
+		SELECT t.id,CONCAT(t.parent_id,'') parent_id,t.name_en as name,t.name as display_name,
+		   t.org_code as short_name,t.manager,t.org_type,t.org_kind,t.responsibilities,t.foreign_id,
+		   (SELECT name FROM BMS_BASE_ORG f2 WHERE f2.id = t.parent_id) AS parent_name,
+		   k.key_name as salary_model,customer_no_flag
+          from BMS_BASE_ORG t
+          left join BMS_BASE_KEY k on t.salary_model = k.value and k.key_code='SALARY_MODEL'
+          where 1=1 and t.deleted='0'
 		<if test="id!=null and id!=''">
 			and t.id=#{id}
 		</if>
@@ -37,8 +40,8 @@
 			LAST_INSERT_ID()
 		</selectKey>
 		<![CDATA[
-			insert into BMS_BASE_ORG(parent_id,org_type,org_kind,name,name_en,foreign_id,org_code,sort_number,manager,responsibilities,deleted,editor_id,edit_date) 
-			values(#{parent_id},#{org_type},#{org_kind},#{name},#{name_en},#{foreign_id},#{org_code},#{sort_number},#{manager},#{responsibilities},#{deleted},#{editor_id},#{edit_date})
+			insert into BMS_BASE_ORG(parent_id,org_type,org_kind,name,name_en,foreign_id,org_code,sort_number,manager,responsibilities,deleted,editor_id,edit_date,salary_model,customer_no_flag) 
+			values(#{parent_id},#{org_type},#{org_kind},#{name},#{name_en},#{foreign_id},#{org_code},#{sort_number},#{manager},#{responsibilities},#{deleted},#{editor_id},#{edit_date},#{salary_model},#{customer_no_flag})
 		]]>
 	</insert>
 	<!-- 编辑组织结构 -->
@@ -47,7 +50,7 @@
 			<if test="parent_id!=''">
 			parent_id=#{parent_id},
 			</if>
-			org_type=#{org_type},org_kind=#{org_kind},name=#{name},name_en=#{name_en},org_code=#{org_code}<!-- ,sort_number=#{sort_number} -->,manager=#{manager},responsibilities=#{responsibilities},deleted=#{deleted},editor_id=#{editor_id},edit_date=#{edit_date}  
+			org_type=#{org_type},org_kind=#{org_kind},name=#{name},name_en=#{name_en},org_code=#{org_code}<!-- ,sort_number=#{sort_number} -->,manager=#{manager},responsibilities=#{responsibilities},deleted=#{deleted},editor_id=#{editor_id},edit_date=#{edit_date},salary_model=#{salary_model},customer_no_flag=#{customer_no_flag}  
 			where id=#{id}
 	</update>
 	<!--删除组织结构 -->
@@ -123,46 +126,25 @@
 	
 	<select id="getStaffList" resultType="Map" parameterType='Map'>
 		SELECT s.* FROM BMS_HR_STAFF s WHERE 1=1
-		<if test="orgType!='' ">
-			and FIND_IN_SET(s.plant_org,#{orgStr})>0
+		<if test="orgType==1">
+			AND FIND_IN_SET(s.plant_org,#{orgStr})>0
 		</if>
-		<if test="orgType=='0' ">
-			and FIND_IN_SET(s.plant_org,#{orgStr})>0
+		<if test="orgType==2">
+			AND FIND_IN_SET(s.plant_org,#{orgStr})>0
+			AND FIND_IN_SET(s.workshop_org,#{orgStr})>0
 		</if>
-		<if test="orgType=='1' or orgType=='2'">
-			and FIND_IN_SET(s.plant_org,#{orgStr})>0
-		</if>
-		<if test="orgType=='3' ">
+		<if test="orgType==3 ">
 			and case when ISNULL(s.plant_org) THEN 1=1 else
 			FIND_IN_SET(s.plant_org,#{orgStr})>0 end
-			and FIND_IN_SET(s.dept_org,#{orgStr})>0
-		</if>
-		<if test="orgType=='4' ">
-			and case when ISNULL(s.plant_org) THEN 1=1 else
-			FIND_IN_SET(s.plant_org,#{orgStr})>0 end
-			and case when ISNULL(s.dept_org) THEN 1=1 else
-			FIND_IN_SET(s.dept_org,#{orgStr})>0 end
+			AND FIND_IN_SET(s.workgroup_org,#{orgStr})>0
 			and FIND_IN_SET(s.workshop_org,#{orgStr})>0
 		</if>
-		<if test="orgType=='5' ">
+		<if test="orgType==4 ">
 			and case when ISNULL(s.plant_org) THEN 1=1 else
-			FIND_IN_SET(s.plant_org,#{orgStr})>0 end
-			and case when ISNULL(s.dept_org) THEN 1=1 else
-			FIND_IN_SET(s.dept_org,#{orgStr})>0 end
-			and case when ISNULL(s.workshop_org) THEN 1=1 else
-			FIND_IN_SET(s.workshop_org,#{orgStr})>0 end
-			and FIND_IN_SET(s.workgroup_org,#{orgStr})>0
-		</if>
-		<if test="orgType=='6' ">
-			and case when ISNULL(s.plant_org) THEN 1=1 else
-			FIND_IN_SET(s.plant_org,#{orgStr})>0 end
-			and case when ISNULL(s.dept_org) THEN 1=1 else
-			FIND_IN_SET(s.dept_org,#{orgStr})>0 end
-			and case when ISNULL(s.workshop_org) THEN 1=1 else
-			FIND_IN_SET(s.workshop_org,#{orgStr})>0 end
-			and case when ISNULL(s.workgroup_org) THEN 1=1 else
-			FIND_IN_SET(s.workgroup_org,#{orgStr})>0 end
-			and FIND_IN_SET(s.team_org,#{orgStr})>0
+			FIND_IN_SET(s.plant_org,#{orgStr})>0 end			
+			AND FIND_IN_SET(s.workgroup_org,#{orgStr})>0
+			AND FIND_IN_SET(s.team_org,#{orgStr})>0
+			and FIND_IN_SET(s.workshop_org,#{orgStr})>0
 		</if>
 
 		<if test="staff_number!=null and staff_number!=''">
@@ -188,46 +170,25 @@
 	</select>
 	<select id="getStaffCount" resultType="int" parameterType='Map'>
 		SELECT COUNT(s.id) FROM BMS_HR_STAFF s WHERE 1=1
-		<if test="orgType!='' ">
-			and FIND_IN_SET(s.plant_org,#{orgStr})>0
+		<if test="orgType==1">
+			AND FIND_IN_SET(s.plant_org,#{orgStr})>0
 		</if>
-		<if test="orgType=='0' ">
-			and FIND_IN_SET(s.plant_org,#{orgStr})>0
+		<if test="orgType==2">
+			AND FIND_IN_SET(s.plant_org,#{orgStr})>0
+			AND FIND_IN_SET(s.workshop_org,#{orgStr})>0
 		</if>
-		<if test="orgType=='1' or orgType=='2'">
-			and FIND_IN_SET(s.plant_org,#{orgStr})>0
-		</if>
-		<if test="orgType=='3' ">
+		<if test="orgType==3 ">
 			and case when ISNULL(s.plant_org) THEN 1=1 else
 			FIND_IN_SET(s.plant_org,#{orgStr})>0 end
-			and FIND_IN_SET(s.dept_org,#{orgStr})>0
-		</if>
-		<if test="orgType=='4' ">
-			and case when ISNULL(s.plant_org) THEN 1=1 else
-			FIND_IN_SET(s.plant_org,#{orgStr})>0 end
-			and case when ISNULL(s.dept_org) THEN 1=1 else
-			FIND_IN_SET(s.dept_org,#{orgStr})>0 end
+			AND FIND_IN_SET(s.workgroup_org,#{orgStr})>0
 			and FIND_IN_SET(s.workshop_org,#{orgStr})>0
 		</if>
-		<if test="orgType=='5' ">
+		<if test="orgType==4 ">
 			and case when ISNULL(s.plant_org) THEN 1=1 else
-			FIND_IN_SET(s.plant_org,#{orgStr})>0 end
-			and case when ISNULL(s.dept_org) THEN 1=1 else
-			FIND_IN_SET(s.dept_org,#{orgStr})>0 end
-			and case when ISNULL(s.workshop_org) THEN 1=1 else
-			FIND_IN_SET(s.workshop_org,#{orgStr})>0 end
-			and FIND_IN_SET(s.workgroup_org,#{orgStr})>0
-		</if>
-		<if test="orgType=='6' ">
-			and case when ISNULL(s.plant_org) THEN 1=1 else
-			FIND_IN_SET(s.plant_org,#{orgStr})>0 end
-			and case when ISNULL(s.dept_org) THEN 1=1 else
-			FIND_IN_SET(s.dept_org,#{orgStr})>0 end
-			and case when ISNULL(s.workshop_org) THEN 1=1 else
-			FIND_IN_SET(s.workshop_org,#{orgStr})>0 end
-			and case when ISNULL(s.workgroup_org) THEN 1=1 else
-			FIND_IN_SET(s.workgroup_org,#{orgStr})>0 end
-			and FIND_IN_SET(s.team_org,#{orgStr})>0
+			FIND_IN_SET(s.plant_org,#{orgStr})>0 end			
+			AND FIND_IN_SET(s.workgroup_org,#{orgStr})>0
+			AND FIND_IN_SET(s.team_org,#{orgStr})>0
+			and FIND_IN_SET(s.workshop_org,#{orgStr})>0
 		</if>
 
 		<if test="staff_number!=null and staff_number!=''">
@@ -449,5 +410,104 @@
 			#{item.edit_date},effective_date=#{item.effective_date} WHERE id = #{item.id}
 		</foreach>
 	</update>
+	
+	<select id="getStaffDistribution" parameterType="Map" resultType="Map">
+		SELECT d.factory,d.workshop,d.workgroup,d.team,s.staff_number,s.name staff_name,d.distribution,d.effective_date,
+		d.editor,d.edit_date,concat(o.order_no,' ',o.order_name,t.internal_name,' ',o.order_qty,'台') order_desc 
+		FROM BMS_HR_STAFF_DISTRIBUTION d
+		left join BMS_OR_ORDER o on d.order_id=o.id
+		left join BMS_BASE_BUS_TYPE t on t.id=o.bus_type_id
+		LEFT JOIN BMS_HR_STAFF s on s.staff_number=d.staff_number
+		where 1=1
+		<if test="effctiveDateStart !=null and effctiveDateStart !=''">
+			and d.effective_date >=#{effctiveDateStart}
+		</if>
+		<if test="effctiveDateEnd !=null and effctiveDateEnd !=''">
+			and d.effective_date &lt;=#{effctiveDateEnd}
+		</if>
+		<if test="factory !=null and factory !=''">
+			and d.factory =#{factory}
+		</if>
+		<if test="workshop !=null and workshop !=''">
+			and d.workshop =#{workshop}
+		</if>
+		<if test="workgroup !=null and workgroup !=''">
+			and d.workgroup =#{workgroup}
+		</if>
+		<if test="team !=null and team !=''">
+			and d.team =#{team}
+		</if>
+		<if test="order_no !=null and order_no !=''">
+			and d.order_id =(SELECT id FROM BMS_OR_ORDER WHERE order_no = #{order_no})
+		</if>
+		<if test="staff !=null and staff !=''">
+			and (s.name like concat(#{staff},'%') or s.staff_number like concat(#{staff},'%'))
+		</if>
+		order by d.factory,d.team,d.order_id,d.edit_date desc,s.staff_number
+		<if test="start !=null">
+			LIMIT #{start} ,#{length} 
+		</if>	
+	</select>
+	<select id="getStaffDistributionCount" parameterType="Map" resultType="int">
+		SELECT COUNT(d.id )
+		FROM BMS_HR_STAFF_DISTRIBUTION d
+		left join BMS_OR_ORDER o on d.order_id=o.id
+		left join BMS_BASE_BUS_TYPE t on t.id=o.bus_type_id
+		LEFT JOIN BMS_HR_STAFF s on s.staff_number=d.staff_number
+		where 1=1
+		<if test="effctiveDateStart !=null and effctiveDateStart !=''">
+			and d.effective_date >=#{effctiveDateStart}
+		</if>
+		<if test="effctiveDateEnd !=null and effctiveDateEnd !=''">
+			and d.effective_date &lt;=#{effctiveDateEnd}
+		</if>
+		<if test="factory !=null and factory !=''">
+			and d.factory =#{factory}
+		</if>
+		<if test="workshop !=null and workshop !=''">
+			and d.workshop =#{workshop}
+		</if>
+		<if test="workgroup !=null and workgroup !=''">
+			and d.workgroup =#{workgroup}
+		</if>
+		<if test="team !=null and team !=''">
+			and d.team =#{team}
+		</if>
+		<if test="order_no !=null and order_no !=''">
+			and d.order_id =(SELECT id FROM BMS_OR_ORDER WHERE order_no = #{order_no})
+		</if>
+		<if test="staff !=null and staff !=''">
+			and (s.name like concat(#{staff},'%') or s.staff_number like concat(#{staff},'%'))
+		</if>
+	</select>
+	<select id="checkIsValidStaff" parameterType="map" resultType="int">
+		select count(id) from BMS_HR_STAFF where staff_number=#{staff_number} and name=#{staff_name}
+	</select>
+	<select id="getWorkgroupPrice" parameterType="map" resultType="double">
+		SELECT ifnull(standard_price,0) FROM BMS_HR_WORKGROUP_PRICE
+		where concat(factory,'-',workshop,'-',workgroup,'-',team)=#{workgroup}
+		and order_id=(SELECT id FROM BMS_OR_ORDER WHERE order_no = #{order_id}) and effective_date&lt;=#{effective_date}
+		order by effective_date desc 
+		limit 1
+	</select>
+	<delete id="deleteStaffDistribution" parameterType="Map">
+		delete from BMS_HR_STAFF_DISTRIBUTION where effective_date=#{effective_date}
+		and staff_number in
+		<foreach collection="stafflist" item="staff" open="(" separator="," close=")">
+			#{staff}
+		</foreach>
+		and order_id=(SELECT id FROM BMS_OR_ORDER WHERE order_no = #{order_id})
+	</delete>
+	<insert id="saveStaffDistribution" parameterType="list" >
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into BMS_HR_STAFF_DISTRIBUTION (factory,workshop,workgroup,team,staff_number,order_id,distribution,editor,edit_date,effective_date)
+		values
+		<foreach collection="list" item="item" index="index" separator=",">
+			(#{item.factory},#{item.workshop},#{item.workgroup},#{item.team},#{item.staff_number},(SELECT id FROM BMS_OR_ORDER WHERE order_no = #{item.order_id}),#{item.distribution},#{item.editor},#{item.edit_date},#{item.effective_date})
+		</foreach>
+	</insert>
 	
 </mapper>

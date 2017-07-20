@@ -62,13 +62,13 @@
 								   <input id="search_date_end" placeholder="结束时间..." style="width:90px" type="text" onClick="WdatePicker({el:'search_date_end',dateFmt:'yyyy-MM-dd'});">&nbsp;</td>
 								<td>
 								<td>
-								    S：<input type="radio" name="search_bugLevel" value="S" />&nbsp;&nbsp;
-									A：<input type="radio" name="search_bugLevel" value="A" />&nbsp;&nbsp;
-									B：<input type="radio" name="search_bugLevel" value="B" />&nbsp;&nbsp;
-									C：<input type="radio" name="search_bugLevel" value="C" />
+								    S：<input type="checkbox" name="search_bugLevel" value="S" />&nbsp;&nbsp;
+									A：<input type="checkbox" name="search_bugLevel" value="A" />&nbsp;&nbsp;
+									B：<input type="checkbox" name="search_bugLevel" value="B" />&nbsp;&nbsp;
+									C：<input type="checkbox" name="search_bugLevel" value="C" />
 								
 								<td>
-								   <input id="btnQuery" type="button" class="btn btn-sm btn-primary" value="查询" style="margin-left: 2px;"></input>
+								   <input id="btnQuery" type="button" class="btn btn-sm btn-primary" value="查询" style="margin-left: 10px;"></input>
 								   <input id="btnAdd" type="button" class="btn btn-sm btn-success" value="新增" style="margin-left: 2px;"></input>
 								</td>
 							</tr>
@@ -195,7 +195,7 @@
 					<tr style="height:36px">
 					    <td align="right">&nbsp;异常描述：</td>
 						<td colspan='3'>
-						<textarea id="edit_description" style="width: 360px;margin-top: 5px;" placeholder="..." rows="1"></textarea>
+						<textarea id="edit_description" style="width: 100%;margin-top: 5px;" placeholder="..." rows="1"></textarea>
 						</td>
 					</tr>
 					<tr style="height:36px">
@@ -210,19 +210,19 @@
 					<tr style="height:36px">
 					    <td align="right">&nbsp;临时措施：</td>
 						<td colspan=3>
-						<textarea id="edit_tmpMeasures" name="edit_tmpMeasures" style="width: 360px;margin-top: 5px;" placeholder="..." rows="1"></textarea>
+						<textarea id="edit_tmpMeasures" name="edit_tmpMeasures" style="width: 100%;margin-top: 5px;" placeholder="..." rows="1"></textarea>
 						</td>
 					</tr>
 					<tr style="height:36px">
 					    <td align="right">&nbsp;原因分析：</td>
 						<td colspan=3>
-						<textarea id="edit_faultReason" name="edit_faultReason" style="width: 360px;margin-top: 5px;" placeholder="..." rows="1"></textarea>
+						<textarea id="edit_faultReason" name="edit_faultReason" style="width: 100%;margin-top: 5px;" placeholder="..." rows="1"></textarea>
 						</td>
 					</tr>
 					<tr style="height:36px">
 					    <td align="right">&nbsp;改善/预防措施：</td>
 						<td colspan=3>
-						<textarea id="edit_impMeasures" name="edit_impMeasures" style="width: 360px;margin-top: 5px;" placeholder="..." rows="1"></textarea>
+						<textarea id="edit_impMeasures" name="edit_impMeasures" style="width: 100%;margin-top: 5px;" placeholder="..." rows="1"></textarea>
 						</td>
 					</tr>
 					<tr style="height:36px">
@@ -251,7 +251,7 @@
 					<tr style="height:36px">
 					    <td align="right">&nbsp;备注：</td>
 						<td colspan=3>
-						<textarea id="edit_memo"  style="width: 360px;" rows="1"></textarea>
+						<textarea id="edit_memo"  style="width: 100%;" rows="1"></textarea>
 <!-- 						<input type="hidden" id="edit_id"> -->
 						</td>
 					</tr>

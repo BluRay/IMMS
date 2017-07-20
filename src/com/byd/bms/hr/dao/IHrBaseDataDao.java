@@ -43,4 +43,11 @@ public interface IHrBaseDataDao {
 	public Map<String,Object> queryWorkgroupPrice(Map<String, Object> map);
 	public int addWorkgroupPrice(List<Map<String, Object>> addList);
 	public int updateWorkgroupPrice(List<Map<String, Object>> upDateList);
+	
+	public List<Map<String,Object>> getStaffDistribution(Map<String, Object> cMap);
+	public int getStaffDistributionCount(Map<String, Object> cMap);
+	public int checkIsValidStaff(Map<String, Object> cMap);
+	public Double getWorkgroupPrice(Map<String, Object> pmap);
+	public int deleteStaffDistribution(Map<String,Object> conditionMap);
+	public int saveStaffDistribution(List<Map<String, Object>> datalist);
 }

@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -121,6 +122,8 @@ public class HrBaseDataController extends BaseController {
 		conditionMap.put("edit_date", curTime);
 
 		conditionMap.put("id", request.getParameter("id"));
+		conditionMap.put("salary_model", request.getParameter("salary_model"));
+		conditionMap.put("customer_no_flag", request.getParameter("customer_no_flag"));
 
 		int result = hrBaseDataService.editOrgData(conditionMap);
 		if(result==1){
@@ -196,6 +199,8 @@ public class HrBaseDataController extends BaseController {
 			conditionMap.put("deleted", "0");
 			conditionMap.put("editor_id", editor_id);
 			conditionMap.put("edit_date", curTime);
+			conditionMap.put("salary_model", request.getParameter("salary_model"));
+			conditionMap.put("customer_no_flag", request.getParameter("customer_no_flag"));
 			
 			//数据插入成功后返回新插入数据的id
 			conditionMap.put("id", "");
@@ -548,6 +553,18 @@ public class HrBaseDataController extends BaseController {
         return mv;  
     }
 	
+	@RequestMapping("/staffDistribution")
+	public ModelAndView staffDistribution(){ 	//基础数据 班组成员承包单价
+		mv.setViewName("hr/staffDistribution");
+        return mv;  
+    }
+	
+	@RequestMapping("/workTimePrice")
+	public ModelAndView workTimePrice(){ 		//基础数据 工时(等待)单价维护
+		mv.setViewName("hr/workTimePrice");
+        return mv;  
+    }
+	
 	@RequestMapping("/getStaffList")
 	@ResponseBody
 	public ModelMap getStaffList(){
@@ -559,7 +576,7 @@ public class HrBaseDataController extends BaseController {
 		condMap.put("start", start);
 		condMap.put("length", length);
 		condMap.put("org_id", request.getParameter("org_id"));
-		condMap.put("orgType", request.getParameter("orgType"));
+		condMap.put("orgType", (request.getParameter("orgType").equals(""))?0:request.getParameter("orgType"));
 		condMap.put("staff_number", request.getParameter("staff_number"));
 		condMap.put("staff_level", request.getParameter("staff_level"));
 		condMap.put("salary_type", request.getParameter("salary_type"));
@@ -588,6 +605,33 @@ public class HrBaseDataController extends BaseController {
 		condMap.put("edit_user", edit_user);
 		int result = hrBaseDataService.dimissionStaff(condMap);
 		initModel(true,String.valueOf(result),null);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/getStaffDistribution")
+	@ResponseBody
+	public ModelMap getStaffDistribution(){
+		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
+		int start=(request.getParameter("start")!=null)?Integer.parseInt(request.getParameter("start")):0;		//分页数据起始数
+		int length=(request.getParameter("length")!=null)?Integer.parseInt(request.getParameter("length")):20;	//每一页数据条数
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("draw", draw);
+		condMap.put("start", start);
+		condMap.put("length", length);
+
+		condMap.put("factory", request.getParameter("factory"));
+		condMap.put("workshop", request.getParameter("workshop"));
+		condMap.put("workgroup", request.getParameter("workgroup"));
+		condMap.put("team", request.getParameter("team"));
+		condMap.put("order_no", request.getParameter("orderId"));
+		condMap.put("staff", request.getParameter("staff"));
+		condMap.put("effctiveDateStart", request.getParameter("effctiveDateStart"));
+		condMap.put("effctiveDateEnd", request.getParameter("effctiveDateEnd"));	
+		
+		Map<String,Object> list = hrBaseDataService.getStaffDistribution(condMap);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(list);
 		model = mv.getModelMap();
 		return model;
 	}
@@ -629,10 +673,8 @@ public class HrBaseDataController extends BaseController {
 			}
 			List<Map<String, Object>> addList = new ArrayList<Map<String,Object>>();
 			List<Map<String, Object>> upDateList = new ArrayList<Map<String,Object>>();
-			int i = 1;
 			int dataFlag = 0;
 			for(Object[] data : excelModel.getData()){
-				++i;
 				Map<String, Object> info = new HashMap<String, Object>();
 				String factory = data[0].toString().trim(); 
 				info.put("factory", factory);
@@ -689,6 +731,151 @@ public class HrBaseDataController extends BaseController {
 			return model;
 		}
 		initModel(success,result,result);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping(value="/uploadStaffDistribution",method=RequestMethod.POST)
+	@ResponseBody
+	public ModelMap uploadStaffDistribution(@RequestParam(value="file",required=false) MultipartFile file){
+		String fileFileName = "uploadStaffDistribution.xls";
+		String order_no = request.getParameter("orderId");
+		boolean success = true;
+		String message = "";
+		String effective_date = request.getParameter("effective_date");
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String edit_user = request.getSession().getAttribute("staff_number") + "";
+		ExcelModel excelModel =new ExcelModel();
+		excelModel.setReadSheets(1);
+		excelModel.setStart(1);
+		Map<String,Integer> dataType = new HashMap<String,Integer>();
+		dataType.put("0", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("1", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("2", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("3", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("4", ExcelModel.CELL_TYPE_NUMERIC);
+		dataType.put("5", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("6", ExcelModel.CELL_TYPE_NUMERIC);
+		excelModel.setDataType(dataType);
+		excelModel.setPath(fileFileName);
+		try {
+			Map<String,Object> disMap=new HashMap<String,Object>();
+			//datalist:保存数据封装
+			List<Map<String,Object>> datalist=new ArrayList<Map<String,Object>>();
+			//staff number 列表
+			List<String> stafflist=new ArrayList<String>();		
+			File staffFile = new File(fileFileName);
+			file.transferTo(staffFile);
+			InputStream is = new FileInputStream(staffFile);
+			ExcelTool excelTool = new ExcelTool();
+			excelTool.readExcel(is, excelModel);
+			List<String> headers=excelModel.getHeader();
+			if(!headers.get(0).equals("工厂")||!headers.get(1).equals("车间")||
+					!headers.get(2).equals("班组")||!headers.get(3).equals("小班组")||
+					!headers.get(4).equals("工号")||!headers.get(5).equals("姓名")||
+					!headers.get(6).equals("分配金额")){
+				Exception e=new Exception("请使用下载的模板导入！");
+				throw e;			
+			}
+			//遍历excel数据，将分配比例按小班组汇总保存到disMap中
+    		String last_factory="";
+    		String last_workshop="";
+    		String last_workgroup="";
+    		String last_team="";
+    		int rowcount=2;
+    		for(Object[] data:excelModel.getData()){
+    			String factory=data[0].toString();
+    			String workshop=data[1].toString();
+    			String workgroup=data[2].toString();
+    			String team=data[3].toString();
+    			String staffNumber=data[4].toString();
+    			String staffName=data[5].toString();
+    			BigDecimal dist_val=new BigDecimal(data[6].toString());
+    			String mapKey=factory+"-"+workshop+"-"+workgroup+"-"+team;
+    			Map<String,Object> dmap=new HashMap<String,Object>();
+    			dmap.put("factory", factory);
+    			dmap.put("workshop", workshop);
+    			dmap.put("workgroup", workgroup);
+    			dmap.put("team", team);
+    			dmap.put("staff_number", staffNumber);
+    			dmap.put("staff_name", staffName);
+    			dmap.put("order_id", order_no);
+    			dmap.put("distribution", dist_val.toString());
+    			dmap.put("editor", edit_user);
+    			dmap.put("edit_date", curTime);
+    			dmap.put("effective_date", effective_date);
+    			
+    			Map<String,Object> info=new HashMap<String,Object>();
+    			info.put("factory", factory);
+    			info.put("workshop", workshop);
+    			info.put("workgroup", workgroup);
+    			info.put("small_workgroup", team);
+    			//校验用户填写的工厂、车间、班组、小班组、车型 信息是否正确
+				Map orgMap =  hrBaseDataService.getOrgInfo(info);
+				if(null == orgMap){
+					//用户填写的工厂、车间、班组、小班组信息有误
+					success = false;
+					throw new Exception("第"+rowcount+"行信息有误，请核实组织结构信息是否正确后重新导入！");
+				}
+				//校验工号姓名是否匹配
+    			if(hrBaseDataService.checkIsValidStaff(dmap)==0){
+    				success=false;
+    				message="工号“"+staffNumber+"”和姓名“"+staffName+"”不匹配！";
+    				throw new Exception(message);
+    			}else{
+    				if(disMap.get(mapKey)!=null){
+        				BigDecimal map_val=new BigDecimal((String)disMap.get(mapKey));
+        				disMap.put(mapKey, (dist_val.add(map_val)).toString());
+        			}else{
+        				disMap.put(mapKey, dist_val.toString());
+        			}
+    			}
+    			datalist.add(dmap);
+    			stafflist.add(staffNumber);
+    			rowcount++;
+    		}
+    		//封装cdmap用以删除对应生效日期内的需要导入员工的分配信息
+    		Map<String,Object> cdmap=new HashMap<String,Object>();
+    		cdmap.put("order_id", order_no);
+    		cdmap.put("stafflist", stafflist);
+    		cdmap.put("effective_date", effective_date);
+    		for(String m_key:disMap.keySet()){
+    			Map<String,Object> pmap=new HashMap<String,Object>();
+    			pmap.put("order_id", order_no);
+    			pmap.put("workgroup", m_key);
+    			pmap.put("effective_date", effective_date);
+    			Double total_price=hrBaseDataService.getWorkgroupPrice(pmap);
+    			total_price=total_price==null?0:total_price;
+    			if(total_price==0){
+    				success=false;
+    				message=m_key+"未维护班组承包单价,请维护后重新导入！";
+    				throw new Exception(message);
+    			}
+    			if(Double.parseDouble((String)disMap.get(m_key))!=total_price){
+    				success=false;
+    				message=m_key+"分配金额和值不等于该班组承包单价"+total_price+",请修改后重新导入！";
+    				throw new Exception(message);
+    			}
+    		}
+    		if(success){   			
+    			//先删除对应生效日期内的需要导入员工的分配信息，再导入新的数据
+    			hrBaseDataService.deleteStaffDistribution(cdmap);
+    			int i=hrBaseDataService.saveStaffDistribution(datalist);
+    			if(i>0){
+    				success=true;
+    				message="导入成功！";
+    			}
+    		}    		
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			initModel(false,message,null);
+			model = mv.getModelMap();
+			return model;
+		}
+		
+		initModel(true,message,null);
 		model = mv.getModelMap();
 		return model;
 	}
@@ -863,4 +1050,5 @@ public class HrBaseDataController extends BaseController {
 	}
 	
 	/****************END YangKe**************************************************/
+	
 }

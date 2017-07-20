@@ -65,7 +65,7 @@
 								<td>订单：</td>
 								<td><input style="height: 30px;width:130px;" type="text" class="input-medium revise" placeholder="订单编号..." id="search_order_no" /></td> 					
 								<td>车号：</td>
-								<td><input style="height: 30px;width:130px;" type="text" class="input-medium revise" placeholder="车号..." id="search_bus_number" /></td> 	
+								<td><input style="height: 30px;width:160px;" type="text" class="input-medium revise" placeholder="车号..." id="search_bus_number" /></td> 	
 								
 								<td style="padding-left:5px;">
 								<label class=""> <input name="search_test_result" value="0" type="checkbox">一次检验合格
@@ -73,7 +73,7 @@
 								</label> <label class=""> <input name="search_test_result" value="2" type="checkbox">让步放行
 								</label>
 								</td>
-								<td><input type="button" class="btn btn-sm btn-primary" id="btnQuery" value="查询" style="margin-left: 2px;"></input>						
+								<td><input type="button" class="btn btn-sm btn-primary" id="btnQuery" value="查询" style="margin-left: 10px;"></input>						
 										 <input type="button" class="btn btn-sm btn-success" id="btnAdd" value="新增" style="margin-left: 2px;"></input>
 								</td>
 							</tr>

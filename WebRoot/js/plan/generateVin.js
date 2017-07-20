@@ -1,6 +1,7 @@
 $(document).ready(function () {	
 	initPage();
 	function initPage(){
+		getBusNumberSelect('#search_bus_number');
 		getBusNumberSelect('#nav-search-input');
 		$("#divBulkAdd").hide();
 		getOrderNoSelect("#search_order_no","#orderId");

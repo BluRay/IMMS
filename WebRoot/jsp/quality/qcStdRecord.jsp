@@ -52,7 +52,7 @@
 								<td>编制日期：</td>
 								<td><input id="start_date" placeholder="开始时间..." style="width:125px" type="text" onClick="WdatePicker({el:'start_date',dateFmt:'yyyy-MM-dd'});"> - <input id="end_date" placeholder="结束时间..." style="width:125px" type="text" onClick="WdatePicker({el:'end_date',dateFmt:'yyyy-MM-dd'});"></td>
 
-								<td><input type="button" class="btn btn-sm btn-primary btnQuery" id="btnQuery" value="查询" style="margin-left: 2px;"></input>
+								<td><input type="button" class="btn btn-sm btn-primary btnQuery" id="btnQuery" value="查询" style="margin-left: 10px;"></input>
 									<button id='btnAdd' class="btn btn-sm btn-success">新增</button>
 							</tr>
 						</table>
@@ -72,20 +72,20 @@
 						<div class="form-group">
 							<label class="col-sm-3 control-label no-padding-right" for="add">*&nbsp;记录编号</label>
 							<div class="col-sm-9">
-								<input type="text" class="input-medium" id="recordNo" name="recordNo"/>
+								<input type="text" class="input-medium" id="recordNo" name="recordNo" style="width:360px;height:30px;"/>
 							</div>
 						</div>
 						<div class="form-group">
 							<label class="col-sm-3 control-label no-padding-right" for="add">*&nbsp;标准文件编号/名称</label>
 							<div class="col-sm-9">
-								<input type="text" class="input-medium" id="stdFileName" name="standardfile"/>
+								<input type="text" class="input-medium" id="stdFileName" name="standardfile" style="width:360px;height:30px;"/>
 							</div>
 						</div>
 						
 						<div class="form-group">
 							<label class="col-sm-3 control-label no-padding-right" for="add">*&nbsp;更新内容摘要</label>
 							<div class="col-sm-9">
-								<textarea class="input-xlarge" id="usynopsis" rows="1" name="usynopsis"></textarea>
+								<textarea class="input-xlarge" id="usynopsis" style="width:360px;" rows="2" name="usynopsis"></textarea>
 							</div>
 						</div>
 						
@@ -107,13 +107,13 @@
 						<div class="form-group">
 							<label class="col-sm-3 control-label no-padding-right" for="add">&nbsp;备注</label>
 							<div class="col-sm-9">
-								<textarea class="input-xlarge" id="memo" rows="1" name="memo"></textarea>
+								<textarea class="input-xlarge" id="memo" style="width:360px;" rows="1" name="memo"></textarea>
 							</div>
 						</div>
 						<div class="form-group">
 							<label class="col-sm-3 control-label no-padding-right" for="">&nbsp;通知邮箱地址</label>
 							<div class="col-sm-9">
-								<textarea class="input-xlarge" id="mailAddrs" rows="1" placeholder="多个邮箱以;隔开" name="mailAddrs"></textarea>
+								<textarea class="input-xlarge" style="width:360px;" id="mailAddrs" rows="3" placeholder="多个邮箱以;隔开" name="mailAddrs"></textarea>
 							</div>
 					    </div>
 					</form>
@@ -126,19 +126,19 @@
 						<div class="form-group">
 							<label class="col-sm-3 control-label no-padding-right" for="add">*&nbsp;记录编号</label>
 							<div class="col-sm-9">
-								<input type="text" class="input-medium" id="recordNo_show" readonly="readonly"/>
+								<input type="text" class="input-medium" style="width:360px;height:30px;" id="recordNo_show" readonly="readonly"/>
 							</div>
 						</div>
 						<div class="form-group">
 							<label class="col-sm-3 control-label no-padding-right" for="add">*&nbsp;标准文件编号/名称</label>
 							<div class="col-sm-9">
-                                <input type="text" class="input-medium" id="stdFileName_show" readonly="readonly"/>
+                                <input type="text" class="input-medium" style="width:360px;height:30px;" id="stdFileName_show" readonly="readonly"/>
                             </div>
 						</div>
 						<div class="form-group">
 							<label class="col-sm-3 control-label no-padding-right" for="add">*&nbsp;更新内容摘要</label>
 							<div class="col-sm-9">
-								<textarea class="input-xlarge" id="usynopsis_show" rows="1" name="usynopsis" readonly="readonly"></textarea>
+								<textarea class="input-xlarge" style="width:360px;" id="usynopsis_show" rows="2" name="usynopsis" readonly="readonly"></textarea>
 							</div>
 						</div>
 						<div class="form-group">
@@ -152,13 +152,13 @@
 						<div class="form-group">
 							<label class="col-sm-3 control-label no-padding-right" for="add">&nbsp;备注</label>
 							<div class="col-sm-9">
-								<textarea class="input-xlarge" id="memo_show" rows="1" name="memo" readonly="readonly"></textarea>
+								<textarea class="input-xlarge" style="width:360px;" id="memo_show" rows="1" name="memo" readonly="readonly"></textarea>
 							</div>
 						</div>
 						<div class="form-group">
 							<label class="col-sm-3 control-label no-padding-right" for="">&nbsp;通知邮箱地址</label>
 							<div class="col-sm-9">
-								<textarea class="input-xlarge" id="mailAddrs_show" rows="1" name="mailAddrs" readonly="readonly"></textarea>
+								<textarea class="input-xlarge" style="width:360px;" id="mailAddrs_show" rows="3" name="mailAddrs" readonly="readonly"></textarea>
 							</div>
 					    </div>
 					</form>

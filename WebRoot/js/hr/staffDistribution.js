@@ -1,30 +1,24 @@
-
 var factory = '';
 var workshop = '';
 var workgroup = '';
 var team = '';
-jQuery(function($) {
+$(document).ready(function () {	
 	initPage();
 	
 	function initPage() {
 		getOrderNoSelect("#search_order_no","#orderId");
-		getOrgAuthTree($("#workGroupTree"),'hrBaseData/workgroupPrice',"1,2,3,4",'1',3);
+		getOrgAuthTree($("#workGroupTree"),'hrBaseData/staffDistribution',"1,2,3,4",'1',3);
 		$('#workGroupTree').height($(window).height()-200)
 		$('#workGroupTree').ace_scroll({
 			size: $(window).height()-200
 		});
 	}
 	
-	if($(window).height() * 0.6 > 350){
-		$("#div_tree1").height($(window).height()-105);
-		$("#div_tree2").height($(window).height()-105);
-	}
-	
 	$("#btnQuery").click(function () {
 		eachSeries(scripts, getScript, initTable);
 		ajaxQuery();
     });
-
+	
 	$("#btnBulkAdd").click (function () {
 		$("#divBulkAdd").show();
 	});
@@ -48,13 +42,14 @@ jQuery(function($) {
 			alert("请选择文件！");
 			return false;
 		}
+		var file = $("#file").val();
 		var extName = file.substring(file.lastIndexOf(".")).toLowerCase();
 		if(extName !== ".xls"){
 			alert("请上传.xls类型的文件！");
 		}
 		
-		$("#uploadWorkgroupPriceForm").ajaxSubmit({
-			url:"uploadWorkgroupPrice",
+		$("#uploadDistributionForm").ajaxSubmit({
+			url:"uploadStaffDistribution",
 			type: "post",
 			dataType:"json",
 			data:{
@@ -71,13 +66,16 @@ jQuery(function($) {
 				}
 			}			
 		});
+		
 	});
 	
-})
+	if($(window).height() * 0.6 > 350){
+		$("#div_tree1").height($(window).height()-105);
+		$("#div_tree2").height($(window).height()-105);
+	}
+	
+});
 
-function ajaxQuery(){
-	$table.bootstrapTable('refresh', {url: 'getWorkgroupPriceList'});
-}
 
 function zTreeBeforeClick(treeId, treeNode, clickFlag) {
 }
@@ -102,22 +100,20 @@ function zTreeOnClick(event, treeId, treeNode) {
 		team=treeNode.displayName;
 	}
 	
-	if(treeNode.org_type != '4'){
-		alert("请选择小班组！");
-		return false;
-	}
-	
 	console.log("-->" + factory + "|" + workshop + "|" + team);
 	eachSeries(scripts, getScript, initTable);
 	ajaxQuery();
 };
 
+function ajaxQuery(){
+	$table.bootstrapTable('refresh', {url: 'getStaffDistribution'});
+}
 
 //----------START bootstrap initTable ----------
 function initTable() {
     $table.bootstrapTable({
         height: getHeight(),
-        url:'getWorkgroupPriceList',
+        url:'getStaffDistribution',
         striped:false,
         paginationVAlign:'bottom',
         searchOnEnterKey:true,
@@ -129,6 +125,7 @@ function initTable() {
         	params["workgroup"] = workgroup; 
         	params["team"] = team; 
         	params["orderId"] = $("#search_order_no").val(); 
+        	params["staff"] = $("#search_staff").val(); 
         	params["effctiveDateStart"] = $("#start_date").val(); 
         	params["effctiveDateEnd"] = $("#end_date").val(); 
         	return params;
@@ -154,19 +151,25 @@ function initTable() {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
     	        	}
             },{
-            	field: 'team',title: '&nbsp;&nbsp;小班组&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
-                sortable: false,visible: true,footerFormatter: totalTextFormatter,
-                cellStyle:function cellStyle(value, row, index, field) {
-    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
-    	        	}
-            },{
             	field: 'order_desc',title: '&nbsp;&nbsp;订单&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
                 sortable: false,visible: true,footerFormatter: totalTextFormatter,
                 cellStyle:function cellStyle(value, row, index, field) {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
     	        	}
             },{
-            	field: 'stand_price',title: '&nbsp;&nbsp;承包单价&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
+            	field: 'staff_number',title: '&nbsp;&nbsp;工号&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
+                sortable: false,visible: true,footerFormatter: totalTextFormatter,
+                cellStyle:function cellStyle(value, row, index, field) {
+    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
+    	        	}
+            },{
+            	field: 'staff_name',title: '&nbsp;&nbsp;姓名&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
+                sortable: false,visible: true,footerFormatter: totalTextFormatter,
+                cellStyle:function cellStyle(value, row, index, field) {
+    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
+    	        	}
+            },{
+            	field: 'distribution',title: '&nbsp;&nbsp;分配金额&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
                 sortable: false,visible: true,footerFormatter: totalTextFormatter,
                 cellStyle:function cellStyle(value, row, index, field) {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
@@ -178,13 +181,13 @@ function initTable() {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
     	        	}
             },{
-            	field: 'editor',title: '&nbsp;&nbsp;维护人&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
+            	field: 'editor',title: '&nbsp;&nbsp;编辑人&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
                 sortable: false,visible: true,footerFormatter: totalTextFormatter,
                 cellStyle:function cellStyle(value, row, index, field) {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
     	        	}
             },{
-            	field: 'edit_date',title: '&nbsp;&nbsp;维护时间&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
+            	field: 'edit_date',title: '&nbsp;&nbsp;编辑时间&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
                 sortable: false,visible: true,footerFormatter: totalTextFormatter,
                 cellStyle:function cellStyle(value, row, index, field) {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};

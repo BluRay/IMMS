@@ -109,6 +109,7 @@ $(document).ready(function(){
 });
 
 function initPage(){
+	getBusNumberSelect('#search_bus_number');
 	getKeysSelect("CHECK_NODE", "", "#search_node","全部","id");
 	getKeysSelect("CHECK_NODE", "", "#check_node","请选择","id");
 	getFactorySelect("quality/prdRcdIn","","#search_factory","全部","id")

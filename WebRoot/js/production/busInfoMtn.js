@@ -53,6 +53,7 @@ $(document).ready(function(){
 });
 
 function initPage(){
+	getBusNumberSelect('#search_bus_number');
 	$("#search_bus_number").val(getQueryString("bus_number"));
 	getFactorySelect("production/busInfoMtn","","#search_factory","全部","id");
 	getBusTypeSelect("","#search_bus_type","全部","id");

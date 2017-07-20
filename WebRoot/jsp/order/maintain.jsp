@@ -95,20 +95,22 @@
 
 			</div>
 			<div id="dialog-message" class="hide">
-				<table id="tableBusNumber"
-					style="table-layout: fixed; font-size: 12px"
-					class="table table-bordered table-striped">
-					<thead>
-						<tr>
-							<th style="text-align: center;">序号</th>
-							<th style="text-align: center;">车号</th>
-							<th style="text-align: center;">生产工厂</th>
-							<th style="text-align: center;">当前工序</th>
-						</tr>
-					</thead>
-					<tbody>
-					</tbody>
-				</table>
+				<form id="" class="form-horizontal">
+					<table id="tableBusNumber"
+						style="table-layout: fixed; font-size: 12px"
+						class="table table-bordered table-striped ">
+						<thead>
+							<tr>
+								<th style="text-align: center;">序号</th>
+								<th style="text-align: center;">车号</th>
+								<th style="text-align: center;">生产工厂</th>
+								<th style="text-align: center;">当前工序</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</form>
 			</div>
 
 			<div id="dialog-order" class="hide">
