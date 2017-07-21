@@ -50,15 +50,58 @@
 								<td>工厂：</td>
 								<td><select id="search_factory" class="input-small" style="height: 30px;width:100px"></select></td>
 								<td>&nbsp;有效期：</td>
-								<td><input id="effective_date" type="text"  class="input-medium" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/></td>
+								<td><input id="effective_date" type="text" placeholder="有效期.." style="width:100px" class="input-medium" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/></td>
 								<td></td>
-								<td><input id="btnQuery" type="button" class="btn btn-sm btn-success" value="查询" style="margin-left: 2px;"></input>&nbsp;&nbsp;</td>
+								<td>&nbsp;&nbsp;<input id="btnQuery" type="button" class="btn btn-sm btn-success" value="查询" style="margin-left: 2px;"></input>&nbsp;&nbsp;<input id="btnAdd" class="btn btn-sm btn-info" value="增加" type="button">&nbsp;</td>
 							</tr>
 						</table>
 					</div>
 					
+					<div id="toolbar"></div>
+					<table  style="font-weight:normal;" id="table" data-toolbar="#toolbar" data-search="false" data-show-refresh="true"
+				           data-show-toggle="false" data-show-columns="true" data-show-export="true" data-detail-view="false"
+				           data-detail-formatter="detailFormatter" data-minimum-count-columns="2" data-show-pagination-switch="true"
+				           data-pagination="true" data-id-field="id" data-page-list="[50, 100, 200, 500, ALL]"
+				           data-show-footer="false" data-side-pagination="server" data-response-handler="responseHandler">
+				    </table>
+				    
 					</div>
 			</div><!-- /.main-content -->
+			
+			<div id="dialog-add" class="hide" style="align:center;width:700px;height:500px">
+				<table>
+					<tr style="height:40px">
+						<td align="right" style="width:200px">生产工厂：</td><td style="width:150px"><select id="new_factory" class="form-control" style="width:150px"></select></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:200px">工时类型：</td><td style="width:150px"><select id="new_hour_type" class="form-control" style="width:150px"></select></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:200px">生效日期：</td><td style="width:150px"><input id="new_effective_date" placeholder="生效日期..." style="width:150px" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text"></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:200px">工时单价：</td><td style="width:150px"><input id="new_price" placeholder="工时单价..." style="width:150px" type="text"></td>
+					</tr>
+					
+				</table>
+			</div>
+			<div id="dialog-edit" class="hide" style="align:center;width:700px;height:500px">
+				<table>
+					<tr style="height:40px">
+						<td align="right" style="width:200px">生产工厂：</td><td style="width:150px"><select id="edit_factory" class="form-control" style="width:150px"></select></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:200px">工时类型：</td><td style="width:150px"><select id="edit_hour_type" class="form-control" style="width:150px"></select></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:200px">生效日期：</td><td style="width:150px"><input id="edit_effective_date" placeholder="生效日期..." style="width:150px" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text"></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:200px">工时单价：</td><td style="width:150px"><input id="edit_price" placeholder="工时单价..." style="width:150px" type="text"></td>
+					</tr>
+					
+				</table>
+			</div>
 
 			<!-- 脚 -->
 			<%-- <jsp:include page="footer.jsp" flush="true"/> --%>
@@ -74,7 +117,7 @@
 		position: absolute;
 		margin-top: 102px;
 		right: 20px;
-		top: -49px;
+		top: -79px;
 	}
 	.btn-default {
 		color: #333;

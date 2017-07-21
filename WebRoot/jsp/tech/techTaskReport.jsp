@@ -58,8 +58,8 @@
 								<td>状态：</td>
 								<td>
 									<select class="input-small" id="status" style="height: 30px;width:120px">
-										<option value="全部">全部</option>
-										<option value="已创建" selected>已创建</option>
+										<option value="全部" selected>全部</option>
+										<option value="已创建" >已创建</option>
 										<option value="已分配">已分配</option>
 										<option value="已评估">已评估</option>
 										<option value="已完成">已完成</option>

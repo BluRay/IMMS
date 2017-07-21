@@ -62,7 +62,8 @@ function ajaxShowBusNumber(order_no,tech_task_id,bus_num_s,bus_num_e,factory,wor
 		resizable: false,
 		title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-flag green"></i> 技改车辆信息</h4></div>',
 		title_html: true,
-		width:'550px',
+		width:850,
+		height:580,
 		modal: true,
 		buttons: [{
 					text: "关闭",

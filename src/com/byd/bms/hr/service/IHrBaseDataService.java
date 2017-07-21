@@ -25,6 +25,14 @@ public interface IHrBaseDataService {
 	
 	public int editPositionData(Map<String,Object> conditionMap);
 	
+    public Map<String,Object> addStandardHumanData(List<Map<String,Object>> list);
+	
+	public List<Map<String,Object>> getStandardHumanData(Map<String,Object> conditionMap);
+	
+	public int editStandardHumanData(Map<String,Object> conditionMap);
+	
+	public void deleteStandardHumanData(String id);
+	
 	public void deletePositionData(List<String> list);
 
 	public List<Map<String,Object>> getOrg(List<Map<String,Object>> conditionMap);
@@ -42,4 +50,8 @@ public interface IHrBaseDataService {
 	public Double getWorkgroupPrice(Map<String, Object> pmap);
 	public int deleteStaffDistribution(Map<String,Object> conditionMap);
 	public int saveStaffDistribution(List<Map<String, Object>> datalist);
+	
+	public int addWorkTimePrice(Map<String,Object> conditionMap);
+	public int editWorkTimePrice(Map<String,Object> conditionMap);
+	public Map<String,Object> getWorkTimePrice(Map<String, Object> conditionMap);
 }

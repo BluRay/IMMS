@@ -1492,4 +1492,45 @@
 		</if>
 	</select>
 	
+	<select id="querySalaryModel" parameterType="Map" resultType="Map">
+		select o.customer_no_flag,k.key_name salary_model
+		from BMS_BASE_ORG o 
+		left join BMS_BASE_KEY k on k.value=o.salary_model and k.key_code='SALARY_MODEL'
+		where o.org_type='4' and o.id=#{org_id} and o.deleted='0'
+	</select>
+	
+	<select id="queryTeamStaffList" parameterType="Map" resultType="Map">		
+		select s.id,s.staff_number,s.name,s.job,s.basic_salary,s.plant_org,s.workshop_org,s.workgroup_org,s.team_org,
+		ifnull((select r.new_value from BMS_HR_STAFF_UPDATE_RECORD r where r.staff_number=s.staff_number 
+		<if test="work_date !=null and work_date !=''">
+			and substring(r.edit_date,1,10)&lt;=#{work_date}
+		</if>	
+		order by r.edit_date desc limit 1),0) skill_parameter,
+		ifnull((select d.distribution from BMS_HR_STAFF_DISTRIBUTION d where d.staff_number=s.staff_number 
+		<if test="work_date !=null and work_date !=''">
+			and d.effective_date&lt;=#{work_date}
+		</if>	
+		<if test="order_id !=null and order_id !=''">
+			and d.order_id=#{order_id}
+		</if>	
+		 order by d.effective_date desc limit 1),0) distribution,
+		ifnull((select p.standard_price from BMS_HR_WORKGROUP_PRICE p where p.factory=#{factory} and p.workshop=#{workshop}
+		and p.workgroup=#{workgroup}  and p.team=#{team} 
+		<if test="work_date !=null and work_date !=''">
+			and p.effective_date&lt;=#{work_date}
+		</if>	
+		<if test="order_id !=null and order_id !=''">
+			and p.order_id=#{order_id}
+		</if>	
+		order by p.effective_date desc limit 1),0) standard_price
+		from BMS_HR_STAFF s
+		where s.salary_type='计件'
+		<if test="staff_number !=null and staff_number !=''">
+			and  s.staff_number=#{staff_number}
+		</if>
+		<if test="staff_number ==null or staff_number ==''">
+			and s.plant_org=#{factory}  and s.workshop_org=#{workshop} and s.workgroup_org=#{workgroup}and s.team_org=#{team} 
+		</if>
+	
+	</select>
 </mapper>

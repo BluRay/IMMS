@@ -83,7 +83,7 @@
 				</div>
 					
 				<div id="dialog-assessModal" class="hide" style="align:center;width:700px;height:500px">
-					<form id="task_assess">
+					<form id="task_assess" class="form-horizontal">
 					<table>
 					<tr style="height:40px">
 						<td align="right" style="width:100px">技改任务：</td><td style="width:250px"><input type="text" style="width:250px" disabled="disabled" id="v_task_content" class="input-small" /></td>

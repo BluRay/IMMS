@@ -1,4 +1,4 @@
-var switch_node_arr="焊装,玻璃钢,涂装,底盘,总装,检测线";
+var switch_node_arr="焊装,涂装,底盘,总装,检测线,仓库";
 $(document).ready(function (){
 	initPage();
 	
@@ -94,7 +94,7 @@ $(document).on("click","input[name='new_tecn_flag']",function(e){
 		});
 		
 		$(tr_body).html("<td>"+((tech_info['自制件']==undefined)?"":tech_info['自制件'])+"</td><td>"+((tech_info['部件']==undefined)?"":tech_info['部件'])+"</td><td>"+
-				((tech_info['焊装']==undefined)?"":tech_info['焊装'])+"</td><td>"+((tech_info['玻璃钢']==undefined)?"":tech_info['玻璃钢'])+"</td><td>"+((tech_info['涂装']==undefined)?"":tech_info['涂装'])+"</td><td>"+
+				((tech_info['焊装']==undefined)?"":tech_info['焊装'])+"</td><td>"+((tech_info['涂装']==undefined)?"":tech_info['涂装'])+"</td><td>"+
 				((tech_info['底盘']==undefined)?"":tech_info['底盘'])+"</td><td>"+((tech_info['总装']==undefined)?"":tech_info['总装'])+"</td><td>"+((tech_info['检测线']==undefined)?"":tech_info['检测线'])+"</td>");
 
 	}else{
@@ -202,7 +202,8 @@ function ajaxEdit(task_id,task_detail_id,task_content,tech_order_no,switch_mode,
 		resizable: false,
 		title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-flag green"></i> 技改任务分配</h4></div>',
 		title_html: true,
-		width:'550px',
+		width:700,
+		height:580,
 		modal: true,
 		buttons: [{
 					text: "取消",
@@ -420,9 +421,9 @@ function addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factor
 					" class=\"input-medium\" type=\"checkbox\""+checked+" "+factory_disable_obj[prod_factory]+">");
 			var tech_factory="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>技改工厂：</b><select style='width:100px;height:28px' class='tech_factory' >"+factory_select_options+"</select>";
 			var tech_table=$("<table class=\"table table-bordered table-striped\" style=\"margin-bottom: 0px;\"></table>");
-			var tr_head=$("<tr><td>自制件</td><td>部件</td><td>焊装</td><td>玻璃钢</td><td>涂装</td><td>底盘</td><td>总装</td><td>检测线</td></tr>");
+			var tr_head=$("<tr><td>自制件</td><td>部件</td><td>焊装</td><td>涂装</td><td>底盘</td><td>总装</td><td>检测线</td></tr>");
 			var tr_body=$("<tr height='31px'><td>"+(tech_obj['自制件']||'')+"</td><td>"+(tech_obj['部件']||'')+"</td><td>"+
-					(tech_obj['焊装']||'')+"</td><td>"+(tech_obj['玻璃钢']||'')+"</td><td>"+(tech_obj['涂装']||'')+"</td><td>"+
+					(tech_obj['焊装']||'')+"</td><td>"+(tech_obj['涂装']||'')+"</td><td>"+
 					(tech_obj['底盘']||'')+"</td><td>"+(tech_obj['总装']||'')+"</td><td>"+(tech_obj['检测线']||'')+"</td></tr>");
 			$(tech_table).append(tr_head).append(tr_body);	
 			$(facotory_div).append(ckbox);

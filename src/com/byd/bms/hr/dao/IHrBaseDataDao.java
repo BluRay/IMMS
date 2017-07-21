@@ -31,6 +31,14 @@ public interface IHrBaseDataDao {
 	
 	public void deletePositionData(String id);
 	
+    public int addStandardHumanData(Map<String,Object> map);
+	
+	public int editStandardHumanData(Map<String,Object> map);
+	
+	public int deleteStandardHumanData(String id);
+	
+	public List<Map<String,Object>> getStandardHumanData(Map<String,Object> conditionMap);
+	
 	public List<Map<String,Object>> getStaffList(Map<String, Object> conditionMap);
 	public int getStaffCount(Map<String, Object> conditionMap);
 	public List<Map<String,Object>> getOrg(List<Map<String,Object>> conditionMap);
@@ -50,4 +58,9 @@ public interface IHrBaseDataDao {
 	public Double getWorkgroupPrice(Map<String, Object> pmap);
 	public int deleteStaffDistribution(Map<String,Object> conditionMap);
 	public int saveStaffDistribution(List<Map<String, Object>> datalist);
+	
+	public int addWorkTimePrice(Map<String,Object> conditionMap);
+	public int editWorkTimePrice(Map<String,Object> conditionMap);
+	public List<Map<String,Object>> getWorkTimePrice(Map<String, Object> cMap);
+	public int getWorkTimePriceCount(Map<String, Object> cMap);
 }

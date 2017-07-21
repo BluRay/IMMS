@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <meta charset="utf-8" />
-<title>部件上下线</title>
+<title>计件工时维护</title>
 <meta name="description" content="Common Buttons &amp; Icons" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
@@ -33,7 +33,7 @@
 						<li><i class="ace-icon fa fa-home home-icon"></i><a
 							href="<%=request.getContextPath()%>/index">首页</a></li>
 						<li><a href="#">生产执行</a></li>
-						<li><a href="#">部件上下线</a></li>
+						<li><a href="#">计件工时维护</a></li>
 					</ul>
 					<!-- /.breadcrumb -->
 
@@ -52,41 +52,18 @@
 
 				<div class="page-content">
 					<div class="row">
-						<div id="zztree" class="col-xs-2" style="position: relative; left: 0; float: left; border: 1px solid #ccebf8; overflow: auto;">
+						<div id="zztree" class="col-xs-2" style="position: relative; left: 0; float: left; border: 1px solid #ccebf8; overflow: auto;color:#616161">
 							<ul id="workGroupTree" class="ztree" style="padding-left:0px;"></ul>
 						</div>
 						<div class="col-xs-10">
 							<div class="row">
-								<form id="form" class="well form-search " style="margin-left: 20px;">
-									<table>
-										<tr>
-											<td>生产工厂：</td>
-											<td>
-												<select name="" id="search_factory" class="input-medium carType" style="height: 30px; width: 100px;"></select>
-											</td>
-											<td>订单编号：</td>
-											<td>
-												<input style="height: 30px; width: 100px;" type="text" class="input-medium revise" placeholder="订单编号..." id="search_order_no" />
-											</td>
-											<td>生产部件：</td>
-											<td>
-												<!-- <input type="text"  id="search_parts" class="input-medium" style="height: 30px;width:90px;" ></input> -->
-												<select id="search_parts" class="input-medium" style="height: 30px; width: 90px;"> </select>
-											</td>
-											<td>生产日期：</td>
-											<td><input id="search_date_start" class="input-medium" style="width: 90px" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text">
-												- <input id="search_date_end" class="input-medium" style="width: 90px" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text">
-											</td>
-											<td>
-												<input type="button" class="btn btn-sm btn-primary" id="btnQuery" value="查询" style="margin-left: 2px;"></input>
-												<input type="button" class="btn btn-sm btn-info" id="btnAdd" value="新增" style="margin-left: 2px;"></input></td>
-										</tr>
-									</table>
-								</form>
+								<form id="form" class="well form-search " style="margin-left: 12px;display:none">
+									 
+									</form>
 							</div>
-							<div class="row">
-								<div class="col-xs-12">
-									<table id="tableResult" class="table table-striped table-bordered table-hover" style="font-size: 12px; width: 1300px; overflow-x: auto">
+							<div class="row" >
+								<div class="col-xs-12"  id="tableReusltDiv" style="padding-right:0px;">
+									<table id="tableResult" class="table table-striped table-bordered table-hover" style="table-layout:fixed;font-size: 12px; width:933px;overflow:auto;">
 									</table>
 								</div>
 							</div>

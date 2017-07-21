@@ -86,6 +86,10 @@ public interface IProductionDao {
 	List<Map<String, Object>> getCertificationList(Map<String, Object> condMap);
 
 	int getCertificationCount(Map<String, Object> condMap);
+	
+	Map<String,Object> querySalaryModel(Map<String, Object> condMap);
+
+	List<Map<String, Object>>  queryTeamStaffList(Map<String, Object> condMap);
 	/*****************************xiong jianwu end  *****************************/
 
 	/******************* tangjin start**************************/
@@ -122,4 +126,6 @@ public interface IProductionDao {
 	public List<Map<String,String>> getProductionSearch(Map<String,Object> queryMap);
 	public List<Map<String,String>> getProductionWIPBusInfo(Map<String,Object> queryMap);
 	public List<Map<String,String>> getProductionSearchCarinfo(Map<String,Object> queryMap);
+
+
 }

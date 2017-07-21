@@ -699,6 +699,8 @@ public class ProductionController extends BaseController {
 	 * 校验VIN与对应的车载终端是否绑定成功
 	 * @return
 	 */
+	@RequestMapping("/gpsValidate")
+	@ResponseBody
 	public ModelMap gpsValidate(){
 		model.clear();
 		String conditions=request.getParameter("conditions");
@@ -724,6 +726,62 @@ public class ProductionController extends BaseController {
 		mv.getModelMap().addAttribute("workshop", request.getParameter("workshop"));
 		mv.setViewName("production/pieceWorkhourMtn");
 		return mv;
+	}
+	
+	/**
+	 * @author xiong.jianwu
+	 * 获取小班组的计件方式
+	 * @return
+	 */
+	@RequestMapping("/getSalaryModel")
+	@ResponseBody
+	public ModelMap getSalaryModel(){
+		model.clear();
+		String factory=request.getParameter("factory");
+		String workshop=request.getParameter("workshop");
+		String workgroup=request.getParameter("workgroup");
+		String team=request.getParameter("team");
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("factory", factory);
+		condMap.put("workshop", workshop);
+		condMap.put("workgroup", workgroup);
+		condMap.put("team", team);
+		
+		productionService.getSalaryModel(condMap,model);
+			
+		return model;
+	}
+	
+	/**
+	 * @author xiong.jianwu
+	 * 计件工时维护查询小班组人员列表,小班组记资方式
+	 * @return
+	 */
+	@RequestMapping("/getTeamStaffDetail")
+	@ResponseBody
+	public ModelMap getTeamStaffDetail(){
+		model.clear();
+		String factory=request.getParameter("factory");
+		String workshop=request.getParameter("workshop");
+		String workgroup=request.getParameter("workgroup");
+		String team=request.getParameter("team");
+		String order_id=request.getParameter("order_id");
+		String work_date=request.getParameter("work_date");
+		String org_id=request.getParameter("org_id");
+		String staff_number=request.getParameter("staff_number");
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("factory", factory);
+		condMap.put("workshop", workshop);
+		condMap.put("workgroup", workgroup);
+		condMap.put("team", team);
+		condMap.put("order_id", order_id);
+		condMap.put("org_id", org_id);
+		condMap.put("work_date", work_date);
+		condMap.put("staff_number", staff_number);
+		
+		productionService.getTeamStaffDetail(condMap,model);
+		
+		return model;
 	}
 	/****************************  xiongjianwu ***************************/
 	

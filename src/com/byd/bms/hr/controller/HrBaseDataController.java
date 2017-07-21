@@ -3,6 +3,7 @@ package com.byd.bms.hr.controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
@@ -13,6 +14,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +66,12 @@ public class HrBaseDataController extends BaseController {
 	@RequestMapping("/positionSystem")
 	public ModelAndView positionSystemPage() {
 		mv.setViewName("hr/positionSystem");
+		return mv;
+	}
+	//标准人力
+	@RequestMapping("/standardHuman")
+	public ModelAndView standardHumanPage() {
+		mv.setViewName("hr/standardHuman");
 		return mv;
 	}
 	// 获取组织架构tree型菜单
@@ -540,6 +553,170 @@ public class HrBaseDataController extends BaseController {
 		model = mv.getModelMap();
 		return model;
 	}
+	/**
+	 * 上传标准人力
+	 * @return
+	 */
+	@RequestMapping("/uploadStandardHuman")
+	@ResponseBody
+	public ModelMap uploadStandardHuman(@RequestParam(value="file",required=false) MultipartFile file){
+		logger.info("uploading.....");
+		String fileName="standardHuman.xls";
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String editor_id = request.getSession().getAttribute("user_id") + "";
+		try{
+		ExcelModel excelModel = new ExcelModel();
+		excelModel.setReadSheets(1);
+		excelModel.setStart(1);
+		Map<String, Integer> dataType = new HashMap<String, Integer>();
+		dataType.put("0", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("1", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("2", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("3", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("4", ExcelModel.CELL_TYPE_NUMERIC);
+		dataType.put("5", ExcelModel.CELL_TYPE_CANNULL);
+		excelModel.setDataType(dataType);
+		excelModel.setPath(fileName);
+		File tempfile=new File(fileName);
+		file.transferTo(tempfile);
+		/**
+		 * 读取输入流中的excel文件，并且将数据封装到ExcelModel对象中
+		 */
+		InputStream is = new FileInputStream(tempfile);
+
+		ExcelTool excelTool = new ExcelTool();
+		excelTool.readExcel(is, excelModel);
+		Map<String, Object> conditionMap = new HashMap<String, Object>();
+		List<Map<String, Object>> positionDataList = hrBaseDataService.getPositionData(conditionMap);
+		List<Map<String, Object>> addList = new ArrayList<Map<String, Object>>();
+		//行号
+		int line=1;
+		String orgId="";
+		for (Object[] data : excelModel.getData()) {
+			Map<String, Object> infomap = new HashMap<String, Object>();
+			String factory_name=data[0].toString().trim();
+			String workshop_name=data[1]!=null ? data[1].toString().trim() : "";
+			String workgroup_name=data[2]!=null ? data[2].toString().trim() : "";
+			String job_name=data[3]!=null ? data[3].toString().trim() : "";
+			
+			orgId=this.findTreeNodeByName(factory_name);
+			if(!workshop_name.equals("")){
+				orgId=this.findChildNodeByName(workshop_name, orgId);
+			}
+			if(!workgroup_name.equals("")){
+				orgId=this.findChildNodeByName(workgroup_name, orgId);
+			}
+			//获得岗位id
+			for(Map<String,Object> m : positionDataList){
+				if(job_name.equals(m.get("job_name").toString())){
+					long job_id = (long)m.get("id");
+					infomap.put("job_id", job_id);
+					String job_no = (String)m.get("job_no");
+					infomap.put("job_no", job_no);
+					break;
+				}
+			}
+			String type=data[5]!=null ? data[5].toString().trim() : "";
+			if("计时".equals(type)){
+				infomap.put("type", "0");
+			}
+			if("计件".equals(type)){
+				infomap.put("type", "1");
+			}
+			infomap.put("org_id", orgId);
+			infomap.put("job_name", data[3] == null ? null : data[3].toString().trim());
+			infomap.put("standard_humans", data[4] == null ? null : data[4].toString().trim());
+			//infomap.put("type", type);
+			infomap.put("editor_id", editor_id);
+			infomap.put("edit_date", curTime);
+			infomap.put("deleted", "0");
+			infomap.put("line", line);
+			addList.add(infomap);
+			line++;
+		}
+		Map<String,Object> resultMap=hrBaseDataService.addStandardHumanData(addList);
+		if(resultMap.get("error")==null){
+			initModel(true,"导入成功！",addList);
+		}else{
+			initModel(false,(String)resultMap.get("error"),null);
+		}
+		
+		}catch(Exception e){
+			initModel(false,"导入失败！",null);
+		}
+		return mv.getModelMap();
+	}
+	//根据名称获得节点id
+	public String findTreeNodeByName(String name){
+		if(getOrgList()==null){
+			Map<String, Object> conditionMap = new HashMap<String, Object>();
+			List list = hrBaseDataService.getOrgDataTreeList(conditionMap);
+			setOrgList(list);
+		}
+		for(Map m : (List<Map<String,Object>>)getOrgList()){
+			if(name.equals(m.get("display_name")!=null?m.get("display_name").toString():"")){
+				return m.get("id").toString();
+			}
+		}
+		return null;
+	}
+	
+	//根据节点名和父节点id获得节点id
+	public  String findChildNodeByName(String name,String parentid){
+		/*if(getOrgList()==null){
+			Map<String, Object> conditionMap = new HashMap<String, Object>();
+			List list = orgDao.getOrgData(conditionMap);
+			setOrgList(list);
+		}*/
+		for(Map m : (List<Map<String,Object>>)getOrgList()){
+			if(name.equals(m.get("display_name")!=null?m.get("display_name").toString():"") && parentid.equals(m.get("parent_id")!=null?m.get("parent_id").toString():"")){
+				return m.get("id").toString();
+			}
+		}
+		return null;
+	}
+	/**
+	 * 判断是否数字
+	 * @param str
+	 * @return
+	 */
+	public boolean isNumeric(String str){
+	   Pattern pattern = Pattern.compile("[0-9]*");
+	   Matcher isNum = pattern.matcher(str);
+	   if( !isNum.matches() ){
+	       return false;
+	   }
+	   return true;
+	}
+	// 获取组织架构tree型菜单
+	@RequestMapping("/getStandardHumanData")
+	@ResponseBody
+	public ModelMap getStandardHumanData() {
+		Map<String, Object> queryMap = new HashMap<String, Object>();
+		String id = request.getParameter("id");
+		queryMap.put("org_id", id);
+		List result = hrBaseDataService.getStandardHumanData(queryMap);
+		Map<String, Object> map = new HashMap<String, Object>();  
+        map.put( "data",result);
+        map.put( "success",true);
+		model.addAllAttributes(map);
+        return model;
+	}
+	@RequestMapping("/deleteStandardHumanData")
+	@ResponseBody
+	public ModelMap deleteStandardHumanData() {
+		try {
+			String id = request.getParameter("id");
+			
+			hrBaseDataService.deleteStandardHumanData(id);
+			initModel(true, "success", "");
+		} catch (Exception e) {
+			initModel(false, e.getMessage(), e.toString());
+		}
+		model = mv.getModelMap();
+		return model;
+	}
 	/****************START YangKe**************************************************/
 	@RequestMapping("/staffManager")
 	public ModelAndView staffManager(){ 		//基础数据 员工库
@@ -632,6 +809,65 @@ public class HrBaseDataController extends BaseController {
 		Map<String,Object> list = hrBaseDataService.getStaffDistribution(condMap);
 		mv.clear();
 		mv.getModelMap().addAllAttributes(list);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/getWorkTimePriceList")
+	@ResponseBody
+	public ModelMap getWorkTimePriceList(){
+		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
+		int start=(request.getParameter("start")!=null)?Integer.parseInt(request.getParameter("start")):0;		//分页数据起始数
+		int length=(request.getParameter("length")!=null)?Integer.parseInt(request.getParameter("length")):20;	//每一页数据条数
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("draw", draw);
+		condMap.put("start", start);
+		condMap.put("length", length);
+		condMap.put("factory_id", request.getParameter("factory_id"));
+		condMap.put("effective_date", request.getParameter("effective_date"));
+		
+		Map<String,Object> list = hrBaseDataService.getWorkTimePrice(condMap);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(list);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/addWorkTimePrice")
+	@ResponseBody
+	public ModelMap addWorkTimePrice(){
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String edit_user = request.getSession().getAttribute("staff_number") + "";
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("factory_id", request.getParameter("factory_id"));
+		condMap.put("hour_type", request.getParameter("hour_type"));
+		condMap.put("effective_date", request.getParameter("effective_date"));
+		condMap.put("price", request.getParameter("price"));
+		condMap.put("edit_date", curTime);
+		condMap.put("editor_id", edit_user);
+		int result = hrBaseDataService.addWorkTimePrice(condMap);
+		initModel(true,String.valueOf(result),null);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/editWorkTimePrice")
+	@ResponseBody
+	public ModelMap editWorkTimePrice(){
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String edit_user = request.getSession().getAttribute("staff_number") + "";
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("id", request.getParameter("id"));
+		condMap.put("factory_id", request.getParameter("factory_id"));
+		condMap.put("hour_type", request.getParameter("hour_type"));
+		condMap.put("effective_date", request.getParameter("effective_date"));
+		condMap.put("price", request.getParameter("price"));
+		condMap.put("edit_date", curTime);
+		condMap.put("editor_id", edit_user);
+		int result = hrBaseDataService.editWorkTimePrice(condMap);
+		initModel(true,String.valueOf(result),null);
 		model = mv.getModelMap();
 		return model;
 	}

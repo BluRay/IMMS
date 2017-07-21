@@ -419,7 +419,19 @@ public class ProductionServiceImpl implements IProductionService {
 		}
 		
 	}
-	
+
+	@Override
+	public void getSalaryModel(Map<String, Object> condMap, ModelMap model) {
+		
+		model.put("data",productionDao.querySalaryModel(condMap));	
+	}
+
+	@Override
+	public void getTeamStaffDetail(Map<String, Object> condMap, ModelMap model) {
+		model.put("salary_model",productionDao.querySalaryModel(condMap));	
+		model.put("staff_list", productionDao.queryTeamStaffList(condMap));
+	}
+
 	/*****************************xiong jianwu end  *****************************/
 
 

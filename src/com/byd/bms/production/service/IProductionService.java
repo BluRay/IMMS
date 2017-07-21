@@ -64,7 +64,10 @@ public interface IProductionService {
 	public void getCertificationList(Map<String, Object> conditionMap, ModelMap model);
 
 	public void transferDataToHGZSys(List<Map<String, Object>> buslist, ModelMap model);
-	
+
+	public void getSalaryModel(Map<String, Object> condMap, ModelMap model);
+
+	public void getTeamStaffDetail(Map<String, Object> condMap, ModelMap model);
 	/*****************************xiong jianwu end  *****************************/
 
 	/******************* tangjin start**************************/
@@ -96,4 +99,6 @@ public interface IProductionService {
 	public List<Map<String,String>> getProductionSearch(Map<String,Object> queryMap);
 	public List<Map<String,String>> getProductionWIPBusInfo(Map<String,Object> queryMap);
 	public List<Map<String,String>> getProductionSearchCarinfo(Map<String,Object> queryMap);
+
+
 }

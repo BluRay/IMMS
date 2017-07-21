@@ -123,7 +123,56 @@
         and id=#{id}
         </if>
 	</select>
-	
+	<!-- 添加标准人力 -->
+	<insert id="addStandardHumanData" useGeneratedKeys="true" keyProperty="id">
+		<![CDATA[
+			insert into BMS_HR_BASE_STANDARD_HUMAN(type,org_id,job_id,job_no,job_name,standard_humans,deleted,editor_id,edit_date) 
+			values(#{type},#{org_id},#{job_id},#{job_no},#{job_name},#{standard_humans},#{deleted},#{editor_id},#{edit_date})
+		]]>
+	</insert>
+	<!-- 编辑标准人力-->
+	<update id="editStandardHumanData">
+			update BMS_HR_BASE_STANDARD_HUMAN set 
+			standard_humans = #{standard_humans}
+			where id=#{id}
+	</update>
+	<!-- 删除标准人力-->
+	<update id="deleteStandardHumanData">
+			update BMS_HR_BASE_STANDARD_HUMAN set 
+			deleted = '1'
+			where id=#{id}
+	</update>
+	<!-- 获得标准人力 -->
+	<select id="getStandardHumanData" parameterType="Map" resultType="Map">
+			SELECT h.id,o.id as org_id,j.id as job_id,j.job_no,
+              j.job_name,h.standard_humans,o.name as org_name,o.org_kind,o.org_type
+              ,(SELECT count(1) FROM BMS_HR_STAFF s WHERE
+              case o.org_kind
+                 when '1' THEN
+                     s.plant_org=o.name
+                 when '2' THEN
+                     s.workshop_org=o.name
+                 when '3' THEN
+                     s.workgroup_org=o.name
+                 end
+              ) as realHuman
+            FROM BMS_HR_BASE_STANDARD_HUMAN h
+              left join BMS_HR_BASE_JOB j on j.id=h.job_id
+              left join BMS_BASE_ORG o on o.id=h.org_id
+            WHERE h.deleted='0' and j.deleted='0'
+              <if test="org_id!=null">
+              and h.org_id=#{org_id}
+              </if>
+              <if test="job_id!=null">
+              and h.job_id=#{job_id}
+              </if>
+              <if test="job_no!=null">
+              and h.job_no=#{job_no}
+              </if>
+              <if test="id!=null">
+              and h.id=#{id}
+              </if>
+	</select>
 	<select id="getStaffList" resultType="Map" parameterType='Map'>
 		SELECT s.* FROM BMS_HR_STAFF s WHERE 1=1
 		<if test="orgType==1">
@@ -509,5 +558,45 @@
 			(#{item.factory},#{item.workshop},#{item.workgroup},#{item.team},#{item.staff_number},(SELECT id FROM BMS_OR_ORDER WHERE order_no = #{item.order_id}),#{item.distribution},#{item.editor},#{item.edit_date},#{item.effective_date})
 		</foreach>
 	</insert>
+	
+	<select id="getWorkTimePrice" parameterType="Map" resultType="Map">
+		SELECT P.*,F.factory_name,K.key_name,U.display_name FROM BMS_HR_HOUR_PRICE P
+		LEFT OUTER JOIN BMS_BASE_FACTORY F ON P.factory_id = F.id
+		LEFT OUTER JOIN BMS_BASE_KEY K ON P.hour_type = K.value AND K.key_code='HOUR_PRICE'
+		LEFT OUTER JOIN BMS_BASE_USER U ON P.editor_id = U.staff_number
+		WHERE 1=1 
+		<if test="factory_id !=null and factory_id !=''">
+			and P.factory_id = #{factory_id}
+		</if>
+		<if test="effective_date !=null and effective_date !=''">
+			and P.effective_date =#{effective_date}
+		</if>
+		<if test="start !=null">
+			LIMIT #{start} ,#{length} 
+		</if>
+	</select>
+	<select id="getWorkTimePriceCount" parameterType="Map" resultType="int">
+		SELECT COUNT(P.id) FROM BMS_HR_HOUR_PRICE P
+		LEFT OUTER JOIN BMS_BASE_FACTORY F ON P.factory_id = F.id
+		LEFT OUTER JOIN BMS_BASE_KEY K ON P.hour_type = K.value AND K.key_code='HOUR_PRICE'
+		WHERE 1=1 
+		<if test="factory_id !=null and factory_id !=''">
+			and P.factory_id = #{factory_id}
+		</if>
+		<if test="effective_date !=null and effective_date !=''">
+			and P.effective_date =#{effective_date}
+		</if>
+	</select>
+	<insert id="addWorkTimePrice" useGeneratedKeys="true" keyProperty="id">
+		<![CDATA[
+		INSERT INTO BMS_HR_HOUR_PRICE
+		(factory_id, hour_type, effective_date, price, editor_id, edit_date)
+		VALUES(#{factory_id}, #{hour_type},#{effective_date}, #{price}, #{editor_id}, #{edit_date})
+		]]>
+	</insert>
+	<update id="editWorkTimePrice" parameterType="Map">
+		UPDATE BMS_HR_HOUR_PRICE SET factory_id = #{factory_id},hour_type = #{hour_type},price = #{price},effective_date = #{effective_date},editor_id = #{editor_id} ,edit_date =  #{edit_date}
+		WHERE id = #{id}
+	</update>
 	
 </mapper>

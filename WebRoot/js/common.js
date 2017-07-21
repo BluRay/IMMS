@@ -137,7 +137,7 @@ function getOrderNoSelect(elementId, submitId, fn_backcall, bustype,factoryEleme
 				}
 			});
 		},
-		items : 30,
+		items : 15,
 		highlighter : function(item) {
 			var order_name = "";
 			var bus_type = "";
@@ -159,29 +159,28 @@ function getOrderNoSelect(elementId, submitId, fn_backcall, bustype,factoryEleme
 			$.each(orderlist, function(index, value) {
 				if (value.orderNo == item) {
 					selectId = value.id;
+					// alert(submitId);
+					$(elementId).attr("order_id", selectId);
+					$(submitId).val(selectId);
 					if (typeof (fn_backcall) == "function") {
 						fn_backcall(value);
 					}
 					return;
 				}
 			})
-			// alert(submitId);
-			$(elementId).attr("order_id", selectId);
-			$(submitId).val(selectId);
 			return true;
 		},
 		updater : function(item) {
 			$.each(orderlist, function(index, value) {
 				if (value.orderNo == item) {
 					selectId = value.id;
+					$(elementId).attr("order_id", selectId);
+					$(submitId).val(selectId);
 					if (typeof (fn_backcall) == "function") {
 						fn_backcall(value);
 					}
 				}
 			})
-			// alert(submitId);
-			$(elementId).attr("order_id", selectId);
-			$(submitId).val(selectId);
 			return item;
 		}
 	});
@@ -504,7 +503,7 @@ function getPartsSelect(elementId, submitId, fn_backcall) {
 			return true;
 			
 		},
-		items : 30,
+		items : 15,
 		updater : function(item) {
 			var selectId = "";
 			$.each(partslist, function(index, value) {

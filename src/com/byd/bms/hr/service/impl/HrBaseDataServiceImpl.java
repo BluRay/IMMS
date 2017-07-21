@@ -72,6 +72,93 @@ public class HrBaseDataServiceImpl implements IHrBaseDataService {
 		return result;
 	}
 	@Override
+	public Map<String,Object> addStandardHumanData(List<Map<String, Object>> list) {
+		int result=0;
+		Map<String,Object> resultMap=new HashMap<String,Object>();
+		for(Map<String,Object> map : list){
+			Map<String,Object> conMap=new HashMap<String,Object>();
+			if(map.get("org_id")==null){
+				resultMap.put("error", map.get("line")+"行数据错误,请维护组织架构");
+				break;
+			}
+			if(map.get("job_id")==null){
+				resultMap.put("error", map.get("line")+"行数据错误,请维护标准岗位："+map.get("job_name"));
+				break;
+			}
+			conMap.put("job_id", map.get("job_id"));
+			conMap.put("org_id", map.get("org_id"));
+			List<Map<String,Object>> plist=hrBaseDataDao.getStandardHumanData(conMap);
+			if(plist.size()>0){
+				Map pMap=plist.get(0);
+				map.put("id", pMap.get("id"));
+				result=hrBaseDataDao.editStandardHumanData(map);
+			}else{
+				result=hrBaseDataDao.addStandardHumanData(map);
+			}
+		}
+		return resultMap;
+	}
+	@Override
+	public List<Map<String, Object>> getStandardHumanData(
+			Map<String, Object> conditionMap) {
+		Map<String, Object> conMap=new HashMap<String, Object>();
+		List<Map<String, Object>> humanMap=hrBaseDataDao.getStandardHumanData(conditionMap);
+		List<Map<String, Object>> orgMap=hrBaseDataDao.getOrgDataTreeList(conMap);
+		for(Map map : humanMap){
+			String org_id=map.get("org_id")+"";
+			String org_type=(String)map.get("org_type");
+			if(org_type.equals("1")){
+				map.put("factory_name",(String)map.get("org_name"));
+				map.put("workshop_name", "");
+				map.put("workgroup_name", "");
+			}
+			if(org_type.equals("2")){
+				for(Map gmap : orgMap){
+					String id=gmap.get("id")+"";
+					if(id.equals(org_id)){
+						map.put("factory_name",(String)gmap.get("parent_name"));
+						break;
+					}
+				}
+				map.put("workshop_name", (String)map.get("org_name"));
+				map.put("workgroup_name", "");
+			}
+			if(org_type.equals("3")){
+				for(Map gmap : orgMap){
+					String id=gmap.get("id")+"";
+					if(id.equals(org_id)){
+						map.put("workshop_name",(String)gmap.get("parent_name"));
+					}
+				}
+				for(Map gmap : orgMap){
+					String id=gmap.get("id")+"";
+					if(id.equals(org_id)){
+						String parent_id=(String)gmap.get("parent_id");
+						for(Map p_gmap : orgMap){
+							String p_id=p_gmap.get("id")+"";
+							if(p_id.equals(parent_id)){
+								map.put("factory_name",(String)p_gmap.get("parent_name"));
+							}
+						}
+					}
+					
+					
+				}
+				map.put("workgroup_name",  (String)map.get("org_name"));
+			}
+			
+		}
+		return humanMap;
+	}
+	@Override
+	public int editStandardHumanData(Map<String, Object> conditionMap) {
+		return hrBaseDataDao.editStandardHumanData(conditionMap);
+	}
+	@Override
+	public void deleteStandardHumanData(String id) {
+	    hrBaseDataDao.deleteStandardHumanData(id);
+	}
+	@Override
 	public List<Map<String, Object>> getPositionData(
 			Map<String, Object> conditionMap) {
 		return hrBaseDataDao.getPositionData(conditionMap);
@@ -150,5 +237,23 @@ public class HrBaseDataServiceImpl implements IHrBaseDataService {
 	@Override
 	public int saveStaffDistribution(List<Map<String, Object>> datalist) {
 		return hrBaseDataDao.saveStaffDistribution(datalist);
+	}
+	@Override
+	public int addWorkTimePrice(Map<String, Object> conditionMap) {
+		return hrBaseDataDao.addWorkTimePrice(conditionMap);
+	}
+	@Override
+	public int editWorkTimePrice(Map<String, Object> conditionMap) {
+		return hrBaseDataDao.editWorkTimePrice(conditionMap);
+	}
+	@Override
+	public Map<String, Object> getWorkTimePrice(Map<String, Object> conditionMap) {
+		int totalCount=0;
+		List<Map<String,Object>> datalist = hrBaseDataDao.getWorkTimePrice(conditionMap);
+		totalCount = hrBaseDataDao.getWorkTimePriceCount(conditionMap);		
+		Map<String, Object> result = new HashMap<String,Object>();
+		result.put("total", totalCount);
+		result.put("rows", datalist);
+		return result;
 	}
 }
