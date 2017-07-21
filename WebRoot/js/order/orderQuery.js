@@ -34,7 +34,7 @@ function ajaxQuery(){
         },
 		dom: 'Bfrtip',
 	    buttons: [
-	        {extend:'excel',title:'data_export',className:'black',text:'<i class=\"fa fa-file-excel-o bigger-130\" tooltip=\"导出excel\"></i>'},
+	        {extend:'excelHtml5',title:'data_export',className:'black',text:'<i class=\"fa fa-file-excel-o bigger-130\" tooltip=\"导出excel\"></i>'},
 	        {extend:'colvis',text:'<i class=\"fa fa-list bigger-130\" tooltip=\"选择展示列\"></i>'}
 	    ],
         rowsGroup:[0,1,2,3,4],

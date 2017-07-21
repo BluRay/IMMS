@@ -156,11 +156,11 @@
 		<script src="../assets/js/ace/ace.onpage-help.js"></script>
 		<script src="../assets/js/bootstrap3-typeahead.js"></script>
 		<script src="../js/jquery.form.js"></script>
-		
+		<script src="../assets/js/jszip.min.js"></script>
 		<script src="../assets/js/dataTables.buttons.js"></script>
 		<script src="../assets/js/buttons.colVis.js"></script>
 		<script src="../assets/js/buttons.html5.js"></script>
-		<script src="../assets/js/buttons.flash.js"></script> 
+	<!-- 	<script src="../assets/js/buttons.flash.js"></script>  -->
 		<!-- <script src="../js/bootstrap-table.js"></script> -->
 		<script src="../js/common.js"></script>
 		<!-- <script src="../js/bootstrapInit.js"></script>	 -->

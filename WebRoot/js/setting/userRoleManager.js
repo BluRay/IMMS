@@ -74,8 +74,8 @@ $(document).ready(function () {
 		.on('updated', function(e, result) {
 		})
 		.on('selected', function(e,data) {
-			updatetree2(data.info[0].id);
 			this_staff_number = data.info[0].id;
+			updatetree2(data.info[0].id);
 		})
 		.on('click', function(e) {
 		})
@@ -206,7 +206,7 @@ $(document).ready(function () {
 	}
 	
 	function updatePermissionInput(role_id){
-		console.info('updatePermissionInput');
+		console.info('updatePermissionInput role_id = ' + role_id + "|this_staff_number = " + this_staff_number);
 		$.ajax({
 		    url: "getFunctionList",
 		    dataType: "json",

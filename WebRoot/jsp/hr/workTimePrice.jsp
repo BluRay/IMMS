@@ -5,6 +5,11 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta charset="utf-8" />
 		<title>工时单价维护</title>
+		<link rel="stylesheet" href="../css/bootstrap-table.css">
+		<link rel="stylesheet" href="../css/bootstrap-editable.css">
+		<link rel="stylesheet" href="../assets/css/jquery-ui.min.css" />
+		<link rel="stylesheet" href="../assets/css/jquery-ui.custom.min.css" />
+		<link rel="stylesheet" href="../assets/css/jquery.gritter.css" />
 		<meta name="description" content="Common Buttons &amp; Icons" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 	</head>
@@ -39,7 +44,18 @@
 					<!-- /section:settings.box -->
 					<div class="page-content-area">
 					
-					<!-- 东西放这里！ -->		
+					<div class="well">
+						<table>
+							<tr>
+								<td>工厂：</td>
+								<td><select id="search_factory" class="input-small" style="height: 30px;width:100px"></select></td>
+								<td>&nbsp;有效期：</td>
+								<td><input id="effective_date" type="text"  class="input-medium" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/></td>
+								<td></td>
+								<td><input id="btnQuery" type="button" class="btn btn-sm btn-success" value="查询" style="margin-left: 2px;"></input>&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</div>
 					
 					</div>
 			</div><!-- /.main-content -->
@@ -50,4 +66,35 @@
 		</div><!-- /.main-container -->
 	</div>
 	</body>
+	<script>
+		var $table = $('#table'),$remove = $('#remove'),selections = [];
+	</script>
+	<style type="text/css">
+	.fixed-table-toolbar .bs-bars, .fixed-table-toolbar .search, .fixed-table-toolbar .columns {
+		position: absolute;
+		margin-top: 102px;
+		right: 20px;
+		top: -49px;
+	}
+	.btn-default {
+		color: #333;
+		background-color: #fff;
+		border-color: #ccc;
+		height: 40px;
+		color: #fff;
+		background-color: #333;
+	}
+	
+</style>
+	<script src="../assets/js/fuelux/fuelux.tree.min.js"></script>
+	<script src="../assets/js/jquery.ui.touch-punch.min.js"></script>
+	<script src="../assets/js/jquery.gritter.min.js"></script>
+	
+	<script type="text/javascript" src="../assets/js/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="../assets/js/bootstrap3-typeahead.js"></script>
+	<script type="text/javascript" src="../js/jquery.form.js"></script>
+	
+	<script type="text/javascript" src="../js/datePicker/WdatePicker.js"></script>
+	<script type="text/javascript" src="../js/common.js"></script>
+	<script type="text/javascript" src="../js/hr/workTimePrice.js"></script>
 </html>
