@@ -778,3 +778,26 @@ function expandLevel(treeObj,node,level){
         }  
     }  
 }
+/**
+ * js 两个数字相加减消除进度损失
+ * @param num1
+ * @param num2
+ * @returns
+ */
+function numAdd(num1, num2) {
+	var baseNum, baseNum1, baseNum2;
+	try {
+	baseNum1 = num1.toString().split(".")[1].length;
+	} catch (e) {
+	baseNum1 = 0;
+	}
+	try {
+	baseNum2 = num2.toString().split(".")[1].length;
+	} catch (e) {
+	baseNum2 = 0;
+	}
+	baseNum = Math.pow(10, Math.max(baseNum1, baseNum2));
+	
+	//alert((num1 * baseNum +"+"+ num2 * baseNum));
+	return ((num1 * baseNum + num2 * baseNum) / baseNum).toFixed(2);
+	}; 

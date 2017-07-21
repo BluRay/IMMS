@@ -11,6 +11,8 @@ $(document).ready(function () {
 		getFactorySelect("plan/planRevision",'',"#search_factory",null,'id');
 		new Date().getFullYear();
 		$("#search_plan_month").val(''+new Date().getFullYear() + ((new Date().getMonth()+1<10)?'0':'') + (new Date().getMonth()+1))
+		//$("#search_factory").find("option :contains("+GetQueryString("factory_name")+")").attr("selected",true);
+		$("#search_factory").val(GetQueryString("factory_id"));
 		ajaxQuery();
 	}
 

@@ -208,7 +208,7 @@ function generateListTabel(recordList){
 			var last_quantity=isNaN(parseInt($(tds[5]).html()))?0:parseInt($(tds[5]).html());
 			$(quantityinput).html(value.quantity+last_quantity);
 		}else{
-			var tr=$("<tr />");
+			var tr=$("<tr style=\"text-align:center;\"/>");
 			var toolName_input="<input id='toolName_"+i
 							+"' style='border:0;width:100%;height:100%;height:25px' class='tool_name' name='otDispatchRecordList["+i+"].tool_name'"
 							+"value='"+value.tool_name+"' readonly>";
@@ -243,13 +243,13 @@ function generateListTabel(recordList){
 function generateRecordTable(recordList){
 	$.each(recordList,function(index,value){
 		var tr=$("<tr />");
-		$("<td />").html(value.tool_name).appendTo(tr);
-		$("<td />").html(value.single_use_qty).appendTo(tr);
-		$("<td />").html(value.unit).appendTo(tr);
-		$("<td />").html(value.quantity).appendTo(tr);
-		$("<td />").html(value.editor).appendTo(tr);
-		$("<td />").html(value.receiver).appendTo(tr);
-		$("<td />").html(value.edit_date).appendTo(tr);
+		$("<td style=\"text-align:center;\"/>").html(value.tool_name).appendTo(tr);
+		$("<td style=\"text-align:center;\"/>").html(value.single_use_qty).appendTo(tr);
+		$("<td style=\"text-align:center;\"/>").html(value.unit).appendTo(tr);
+		$("<td style=\"text-align:center;\"/>").html(value.quantity).appendTo(tr);
+		$("<td style=\"text-align:center;\"/>").html(value.editor).appendTo(tr);
+		$("<td style=\"text-align:center;\"/>").html(value.receiver).appendTo(tr);
+		$("<td style=\"text-align:center;\"/>").html(value.edit_date).appendTo(tr);
 		$("#dipatchRecord tbody").append(tr);
 	});
 }

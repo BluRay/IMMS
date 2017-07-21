@@ -497,5 +497,21 @@ public class CommonController extends BaseController {
 		commonService.getOrgAuthTree(conditionMap,model);
 		return model;
 	}
-	
+	/**
+	 * @author xiong.jianwu
+	 * 查询车间该月工资是否已提交或者结算
+	 * @return
+	 */
+	@RequestMapping("/getSubmitSalary")
+	@ResponseBody
+	public ModelMap getSubmitSalary(){
+		model.clear();
+		Map<String, Object> condMap = new HashMap<String, Object>();
+		condMap.put("factory", request.getParameter("factory"));
+		condMap.put("workshop", request.getParameter("workshop"));
+		condMap.put("month", request.getParameter("month"));
+		
+		commonService.getSubmitSalary(condMap,model);
+		return model;
+	}
 }

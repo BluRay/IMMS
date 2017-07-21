@@ -99,7 +99,7 @@ function ajaxQuery(){
 		            {"title":"导入时间","class":"center","data":"create_date","defaultContent": ""},
 		            {"title":"操作","class":"center","data": null,"id":"staff_number",
 		            	"render": function ( data, type, row ) {
-		                    return "<i class=\"glyphicon glyphicon-search bigger-130 showbus\" title=\"查看详情\" onclick=\"javascript:window.location = ('planPreview?version="+row['version']+"')\" style='color:blue;cursor: pointer;'></i>&nbsp;";
+		                    return "<i class=\"glyphicon glyphicon-search bigger-130 showbus\" title=\"查看详情\" onclick=\"javascript:window.location = ('planPreview?version="+row['version']+ "&factory_id=" +$("#search_factory").val()+"')\" style='color:blue;cursor: pointer;'></i>&nbsp;";
 		                },
 		            }
 		          ],

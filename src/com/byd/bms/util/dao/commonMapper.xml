@@ -687,4 +687,10 @@
 	<select id="getOrgAuthTree" statementType="CALLABLE" resultType="Map" parameterType='Map'>
 		call P_QueryOrgTreeList(#{staff_number},#{url},#{org_type},#{org_kind})
 	</select>
+	<!-- 查询工厂车间某月是否已提交或结算工资 -->
+	<select id="querySubmitSalary" parameterType="Map" resultType="Map">
+		SELECT staff_number,staff_name 
+		FROM BMS_HR_PIECE_SALARY_HISTORY
+		WHERE month=#{month} AND submit_factory=#{factory} AND submit_workshop=#{workshop} AND status in('已提交','已结算')
+	</select>
 </mapper>

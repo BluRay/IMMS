@@ -405,6 +405,13 @@ public class CommonServiceImpl implements ICommonService {
 		datalist=commonDao.getOrgAuthTree(conditionMap);
 		model.put("data", datalist);	
 		
+	}
+	@Override
+	public void getSubmitSalary(Map<String, Object> condMap, ModelMap model) {
+		List<Map<String,Object>> datalist=new ArrayList<Map<String,Object>>();
+		datalist=commonDao.querySubmitSalary(condMap);
+		model.put("data", datalist);	
+		
 	}	
 	
 }

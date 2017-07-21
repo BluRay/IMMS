@@ -113,5 +113,11 @@ public interface ICommonService {
 	 * @param model
 	 */
 	void getOrgAuthTree(Map<String, Object> conditionMap, ModelMap model);
+	/**
+	 * @author xiong.jianwu
+	 * @param condMap
+	 * @param model
+	 */
+	void getSubmitSalary(Map<String, Object> condMap, ModelMap model);
 	
 }
