@@ -412,6 +412,12 @@ public class CommonServiceImpl implements ICommonService {
 		datalist=commonDao.querySubmitSalary(condMap);
 		model.put("data", datalist);	
 		
+	}
+	@Override
+	public void getBasePrice(Map<String, Object> condMap, ModelMap model) {
+		List<Map<String,Object>> datalist=new ArrayList<Map<String,Object>>();
+		datalist=commonDao.getBasePrice(condMap);
+		model.put("data", datalist);	
 	}	
 	
 }

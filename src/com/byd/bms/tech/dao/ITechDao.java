@@ -70,4 +70,7 @@ public interface ITechDao {
 	public void updateTechTaskStatus(@Param(value="taskList")List<Map<String, String>> taskList);
 	public List<Map<String, String>> queryTechTaskDetailByBus(@Param(value="bus_number")String bus_number);
 	public void updateTechTaskFollow(Map<String, Object> condMap);
+	
+	public List<Map<String, Object>> getSingleTaskList(Map<String,Object> queryMap);
+	public int getSingleTaskListCount(Map<String,Object> queryMap);
 }

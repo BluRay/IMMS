@@ -509,5 +509,90 @@ public class TechServiceImpl implements ITechService {
 		
 	}
 
+	@Override
+	public Map<String, Object> querySingleTasklist(String conditions) {
+		JSONObject jo=JSONObject.fromObject(conditions);
+		Map<String,Object> conditionMap=new HashMap<String,Object>();
+		for(Iterator it=jo.keys();it.hasNext();){
+			String key=(String) it.next();
+			conditionMap.put(key, jo.get(key));
+		}
+		String workshops=(String) conditionMap.get("workshop_list");
+		List<String> workshopList=Arrays.asList(workshops.split(","));
+		conditionMap.put("workshop_list", workshopList);
+		int totalCount=techDao.queryTechTaskListCount(conditionMap);
+		//int totalCount=0;
+		List<Map<String,Object>> data_list=techDao.queryTechTaskList(conditionMap);	
+		List<Map<String,Object>> rows=new ArrayList<Map<String,Object>>();
+		
+		for(Map<String,Object> data:data_list){			
+			String tech_list=(String) data.get("tech_list");
+			String time_list=(String) data.get("time_list");
+			String follow_list=(String) data.get("follow_list");
+			String ready_hour_list=(String) data.get("ready_hour_list");
+			Pattern p=Pattern.compile(":");
+			Pattern p1=Pattern.compile(",");
+			JSONObject time_jso=new JSONObject();
+			JSONObject follow_jso=new JSONObject();
+			JSONObject readyHour_jso=new JSONObject();
+			
+			if(StringUtils.isNotEmpty(time_list)){
+				time_list="{\""+time_list+"\"}";
+				Matcher m=p.matcher(time_list);
+				time_list=m.replaceAll("\":\"");
+				Matcher m1=p1.matcher(time_list);
+				time_list=m1.replaceAll("\",\"");
+				time_jso=JSONObject.fromObject(time_list);
+			}
+			
+			
+			if(StringUtils.isNotEmpty(follow_list)){
+				follow_list="{\""+follow_list+"\"}";
+				Matcher m=p.matcher(follow_list);
+				follow_list=m.replaceAll("\":\"");
+				Matcher m1=p1.matcher(follow_list);
+				follow_list=m1.replaceAll("\",\"");
+				follow_jso=JSONObject.fromObject(follow_list);
+			}
+			
+			if(StringUtils.isNotEmpty(ready_hour_list)){
+				ready_hour_list="{\""+ready_hour_list+"\"}";
+				Matcher m=p.matcher(ready_hour_list);
+				ready_hour_list=m.replaceAll("\":\"");
+				Matcher m1=p1.matcher(ready_hour_list);
+				ready_hour_list=m1.replaceAll("\",\"");
+				readyHour_jso=JSONObject.fromObject(ready_hour_list);
+			}
+			
+			if(StringUtils.isNotEmpty(tech_list)){
+				String[] techarr=tech_list.split(",");
+				for(String tech:techarr){
+					Map<String,Object> data_cp=new HashMap<String,Object>();
+					data_cp.putAll(data);
+					String workshop=tech.split(":")[0];
+					String tech_num=tech.split(":")[1];
+					if(StringUtils.contains((String) workshops, workshop)){
+						data_cp.put("workshop", workshop);
+						data_cp.put("tech_num", tech_num);
+						data_cp.put("tech_time", time_jso.get(workshop));
+						data_cp.put("follow_num", follow_jso.get(workshop));
+						data_cp.put("ready_hour", readyHour_jso.get(workshop));
+						rows.add(data_cp);
+					}
+					
+				}
+			}
+			
+		}			
+		Map<String, Object> result=new HashMap<String,Object>();
+		totalCount -= (data_list.size()-rows.size());
+		
+		result.put("recordsTotal", totalCount);
+		result.put("recordsFiltered", totalCount);
+		result.put("data", rows);
+		
+		return result;
+	}
+
 		
 }

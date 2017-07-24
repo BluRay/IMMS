@@ -68,6 +68,19 @@ public interface IProductionService {
 	public void getSalaryModel(Map<String, Object> condMap, ModelMap model);
 
 	public void getTeamStaffDetail(Map<String, Object> condMap, ModelMap model);
+
+	public void workhourValidateBus(Map<String, Object> condMap, ModelMap model);
+
+	public void workhourValidateRecordIn(Map<String, Object> condMap, ModelMap model);
+	
+	public void saveStaffHours_cal0(String str_staffHours, String is_customer, String edit_date,String editor_id,ModelMap model);
+
+	public void saveStaffHours_cal1(String str_staffHours, String is_customer,String edit_date, String editor_id,ModelMap model);
+
+	public void saveStaffHours_cal2(String str_staffHours, String edit_date, String editor_id,ModelMap model);
+
+	public void saveStaffHours_cal3(String str_staffHours, String edit_date, String editor_id,ModelMap model);
+	
 	/*****************************xiong jianwu end  *****************************/
 
 	/******************* tangjin start**************************/
@@ -94,11 +107,14 @@ public interface IProductionService {
 	public int updateBusConfig(Map<String,Object> conditionMap);
 	
 	public List<Map<String,Object>> getOrderConfigList(Map<String,Object> conditionMap);
+	
+	public Map<String, Object> getWaitWorkTimeList(Map<String, Object> condMap);
+	
+	public int saveWaitWorkHourInfo(List<Map<String, Object>> swh_list);
 	/******************* tangjin end**************************/
 
 	public List<Map<String,String>> getProductionSearch(Map<String,Object> queryMap);
 	public List<Map<String,String>> getProductionWIPBusInfo(Map<String,Object> queryMap);
 	public List<Map<String,String>> getProductionSearchCarinfo(Map<String,Object> queryMap);
-
 
 }

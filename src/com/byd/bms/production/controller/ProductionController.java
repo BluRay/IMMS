@@ -1,9 +1,5 @@
 package com.byd.bms.production.controller;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -426,7 +422,8 @@ public class ProductionController extends BaseController {
 		String conditions=request.getParameter("conditions");
 		JSONObject jo = JSONObject.fromObject(conditions);
 		Map<String, Object> conditionMap = new HashMap<String, Object>();	
-		for (Iterator it = jo.keys(); it.hasNext();) {
+		for (@SuppressWarnings("rawtypes")
+		Iterator it = jo.keys(); it.hasNext();) {
 			String key = (String) it.next();
 			logger.info(key);
 			conditionMap.put(key, jo.get(key));
@@ -783,6 +780,83 @@ public class ProductionController extends BaseController {
 		
 		return model;
 	}
+	
+	/**
+	 * @author xiong.jianwu
+	 * 计件工时维护校验车号/自编号是否已经录入工时信息。车辆是否在车间上线
+	 * @return
+	 */
+	@RequestMapping("/workhourValidateBus")
+	@ResponseBody
+	public ModelMap workhourValidateBus(){
+		model.clear();
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("salary_model", request.getParameter("salary_model"));
+		condMap.put("is_customer", request.getParameter("is_customer"));
+		condMap.put("factory", request.getParameter("factory"));
+		condMap.put("workshop", request.getParameter("workshop"));
+		condMap.put("workgroup", request.getParameter("workgroup"));
+		condMap.put("team", request.getParameter("team"));
+		condMap.put("bus_number", request.getParameter("bus_number"));
+		condMap.put("work_date", request.getParameter("work_date"));
+		
+		productionService.workhourValidateBus(condMap,model);	
+		return model;
+	}
+	
+	/**
+	 * @author xiong.jianwu
+	 * 校验辅助人力、底薪模式是否已经录入了计件工时信息
+	 * @return
+	 */
+	@RequestMapping("/workhourValidateRecordIn")
+	@ResponseBody
+	public ModelMap workhourValidateRecordIn(){
+		model.clear();
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("salary_model", request.getParameter("salary_model"));
+		condMap.put("factory", request.getParameter("factory"));
+		condMap.put("workshop", request.getParameter("workshop"));
+		condMap.put("workgroup", request.getParameter("workgroup"));
+		condMap.put("team", request.getParameter("team"));
+		condMap.put("work_date", request.getParameter("work_date"));
+		
+		productionService.workhourValidateRecordIn(condMap,model);
+		return model;
+	}
+	
+	/**
+	 * @author xiong.jianwu
+	 * 保存计件工时信息
+	 * @return
+	 */
+	@RequestMapping("/saveStaffHours")
+	@ResponseBody
+	public ModelMap saveStaffHours(){
+		model.clear();
+		String salary_model=request.getParameter("salary_model");
+		String is_customer=request.getParameter("is_customer");
+		String str_staffHours=request.getParameter("staffHourList");
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String edit_date = df.format(new Date());
+		String editor_id=String.valueOf(session.getAttribute("user_id"));
+		
+		if("技能系数".equals(salary_model)){
+			productionService.saveStaffHours_cal0(str_staffHours,is_customer,edit_date,editor_id,model);
+		}
+		if("承包制".equals(salary_model)){
+			productionService.saveStaffHours_cal1(str_staffHours,is_customer,edit_date,editor_id,model);
+		}
+		if("辅助人力".equals(salary_model)){
+			productionService.saveStaffHours_cal2(str_staffHours,edit_date,editor_id,model);
+		}
+		if("底薪模式".equals(salary_model)){
+			productionService.saveStaffHours_cal3(str_staffHours,edit_date,editor_id,model);
+		}
+
+		return model;
+	}
+	
 	/****************************  xiongjianwu ***************************/
 	
 	@RequestMapping("/productionsearchbusinfo")
@@ -1101,6 +1175,7 @@ public class ProductionController extends BaseController {
 	}
 	@RequestMapping("/getOrderConfigList")
 	@ResponseBody
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public ModelMap getOrderConfigList() {
 		model=new ModelMap();
 		String search_order_no=request.getParameter("search_order_no");
@@ -1147,5 +1222,64 @@ public class ProductionController extends BaseController {
 		model.addAllAttributes(result);
 		return model;
 	}
+	/**等待工时维护*/
+	@RequestMapping("/waitWorkTimeMtn")
+	public ModelAndView waitWorkTimeMtn(){
+		mv.setViewName("production/waitWorkTimeMtn");
+		return mv;
+	}
+	/**
+	 * 员工工时查询
+	 * @return
+	 */
+	@RequestMapping("/getWaitWorkTimeList")
+	@ResponseBody
+	public ModelMap getWaitWorkTimeList(){
+		String conditions=request.getParameter("conditions");
+		JSONObject jo=JSONObject.fromObject(conditions);
+		Map<String,Object> conditionMap=new HashMap<String,Object>();
+		for(Iterator it=jo.keys();it.hasNext();){
+			String key=(String) it.next();
+			conditionMap.put(key, jo.get(key));
+		}
+		Map<String,Object> list = productionService.getWaitWorkTimeList(conditionMap);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(list);
+		model = mv.getModelMap();
+		return model;
+	}
+	@RequestMapping("/saveWaitWorkTimeInfo")
+	@ResponseBody
+	public ModelMap saveWaitWorkTimeInfo(){
+		String conditions=request.getParameter("conditions");
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String userid=String.valueOf(session.getAttribute("user_id"));
+		JSONArray jsonArray=JSONArray.fromObject(conditions);
+		List<Map<String,Object>> swh_list=new ArrayList<Map<String,Object>>();
+		for(int i=0;i<jsonArray.size();i++){
+			 JSONObject object = (JSONObject)jsonArray.get(i);		
+			 object.put("editor_id", userid);
+			 object.put("edit_date", curTime);
+			Map<String, Object> map = (Map<String, Object>) object;
+			swh_list.add(map);
+		}
+		int i=0;		
+		i=productionService.saveWaitWorkHourInfo(swh_list);
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		if(i>0){
+			result.put("success", true);
+			result.put("message","保存成功");
+		}else{
+			result.put("success", false);
+			result.put("message","保存失败");
+		}		
+		mv.clear();
+		mv.getModelMap().addAllAttributes(result);
+		model = mv.getModelMap();
+		return model;
+	}
+	
 	/****************************  TANGJIN ***************************/
 }

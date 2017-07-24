@@ -1,11 +1,11 @@
 package com.byd.bms.util.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -514,4 +514,17 @@ public class CommonController extends BaseController {
 		commonService.getSubmitSalary(condMap,model);
 		return model;
 	}
+	@RequestMapping("/getBasePrice")
+	@ResponseBody
+	public ModelMap getBasePrice() throws UnsupportedEncodingException{	
+		model.clear();
+		Map<String, Object> condMap = new HashMap<String, Object>();
+		condMap.put("factory", request.getParameter("factory"));
+		condMap.put("workDate", request.getParameter("workDate"));
+		condMap.put("type", request.getParameter("type"));
+		
+		commonService.getBasePrice(condMap,model);
+		return model;
+	}
+	
 }

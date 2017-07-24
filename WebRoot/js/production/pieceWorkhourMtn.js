@@ -20,14 +20,14 @@ $(document).ready(function() {
 	
 	$(document).on("click","#dstcopy",function(){
 		//$(".distribution :eq(0)").focus();
-		var workhourlist=$(".workhour");
-		if(workhourlist.length==0){
-			workhourlist=$(".distribution");
+		var work_hourlist=$(".work_hour");
+		if(work_hourlist.length==0){
+			work_hourlist=$(".distribution");
 		}
-		//alert(workhourlist.length);
-		$(workhourlist).eq(0).css("display","none");
-		$("#copy_paste").val($(workhourlist).eq(0).val()).css("display","").css("background-color","rgb(191, 237, 245)").select();
-		$(workhourlist).css("background-color","rgb(191, 237, 245)");
+		//alert(work_hourlist.length);
+		$(work_hourlist).eq(0).css("display","none");
+		$("#copy_paste").val($(work_hourlist).eq(0).val()).css("display","").css("background-color","rgb(191, 237, 245)").select();
+		$(work_hourlist).css("background-color","rgb(191, 237, 245)");
 	});
 	
 	$(document).on("paste","#copy_paste",function(e){
@@ -35,13 +35,13 @@ $(document).ready(function() {
 			 var copy_text=$(e.target).val();
 			 $(e.target).val("");
 			 var dist_list=copy_text.split(" ");
-			 var workhourlist=$(".workhour")||$(".distribution");
-			 $(workhourlist).eq(0).css("display","");
+			 var work_hourlist=$(".work_hour")||$(".distribution");
+			 $(work_hourlist).eq(0).css("display","");
 				$("#copy_paste").css("display","none");
 			 $.each(dist_list,function(i,value){
-				 $(workhourlist).eq(i).val(value);								 
+				 $(work_hourlist).eq(i).val(value);								 
 			 });
-			 $(workhourlist).css("background-color","white");
+			 $(work_hourlist).css("background-color","white");
 			 //alert(dist_list.length);
 			 //alert(copy_text);
 		 },1);
@@ -65,7 +65,7 @@ $(document).ready(function() {
 			$("<td class='center'/>").html("").appendTo(tr);
 			$("<td class='center'/>").html(price).appendTo(tr);
 			$("<td class='center'/>").html("").appendTo(tr);
-			$("<td class='center'/>").html("<input class='input-medium workhour' style='width:60px;height:28px;text-align:center' type='text'>"+
+			$("<td class='center'/>").html("<input class='input-medium work_hour' style='width:60px;height:28px;text-align:center' type='text'>"+
 					"<input id='copy_paste' class='input-small' style='width:60px;height:28px;text-align:center;display:none' type='text'>").appendTo(tr);
 			$("<td class='center'/>").html("").appendTo(tr);
 			$("<td class='center'/>").html("").appendTo(tr);
@@ -92,7 +92,7 @@ $(document).ready(function() {
 			$("<td class='center'/>").html("").appendTo(tr);
 			$("<td class='center'/>").html("").appendTo(tr);
 			$("<td class='center'/>").html("").appendTo(tr);
-			$("<td class='center'/>").html("<input class='input-medium workhour' style='width:60px;height:28px;text-align:center' type='text'>"+
+			$("<td class='center'/>").html("<input class='input-medium work_hour' style='width:60px;height:28px;text-align:center' type='text'>"+
 					"<input id='copy_paste' class='input-small' style='width:60px;height:28px;text-align:center;display:none' type='text'>").appendTo(tr);
 			$("<td class='center'/>").html("").appendTo(tr);
 			$("<td class='center'/>").html("").appendTo(tr);
@@ -148,7 +148,7 @@ $(document).ready(function() {
 		 }
 	});
 	
-	$(document).on("input",".workhour",function(){
+	$(document).on("input",".work_hour",function(){
 		if(isNaN(Number($(this).val()))){
 			alert("参与度/工时只能为数字！");
 			$(this).val("");
@@ -164,94 +164,334 @@ $(document).ready(function() {
 		}
 	})
 	
+	$(document).on("input","#bonus",function(){
+		if(isNaN(Number($(this).val()))){
+			alert("补贴车只能为数字！");
+			$(this).val("");
+			return false;
+		}
+	})
+	
 	//保存工时信息
 	$(document).on("click","#btnSave",function(){
 		var bus_number=$("#bus_number").val();
 		var order_id=$("#bus_number").attr("order_id")||$("#order_no").attr("order_id");
 		var work_date=$("#work_date").val();
-		var cutormer_number=$("#customer_number").val()
+		var cutomer_number=$("#customer_number").val()
+		var staffHourList=[];
+		var trs=$("#tableResult tbody").find("tr");
+		var total_distribution=0;
+		var standard_price=0;
+		var save_flag=true;
+		var bus_count=1;
+		var bonus=$("#bonus").val();
+		//判断该车间的该月工资是否已提交/结算
+		if(checkSalarySubmit(factory,workshop,work_date.substring(0,7))=='true'){
+			alert(factory+workshop+"车间工资已提交/结算，不允许再维护工时信息！");
+			save_flag=false;
+			return false;
+		}		
 		
+		/**
+		 *技能系数 判断逻辑
+		 */
 		if(salary_model=='技能系数'){
+			standard_price=Number($(trs[0]).children("td").eq(4).html());
+			if(standard_price==0){
+				saveFlag = false;
+				alert("该班组未维护班组承包单价！");
+				return false;
+			}
 			//判断车号、操作日期是否有效填写（自编号模式判断订单、自编号、操作日期是否有效填写）		
 			if(is_customer=='1'){
-				if(cutormer_number.trim().length==0){
+				if(cutomer_number.trim().length==0){
 					alert("请填写自编号！");
+					save_flag=false;
 					return false;
 				}
 				if(!order_id||order_id.trim().length==0){
 					alert("请填写有效订单！")
+					save_flag=false;
 					return false;
-				}				
+				}			
+				var area=cutomer_number.split("_");
+				if(area.length<=1){
+					alert("输入格式不正确，自编号格式为：车型-订单_起始号-结束号！");
+					save_flag=false;
+					return false;
+				}
+				if(area[1].split("-").length>1){
+					bus_start=area[1].split("-")[0];
+					bus_end=area[1].split("-")[1];
+					if(isNaN(parseInt(bus_start))||isNaN(parseInt(bus_end))){
+						alert("起始号和结束号必须为数字！");
+						save_flag=false;
+						return false;
+					}else{
+						bus_count=parseInt(bus_end,0)-parseInt(bus_start,0)+1;
+					}					
+				}
+				if(bus_count<0){
+					alert("结束号必须大于起始号");
+					save_flag=false;
+					return false;			
+				}
 			}else{
 				if(!order_id||order_id.trim().length==0){
 					alert("请填写有效车号！")
+					save_flag=false;
 					return false;
 				}		
 			}
 			if(work_date.trim().length==0){
 				alert("请填写操作日期！")
+				save_flag=false;
 				return false;
 			}
 			/**判断车辆是否在车间上线
 			*判断车号、操作日期是否已经录入过记录（自编号模式下判断自编号、操作日期是否已经录入过记录）
 			**/
 			if(is_customer=='0'){
-				validateBus(bus_number,is_customer,work_date);
+				save_flag=validateBus(bus_number,is_customer,work_date);
 			}else{
-				validateBus(cutormer_number,is_customer);
+				save_flag=validateBus(cutomer_number,is_customer);
+			}
+			if(!save_flag){
+				return false;
 			}
 			//判断参与度/工时有无为空
+			$.each(trs,function(i,tr){
+				var tds=$(tr).children("td");
+				var work_hour=$(tds).eq(6).find(".work_hour").val();				
+				if(work_hour.trim().length==0){
+					alert("参与度/工时不能为空！");
+					save_flag=false;
+					return false;
+				}
+				var staff_number = $(tds).eq(1).find(".staff_number").val()||$(tds).eq(1).html();
+				var staff_name=$(tds).eq(2).html();
+				var job=$(tds).eq(3).html();
+				if (staff_number.trim().length > 0) {
+					var staff={};
+					staff.staff_number=staff_number;
+					staff.staff_name=staff_name;
+					staff.job=job;
+					staff.factory=factory;
+					staff.workshop = workshop;
+					staff.workgroup=workgroup;
+					staff.team=team;
+					staff.org_id=org_id;
+					staff.salary_model=salary_model;
+					staff.bus_number=bus_number||cutomer_number;
+					staff.bus_count=bus_count;
+					staff.bonus=bonus;
+					staff.work_date=work_date;
+					staff.skill_parameter=$(tds).eq(5).html();
+					staff.work_hour=work_hour;
+					staff.standard_price=standard_price;
+					staff.status='1';
+					staff.order_id=order_id;
 			
+					if(!isContain(staff,staffHourList)){
+						staffHourList.push(staff);
+					}else{
+						saveFlag=false;
+						alert(staff.staff_name+"不能重复维护工时！");
+						return false;
+						
+					}
+				}
+			
+			})
 		}
+		/**
+		 *承包制 判断逻辑
+		 */
 		if(salary_model=='承包制'){
+			standard_price=Number($(trs[0]).children("td").eq(4).html());
+			if(standard_price==0){
+				saveFlag = false;
+				alert("该班组未维护班组承包单价！");
+				return false;
+			}
 			//判断车号、操作日期是否有效填写（自编号模式判断订单、自编号、操作日期是否有效填写）
 			if(is_customer=='1'){
-				if(cutormer_number.trim().length==0){
+				if(cutomer_number.trim().length==0){
 					alert("请填写自编号！");
+					save_flag=false;
 					return false;
 				}
 				if(!order_id||order_id.trim().length==0){
 					alert("请填写有效订单！")
+					save_flag=false;
 					return false;
-				}				
+				}			
+				var area=cutomer_number.split("_");
+				if(area.length<=1){
+					alert("输入格式不正确，自编号格式为：车型-订单_起始号-结束号！");
+					save_flag=false;
+					return false;
+				}
+				if(area[1].split("-").length>1){
+					bus_start=area[1].split("-")[0];
+					bus_end=area[1].split("-")[1];
+					if(isNaN(parseInt(bus_start))||isNaN(parseInt(bus_end))){
+						alert("起始号和结束号必须为数字！");
+						save_flag=false;
+						return false;
+					}else{
+						bus_count=parseInt(bus_end,0)-parseInt(bus_start,0)+1;
+					}					
+				}
+				if(bus_count<0){
+					alert("结束号必须大于起始号");
+					save_flag=false;
+					return false;
+				}
 			}else{
 				if(!order_id||order_id.trim().length==0){
 					alert("请填写有效车号！")
+					save_flag=false;
 					return false;
 				}		
 			}
 			if(work_date.trim().length==0){
 				alert("请填写操作日期！")
+				save_flag=false;
 				return false;
 			}
 			/**判断车辆是否在车间上线
 			*判断车号、操作日期是否已经录入过记录（自编号模式下判断自编号、操作日期是否已经录入过记录）
 			**/
 			if(is_customer=='0'){
-				validateBus(bus_number,is_customer,work_date);
+				save_flag=validateBus(bus_number,is_customer,work_date);
 			}else{
-				validateBus(cutormer_number,is_customer);
+				save_flag=validateBus(cutomer_number,is_customer);
+			}
+			if(!save_flag){
+				return false;
 			}
 			//判断分配金额有无为空
+			$.each(trs,function(i,tr){
+				var tds=$(tr).children("td");
+				var tr_obj=$("#tableResult").dataTable().fnGetData($(tr));
+				standard_price=Number($(tr).children("td").eq(4).html());
+				var distribution=$(tr).children("td").eq(5).find(".distribution").val();
+				total_distribution=numAdd(total_distribution,Number(distribution));
+				if(distribution.trim().length==0){
+					alert("分配金额不能为空！");
+					save_flag=false;
+					return false;
+				}
+				var staff_number = $(tds).eq(1).find(".staff_number").val()||$(tds).eq(1).html();
+				var staff_name=$(tds).eq(2).html();
+				var job=$(tds).eq(3).html();
+				if (staff_number.trim().length > 0) {
+					var staff={};
+					staff.staff_number=staff_number;
+					staff.staff_name=staff_name;
+					staff.job=job;
+					staff.standard_price=standard_price;
+					staff.factory=factory;
+					staff.workshop = workshop;
+					staff.workgroup=workgroup;
+					staff.team=team;
+					staff.org_id=org_id;
+					staff.salary_model=salary_model;
+					staff.bus_number=bus_number;
+					staff.bus_count=bus_count;
+					staff.bonus=bonus;
+					staff.work_date=work_date;
+					staff.skill_parameter=tr_obj.skill_parameter;
+					staff.distribution=distribution;
+					staff.status='1';
+					staff.order_id=order_id;
 			
+					if(!isContain(staff,staffHourList)){
+						staffHourList.push(staff);
+					}else{
+						saveFlag=false;
+						alert(staff.staff_name+"不能重复维护工时！");
+						return false;
+						
+					}
+				}
+			})
+			if(!save_flag){
+				return false;
+			}
 			//判断分配金额之和是否等于班组承包单价
-			
+			if(total_distribution!=standard_price){
+				save_flag = false;
+				alert("分配金额之和必须等于班组承包单价"+standard_price);
+				return false;				
+			}	
+			if(!save_flag){
+				return false;
+			}
 		}
+		/**
+		 * 辅助人力 、底薪模式 判断逻辑
+		 */
 		if(salary_model=='辅助人力'||salary_model=='底薪模式'){
 			//判断操作日期有无填写
 			if(work_date.trim().length==0){
 				alert("请填写操作日期！")
+				save_flag=false;
 				return false;
 			}			
 			//判断该小班组、操作日期是否已经录入过记录
-			validateRecordIn();
-			
+			save_flag=validateRecordIn(work_date);
+			if(!save_flag){
+				return false;
+			}
 			//判断参与度/工时有无为空
+			$.each(trs,function(i,tr){
+				var tds=$(tr).children("td");
+				var work_hour=$(tds).eq(5).find(".work_hour").val();						
+				if(work_hour.trim().length==0){
+					alert("参与度/工时不能为空！");
+					save_flag=false;
+					return false;
+				}
+				var staff_number = $(tds).eq(1).find(".staff_number").val()||$(tds).eq(1).html();
+				var staff_name=$(tds).eq(2).html();
+				var job=$(tds).eq(3).html();
+				if (staff_number.trim().length > 0) {
+					var staff={};
+					staff.staff_number=staff_number;
+					staff.staff_name=staff_name;
+					staff.job=job;
+					staff.factory=factory;
+					staff.workshop = workshop;
+					staff.workgroup=workgroup;
+					staff.team=team;
+					staff.org_id=org_id;
+					staff.salary_model=salary_model;
+					staff.work_date=work_date;
+					staff.skill_parameter=$(tds).eq(4).html();
+					staff.work_hour=work_hour;
+					staff.status='1';
 			
+					if(!isContain(staff,staffHourList)){
+						staffHourList.push(staff);
+					}else{
+						saveFlag=false;
+						alert(staff.staff_name+"不能重复维护工时！");
+						return false;
+						
+					}
+				}
+			})
 		}
-	})
+		
+		//所有条件检验合格后保存计件工时信息
+		if(save_flag){
+			ajaxSave(staffHourList,salary_model,is_customer);
+		}
 	
 })
+});
 
 function initPage() {
 	getOrgAuthTree($("#workGroupTree"),'production/pieceWorkhourMtn',"1,2,3,4",'1',3);
@@ -407,7 +647,7 @@ function showStaffList(staff_list){
 		            {"title":"单价","class":"center","data":"standard_price","defaultContent": ""},		            
 		            {"title":"技能系数","width":"80","class":"center","data":"skill_parameter","defaultContent": ""},		            
 		            {"title":"参与度/工时"+"&nbsp;<i id='dstcopy' title='粘贴整列' name='edit' rel='tooltip'  class='fa fa-clipboard' style='cursor: pointer;color:blue'></i>","width":"100","class":"center","data": "","defaultContent": "","render":function(data,type,row){
-		            	return "<input type='text' class='input-medium workhour' style='width:60px;height:28px;text-align:center'  />"+
+		            	return "<input type='text' class='input-medium work_hour' style='width:60px;height:28px;text-align:center'  />"+
 		            	"<input type='text' id='copy_paste' class='input-small' style='width:60px;height:28px;text-align:center;display:none'>";
 		            }},
 		            {"title":"小班组","class":"center","data":"team_org","defaultContent":""},
@@ -445,7 +685,7 @@ function showStaffList(staff_list){
 		            {"title":"岗位","class":"center","data": "job","defaultContent": ""},	  
 		            {"title":"技能系数","width":"80","class":"center","data":"skill_parameter","defaultContent": ""},		
 		            {"title":"参与度/工时"+"&nbsp;<i id='dstcopy' title='粘贴整列' name='edit' rel='tooltip'  class='fa fa-clipboard' style='cursor: pointer;color:blue'></i>","width":"100","class":"center","data": "","defaultContent": "","render":function(data,type,row){
-		            	return "<input type='text' class='input-medium workhour' style='width:60px;height:28px;text-align:center'  />"+
+		            	return "<input type='text' class='input-medium work_hour' style='width:60px;height:28px;text-align:center'  />"+
 		            	"<input type='text' id='copy_paste' class='input-small' style='width:60px;height:28px;text-align:center;display:none'>";
 		            }},
 		            {"title":"小班组","class":"center","data":"team_org","defaultContent":""},
@@ -527,7 +767,7 @@ function validateBus(bus_number,is_customer,work_date){
 	var flag=true;
 	$.ajax({
 		url:'workhourValidateBus',
-		method:'post',
+		type:'post',
 		dataType:'json',
 		async:false,
 		data:{
@@ -545,6 +785,10 @@ function validateBus(bus_number,is_customer,work_date){
 				alert(response.message);
 				flag= false;
 			}
+		},
+		error:function(){
+			alert("系统异常！");
+			flag= false;
 		}
 	})
 	return flag;
@@ -553,11 +797,12 @@ function validateBus(bus_number,is_customer,work_date){
  * 校验（小班组、操作日期）条件下是否已经维护过工时信息（辅助人力、底薪模式）
  * @returns {Boolean}
  */
-function validateRecordIn(){
+function validateRecordIn(work_date){
+	
 	var flag=true;
 	$.ajax({
 		url:'workhourValidateRecordIn',
-		method:'post',
+		type:'post',
 		dataType:'json',
 		async:false,
 		data:{
@@ -573,7 +818,29 @@ function validateRecordIn(){
 				alert(response.message);
 				flag= false;
 			}
+		},
+		error:function(){
+			alert("系统异常！");
+			flag= false;
 		}
-	})
+	});
 	return flag;
+}
+
+function ajaxSave(staffHourList,salary_model,is_customer){
+	$.ajax({
+		url:'saveStaffHours',
+		method:'post',
+		dataType:'json',
+		async:false,
+		data:{
+			staffHourList:JSON.stringify(staffHourList),
+			is_customer:is_customer,
+			salary_model:salary_model
+		},
+		success:function(response){
+			alert(response.message);
+		}
+	});
+
 }

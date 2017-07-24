@@ -1688,4 +1688,12 @@ LEFT JOIN BMS_BASE_USER AS u ON u.id = f.confirmor_id
 		]]>
 	</insert>
 	
+	<select id="getSingleTaskList" parameterType="Map" resultType="map">
+		
+		
+		<if test="start !=null">
+			LIMIT #{start} ,#{length} 
+		</if>	
+	</select>
+	
 </mapper>

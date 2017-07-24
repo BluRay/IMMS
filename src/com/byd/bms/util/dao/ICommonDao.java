@@ -101,4 +101,6 @@ public interface ICommonDao {
 	List<Map<String,Object>> getOrgAuthTree(Map<String, Object> conditionMap);//获取权限树
 	
 	List<Map<String,Object>> querySubmitSalary(Map<String,Object> condMap);
+	
+	List<Map<String,Object>> getBasePrice(Map<String,Object> condMap);
 }

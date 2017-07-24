@@ -79,7 +79,7 @@
 												<td>姓名/工号：</td>
 												<td><input id="search_staff" style="height: 30px;width:100%" placeholder="请输入姓名/工号..." class="col-sm-10" type="text"></td>
 												<td align="right">&nbsp;日期：</td>
-												<td><input id="start_date" placeholder="开始时间..." style="height: 30px;width:125px" type="text" onClick="WdatePicker({el:'start_date',dateFmt:'yyyy-MM-dd'});"> - <input id="end_date" placeholder="结束时间..." style="height: 30px;width:125px" type="text" onClick="WdatePicker({el:'end_date',dateFmt:'yyyy-MM-dd'});"></td>
+												<td><input id="start_date" placeholder="开始时间..." style="height: 30px;width:90px" type="text" onClick="WdatePicker({el:'start_date',dateFmt:'yyyy-MM-dd'});"> - <input id="end_date" placeholder="结束时间..." style="height: 30px;width:90px" type="text" onClick="WdatePicker({el:'end_date',dateFmt:'yyyy-MM-dd'});"></td>
 												<td align="right"><input type="button" class="btn btn-sm btn-success" id="btnQuery" value="查询" style="margin-left: 2px;"></input>&nbsp;
 												</td>
 												<td>&nbsp;<input id="btnBulkAdd" class="btn btn-sm btn-info" value="批量导入" type="button">&nbsp;</td>

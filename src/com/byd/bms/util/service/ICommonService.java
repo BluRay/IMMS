@@ -120,4 +120,6 @@ public interface ICommonService {
 	 */
 	void getSubmitSalary(Map<String, Object> condMap, ModelMap model);
 	
+	void getBasePrice(Map<String, Object> condMap, ModelMap model);
+	
 }

@@ -825,8 +825,10 @@ public class PlanController extends BaseController{
 	@ResponseBody
 	public ModelMap getPauseList(){
 		String factory_id=request.getParameter("factory_id");
+		String factory_name=request.getParameter("factory_name");
 		String order_no=request.getParameter("order_no");
 		String workshop_id = request.getParameter("workshop_id");
+		String workshop_name = request.getParameter("workshop_name");
 		String line = request.getParameter("line");
 		String reason_type = request.getParameter("reason_type");
 		String pause_date_start = request.getParameter("pause_date_start");
@@ -842,8 +844,10 @@ public class PlanController extends BaseController{
 		condMap.put("start", start);
 		condMap.put("length", length);
 		condMap.put("factory_id", factory_id);
+		condMap.put("factory_name", factory_name);
 		condMap.put("order_no", order_no);
 		condMap.put("workshop_id", workshop_id);
+		condMap.put("workshop_name", workshop_name);
 		condMap.put("line", line);
 		condMap.put("reason_type_id", reason_type);
 		condMap.put("start_time", pause_date_start);

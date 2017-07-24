@@ -90,6 +90,23 @@ public interface IProductionDao {
 	Map<String,Object> querySalaryModel(Map<String, Object> condMap);
 
 	List<Map<String, Object>>  queryTeamStaffList(Map<String, Object> condMap);
+
+	int queryBusWorkshopOnline(Map<String, Object> condMap);
+
+	List<Map<String, Object>> queryStaffWorkhourList(Map<String, Object> condMap);
+	
+	int insertStaffHours(@Param(value = "staff_hour_list")List<Map<String, Object>> staff_hour_list);
+
+	void caculatePieceSalary_0(Map<String, Object> condMap);//技能系数模式工资计算
+	
+	void caculatePieceSalary_1(Map<String, Object> condMap);// 承包制模式工资计算
+	
+	void caculatePieceSalary_2(Map<String, Object> condMap);// 辅助人力模式工资计算
+	
+	void caculatePieceSalary_3(Map<String, Object> condMap);// 底薪模式工资计算
+
+	void deleteStaffHours(Map<String, Object> condMap);
+	
 	/*****************************xiong jianwu end  *****************************/
 
 	/******************* tangjin start**************************/
@@ -121,11 +138,17 @@ public interface IProductionDao {
 	public int updateBusConfig(Map<String,Object> conditionMap);
 	
 	public List<Map<String,Object>> getOrderConfigList(Map<String, Object> conditionMap);
+	
+    public List<Map<String,Object>> getWaitWorkTimeList(Map<String, Object> conditionMap);
+	
+	public int getWaitWorkTimeCount(Map<String,Object> conditionMap);
+	
+	public int saveWaitWorkHourInfo(List<Map<String, Object>> swh_list);
 	/******************* tangjin end**************************/
 
 	public List<Map<String,String>> getProductionSearch(Map<String,Object> queryMap);
 	public List<Map<String,String>> getProductionWIPBusInfo(Map<String,Object> queryMap);
 	public List<Map<String,String>> getProductionSearchCarinfo(Map<String,Object> queryMap);
 
-
+	
 }

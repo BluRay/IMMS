@@ -851,6 +851,18 @@ public class TechController extends BaseController{
 		return model;
 	}
 	
+	@RequestMapping("/querySingleTasklist")
+	@ResponseBody
+	public ModelMap querySingleTasklist(){
+		String conditions = request.getParameter("conditions");		
+		
+		Map<String,Object> list = techService.querySingleTasklist(conditions);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(list);
+		model = mv.getModelMap();
+		return model;
+	}
+	
 	/**
 	 * @author xiong.jianwu
 	 * 技改跟进（移动端）

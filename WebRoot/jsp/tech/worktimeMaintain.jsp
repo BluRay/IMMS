@@ -7,6 +7,9 @@
 		<title>技改工时维护</title>
 		<meta name="description" content="Common Buttons &amp; Icons" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+		<link rel="stylesheet" href="../assets/css/jquery-ui.min.css" />
+		<link rel="stylesheet" href="../assets/css/jquery-ui.custom.min.css" />
+		<link rel="stylesheet" href="../assets/css/jquery.gritter.css" />
 	</head>
 	<body class="no-skin" style="font-family: 'Microsoft YaHei';">
 		<!-- 头 -->
@@ -42,6 +45,8 @@
 							<tr>
 								<td>工厂：</td>
 								<td><select id="search_factory" class="input-small" style="height: 30px;width:120px"></select></td>
+								<td>&nbsp;车间：</td>
+								<td><select id="search_workshop" class="input-small" style="height: 30px;width:110px"></select></td>
 								<td>&nbsp;订单：</td>
 								<td><input id="search_order_no" placeholder="请输入订单编号..." style="height: 30px;width:110px" type="text"></td>
 								<td>&nbsp;技改单编号：</td>
@@ -66,11 +71,69 @@
 							</tr>
 						</table>
 					</div>
-
 					
+					<table id="tableData" class="table table-striped table-bordered table-hover" style="width:2500px;overflow-x:auto;font-size: 12px;">
+					</table>
 					
 					</div>
 			</div><!-- /.main-content -->
+			
+			<div id="dialog-add" class="hide" style="align:center;width:700px;height:500px">
+				<table style="line-height:30px">
+					<tr>
+					<td width="140px" style="text-align:right">技改单编号：</td>								
+					<td id="orderNo"></td>
+					</tr>
+					<tr>
+					<td width="140px" style="text-align:right">技改任务：</td>								
+					<td id="task"></td>	
+					</tr>
+				</table>
+				<table >
+					<tr>
+					<td width="60px" style="text-align:right">工厂：</td>
+					<td width="160px"><select id="factory" class="input-medium"></select>
+					</td>
+					<td width="80px" style="text-align:right">车间：</td>
+					<td width="160px"><select id="workshop" class="input-medium"></select>
+					</td>
+					<td></td>
+					<td></td>
+					</tr>
+					<tr>
+					<td width="60px" style="text-align:right">班组：</td>
+					<td width="160px"><select id="group" class="input-medium"><option value=''>请选择</option></select>
+					</td>
+					<td width="80px" style="text-align:right">小班组：</td>
+					<td width="160px"><select id="subgroup" class="input-medium"><option value=''>请选择</option></select>
+					</td>
+					<td width="80px" style="text-align:right">操作日期：</td>
+					<td>
+						<input type="text" id="mta_wdate" class="input-medium" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:new Date()})"/>
+					</td>
+					</tr>
+				</table>
+				
+				<h5 class="section-head">技改工时<span style="float:right;margin: 10px 20px;color:green" class="read_hours"></span></h5>
+				<table id="table_workhour" style="margin-left:0px;margin-top:0px;width:100%;text-align:left;" class="exp-table table">
+					<thead style="background-color: rgb(225, 234, 240)">
+						<tr>
+						<td style="width: 30px;"><i class="fa fa-plus addWorkhour" style="cursor: pointer;color: blue;"></i></td>
+						<td >工号</td>
+						<td >姓名</td>
+						<td >岗位</td>
+						<td >技改工时</td>
+						<td >小班组</td>
+						<td >班组</td>
+						<td >车间</td>
+						<td >工厂</td>
+						</tr>
+					</thead>
+					<tbody class="exp-table" id="tb_workhour">
+					</tbody>
+				</table>
+				
+			</div>
 
 			<!-- 脚 -->
 			<%-- <jsp:include page="footer.jsp" flush="true"/> --%>
@@ -78,4 +141,16 @@
 		</div><!-- /.main-container -->
 	</div>
 	</body>
+	<script src="../assets/js/fuelux/fuelux.tree.min.js"></script>
+	<script src="../assets/js/jquery-ui.min.js"></script>
+	<script src="../assets/js/jquery.ui.touch-punch.min.js"></script>
+	<script src="../assets/js/jquery.gritter.min.js"></script>
+	<script src="../assets/js/jquery.dataTables.min.js"></script>
+	<script src="../assets/js/jquery.dataTables.bootstrap.js"></script>
+	<script src="../assets/js/dataTables.fixedColumns.min.js"></script>
+	<script type="text/javascript" src="../js/jquery.form.js"></script>
+	<script src="../assets/js/bootstrap3-typeahead.js"></script>
+	<script src="../js/datePicker/WdatePicker.js"></script>
+	<script src="../js/common.js"></script>
+	<script src="../js/tech/worktimeMaintain.js"></script>
 </html>

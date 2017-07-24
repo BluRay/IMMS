@@ -47,7 +47,7 @@ String display_name = (String)session.getAttribute("display_name");
 							</a>
 
 							<ul class="dropdown-menu-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close" style="height:100px">
-								<li class="dropdown-header" id="task" style="width:280px;">
+								<li class="dropdown-header" id="task" style="width:238px;">
 									<i class="ace-icon fa fa-check"></i>
 <!-- 									4 Tasks to complete -->
 								</li>

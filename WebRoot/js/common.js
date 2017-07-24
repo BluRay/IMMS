@@ -801,3 +801,42 @@ function numAdd(num1, num2) {
 	//alert((num1 * baseNum +"+"+ num2 * baseNum));
 	return ((num1 * baseNum + num2 * baseNum) / baseNum).toFixed(2);
 	}; 
+	/**
+	 * 判断staff是否已经在staff列表中存在 for ：工时维护时判断使用
+	 */
+	function isContain(staff,staffarr){
+		var flag=false;
+		$.each(staffarr,function(index,obj){
+			if(obj.staff_number==staff.staff_number){
+				flag=true;
+				return;
+			}
+		})
+		return flag;
+	}
+	
+	function checkSalarySubmit(factory,workshop,month){
+		var submit_flg="";
+		$.ajax({
+			url : "/IMMS/common/getSubmitSalary",
+			dataType : "json",
+			data : {
+				"factory":factory,
+				"workshop":workshop,
+				"month":month
+			},
+			type:"post",
+			async:false,
+			error : function(response) {
+				//alert(response.message)
+			},
+			success : function(response) {
+				if(response.length>0){
+					submit_flg= "true";
+				}else{
+					submit_flg= "false";
+				}
+			}
+		})
+		return submit_flg;
+	}

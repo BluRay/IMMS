@@ -695,6 +695,117 @@
 			</foreach>
 		</if>
 	</select>
+	
+		<select id="queryBusWorkshopOnline" parameterType="Map" resultType="int">
+		select count(id)
+		from BMS_PLAN_BUS
+		where bus_number=#{bus_number}
+		<if test="workshop=='焊装' ">
+			and welding_online_date is not null and
+			welding_online_date !=''
+		</if>
+		<if test="workshop=='玻璃钢' ">
+			and welding_offline_date is not null and
+			welding_offline_date !=''
+		</if>
+		<if test="workshop=='涂装' ">
+			and painting_online_date is not null and
+			painting_online_date !=''
+		</if>
+		<if test="workshop=='底盘' ">
+			and chassis_online_date is not null and
+			chassis_online_date !=''
+		</if>
+		<if test="workshop=='总装' ">
+			and assembly_online_date is not null and
+			assembly_online_date !=''
+		</if>
+		<if test="workshop=='调试区' ">
+			and debugarea_online_date is not null and
+			debugarea_online_date !=''
+		</if>
+		<if test="workshop=='检测线' ">
+			and testline_online_date is not null and
+			testline_online_date !=''
+		</if>
+		<if test="workshop=='成品库' ">
+			and warehousing_date is not null and warehousing_date !=''
+		</if>
+	</select>
+	
+	<select id="queryStaffWorkhourList" parameterType="Map" resultType="Map">
+		select h.*,s.name staff_name,s.job
+		from BMS_HR_STAFF_PIECE_HOURS h
+		left join BMS_HR_STAFF s on h.staff_number=s.staff_number
+		where 1=1
+		<if test="bus_number !=null and bus_number !=''">
+			and h.bus_number=#{bus_number}
+		</if>
+		<if test="work_date !=null and work_date !=''">
+			and h.work_date=#{work_date}
+		</if>
+		<if test="salary_model !=null and salary_model !=''">
+			and h.salary_model=#{salary_model}
+		</if>
+		<if test="factory !=null and factory !=''">
+			and h.factory=#{factory}
+		</if>
+		<if test="workshop !=null and workshop !=''">
+			and h.workshop=#{workshop}
+		</if>
+		<if test="workgroup !=null and workgroup !=''">
+			and h.workgroup=#{workgroup}
+		</if>
+		<if test="team !=null and team !=''">
+			and h.team=#{team}
+		</if>
+	</select>
+	
+	<insert id="insertStaffHours" parameterType="List"  useGeneratedKeys="true" keyProperty="id">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into BMS_HR_STAFF_PIECE_HOURS
+		(org_id,factory,workshop,workgroup,team,standard_price,salary_model,order_id,bus_number,bus_count,bonus,work_date,
+		staff_number,skill_parameter,distribution,work_hour,status,editor_id,edit_date)
+		values
+		<foreach  collection="staff_hour_list" item="detail" index="index" separator=",">
+		(#{detail.org_id},#{detail.factory},#{detail.workshop},#{detail.workgroup},#{detail.team},#{detail.standard_price},
+		#{detail.salary_model},#{detail.order_id},#{detail.bus_number},#{detail.bus_count},#{detail.bonus},#{detail.work_date},
+		#{detail.staff_number},#{detail.skill_parameter},#{detail.distribution},#{detail.work_hour},#{detail.status},#{detail.editor_id},#{detail.edit_date})
+		</foreach>
+	</insert>
+	
+	<update id="deleteStaffHours" parameterType="Map" >
+		delete from BMS_HR_STAFF_PIECE_HOURS
+		where factory=#{factory} and workshop=#{workshop} and workgroup=#{workgroup} and team=#{team} 
+		and work_date=#{work_date} and salary_model=#{salary_model}
+		<if test="bus_number !=null and bus_number !=''">
+			and bus_number=#{bus_number}
+		</if>		
+	</update>
+	
+	<!-- 计件工资计算（技能系数模式） -->
+	<select id="caculatePieceSalary_0" statementType="CALLABLE" parameterType="Map" resultType="String">
+		call P_CACULATE_PIECE_SALLARY_0(#{factory},#{workshop},#{workgroup},#{team},#{bus_number},#{start_date},#{end_date});
+	</select>
+	
+	<!-- 计件工资计算（承包制模式） -->
+	<select id="caculatePieceSalary_1" statementType="CALLABLE" parameterType="Map" resultType="String">
+		call P_CACULATE_PIECE_SALLARY_1(#{factory},#{workshop},#{workgroup},#{team},#{bus_number},#{start_date},#{end_date});
+	</select>
+	
+	<!-- 计件工资计算（辅助人力模式） -->
+	<select id="caculatePieceSalary_2" statementType="CALLABLE" parameterType="Map" resultType="String">
+		call P_CACULATE_PIECE_SALLARY_2(#{factory},#{workshop},#{workgroup},#{team},#{bus_number},#{work_month});
+	</select>
+	
+	<!-- 计件工资计算（底薪模式） -->
+	<select id="caculatePieceSalary_3" statementType="CALLABLE" parameterType="Map" resultType="String">
+		call P_CACULATE_PIECE_SALLARY_3(#{factory},#{workshop},#{workgroup},#{team},#{bus_number},#{start_date},#{end_date});
+	</select>
+	
 <!-- ########################### xiong jianwu end#############################-->
 
 	<update id="updateBusMotorNumber" parameterType="map">
@@ -1531,6 +1642,98 @@
 		<if test="staff_number ==null or staff_number ==''">
 			and s.plant_org=#{factory}  and s.workshop_org=#{workshop} and s.workgroup_org=#{workgroup}and s.team_org=#{team} 
 		</if>
-	
+		order by s.staff_number
 	</select>
+	<select id="getWaitWorkTimeList" parameterType="Map" resultType="Map">
+		SELECT s.* FROM BMS_HR_WAIT_SALARY s WHERE 1=1
+		<if test="status !=null and status !=''">
+			and s.status=#{status}
+		</if>
+		<if test="factory !=null and factory !='' and factory !='请选择'">
+			and s.factory=#{factory}
+		</if>
+		<if test="workshop !=null and workshop !='' and workshop !='请选择'">
+			and find_in_set(s.workshop,#{workshop})>0
+		</if>
+		<if test="workgroup !=null and workgroup !='' and workgroup !='请选择'">
+			and s.workgroup=#{workgroup}
+		</if>
+		<if test="waitReason !=null and waitReason !=''">
+			and s.wait_reason=#{waitReason}
+		</if>		
+		<if test="workDate !=null and workDate !=''">
+			and s.work_date=#{workDate}
+		</if>
+		<if test="staffNum !=null and staffNum!=''">
+			and find_in_set(s.staff_number,#{staffNum})>0
+		</if>	
+		<if test="wdateStart !=null and wdateStart !=''">
+		<![CDATA[ 
+			and s.work_date>=#{wdateStart}
+		]]>
+			</if>
+			<if test="wdateEnd !=null and wdateEnd !=''">
+		<![CDATA[ 
+			and s.work_date<=#{wdateEnd}
+		]]>
+		</if>
+		
+		order by s.factory,s.workshop,s.workgroup,s.team,s.work_date desc
+		<if test="start !=null">
+			LIMIT #{start} ,#{length} 
+		</if>		
+	</select>
+	
+	<select id="getWaitWorkTimeCount" parameterType="Map" resultType="int">
+		SELECT count(1) FROM BMS_HR_WAIT_SALARY s WHERE 1=1
+		<if test="status !=null and status !=''">
+			and s.status=#{status}
+		</if>
+		<if test="factory !=null and factory !='' and factory !='请选择'">
+			and s.factory=#{factory}
+		</if>
+		<if test="workshop !=null and workshop !='' and workshop !='请选择'">
+			and find_in_set(s.workshop,#{workshop})>0
+		</if>
+		<if test="workgroup !=null and workgroup !='' and workgroup !='请选择'">
+			and s.workgroup=#{workgroup}
+		</if>
+		<if test="waitReason !=null and waitReason !=''">
+			and s.wait_reason=#{waitReason}
+		</if>		
+		<if test="workDate !=null and workDate !=''">
+			and s.work_date=#{workDate}
+		</if>
+		<if test="staffNum !=null and staffNum!=''">
+			and find_in_set(s.staff_number,#{staffNum})>0
+		</if>	
+		<if test="wdateStart !=null and wdateStart !=''">
+		<![CDATA[ 
+			and s.work_date>=#{wdateStart}
+		]]>
+			</if>
+			<if test="wdateEnd !=null and wdateEnd !=''">
+		<![CDATA[ 
+			and s.work_date<=#{wdateEnd}
+		]]>
+		</if>
+		
+	</select>
+	<insert id="saveWaitWorkHourInfo" parameterType="list">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		<foreach collection="list" item="detail" index="index"
+			separator=";">
+			insert into BMS_HR_WAIT_SALARY
+			(staff_number,staff_name,job,plant_org,workshop_org,workgroup_org,team_org,skill_parameter,wait_type,hour_price,work_hour,work_date,
+             wait_reason,stopline_id,detail_reason,whereabouts,duty_unit,status,factory,workshop,workgroup,team,editor,edit_date)
+			values
+			(#{detail.staff_number},#{detail.staff_name},#{detail.job},#{detail.plant_org},#{detail.workshop_org},#{detail.workgroup_org},#{detail.team_org},#{detail.skill_parameter},
+			#{detail.wait_type},#{detail.price},#{detail.work_hour},#{detail.work_date},#{detail.wait_reason},
+            #{detail.stopline_id}, #{detail.detail_reason},#{detail.whereabouts},#{detail.duty_unit},'0',
+            #{detail.factory},#{detail.workshop},#{detail.workgroup},#{detail.team},#{detail.editor_id},#{detail.edit_date})
+		</foreach>
+	</insert>
 </mapper>
