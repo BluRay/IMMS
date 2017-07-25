@@ -505,8 +505,8 @@ public class HrBaseDataController extends BaseController {
 	@ResponseBody
 	public ModelMap getPositionList(){
 		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
-		int start=(request.getParameter("offset")!=null)?Integer.parseInt(request.getParameter("offset")):0;		//分页数据起始数
-		int length=(request.getParameter("limit")!=null)?Integer.parseInt(request.getParameter("limit")):20;	//每一页数据条数
+		int start=(request.getParameter("start")!=null)?Integer.parseInt(request.getParameter("start")):0;		//分页数据起始数
+		int length=(request.getParameter("length")!=null)?Integer.parseInt(request.getParameter("length")):20;	//每一页数据条数
 		Map<String,Object> condMap=new HashMap<String,Object>();
 		condMap.put("draw", draw);
 		condMap.put("start", start);

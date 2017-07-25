@@ -282,14 +282,14 @@ function btnConfirm(){
 	var factory=$("#factory").val();
 	var dept="生产部";
 	var workshop=$("#workshop").val();
-	var workgroup=$("#group option:selected").text()=="请选择"?"":$("#group option:selected").text();
-	var team=$("#subgroup option:selected").text()=="请选择"?"":$("#subgroup option:selected").text();
+	//var workgroup=$("#group option:selected").text()=="请选择"?"":$("#group option:selected").text();
+	//var team=$("#subgroup option:selected").text()=="请选择"?"":$("#subgroup option:selected").text();
 	
 	var subgroupId=$("#subgroup").val()==''?'0':$("#subgroup").val();
 	var groupId=$("#group").val()==''?'0':$("#group").val();
 	var workshopId=$("#search_workshop :selected").attr('org_id');
 	var workDate=$("#mta_wdate").val();						
-	console.log(factory + "|" + workshop + "|" + workgroup + "|" +team + "|" +subgroupId + "|" +groupId + "|" +workshopId+ "|" +workDate);
+	//console.log(factory + "|" + workshop + "|" + workgroup + "|" +team + "|" +subgroupId + "|" +groupId + "|" +workshopId+ "|" +workDate);
 	if(workDate==null||workDate.trim().length==0){
 		alert("请输入操作日期！");
 		return false;
@@ -305,6 +305,10 @@ function btnConfirm(){
 		var staffId=$(input).attr("staffId");	
 		var staff_number=$(input).val();										
 		var workHour=$(tr).find(".work_hour").val();
+		
+		var workgroup = $(tr).find(".staff_group").html();
+		var team = $(tr).find(".staff_subgroup").html();
+		
 		var skillParameter=$(tr).data("skill_parameter");
 		if(staffId !=undefined &&staffId.trim().length>0){
 			var staff = {};

@@ -7,6 +7,9 @@
 		<title>技改工时审核</title>
 		<meta name="description" content="Common Buttons &amp; Icons" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+		<link rel="stylesheet" href="../assets/css/jquery-ui.min.css" />
+		<link rel="stylesheet" href="../assets/css/jquery-ui.custom.min.css" />
+		<link rel="stylesheet" href="../assets/css/jquery.gritter.css" />
 	</head>
 	<body class="no-skin" style="font-family: 'Microsoft YaHei';">
 		<!-- 头 -->
@@ -36,38 +39,10 @@
 				</div>
 				
 			<div class="page-content">
+					<!-- /section:settings.box -->
 					<div class="page-content-area">
-					<div class="well">
-						<table>
-							<tr>
-								<td>工厂：</td>
-								<td><select id="search_factory" class="input-small" style="height: 30px;width:120px"></select></td>
-								<td>&nbsp;订单：</td>
-								<td><input id="search_order_no" placeholder="请输入订单编号..." style="height: 30px;width:110px" type="text"></td>
-								<td>&nbsp;技改单编号：</td>
-								<td><input id="search_tech_order_no" placeholder="技改单编号..." style="height: 30px;width:110px" type="text"></td>
-								<td>&nbsp;技改任务：</td>
-								<td><input id="search_tech_task_content" placeholder="技改任务..." style="height: 30px;width:110px" type="text"></td>
-							</tr>
-							<tr>
-								<td>&nbsp;状态：</td>
-								<td>
-									<select class="input-small" id="status" style="height: 30px;width:120px">
-										<option value="全部">全部</option>
-										<option value="已创建" selected>已创建</option>
-										<option value="已分配">已分配</option>
-										<option value="已评估">已评估</option>
-										<option value="已完成">已完成</option>
-									</select>
-								</td>
-								<td>&nbsp;技改单日期：</td>
-								<td colspan=3><input id="search_date_start" placeholder="开始时间..." style="height: 30px;width:110px" type="text" onClick="WdatePicker({el:'search_date_start',dateFmt:'yyyy-MM-dd'});"> - <input id="search_date_end" placeholder="结束时间..." style="height: 30px;width:110px" type="text" onClick="WdatePicker({el:'search_date_end',dateFmt:'yyyy-MM-dd'});"></td>
-								<td><input id="btnQuery" type="button" class="btn btn-sm btn-success" value="查询" style="margin-left: 2px;"></input></td>
-							</tr>
-						</table>
-					</div>
-
 					
+					<!-- 东西放这里！ -->		
 					
 					</div>
 			</div><!-- /.main-content -->
@@ -78,4 +53,16 @@
 		</div><!-- /.main-container -->
 	</div>
 	</body>
+	<script src="../assets/js/fuelux/fuelux.tree.min.js"></script>
+	<script src="../assets/js/jquery-ui.min.js"></script>
+	<script src="../assets/js/jquery.ui.touch-punch.min.js"></script>
+	<script src="../assets/js/jquery.gritter.min.js"></script>
+	<script src="../assets/js/jquery.dataTables.min.js"></script>
+	<script src="../assets/js/jquery.dataTables.bootstrap.js"></script>
+	<script src="../assets/js/dataTables.fixedColumns.min.js"></script>
+	<script type="text/javascript" src="../js/jquery.form.js"></script>
+	<script src="../assets/js/bootstrap3-typeahead.js"></script>
+	<script src="../js/datePicker/WdatePicker.js"></script>
+	<script src="../js/common.js"></script>
+	<script src="../js/tech/worktimeVerify.js"></script>
 </html>

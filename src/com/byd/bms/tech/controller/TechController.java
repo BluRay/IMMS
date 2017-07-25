@@ -144,8 +144,8 @@ public class TechController extends BaseController{
 		String tech_date_end=request.getParameter("tech_date_end");		//技改单日期-结束
 		String status=request.getParameter("status");					//技改任务状态
 		condMap.put("draw", request.getParameter("draw"));
-		condMap.put("start", request.getParameter("start"));
-		condMap.put("length", request.getParameter("length"));
+		condMap.put("start", request.getParameter("offset"));
+		condMap.put("length", request.getParameter("limit"));
 		condMap.put("tech_order_no", tech_order_no);
 		condMap.put("task_content", task_content);
 		condMap.put("tech_date_start",tech_date_start);
@@ -480,8 +480,8 @@ public class TechController extends BaseController{
 	@ResponseBody
 	public ModelMap getTaskList(){
 		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
-		int start=(request.getParameter("start")!=null)?Integer.parseInt(request.getParameter("start")):0;		//分页数据起始数
-		int length=(request.getParameter("length")!=null)?Integer.parseInt(request.getParameter("length")):500;	//每一页数据条数
+		int start=(request.getParameter("offset")!=null)?Integer.parseInt(request.getParameter("offset")):0;		//分页数据起始数
+		int length=(request.getParameter("limit")!=null)?Integer.parseInt(request.getParameter("limit")):500;	//每一页数据条数
 		String conditions = request.getParameter("conditions");
 		JSONObject jo=JSONObject.fromObject(conditions);
 		Map<String,Object> conditionMap=new HashMap<String,Object>();

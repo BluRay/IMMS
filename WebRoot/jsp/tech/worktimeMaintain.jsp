@@ -115,7 +115,7 @@
 				</table>
 				
 				<h5 class="section-head">技改工时<span style="float:right;margin: 10px 20px;color:green" class="read_hours"></span></h5>
-				<div style="width:100%;height:400px;">
+				<div style="width:100%;height:300px;">
 				<table id="table_workhour" style="margin-left:0px;margin-top:0px;width:100%;text-align:left;" class="exp-table table">
 					<thead style="background-color: rgb(225, 234, 240)">
 						<tr>
