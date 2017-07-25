@@ -418,6 +418,14 @@ public class CommonServiceImpl implements ICommonService {
 		List<Map<String,Object>> datalist=new ArrayList<Map<String,Object>>();
 		datalist=commonDao.getBasePrice(condMap);
 		model.put("data", datalist);	
-	}	
+	}
+	@Override
+	public List<Map<String, String>> queryChildOrgList(String parentOrgId) {
+		return commonDao.queryChildOrgList(parentOrgId);
+	}
+	@Override
+	public List<Map<String, String>> queryStaffInfo(Map<String, Object> conditionMap) {
+		return commonDao.queryStaffInfo(conditionMap);
+	}
 	
 }

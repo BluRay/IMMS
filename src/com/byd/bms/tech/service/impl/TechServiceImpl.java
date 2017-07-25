@@ -594,5 +594,15 @@ public class TechServiceImpl implements ITechService {
 		return result;
 	}
 
+	@Override
+	public List<Map<String, String>> queryStaffWorkHours(Map<String, Object> conditionMap) {
+		return techDao.queryStaffWorkHours(conditionMap);
+	}
+
+	@Override
+	public int saveWorkHourInfo(List<Map<String, Object>> swh_list) {
+		return techDao.saveWorkHourInfo(swh_list);
+	}
+
 		
 }

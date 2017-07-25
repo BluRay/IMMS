@@ -87,7 +87,7 @@
 	</select>
 	
 	<select id="queryWorkshopListAuth" parameterType="Map" resultType="Map">			
-		SELECT o.foreign_id id,o.name 
+		SELECT o.id org_id,o.foreign_id id,o.name 
 		FROM BMS_BASE_ORG o
 		LEFT JOIN BMS_BASE_ORG o1 ON o.parent_id=o1.id
 		WHERE o.org_type='2' and o1.name=#{factory} and o.deleted='0'
@@ -702,4 +702,79 @@
 		order by edit_date desc
 		limit 1
 	</select>
+	
+	<select id="queryChildOrgList" parameterType="String" resultType="Map">
+		select o.* from BMS_BASE_ORG o
+		left join BMS_BASE_ORG o1 on o.parent_id=o1.id
+		where o1.id=#{parentOrgId} and o.deleted='0'
+		order by o.sort_number asc
+	</select>
+	<select id="queryStaffInfo" parameterType="Map" resultType="Map">
+		<choose>
+			<when test="hourType==1">
+				select s.*,ifnull(d.distribution,0) distribution,d.edit_date 
+				from BMS_HR_STAFF_DISTRIBUTION d
+				left join BMS_HR_STAFF s on d.staff_number=s.staff_number 
+				where 1=1 and d.order_id=#{order_id} 
+				<if test="workDate !=null and workDate!=''">
+					and d.effective_date=(select max(d1.effective_date) from BMS_HR_STAFF_DISTRIBUTION d1
+					where d1.order_id=#{order_id} 
+					<if test="factory !=null and factory !='' and factory !='请选择'">
+					and d1.factory=#{factory}
+					</if>
+					<if test="workshop !=null and workshop !='' and workshop !='请选择'">
+					and d1.workshop=#{workshop}
+					</if>
+					<if test="workgroup !=null and workgroup !='' and workgroup!='请选择'">
+					and d1.workgroup=#{workgroup}
+					</if>
+					<if test="subgroup !=null and subgroup !='' and subgroup!='请选择'">
+					and d1.team=#{subgroup}
+					</if>
+					and d1.effective_date&lt;=#{workDate} )
+				</if>
+				<if test="staffNum !=null and staffNum !=''">
+					and s.staff_number=#{staffNum}
+				</if>
+				<if test="factory !=null and factory !='' and factory !='请选择'">
+					and d.factory=#{factory}
+				</if>
+				<if test="workshop !=null and workshop !='' and workshop !='请选择'">
+					and d.workshop=#{workshop}
+				</if>
+				<if test="workgroup !=null and workgroup !='' and workgroup!='请选择'">
+					and d.workgroup=#{workgroup}
+				</if>
+				<if test="subgroup !=null and subgroup !='' and subgroup!='请选择'">
+					and d.team=#{subgroup}
+				</if>
+			</when>
+			<otherwise>
+				select s.*,ifnull(d.distribution,0) distribution,d.edit_date
+				from BMS_HR_STAFF s
+				left join BMS_HR_STAFF_DISTRIBUTION d on d.staff_number=s.staff_number 
+				and d.order_id=#{order_id} and d.edit_date=#{workDate}
+				where 1=1 and s.status='在职' 
+				<if test="staffNum !=null and staffNum !=''">
+					and s.staff_number=#{staffNum}
+				</if>
+				<if test="factory !=null and factory !='' and factory !='请选择'">
+					and s.plant_org=#{factory}
+				</if>
+				<if test="dept !=null and dept !='' and dept !='请选择'">
+					and s.dept_org=#{dept}
+				</if>
+				<if test="workshop !=null and workshop !='' and workshop !='请选择'">
+					and s.workshop_org=#{workshop}
+				</if>
+				<if test="workgroup !=null and workgroup !='' and workgroup!='请选择'">
+					and s.workgroup_org=#{workgroup}
+				</if>
+				<if test="subgroup !=null and subgroup !='' and subgroup!='请选择'">
+					and s.team_org=#{subgroup}
+				</if>				
+			</otherwise>
+		</choose>		
+	</select>
+	
 </mapper>

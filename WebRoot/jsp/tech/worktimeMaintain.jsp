@@ -92,10 +92,10 @@
 				<table >
 					<tr>
 					<td width="60px" style="text-align:right">工厂：</td>
-					<td width="160px"><select id="factory" class="input-medium"></select>
+					<td width="160px"><input id="factory" disabled="disabled" style="height: 30px;width:150px" type="text">
 					</td>
 					<td width="80px" style="text-align:right">车间：</td>
-					<td width="160px"><select id="workshop" class="input-medium"></select>
+					<td width="160px"><input id="workshop" disabled="disabled" style="height: 30px;width:150px" type="text">
 					</td>
 					<td></td>
 					<td></td>
@@ -109,16 +109,17 @@
 					</td>
 					<td width="80px" style="text-align:right">操作日期：</td>
 					<td>
-						<input type="text" id="mta_wdate" class="input-medium" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:new Date()})"/>
+						<input type="text" id="mta_wdate" class="input-medium" placeholder="操作日期" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:new Date()})"/>
 					</td>
 					</tr>
 				</table>
 				
 				<h5 class="section-head">技改工时<span style="float:right;margin: 10px 20px;color:green" class="read_hours"></span></h5>
+				<div style="width:100%;height:400px;">
 				<table id="table_workhour" style="margin-left:0px;margin-top:0px;width:100%;text-align:left;" class="exp-table table">
 					<thead style="background-color: rgb(225, 234, 240)">
 						<tr>
-						<td style="width: 30px;"><i class="fa fa-plus addWorkhour" style="cursor: pointer;color: blue;"></i></td>
+						<td style="width: 30px;"><i id="addWorkhour" class="fa fa-plus addWorkhour" style="cursor: pointer;color: blue;"></i></td>
 						<td >工号</td>
 						<td >姓名</td>
 						<td >岗位</td>
@@ -132,7 +133,7 @@
 					<tbody class="exp-table" id="tb_workhour">
 					</tbody>
 				</table>
-				
+				</div>
 			</div>
 
 			<!-- 脚 -->

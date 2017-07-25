@@ -863,6 +863,49 @@ public class TechController extends BaseController{
 		return model;
 	}
 	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping("/getStaffWorkHours")
+	@ResponseBody
+	public ModelMap getStaffWorkHours(){
+		String conditions = request.getParameter("conditions");
+		JSONObject jo = JSONObject.fromObject(conditions);
+		Map<String, Object> conditionMap = new HashMap<String, Object>();
+		for (Iterator it = jo.keys(); it.hasNext();) {
+			String key = (String) it.next();
+			conditionMap.put(key, jo.get(key));
+		}
+		List<Map<String, String>> datalist = techService.queryStaffWorkHours(conditionMap);
+		Map<String, Object> result = new HashMap<String,Object>();
+		result.put("data", datalist);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(result);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/saveWorkHourInfo")
+	@ResponseBody
+	public ModelMap saveWorkHourInfo(){
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String edit_user = request.getSession().getAttribute("staff_number") + "";
+		String conditions = request.getParameter("conditions");
+		JSONArray jsonArray = JSONArray.fromObject(conditions);
+		List<Map<String, Object>> swh_list = new ArrayList<Map<String, Object>>();
+		for (int i = 0; i < jsonArray.size(); i++) {
+			JSONObject object = (JSONObject) jsonArray.get(i);
+			object.put("editorId", edit_user);
+			object.put("editDate", curTime);
+			Map<String, Object> map = (Map<String, Object>) object;
+			swh_list.add(map);
+		}
+		int result = techService.saveWorkHourInfo(swh_list);
+		mv.clear();
+		initModel(true,String.valueOf(result),null);
+		model = mv.getModelMap();
+		return model;
+	}
+	
 	/**
 	 * @author xiong.jianwu
 	 * 技改跟进（移动端）

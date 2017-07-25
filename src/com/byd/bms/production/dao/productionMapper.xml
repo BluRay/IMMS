@@ -798,12 +798,12 @@
 	
 	<!-- 计件工资计算（辅助人力模式） -->
 	<select id="caculatePieceSalary_2" statementType="CALLABLE" parameterType="Map" resultType="String">
-		call P_CACULATE_PIECE_SALLARY_2(#{factory},#{workshop},#{workgroup},#{team},#{bus_number},#{work_month});
+		call P_CACULATE_PIECE_SALLARY_2(#{factory},#{workshop},#{workgroup},#{team},#{work_month});
 	</select>
 	
 	<!-- 计件工资计算（底薪模式） -->
 	<select id="caculatePieceSalary_3" statementType="CALLABLE" parameterType="Map" resultType="String">
-		call P_CACULATE_PIECE_SALLARY_3(#{factory},#{workshop},#{workgroup},#{team},#{bus_number},#{start_date},#{end_date});
+		call P_CACULATE_PIECE_SALLARY_3(#{factory},#{workshop},#{workgroup},#{team},#{work_month});
 	</select>
 	
 <!-- ########################### xiong jianwu end#############################-->

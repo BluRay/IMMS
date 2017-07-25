@@ -73,4 +73,6 @@ public interface ITechDao {
 	
 	public List<Map<String, Object>> getSingleTaskList(Map<String,Object> queryMap);
 	public int getSingleTaskListCount(Map<String,Object> queryMap);
+	public int saveWorkHourInfo(List<Map<String, Object>> swh_list);
+	
 }

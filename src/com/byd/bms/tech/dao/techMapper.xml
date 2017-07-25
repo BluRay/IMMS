@@ -867,10 +867,10 @@
 		<foreach collection="list" item="detail" index="index"
 			separator=";">
 			insert into BMS_HR_STAFF_TECH_HOURS
-			(org_id,ecn_task_id,work_date,staff_number,work_hour,editor_id,edit_date,skill_parameter,factory,dept,workshop,workgroup,team)
+			(org_id,ecn_task_id,work_date,staff_number,work_hour,editor_id,edit_date,skill_parameter,factory,workshop,workgroup,team)
 			values
 			(#{detail.subgroupId},#{detail.ecnTaskId},#{detail.workDate},#{detail.staff_number},#{detail.workHour},#{detail.editorId},#{detail.editDate},
-			#{detail.skillParameter},#{detail.factory},#{detail.dept},#{detail.workshop},#{detail.workgroup},#{detail.team})
+			#{detail.skillParameter},#{detail.factory},#{detail.workshop},#{detail.workgroup},#{detail.team})
 		</foreach>
 	</insert>
 	

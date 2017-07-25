@@ -527,4 +527,40 @@ public class CommonController extends BaseController {
 		return model;
 	}
 	
+	@RequestMapping("/getChildOrgList")
+	@ResponseBody
+	public ModelMap getChildOrgList(){
+		String parentId = request.getParameter("parentId");
+		List<Map<String,String>> datalist = commonService.queryChildOrgList(parentId);
+		Map<String, Object> result = new HashMap<String,Object>();
+		result.put("data", datalist);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(result);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/getStaffInfo")
+	@ResponseBody
+	public ModelMap getStaffInfo(){
+		Map<String, Object> conditionMap = new HashMap<String, Object>();
+		conditionMap.put("staffNum", request.getParameter("staffNum"));
+		conditionMap.put("factory", request.getParameter("factory"));
+		conditionMap.put("dept", request.getParameter("dept"));
+		conditionMap.put("workshop", request.getParameter("workshop"));
+		conditionMap.put("workgroup", request.getParameter("workgroup"));
+		conditionMap.put("subgroup", request.getParameter("subgroup"));
+		conditionMap.put("workDate", request.getParameter("workDate"));
+		conditionMap.put("order_id", request.getParameter("order_id"));
+		conditionMap.put("hourType", request.getParameter("hourType"));
+		
+		List<Map<String,String>> datalist = commonService.queryStaffInfo(conditionMap);
+		Map<String, Object> result = new HashMap<String,Object>();
+		result.put("data", datalist);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(result);
+		model = mv.getModelMap();
+		return model;
+	}
+	
 }

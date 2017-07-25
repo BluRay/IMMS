@@ -75,4 +75,8 @@ public interface ITechService {
 	public void followTechTaskByBus(String bus_number, String tech_task_follow_ids,int userid,String curTime,ModelMap model);
 	
 	public Map<String,Object> querySingleTasklist(String conditions);
+
+	public List<Map<String, String>> queryStaffWorkHours(Map<String, Object> conditionMap);
+	
+	public int saveWorkHourInfo(List<Map<String, Object>> swh_list);
 }

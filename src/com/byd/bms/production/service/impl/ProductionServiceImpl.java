@@ -658,8 +658,7 @@ public class ProductionServiceImpl implements IProductionService {
 		condMap.put("workshop", workshop);
 		condMap.put("workgroup", workgroup);
 		condMap.put("team", team);
-		condMap.put("start_date", work_date);
-		condMap.put("end_date", work_date);
+		condMap.put("work_month", work_date.substring(0, 7));
 		condMap.put("work_date", work_date);
 		condMap.put("salary_model", "底薪模式");
 

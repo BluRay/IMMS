@@ -33,9 +33,15 @@ function ajaxQuery(){
             rightColumns:2
         },
 		dom: 'Bfrtip',
+		lengthMenu: [
+		             [ 10, 25, 50, -1 ],
+		             [ '显示10行', '显示25行', '显示50行', '全部' ]
+		         ],
 	    buttons: [
 	        {extend:'excelHtml5',title:'data_export',className:'black',text:'<i class=\"fa fa-file-excel-o bigger-130\" tooltip=\"导出excel\"></i>'},
-	        {extend:'colvis',text:'<i class=\"fa fa-list bigger-130\" tooltip=\"选择展示列\"></i>'}
+	        {extend:'colvis',text:'<i class=\"fa fa-list bigger-130\" tooltip=\"选择展示列\"></i>'},
+	        {extend:'pageLength',text:'显示20行'}
+	       
 	    ],
         rowsGroup:[0,1,2,3,4],
 		paiging:true,
@@ -43,12 +49,12 @@ function ajaxQuery(){
 		searching: false,
 		bAutoWidth:false,
 		destroy: true,
-		sScrollY: $(window).height()-270,
+		sScrollY: $(window).height()-250,
 		scrollX: true,
 		/*scrollCollapse: true,*/
 		pageLength: pageSize,
 		pagingType:"full_numbers",
-		lengthChange:false,
+		lengthChange:true,
 		orderMulti:false,
 		language: {
 			emptyTable:"抱歉，未查询到数据！",

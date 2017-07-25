@@ -186,7 +186,7 @@ function ajaxQuery(){
             $.ajax({
                 type: "post",
                 url: "getPositionList",
-                cache: true,  //禁用缓存
+                cache: false,  //禁用缓存
                 data: param,  //传入组装的参数
                 dataType: "json",
                 success: function (result) {

@@ -103,4 +103,7 @@ public interface ICommonDao {
 	List<Map<String,Object>> querySubmitSalary(Map<String,Object> condMap);
 	
 	List<Map<String,Object>> getBasePrice(Map<String,Object> condMap);
+	
+	public List<Map<String,String>> queryChildOrgList(String parentOrgId);//根据父节点名称查找下一级组织列表
+	public List<Map<String,String>> queryStaffInfo(Map<String, Object> conditionMap);//查询员工信息
 }

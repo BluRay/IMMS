@@ -14,18 +14,18 @@ function getSelects(data, selectval, element,defaultVal,valName) {
 	$.each(data, function(index, value) {
 		if(valName=="name"){
 			if (selectval == value.id || selectval == value.name) {
-				strs += "<option value=" + value.name + " selected='selected'" + ">"
+				strs += "<option value=" + value.name +(value.org_id?(" org_id="+value.org_id):"")+ " selected='selected'" + ">"
 						+ value.name + "</option>";
 			} else {
-				strs += "<option value=" + value.name + ">" + value.name
+				strs += "<option value=" + value.name +(value.org_id?(" org_id="+value.org_id):"")+ ">" + value.name
 						+ "</option>";
 			}
 		}else{
 			if (selectval == value.id || selectval == value.name) {
-				strs += "<option value=" + value.id + " selected='selected'" + ">"
+				strs += "<option value=" + value.id +(value.org_id?(" org_id="+value.org_id):"")+ " selected='selected'" + ">"
 						+ value.name + "</option>";
 			} else {
-				strs += "<option value=" + value.id + ">" + value.name
+				strs += "<option value=" + value.id+(value.org_id?(" org_id="+value.org_id):"") + ">" + value.name
 						+ "</option>";
 			}
 		}
@@ -840,3 +840,49 @@ function numAdd(num1, num2) {
 		})
 		return submit_flg;
 	}
+	
+	function getChildOrgSelect(elementId,parentId,selectVal,selectType){
+		$.ajax({
+			url : "/IMMS/common/getChildOrgList",
+			dataType : "json",
+			data : {
+				"parentId" : parentId
+			},
+			async : false,
+			error : function() {
+				alertError();
+			},
+			success : function(response) {
+				if (selectType == 'noall') {
+					getSelects_noall(response.data, selectVal, elementId,"");
+				} else if (selectType == 'empty') {
+					getSelects_empty(response.data, selectVal, elementId,"");
+				} else {
+					getSelects(response.data, selectVal, elementId,"");
+				}
+			}
+		})
+	}
+	
+function getStaffInfo(staffNum){
+	var staff;
+	$.ajax({
+		type : "get",// 使用get方法访问后台
+		dataType : "json",// 返回json格式的数据
+		async : false,
+		url : "/IMMS/common/getStaffInfo",
+		data : {
+			"staffNum" : staffNum
+		},
+		success : function(response) {
+			var list = response.data;
+			if (list.length > 0) {
+				staff = list[0];
+			}
+		}
+	})
+	return staff;
+}
+
+
+	
