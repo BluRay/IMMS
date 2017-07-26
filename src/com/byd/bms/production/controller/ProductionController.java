@@ -878,7 +878,7 @@ public class ProductionController extends BaseController {
 	
 	/**
 	 * @author xiong.jianwu
-	 * 查询计件工时列表（计件工时修改页面）
+	 * 查询计件工时列表（计件工时修改/审核页面）
 	 * @return
 	 */
 	@RequestMapping("/getStaffHoursDetail")
@@ -889,8 +889,9 @@ public class ProductionController extends BaseController {
 		String bus_number=request.getParameter("bus_number");
 		String wdate_start=request.getParameter("wdate_start");
 		String wdate_end=request.getParameter("wdate_end");
-			
-		productionService.getStaffHoursDetail(org_id,bus_number,wdate_start,wdate_end,model);
+		String status=request.getParameter("status");
+		
+		productionService.getStaffHoursDetail(org_id,bus_number,wdate_start,wdate_end,status,model);
 		return model;
 	}
 	
@@ -911,6 +912,7 @@ public class ProductionController extends BaseController {
 		condMap.put("bus_number", request.getParameter("bus_number"));
 		condMap.put("work_date", request.getParameter("work_date"));
 		condMap.put("swh_id", request.getParameter("swh_id"));
+		condMap.put("salary_model", request.getParameter("salary_model"));
 		
 		productionService.deleteStaffHours(condMap,model);
 		return model;
@@ -946,6 +948,17 @@ public class ProductionController extends BaseController {
 		}
 		return model;
 	}
+	
+	/**
+	 * 计件工时审核页面
+	 * @return
+	 */
+	@RequestMapping("/pieceWorkhourVerify")
+	public ModelAndView pieceWorkhourVerify(){
+		mv.setViewName("production/pieceWorkhourVerify");
+		return mv;
+	}
+
 	/****************************  xiongjianwu ***************************/
 	
 	@RequestMapping("/productionsearchbusinfo")

@@ -683,15 +683,23 @@ public class ProductionServiceImpl implements IProductionService {
 
 	@Override
 	public void getStaffHoursDetail(String org_id, String bus_number,
-			String wdate_start, String wdate_end, ModelMap model) {
+			String wdate_start, String wdate_end,String status,ModelMap model) {
 		Map<String,Object> condMap=new HashMap<String,Object>();
 		condMap.put("org_id", org_id);
 		condMap.put("bus_number", bus_number);
 		condMap.put("wdate_start", wdate_start);
 		condMap.put("wdate_end", wdate_end);
-		condMap.put("status", "2");
-		model.put("salary_model",productionDao.querySalaryModel(condMap));	
-		model.put("staff_hour_list", productionDao.queryStaffHoursDetail(condMap));
+		condMap.put("status", status);
+		Map<String,Object> salary_model=productionDao.querySalaryModel(condMap);
+		model.put("salary_model",salary_model);	
+		condMap.put("salary_model", salary_model.get("salary_model"));
+		if("技能系数".equals(salary_model.get("salary_model"))||"承包制".equals(salary_model.get("salary_model"))
+				||"辅助人力".equals(salary_model.get("salary_model"))||"底薪模式".equals(salary_model.get("salary_model"))){
+			model.put("staff_hour_list", productionDao.queryStaffHoursDetail(condMap));
+		}else{
+			model.put("staff_hour_list", new ArrayList<>());
+		}
+		
 		
 	}
 
@@ -899,7 +907,7 @@ public class ProductionServiceImpl implements IProductionService {
 			throw new RuntimeException(e.getMessage());
 		}	
 	}
-	
+
 	/*****************************xiong jianwu end  *****************************/
 
 

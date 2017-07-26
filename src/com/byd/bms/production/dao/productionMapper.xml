@@ -1889,8 +1889,17 @@
 	
 	<!-- added by xiong.jianwu 查询员工计件工时信息 -->
 	<select id="queryStaffHoursDetail" parameterType="Map" resultType="Map">
-		select h.*,s.name staff_name,s.job,s.plant_org,s.workshop_org
+		select h.*,s.name staff_name,s.job,s.plant_org,s.workshop_org,sa.ppay
 		from BMS_HR_STAFF_PIECE_HOURS h
+		left join BMS_HR_PIECE_SALARY sa on
+		<if test="salary_model=='技能系数' or salary_model=='承包制' ">
+			h.staff_number=sa.staff_number and h.factory=sa.factory
+			and h.workshop=sa.workshop and h.work_date=sa.work_date
+		</if>
+		<if test="salary_model=='辅助人力' or salary_model=='底薪模式' ">
+			h.staff_number=sa.staff_number and h.factory=sa.factory
+			and h.workshop=sa.workshop and substring(h.work_date,1,7)=sa.work_date
+		</if>
 		left join BMS_HR_STAFF s on h.staff_number=s.staff_number
 		where find_in_set(h.status,#{status})>0 
 		<if test="org_id !=null and org_id !=''">

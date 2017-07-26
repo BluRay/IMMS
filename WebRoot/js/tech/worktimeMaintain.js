@@ -36,8 +36,8 @@ $(document).ready(function(){
 	});
 	
 	$("#subgroup").change(function() {
-		var factory = $("#factory").find("option:selected").text();
-		var workshop = $("#workshop").find("option:selected").text();
+		var factory = $("#factory").val();
+		var workshop = $("#workshop").val();
 		var workgroup = $("#group").find("option:selected").text();
 		var subgroup = $("#subgroup").find("option:selected").text();
 		console.log(factory + "|" + workshop + "|" + workgroup + "|" + subgroup);
@@ -214,16 +214,16 @@ function ajaxQuery(){
 		},
 		columns: [
 		            {"title":"技改任务",width:'120',"class":"center","data":"task_content","defaultContent": ""},
-		            {"title":"变更单类型",width:'60',"class":"center","data":"tech_order_type","defaultContent": ""},
+		            {"title":"变更单类型",width:'80',"class":"center","data":"tech_order_type","defaultContent": ""},
 		            {"title":"技改单号",width:'80',"class":"center","data":"tech_order_no","defaultContent": ""},
-		            {"title":"变更单附件",width:'60',"class":"center","data":"tech_order_file","defaultContent": "",
+		            {"title":"变更单附件",width:'80',"class":"center","data":"tech_order_file","defaultContent": "",
 		            	"render": function ( data, type, row ) {
 		            		if(data!=''&& data!=null){
 								return "<a href=\""+data+"\" target='_blank'>"+"查看"+"</a>";
 							}	
 		            	},
 		            },
-		            {"title":"技改单日期",width:'60',"class":"center","data":"tech_date","defaultContent": ""},
+		            {"title":"技改单日期",width:'80',"class":"center","data":"tech_date","defaultContent": ""},
 		            {"title":"责任单位",width:'60',"class":"center","data":"duty_unit","defaultContent": ""},
 		            {"title":"重大变更",width:'60',"class":"center","data":"major_change","defaultContent": ""},
 		            {"title":"顾客变更",width:'60',"class":"center","data":"custom_change","defaultContent": ""},
@@ -238,13 +238,13 @@ function ajaxQuery(){
 		            {"title":"技改类型",width:'60',"class":"center","data":"tech_type","defaultContent": ""},
 		            {"title":"切换方式",width:'60',"class":"center","data":"switch_mode","defaultContent": ""},
 		            {"title":"切换节点",width:'60',"class":"center","data":"switch_node","defaultContent": ""},
-		            {"title":"订单",width:'60',"class":"center","data":"order_desc","defaultContent": ""},
+		            {"title":"订单",width:'80',"class":"center","data":"order_desc","defaultContent": ""},
 		            {"title":"工厂",width:'60',"class":"center","data":"factory","defaultContent": ""},
 		            {"title":"车间",width:'60',"class":"center","data":"workshop","defaultContent": ""},
 		            {"title":"分配工时",width:'60',"class":"center","data":"tech_time","defaultContent": ""},
 		            {"title":"技改台数",width:'60',"class":"center","data":"tech_num","defaultContent": ""},
 		            {"title":"完成台数",width:'60',"class":"center","data":"follow_num","defaultContent": ""},
-		            {"title":"已录入工时",width:'60',"class":"center","data":"ready_hour","defaultContent": ""},
+		            {"title":"已录入工时",width:'80',"class":"center","data":"ready_hour","defaultContent": ""},
 		            {"title":"车号信息",width:'60',"class":"center","data":"-","defaultContent": ""},
 		            {"title":"成本可否转移",width:'80',"class":"center","data":"order_desc","defaultContent": "",
 		            	"render": function ( data, type, row ) {
