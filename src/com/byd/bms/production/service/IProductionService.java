@@ -80,7 +80,25 @@ public interface IProductionService {
 	public void saveStaffHours_cal2(String str_staffHours, String edit_date, String editor_id,ModelMap model);
 
 	public void saveStaffHours_cal3(String str_staffHours, String edit_date, String editor_id,ModelMap model);
+
+	public void getStaffHoursDetail(String org_id, String bus_number, String wdate_start, String wdate_end, ModelMap model);
+
+	public void deleteStaffHours(Map<String, Object> condMap, ModelMap model);
 	
+	public void updateStaffHours_cal0(String str_staffHours,
+			String is_customer, String edit_date, String editor_id,
+			ModelMap model);
+
+	public void updateStaffHours_cal1(String str_staffHours,
+			String is_customer, String edit_date, String editor_id,
+			ModelMap model);
+
+	public void updateStaffHours_cal2(String str_staffHours, String edit_date,
+			String editor_id, ModelMap model);
+
+	public void updateStaffHours_cal3(String str_staffHours, String edit_date,
+			String editor_id, ModelMap model);
+
 	/*****************************xiong jianwu end  *****************************/
 
 	/******************* tangjin start**************************/
@@ -126,5 +144,6 @@ public interface IProductionService {
 	public void deleteRewards(Map map);
 	public List<Map<String, Object>> getOrg(List<Map<String, Object>> conditionMap);
 	public int insertRewards(List<Map<String, Object>> conditionMap);		//增加奖惩数据
+
 
 }

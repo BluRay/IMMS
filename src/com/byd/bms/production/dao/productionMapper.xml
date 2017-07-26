@@ -778,12 +778,17 @@
 	</insert>
 	
 	<update id="deleteStaffHours" parameterType="Map" >
-		delete from BMS_HR_STAFF_PIECE_HOURS
-		where factory=#{factory} and workshop=#{workshop} and workgroup=#{workgroup} and team=#{team} 
-		and work_date=#{work_date} and salary_model=#{salary_model}
+		<if test="swh_id !=null and swh_id !=''">
+			delete from BMS_HR_STAFF_PIECE_HOURS
+			where id=#{swh_id}
+		</if>
 		<if test="bus_number !=null and bus_number !=''">
-			and bus_number=#{bus_number}
-		</if>		
+			delete from BMS_HR_STAFF_PIECE_HOURS
+			where factory=#{factory} and workshop=#{workshop} and workgroup=#{workgroup} and team=#{team} 
+			and work_date=#{work_date} and salary_model=#{salary_model}
+			and bus_number=#{bus_number}	
+		</if>
+			
 	</update>
 	
 	<!-- 计件工资计算（技能系数模式） -->
@@ -806,6 +811,14 @@
 		call P_CACULATE_PIECE_SALLARY_3(#{factory},#{workshop},#{workgroup},#{team},#{work_month});
 	</select>
 	
+	<update id="updateStaffHours" parameterType="List">
+		<foreach item="detail" index="index" collection="staff_hour_list" open="" separator=";" close="">
+			update BMS_HR_STAFF_PIECE_HOURS
+			set status=#{detail.status},work_hour=#{detail.work_hour},distribution=#{detail.distribution},
+			bonus=#{detail.bonus},editor_id=#{detail.editor_id},edit_date=#{detail.edit_date}
+			where id=#{detail.id}
+		</foreach>
+	</update>
 <!-- ########################### xiong jianwu end#############################-->
 
 	<update id="updateBusMotorNumber" parameterType="map">
@@ -1873,6 +1886,28 @@
             #{detail.factory},#{detail.workshop},#{detail.workgroup},#{detail.team},#{detail.editor},#{detail.edit_date})
 		</foreach>
 	</insert>
+	
+	<!-- added by xiong.jianwu 查询员工计件工时信息 -->
+	<select id="queryStaffHoursDetail" parameterType="Map" resultType="Map">
+		select h.*,s.name staff_name,s.job,s.plant_org,s.workshop_org
+		from BMS_HR_STAFF_PIECE_HOURS h
+		left join BMS_HR_STAFF s on h.staff_number=s.staff_number
+		where find_in_set(h.status,#{status})>0 
+		<if test="org_id !=null and org_id !=''">
+			and h.org_id=#{org_id}
+		</if>
+		<if test="bus_number !=null and bus_number !=''">
+			and h.bus_number=#{bus_number} 
+		</if>
+		<if test="wdate_start !=null and wdate_start !=''">
+			and h.work_date>=#{wdate_start}
+		</if>
+		<if test="wdate_end !=null and wdate_end !=''">
+			and h.work_date&lt;=#{wdate_end}
+		</if>	 
+		order by h.bus_number,h.work_date,h.staff_number
+	</select>
+	
 	<update id="deleteWaitHourInfo" parameterType="Map">
 		delete from BMS_HR_WAIT_SALARY where 1=1 
 		<if test="swhid !=null and swhid !=''">

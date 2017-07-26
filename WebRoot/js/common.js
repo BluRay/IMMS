@@ -768,11 +768,15 @@ function getOrgAuthTree(treeId,url,orgType,orgKind,level,nodeName_default){
  */
 function expandLevel(treeObj,node,level){  
     var childrenNodes = node.children;  
+    if(level==1){
+    	treeObj.expandNode(node, true, false, false);  
+    	return false;
+    }
     for(var i=0;i<childrenNodes.length;i++)  
     {  
         treeObj.expandNode(childrenNodes[i], true, false, false);  
         level=level-1;  
-        if(level>=0)  
+        if(level>0)  
         {  
             expandLevel(treeObj,childrenNodes[i],level);  
         }  

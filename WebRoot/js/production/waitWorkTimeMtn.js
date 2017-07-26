@@ -636,3 +636,35 @@ function getReasonTypeSelect() {
 		}
 	});
 }
+function compareTime(beginTime,endTime){  
+	
+    var startDateTemp = beginTime.split(" ");  
+    var endDateTemp = endTime.split(" ");  
+    var arrStartDate = startDateTemp[0].split("-");  
+    var arrEndDate = endDateTemp[0].split("-");  
+    arrStartTime=[0,0,0];
+    arrEndTime=[0,0,0];
+    if(startDateTemp[1]!=undefined){
+    	var timearr=startDateTemp[1].split(":");
+    	arrStartTime[0] = timearr[0]==undefined?0:timearr[0];  
+    	arrStartTime[1] = timearr[1]==undefined?0:timearr[1]; 
+    	arrStartTime[2] = timearr[2]==undefined?0:timearr[2]; 
+    }
+    if(endDateTemp[1]!=undefined){
+    	var timearr=endDateTemp[1].split(":");
+    	arrEndTime[0] = timearr[0]==undefined?0:timearr[0];  
+    	arrEndTime[1] = timearr[1]==undefined?0:timearr[1]; 
+    	arrEndTime[2] = timearr[2]==undefined?0:timearr[2]; 
+    }
+
+    var allStartDate = new Date(arrStartDate[0], arrStartDate[1], arrStartDate[2], arrStartTime[0], arrStartTime[1], arrStartTime[2]);  
+    var allEndDate = new Date(arrEndDate[0], arrEndDate[1], arrEndDate[2], arrEndTime[0], arrEndTime[1], arrEndTime[2]);   
+ 
+    if (allStartDate.getTime() > allEndDate.getTime()) {    
+        return 1;  
+    } else if(allStartDate.getTime() == allEndDate.getTime()){  
+    	return 0;
+    } else {   
+    	return -1;  
+      }   
+} 

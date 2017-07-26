@@ -866,6 +866,86 @@ public class ProductionController extends BaseController {
 		return model;
 	}
 	
+	/**
+	 * 计件工时修改页面
+	 * @return
+	 */
+	@RequestMapping("/pieceWorkhourUpdate")
+	public ModelAndView pieceWorkhourUpdate(){
+		mv.setViewName("production/pieceWorkhourUpdate");
+		return mv;
+	}
+	
+	/**
+	 * @author xiong.jianwu
+	 * 查询计件工时列表（计件工时修改页面）
+	 * @return
+	 */
+	@RequestMapping("/getStaffHoursDetail")
+	@ResponseBody
+	public ModelMap getStaffHoursDetail(){
+		model.clear();
+		String org_id=request.getParameter("org_id");
+		String bus_number=request.getParameter("bus_number");
+		String wdate_start=request.getParameter("wdate_start");
+		String wdate_end=request.getParameter("wdate_end");
+			
+		productionService.getStaffHoursDetail(org_id,bus_number,wdate_start,wdate_end,model);
+		return model;
+	}
+	
+	/**
+	 * @author xiong.jianwu
+	 * 删除员工工时信息
+	 * @return
+	 */
+	@RequestMapping("/deleteStaffHours")
+	@ResponseBody
+	public ModelMap deleteStaffHours(){
+		model.clear();
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("factory", request.getParameter("factory"));
+		condMap.put("workshop", request.getParameter("workshop"));
+		condMap.put("workgroup", request.getParameter("workgroup"));
+		condMap.put("team", request.getParameter("team"));
+		condMap.put("bus_number", request.getParameter("bus_number"));
+		condMap.put("work_date", request.getParameter("work_date"));
+		condMap.put("swh_id", request.getParameter("swh_id"));
+		
+		productionService.deleteStaffHours(condMap,model);
+		return model;
+	}
+	
+	/**
+	 * @author xiong.jianwu
+	 * 计件工时信息修改，重新计算计件工资
+	 * @return
+	 */
+	@RequestMapping("/updateStaffHours")
+	@ResponseBody
+	public ModelMap updateStaffHours(){
+		model.clear();
+		String salary_model=request.getParameter("salary_model");
+		String is_customer=request.getParameter("is_customer");
+		String str_staffHours=request.getParameter("staffHourList");
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String edit_date = df.format(new Date());
+		String editor_id=String.valueOf(session.getAttribute("user_id"));
+		
+		if("技能系数".equals(salary_model)){
+			productionService.updateStaffHours_cal0(str_staffHours,is_customer,edit_date,editor_id,model);
+		}
+		if("承包制".equals(salary_model)){
+			productionService.updateStaffHours_cal1(str_staffHours,is_customer,edit_date,editor_id,model);
+		}
+		if("辅助人力".equals(salary_model)){
+			productionService.updateStaffHours_cal2(str_staffHours,edit_date,editor_id,model);
+		}
+		if("底薪模式".equals(salary_model)){
+			productionService.updateStaffHours_cal3(str_staffHours,edit_date,editor_id,model);
+		}
+		return model;
+	}
 	/****************************  xiongjianwu ***************************/
 	
 	@RequestMapping("/productionsearchbusinfo")

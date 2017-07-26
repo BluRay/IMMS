@@ -107,6 +107,10 @@ public interface IProductionDao {
 
 	void deleteStaffHours(Map<String, Object> condMap);
 	
+	List<Map<String, Object>> queryStaffHoursDetail(Map<String, Object> condMap);	
+
+	int updateStaffHours(@Param(value = "staff_hour_list")List<Map<String, Object>> staff_hour_list);
+	
 	/*****************************xiong jianwu end  *****************************/
 
 	/******************* tangjin start**************************/
@@ -153,9 +157,7 @@ public interface IProductionDao {
 	public List<Map<String,String>> getProductionSearch(Map<String,Object> queryMap);
 	public List<Map<String,String>> getProductionWIPBusInfo(Map<String,Object> queryMap);
 	public List<Map<String,String>> getProductionSearchCarinfo(Map<String,Object> queryMap);
-
-	public int addRewards(List<Map<String, Object>> addList);
-	
+	public int addRewards(List<Map<String, Object>> addList);	
 	public List<Map<String,String>> getRewardsList(Map<String,Object> queryMap);
 	public int getRewardsListCount(Map<String,Object> queryMap);
 	public void deleteRewards(Map map);

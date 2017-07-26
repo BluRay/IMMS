@@ -19,10 +19,12 @@ import javax.annotation.Resource;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import org.apache.poi.util.StringUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 
+import com.alibaba.druid.util.StringUtils;
 import com.byd.bms.production.dao.IProductionDao;
 import com.byd.bms.production.model.ProductionException;
 import com.byd.bms.production.service.IProductionService;
@@ -678,7 +680,225 @@ public class ProductionServiceImpl implements IProductionService {
 		}
 		
 	}
-	
+
+	@Override
+	public void getStaffHoursDetail(String org_id, String bus_number,
+			String wdate_start, String wdate_end, ModelMap model) {
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("org_id", org_id);
+		condMap.put("bus_number", bus_number);
+		condMap.put("wdate_start", wdate_start);
+		condMap.put("wdate_end", wdate_end);
+		condMap.put("status", "2");
+		model.put("salary_model",productionDao.querySalaryModel(condMap));	
+		model.put("staff_hour_list", productionDao.queryStaffHoursDetail(condMap));
+		
+	}
+
+	@Override
+	public void deleteStaffHours(Map<String, Object> condMap, ModelMap model) {
+		try{
+			productionDao.deleteStaffHours(condMap);
+			model.put("success", true);
+			model.put("message", "删除成功！");
+		}catch(Exception e){
+			model.put("success", false);
+			model.put("message", "系统异常，删除失败！");
+			
+			throw new RuntimeException(e.getMessage());
+		}
+		
+	}
+
+	@Override
+	public void updateStaffHours_cal0(String str_staffHours,
+			String is_customer, String edit_date, String editor_id,
+			ModelMap model) {
+		JSONArray staff_hours_arr=JSONArray.fromObject(str_staffHours);
+		Iterator it_del=staff_hours_arr.iterator();
+		List<Map<String,Object>> staff_hour_list=new ArrayList<Map<String,Object>>();
+		List<String> buslist=new ArrayList<String>();
+		
+		while(it_del.hasNext()){
+			JSONObject jel=(JSONObject) it_del.next();
+			Map<String,Object> staff=(Map<String, Object>) JSONObject.toBean(jel, Map.class);
+			staff.put("editor_id", editor_id);
+			staff.put("edit_date", edit_date);
+			staff.put("status", "1");
+			staff_hour_list.add(staff);
+			buslist.add(staff.get("bus_number").toString());
+		}
+		String factory =staff_hour_list.get(0).get("factory").toString();
+		String workshop=staff_hour_list.get(0).get("workshop").toString();
+		String workgroup=staff_hour_list.get(0).get("workgroup").toString();
+		String team=staff_hour_list.get(0).get("team").toString();
+		
+		Map<String, Object> condMap=new HashMap<String,Object>();
+		condMap.put("factory", factory);
+		condMap.put("workshop", workshop);
+		condMap.put("workgroup", workgroup);
+		condMap.put("team", team);
+		condMap.put("bus_number", String.join(",", buslist));
+		condMap.put("salary_model", "技能系数");
+		/**
+		 * 更新工时信息
+		 */
+		try{
+			int i=productionDao.updateStaffHours(staff_hour_list);
+			//计算计件工资
+			if(i>0){
+				productionDao.caculatePieceSalary_0(condMap);
+			}
+			model.put("success", true);
+			model.put("message", "保存成功！");
+		}catch(Exception e){
+			model.put("success", false);
+			model.put("message", "保存失败!<br/>"+e.getMessage());
+			throw new RuntimeException(e.getMessage());
+		
+		}
+	}
+
+	@Override
+	public void updateStaffHours_cal1(String str_staffHours,
+			String is_customer, String edit_date, String editor_id,
+			ModelMap model) {
+		JSONArray staff_hours_arr=JSONArray.fromObject(str_staffHours);
+		Iterator it_del=staff_hours_arr.iterator();
+		List<Map<String,Object>> staff_hour_list=new ArrayList<Map<String,Object>>();
+		List<String> buslist=new ArrayList<String>();
+		
+		while(it_del.hasNext()){
+			JSONObject jel=(JSONObject) it_del.next();
+			Map<String,Object> staff=(Map<String, Object>) JSONObject.toBean(jel, Map.class);
+			staff.put("editor_id", editor_id);
+			staff.put("edit_date", edit_date);
+			staff.put("status", "1");
+			staff_hour_list.add(staff);
+			buslist.add(staff.get("bus_number").toString());
+		}
+		String factory =staff_hour_list.get(0).get("factory").toString();
+		String workshop=staff_hour_list.get(0).get("workshop").toString();
+		String workgroup=staff_hour_list.get(0).get("workgroup").toString();
+		String team=staff_hour_list.get(0).get("team").toString();
+		
+		Map<String, Object> condMap=new HashMap<String,Object>();
+		condMap.put("factory", factory);
+		condMap.put("workshop", workshop);
+		condMap.put("workgroup", workgroup);
+		condMap.put("team", team);
+		condMap.put("bus_number", String.join(",", buslist));
+		condMap.put("salary_model", "承包制");
+
+		/**
+		 * 更新工时信息
+		 */
+		try{
+			int i=productionDao.updateStaffHours(staff_hour_list);
+		//计算计件工资
+			if(i>0){
+				productionDao.caculatePieceSalary_1(condMap);
+			}
+			model.put("success", true);
+			model.put("message", "保存成功！");
+		}catch(Exception e){
+			model.put("success", false);
+			model.put("message", "保存失败!<br/>"+e.getMessage());
+			throw new RuntimeException(e.getMessage());
+		}	
+	}
+
+	@Override
+	public void updateStaffHours_cal2(String str_staffHours, String edit_date,
+			String editor_id, ModelMap model) {
+		JSONArray staff_hours_arr=JSONArray.fromObject(str_staffHours);
+		Iterator it_del=staff_hours_arr.iterator();
+		List<Map<String,Object>> staff_hour_list=new ArrayList<Map<String,Object>>();
+		
+		while(it_del.hasNext()){
+			JSONObject jel=(JSONObject) it_del.next();
+			Map<String,Object> staff=(Map<String, Object>) JSONObject.toBean(jel, Map.class);
+			staff.put("editor_id", editor_id);
+			staff.put("edit_date", edit_date);
+			staff.put("status", "1");
+			staff_hour_list.add(staff);
+		}
+		String factory =staff_hour_list.get(0).get("factory").toString();
+		String workshop=staff_hour_list.get(0).get("workshop").toString();
+		String workgroup=staff_hour_list.get(0).get("workgroup").toString();
+		String team=staff_hour_list.get(0).get("team").toString();
+		String work_date=staff_hour_list.get(0).get("work_date").toString();
+		
+		Map<String, Object> condMap=new HashMap<String,Object>();
+		condMap.put("factory", factory);
+		condMap.put("workshop", workshop);
+		condMap.put("workgroup", workgroup);
+		condMap.put("team", team);
+		condMap.put("work_month", work_date.substring(0, 7));
+		condMap.put("salary_model", "辅助人力");
+		/**
+		 * 更新工时信息
+		 */
+		try{
+			int i=productionDao.updateStaffHours(staff_hour_list);
+		//计算计件工资
+			if(i>0){
+				productionDao.caculatePieceSalary_2(condMap);
+			}
+			model.put("success", true);
+			model.put("message", "保存成功！");
+		}catch(Exception e){
+			model.put("success", false);
+			model.put("message", "保存失败!<br/>"+e.getMessage());
+			throw new RuntimeException(e.getMessage());
+		}
+	}
+
+	@Override
+	public void updateStaffHours_cal3(String str_staffHours, String edit_date,
+			String editor_id, ModelMap model) {
+		JSONArray staff_hours_arr=JSONArray.fromObject(str_staffHours);
+		Iterator it_del=staff_hours_arr.iterator();
+		List<Map<String,Object>> staff_hour_list=new ArrayList<Map<String,Object>>();
+		
+		while(it_del.hasNext()){
+			JSONObject jel=(JSONObject) it_del.next();
+			Map<String,Object> staff=(Map<String, Object>) JSONObject.toBean(jel, Map.class);
+			staff.put("editor_id", editor_id);
+			staff.put("edit_date", edit_date);
+			staff.put("status", "1");
+			staff_hour_list.add(staff);
+		}
+		String factory =staff_hour_list.get(0).get("factory").toString();
+		String workshop=staff_hour_list.get(0).get("workshop").toString();
+		String workgroup=staff_hour_list.get(0).get("workgroup").toString();
+		String team=staff_hour_list.get(0).get("team").toString();
+		String work_date=staff_hour_list.get(0).get("work_date").toString();
+		
+		Map<String, Object> condMap=new HashMap<String,Object>();
+		condMap.put("factory", factory);
+		condMap.put("workshop", workshop);
+		condMap.put("workgroup", workgroup);
+		condMap.put("team", team);
+		condMap.put("work_month", work_date.substring(0, 7));
+		condMap.put("salary_model", "底薪模式");
+		/**
+		 * 更新工时信息
+		 */
+		try{
+			int i=productionDao.updateStaffHours(staff_hour_list);
+		//计算计件工资
+			if(i>0){
+				productionDao.caculatePieceSalary_3(condMap);
+			}
+			model.put("success", true);
+			model.put("message", "保存成功！");
+		}catch(Exception e){
+			model.put("success", false);
+			model.put("message", "保存失败!<br/>"+e.getMessage());
+			throw new RuntimeException(e.getMessage());
+		}	
+	}
 	
 	/*****************************xiong jianwu end  *****************************/
 
