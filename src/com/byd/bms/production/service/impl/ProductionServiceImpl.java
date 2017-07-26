@@ -775,7 +775,15 @@ public class ProductionServiceImpl implements IProductionService {
 		
 		return productionDao.saveWaitWorkHourInfo(swh_list);
 	}
+	@Override
+	public int deleteWaitHourInfo(Map<String, Object> conditionMap) {
+		return productionDao.deleteWaitHourInfo(conditionMap);
+	}
 
+	@Override
+	public int batchUpdateWaitPay(List<Map<String, Object>> swh_list) {
+		return productionDao.batchUpdateWaitPay(swh_list);
+	}
 	/*******************  tangjin end  **************************/
 	@Override
 	@DataSource("dataSourceSlave")
@@ -792,5 +800,31 @@ public class ProductionServiceImpl implements IProductionService {
 	public List<Map<String,String>> getProductionSearchCarinfo(Map<String,Object> queryMap){
 		return productionDao.getProductionSearchCarinfo(queryMap);
 	}
-
+	@Override
+	public int addRewards(List<Map<String, Object>> addList) {
+		return productionDao.addRewards(addList);
+	}
+	@Override
+	public Map<String, Object> getRewardsList(Map<String,Object> queryMap){
+		int totalCount=0;
+		List<Map<String,String>> datalist = productionDao.getRewardsList(queryMap);
+		totalCount = productionDao.getRewardsListCount(queryMap);		
+		Map<String, Object> result = new HashMap<String,Object>();
+		result.put("total", totalCount);
+		result.put("rows", datalist);
+		return result;
+	}
+	
+	@Override
+	public void deleteRewards(Map map) {
+		productionDao.deleteRewards(map);
+	}
+	@Override
+	public List<Map<String, Object>> getOrg(List<Map<String, Object>> conditionMap) {
+		return productionDao.getOrg(conditionMap);
+	}
+	@Override
+	public int insertRewards(List<Map<String, Object>> conditionMap){
+		return productionDao.insertRewards(conditionMap);
+	}
 }

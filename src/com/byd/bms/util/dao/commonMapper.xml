@@ -254,6 +254,11 @@
 		</if>
 	</update>
 	
+	<select id="getStaffNameByNumber" parameterType="String"
+		resultType="String">
+		select name from BMS_HR_STAFF where
+		staff_number=#{staff_number}
+	</select>
 	<select id="queryIndexOrderData" parameterType="String" resultType="Map">
 		select * from
 		(select count(b.bus_number) warehouse_qty

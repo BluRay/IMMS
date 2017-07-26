@@ -72,6 +72,9 @@ public class CommonServiceImpl implements ICommonService {
 	public List<String> getRoleAuthority(String staff_number) {
 		List<String> datalist = commonDao.getRoleAuthority(staff_number);
 		return datalist;
+	}@Override
+	public void getStaffNameByNumber(String staff_number,ModelMap model){
+		model.put("data", commonDao.getStaffNameByNumber(staff_number));
 	}
 	@Override
 	public List<Map<String, Object>> getWorkshopSelect( Map<String, Object> condMap) {

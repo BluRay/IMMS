@@ -10,6 +10,8 @@
 		<link rel="stylesheet" href="../assets/css/jquery-ui.min.css" />
 		<link rel="stylesheet" href="../assets/css/jquery-ui.custom.min.css" />
 		<link rel="stylesheet" href="../assets/css/jquery.gritter.css" />
+		<link rel="stylesheet" href="../assets/css/fixedColumns.bootstrap.min.css" />
+		<link rel="stylesheet" href="../assets/css/fixedColumns.dataTables.min.css" />
 	</head>
 	<body class="no-skin" style="font-family: 'Microsoft YaHei';">
 		<!-- 头 -->
@@ -72,7 +74,7 @@
 						</table>
 					</div>
 					
-					<table id="tableData" class="table table-striped table-bordered table-hover" style="width:2500px;overflow-x:auto;font-size: 12px;">
+					<table id="tableData" class="table table-striped table-bordered table-hover" style="width:2000px;overflow-x:auto;font-size: 12px;">
 					</table>
 					
 					</div>
@@ -133,6 +135,58 @@
 					<tbody class="exp-table" id="tb_workhour">
 					</tbody>
 				</table>
+				</div>
+			</div>
+			
+			<div id="dialog-edit" class="hide" style="align:center;width:700px;height:500px">
+				<table style="line-height:30px">
+					<tr>
+					<td width="140px" style="text-align:right">技改单编号：</td>								
+					<td id="edit_orderNo"></td>
+					</tr>
+					<tr>
+					<td width="140px" style="text-align:right">技改任务：</td>								
+					<td id="edit_task"></td>	
+					</tr>
+				</table>
+				<table class="form-search">
+					<tr>
+					<td width="60px" style="text-align:right">工号：</td>
+					<td width="160px">
+						<input type="text" class="input-medium" id="edit_cardNumber"/>
+						<input type="text" style="display:none" class="input-medium" id="edit_ecnTaskId"/>
+						<input type="text" style="display:none" class="input-medium" id="edit_factory"/>
+						<input type="text" style="display:none" class="input-medium" id="edit_workshop"/>
+					</td>
+					<td width="80px" style="text-align:right">操作日期：</td>
+					<td width="160px">
+						<input type="text" class="input-medium" id="edit_workDate" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:new Date()})"/>
+					</td>
+					<td><input type="button" class="btn btn-primary" id="btnSwhQuery" value="查询" style="margin-left: 2px;line-height:0; height:32px"></input></td>
+					<td></td>
+					</tr>								
+				</table>
+				<h5 class="section-head">技改工时<span style="float:right;margin: 10px 20px;color:green" class="read_hours"></span></h5>
+				<div style="width:100%;height:300px;">
+					<table style="margin-left:0px;width: 100%;"class="exp-table table" id="workhour_tb">
+						<thead style="background-color: rgb(225, 234, 240)">
+						<tr>
+						<td ><input type="checkbox" id="checkall"></td>
+						<td >工号</td>
+						<td >姓名</td>
+						<td >岗位</td>
+						<td >技改工时</td>
+						<td >小班组</td>
+						<td >班组</td>
+						<td >车间</td>
+						<td >工厂</td>
+						<td>状态</td>
+						<td >操作日期</td>
+						</tr>
+						</thead>
+						<tbody class="exp-table" id="workhour_list">
+						</tbody>
+					</table>
 				</div>
 			</div>
 

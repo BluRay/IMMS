@@ -509,6 +509,7 @@ public class TechServiceImpl implements ITechService {
 		
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Map<String, Object> querySingleTasklist(String conditions) {
 		JSONObject jo=JSONObject.fromObject(conditions);
@@ -602,6 +603,16 @@ public class TechServiceImpl implements ITechService {
 	@Override
 	public int saveWorkHourInfo(List<Map<String, Object>> swh_list) {
 		return techDao.saveWorkHourInfo(swh_list);
+	}
+
+	@Override
+	public int deleteWorkHourInfo(Map<String, String> conditionMap) {
+		return techDao.deleteWorkHourInfo(conditionMap);
+	}
+
+	@Override
+	public int batchUpdateWorkHour(List<Map<String, Object>> swh_list) {
+		return techDao.batchUpdateWorkHour(swh_list);
 	}
 
 		

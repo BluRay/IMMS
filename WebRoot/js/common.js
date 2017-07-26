@@ -772,7 +772,7 @@ function expandLevel(treeObj,node,level){
     {  
         treeObj.expandNode(childrenNodes[i], true, false, false);  
         level=level-1;  
-        if(level>0)  
+        if(level>=0)  
         {  
             expandLevel(treeObj,childrenNodes[i],level);  
         }  
@@ -884,5 +884,13 @@ function getStaffInfo(staffNum){
 	return staff;
 }
 
+function check_All_unAll(tableId, checkall) {
+	if (checkall) {
+		$(tableId + " tbody :checkbox").prop("checked", true);
+		$(tableId + " tbody :disabled").prop("checked", false);
+	} else {
+		$(tableId + " tbody :checkbox").prop("checked", false);
+	}
+}
 
 	

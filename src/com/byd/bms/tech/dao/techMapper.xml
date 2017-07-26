@@ -875,8 +875,7 @@
 	</insert>
 	
 	<update id="batchUpdateWorkHour" parameterType="List">
-		<foreach collection="list" item="detail" index="index"
-			separator=";">
+		<foreach collection="list" item="detail" index="index" separator=";">
 			update BMS_HR_STAFF_TECH_HOURS
 			<trim prefix="SET" suffixOverrides=",">
 				<if test="detail.status!=null">
@@ -1324,6 +1323,13 @@
 		<![CDATA[
 			delete from BMS_TECH_MATERIAL where tech_task_id= #{tech_task_id}
 		]]>
+	</update>
+	
+	<update id="deleteWorkHourInfo" parameterType="Map">
+		DELETE FROM BMS_HR_STAFF_TECH_HOURS WHERE 
+		<if test="ids !=null and ids !=''">
+			find_in_set(id,#{ids})>0
+		</if>		
 	</update>
 	
 	<!-- 技改任务维护-修改 -->

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.byd.bms.hr.dao.IHrReportDao">
+  	
+		
+	<!-- 查询奖惩汇总信息 -->
+	<select id="getRewardsCollectList" resultType="Map"
+		parameterType='Map'>
+		
+		SELECT tmp.*,r.rewards_date,r.reasons,r.add as add_,r.deduct as decuct_,r.group_leader,r.gaffer,r.proposer,r.status 
+			FROM 
+					(SELECT
+							r1.staff_number,s.name,s.workgroup_org,s.team_org,left(r1.rewards_date,7) rewards_month,r1.rewards_factory,r1.rewards_workshop,100
+							AS 'fullmark',sum(r1.add) AS `add`,
+							SUM(r1.deduct) AS
+							deduct,100+ifnull(sum(r1.add),0)-ifnull(SUM(r1.deduct),0) AS mark
+							 FROM
+							BMS_HR_REWARDS r1
+							LEFT JOIN BMS_HR_STAFF s ON r1.staff_number = s.staff_number
+							WHERE
+							1=1
+							and r1.rewards_date LIKE CONCAT(#{rewards_date},'%') 
+							<if test="rewards_factory!=null and rewards_factory!=''">
+								AND r1.rewards_factory = #{rewards_factory}
+							</if>
+							<if test="rewards_workshop!=null and rewards_workshop!=''">
+								AND r1.rewards_workshop = #{rewards_workshop}
+							</if>
+							<if test="staff_number!=null">
+								AND r1.staff_number LIKE CONCAT('%',#{staff_number},'%') 
+								AND (s.staff_number LIKE CONCAT('%',#{staff_number},'%') OR s.name LIKE CONCAT('%',#{staff_number},'%'))
+							</if>
+							GROUP BY r1.staff_number,left(r1.rewards_date,7),r1.rewards_factory,r1.rewards_workshop
+							order by r1.staff_number,left(r1.rewards_date,7),r1.rewards_factory,r1.rewards_workshop
+							<if test="start !=null  and length!=-1">
+								LIMIT #{start} ,#{length} 
+							</if>
+							)tmp  
+		    LEFT JOIN BMS_HR_REWARDS r 
+				ON tmp.staff_number = r.staff_number AND tmp.rewards_month = left(r.rewards_date,7) 
+					AND tmp.rewards_factory = r.rewards_factory AND tmp.rewards_workshop = r.rewards_workshop 
+			LEFT JOIN BMS_HR_STAFF s1 ON r.staff_number = s1.staff_number
+		 WHERE 1=1 
+					and	r.rewards_date LIKE CONCAT(#{rewards_date},'%')
+				<if test="rewards_factory!=null and rewards_factory!=''">
+					AND r.rewards_factory = #{rewards_factory}
+				</if>
+				<if test="rewards_workshop!=null and rewards_workshop!=''">
+					AND r.rewards_workshop = #{rewards_workshop}
+				</if>
+				<if test="staff_number!=null">
+					AND r.staff_number LIKE CONCAT('%',#{staff_number},'%') 
+					AND (s1.staff_number LIKE CONCAT('%',#{staff_number},'%') OR s1.name LIKE CONCAT('%',#{staff_number},'%'))
+				</if>
+				ORDER BY r.staff_number,tmp.rewards_month,tmp.rewards_factory,tmp.rewards_workshop
+	</select>
+	<select id="getRewardsCollectTotalCount" resultType="int"
+		parameterType='Map'>
+		SELECT 		count(tmp.staff_number)  FROM (
+				SELECT r.staff_number FROM BMS_HR_REWARDS r
+				LEFT JOIN BMS_HR_STAFF s ON r.staff_number = s.staff_number
+				WHERE  1= 1
+				and r.rewards_date LIKE CONCAT('%',#{rewards_date},'%')
+				<if test="rewards_factory!=null and rewards_factory!=''">
+					AND r.rewards_factory = #{rewards_factory}
+				</if>
+				<if test="rewards_workshop!=null and rewards_workshop!=''">
+					AND r.rewards_workshop = #{rewards_workshop}
+				</if>
+				<if test="staff_number!=null">
+					AND r.staff_number LIKE CONCAT('%',#{staff_number},'%') 
+					AND (s.staff_number LIKE CONCAT('%',#{staff_number},'%') OR s.name LIKE CONCAT('%',#{staff_number},'%'))
+				</if>
+				GROUP BY r.staff_number,left(r.rewards_date,7),r.rewards_factory,r.rewards_workshop )tmp
+
+	</select>
+	
+</mapper>

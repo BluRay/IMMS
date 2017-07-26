@@ -144,11 +144,22 @@ public interface IProductionDao {
 	public int getWaitWorkTimeCount(Map<String,Object> conditionMap);
 	
 	public int saveWaitWorkHourInfo(List<Map<String, Object>> swh_list);
+	
+	public int deleteWaitHourInfo(Map<String, Object> conditionMap);
+	
+	public int batchUpdateWaitPay(List<Map<String, Object>> swh_list);
 	/******************* tangjin end**************************/
 
 	public List<Map<String,String>> getProductionSearch(Map<String,Object> queryMap);
 	public List<Map<String,String>> getProductionWIPBusInfo(Map<String,Object> queryMap);
 	public List<Map<String,String>> getProductionSearchCarinfo(Map<String,Object> queryMap);
 
+	public int addRewards(List<Map<String, Object>> addList);
+	
+	public List<Map<String,String>> getRewardsList(Map<String,Object> queryMap);
+	public int getRewardsListCount(Map<String,Object> queryMap);
+	public void deleteRewards(Map map);
+	public List<Map<String, Object>> getOrg(List<Map<String, Object>> conditionMap);
+	public int insertRewards(List<Map<String, Object>> conditionMap);
 	
 }

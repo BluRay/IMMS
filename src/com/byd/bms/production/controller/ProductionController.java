@@ -1,5 +1,12 @@
 package com.byd.bms.production.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,21 +15,23 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.byd.bms.production.model.ProductionException;
 import com.byd.bms.production.service.IProductionService;
+import com.byd.bms.util.ExcelModel;
+import com.byd.bms.util.ExcelTool;
 import com.byd.bms.util.HttpUtil;
 import com.byd.bms.util.controller.BaseController;
 import com.byd.bms.util.model.BmsBaseUser;
@@ -1254,12 +1263,12 @@ public class ProductionController extends BaseController {
 		String conditions=request.getParameter("conditions");
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String curTime = df.format(new Date());
-		String userid=String.valueOf(session.getAttribute("user_id"));
+		String user_name=String.valueOf(session.getAttribute("user_name"));
 		JSONArray jsonArray=JSONArray.fromObject(conditions);
 		List<Map<String,Object>> swh_list=new ArrayList<Map<String,Object>>();
 		for(int i=0;i<jsonArray.size();i++){
 			 JSONObject object = (JSONObject)jsonArray.get(i);		
-			 object.put("editor_id", userid);
+			 object.put("editor", user_name);
 			 object.put("edit_date", curTime);
 			Map<String, Object> map = (Map<String, Object>) object;
 			swh_list.add(map);
@@ -1280,6 +1289,292 @@ public class ProductionController extends BaseController {
 		model = mv.getModelMap();
 		return model;
 	}
-	
+	/**等待工时修改*/
+	@RequestMapping("/waitWorkTimeMod")
+	public ModelAndView waitWorkTimeMod(){
+		mv.setViewName("production/waitWorkTimeMod");
+		return mv;
+	}
+	/**
+	 * 删除工时信息
+	 * @return
+	 */
+	@RequestMapping("/deleteWaitWorkTimeInfo")
+	@ResponseBody
+	public ModelMap deleteWaitWorkTimeInfo(){
+		Map<String,Object> result=new HashMap<String,Object>();
+		String conditions=request.getParameter("conditions");
+		JSONObject jo=JSONObject.fromObject(conditions);
+		Map<String,Object> conditionMap=new HashMap<String,Object>();
+		for(Iterator it=jo.keys();it.hasNext();){
+			String key=(String) it.next();
+			conditionMap.put(key, jo.get(key));
+		}
+		
+		int i=productionService.deleteWaitHourInfo(conditionMap);
+		if(i>0){
+			result.put("success", true);
+		    result.put("message", "删除成功");
+		}else{
+			result.put("success", false);
+		    result.put("message", "系统异常！删除失败");
+		}
+		model.addAllAttributes(result);
+		return model;
+	}
+	@RequestMapping("/updateWaitWorkTimeInfo")
+	@ResponseBody
+	public ModelMap updateWaitWorkTimeInfo(){
+		String conditions=request.getParameter("conditions");
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String user_name=String.valueOf(session.getAttribute("user_name"));
+		JSONArray jsonArray=JSONArray.fromObject(conditions);
+		List<Map<String,Object>> swh_list=new ArrayList<Map<String,Object>>();
+		for(int i=0;i<jsonArray.size();i++){
+			 JSONObject object = (JSONObject)jsonArray.get(i);	
+			 if(object.get("status").toString().equals("1")){
+				 object.put("approver", user_name);
+				 object.put("approve_date", curTime);
+			 }else{
+				 object.put("wpay", null);
+				 object.put("editor", user_name);
+				 object.put("edit_date", curTime);
+			 }
+			 
+			Map<String, Object> map = (Map<String, Object>) object;
+			swh_list.add(map);
+		}
+		int i=0;		
+		i=productionService.batchUpdateWaitPay(swh_list);
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		if(i>0){
+			result.put("success", true);
+			result.put("message","修改成功");
+		}else{
+			result.put("success", false);
+			result.put("message","修改失败");
+		}		
+		mv.clear();
+		mv.getModelMap().addAllAttributes(result);
+		model = mv.getModelMap();
+		return model;
+	}
+	/**等待工时审核*/
+	@RequestMapping("/waitWorkTimeVerify")
+	public ModelAndView waitWorkTimeVerify(){
+		mv.setViewName("production/waitWorkTimeVerify");
+		return mv;
+	}
 	/****************************  TANGJIN ***************************/
+	
+	/****************************  THW ***************************/
+	/**
+	 * 生产模块首页
+	 * @return
+	 */
+	@RequestMapping("/rewardsIndex")
+	public ModelAndView rewardsIndex(){
+		mv.setViewName("production/rewardsMtn");
+		return mv;
+	}
+	/**
+	 * 查询监控工序下拉列表
+	 * @return
+	 */
+	@RequestMapping("/addRewards")
+	@ResponseBody
+	public ModelMap addRewards(){
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String userid=String.valueOf(session.getAttribute("user_id"));
+		
+		List<Map<String, Object>> addList = new ArrayList<Map<String,Object>>();
+		Map<String, Object> rewardsInfo = new HashMap<String, Object>();
+		rewardsInfo.put("staff_number", request.getParameter("staff_number"));
+		rewardsInfo.put("rewards_factory", request.getParameter("rewards_factory"));
+		rewardsInfo.put("rewards_workshop", request.getParameter("rewards_workshop"));
+		rewardsInfo.put("rewards_date", request.getParameter("rewards_date"));
+		rewardsInfo.put("reasons", request.getParameter("reasons"));
+		rewardsInfo.put("deduct", request.getParameter("deduct"));
+		rewardsInfo.put("add", request.getParameter("add"));
+		rewardsInfo.put("group_leader", request.getParameter("group_leader"));
+		rewardsInfo.put("gaffer", request.getParameter("gaffer"));
+		rewardsInfo.put("proposer", request.getParameter("proposer"));
+		rewardsInfo.put("editor_id", userid);
+		rewardsInfo.put("edit_date", curTime);
+		addList.add(rewardsInfo);
+		
+		model=new ModelMap();
+		model.put("data", productionService.addRewards(addList));
+		return model;
+	}
+	
+	@RequestMapping("/getRewardsList")
+	@ResponseBody
+	public ModelMap getRewardsList() {
+		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
+		int start=(request.getParameter("start")!=null)?Integer.parseInt(request.getParameter("start")):0;		//分页数据起始数
+		int length=(request.getParameter("length")!=null)?Integer.parseInt(request.getParameter("length")):20;	//每一页数据条数
+		Map<String, Object> conditionMap = new HashMap<String, Object>();
+		conditionMap.put("draw", draw);
+		conditionMap.put("start", start);
+		conditionMap.put("length", length);
+		conditionMap.put("staff_number", request.getParameter("staff_number"));
+		conditionMap.put("rewards_factory", request.getParameter("factory"));
+		conditionMap.put("rewards_workshop", request.getParameter("workshop"));
+		conditionMap.put("rewards_date", request.getParameter("rewards_date"));
+		
+		Map<String, Object> selectList = productionService.getRewardsList(conditionMap);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(selectList);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/deleteRewards")
+	@ResponseBody
+	public ModelMap deleteRewards() {
+		try {
+			String ids = request.getParameter("ids");
+			Map map = new HashMap();
+			map.put("ids", ids);
+			productionService.deleteRewards(map);
+			initModel(true, "success", "");
+		} catch (Exception e) {
+			initModel(false, e.getMessage(), e.toString());
+		}
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value="/uploadRewards",method=RequestMethod.POST)
+	@ResponseBody
+	public ModelMap uploadRewards(@RequestParam(value="file",required=false) MultipartFile file){
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String userid=String.valueOf(session.getAttribute("user_id"));
+		
+		int insert = 0;
+		String result = "";
+		
+		String fileFileName = "uploadRewards.xls";
+		//int result = 0;
+		ExcelModel excelModel =new ExcelModel();
+		excelModel.setReadSheets(1);
+		excelModel.setStart(1);
+		Map<String,Integer> dataType = new HashMap<String,Integer>();
+		dataType.put("0", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("1", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("2", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("3", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("4", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("5", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("6", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("7", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("8", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("9", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("10", ExcelModel.CELL_TYPE_CANNULL);
+		excelModel.setDataType(dataType);
+		excelModel.setPath(fileFileName);
+		
+		try {
+			File staffFile = new File(fileFileName);
+			file.transferTo(staffFile);
+			InputStream is = new FileInputStream(staffFile);
+			ExcelTool excelTool = new ExcelTool();
+			excelTool.readExcel(is, excelModel);
+			
+			if(excelModel.getData().size()>500){
+				initModel(false,"不能同时导入500条以上数据！",null);
+				model = mv.getModelMap();
+				return model;
+			}else{
+				List<Map<String, Object>> addList = new ArrayList<Map<String,Object>>();
+				StringBuffer staff_numbers = new StringBuffer();
+				boolean success = true;
+				int i = 1;
+				List<Map<String, Object>> queryOrgList = new ArrayList<Map<String,Object>>();
+				for(Object[] data : excelModel.getData()){
+					++i;
+					if(null == data[0] || StringUtils.isBlank(data[0].toString().trim())){
+						success = false;
+						result = result+"第"+i+"行工号信息为必填项！\n";
+					}
+					if(null == data[2] || StringUtils.isBlank(data[2].toString().trim()) || 
+							null == data[3] || StringUtils.isBlank(data[3].toString().trim()) || 
+							null == data[4] || StringUtils.isBlank(data[4].toString().trim())){
+						success = false;
+						result = result+"第"+i+"行奖惩工厂、奖惩车间、奖惩日期信息为必填项！\n";
+					}
+					if((null == data[6] || StringUtils.isBlank(data[6].toString().trim())) &&
+							(null == data[7] || StringUtils.isBlank(data[7].toString().trim())) ){
+						success = false;
+						result = result+"第"+i+"行扣分、奖励至少需要填写一个值！\n";
+					}
+					//组织结构信息校验
+					Map queryOrgMap = new HashMap<String, Object>();
+					if(null!=data[2] && !"".equals(data[2].toString().trim())){
+						queryOrgMap.put("plant", data[2]==null?null:data[2].toString());
+					}
+					if(null!=data[3] && !"".equals(data[3].toString().trim())){
+						queryOrgMap.put("workshop", data[3]==null?null:data[3].toString());
+					}
+					
+					queryOrgList.add(queryOrgMap);
+					
+					Map<String, Object> rewardsInfo = new HashMap<String, Object>();
+					rewardsInfo.put("staff_number", data[0] == null?null:data[0].toString().trim());
+					rewardsInfo.put("rewards_factory", data[2] == null?null:data[2].toString().trim());
+					rewardsInfo.put("rewards_workshop", data[3] == null?null:data[3].toString().trim());
+					rewardsInfo.put("rewards_date", data[4] == null?null:data[4].toString().trim());
+					rewardsInfo.put("reasons", data[5] == null?null:data[5].toString().trim());
+					rewardsInfo.put("deduct", data[6] == null?null:data[6].toString().trim());
+					rewardsInfo.put("add", data[7] == null?null:data[7].toString().trim());
+					rewardsInfo.put("group_leader", data[8] == null?null:data[8].toString().trim());
+					rewardsInfo.put("gaffer", data[9] == null?null:data[9].toString().trim());
+					rewardsInfo.put("proposer", data[10] == null?null:data[10].toString().trim());
+					rewardsInfo.put("editor_id", userid);
+					rewardsInfo.put("edit_date", curTime);
+					addList.add(rewardsInfo);
+				}
+				//根据用户填写的组织结构信息查询bms_base_org表
+				List<Map<String, Object>> orgResultList = productionService.getOrg(queryOrgList);
+				int j=1;
+				for(Object[] data : excelModel.getData()){
+					++j;
+					String rewards_factory = data[2].toString().trim();
+					String rewards_workshop = data[3].toString().trim();
+					Map <String, Object> orgMap = new HashMap<String, Object>();
+					orgMap.put("plant", rewards_factory);
+					orgMap.put("workshop", rewards_workshop);
+					if(orgResultList.indexOf(orgMap)<0){
+						success = false;
+						result = result+"第"+j+"行填写的惩工厂、奖惩车间信息与组织结构不符！\n";
+					}
+				}
+				if(success){
+					insert = productionService.insertRewards(addList);
+				}
+				
+			}
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+			initModel(false,"导入文件的格式有误！",null);
+			model = mv.getModelMap();
+			return model;
+		}
+		if(insert>0){
+			result ="车间奖惩导入成功！";
+		}
+		initModel(true,result,null);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	/****************************  THW ***************************/
+	
 }

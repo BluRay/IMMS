@@ -51,6 +51,8 @@ public interface ICommonService {
 	List<Map<String,Object>> getWorkgroupSelectAll(Map<String,Object> condMap);
 	
 	public List<Map<String,String>> getUserInfoByCard(String string);//刷厂牌获取用户信息
+	
+	public void getStaffNameByNumber(String staff_number,ModelMap model);
 
 	/**
 	 * @author xiong.jianwu

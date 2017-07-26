@@ -79,4 +79,6 @@ public interface ITechService {
 	public List<Map<String, String>> queryStaffWorkHours(Map<String, Object> conditionMap);
 	
 	public int saveWorkHourInfo(List<Map<String, Object>> swh_list);
+	public int deleteWorkHourInfo(Map<String, String> conditionMap);
+	public int batchUpdateWorkHour(List<Map<String, Object>> swh_list);
 }

@@ -1,11 +1,18 @@
 package com.byd.bms.util.controller;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import net.sf.json.JSONObject;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -337,6 +344,14 @@ public class CommonController extends BaseController {
 		condMap.put("query_date", query_date);
 		condMap.put("factory_id", request.getParameter("factory_id"));
 		commonService.getIndexFactoryDailyData(condMap,model);
+		return model;
+	}
+	@RequestMapping("/getStaffNameByNumber")
+	@ResponseBody
+	public ModelMap getStaffNameByNumber(){
+		model=new ModelMap();
+		String staff_number = request.getParameter("staff_number");
+		commonService.getStaffNameByNumber(staff_number,model);
 		return model;
 	}
 	

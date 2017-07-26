@@ -883,6 +883,7 @@ public class TechController extends BaseController{
 		return model;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@RequestMapping("/saveWorkHourInfo")
 	@ResponseBody
 	public ModelMap saveWorkHourInfo(){
@@ -900,6 +901,53 @@ public class TechController extends BaseController{
 			swh_list.add(map);
 		}
 		int result = techService.saveWorkHourInfo(swh_list);
+		mv.clear();
+		initModel(true,String.valueOf(result),null);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/deleteWorkHourInfo")
+	@ResponseBody
+	public ModelMap deleteWorkHourInfo(){
+		String conditions = request.getParameter("conditions");
+		JSONArray jsonArray=JSONArray.fromObject(conditions);
+		List<String> idlist=new ArrayList<String>();
+		for(int i=0;i<jsonArray.size();i++){
+			 JSONObject object = (JSONObject)jsonArray.get(i);
+			 idlist.add(object.getString("id"));
+		}
+		String ids=StringUtils.join(idlist, ",");
+		Map<String, String> conditionMap=new HashMap<String,String>();
+		conditionMap.put("ids", ids);
+		
+		int result = techService.deleteWorkHourInfo(conditionMap);
+		mv.clear();
+		initModel(true,String.valueOf(result),null);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/updateWorkHourInfo")
+	@ResponseBody
+	public ModelMap updateWorkHourInfo(){
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String edit_user = request.getSession().getAttribute("staff_number") + "";
+		String conditions = request.getParameter("conditions");
+		JSONArray jsonArray=JSONArray.fromObject(conditions);
+		List<Map<String, Object>> swh_list = new ArrayList<Map<String, Object>>();
+		for (int i = 0; i < jsonArray.size(); i++) {
+			JSONObject object = (JSONObject) jsonArray.get(i);
+			object.put("approverId", edit_user);
+			object.put("approveDate", curTime);
+			object.put("status", "1");
+			object.put("actionType", "verify");
+			Map<String, Object> map = (Map<String, Object>) object;
+			swh_list.add(map);
+		}
+		int result = techService.batchUpdateWorkHour(swh_list);
 		mv.clear();
 		initModel(true,String.valueOf(result),null);
 		model = mv.getModelMap();

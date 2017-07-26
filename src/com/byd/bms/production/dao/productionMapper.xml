@@ -1658,27 +1658,30 @@
 		<if test="workgroup !=null and workgroup !='' and workgroup !='请选择'">
 			and s.workgroup=#{workgroup}
 		</if>
+		<if test="team !=null and team !='' and team !='请选择'">
+			and s.team=#{team}
+		</if>
 		<if test="waitReason !=null and waitReason !=''">
-			and s.wait_reason=#{waitReason}
+			and s.wait_reason=#{wait_reason}
 		</if>		
 		<if test="workDate !=null and workDate !=''">
 			and s.work_date=#{workDate}
 		</if>
-		<if test="staffNum !=null and staffNum!=''">
-			and find_in_set(s.staff_number,#{staffNum})>0
+		<if test="staff_number !=null and staff_number!=''">
+			and find_in_set(s.staff_number,#{staff_number})>0
 		</if>	
-		<if test="wdateStart !=null and wdateStart !=''">
+		<if test="date_start !=null and date_start !=''">
 		<![CDATA[ 
-			and s.work_date>=#{wdateStart}
+			and s.work_date>=#{date_start}
 		]]>
 			</if>
-			<if test="wdateEnd !=null and wdateEnd !=''">
+			<if test="date_end !=null and date_end !=''">
 		<![CDATA[ 
-			and s.work_date<=#{wdateEnd}
+			and s.work_date<=#{date_end}
 		]]>
 		</if>
 		
-		order by s.factory,s.workshop,s.workgroup,s.team,s.work_date desc
+		order by s.factory,s.workshop,s.workgroup,s.team,s.work_date,s.wait_reason,s.detail_reason desc
 		<if test="start !=null">
 			LIMIT #{start} ,#{length} 
 		</if>		
@@ -1698,6 +1701,9 @@
 		<if test="workgroup !=null and workgroup !='' and workgroup !='请选择'">
 			and s.workgroup=#{workgroup}
 		</if>
+		<if test="team !=null and team !='' and team !='请选择'">
+			and s.team=#{team}
+		</if>
 		<if test="waitReason !=null and waitReason !=''">
 			and s.wait_reason=#{waitReason}
 		</if>		
@@ -1719,6 +1725,137 @@
 		</if>
 		
 	</select>
+	
+	<insert id="addRewards" parameterType="List">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		<foreach collection="list" index="index" item="item"
+			separator=";">
+			INSERT INTO BMS_HR_REWARDS(staff_number,rewards_date
+			<if test="item.rewards_factory!=null and item.rewards_factory!=''">,rewards_factory</if>
+			<if test="item.rewards_workshop!=null and item.rewards_workshop!=''">,rewards_workshop</if>
+			<if test="item.reasons!=null and item.reasons!=''">,reasons</if>
+			<if test="item.add!=null and item.add!=''">,`add`</if>
+			<if test="item.deduct!=null and item.deduct!=''">,deduct</if>
+			<if test="item.group_leader!=null and item.group_leader!=''">,group_leader</if>
+			<if test="item.gaffer!=null and item.gaffer!=''">,gaffer</if>
+			<if test="item.proposer!=null and item.proposer!=''">,proposer</if>
+			<if test="item.editor_id!=null and item.editor_id!=''">,editor_id</if>
+			<if test="item.edit_date!=null and item.edit_date!=''">,edit_date</if>
+			)
+			VALUES(#{item.staff_number},#{item.rewards_date}
+			<if test="item.rewards_factory!=null and item.rewards_factory!=''">,#{item.rewards_factory}</if>
+			<if test="item.rewards_workshop!=null and item.rewards_workshop!=''">,#{item.rewards_workshop}</if>
+			<if test="item.reasons!=null and item.reasons!=''">,#{item.reasons}</if>
+			<if test="item.add!=null and item.add!=''">,#{item.add}</if>
+			<if test="item.deduct!=null and item.deduct!=''">,#{item.deduct}</if>
+			<if test="item.group_leader!=null and item.group_leader!=''">,#{item.group_leader}</if>
+			<if test="item.gaffer!=null and item.gaffer!=''">,#{item.gaffer}</if>
+			<if test="item.proposer!=null and item.proposer!=''">,#{item.proposer}</if>
+			<if test="item.editor_id!=null and item.editor_id!=''">,#{item.editor_id}</if>
+			<if test="item.edit_date!=null and item.edit_date!=''">,#{item.edit_date}</if>
+			)
+		</foreach>
+	</insert>
+
+	<!-- 查询奖惩信息 -->
+	<select id="getRewardsList" resultType="Map" parameterType='Map'>
+		SELECT r.*,s.name FROM BMS_HR_REWARDS r
+		LEFT JOIN BMS_HR_STAFF s ON r.staff_number = s.staff_number
+		WHERE 1=1
+		<if test="rewards_date!=null and rewards_date!=''">
+			AND r.rewards_date LIKE CONCAT('%',#{rewards_date},'%')
+		</if>
+		<if test="staff_number!=null">
+			AND r.staff_number LIKE CONCAT('%',#{staff_number},'%') 
+			AND (s.staff_number LIKE CONCAT('%',#{staff_number},'%') OR s.name LIKE CONCAT('%',#{staff_number},'%'))
+		</if>
+		<if test="rewards_factory!=null and rewards_factory!=''">
+			AND r.rewards_factory = #{rewards_factory}
+		</if>
+		<if test="rewards_workshop!=null and rewards_workshop!=''">
+			AND r.rewards_workshop = #{rewards_workshop}
+		</if>
+		order by staff_number,rewards_date
+        <if test="start !=null  and length!=-1">
+			LIMIT #{start} ,#{length} 
+		</if>
+	</select>
+	<select id="getRewardsListCount" resultType="int"
+		parameterType='Map'>
+		SELECT count(r.id) FROM BMS_HR_REWARDS r
+		LEFT JOIN BMS_HR_STAFF s ON r.staff_number = s.staff_number
+		WHERE 1=1
+		<if test="rewards_date!=null and rewards_date!=''">
+			AND r.rewards_date LIKE CONCAT('%',#{rewards_date},'%')
+		</if>
+		<if test="staff_number!=null">
+			AND r.staff_number LIKE CONCAT('%',#{staff_number},'%') 
+			AND (s.staff_number LIKE CONCAT('%',#{staff_number},'%') OR s.name LIKE CONCAT('%',#{staff_number},'%'))
+		</if>
+		<if test="rewards_factory!=null and rewards_factory!=''">
+			AND r.rewards_factory = #{rewards_factory}
+		</if>
+		<if test="rewards_workshop!=null and rewards_workshop!=''">
+			AND r.rewards_workshop = #{rewards_workshop}
+		</if>
+	</select>
+	
+	<update id="deleteRewards" parameterType='Map'>
+		DELETE FROM
+		BMS_HR_REWARDS
+		WHERE FIND_IN_SET(id,#{ids})>0
+	</update>
+	<select id="getOrg" parameterType="List" resultType="Map">
+			<foreach collection="list" index="index" item="item"
+				 separator="UNION ALL" >
+					SELECT o1.name plant
+						<if test="item.workshop!=null">
+							,o2.name workshop
+						</if>
+						FROM BMS_BASE_ORG o1
+						<if test="item.workshop!=null">
+							LEFT JOIN BMS_BASE_ORG o2 on o1.id = o2.parent_id and o2.deleted = '0' and o2.name = #{item.workshop}
+						</if>
+						WHERE o1.name = #{item.plant} AND o1.deleted = '0'
+			</foreach>
+	</select>
+	<insert id="insertRewards" parameterType="List">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		<foreach collection="list" index="index" item="item"
+			separator=";">
+			INSERT INTO BMS_HR_REWARDS(staff_number,rewards_date
+			<if test="item.rewards_factory!=null and item.rewards_factory!=''">,rewards_factory</if>
+			<if test="item.rewards_workshop!=null and item.rewards_workshop!=''">,rewards_workshop</if>
+			<if test="item.reasons!=null and item.reasons!=''">,reasons</if>
+			<if test="item.add!=null and item.add!=''">,`add`</if>
+			<if test="item.deduct!=null and item.deduct!=''">,deduct</if>
+			<if test="item.group_leader!=null and item.group_leader!=''">,group_leader</if>
+			<if test="item.gaffer!=null and item.gaffer!=''">,gaffer</if>
+			<if test="item.proposer!=null and item.proposer!=''">,proposer</if>
+			<if test="item.editor_id!=null and item.editor_id!=''">,editor_id</if>
+			<if test="item.edit_date!=null and item.edit_date!=''">,edit_date</if>
+			)
+			VALUES(#{item.staff_number},#{item.rewards_date}
+			<if test="item.rewards_factory!=null and item.rewards_factory!=''">,#{item.rewards_factory}</if>
+			<if test="item.rewards_workshop!=null and item.rewards_workshop!=''">,#{item.rewards_workshop}</if>
+			<if test="item.reasons!=null and item.reasons!=''">,#{item.reasons}</if>
+			<if test="item.add!=null and item.add!=''">,#{item.add}</if>
+			<if test="item.deduct!=null and item.deduct!=''">,#{item.deduct}</if>
+			<if test="item.group_leader!=null and item.group_leader!=''">,#{item.group_leader}</if>
+			<if test="item.gaffer!=null and item.gaffer!=''">,#{item.gaffer}</if>
+			<if test="item.proposer!=null and item.proposer!=''">,#{item.proposer}</if>
+			<if test="item.editor_id!=null and item.editor_id!=''">,#{item.editor_id}</if>
+			<if test="item.edit_date!=null and item.edit_date!=''">,#{item.edit_date}</if>
+			)
+		</foreach>
+	</insert>
+	
 	<insert id="saveWaitWorkHourInfo" parameterType="list">
 		<selectKey resultType="int" keyProperty="id" order="AFTER">
 			SELECT
@@ -1733,7 +1870,53 @@
 			(#{detail.staff_number},#{detail.staff_name},#{detail.job},#{detail.plant_org},#{detail.workshop_org},#{detail.workgroup_org},#{detail.team_org},#{detail.skill_parameter},
 			#{detail.wait_type},#{detail.price},#{detail.work_hour},#{detail.work_date},#{detail.wait_reason},
             #{detail.stopline_id}, #{detail.detail_reason},#{detail.whereabouts},#{detail.duty_unit},'0',
-            #{detail.factory},#{detail.workshop},#{detail.workgroup},#{detail.team},#{detail.editor_id},#{detail.edit_date})
+            #{detail.factory},#{detail.workshop},#{detail.workgroup},#{detail.team},#{detail.editor},#{detail.edit_date})
 		</foreach>
 	</insert>
+	<update id="deleteWaitHourInfo" parameterType="Map">
+		delete from BMS_HR_WAIT_SALARY where 1=1 
+		<if test="swhid !=null and swhid !=''">
+			and id=#{swhid} and status ='2'
+		</if>
+		<if test="ids !=null and ids !=''">
+			and find_in_set(id,#{ids})>0 and status ='2'
+		</if>
+
+	</update>
+	<update id="batchUpdateWaitPay" parameterType="List">
+		<foreach collection="list" item="detail" index="index"
+			separator=";">
+			update BMS_HR_WAIT_SALARY
+			<trim prefix="SET" suffixOverrides=",">
+				<if test="detail.status!=null">
+					status=#{detail.status},
+				</if>
+				<if test="detail.work_hour!=null">
+					work_hour=#{detail.work_hour},
+				</if>
+				<if test="detail.wpay!=null">
+					wpay=#{detail.wpay},
+				</if>
+				<if test="detail.whereabouts !=null and detail.whereabouts !=''">
+					whereabouts=#{detail.whereabouts},
+				</if>
+				<if test="detail.editor !=null">
+					editor=#{detail.editor},
+				</if>
+				<if test="detail.edit_date !=null">
+					edit_date=#{detail.edit_date},
+				</if>
+				<if test="detail.approver !=null">
+					approver=#{detail.approver},
+				</if>
+				<if test="detail.approve_date !=null">
+					approve_date=#{detail.approve_date},
+				</if>
+			</trim>
+			where id=#{detail.id}
+			<if test="detail.actionType!=null">
+				and status !='3'
+			</if>
+		</foreach>
+	</update>
 </mapper>

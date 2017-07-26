@@ -192,7 +192,7 @@ $(document).ready(function() {
 	            $.ajax({
 	                type: "post",
 	                url: "/IMMS/plan/getPauseList",
-	                cache: true,  //禁用缓存
+	                cache: false,  //禁用缓存
 	                data: param,  //传入组装的参数
 	                dataType: "json",
 	                success: function (result) {
