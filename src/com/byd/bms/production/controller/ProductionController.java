@@ -15,8 +15,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.byd.bms.hr.service.IHrBaseDataService;
 import com.byd.bms.production.model.ProductionException;
 import com.byd.bms.production.service.IProductionService;
 import com.byd.bms.util.ExcelModel;
@@ -46,6 +50,8 @@ public class ProductionController extends BaseController {
 	static Logger logger = Logger.getLogger(ProductionController.class.getName());
 	@Autowired
 	protected IProductionService productionService;
+	@Autowired
+	protected IHrBaseDataService hrBaseDataService;
 
 	/****************************  xiongjianwu ***************************/
 	/**
@@ -958,7 +964,35 @@ public class ProductionController extends BaseController {
 		mv.setViewName("production/pieceWorkhourVerify");
 		return mv;
 	}
-
+	
+	/**
+	 * 工时审核（驳回）
+	 * @return
+	 */
+	@RequestMapping("/verifyStaffHours")
+	@ResponseBody
+	public ModelMap verifyStaffHours(){
+		model.clear();
+		String factory=request.getParameter("factory");
+		String workshop=request.getParameter("workshop");
+		String workgroup=request.getParameter("workgroup");
+		String team=request.getParameter("team");
+		String salary_model=request.getParameter("salary_model");
+		String bus_number_list=request.getParameter("bus_number_list");
+		String work_date_list=request.getParameter("work_date_list");
+		Map<String,String> condMap=new HashMap<String,String>();
+		condMap.put("factory", factory);
+		condMap.put("workshop", workshop);
+		condMap.put("workgroup", workgroup);
+		condMap.put("team", team);
+		condMap.put("salary_model", salary_model);
+		condMap.put("bus_number_list", bus_number_list);
+		condMap.put("work_date_list", work_date_list);
+		condMap.put("status", "2");
+		
+		productionService.verifyStaffHours(condMap,model);
+		return model;
+	}
 	/****************************  xiongjianwu ***************************/
 	
 	@RequestMapping("/productionsearchbusinfo")
@@ -1464,7 +1498,7 @@ public class ProductionController extends BaseController {
 	
 	/****************************  THW ***************************/
 	/**
-	 * 生产模块首页
+	 * 车间奖惩导入
 	 * @return
 	 */
 	@RequestMapping("/rewardsIndex")
@@ -1607,7 +1641,6 @@ public class ProductionController extends BaseController {
 						success = false;
 						result = result+"第"+i+"行扣分、奖励至少需要填写一个值！\n";
 					}
-					//组织结构信息校验
 					Map queryOrgMap = new HashMap<String, Object>();
 					if(null!=data[2] && !"".equals(data[2].toString().trim())){
 						queryOrgMap.put("plant", data[2]==null?null:data[2].toString());
@@ -1633,6 +1666,32 @@ public class ProductionController extends BaseController {
 					rewardsInfo.put("edit_date", curTime);
 					addList.add(rewardsInfo);
 				}
+				//校验员工信息
+				Map<String, Object> conditionMap = new HashMap<String, Object>();
+				conditionMap.put("staff_number", staff_numbers.toString().trim());
+				conditionMap.put("status", "在职");
+				Map<String,Object> staff_info = hrBaseDataService.getStaffList(conditionMap);
+				List<Map<String,Object>> staff_list = (List<Map<String,Object>>)staff_info.get("rows");
+				String[] staffArray=staff_numbers.toString().split(",");
+				for(int ii=0;ii<=staffArray.length-1;ii++){
+					boolean flag=true;
+					String hrStaff_status="在职";
+					for(int j=0;j<=staff_list.size()-1;j++){
+						if(staffArray[ii].equals(staff_list.get(j).get("staff_number"))){
+							flag=false;
+							hrStaff_status= (String)staff_list.get(j).get("status");
+						} 
+					}
+					if(flag){
+						success = false;
+						result = result+"工号为："+staffArray[ii]+"的员工在员工库存在！！\n";
+					}else if(hrStaff_status.equals("离职")){
+						success = false;
+						result = result+"工号为："+staffArray[ii]+"的员工已离职！！\n";
+					}
+					
+				}
+				
 				//根据用户填写的组织结构信息查询bms_base_org表
 				List<Map<String, Object>> orgResultList = productionService.getOrg(queryOrgList);
 				int j=1;
@@ -1663,6 +1722,252 @@ public class ProductionController extends BaseController {
 		if(insert>0){
 			result ="车间奖惩导入成功！";
 		}
+		initModel(true,result,null);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	/**
+	 * 考勤导入
+	 * @return
+	 */
+	@RequestMapping("/attendanceIndex")
+	public ModelAndView attendanceIndex(){
+		mv.setViewName("production/attendanceMtn");
+		return mv;
+	}
+	
+	@RequestMapping("/getAttendanceList")
+	@ResponseBody
+	public ModelMap getAttendanceList() {
+		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
+		int start=(request.getParameter("start")!=null)?Integer.parseInt(request.getParameter("start")):0;		//分页数据起始数
+		int length=(request.getParameter("length")!=null)?Integer.parseInt(request.getParameter("length")):20;	//每一页数据条数
+		Map<String, Object> conditionMap = new HashMap<String, Object>();
+		conditionMap.put("draw", draw);
+		conditionMap.put("start", start);
+		conditionMap.put("length", length);
+		conditionMap.put("staff_number", request.getParameter("staff_number"));
+		conditionMap.put("factory", request.getParameter("factory"));
+		conditionMap.put("workshop", request.getParameter("workshop"));
+		conditionMap.put("workgroup", request.getParameter("workgroup"));
+		conditionMap.put("team", request.getParameter("team"));		
+		conditionMap.put("month", request.getParameter("month"));
+		
+		Map<String, Object> selectList = productionService.getAttendanceList(conditionMap);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(selectList);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value="/uploadAttendance",method=RequestMethod.POST)
+	@ResponseBody
+	public ModelMap uploadAttendance(@RequestParam(value="file",required=false) MultipartFile file){
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String userid=String.valueOf(session.getAttribute("user_id"));
+		
+		String result = "";
+		boolean success =true;
+		
+		int error=0; //定义一个错误类型；
+		int lineCount=1; //表格数据行
+		int staffIndex=-1;
+		
+		String fileFileName = "uploadAttendance.xls";
+		//int result = 0;
+		ExcelModel excelModel =new ExcelModel();
+		excelModel.setReadSheets(1);
+		excelModel.setStart(1);
+		Map<String,Integer> dataType = new HashMap<String,Integer>();
+		dataType.put("0", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("1", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("2", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("3", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("4", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("5", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("6", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("7", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("8", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("9", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("10", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("11", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("12", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("13", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("14", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("15", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("16", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("17", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("18", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("19", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("20", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("21", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("22", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("23", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("24", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("25", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("26", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("27", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("28", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("29", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("30", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("31", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("32", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("33", ExcelModel.CELL_TYPE_CANNULL);
+		excelModel.setDataType(dataType);
+		excelModel.setPath(fileFileName);
+		
+		try {
+			File staffFile = new File(fileFileName);
+			file.transferTo(staffFile);
+			InputStream is = new FileInputStream(staffFile);
+			ExcelTool excelTool = new ExcelTool();
+			excelTool.readExcel(is, excelModel);
+			
+			if(excelModel.getData().size()>500){
+				initModel(false,"不能同时导入500条以上数据！",null);
+				model = mv.getModelMap();
+				return model;
+			}else{
+						List<Map<String, Object>> addList = new ArrayList<Map<String,Object>>();
+						
+						String month = excelModel.getData().get(0)[2].toString().trim().substring(0,7);
+						logger.info("---->month: " + month);
+						StringBuffer staff_numbers = new StringBuffer();
+						//解析并封装数据
+						for(Object[] data : excelModel.getData()){
+							if(null != data[0] && StringUtils.isNotBlank(data[0].toString().trim())){
+								String staff_number = data[0].toString().trim(); 
+								staff_numbers.append(staff_number);
+								staff_numbers.append(",");
+							}
+							Map<String, Object> attendanceInfo = new HashMap<String, Object>();
+							attendanceInfo.put("staff_number", data[0] == null?"0":data[0].toString().trim());
+							attendanceInfo.put("month", month);
+							attendanceInfo.put("D1", data[3] == null?"0":data[3].toString().trim());
+							attendanceInfo.put("D2", data[4] == null?"0":data[4].toString().trim());
+							attendanceInfo.put("D3", data[5] == null?"0":data[5].toString().trim());
+							attendanceInfo.put("D4", data[6] == null?"0":data[6].toString().trim());
+							attendanceInfo.put("D5", data[7] == null?"0":data[7].toString().trim());
+							attendanceInfo.put("D6", data[8] == null?"0":data[8].toString().trim());
+							attendanceInfo.put("D7", data[9] == null?"0":data[9].toString().trim());
+							attendanceInfo.put("D8", data[10] == null?"0":data[10].toString().trim());
+							attendanceInfo.put("D9", data[11] == null?"0":data[11].toString().trim());
+							attendanceInfo.put("D10", data[12] == null?"0":data[12].toString().trim());
+							attendanceInfo.put("D11", data[13] == null?"0":data[13].toString().trim());
+							attendanceInfo.put("D12", data[14] == null?"0":data[14].toString().trim());
+							attendanceInfo.put("D13", data[15] == null?"0":data[15].toString().trim());
+							attendanceInfo.put("D14", data[16] == null?"0":data[16].toString().trim());
+							attendanceInfo.put("D15", data[17] == null?"0":data[17].toString().trim());
+							attendanceInfo.put("D16", data[18] == null?"0":data[18].toString().trim());
+							attendanceInfo.put("D17", data[19] == null?"0":data[19].toString().trim());
+							attendanceInfo.put("D18", data[20] == null?"0":data[20].toString().trim());
+							attendanceInfo.put("D19", data[21] == null?"0":data[21].toString().trim());
+							attendanceInfo.put("D20", data[22] == null?"0":data[22].toString().trim());
+							attendanceInfo.put("D21", data[23] == null?"0":data[23].toString().trim());
+							attendanceInfo.put("D22", data[24] == null?"0":data[24].toString().trim());
+							attendanceInfo.put("D23", data[25] == null?"0":data[25].toString().trim());
+							attendanceInfo.put("D24", data[26] == null?"0":data[26].toString().trim());
+							attendanceInfo.put("D25", data[27] == null?"0":data[27].toString().trim());
+							attendanceInfo.put("D26", data[28] == null?"0":data[28].toString().trim());
+							attendanceInfo.put("D27", data[29] == null?"0":data[29].toString().trim());
+							attendanceInfo.put("D28", data[30] == null?"0":data[30].toString().trim());
+							attendanceInfo.put("D29", data[31] == null?"0":data[31].toString().trim());
+							attendanceInfo.put("D30", data[32] == null?"0":data[32].toString().trim());
+							attendanceInfo.put("D31", data[33] == null?"0":data[33].toString().trim());
+							
+							int attendance_days = 0;
+							float attendance_hours = 0;
+							for(int i=3;i<=33;i++){
+								if(!"0".equals(data[i])&&data[i]!=null&&StringUtils.isNotEmpty(data[i].toString().trim())){
+									attendance_days++;
+									attendance_hours+=Float.valueOf(data[i].toString().trim());
+								}
+							}
+							attendanceInfo.put("attendance_days", attendance_days);
+							attendanceInfo.put("attendance_hours", attendance_hours);
+							addList.add(attendanceInfo);
+						}
+						/*
+						 * 数据校验
+						 */
+						Map<String, Object> conditionMap = new HashMap<String, Object>();
+						conditionMap.put("month", month);
+						conditionMap.put("staff_number", staff_numbers.toString().trim());
+						conditionMap.put("status", "在职");
+						String[] staffArray=staff_numbers.toString().split(",");
+						for(int i=0;i<staffArray.length-1;i++){
+							lineCount=i+2;
+							for(int j=i+1;j<=staffArray.length-1;j++){
+								if(staffArray[i].equals(staffArray[j])){
+									success = false;
+									staffIndex=j+2;
+									error=3;                 //员工数据重复类型
+									throw new Exception();
+								}
+							}
+						}
+						
+						Map<String,Object> staff_info = hrBaseDataService.getStaffList(conditionMap);
+						List<Map<String,Object>> staff_list = (List<Map<String,Object>>)staff_info.get("rows");
+						for(int i=0;i<=staffArray.length-1;i++){
+							boolean flag=true;
+							String hrStaff_status="在职";
+							for(int j=0;j<=staff_list.size()-1;j++){
+								if(staffArray[i].equals(staff_list.get(j).get("staff_number"))){
+									flag=false;
+									hrStaff_status= (String)staff_list.get(j).get("status");
+								} 
+							}
+							if(flag){
+								success = false;
+								lineCount=i+2;
+								error=1;                 //员工不存在类型
+								throw new Exception();
+							}else if(hrStaff_status.equals("离职")){
+								success = false;
+								lineCount=i+2;
+								error=2;             //员工已经离职
+								throw new Exception();
+							}
+							
+						}
+						int insert = 0;
+						if(success){
+							insert = productionService.uoloadStaffAttendance(addList);
+						}
+						if(insert>0){
+							result ="考勤信息导入成功！";
+						}
+				}
+		
+		} catch (Exception e) {
+			switch(error){
+			  case 0:
+				  success = false;
+				  result = "考勤信息上传出错："+e.getMessage();
+				  e.printStackTrace();
+				  break;
+			  case 1:
+				  success = false;
+				  result="第"+lineCount+"行数据有误，该行员工不存在，数据上传失败！";
+				  break;
+			  case 2:
+				  success = false;
+				  result="第"+lineCount+"行数据有误，该行员工已经离职，数据上传失败！";
+				  break;
+			  case 3:
+				  success = false;
+				  result="第"+staffIndex+"行数据与第"+lineCount+"行数据重复，数据上传失败！";
+				  break;
+			}
+			initModel(false,result,null);
+			model = mv.getModelMap();
+			return model;
+		}
+		
 		initModel(true,result,null);
 		model = mv.getModelMap();
 		return model;

@@ -412,12 +412,13 @@ function fillResult(index){
 function drawFaultLibTable(data,tableId){
 	$(tableId).dataTable({
 		paiging:false,
-		 keys: true,
+		keys: true,
 		ordering:false,
 		searching: false,
 		autoWidth:false,
 		destroy: true,
 		paginate:false,
+		processing:true,
 /*		rowsGroup:[0],
 		fixedColumns:   {
             leftColumns: 2,
@@ -429,6 +430,7 @@ function drawFaultLibTable(data,tableId){
 		orderMulti:false,
 		info:false,
 		language: {
+			processing: "正在查询，请稍后...",
 			emptyTable:"未查询到数据！",					     
 			infoEmpty:"未查询到数据！",
 			zeroRecords:"未查询到数据！"
@@ -867,6 +869,11 @@ function showEditPage(row){
 				}
 		]
 	});
+	//先destroy datatable，隐藏form
+	if($.fn.dataTable.isDataTable("#tableDetail")){
+		$('#tableDetail').DataTable().destroy();
+		$('#tableDetail').empty();
+	}
 	drawTplDetailTable("#tableDetail",detail_list,true);
 }
 

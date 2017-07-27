@@ -62,21 +62,30 @@ $(document).ready(function () {
 	})
 	
 	$("#btnImport").click(function(){
+		
 		var datalist=getCheckedBus();
-		$.ajax({
-		    url: "certificatePrint",
-		    dataType: "json",
-			type: "post",
-		    data: {
-		    	"conditions":JSON.stringify(datalist)
-		    },
-		    success:function(){
-		    	alert("传输成功！");
-		    },
-		    error:function(){
-		    	alert("系统异常！");
-		    }
-		    })
+		if(datalist.length>0){
+			$(".divLoading").addClass("fade in").show();
+			$.ajax({
+			    url: "certificatePrint",
+			    dataType: "json",
+				type: "post",
+			    data: {
+			    	"conditions":JSON.stringify(datalist)
+			    },
+			    success:function(){
+			    	$(".divLoading").hide();
+			    	alert("传输成功！");		    	
+			    },
+			    error:function(){
+			    	$(".divLoading").hide();
+			    	alert("系统异常！");
+			    }
+			    })
+		}else{
+			alert("请选择需要传输打印的车号！");
+		}
+		
 	});
 	
 	

@@ -10,12 +10,12 @@ jQuery(function($) {
 	
 	function initPage() {
 		getOrgAuthTree($("#workGroupTree"),'hrBaseData/staffManager',"1,2,3,4",'1',3);
+		getOrgInfo();
 		$('#workGroupTree').height($(window).height()-200)
 		$('#workGroupTree').ace_scroll({
 			size: $(window).height()-200
 		});
 	}
-	
 	
 	if($(window).height() * 0.6 > 350){
 		$("#div_tree1").height($(window).height()-120);
@@ -156,29 +156,14 @@ function zTreeBeforeClick(treeId, treeNode, clickFlag) {
 }
 
 function zTreeOnClick(event, treeId, treeNode) {
-	if(treeNode.org_type=='1'){
-		factory=treeNode.displayName;
-	}	
-	if(treeNode.org_type == '2'){
-		factory=treeNode.getParentNode().displayName;
-		workshop=treeNode.displayName;
-	}
-	if(treeNode.org_type == '3'){
-		factory=treeNode.getParentNode().getParentNode().displayName;
-		workshop=treeNode.getParentNode().displayName;
-		workgroup=treeNode.displayName;
-	}
-	if(treeNode.org_type == '4'){
-		factory=treeNode.getParentNode().getParentNode().getParentNode().displayName;
-		workshop=treeNode.getParentNode().getParentNode().displayName;
-		workgroup=treeNode.getParentNode().displayName;
-		team=treeNode.displayName;
-	}
-	
-	var nodes = zTreeObj.getSelectedNodes();
-	var treeNode = nodes[0];
-	org_id = nodes[0].id;
-	orgType = nodes[0].org_type;
+	getOrgInfo(treeNode);
+	ajaxQuery();
+};
+
+function getOrgInfo(treeNode){
+	treeNode = treeNode||zTreeObj.getSelectedNodes()[0];
+	org_id = treeNode.id;
+	orgType = treeNode.org_type;
 	var strArr = [];
 	var org_type = treeNode.org_type;
 	orgStr = "";
@@ -206,9 +191,27 @@ function zTreeOnClick(event, treeId, treeNode) {
 	console.log("-->org_type = " + org_type  +"|orgStr = " + orgStr);
 	
 	console.log("-->" + factory + "|" + workshop + "|" + team);
-	ajaxQuery();
-};
 
+	if(treeNode.org_type=='1'){
+		factory=treeNode.displayName;
+	}	
+	if(treeNode.org_type == '2'){
+		factory=treeNode.getParentNode().displayName;
+		workshop=treeNode.displayName;
+	}
+	if(treeNode.org_type == '3'){
+		factory=treeNode.getParentNode().getParentNode().displayName;
+		workshop=treeNode.getParentNode().displayName;
+		workgroup=treeNode.displayName;
+	}
+	if(treeNode.org_type == '4'){
+		factory=treeNode.getParentNode().getParentNode().getParentNode().displayName;
+		workshop=treeNode.getParentNode().getParentNode().displayName;
+		workgroup=treeNode.getParentNode().displayName;
+		team=treeNode.displayName;
+	}
+
+}
 
 //----------START bootstrap initTable ----------
 function initTable() {

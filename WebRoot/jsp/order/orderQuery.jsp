@@ -83,7 +83,7 @@
 					</div>
 
 					<div class="row">
-						<div class="col-xs-12">
+						<div class="col-xs-12" >
 							<div style="display: none;position:fixed;z-index:999;margin-top:150px;margin-left:500px" class="divLoading" >
 				            	<span><i class="fa fa-spinner fa-spin fa-4x" style="height:1em;"></i></span>
 				        	</div>
@@ -97,7 +97,7 @@
 					    	</table>
 							</div> -->
 							
-							<table id="tableOrder" class="table table-striped table-bordered table-hover" style="font-size: 12px;width:2800px;overflow-x:auto;">
+							<table id="tableOrder" class="table table-striped table-bordered table-hover" style="font-size: 12px;width:2800px;overflow-x:auto;padding-right: 20px;">
 						</table>
 						</div>
 					</div>

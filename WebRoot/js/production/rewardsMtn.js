@@ -3,6 +3,12 @@ var factory="";
 var workshop="";
 
 $(document).ready(function() {
+	//获取系统时间 
+	var LSTR_ndate=new Date(); 
+	var LSTR_MM=LSTR_ndate.getMonth()+1;
+	LSTR_MM=parseInt(LSTR_MM) >= 10?LSTR_MM:("0"+LSTR_MM);
+	$("#search_rewards_date").val(LSTR_ndate.getFullYear() + "-" + LSTR_MM);
+	
 	initPage();
 	
 	$("#btnBulkAdd").click (function () {
@@ -33,7 +39,7 @@ $(document).ready(function() {
 })
 
 function initPage() {
-	getOrgAuthTree($("#workGroupTree"),'production/pieceWorkhourMtn',"1,2",'1',1);
+	getOrgAuthTree($("#workGroupTree"),'production/rewardsIndex',"1,2",'1',1);
 	$('#workGroupTree').height($(window).height()-110)
 	$('#workGroupTree').ace_scroll({
 		size:$(this).attr('data-size')|| $(window).height()-110,
@@ -41,9 +47,38 @@ function initPage() {
 		alwaysVisible : true
 	});
 	
+	var nodes = zTreeObj.getSelectedNodes();
+	if(nodes.length>0){
+		var treeNode = nodes[0];
+		if(treeNode.org_type=='1'){
+			factory=treeNode.displayName;
+			workshop="";
+			workgroup="";
+			team="";
+		}	
+		if(treeNode.org_type == '2'){
+			factory=treeNode.getParentNode().displayName;
+			workshop=treeNode.displayName;
+			workgroup="";
+			team="";
+		}
+		if(treeNode.org_type == '3'){
+			factory=treeNode.getParentNode().getParentNode().displayName;
+			workshop=treeNode.getParentNode().displayName;
+			workgroup=treeNode.displayName;
+			team="";
+		}
+		if(treeNode.org_type == '4'){
+			factory=treeNode.getParentNode().getParentNode().getParentNode().displayName;
+			workshop=treeNode.getParentNode().getParentNode().displayName;
+			workgroup=treeNode.getParentNode().displayName;
+			team=treeNode.displayName;
+		}
+	}
+	
 	$("#btnAdd").on('click', function(e) {
-		getFactorySelect("production/rewardsMtn",'',"#new_rewards_factory",null,'id');
-		getWorkshopSelect("production/rewardsMtn",$("#new_rewards_factory :selected").text(),"","#new_rewards_workshop",null,"id");
+		getFactorySelect("production/rewardsIndex",'',"#new_rewards_factory",null,'id');
+		getWorkshopSelect("production/rewardsIndex",$("#new_rewards_factory :selected").text(),"","#new_rewards_workshop",null,"id");
 		e.preventDefault();
 		$("#dialog-add").removeClass('hide').dialog({
 			resizable: false,
@@ -146,6 +181,7 @@ function zTreeOnClick(event, treeId, treeNode) {
 	
 	if(treeNode.org_type=='1'){
 		factory=treeNode.displayName;
+		workshop="";
 	}	
 	if(treeNode.org_type == '2'){
 		factory=treeNode.getParentNode().displayName;

@@ -111,6 +111,8 @@ public interface IProductionDao {
 
 	int updateStaffHours(@Param(value = "staff_hour_list")List<Map<String, Object>> staff_hour_list);
 	
+	void updateStaffHoursStatus(Map<String, String> condMap);
+	
 	/*****************************xiong jianwu end  *****************************/
 
 	/******************* tangjin start**************************/
@@ -163,5 +165,11 @@ public interface IProductionDao {
 	public void deleteRewards(Map map);
 	public List<Map<String, Object>> getOrg(List<Map<String, Object>> conditionMap);
 	public int insertRewards(List<Map<String, Object>> conditionMap);
+	
+	public List<Map<String,String>> getAttendanceList(Map<String,Object> queryMap);
+	public int getAttendanceListCount(Map<String,Object> queryMap);
+	public List<Map<String,Object>> getStaffAttendanceInfo(Map<String,Object> queryMap);
+	public int delAttendance(Map<String,Object> conditionMap);				//删除考勤数据
+	public int insertAttendance(List<Map<String, Object>> conditionMap);	//增加考勤数据
 	
 }

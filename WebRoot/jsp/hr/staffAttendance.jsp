@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <meta charset="utf-8" />
-<title>车间奖惩维护</title>
+<title>考勤查询</title>
 <meta name="description" content="Common Buttons &amp; Icons" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
@@ -34,8 +34,8 @@
 					<ul class="breadcrumb">
 						<li><i class="ace-icon fa fa-home home-icon"></i><a
 							href="<%=request.getContextPath()%>/index">首页</a></li>
-						<li><a href="#">生产执行</a></li>
-						<li><a href="#">车间奖惩维护</a></li>
+						<li><a href="#">计件工资</a></li>
+						<li><a href="#">考勤查询</a></li>
 					</ul>
 					<!-- /.breadcrumb -->
 
@@ -66,32 +66,17 @@
 											class="input-medium revise" placeholder="请输入工号或姓名..." value=""
 											id="search_staff_number" /></td>
 										<td>月份：</td>	
-										<td><input id="search_rewards_date" placeholder="月份..." onclick="WdatePicker({el:'search_rewards_date',dateFmt:'yyyy-MM'});" style="height: 30px;width: 100px;" class="input-small carSeries" type="text"></td>	
+										<td><input id="search__date" placeholder="月份..." onclick="WdatePicker({el:'search__date',dateFmt:'yyyy-MM'});" style="height: 30px;width: 100px;" class="input-small carSeries" type="text"></td>	
 										<td><input type="button"
 											class="btn btn-sm btn-primary btnQueryRewards" id="btnQueryRewards" value="查询"
 											style="margin-left: 10px;"></input>
-											<button id='btnAdd' class="btn btn-sm btn-success btnAdd">新增</button>
-											<button id='btnBulkAdd' class="btn btn-sm btn-info btnImport">导入</button>
-											<button id='btnDeleteRewards' class="btn btn-sm btn-warning btnDeleteRewards">删除</button>
 										</td>
 									</tr>
 								</table>
 							</div>
-							<div id="divBulkAdd" class="well" style="display:none;">
-								<button id="btnBulkHide" type="button" class="close"><i class="ace-icon fa fa-times"></i></button>
-									<form id="uploadRewardsForm" action="#" enctype="multipart/form-data" method="post">
-									<table>
-										<tr>
-											<td><input id="file" type="file" name="file" accept="*.xlsx"/></td>
-											<td><input id="btn_upload" type="button" class="btn btn-sm btn-primary" value="上传并导入" onclick="javascript:return LimitAttach(this.form, this.form.file.value)"/></td>
-											<td></td><td><a href="../docs/rewards_upload.xls">下载批导模板</a></td>
-										</tr>
-									</table>
-									</form>
-							</div>
 							<div class="row" >
 								<div class="col-xs-12"  id="tableReusltDiv" style="padding-right:0px;">
-									<table id="tableResult" class="table table-striped table-bordered table-hover" style="table-layout:fixed;font-size: 12px; width:933px;overflow:auto;">
+									<table id="tableResult" class="table table-striped table-bordered table-hover" style="table-layout:fixed;font-size: 12px; width:930px;overflow:auto;">
 									</table>
 								</div>
 							</div>
@@ -170,7 +155,7 @@
 		<script src="../assets/js/buttons.html5.js"></script>
 		<script src="../js/jquery.form.js"></script>
 		<script src="../js/common.js"></script>
-		<script src="../js/production/rewardsMtn.js"></script>
+		<script src="../js/hr/staffAttendance.js"></script>
 		
 </body>
 

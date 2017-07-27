@@ -473,12 +473,15 @@ function traverseTree(node,parentli,two){
 				<!-- #section:basics/sidebar.layout.minimize -->
 				<div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
 					<i class="ace-icon fa fa-angle-double-left" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
-				</div>
-
+				</div>				
 				<!-- /section:basics/sidebar.layout.minimize -->
 				<script type="text/javascript">
 					try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
 				</script>
+		<div style="display: none;position:absolute;z-index:999;top:50%;left:350%" class="divLoading" >
+             <span><i class="fa fa-spinner fa-spin fa-4x" style="height:1em;"></i></span>
+         </div> 
 			</div>
+			
 </body>
 </html>

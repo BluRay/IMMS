@@ -99,6 +99,7 @@ public interface IProductionService {
 	public void updateStaffHours_cal3(String str_staffHours, String edit_date,
 			String editor_id, ModelMap model);
 
+	public void verifyStaffHours(Map<String, String> condMap,ModelMap model);
 	
 	/*****************************xiong jianwu end  *****************************/
 
@@ -134,6 +135,7 @@ public interface IProductionService {
     public int deleteWaitHourInfo(Map<String, Object> conditionMap);
 	
 	public int batchUpdateWaitPay(List<Map<String, Object>> swh_list);
+	
 	/******************* tangjin end**************************/
 
 	public List<Map<String,String>> getProductionSearch(Map<String,Object> queryMap);
@@ -145,6 +147,7 @@ public interface IProductionService {
 	public void deleteRewards(Map map);
 	public List<Map<String, Object>> getOrg(List<Map<String, Object>> conditionMap);
 	public int insertRewards(List<Map<String, Object>> conditionMap);		//增加奖惩数据
-
+	public Map<String, Object> getAttendanceList(Map<String,Object> queryMap);
+	public int uoloadStaffAttendance(List<Map<String, Object>> addList);
 
 }

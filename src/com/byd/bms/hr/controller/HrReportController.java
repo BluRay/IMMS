@@ -33,6 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.byd.bms.hr.service.IHrReportService;
+import com.byd.bms.production.service.IProductionService;
 import com.byd.bms.util.ExcelModel;
 import com.byd.bms.util.ExcelTool;
 import com.byd.bms.util.controller.BaseController;
@@ -47,8 +48,10 @@ public class HrReportController extends BaseController {
 	static Logger logger = Logger.getLogger("HR");
 	@Autowired
 	protected IHrReportService hrReportService;
+	@Autowired
+	protected IProductionService productionService;
 
-	//组织架构
+	//奖惩汇总
 	@RequestMapping("/rewardsCollect")
 	public ModelAndView rewardsCollect() {
 		mv.setViewName("hr/rewardsCollect");
@@ -77,4 +80,37 @@ public class HrReportController extends BaseController {
 		return model;
 	}
 	
+	/**
+	 * 考勤导入
+	 * @return
+	 */
+	@RequestMapping("/staffAttendance")
+	public ModelAndView staffAttendance(){
+		mv.setViewName("hr/staffAttendance");
+		return mv;
+	}
+	
+	@RequestMapping("/getAttendanceList")
+	@ResponseBody
+	public ModelMap getAttendanceList() {
+		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
+		int start=(request.getParameter("start")!=null)?Integer.parseInt(request.getParameter("start")):0;		//分页数据起始数
+		int length=(request.getParameter("length")!=null)?Integer.parseInt(request.getParameter("length")):20;	//每一页数据条数
+		Map<String, Object> conditionMap = new HashMap<String, Object>();
+		conditionMap.put("draw", draw);
+		conditionMap.put("start", start);
+		conditionMap.put("length", length);
+		conditionMap.put("staff_number", request.getParameter("staff_number"));
+		conditionMap.put("factory", request.getParameter("factory"));
+		conditionMap.put("workshop", request.getParameter("workshop"));
+		conditionMap.put("workgroup", request.getParameter("workgroup"));
+		conditionMap.put("team", request.getParameter("team"));		
+		conditionMap.put("month", request.getParameter("month"));
+		
+		Map<String, Object> selectList = productionService.getAttendanceList(conditionMap);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(selectList);
+		model = mv.getModelMap();
+		return model;
+	}
 }

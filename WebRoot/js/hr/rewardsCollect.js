@@ -3,6 +3,11 @@ var factory="";
 var workshop="";
 
 $(document).ready(function() {
+	//获取系统时间 
+	var LSTR_ndate=new Date(); 
+	var LSTR_MM=LSTR_ndate.getMonth()+1;
+	LSTR_MM=parseInt(LSTR_MM) >= 10?LSTR_MM:("0"+LSTR_MM);
+	$("#search_rewards_date").val(LSTR_ndate.getFullYear() + "-" + LSTR_MM);
 	initPage();
 })
 
@@ -14,6 +19,20 @@ function initPage() {
 		mouseWheelLock: true,
 		alwaysVisible : true
 	});
+	
+	var nodes = zTreeObj.getSelectedNodes();
+	if(nodes.length>0){
+		var treeNode = nodes[0];
+		if(treeNode.org_type=='1'){
+			factory=treeNode.displayName;
+			workshop="";
+		}	
+		if(treeNode.org_type == '2'){
+			factory=treeNode.getParentNode().displayName;
+			workshop=treeNode.displayName;
+		}
+	}
+	
 	
 	$("#btnQueryRewards").on('click', function(e) {
 		ajaxQuery();

@@ -80,7 +80,7 @@
 					</div>
 			</div><!-- /.main-content -->
 			
-			<div id="dialog-add" class="hide" style="align:center;width:700px;height:500px">
+			<div id="dialog-add" class="hide" style="align:center;width:780px;height:500px">
 				<table style="line-height:30px">
 					<tr>
 					<td width="140px" style="text-align:right">技改单编号：</td>								
@@ -138,7 +138,7 @@
 				</div>
 			</div>
 			
-			<div id="dialog-edit" class="hide" style="align:center;width:700px;height:500px">
+			<div id="dialog-edit" class="hide" style="align:center;width:780px;height:500px">
 				<table style="line-height:30px">
 					<tr>
 					<td width="140px" style="text-align:right">技改单编号：</td>								

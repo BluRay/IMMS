@@ -819,6 +819,17 @@
 			where id=#{detail.id}
 		</foreach>
 	</update>
+	
+	<update id="updateStaffHoursStatus" parameterType="Map">
+		update BMS_HR_STAFF_PIECE_HOURS set status=#{status}
+		where factory=#{factory} and workshop=#{workshop} and workgroup=#{workgroup} and team=#{team}
+		<if test="bus_number_list !=null and bus_number_list !=''">
+			and find_in_set(bus_number,#{bus_number_list})>0 and salary_model=#{salary_model}
+		</if>
+		<if test="work_date_list !=null and work_date_list !=''">
+			and find_in_set(work_date,#{work_date_list})>0 and salary_model=#{salary_model}
+		</if>
+	</update>
 <!-- ########################### xiong jianwu end#############################-->
 
 	<update id="updateBusMotorNumber" parameterType="map">
@@ -1963,4 +1974,141 @@
 			</if>
 		</foreach>
 	</update>
+	
+	<select id="getAttendanceList" resultType="Map" parameterType='Map'>
+		SELECT s.staff_number,a.month,a.attendance_days,a.attendance_hours,
+		IF(a.D1='0','',a.D1) AS D1,IF(a.D2='0','',a.D2) AS
+		D2,IF(a.D3='0','',a.D3) AS D3,IF(a.D4='0','',a.D4) AS D4,
+		IF(a.D5='0','',a.D5) AS D5,IF(a.D6='0','',a.D6) AS
+		D6,IF(a.D7='0','',a.D7) AS D7,IF(a.D8='0','',a.D8) AS D8,
+		IF(a.D9='0','',a.D9) AS D9,IF(a.D10='0','',a.D10) AS
+		D10,IF(a.D11='0','',a.D11) AS D11,IF(a.D12='0','',a.D12) AS D12,
+		IF(a.D13='0','',a.D13) AS D13,IF(a.D14='0','',a.D14) AS
+		D14,IF(a.D15='0','',a.D15) AS D15,IF(a.D16='0','',a.D16) AS D16,
+		IF(a.D17='0','',a.D17) AS D17,IF(a.D18='0','',a.D18) AS
+		D18,IF(a.D19='0','',a.D19) AS D19,IF(a.D20='0','',a.D20) AS D20,
+		IF(a.D21='0','',a.D21) AS D21,IF(a.D22='0','',a.D22) AS
+		D22,IF(a.D23='0','',a.D23) AS D23,IF(a.D24='0','',a.D24) AS D24,
+		IF(a.D25='0','',a.D25) AS D25,IF(a.D26='0','',a.D26) AS
+		D26,IF(a.D27='0','',a.D27) AS D27,IF(a.D28='0','',a.D28) AS D28,
+		IF(a.D29='0','',a.D29) AS D29,IF(a.D30='0','',a.D30) AS
+		D30,IF(a.D31='0','',a.D31) AS D31,s.name 
+		FROM  BMS_HR_STAFF s 
+		LEFT JOIN BMS_HR_STAFF_ATTENDANCE a ON a.staff_number = s.staff_number and a.month = #{month}
+		where 1=1
+		and s.salary_type='计件'
+		<if test="factory!=null and factory!=''"> AND s.plant_org = #{factory} </if>
+		<if test="workshop!=null and workshop!=''"> AND s.workshop_org = #{workshop} </if>
+		<if test="workgroup!=null and workgroup!=''"> AND s.workgroup_org = #{workgroup} </if>
+		<if test="team!=null and team!=''"> AND s.team_org = #{team}</if>
+		<if test="staff_number!=null and staff_number !=''">
+			AND (s.staff_number LIKE CONCAT('%',#{staff_number},'%')
+			OR s.name LIKE CONCAT('%',#{staff_number},'%'))
+		</if>
+		<if test="start !=null  and length!=-1">
+			LIMIT #{start} ,#{length} 
+		</if>
+	</select>
+	<select id="getAttendanceListCount" resultType="int"
+		parameterType='Map'>
+		select count(distinct t1.staff_id) from (
+		select s.id staff_id from
+		BMS_HR_STAFF s where 1=1 and s.salary_type='计件'
+		<if test="factory!=null and factory!=''"> AND s.plant_org = #{factory} </if>
+		<if test="workshop!=null and workshop!=''"> AND s.workshop_org = #{workshop} </if>
+		<if test="workgroup!=null and workgroup!=''"> AND s.workgroup_org = #{workgroup} </if>
+		<if test="team!=null and team!=''"> AND s.team_org = #{team}</if>
+		<if test="staff_number!=null and staff_number !=''">
+			AND (s.staff_number LIKE CONCAT('%',#{staff_number},'%')
+			OR s.name LIKE CONCAT('%',#{staff_number},'%'))
+		</if>
+		) t1
+	</select>
+	
+	<select id="getStaffAttendanceInfo" resultType="Map" parameterType='Map'>
+		SELECT * FROM BMS_HR_STAFF_ATTENDANCE 
+		WHERE `month` = #{month} AND staff_number = #{staff_number}
+	</select>
+	<update id="delAttendance" parameterType='Map'>
+		DELETE FROM
+		BMS_HR_STAFF_ATTENDANCE
+		WHERE FIND_IN_SET(staff_number,#{staff_numbers})>0 AND month = #{month}
+	</update>
+	<insert id="insertAttendance" parameterType="List">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		<foreach collection="list" index="index" item="item"
+			separator=";">
+			INSERT INTO
+			BMS_HR_STAFF_ATTENDANCE(staff_number,month,attendance_days,attendance_hours
+			<if test="item.D1!=null and item.D1!=''">,D1</if>
+			<if test="item.D2!=null and item.D2!=''">,D2</if>
+			<if test="item.D3!=null and item.D3!=''">,D3</if>
+			<if test="item.D4!=null and item.D4!=''">,D4</if>
+			<if test="item.D5!=null and item.D5!=''">,D5</if>
+			<if test="item.D6!=null and item.D6!=''">,D6</if>
+			<if test="item.D7!=null and item.D7!=''">,D7</if>
+			<if test="item.D8!=null and item.D8!=''">,D8</if>
+			<if test="item.D9!=null and item.D9!=''">,D9</if>
+			<if test="item.D10!=null and item.D10!=''">,D10</if>
+			<if test="item.D11!=null and item.D11!=''">,D11</if>
+			<if test="item.D12!=null and item.D12!=''">,D12</if>
+			<if test="item.D13!=null and item.D13!=''">,D13</if>
+			<if test="item.D14!=null and item.D14!=''">,D14</if>
+			<if test="item.D15!=null and item.D15!=''">,D15</if>
+			<if test="item.D16!=null and item.D16!=''">,D16</if>
+			<if test="item.D17!=null and item.D17!=''">,D17</if>
+			<if test="item.D18!=null and item.D18!=''">,D18</if>
+			<if test="item.D19!=null and item.D19!=''">,D19</if>
+			<if test="item.D20!=null and item.D20!=''">,D20</if>
+			<if test="item.D21!=null and item.D21!=''">,D21</if>
+			<if test="item.D22!=null and item.D22!=''">,D22</if>
+			<if test="item.D23!=null and item.D23!=''">,D23</if>
+			<if test="item.D24!=null and item.D24!=''">,D24</if>
+			<if test="item.D25!=null and item.D25!=''">,D25</if>
+			<if test="item.D26!=null and item.D26!=''">,D26</if>
+			<if test="item.D27!=null and item.D27!=''">,D27</if>
+			<if test="item.D28!=null and item.D28!=''">,D28</if>
+			<if test="item.D29!=null and item.D29!=''">,D29</if>
+			<if test="item.D30!=null and item.D30!=''">,D30</if>
+			<if test="item.D31!=null and item.D31!=''">,D31</if>
+			)
+			VALUES(#{item.staff_number},#{item.month},#{item.attendance_days},#{item.attendance_hours}
+			<if test="item.D1!=null and item.D1!=''">,#{item.D1}</if>
+			<if test="item.D2!=null and item.D2!=''">,#{item.D2}</if>
+			<if test="item.D3!=null and item.D3!=''">,#{item.D3}</if>
+			<if test="item.D4!=null and item.D4!=''">,#{item.D4}</if>
+			<if test="item.D5!=null and item.D5!=''">,#{item.D5}</if>
+			<if test="item.D6!=null and item.D6!=''">,#{item.D6}</if>
+			<if test="item.D7!=null and item.D7!=''">,#{item.D7}</if>
+			<if test="item.D8!=null and item.D8!=''">,#{item.D8}</if>
+			<if test="item.D9!=null and item.D9!=''">,#{item.D9}</if>
+			<if test="item.D10!=null and item.D10!=''">,#{item.D10}</if>
+			<if test="item.D11!=null and item.D11!=''">,#{item.D11}</if>
+			<if test="item.D12!=null and item.D12!=''">,#{item.D12}</if>
+			<if test="item.D13!=null and item.D13!=''">,#{item.D13}</if>
+			<if test="item.D14!=null and item.D14!=''">,#{item.D14}</if>
+			<if test="item.D15!=null and item.D15!=''">,#{item.D15}</if>
+			<if test="item.D16!=null and item.D16!=''">,#{item.D16}</if>
+			<if test="item.D17!=null and item.D17!=''">,#{item.D17}</if>
+			<if test="item.D18!=null and item.D18!=''">,#{item.D18}</if>
+			<if test="item.D19!=null and item.D19!=''">,#{item.D19}</if>
+			<if test="item.D20!=null and item.D20!=''">,#{item.D20}</if>
+			<if test="item.D21!=null and item.D21!=''">,#{item.D21}</if>
+			<if test="item.D22!=null and item.D22!=''">,#{item.D22}</if>
+			<if test="item.D23!=null and item.D23!=''">,#{item.D23}</if>
+			<if test="item.D24!=null and item.D24!=''">,#{item.D24}</if>
+			<if test="item.D25!=null and item.D25!=''">,#{item.D25}</if>
+			<if test="item.D26!=null and item.D26!=''">,#{item.D26}</if>
+			<if test="item.D27!=null and item.D27!=''">,#{item.D27}</if>
+			<if test="item.D28!=null and item.D28!=''">,#{item.D28}</if>
+			<if test="item.D29!=null and item.D29!=''">,#{item.D29}</if>
+			<if test="item.D30!=null and item.D30!=''">,#{item.D30}</if>
+			<if test="item.D31!=null and item.D31!=''">,#{item.D31}</if>
+			)
+		</foreach>
+	</insert>
+	
 </mapper>

@@ -82,7 +82,7 @@
 					</div>
 			</div><!-- /.main-content -->
 			
-			<div id="dialog-edit" class="hide" style="align:center;width:700px;height:500px">
+			<div id="dialog-edit" class="hide" style="align:center;width:780px;height:500px">
 				<table style="line-height:30px" >
 					<tr>
 						<td width="140px" style="text-align:right">派工单号：</td><td id="edit_orderNo" colspan="5"></td>
@@ -94,7 +94,7 @@
 						<td width="140px" style="text-align:right">技改台数：</td><td id="edit_ecnNumber" width="50px" ></td>
 						<td width="120px" style="text-align:right">单车总工时：</td><td id="edit_singleHour"  ></td>
 						<td width="120px" style="text-align:right">工时单价：</td>								
-						<td id="edit_singlePrice"><input type="text" class="input-medium" style="margin-bottom: 0px;height:30px"></td>
+						<td><input type="text" id="edit_singlePrice" class="input-medium" style="margin-bottom: 0px;height:30px"></td>
 					</tr>
 				</table>
 				<table class="form-search">
@@ -107,8 +107,30 @@
 					<td></td>
 					</tr>								
 				</table>
+				<h5 class="section-head">技改工时<span style="float:right;margin: 10px 20px;color:green" class="read_hours"></span></h5>
+				<div style="width:100%;height:300px;">
+				<table id="work_hour_tb" style="margin-left:0px;margin-top:15px;width: 100%;"class="exp-table table">
+					<thead style="background-color: rgb(225, 234, 240)">
+					<tr>
+					<td><input type="checkbox" id="checkall"></td>
+					<td >工号</td>
+					<td >姓名</td>
+					<td >岗位</td>
+					<td >额外工时</td>
+					<td >小班组</td>
+					<td >班组</td>
+					<td >车间</td>
+					<td >工厂</td>
+					<td >操作日期</td>
+					<td >状态</td>
+					</tr>
+					</thead>
+					<tbody class="exp-table" id="workhour_list">
+					</tbody>
+				</table>
 				
-			
+				
+				</div>
 			</div>
 
 			<!-- 脚 -->
