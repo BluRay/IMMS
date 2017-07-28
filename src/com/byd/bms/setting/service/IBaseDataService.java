@@ -20,7 +20,7 @@ public interface IBaseDataService {
 		public void deleteFactory(List ids);
 		public int checkDeleteFactory(List ids);
 		public int addFactory(BmsBaseFactory factory);
-		
+		public BmsBaseFactory getFactoryById(String id);
 		//车间 分页查询
 		public Map<String, Object> getWorkshopList(Map<String,Object> queryMap);
 		//public int getWorkshopTotalCount(Map<String,Object> queryMap);

@@ -1025,6 +1025,37 @@ public class ProductionServiceImpl implements IProductionService {
 	public int batchUpdateWaitPay(List<Map<String, Object>> swh_list) {
 		return productionDao.batchUpdateWaitPay(swh_list);
 	}
+	@Override
+	public Map<String, Object> getTmpOrderTypeList(Map<String, Object> queryMap) {
+		int totalCount=0;
+		List<Map<String, String>> datalist=productionDao.getTmpOrderTypeList(queryMap);
+		totalCount=productionDao.getTmpOrderTypeCount(queryMap);
+		Map<String, Object> result=new HashMap<String,Object>();
+		result.put("draw", queryMap.get("draw"));
+		result.put("recordsTotal", totalCount);
+		result.put("recordsFiltered", totalCount);
+		result.put("data", datalist);
+		return result;
+	}
+
+	@Override
+	public void editTmpOrderType(Map<String, Object> map) {
+		productionDao.editTmpOrderType(map);
+	}
+
+	@Override
+	public void delTmpOrderType(List<String> ids) {
+		for(String id : ids){
+			productionDao.delTmpOrderType(id);
+		}
+	}
+
+	@Override
+	public int insertTmpOrderType(Map<String, Object> map) {
+		return productionDao.insertTmpOrderType(map);
+	}
+		
+	
 	/*******************  tangjin end  **************************/
 	@Override
 	@DataSource("dataSourceSlave")
@@ -1266,5 +1297,5 @@ public class ProductionServiceImpl implements IProductionService {
 		
 		return productionDao.insertAttendance(conditionMap);
 	}
-	
+
 }

@@ -34,11 +34,14 @@ import org.springframework.web.servlet.ModelAndView;
 import com.byd.bms.hr.service.IHrBaseDataService;
 import com.byd.bms.production.model.ProductionException;
 import com.byd.bms.production.service.IProductionService;
+import com.byd.bms.setting.model.BmsBaseFactory;
+import com.byd.bms.setting.service.IBaseDataService;
 import com.byd.bms.util.ExcelModel;
 import com.byd.bms.util.ExcelTool;
 import com.byd.bms.util.HttpUtil;
 import com.byd.bms.util.controller.BaseController;
 import com.byd.bms.util.model.BmsBaseUser;
+import com.byd.bms.util.service.ICommonService;
 /**
  * 生产模块Controller
  * @author xiong.jianwu 2017/5/2
@@ -52,7 +55,10 @@ public class ProductionController extends BaseController {
 	protected IProductionService productionService;
 	@Autowired
 	protected IHrBaseDataService hrBaseDataService;
-
+	@Autowired
+	protected ICommonService commonService;
+	@Autowired
+	protected IBaseDataService baseDataService;
 	/****************************  xiongjianwu ***************************/
 	/**
 	 * 生产模块首页
@@ -1391,12 +1397,13 @@ public class ProductionController extends BaseController {
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String curTime = df.format(new Date());
 		String user_name=String.valueOf(session.getAttribute("user_name"));
+		
 		JSONArray jsonArray=JSONArray.fromObject(conditions);
 		List<Map<String,Object>> swh_list=new ArrayList<Map<String,Object>>();
 		for(int i=0;i<jsonArray.size();i++){
-			 JSONObject object = (JSONObject)jsonArray.get(i);		
-			 object.put("editor", user_name);
-			 object.put("edit_date", curTime);
+			JSONObject object = (JSONObject)jsonArray.get(i);		
+			object.put("editor", user_name);
+			object.put("edit_date", curTime);
 			Map<String, Object> map = (Map<String, Object>) object;
 			swh_list.add(map);
 		}
@@ -1405,6 +1412,8 @@ public class ProductionController extends BaseController {
 		Map<String, Object> result = new HashMap<String, Object>();
 		
 		if(i>0){
+			Map<String,Map<String,Object>> taskMap=getWaitWorkTimeMap(swh_list,"");
+			commonService.createTask("等待工时审核",taskMap);
 			result.put("success", true);
 			result.put("message","保存成功");
 		}else{
@@ -1415,6 +1424,33 @@ public class ProductionController extends BaseController {
 		mv.getModelMap().addAllAttributes(result);
 		model = mv.getModelMap();
 		return model;
+	}
+	public Map<String,Map<String,Object>> getWaitWorkTimeMap(List<Map<String,Object>> swh_list,String flag){
+		String factory_id=String.valueOf(session.getAttribute("factory_id"));
+		// Map<任务名称_工厂代码_车间名称,Map<String,Object>>
+		BmsBaseFactory bmsBaseFactory=baseDataService.getFactoryById(factory_id);
+		String factory_code=bmsBaseFactory.getFactoryCode();
+		Map<String,Map<String,Object>> taskMap=new HashMap<String,Map<String,Object>>();
+		Map<String,Object> paramMap=null;
+		for(Map<String,Object> swh_map : swh_list){
+			String factory=(String)swh_map.get("factory");
+			String workshop=(String)swh_map.get("workshop");
+			String key=factory_code+"_"+workshop;
+			if(taskMap.containsKey(key)){
+				Integer count=(Integer)taskMap.get(key).get("count")+1;
+				taskMap.get(key).put("count", count);
+			}else{
+				String paramval="?factory="+factory+"&workshop="+workshop+"&status=0";
+				if(flag.equals("reject")){
+					paramval="?factory="+factory+"&workshop="+workshop+"&status=2";
+				}
+				paramMap=new HashMap<String,Object>();
+				paramMap.put("param", paramval);
+				paramMap.put("count", 1);
+				taskMap.put(key, paramMap);
+			}
+		}
+		return taskMap;
 	}
 	/**等待工时修改*/
 	@RequestMapping("/waitWorkTimeMod")
@@ -1437,9 +1473,18 @@ public class ProductionController extends BaseController {
 			String key=(String) it.next();
 			conditionMap.put(key, jo.get(key));
 		}
-		
+		Map map=productionService.getWaitWorkTimeList(conditionMap);
+		// Map<车间,任务数>
+		List<Map<String,Object>> swh_list=new ArrayList<Map<String,Object>>();
+		List list=(List) map.get("data");
+		for(Object object : list){
+			Map obj=(Map)object;
+			swh_list.add(obj);
+		}
 		int i=productionService.deleteWaitHourInfo(conditionMap);
 		if(i>0){
+			Map<String,Map<String,Object>> taskMap=getWaitWorkTimeMap(swh_list,"");
+			commonService.updateTask("等待工时修改",taskMap);
 			result.put("success", true);
 		    result.put("message", "删除成功");
 		}else{
@@ -1453,6 +1498,8 @@ public class ProductionController extends BaseController {
 	@ResponseBody
 	public ModelMap updateWaitWorkTimeInfo(){
 		String conditions=request.getParameter("conditions");
+		String flag=request.getParameter("flag");
+		String factory_id=String.valueOf(session.getAttribute("factory_id"));
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String curTime = df.format(new Date());
 		String user_name=String.valueOf(session.getAttribute("user_name"));
@@ -1475,8 +1522,21 @@ public class ProductionController extends BaseController {
 		int i=0;		
 		i=productionService.batchUpdateWaitPay(swh_list);
 		Map<String, Object> result = new HashMap<String, Object>();
-		
 		if(i>0){
+			if(flag.equals("modify")){
+				Map<String,Map<String,Object>> taskMap=getWaitWorkTimeMap(swh_list,"");
+				commonService.createTask("等待工时审核",taskMap);
+				commonService.updateTask("等待工时修改",taskMap);
+			}
+            if(flag.equals("verify")){
+            	Map<String,Map<String,Object>> taskMap=getWaitWorkTimeMap(swh_list,"");
+            	commonService.updateTask("等待工时修改",taskMap);			
+            }
+			if(flag.equals("reject")){
+				Map<String,Map<String,Object>> taskMap=getWaitWorkTimeMap(swh_list,flag);
+				commonService.createTask("等待工时修改",taskMap);
+				commonService.updateTask("等待工时审核",taskMap);
+			}
 			result.put("success", true);
 			result.put("message","修改成功");
 		}else{
@@ -1492,6 +1552,105 @@ public class ProductionController extends BaseController {
 	@RequestMapping("/waitWorkTimeVerify")
 	public ModelAndView waitWorkTimeVerify(){
 		mv.setViewName("production/waitWorkTimeVerify");
+		return mv;
+	}
+	/**临时派工类型*/
+	@RequestMapping("/tmpOrderType")
+	public ModelAndView tmpOrderType(){
+		mv.setViewName("production/tmpOrderType");
+		return mv;
+	}
+	@RequestMapping("/getTmpOrderTypeList")
+	@ResponseBody
+	public ModelMap getTmpOrderTypeList(){
+		String name=request.getParameter("search_name");
+		String cost_transfer=request.getParameter("search_cost_transfer");
+		int draw=Integer.parseInt(request.getParameter("draw"));//jquerydatatables 
+		int start=Integer.parseInt(request.getParameter("start"));//分页数据起始数
+		int length=Integer.parseInt(request.getParameter("length"));//每一页数据条数
+		
+		Map<String,Object> conditionMap=new HashMap<String,Object>();
+		conditionMap.put("name",name);
+		conditionMap.put("cost_transfer",cost_transfer);
+		conditionMap.put("draw", draw);
+		conditionMap.put("start", start);
+		conditionMap.put("length", length);
+		Map<String,Object> list = productionService.getTmpOrderTypeList(conditionMap);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(list);
+		model = mv.getModelMap();
+		return model;
+	}
+	@RequestMapping("/addTmpOrderType")
+	@ResponseBody
+	public ModelMap addTmpOrderType() {
+		try {
+			String name = request.getParameter("name");
+			String cost_transfer = request.getParameter("cost_transfer");
+			String editor_id = request.getSession().getAttribute("user_id") + "";
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String edit_date = df.format(new Date());
+			Map<String,Object> map=new HashMap<String,Object>();
+			map.put("name", name);
+			map.put("cost_transfer", cost_transfer);
+			map.put("editor", editor_id);
+			map.put("edit_date", edit_date);
+
+			int reuslt = productionService.insertTmpOrderType(map);
+			initModel(true, "success", reuslt);
+		} catch (Exception e) {
+			initModel(false, e.getMessage(), e.toString());
+		}
+		model = mv.getModelMap();
+		return model;
+	}
+ 
+	@RequestMapping("/editTmpOrderType")
+	@ResponseBody
+	public ModelMap editTmpOrderType() {
+		try {
+			int id = Integer.parseInt(request.getParameter("id"));
+			String name = request.getParameter("name");
+			String cost_transfer = request.getParameter("cost_transfer");
+			String editor_id = request.getSession().getAttribute("user_id") + "";
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String edit_date = df.format(new Date());
+			Map<String,Object> map=new HashMap<String,Object>();
+			map.put("id", id);
+			map.put("name", name);
+			map.put("cost_transfer", cost_transfer);
+			map.put("editor", editor_id);
+			map.put("edit_date", edit_date);
+			productionService.editTmpOrderType(map);
+			initModel(true, "success", "");
+		} catch (Exception e) {
+			initModel(false, e.getMessage(), e.toString());
+		}
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/deleteTmpOrderType")
+	@ResponseBody
+	public ModelMap deleteTmpOrderType() {
+		try {
+			String ids = request.getParameter("ids");
+			List<String> idlist = new ArrayList<String>();
+			for(String id : ids.split(",")){
+				idlist.add(id);
+			}
+			productionService.delTmpOrderType(idlist);
+			initModel(true, "success", "");
+		} catch (Exception e) {
+			initModel(false, e.getMessage(), e.toString());
+		}
+		model = mv.getModelMap();
+		return model;
+	}
+	/**额外工时库维护*/
+	@RequestMapping("/extraWorkHourManager")
+	public ModelAndView extraWorkHourManager(){
+		mv.setViewName("production/extraWorkHourManager");
 		return mv;
 	}
 	/****************************  TANGJIN ***************************/

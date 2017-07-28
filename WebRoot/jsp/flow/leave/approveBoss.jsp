@@ -12,7 +12,7 @@
 	</head>
 
 	<body>
-		<form id="inputForm" action="${ctx }/snaker/flow/process" method="post" target="mainFrame">
+		<form id="inputForm" action="${ctx }/snaker/flow/processtest" method="post" target="mainFrame">
 			<input type="hidden" name="processId" value="${processId }" />
 			<input type="hidden" name="orderId" value="${orderId }" />
 			<input type="hidden" name="taskId" value="${taskId }" />

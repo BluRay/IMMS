@@ -3,6 +3,7 @@ package com.byd.bms.production.service;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 
@@ -135,6 +136,12 @@ public interface IProductionService {
     public int deleteWaitHourInfo(Map<String, Object> conditionMap);
 	
 	public int batchUpdateWaitPay(List<Map<String, Object>> swh_list);
+	
+	//临时派工类型
+	public Map<String,Object> getTmpOrderTypeList(Map<String,Object> queryMap);
+	public void editTmpOrderType(Map<String,Object> map);
+	public void delTmpOrderType(List<String> ids);
+	public int insertTmpOrderType(Map<String,Object> map);
 	
 	/******************* tangjin end**************************/
 

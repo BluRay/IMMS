@@ -357,5 +357,9 @@ public class BaseDataServiceImpl implements IBaseDataService {
 	public void deleteVinRule(List ids) {
 		baseDataDao.deleteVinRule(ids);
 	}
+	@Override
+	public BmsBaseFactory getFactoryById(String id) {
+		return baseDataDao.getFactoryById(id);
+	}
 
 }

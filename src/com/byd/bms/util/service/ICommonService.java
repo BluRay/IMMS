@@ -70,9 +70,13 @@ public interface ICommonService {
 
     Map<String,Object> getTaskList(Map<String, Object> condMap);
 	
-	public int createTask(String task_type,String count,String param,String factoryCode);
+	public int createTask(String task_type,String count,String param,String factoryCode,String workshop_name);
 	
-	public int updateTask(String task_type,String finish_count);
+	public int createTask(String task_name,Map<String,Map<String,Object>> taskMap);
+	
+	public int updateTask(String task_type,String finish_count,String workshop_name);
+	
+	public int updateTask(String task_name,Map<String,Map<String,Object>> taskMap);
 
 	/**
 	 * @author xiong.jianwu

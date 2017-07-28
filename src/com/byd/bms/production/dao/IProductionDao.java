@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.byd.bms.production.model.ProductionException;
+import com.byd.bms.setting.model.BmsBaseFactory;
 @Repository(value="productionDao")
 public interface IProductionDao {
 	/*****************************xiong jianwu start  *****************************/
@@ -154,6 +155,13 @@ public interface IProductionDao {
 	public int deleteWaitHourInfo(Map<String, Object> conditionMap);
 	
 	public int batchUpdateWaitPay(List<Map<String, Object>> swh_list);
+	
+	//临时派工类型
+	public List<Map<String,String>> getTmpOrderTypeList(Map<String,Object> queryMap);
+	public int getTmpOrderTypeCount(Map<String,Object> queryMap);
+	public void editTmpOrderType(Map<String,Object> map);
+	public void delTmpOrderType(@Param("id") String id);
+	public int insertTmpOrderType(Map<String,Object> map);
 	/******************* tangjin end**************************/
 
 	public List<Map<String,String>> getProductionSearch(Map<String,Object> queryMap);

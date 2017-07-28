@@ -1912,7 +1912,7 @@
 		left join BMS_HR_PIECE_SALARY sa on
 		<if test="salary_model=='技能系数' or salary_model=='承包制' ">
 			h.staff_number=sa.staff_number and h.factory=sa.factory
-			and h.workshop=sa.workshop and h.work_date=sa.work_date
+			and h.workshop=sa.workshop and h.work_date=sa.work_date and h.bus_number=sa.bus_number
 		</if>
 		<if test="salary_model=='辅助人力' or salary_model=='底薪模式' ">
 			h.staff_number=sa.staff_number and h.factory=sa.factory
@@ -2117,5 +2117,84 @@
 			)
 		</foreach>
 	</insert>
-	
+	<update id="editTmpOrderType" parameterType='Map'>
+		update 
+		BMS_PD_TMP_ORDER_TYPE set 
+		<if test="name!=null and name !=''">
+			name=#{name},
+		</if>
+		<if test="cost_transfer!=null and cost_transfer !=''">
+			cost_transfer=#{cost_transfer}
+		</if>
+		WHERE id= #{id}
+	</update>
+	<insert id="insertTmpOrderType" parameterType="Map">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+			INSERT INTO
+			BMS_PD_TMP_ORDER_TYPE(name,cost_transfer,editor,edit_date)
+			VALUES(#{name},#{cost_transfer},#{editor},#{edit_date})
+	</insert>
+	<update id="delTmpOrderType" parameterType='String'>
+		delete from
+		BMS_PD_TMP_ORDER_TYPE WHERE id= #{id}
+	</update>
+	<select id="getTmpOrderTypeList" parameterType="Map" resultType="Map">
+		SELECT s.*,u.username as username FROM BMS_PD_TMP_ORDER_TYPE s 
+		left join BMS_BASE_USER u on s.editor=u.id
+		WHERE 1=1
+		<if test="name !=null and name !=''">
+			and s.name=#{name}
+		</if>
+		<if test="cost_transfer !=null and cost_transfer !=''">
+			and s.cost_transfer=#{cost_transfer}
+		</if>
+		<if test="start !=null">
+			LIMIT #{start} ,#{length} 
+		</if>		
+	</select>
+	<select id="getTmpOrderTypeCount" parameterType="Map" resultType="int">
+		SELECT count(1) FROM BMS_PD_TMP_ORDER_TYPE s WHERE 1=1
+		<if test="name !=null and name !=''">
+			and s.name=#{name}
+		</if>
+		<if test="cost_transfer !=null and cost_transfer !=''">
+			and s.cost_transfer=#{cost_transfer}
+		</if>
+	</select>
+	<select id="getExtraWorkHourManagerList" parameterType="Map" resultType="Map">
+		SELECT s.* FROM BMS_PD_TMP_HOURS s WHERE 1=1
+		<if test="bus_type !=null and bus_type !=''">
+			and s.bus_type=#{bus_type}
+		</if>
+		<if test="order_no !=null and order_no !=''">
+			and s.order_no=#{order_no}
+		</if>
+		<if test="order_type !=null and order_type !=''">
+			and s.order_type LIKE CONCAT('%',#{order_type},'%')
+		</if>
+		<if test="reason_content !=null and reason_content !=''">
+			and s.reason_content LIKE CONCAT('%',#{reason_content},'%')
+		</if>
+		<if test="start !=null">
+			LIMIT #{start} ,#{length} 
+		</if>		
+	</select>
+	<select id="getExtraWorkHourManagerCount" parameterType="Map" resultType="int">
+		SELECT count(1) FROM BMS_PD_TMP_HOURS s WHERE 1=1
+		<if test="bus_type !=null and bus_type !=''">
+			and s.bus_type=#{bus_type}
+		</if>
+		<if test="order_no !=null and order_no !=''">
+			and s.order_no=#{order_no}
+		</if>
+		<if test="order_type !=null and order_type !=''">
+			and s.order_type LIKE CONCAT('%',#{order_type},'%')
+		</if>
+		<if test="reason_content !=null and reason_content !=''">
+			and s.reason_content LIKE CONCAT('%',#{reason_content},'%')
+		</if>
+	</select>
 </mapper>

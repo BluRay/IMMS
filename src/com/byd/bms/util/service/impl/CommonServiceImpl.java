@@ -21,6 +21,7 @@ import org.springframework.ui.ModelMap;
 
 import com.byd.bms.order.dao.IReviewDao;
 import com.byd.bms.order.model.BmsOrderReviewResults;
+import com.byd.bms.setting.dao.IBaseDataDao;
 import com.byd.bms.snaker.engine.SnakerEngineFacets;
 import com.byd.bms.util.DataSource;
 import com.byd.bms.util.dao.ICommonDao;
@@ -36,6 +37,8 @@ public class CommonServiceImpl implements ICommonService {
 	private SnakerEngineFacets facets;
 	@Autowired
 	private IReviewDao reviewDao;
+	@Autowired
+	private IBaseDataDao baseDataDao;
 	@Autowired 
 	protected HttpSession session;
 	@Override
@@ -195,6 +198,10 @@ public class CommonServiceImpl implements ICommonService {
 			task.setFinish_count(finishcountStr.substring(0,finishcountStr.indexOf(".")));
 			if((String)m.get("factory_code")!=null){
 				task.setTask_type_name((String)m.get("task_type")+" "+(String)m.get("factory_code"));
+				if((String)m.get("workshop_name")!=null){
+					String str=(String)m.get("task_type")+" "+(String)m.get("factory_code")+" "+(String)m.get("workshop_name");
+					task.setTask_type_name(str);
+				}
 			}else{
 				task.setTask_type_name((String)m.get("task_type"));
 			}
@@ -215,7 +222,8 @@ public class CommonServiceImpl implements ICommonService {
 		return result;
 	}
 	// /**往当前任务表 BMS_BASE_TASK 中新增一个新任务*/
-    public int createTask(String task_type,String count,String param,String factoryCode){
+    public int createTask(String task_type,String count,String param,
+    		String factoryCode,String workshop_name){
     	int result=0;
     	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String curTime = df.format(new Date());
@@ -223,6 +231,7 @@ public class CommonServiceImpl implements ICommonService {
 		Map conditionMap=new HashMap<String,Object>();
 		conditionMap.put("task_type", task_type);
 		conditionMap.put("param", param);
+		conditionMap.put("factory_code", factoryCode);
 		List<Map<String,Object>> taskList=commonDao.queryTaskList(conditionMap);
 		// 如果BMS_BASE_TASK 存在未完成的任务
 		if(taskList.size()>0){  
@@ -247,6 +256,7 @@ public class CommonServiceImpl implements ICommonService {
 					map.put("edit_date", curTime);
 					map.put("param", param);
 					map.put("factory_code", factoryCode);
+					map.put("workshop_name", workshop_name);
 					result=commonDao.addTask(map);
 				}
 			}			
@@ -259,16 +269,91 @@ public class CommonServiceImpl implements ICommonService {
 				map.put("edit_date", curTime);
 				map.put("param", param);
 				map.put("factory_code", factoryCode);
+				map.put("workshop_name", workshop_name);
 				result=commonDao.addTask(map);
 			}
 		}
     	return result;
     }
+ // /**往当前任务表 BMS_BASE_TASK 中新增一个新任务*/
+    public int createTask(String task_name,Map<String,Map<String,Object>> taskMap){
+    	int result=0;
+    	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String userid=String.valueOf(session.getAttribute("user_id"));
+		for (String key : taskMap.keySet()) {
+//			Map val=taskMap.get(key);
+			String [] atrArry=key.split("_");
+			String fc=atrArry[0].toString();
+			String ws=atrArry[1].toString();
+			Map conditionMap=new HashMap<String,Object>();
+			conditionMap.put("task_type", task_name);
+			conditionMap.put("factory_code", fc);
+			conditionMap.put("workshop_name", ws);
+			List<Map<String,Object>> taskList=commonDao.queryTaskList(conditionMap);
+			// 如果BMS_BASE_TASK 存在未完成的任务
+			if(taskList.size()>0){  
+				Map<String,Object> tm=taskList.get(0);
+				Map<String,Object> task=new HashMap<String,Object>();
+				task.put("id",(String)tm.get("id"));
+				task.put("count",taskMap.get(key).get("count"));
+				task.put("task_type_name",task_name);
+				task.put("editor_id", Integer.parseInt(userid));
+				task.put("edit_date", curTime);
+				commonDao.updateTask(task);
+			}else{ // 如果BMS_BASE_TASK的任务 都已完成，重新new一个task，新增一条记录
+				Map map=commonDao.queryTaskType(conditionMap);
+				if(map!=null && !map.isEmpty()){
+					map.put("count", taskMap.get(key).get("count"));
+					map.put("finish_count", "0");
+					map.put("editor_id", Integer.parseInt(userid));
+					map.put("edit_date", curTime);
+					map.put("param", taskMap.get(key).get("param"));
+					map.put("factory_code", fc);
+					map.put("workshop_name", ws);
+					result=commonDao.addTask(map);
+				}
+			}
+		}
+		
+    	return result;
+    }
  // /**更新任务表 BMS_BASE_TASK*/
-    public int updateTask(String task_type,String finish_count){
+    public int updateTask(String task_name,Map<String,Map<String,Object>> taskMap){
+    	int result=0;
+    	for (String key : taskMap.keySet()) {
+			Map val=taskMap.get(key);
+			String [] atrArry=key.split("_");
+			String fc=atrArry[0].toString();
+			String ws=atrArry[1].toString();
+			Map<String,Object> conditionMap=new HashMap<String,Object>();
+			conditionMap.put("task_type", task_name);
+			conditionMap.put("factory_code", fc);
+			conditionMap.put("workshop_name", ws);
+			List<Map<String,Object>> taskList=commonDao.queryTaskList(conditionMap);
+			// 如果BMS_BASE_TASK 存在未完成的任务
+			if(taskList.size()>0){  
+				Map<String,Object> tm=taskList.get(0);
+				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				String curTime = df.format(new Date());
+				String userid=String.valueOf(session.getAttribute("user_id"));
+				Map<String,Object> task=new HashMap<String,Object>();
+				task.put("id",(String)tm.get("id"));
+				task.put("count",null);
+				task.put("finish_count",taskMap.get(key).get("count")+"");
+				task.put("task_type_name",task_name);
+				task.put("handler", Integer.parseInt(userid));
+				task.put("finish_date", curTime);
+				result=commonDao.updateTask(task);
+		    }
+    	}
+    	return result;
+    }
+    public int updateTask(String task_type,String finish_count,String workshop_name){
     	int result=0;
 		Map conditionMap=new HashMap<String,Object>();
 		conditionMap.put("task_type", task_type);
+		conditionMap.put("workshop_name", workshop_name);
 		List<Map<String,Object>> list=commonDao.queryTaskList(conditionMap);
 		if(list.size()>0){
 			Map m=list.get(0);
@@ -285,7 +370,6 @@ public class CommonServiceImpl implements ICommonService {
 		}
     	return result;
     }
-    
     /**
      * @author xiong.jianwu
      * @param factory_id

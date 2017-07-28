@@ -205,9 +205,9 @@
 	</select>
 	<select id="queryTaskList" parameterType="Map" resultType="Map">
 		select CONCAT(t.id,'') id,r.staff_number,t.factory_code,p.task_type,sum(t.count) count,
-		sum(t.finish_count) finish_count,p.url,t.param from BMS_BASE_TASK t 
+		sum(t.finish_count) finish_count,p.url,t.param,t.workshop_name from BMS_BASE_TASK t 
 		left join BMS_BASE_TASK_TYPE p on t.task_type_id=p.id
-		left join BMS_BASE_USER_ROLE r on t.role_id=r.role_id
+		left join BMS_BASE_USER_ROLE r on (t.role_id=r.role_id)
 		 where t.count!=t.finish_count  
 		<if test="staff_number !=null and staff_number !=''"> 
 		    <!-- 默认 permission_key=1 对应工厂权限-->
@@ -219,11 +219,36 @@
 		<if test="param !=null and param !=''"> 
 			and t.param=#{param}
 		</if>
+		<if test="workshop_name !=null and workshop_name !=''"> 
+			and t.workshop_name=#{workshop_name}
+		</if>
+		  group by r.staff_number,t.factory_code,p.task_type,p.url,t.param
+		  union all
+		select CONCAT(t.id,'') id,r.staff_number,t.factory_code,p.task_type,sum(t.count) count,
+		sum(t.finish_count) finish_count,p.url,t.param,t.workshop_name from BMS_BASE_TASK t 
+		left join BMS_BASE_TASK_TYPE p on t.task_type_id=p.id
+		left join BMS_BASE_USER r on (t.staff_number=r.staff_number)
+		 where t.count!=t.finish_count  
+		<if test="staff_number !=null and staff_number !=''"> 
+			and r.staff_number=#{staff_number}
+		</if>
+		<if test="task_type !=null and task_type !=''"> 
+			and p.task_type=#{task_type}
+		</if>
+		<if test="param !=null and param !=''"> 
+			and t.param=#{param}
+		</if>
+		<if test="workshop_name !=null and workshop_name !=''"> 
+			and t.workshop_name=#{workshop_name}
+		</if>
 		  group by r.staff_number,t.factory_code,p.task_type,p.url,t.param
 	</select>
 	<select id="queryTaskType" parameterType="Map" resultType="Map">
-		select t.id as task_type_id,t.url,t.task_type,r.id as role_id from BMS_BASE_TASK_TYPE t
+		select t.id as task_type_id,t.url,t.task_type,r.id as role_id,t.staff_number from BMS_BASE_TASK_TYPE t
 		left join BMS_BASE_ROLE r on t.role_name=r.role_name where t.task_type=#{task_type}
+		<if test="staff_number !=null and staff_number !=''"> 
+			and t.staff_number=#{staff_number} 
+		</if>
 	</select>
 	<insert id="addTask" parameterType="Map"  useGeneratedKeys="true">
 		<selectKey resultType="int" keyProperty="id" order="AFTER">
@@ -231,9 +256,9 @@
 			LAST_INSERT_ID()
 		</selectKey>
 		insert into BMS_BASE_TASK
-		(task_type_id,url,param,count,finish_count,role_id,factory_code,editor_id,edit_date)
+		(task_type_id,url,param,count,finish_count,role_id,staff_number,factory_code,workshop_name,editor_id,edit_date)
 		values
-		(#{task_type_id},#{url},#{param},#{count},#{finish_count},#{role_id},#{factory_code},#{editor_id},#{edit_date})
+		(#{task_type_id},#{url},#{param},#{count},#{finish_count},#{role_id},#{staff_number},#{factory_code},#{workshop_name},#{editor_id},#{edit_date})
 	</insert>
 	<update id='updateTask' parameterType="Map">
 		update BMS_BASE_TASK set
@@ -702,7 +727,7 @@
 		select p.* from BMS_HR_HOUR_PRICE p left join
 		  BMS_BASE_FACTORY f on f.id=p.factory_id
 		where f.factory_name=#{factory}		
-		and effective_date&gt;=#{workDate}
+		and effective_date&lt;=#{workDate}
 		and hour_type=#{type}
 		order by edit_date desc
 		limit 1
