@@ -340,6 +340,259 @@
 		UPDATE BMS_HR_STAFF SET status = '离职',leave_date = #{curTime},editor_id = #{edit_user} WHERE staff_number = #{staff_number}
 	</update>
 	
+		<!--批量信息员工信息 -->
+	<insert id="insertStaffs" parameterType="List">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		<foreach collection="list" index="index" item="item"
+			separator=";">
+			INSERT INTO BMS_HR_STAFF(staff_number,editor_id,edit_date
+			<if test="item.name!=null and item.name!=''">
+				,name
+			</if>
+			<if test="item.sex!=null and item.sex!=''">
+				,sex
+			</if>
+			<if test="item.birthday!=null and item.birthday!=''">
+				,birthday
+			</if>
+			<if test="item.age!=null and item.age!=''">
+				,age
+			</if>
+			<if test="item.highest_education!=null and item.highest_education!=''">
+				,highest_education
+			</if>
+			<if test="item.fresh_student!=null and item.fresh_student!=''">
+				,fresh_student
+			</if>
+			<if test="item.political_status!=null and item.political_status!=''">
+				,political_status
+			</if>
+			<if test="item.identity_card!=null and item.identity_card!=''">
+				,identity_card
+			</if>
+			<if
+				test="item.factory_incoming_date!=null and item.factory_incoming_date!=''">
+				,factory_incoming_date
+			</if>
+			<if test="item.staff_level!=null and item.staff_level!=''">
+				,staff_level
+			</if>
+			<if test="item.skill_parameter!=null and item.skill_parameter!=''">
+				,skill_parameter
+			</if>
+			<if test="item.salary_type!=null and item.salary_type!=''">
+				,salary_type
+			</if>
+			<if test="item.plant_org!=null and item.plant_org!=''">
+				,plant_org
+			</if>
+			<if test="item.dept_org!=null and item.dept_org!=''">
+				,dept_org
+			</if>
+			<if test="item.workshop_org!=null and item.workshop_org!=''">
+				,workshop_org
+			</if>
+			<if test="item.workgroup_org!=null and item.workgroup_org!=''">
+				,workgroup_org
+			</if>
+			<if test="item.team_org!=null and item.team_org!=''">
+				,team_org
+			</if>
+			<if test="item.job!=null and item.job!=''">
+				,job
+			</if>
+			<if test="item.status!=null and item.status!=''">
+				,status
+			</if>
+			<if test="item.join_channel!=null and item.join_channel!=''">
+				,join_channel
+			</if>
+			<if test="item.leave_way!=null and item.leave_way!=''">
+				,leave_way
+			</if>
+			<if test="item.leave_date!=null and item.leave_date!=''">
+				,leave_date
+			</if>
+			<if test="item.leave_reason!=null and item.leave_reason!=''">
+				,leave_reason
+			</if>
+			<if test="item.last_company!=null and item.last_company!=''">
+				,last_company
+			</if>
+			<if test="item.last_leave_reason!=null and item.last_leave_reason!=''">
+				,last_leave_reason
+			</if>
+			<if test="item.phone!=null and item.phone!=''">
+				,phone
+			</if>
+			<if test="item.family_address!=null and item.family_address!=''">
+				,family_address
+			</if>
+			<if test="item.nation!=null and item.nation!=''">
+				,nation
+			</if>
+			<if test="item.corporation!=null and item.corporation!=''">
+				,corporation
+			</if>
+			<if test="item.workplace!=null and item.workplace!=''">
+				,workplace
+			</if>
+			)
+			VALUES(#{item.staff_number},#{item.editor},#{item.edit_date}
+			<if test="item.name!=null and item.name!=''">
+				,#{item.name}
+			</if>
+			<if test="item.sex!=null and item.sex!=''">
+				,#{item.sex}
+			</if>
+			<if test="item.birthday!=null and item.birthday!=''">
+				,#{item.birthday}
+			</if>
+			<if test="item.age!=null and item.age!=''">
+				,#{item.age}
+			</if>
+			<if test="item.highest_education!=null and item.highest_education!=''">
+				,#{item.highest_education}
+			</if>
+			<if test="item.fresh_student!=null and item.fresh_student!=''">
+				,#{item.fresh_student}
+			</if>
+			<if test="item.political_status!=null and item.political_status!=''">
+				,#{item.political_status}
+			</if>
+			<if test="item.identity_card!=null and item.identity_card!=''">
+				,#{item.identity_card}
+			</if>
+			<if
+				test="item.factory_incoming_date!=null and item.factory_incoming_date!=''">
+				,#{item.factory_incoming_date}
+			</if>
+			<if test="item.staff_level!=null and item.staff_level!=''">
+				,#{item.staff_level}
+			</if>
+			<if test="item.skill_parameter!=null and item.skill_parameter!=''">
+				,#{item.skill_parameter}
+			</if>
+			<if test="item.salary_type!=null and item.salary_type!=''">
+				,#{item.salary_type}
+			</if>
+			<if test="item.plant_org!=null and item.plant_org!=''">
+				,#{item.plant_org}
+			</if>
+			<if test="item.workshop_org!=null and item.workshop_org!=''">
+				,#{item.workshop_org}
+			</if>
+			<if test="item.workgroup_org!=null and item.workgroup_org!=''">
+				,#{item.workgroup_org}
+			</if>
+			<if test="item.team_org!=null and item.team_org!=''">
+				,#{item.team_org}
+			</if>
+			<if test="item.job!=null and item.job!=''">
+				,#{item.job}
+			</if>
+			<if test="item.status!=null and item.status!=''">
+				,#{item.status}
+			</if>
+			<if test="item.join_channel!=null and item.join_channel!=''">
+				,#{item.join_channel}
+			</if>
+			<if test="item.leave_way!=null and item.leave_way!=''">
+				,#{item.leave_way}
+			</if>
+			<if test="item.leave_date!=null and item.leave_date!=''">
+				,#{item.leave_date}
+			</if>
+			<if test="item.leave_reason!=null and item.leave_reason!=''">
+				,#{item.leave_reason}
+			</if>
+			<if test="item.last_company!=null and item.last_company!=''">
+				,#{item.last_company}
+			</if>
+			<if test="item.last_leave_reason!=null and item.last_leave_reason!=''">
+				,#{item.last_leave_reason}
+			</if>
+			<if test="item.phone!=null and item.phone!=''">
+				,#{item.phone}
+			</if>
+			<if test="item.family_address!=null and item.family_address!=''">
+				,#{item.family_address}
+			</if>
+			<if test="item.nation!=null and item.nation!=''">
+				,#{item.nation}
+			</if>
+			<if test="item.corporation!=null and item.corporation!=''">
+				,#{item.corporation}
+			</if>
+			<if test="item.workplace!=null and item.workplace!=''">
+				,#{item.workplace}
+			</if>
+			)
+		</foreach>
+	</insert>
+
+	<!--批量修改员工信息 -->
+	<update id="updateStaffs" parameterType="List">
+		<foreach collection="list" index="index" item="item"
+			separator=";">
+			UPDATE BMS_HR_STAFF
+			SET editor_id = #{item.editor},edit_date = #{item.edit_date}
+			,name = #{item.name}
+			,sex = #{item.sex}
+			,birthday = #{item.birthday}
+			,age = #{item.age}
+			,highest_education = #{item.highest_education}
+			,fresh_student = #{item.fresh_student}
+			,political_status = #{item.political_status}
+			,identity_card = #{item.identity_card}
+			,factory_incoming_date = #{item.factory_incoming_date}
+			,staff_level = #{item.staff_level}
+			,skill_parameter = #{item.skill_parameter}
+			,salary_type = #{item.salary_type}
+			<if test="item.plant_org!=null and item.plant_org!=''">
+				,plant_org = #{item.plant_org}
+			</if>
+			<if test="item.plant_org==null or item.plant_org==''">
+				,plant_org = null
+			</if>
+			<if test="item.workshop_org!=null and item.workshop_org!=''">
+				,workshop_org = #{item.workshop_org}
+			</if>
+			<if test="item.workshop_org==null or item.workshop_org==''">
+				,workshop_org = #{item.workshop_org}
+			</if>
+			<if test="item.workgroup_org!=null and item.workgroup_org!=''">
+				,workgroup_org = #{item.workgroup_org}
+			</if>
+			<if test="item.workgroup_org==null or item.workgroup_org==''">
+				,workgroup_org = null
+			</if>
+			<if test="item.team_org!=null and item.team_org!=''">
+				,team_org = #{item.team_org}
+			</if>
+			<if test="item.team_org==null or item.team_org==''">
+				,team_org = null
+			</if>
+			,job = #{item.job}
+			,status = #{item.status}
+			,join_channel = #{item.join_channel}
+			,leave_way = #{item.leave_way}
+			,leave_date = #{item.leave_date}
+			,leave_reason = #{item.leave_reason}
+			,last_company = #{item.last_company}
+			,last_leave_reason = #{item.last_leave_reason}
+			,phone = #{item.phone}
+			,family_address = #{item.family_address}
+			,nation = #{item.nation}
+			,corporation = #{item.corporation}
+			,workplace = #{item.workplace}
+			WHERE staff_number = #{item.staff_number}
+		</foreach>
+	</update>
+	
 	<select id="getWorkgroupPriceList" parameterType="Map" resultType="Map">
 		select p.id,p.factory,p.workshop,p.workgroup,p.team,p.standard_price stand_price,u.username editor,
 		p.edit_date,concat(o.order_no,' ',o.order_name,t.internal_name,' ',o.order_qty,'台') as order_desc,p.effective_date

@@ -97,10 +97,10 @@
 									
 									<div id="divBulkAdd" class="well" style="display:none;">
 									<button id="btnBulkHide" type="button" class="close"><i class="ace-icon fa fa-times"></i></button>
-										<form id="uploadMasterPlanForm" action="#" enctype="multipart/form-data" method="post">
+										<form id="uploadStaffForm" action="#" enctype="multipart/form-data" method="post">
 										<table>
 											<tr>
-												<td><input id="file" type="file" name="file" accept="*.xlsx"/></td>
+												<td><input id="file" type="file" name="file" accept="*.xls"/></td>
 												<td><input id="btn_upload" type="button" class="btn btn-sm btn-primary" value="上传并导入" onclick="javascript:return LimitAttach(this.form, this.form.file.value)"/></td>
 												<td></td><td><a href="../docs/masterPlan.xls">下载批导模板</a></td>
 											</tr>
@@ -109,7 +109,7 @@
 									</div>
 									
 									<div id="toolbar"></div>
-									<table  style="font-weight:normal;width:3000px;" id="table" data-toolbar="#toolbar" data-search="false" data-show-refresh="true"
+									<table  style="font-weight:normal;width:4500px;" id="table" data-toolbar="#toolbar" data-search="false" data-show-refresh="true"
 								           data-show-toggle="false" data-show-columns="true" data-show-export="true" data-detail-view="false"
 								           data-detail-formatter="detailFormatter" data-minimum-count-columns="2" data-show-pagination-switch="true"
 								           data-pagination="true" data-id-field="id" data-page-list="[50, 100, 200, 500, ALL]"

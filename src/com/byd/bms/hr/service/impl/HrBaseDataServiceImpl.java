@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.byd.bms.hr.dao.IHrBaseDataDao;
 import com.byd.bms.hr.service.IHrBaseDataService;
@@ -180,6 +181,20 @@ public class HrBaseDataServiceImpl implements IHrBaseDataService {
 	@Override
 	public List<String> getStaffListByStaffNumbers(Map<String, Object> conditionMap) {
 		return hrBaseDataDao.getStaffListByStaffNumbers(conditionMap);
+	}
+	@Override
+	@Transactional
+	public int uploadStaff(List<Map<String, Object>> addList,List<Map<String, Object>> updateList){
+		int result = 0;
+		if(addList.size()>0){
+			//批量新增用户信息
+			result = hrBaseDataDao.insertStaffs(addList);
+		}
+		if(updateList.size()>0){
+			//批量修改用户信息
+			result = hrBaseDataDao.updateStaffs(updateList);
+		}
+		return result;
 	}
 	
 	@Override

@@ -38,6 +38,7 @@ public interface IHrBaseDataService {
 	public List<Map<String,Object>> getOrg(List<Map<String,Object>> conditionMap);
 	public List<String> getStaffListByStaffNumbers(Map<String, Object> conditionMap);
 	public int dimissionStaff(Map<String, Object> conditionMap);
+	public int uploadStaff(List<Map<String, Object>> addList,List<Map<String, Object>> updateList);
 	
 	public Map<String,Object> getWorkgroupPriceList(Map<String, Object> conditionMap);
 	public Map<String,Object> getOrgInfo(Map<String,Object> conditionMap);

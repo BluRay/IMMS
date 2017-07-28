@@ -103,7 +103,6 @@
 						<td style="width:250px">
 							<select id="switch_node" class="input-medium">
 								<option value='焊装'>焊装</option>
-								<option value='玻璃钢'>玻璃钢</option>
 								<option value='涂装'>涂装</option>
 								<option value='底盘'>底盘</option>
 								<option value='总装'>总装</option>

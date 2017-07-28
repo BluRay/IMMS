@@ -108,7 +108,7 @@
 			and d.order_id = #{order_id} 
 		</if>
 		ORDER BY d.busnum_start
-		<if test="start !=null">
+		<if test="start !=null and length !='-1'">
 			LIMIT #{start} ,#{length} 
 		</if>			
 	</select>
@@ -200,7 +200,7 @@
 			and o.productive_year=#{actYear}
 		</if>
 			order by o.order_no desc
-		<if test="start !=null">
+		<if test="start !=null and length !='-1'">
 			limit #{start},#{length}
 		</if>
 		
@@ -327,7 +327,7 @@
 			and find_in_set(fo.factory_id,#{factory})
 		</if>
 			order by o.order_no desc
-		<if test="start !=null">
+		<if test="start !=null and length !='-1'">
 			limit #{start},#{length}
 		</if>
 	</select>
@@ -441,7 +441,7 @@
 			and fo.status=#{status}
 		</if>
 		 order by o.id,fo.factory_id desc
-		<if test="start !=null">
+		<if test="start !=null and length !='-1'">
 			limit #{start},#{length}
 		</if>
 	</select>

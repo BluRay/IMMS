@@ -365,7 +365,8 @@ jQuery(function($) {
             		$('#p_id').html(option);
                 	$("#edit_org_type").find("option[keyvalue="+response.data[0].org_type+"]").prop("selected",true);
                 	$("#edit_org_kind").find("option[value="+response.data[0].org_kind+"]").prop("selected",true);
-                	if(response.data[0].salary_model>=0){
+                	if(null!=response.data[0].salary_model&&undefined !=response.data[0].salary_model && ""!=response.data[0].salary_model.trim()&& response.data[0].salary_model>=0){
+                		
                 		$("#edit_salary_model").find("option[keyvalue="+response.data[0].salary_model+"]").prop("selected",true);
                 	}else{
                 		$("#edit_salary_model").find("option[value='']").prop("selected",true);
@@ -395,7 +396,27 @@ jQuery(function($) {
             					text: "确定",
             					"class" : "btn btn-primary btn-minier",
             					click: function() {
-            						
+            					var org_type = $("#edit_org_type :selected").attr('keyvalue');
+        				    	var salary_model = $("#edit_salary_model :selected").attr('keyvalue');
+						    	var customer_no_flag = $("#edit_customer_no_flag :selected").val();
+            					if(org_type == '4'){
+            				    	if(undefined == salary_model || 'undefined' == salary_model || salary_model ==""){
+        					    		$.gritter.add({
+        									title: '系统提示：',
+        									text: '<h5>必须维护小班组的计资模式！</h5><br>',
+        									class_name: 'gritter-info'
+        								});
+        					    		return false;
+            				    	}
+            				    	if(undefined == customer_no_flag || 'undefined' == customer_no_flag || customer_no_flag ==""){
+        					    		$.gritter.add({
+        									title: '系统提示：',
+        									text: '<h5>必须维护小班组的自编号规则！</h5><br>',
+        									class_name: 'gritter-info'
+        								});
+        					    		return false;
+            				    	}
+            					}
             					$.ajax({
             					    url: "editOrgData",
             					    dataType: "json",
@@ -574,7 +595,7 @@ function getWorkgroupListById(id,org_kind,org_type){
 		            {"title":"英文名称","class":"center","data":"name_en","defaultContent": ""},
 		            {"title":"计资模式","class":"center","data":"salary_model","defaultContent": ""},
 		            {"title":"自编号","class":"center","data":"customer_no_flag","defaultContent": "","render": function ( data, type, row ) {
-	                    return data=="1" ? "是" : "否"}
+	                    if(data==null){return "否"}else{return data=="1" ? "是" : "否"}}
 	                },
 		            {"title":"职责","class":"center","data":"responsibilities","defaultContent": ""},
 		            {"title":"管理者","class":"center","data":"manager","defaultContent": ""},

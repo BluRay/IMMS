@@ -78,7 +78,7 @@ function ajaxQuery(){
 		searching: false,
 		bAutoWidth:false,
 		destroy: true,
-		sScrollY: document.documentElement.clientHeight-270,
+		sScrollY: document.documentElement.clientHeight-250,
 		scrollX: true,
 		/*scrollCollapse: true,*/
 		pageLength: 20,

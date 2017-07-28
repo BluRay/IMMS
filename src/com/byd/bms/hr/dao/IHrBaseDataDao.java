@@ -44,6 +44,8 @@ public interface IHrBaseDataDao {
 	public List<Map<String,Object>> getOrg(List<Map<String,Object>> conditionMap);
 	public List<String> getStaffListByStaffNumbers(Map<String, Object> conditionMap);
 	public int dimissionStaff(Map<String, Object> conditionMap);
+	public int insertStaffs(List<Map<String, Object>> conditionMap);
+	public int updateStaffs(List<Map<String, Object>> conditionMap);
 	
 	public List<Map<String,Object>> getWorkgroupPriceList(Map<String, Object> cMap);
 	public int getWorkgroupPriceCount(Map<String, Object> cMap);
