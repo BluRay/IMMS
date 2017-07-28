@@ -15,6 +15,12 @@ $(document).ready(function() {
 			mouseWheelLock: true,
 			alwaysVisible : true
 		});
+		// 通过top页面任务栏进入，设置查询条件
+		factory =decodeURI(getParamValue("factory"));
+		workshop = getParamValue("workshop");
+		if(factory!="" && workshop!=""){
+			ajaxQuery();
+		}
 	}
 
 	$("#btnQuery").click(function(e) {
@@ -211,7 +217,7 @@ function generateTb(swhlist){
 			checkboxId="#chk_"+index;
 			swhids=index+",";
 			
-			if(wh.status=='0'){
+			if(swh.status=='0'){
 				$("<td id='chk_"+index+"' rowspan=1 swhids="+swhids+"/>").html("<input type='checkbox' >").appendTo(tr);
 			}
 			else{
@@ -269,7 +275,8 @@ function ajaxUpdate(conditions,flag) {
 		dataType : "json",
 		type : "post",
 		data : {
-			"conditions" : conditions
+			"conditions" : conditions,
+			"flag" : flag
 		},
 		success : function(response) {
 			if (response.success) {	

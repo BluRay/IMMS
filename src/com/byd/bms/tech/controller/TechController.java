@@ -987,6 +987,24 @@ public class TechController extends BaseController{
 		return model;
 	}
 	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping("/caculateSalary")
+	@ResponseBody
+	public ModelMap caculateSalary(){
+		String conditions = request.getParameter("conditions");
+		JSONObject jo=JSONObject.fromObject(conditions);
+		Map<String,Object> conditionMap=new HashMap<String,Object>();
+		for(Iterator it=jo.keys();it.hasNext();){
+			String key=(String) it.next();
+			conditionMap.put(key, jo.get(key));
+		}
+		techService.caculateEcnSalary(conditionMap);
+		mv.clear();
+		initModel(true,"SUCCESS",null);
+		model = mv.getModelMap();
+		return model;
+	}
+	
 	/**
 	 * @author xiong.jianwu
 	 * 技改跟进（移动端）

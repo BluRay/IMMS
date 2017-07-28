@@ -656,7 +656,7 @@ function getParamValue(name) {
         for (var i = 0; i < paramsArray.length; i++) {
             for (var j in paramsArray[i]) {
                 if (j === name) {
-                    return paramsArray[i][j];
+                    return decodeURI(paramsArray[i][j]);
                 }
             }
         }

@@ -45,66 +45,34 @@ $(document).ready(function() {
 		}
 		
 	})
-	
-	// 工时删除
-	$(document).on("click",".fa-times", function(e) {
-		var del_flag=$(e.target).attr("del_flag");
-		var bus_number=null;
-		var work_date=null;
-		var swh_id=null;
-		if(del_flag=='del_all'){//车号(操作日期)批量删除
-			if(salary_model=="技能系数"||salary_model=="承包制"){
-				bus_number=$(e.target).parent("td").next("td").html();
-				work_date=$(e.target).parent("td").next("td").next("td").html();
-			}else{
-				work_date=$(e.target).parent("td").next("td").html();
-			}
-			
-		}else{//单条数据删除
-			swh_id=$(e.target).attr("swh_id");
-		}
-		if(confirm("是否确认删除？"))
-		$.ajax({
-			url:'deleteStaffHours',
-			type:'post',
-			dataType:'json',
-			data:{
-				factory:factory,
-				workshop:workshop,
-				workgroup:workgroup,
-				team:team,
-				bus_number:bus_number,
-				work_date:work_date,
-				swh_id:swh_id,
-				salary_model:salary_model
-			},
-			success:function(response){
-				if(response.success){
-					alert("删除成功！")
-					//先destroy datatable
-					if($.fn.dataTable.isDataTable("#tableResult")){
-						$('#tableResult').DataTable().destroy();
-						$('#tableResult').empty();
-					}
-					
-					//显示选择的小班组人员列表
-					ajaxGetStaffHoursDetail();
-					if(staff_hour_list.length>0){
-						showStaffList(staff_hour_list);
-					}
-				}else{
-					alert(response.message)
-				}
-			}
-		})
-	});
 
 	
 	//驳回工时工资信息
 	$(document).on("click","#btnSave",function(){
+		var cboxlist=$("#tableResult tbody :checked");
+		var bus_list=[];
+		var work_date_list=[];
+		if(cboxlist.length==0){
+			alert("请选择需要审核的工时信息！");
+			return false;
+		}
+		$.each(cboxlist,function(i,cbox){
+			var td=$(cbox).parent("td");
+			if(td.css("display")!='none'){
+				if(salary_model=='技能系数' ||salary_model=='承包制' ){
+					var bus_number=$(td).next().html();
+					bus_list.push(bus_number)
+				}
+				if(salary_model=='辅助人力' ||salary_model=='底薪模式' ){
+					var work_date=$(td).next().html();
+					work_date_list.push(work_date);
+				}
 
+			}
+		})
+		//alert(bus_list.join(",")+"/"+work_date_list.join(","))
 	
-	
+		ajaxSave(bus_list.join(","),work_date_list.join(","),salary_model);
 	})
 });
 
@@ -196,6 +164,7 @@ function showStaffList(staff_hour_list){
 		            {"title":"参与度/工时","width":"100","class":"center","data": "work_hour","defaultContent": ""/*,"render":function(data,type,row){
 		            	return "<input type='text' class='input-medium work_hour' style='width:60px;height:28px;text-align:center' value='"+data+"' />";
 		            }*/},
+		            {"title":"计件工资","class":"center","data": "ppay","defaultContent": ""},	
 		            {"title":"车间","class":"center","data":"workshop_org","defaultContent":""},
 		            {"title":"工厂","class":"center","data":"plant_org","defaultContent": ""},
 		          
@@ -223,6 +192,7 @@ function showStaffList(staff_hour_list){
 		            {"title":"分配金额","width":"100","class":"center","data": "distribution","defaultContent": ""/*,"render":function(data,type,row){
 		            	return "<input type='text' class='input-medium distribution' style='width:60px;height:28px;text-align:center'  value='"+data+"'/>"
 		            }*/},
+		            {"title":"计件工资","class":"center","data": "ppay","defaultContent": ""},
 		            {"title":"车间","class":"center","data":"workshop_org","defaultContent":""},
 		            {"title":"工厂","class":"center","data":"plant_org","defaultContent": ""},
 		         
@@ -246,6 +216,7 @@ function showStaffList(staff_hour_list){
 		            {"title":"参与度/工时","width":"100","class":"center","data": "work_hour","defaultContent": ""/*,"render":function(data,type,row){
 		            	return "<input type='text' class='input-medium work_hour' style='width:60px;height:28px;text-align:center'  value='"+data+"'/>";
 		            }*/},	
+		            {"title":"计件工资(月)","class":"center","data": "ppay","defaultContent": ""},
 		            {"title":"车间","class":"center","data":"workshop_org","defaultContent":""},
 		            {"title":"工厂","class":"center","data":"plant_org","defaultContent": ""},
 		          ]	;
@@ -306,7 +277,7 @@ function ajaxGetStaffHoursDetail(staff_number){
 		})
 }
 
-function ajaxSave(bus_number_list,work_date_list,salary_model,is_customer){
+function ajaxSave(bus_number_list,work_date_list,salary_model){
 	$.ajax({
 		url:'verifyStaffHours',
 		method:'post',
@@ -317,7 +288,8 @@ function ajaxSave(bus_number_list,work_date_list,salary_model,is_customer){
 			workshop:workshop,
 			workgroup:workgroup,
 			team:team,
-			is_customer:is_customer,
+			bus_number_list:bus_number_list,
+			work_date_list:work_date_list,
 			salary_model:salary_model
 		},
 		success:function(response){

@@ -40,7 +40,7 @@ function ajaxQuery(){
 	    buttons: [
 	        {extend:'excelHtml5',title:'data_export',className:'black',text:'<i class=\"fa fa-file-excel-o bigger-130\" tooltip=\"导出excel\"></i>'},
 	        {extend:'colvis',text:'<i class=\"fa fa-list bigger-130\" tooltip=\"选择展示列\"></i>'},
-	        {extend:'pageLength',text:'显示20行'}
+	        {extend:'pageLength',/*text:'显示行'*/}
 	       
 	    ],
         rowsGroup:[0,1,2,3,4],
@@ -59,6 +59,7 @@ function ajaxQuery(){
 		language: {
 			emptyTable:"抱歉，未查询到数据！",
 			info:"共计 _TOTAL_ 条，当前第 _PAGE_ 页 共 _PAGES_ 页",
+			lengthMenu:"显示 _MENU_ 行",
 			infoEmpty:"",
 			paginate: {
 			  first:"首页",

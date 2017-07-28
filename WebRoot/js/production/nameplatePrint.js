@@ -93,7 +93,7 @@ function ajaxQuery(){
 			destroy: true,
 			sScrollY: $(window).height()-255,
 			scrollX: true,
-			pageLength: 20,
+			pageLength: 11,
 			pagingType:"full_numbers",
 			lengthChange:false,
 			orderMulti:false,

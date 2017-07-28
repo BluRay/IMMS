@@ -355,7 +355,7 @@ function addWorkTime(order_no,tech_order_no,task_content,task_detail_id,factory,
 	edit_list=[];
 	console.log(order_no+"|"+task_content+"|"+task_detail_id+"|"+factory+"|"+workshop+"|"+tech_list);
 	$("#orderNo").html(tech_order_no);
-	$("#task").html(task_content);
+	$("#task_content").html(task_content);
 	$("#factory").val(factory);
 	$("#workshop").val(workshop);
 	$("#group").val('');

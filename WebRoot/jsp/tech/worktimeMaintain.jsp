@@ -88,7 +88,7 @@
 					</tr>
 					<tr>
 					<td width="140px" style="text-align:right">技改任务：</td>								
-					<td id="task"></td>	
+					<td id="task_content"></td>	
 					</tr>
 				</table>
 				<table >

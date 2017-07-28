@@ -211,6 +211,7 @@ $(document).ready(function() {
 			            	return "<input name='exp_radio' value='"+row.reason_type+"' type='radio'>";
 			            }},
 			            {"title":"生产订单","class":"center","data":"order_list","defaultContent": ""},
+//			            {"title":"线别","class":"center","data":"line","defaultContent": ""},
 			            {"title":"停线时间","class":"center","data":"start_time","defaultContent": ""},
 			            {"title":"预计恢复时间","class":"center","data": "pend_time","defaultContent": ""},
 			            {"title":"实际恢复时间","class":"center","data":"end_time","defaultContent":""},
@@ -330,7 +331,7 @@ $(document).ready(function() {
 								stafflist.push(staff);
 							}else{
 								saveFlag=false;
-								alert("不能重复维护工时！");
+								alert(staff.staff_number+" 不能重复维护工时！");
 								return false;
 							}			
 						}
@@ -359,7 +360,7 @@ $(document).ready(function() {
 			if(!saveFlag){
 				return false;
 			}
-			var conditions = "{staffNum:'"+ staffNumlist + "',workDate:'"+ $("#wait_date").val()+ "'}";	
+			var conditions = "{staff_number:'"+ staffNumlist + "',workDate:'"+ $("#wait_date").val()+ "'}";	
 			var sfwlist = ajaxGetStaffWorkHours(conditions);
 			if (sfwlist.length > 0) {
 				//$(tr).remove();
@@ -368,14 +369,6 @@ $(document).ready(function() {
 				return false;
 			}
 
-			/*
-			 * 判断分配比例之和是否等于1
-			 */
-	/*		if(total_distribution.toFixed(3)!=1){
-				saveFlag = false;
-				alert("分配比例之和必须等于1！");
-				return false;
-			}*/
 			console.log(stafflist);
 			if(saveFlag&&stafflist.length>0){
 				ajaxSave(JSON.stringify(stafflist));
@@ -392,22 +385,27 @@ function zTreeBeforeClick(treeId, treeNode, clickFlag) {
 function zTreeOnClick(event, treeId, treeNode) {
 	if(treeNode.org_type=='1'){
 		factory=treeNode.displayName;
+		workshop="";
+		workgroup="";
+		team="";
 	}	
 	if(treeNode.org_type == '2'){
 		factory=treeNode.getParentNode().displayName;
 		workshop=treeNode.displayName;
+		workgroup="";
+		team="";
 	}
 	if(treeNode.org_type == '3'){
 		factory=treeNode.getParentNode().getParentNode().displayName;
 		workshop=treeNode.getParentNode().displayName;
 		workgroup=treeNode.displayName;
+		team="";
 	}
 	if(treeNode.org_type == '4'){
 		factory=treeNode.getParentNode().getParentNode().getParentNode().displayName;
 		workshop=treeNode.getParentNode().getParentNode().displayName;
 		workgroup=treeNode.getParentNode().displayName;
 		team=treeNode.displayName;
-		console.log("treeNode",treeNode);
 	}
 	if(treeNode.org_type != '4'){
 		alert("请选择小班组！");

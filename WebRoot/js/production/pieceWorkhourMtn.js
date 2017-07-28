@@ -185,6 +185,11 @@ $(document).ready(function() {
 		var save_flag=true;
 		var bus_count=1;
 		var bonus=$("#bonus").val();
+		if(trs.length==0){
+			save_flag=false;
+			return false;
+		}
+		
 		//判断该车间的该月工资是否已提交/结算
 		if(checkSalarySubmit(factory,workshop,work_date.substring(0,7))=='true'){
 			alert(factory+workshop+"车间工资已提交/结算，不允许再维护工时信息！");
@@ -486,7 +491,7 @@ $(document).ready(function() {
 		}
 		
 		//所有条件检验合格后保存计件工时信息
-		if(save_flag){
+		if(save_flag&&staffHourList.length>0){
 			ajaxSave(staffHourList,salary_model,is_customer);
 		}
 	
@@ -702,6 +707,7 @@ function showStaffList(staff_list){
 	$("#tableResult").DataTable({
 		paiging:false,
 		ordering:false,
+		processing:true,
 		searching: false,
 		autoWidth:false,
 		paginate:false,
@@ -712,6 +718,7 @@ function showStaffList(staff_list){
 		orderMulti:false,
 		info:false,
 		language: {
+			processing: "正在查询，请稍后...",
 			emptyTable:"",					     
 			infoEmpty:"",
 			zeroRecords:"未查询到人员数据！"

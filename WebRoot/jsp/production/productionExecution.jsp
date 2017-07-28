@@ -14,6 +14,7 @@
 	href="../assets/css/fixedColumns.bootstrap.min.css" />
 <link rel="stylesheet" href="../css/bootstrap-table.css">
 <link rel="stylesheet" href="../css/bootstrap-editable.css">
+<link rel="stylesheet" href="../assets/css/jquery-ui.min.css" />
 <link rel="stylesheet" href="../assets/css/jquery.gritter.css" />
 <link rel="stylesheet" href="../css/common.css">
 <style type="text/css" media="screen">
@@ -217,33 +218,7 @@
 
 						</div>
 					</div>
-				</div>
-
-				<div id="dialog-config" class="hide">
-					<form id="  " class="form-horizontal">
-							<div class="control-group">
-								<label class="control-label" for="vin">*&nbsp;vin号</label>
-								<div class="controls">
-									<input type="text" id="vin" placeholder="vin号..."
-										class="input-medium" />
-								</div>
-							</div>
-							<div class="control-group">
-								<label class="control-label" for="left_motor_number">*&nbsp;左电机号</label>
-								<div class="controls">
-									<input type="text" id="left_motor_number" placeholder="左电机号..."
-										class="input-medium" />
-								</div>
-							</div>
-							<div class="control-group">
-								<label class="control-label" for="right_motor_number">*&nbsp;右电机号</label>
-								<div class="controls">
-									<input type="text" id="right_motor_number"
-										placeholder="右电机号..." class="input-medium" />
-								</div>
-							</div>
-						</form>		
-				</div>
+				</div>				
 <!-- 				<div class="modal" id="newModal" tabindex="-1" role="dialog"
 					aria-hidden="true" >
 					<div class="modal-header">
@@ -260,11 +235,36 @@
 						<button class="btn btn-primary" id="btnAddConfirm">确认</button>
 					</div>
 				</div> -->
-
+			<div id="dialog-config" class="hide">
+					<form id="  " class="form-horizontal">
+							<div class="form-group">
+								<label class="control-label col-sm-4" for="vin">*&nbsp;vin号</label>
+								<div class="controls col-sm-8">
+									<input type="text" id="vin" placeholder="vin号..."
+										class="input-medium" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-sm-4" for="left_motor_number">*&nbsp;左电机号</label>
+								<div class="controls col-sm-8">
+									<input type="text" id="left_motor_number" placeholder="左电机号..."
+										class="input-medium" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-4 control-label" for="right_motor_number">*&nbsp;右电机号</label>
+								<div class="controls col-sm-8">
+									<input type="text" id="right_motor_number"
+										placeholder="右电机号..." class="input-medium" />
+								</div>
+							</div>
+						</form>		
+				</div>
 			</div>
 			<!-- /.main-container -->
+			
 		</div>
-		
+		<script src="../assets/js/jquery-ui.min.js"></script>
 		<script src="../assets/js/jquery.dataTables.min.js"></script>
 		<script src="../assets/js/jquery.dataTables.bootstrap.js"></script>
 		<script src="../assets/js/jquery.gritter.min.js"></script>

@@ -134,6 +134,11 @@ $(document).ready(function() {
 		var bus_count=1;
 		var bonus=$("#bonus").val();	
 		
+		if(trs.length==0){
+			save_flag=false;
+			return false;
+		}
+		
 		/**
 		 *技能系数 判断逻辑
 		 */
@@ -165,17 +170,19 @@ $(document).ready(function() {
 					save_flag=false;
 					return false;
 				}
-				total_distribution=numAdd(total_distribution,Number(distribution));
+				//total_distribution=numAdd(total_distribution,Number(distribution));
 			})
 			if(!save_flag){
 				return false;
 			}
 			//判断分配金额之和是否等于班组承包单价
-			if(total_distribution!=standard_price){
+
+			if(!validateDistribution()){
+				alert("分配金额之和必须等于班组承包单价！");
 				save_flag = false;
-				alert("分配金额之和必须等于班组承包单价"+standard_price);
-				return false;				
-			}				
+				return false;	
+			}
+			
 		}
 		/**
 		 * 辅助人力 、底薪模式 判断逻辑
@@ -476,4 +483,38 @@ function limitMonthDate(e) {
 		}
 	}
 	
+}
+/**
+ * 校验每一台车每天所有人的分配金额之和是否等于班组承包单价
+ */
+function validateDistribution(){
+	var flag=true;
+	var standar_price_arr={};
+	var total_distribution_arr={};
+	var last_bus_number="";
+	var last_order_id="";
+	var last_work_date="";
+	var arr_count=0;
+ 
+	for(var i in staff_hour_list){
+		
+		if(staff_hour_list[i].bus_number!=last_bus_number||staff_hour_list[i].work_date!=last_work_date||staff_hour_list[i].order_id!=last_order_id){
+			standar_price_arr[arr_count]=parseFloat(staff_hour_list[i].standard_price);
+			total_distribution_arr[arr_count]=parseFloat(staff_hour_list[i].distribution);
+			arr_count++;
+		}else{
+			total_distribution_arr[arr_count-1]=numAdd(total_distribution_arr[arr_count-1],parseFloat(staff_hour_list[i].distribution));
+		}
+		last_bus_number=staff_hour_list[i].bus_number;
+		last_order_id=staff_hour_list[i].order_id;
+		last_work_date=staff_hour_list[i].work_date;		
+	}
+	
+	for(var j in standar_price_arr){
+		if(standar_price_arr[j]!=total_distribution_arr[j]){
+			flag=false;
+			return false;
+		}
+	}
+	return flag;
 }

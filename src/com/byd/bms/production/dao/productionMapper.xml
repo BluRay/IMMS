@@ -604,10 +604,11 @@
 		case when b.nameplate_print_date is null then '未打印' else '已打印' end as print_flag,
 		t.battery_model,t.max_weight,t.chassis_model,
 		substring(b.nameplate_print_date,1,10) print_date,t.brand,t.motor_model,t.motor_power,
-		case when t.rated_voltage&lt;=0 then b.rated_voltage end as rated_voltage,
-		case when t.battery_capacity&lt;=0 then b.battery_capacity end as battery_capacity
+		case when b.rated_voltage>0 then b.rated_voltage else(case when c.rated_voltage>0 then c.rated_voltage else t.rated_voltage end)  end as rated_voltage,
+		case when b.battery_capacity>0 then b.battery_capacity else(case when c.battery_capacity>0 then c.battery_capacity  else t.battery_capacity end) end as battery_capacity
 		from BMS_PLAN_BUS b
 		left join BMS_OR_ORDER o on b.order_id=o.id
+		left join BMS_OR_ORDER_CONFIG c on b.order_config_id=c.id
 		left join BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id
 		left join BMS_BASE_USER u on b.nameplate_printer_id=u.id
 		where 1=1 and b.factory_id=#{factoryId}
@@ -657,9 +658,12 @@
 	<select id="getCertificationList" parameterType="Map" resultType="Map">
 		SELECT b.id,b.bus_number,b.vin,b.bus_color,b.bus_seats,concat(b.left_motor_number,'/',b.right_motor_number) motor_number,f.factory_name, 
 		t.vehicle_model,t.chassis_model,t.motor_model,b.zc_production_date as productive_date,b.dp_production_date,
-		b.tire_type,o.order_no,concat(t.passengers,'/',b.bus_seats) passengers,b.spring_num,b.dp_zzd,b.zc_zzd,b.hgz_note
+		b.tire_type,o.order_no,b.spring_num,b.dp_zzd,b.zc_zzd,b.hgz_note,
+		case when b.passenger_num>0 then concat(b.passenger_num,'/',b.bus_seats) else( case when c.passenger_num>0 then concat(c.passenger_num,'/',b.bus_seats) else concat(t.passengers,'/',b.bus_seats) end)  
+		end as passengers
 		FROM BMS_PLAN_BUS b
 		LEFT JOIN BMS_OR_ORDER o ON b.order_id = o.id
+		LEFT JOIN BMS_OR_ORDER_CONFIG c on c.id=b.order_config_id
 		LEFT JOIN BMS_BASE_FACTORY f ON b.factory_id = f.id
 		LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id = t.id
 		WHERE b.factory_id =#{factory_id} and b.vin IS NOT NULL and b.left_motor_number IS NOT NULL 
@@ -1693,6 +1697,9 @@
 		</if>
 		<if test="staff_number !=null and staff_number!=''">
 			and find_in_set(s.staff_number,#{staff_number})>0
+		</if>
+		<if test="ids !=null and ids!=''">
+			and find_in_set(s.id,#{ids})>0
 		</if>	
 		<if test="date_start !=null and date_start !=''">
 		<![CDATA[ 

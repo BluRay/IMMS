@@ -615,5 +615,10 @@ public class TechServiceImpl implements ITechService {
 		return techDao.batchUpdateWorkHour(swh_list);
 	}
 
+	@Override
+	public void caculateEcnSalary(Map<String, Object> conditionMap) {
+		techDao.caculateEcnSalary(conditionMap);
+	}
+
 		
 }

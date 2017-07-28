@@ -248,9 +248,9 @@ $(document).ready(function () {
                 		$("#btnSubmit").removeAttr("disabled");
                     	
                     	if('检测线上线'==$("#exec_processname").val()&&(bus.testline_online_date.trim().length==0||!bus.testline_online_date)){
-                    		var dialog = $( "#dialog-config" ).removeClass('hide').dialog({
-                				width:600,
-                				height:400,
+                    		var dialog = $("#dialog-config" ).removeClass('hide').dialog({
+                				width:400,
+                				height:300,
                 				modal: true,
                 				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i> 校验</h4></div>",
                 				title_html: true,

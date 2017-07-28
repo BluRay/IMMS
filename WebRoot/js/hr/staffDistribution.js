@@ -169,7 +169,7 @@ function initTable() {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
     	        	}
             },{
-            	field: 'distribution',title: '&nbsp;&nbsp;分配金额&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
+            	field: 'distribution',title: '分配金额',align: 'center',valign: 'middle',align: 'center',
                 sortable: false,visible: true,footerFormatter: totalTextFormatter,
                 cellStyle:function cellStyle(value, row, index, field) {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};

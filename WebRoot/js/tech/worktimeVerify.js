@@ -297,7 +297,7 @@ function getSelectList(task_detail_id){
 
 function ajaxUpdate(datalist,conditions,whflag,ecnTaskId,taskStaus,rejectReason) {
 	$.ajax({
-		url : "rejectWorkHourInfo",
+		url : "verifyWorkHourInfo",
 		dataType : "json",
 		async:false,
 		type : "post",
@@ -308,7 +308,7 @@ function ajaxUpdate(datalist,conditions,whflag,ecnTaskId,taskStaus,rejectReason)
 		success : function(response) {
 			if (response.success) {
 				// TODO 批准、驳回时重新计算技改工资 
-				//ajaxCaculateSalary(conditions);
+				ajaxCaculateSalary(conditions);
 				$("#dialog-edit").dialog( "close" );
 				$("#dialog-reason").dialog( "close" );
 				$.gritter.add({
@@ -319,6 +319,26 @@ function ajaxUpdate(datalist,conditions,whflag,ecnTaskId,taskStaus,rejectReason)
 				ajaxQuery();
 				
 			}
+		}
+	});
+}
+
+//批准、驳回时重新计算技改工资
+function ajaxCaculateSalary(conditions) {
+	$.ajax({
+		url : "caculateSalary",
+		dataType : "json",
+		type : "post",
+		data : {
+			"conditions" : conditions
+		},
+		success : function(response) {
+			if (response.success) {
+				
+			} else {
+				alert(response.message);
+			}
+
 		}
 	});
 }

@@ -797,7 +797,7 @@ function showInfoPage(row){
 	$("#test_date").val(row.test_date).attr("disabled",true);
 	
 	$("#btnShowTpl").hide();
-	
+	$(".divLoading").addClass("fade in").show();
 	var detail_list=getProductRecordDetail(row.bus_number,row.test_node,row.factory_id,row.test_card_template_head_id);
 	
 	var dialog = $( "#dialog-config" ).removeClass('hide').dialog({
@@ -817,6 +817,7 @@ function showInfoPage(row){
 		]
 	});
 	drawTplDetailTable("#tableDetail",detail_list,false);
+	$(".divLoading").hide();
 }
 
 function showEditPage(row){
@@ -845,6 +846,7 @@ function showEditPage(row){
 	//alert(workshop_all)
 	getWorkgroupSelectAll(workshop_all);
 	
+	$(".divLoading").addClass("fade in").show();
 	var detail_list=getProductRecordDetail(row.bus_number,row.test_node,row.factory_id,row.test_card_template_head_id);
 	var dialog = $( "#dialog-config" ).removeClass('hide').dialog({
 		width:1100,
@@ -875,6 +877,7 @@ function showEditPage(row){
 		$('#tableDetail').empty();
 	}
 	drawTplDetailTable("#tableDetail",detail_list,true);
+	$(".divLoading").hide();
 }
 
 function getProductRecordDetail(bus_number,test_node,factory_id,test_card_template_head_id){

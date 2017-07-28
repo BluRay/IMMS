@@ -31,7 +31,7 @@
 			and find_in_set(f.factory_id ,#{factory} )
 		</if>
 			ORDER BY o.order_no DESC
-		<if test="start !=null">
+		<if test="start !=null and length !='-1' ">
 			LIMIT #{start} ,#{length} 
 		</if>			
 	</select>
