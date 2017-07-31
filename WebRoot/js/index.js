@@ -182,7 +182,7 @@ $(document).ready(function() {
 		                    enabled: true,
 		                    allowOverlap: true,
 		                	inside:true,
-		                	distance: -20
+		                	distance: 10
 		                }
 		            }
 		        },

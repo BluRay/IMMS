@@ -121,6 +121,18 @@ public class ProductionController extends BaseController {
 		return mv;
 	}
 	
+	@RequestMapping("/workHoursMtaPage")
+	public ModelAndView workHoursMtaPage(){					//额外工时维护 AddBy:Yangke 170731
+		mv.setViewName("production/workHoursMtaPage");
+		return mv;
+	}
+
+	@RequestMapping("/workHoursVerifyPage")
+	public ModelAndView workHoursVerifyPage(){				//额外工时审核 AddBy:Yangke 170731
+		mv.setViewName("production/workHoursVerifyPage");
+		return mv;
+	}
+	
 	@RequestMapping("/productionsearch")
 	public ModelAndView productionsearch(){
 		mv.setViewName("production/productionsearch");
@@ -2134,4 +2146,13 @@ public class ProductionController extends BaseController {
 	
 	/****************************  THW ***************************/
 	
+	/****************************  Yangke 170731 *****************/
+	@RequestMapping("/getorderList")
+	@ResponseBody
+	public ModelMap getorderList(){
+		
+		
+		return model;
+	}
+	/****************************  Yangke End *********************/
 }

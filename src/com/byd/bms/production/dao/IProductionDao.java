@@ -180,4 +180,7 @@ public interface IProductionDao {
 	public int delAttendance(Map<String,Object> conditionMap);				//删除考勤数据
 	public int insertAttendance(List<Map<String, Object>> conditionMap);	//增加考勤数据
 	
+	public List<Map<String,String>> getTmpOrderList(Map<String, Object> conditionMap);
+	public int getTmpOrderCount(Map<String, Object> conditionMap);
+	
 }

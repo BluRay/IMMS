@@ -4,24 +4,18 @@
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta charset="utf-8" />
-		<title>铭牌打印</title>
+		<title>额外工时维护</title>
 		<meta name="description" content="Common Buttons &amp; Icons" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 		<link rel="stylesheet" href="../assets/css/jquery-ui.min.css" />
 		<link rel="stylesheet" href="../assets/css/jquery-ui.custom.min.css" />
 		<link rel="stylesheet" href="../assets/css/jquery.gritter.css" />
-		<link rel="stylesheet" href="../css/printable.css" type="text/css" media="print">
-		<style type="text/css" media="screen">
-	        .printable{
-	            display: none;
-	        }
-	  </style> 
 	</head>
 	<body class="no-skin" style="font-family: 'Microsoft YaHei';">
 		<!-- 头 -->
 		<jsp:include page="../top.jsp" flush="true"/>
 		<!-- 身 -->
-		<div class="main-container notPrintable" id="main-container" >
+		<div class="main-container" id="main-container">
 			<!-- 左边菜单 -->
 			<jsp:include page="../left.jsp" flush="true"/>
 			<!-- 主体 -->
@@ -31,7 +25,7 @@
 					<ul class="breadcrumb">
 						<li><i class="ace-icon fa fa-home home-icon"></i><a href="<%=request.getContextPath()%>/index">首页</a></li>
 						<li><a href="#">生产执行</a></li>
-						<li class="active">铭牌打印</li>
+						<li class="active">额外工时维护</li>
 					</ul><!-- /.breadcrumb -->
 
 					<!-- #section:basics/content.searchbox -->
@@ -45,53 +39,59 @@
 				</div>
 				
 			<div class="page-content">
-					<form id="form" class="well form-search">
+					<!-- /section:settings.box -->
+					<div class="page-content-area">
+					
+					<div class="well">
 						<table>
 							<tr>
-								<td>订单编号：</td>
-								<td><input type="text" class="input-medium revise" id="input_order_no" style="height: 30px;" /></td>
-								<td>流水范围：</td>
+								<td>派工流水号：</td>
+								<td><input id="tmp_order_no" placeholder="请输入派工流水号..." style="height: 30px;width:120px" type="text"></td>
+								<td>&nbsp;申请时间：</td>
+								<td><input id="start_date" placeholder="开始时间..." style="height: 30px;width:100px" type="text" onClick="WdatePicker({el:'start_date',dateFmt:'yyyy-MM-dd'});"> - <input id="end_date" placeholder="结束时间..." style="height: 30px;width:100px" type="text" onClick="WdatePicker({el:'end_date',dateFmt:'yyyy-MM-dd'});"></td>
+								<td>&nbsp;状态：</td>
 								<td>
-								<input type="text" class="input-medium revise" id="input_busno_start"  style="height: 30px;"/> 
-								<span class="add-on" style="padding: 4px 0">-</span> 
-								<input type="text" class="input-medium revise" id="input_busno_end"  style="height: 30px;"/>
+									<select id="status" style="height: 30px;" class="input-small carType">
+										<option value='all'>全部</option>
+										<option value='3'>已评估</option>
+										<option value='5'>已完成</option>
+										<option value='6'>已驳回</option>
+									</select>
 								</td>
-								<td><input type="button" class="btn btn-sm btn-primary" id="btnQuery" value="查询" style="margin-left: 2px;"></input>
-										 <input type="button" class="btn btn-sm btn-success" id="btnPrint" value="打印" style="margin-left: 2px;"></input>
-								</td>							
+								<td>&nbsp;制作工厂：</td>
+								<td><select id="q_factory" style="height: 30px;" class="input-small"></select></td>
+								<td>&nbsp;制作车间：</td>
+								<td><select id="q_workshop" style="height: 30px;" class="input-small"></select></td>
+								<td>
+									<input id="btnQuery" type="button" class="btn btn-sm btn-success" value="查询" style="margin-left: 2px;">
+								</td>
+								<td></td>
 							</tr>
-
 						</table>
-					</form>
-					
-					<div class="row">
-					<div class="col-xs-12">
-						<table id="tableResult" class="table table-striped table-bordered table-hover" style="font-size: 12px;width:1600px;overflow-x:auto">
-						</table>	
-					</div>
 					</div>
 					
+					<table id="tableData" class="table table-striped table-bordered table-hover" style="font-size: 12px;">
+					</table>	
+					
+					</div>
 			</div><!-- /.main-content -->
 
-	</div>
-	</div>
-	<div id="printarea" class="printConfigure printable toPrint">
-			<table id="tablePrint" class="table table-bordered">
-		
-			</table>
+			<!-- 脚 -->
+			<%-- <jsp:include page="footer.jsp" flush="true"/> --%>
+			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse"><i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i></a>
+		</div><!-- /.main-container -->
 	</div>
 	</body>
 	<script src="../assets/js/fuelux/fuelux.tree.min.js"></script>
 	<script src="../assets/js/jquery-ui.min.js"></script>
 	<script src="../assets/js/jquery.ui.touch-punch.min.js"></script>
 	<script src="../assets/js/jquery.gritter.min.js"></script>
+
 	<script src="../assets/js/jquery.dataTables.min.js"></script>
 	<script src="../assets/js/jquery.dataTables.bootstrap.js"></script>
+	<script src="../assets/js/dataTables.fixedColumns.min.js"></script>
 	<script src="../assets/js/bootstrap3-typeahead.js"></script>
-	<script type="text/javascript" src="../js/jquery.form.js"></script>
+	<script type="text/javascript" src="../js/datePicker/WdatePicker.js"></script>
 	<script type="text/javascript" src="../js/common.js"></script>
-	<script type="text/javascript" src="../assets/js/bootstrap3-typeahead.js"></script>
-	<script type="text/javascript" src="../js/jsrender.min.js"></script>
-	<script type="text/javascript" src="../js/jquery-barcode.js"></script>
-	<script type="text/javascript" src="../js/production/nameplatePrint.js"></script>
+	<script type="text/javascript" src="../js/production/workHoursMtaPage.js"></script>
 </html>

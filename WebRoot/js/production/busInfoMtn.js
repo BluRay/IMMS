@@ -240,6 +240,8 @@ function ajaxAdd(){
 		alert("请输入有效订单编号！");
 		return false;
 	}
+	var flag=validateDates();
+	if(flag)	
 	$.ajax({
 		type:"post",
 		url:"updateBusInfo",
@@ -280,6 +282,8 @@ function ajaxAdd(){
  * @param bus_number
  */
 function ajaxEdit(bus_number){
+	var flag=validateDates();
+	if(flag)
 	$.ajax({
 		type:"post",
 		url:"updateBusInfo",
@@ -311,4 +315,48 @@ function ajaxEdit(bus_number){
 			alert(response.message);
 		}
 	})
+}
+
+function validateDates(){
+	var dp_production_date=$("#dp_production_date").val();
+	var dpgg_date=$("#dpgg_date").val();
+	var ccczs_date=$("#ccczs_date").val();
+	var zcgg_date=$("#zcgg_date").val();
+	var zc_production_date=$("#zc_production_date").val();
+	var flag=true;
+	
+	if(dp_production_date.trim().length>0&&dpgg_date.trim().length>0){
+		if(dp_production_date<=dpgg_date){
+			alert("底盘生产日期需在底盘公告日期之后！")
+			flag=false;
+			return false;
+		}
+	}
+	
+	if(dp_production_date.trim().length>0&&zc_production_date.trim().length>0){
+		if(dp_production_date>=zc_production_date){
+			alert("整车生产日期需在底盘生产日期之后！")
+			flag=false;
+			return false;
+		}
+	}
+	
+	if(zcgg_date.trim().length>0&&zc_production_date.trim().length>0){
+		if(zcgg_date>=zc_production_date){
+			alert("整车生产日期需在整车公告日期之后！")
+			flag=false;
+			return false;
+		}
+	}
+	
+	if(ccczs_date.trim().length>0&&zc_production_date.trim().length>0){
+		if(ccczs_date>=zc_production_date){
+			alert("整车生产日期需在CCC证书签发日期日期之后！")
+			flag=false;
+			return false;
+		}
+	}
+	
+	return flag;
+	
 }
