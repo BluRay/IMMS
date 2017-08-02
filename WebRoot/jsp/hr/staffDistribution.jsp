@@ -95,7 +95,7 @@
 												<td>生效日期：<input id="effective_date" type="text"  class="input-medium" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/></td>
 												<td><input id="file" type="file" name="file" accept="*.xlsx"/></td>
 												<td><input id="btn_upload" type="button" class="btn btn-sm btn-primary" value="上传并导入" accept=".xls"/></td>
-												<td></td><td><a href="../docs/masterPlan.xls">下载批导模板</a></td>
+												<td></td><td><a href="../docs/staff_distribution_upload.xls">下载批导模板</a></td>
 											</tr>
 										</table>
 										</form>

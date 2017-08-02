@@ -380,6 +380,9 @@
 			<if test="item.staff_level!=null and item.staff_level!=''">
 				,staff_level
 			</if>
+			<if test="item.basic_salary!=null and item.basic_salary!=''">
+				,basic_salary
+			</if>
 			<if test="item.skill_parameter!=null and item.skill_parameter!=''">
 				,skill_parameter
 			</if>
@@ -473,6 +476,9 @@
 			<if test="item.staff_level!=null and item.staff_level!=''">
 				,#{item.staff_level}
 			</if>
+			<if test="item.basic_salary!=null and item.basic_salary!=''">
+				,#{item.basic_salary}
+			</if>
 			<if test="item.skill_parameter!=null and item.skill_parameter!=''">
 				,#{item.skill_parameter}
 			</if>
@@ -549,7 +555,8 @@
 			,political_status = #{item.political_status}
 			,identity_card = #{item.identity_card}
 			,factory_incoming_date = #{item.factory_incoming_date}
-			,staff_level = #{item.staff_level}
+			,staff_level = #{item.staff_level} 
+			,basic_salary = #{item.basic_salary}
 			,skill_parameter = #{item.skill_parameter}
 			,salary_type = #{item.salary_type}
 			<if test="item.plant_org!=null and item.plant_org!=''">

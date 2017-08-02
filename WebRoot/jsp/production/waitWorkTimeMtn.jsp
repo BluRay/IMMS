@@ -61,7 +61,7 @@
 									 <table>
 										<tr>
 											<td>等待日期：</td>
-											<td><input id="wait_date" placeholder="开始时间..." style="height: 30px;width:120px" type="text" onClick="WdatePicker({el:'wait_date',dateFmt:'yyyy-MM-dd'});"></td>
+											<td><input id="wait_date" placeholder="开始时间..." style="height: 30px;width:100px" type="text" onClick="WdatePicker({el:'wait_date',dateFmt:'yyyy-MM-dd'});"></td>
 											<td>&nbsp;等待原因：</td>
 											<td>
 											    <select id="waitReason" class="input-small" style='width:100px;height: 30px;'>
@@ -71,22 +71,22 @@
 											    </select>
 											</td>
 											<td>&nbsp;具体原因：</td>
-											<td colspan=3><input id="reason_detail" style="height:30px;width:240px" placeholder="" class="col-sm-6" type="text"></td>
+											<td><input id="reason_detail" style="height:30px;width:200px" placeholder="" class="col-sm-6" type="text"></td>
 											<td>&nbsp;责任部门：</td>
 											<td><input id="duty_unit" style="height:30px;width:120px" placeholder="" class="col-sm-6" type="text"></td>
 										</tr>
 										<tr>
 											<td>等待类别：</td>
 											<td>
-												<select id="search_wait_hour_type" style='width:120px;height: 30px;' class="input-small carSeries">
+												<select id="search_wait_hour_type" style='width:100px;height: 30px;' class="input-small carSeries">
 												</select>
 											</td>
 											<td>&nbsp;等待工时：</td>
 											<td><input id="workhour" style="height: 30px; width:100px;" type="text" class="input-medium revise" placeholder="" /></td>
 											<td>&nbsp;人员去向：</td>
-											<td><input id="whereabouts" style="height:30px;width:120px" placeholder="" class="col-sm-6" type="text"></td>
+											<td><input id="whereabouts" style="height:30px;width:200px" placeholder="" class="col-sm-6" type="text"></td>
 											<td id="workhourtotal">&nbsp;&nbsp;已录工时：</td>
-											<td>&nbsp;&nbsp;<input type="button" class="btn btn-sm btn-warning" id="btnSave" value="保存" style="margin-left: 2px;"></input></td>
+											<td>&nbsp;&nbsp;<input type="button" class="btn btn-sm btn-primary" id="btnSave" value="保存" style="margin-left: 2px;"></input></td>
 											
 										</tr>
 									</table>
@@ -102,6 +102,8 @@
 					</div>
 					<div id="dialog-edit" class="hide" style="align:center;width:1200px;height:600px">
 						<form id="newRecordForm" class="form-horizontal" method="post">
+							<input type="hidden" id="select_start_date">
+							<input type="hidden" id="select_finish_date">
 							<table>
 								<tr>
 									<td width='70px'>生产订单：</td>

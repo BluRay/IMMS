@@ -88,7 +88,7 @@ function ajaxQuery(){
 					"order_no":$("#search_order_no").val(),
 					"search_date_start":$("#search_date_start").val(),
 					"search_date_end":$("#search_date_end").val(),
-					"parts_id":$("#search_parts").val(),
+					"parts_id":$("#search_parts :selected").attr("keyvalue"),
 					"orderColumn":"factory_id,order_id,parts_id"
 				};
             param.length = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
@@ -146,7 +146,8 @@ function showEditPage(row){
 	$("#order").val(row.order_no);
 	getKeysSelect("BASE_PARTS", row.parts_id, "#parts","请选择","id");
 	$("#prod_date").val(row.prod_date);
-	$("#parts").val(row.parts_id);
+	//$("#parts").val(row.parts_id);
+	$("#parts option:contains('"+row.parts_name+"')").prop("selected", true);
 	$("#online_num").val(row.online_real_qty);
 	$("#offline_num").val(row.offline_real_qty);
 	
@@ -208,6 +209,7 @@ function ajaxAdd(){
 		alert("下线不能超出工厂订单数！");
 		return false;
 	}
+	//alert($("#parts :selected").attr("keyvalue"));
 	$.ajax({
 		type:"post",
 		url:"saveUpdatePartsOnOffRecord",
@@ -215,7 +217,7 @@ function ajaxAdd(){
 		data:{
 			factory_id:$("#factory").val(),
 			order_id:$("#order_id").val(),
-			parts_id:$("#parts").val(),
+			parts_id:$("#parts :selected").attr("keyvalue")||"",
 			online_num:$("#online_num").val(),
 			offline_num:$("#offline_num").val(),
 			prod_date:$("#prod_date").val()
@@ -274,7 +276,7 @@ function ajaxEdit(id){
 		data:{
 			factory_id:$("#factory").val(),
 			order_id:$("#order_id").val(),
-			parts_id:$("#parts").val(),
+			parts_id:$("#parts :selected").attr("keyvalue")||"",
 			online_num:$("#online_num").val(),
 			offline_num:$("#offline_num").val(),
 			prod_date:$("#prod_date").val(),
@@ -293,7 +295,7 @@ function ajaxEdit(id){
 
 function getPartsFinishCount(){
 	var factory=$("#factory").val();
-	var parts_id=$("#parts").val();
+	var parts_id=$("#parts").attr("keyvalue")||"";
 	var order_no=$("#order").val();
 	var info={};
 	$.ajax({

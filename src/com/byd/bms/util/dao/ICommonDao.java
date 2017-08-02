@@ -30,6 +30,8 @@ public interface ICommonDao {
 	
 	List<Map<String, Object>> queryWorkshopList(Map<String,Object>condMap);
 	
+	List<Map<String, Object>> queryTeamList(Map<String,Object>condMap);
+	
 	List<Map<String, Object>> queryWorkshopListAuth(Map<String,Object>condMap);
 	
 	public List<Map<String,String>> getAllReasonType();

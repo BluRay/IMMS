@@ -514,5 +514,10 @@ public class CommonServiceImpl implements ICommonService {
 	public List<Map<String, String>> queryStaffInfo(Map<String, Object> conditionMap) {
 		return commonDao.queryStaffInfo(conditionMap);
 	}
+	@Override
+	public List<Map<String, Object>> getTeamSelect(Map<String, Object> condMap) {
+		List<Map<String, Object>> teamList=commonDao.queryTeamList(condMap);
+		return teamList;
+	}
 	
 }

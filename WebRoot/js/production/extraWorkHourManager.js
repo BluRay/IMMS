@@ -2,9 +2,13 @@ var pageSize=1;
 var table;
 var dt;
 $(document).ready(function(){
-	
+	initPage();
 	ajaxQuery();
-	
+	function initPage(){
+		getBusTypeSelect("","#search_bus_type","全部","id");
+		getOrderNoSelect("#search_order_no","#orderId");
+		ajaxQuery();
+	}
 	$(".btnQuery").on("click",function(){
 		ajaxQuery();
 	}); 
@@ -45,104 +49,117 @@ $(document).ready(function(){
 	});
 	$("#btn_upload").click (function () {
 		$("#uploadMasterPlanForm").ajaxSubmit({
-			url:"uploadPositionSystem",
+			url:"uploadExtraWorkHourManager",
 			type: "post",
 			dataType:"json",
 			success:function(response){
-				alert(response.message);
-				ajaxQuery();
-				if(response.success){					
-					//window.open("materialAbnormal!index.action","_self");
+				
+				if(response.success){
+					ajaxQuery();
+					$.gritter.add({
+						title: '系统提示：',
+						text: '<h5>'+response.message+'！</h5>',
+						class_name: 'gritter-info'
+					});
 				}else{
-					
+					$.gritter.add({
+						title: '系统提示：',
+						text: '<h5>导入失败！</h5><br>'+response.message,
+						class_name: 'gritter-info'
+					});
 				}
 			}			
 		});
 	});
 	$(document).on("click",".edit",function(){
 		var id=$(this).closest('tr').find('td').eq(0).find('input').eq(0).val();
-		
-		//查询订单信息
-		$.ajax({
-			url: "getPositionData",
-			dataType: "json",
-			data: {"id" : id},
-			async: false,
-			error: function () {alert();},
-			success: function (response) {			
-				$('#editId').val(id);
-				$('#edit_job_no').val(response.data.job_no);
-				$('#edit_job_name').val(response.data.job_name);
-				$('#edit_basic_besponsibilit').val(response.data.basic_besponsibilit);
-				$('#edit_requirements').val(response.data.requirements);
-				$('#edit_skill_and_capability').val(response.data.skill_and_capability);
-				$('#edit_required_train').val(response.data.required_train);
-				var dialog = $( "#dialog-edit" ).removeClass('hide').dialog({
-					width:600,
-					height:520,
-					modal: true,
-					title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i>编辑标准岗位库</h4></div>",
-					title_html: true,
-					buttons: [ 
-						{
-							text: "取消",
-							"class" : "btn btn-minier",
-							click: function() {
-								$( this ).dialog( "close" ); 
-							} 
-						},
-						{
-							text: "确定",
-							"class" : "btn btn-primary btn-minier",
-							click: function() {
-								if($("#edit_job_no").val()===""){
-									alert("岗位编号不能为空！");
-									$("#edit_job_no").focus();
-									return false;
-								}
-								if($("#edit_job_name").val()===""){
-									alert("岗位名称不能为空！");
-									$("#edit_job_name").focus();
-									return false;
-								}	
-								$.ajax({
-								    url: "editPositionData",
-								    dataType: "json",
-									type: "post",
-								    data: {
-								    	"id" : $("#editId").val(),
-								    	"job_no":$("#edit_job_no").val(),
-										"job_name":$("#edit_job_name").val(),
-										"basic_besponsibilit":$("#edit_basic_besponsibilit").val(),
-										"requirements":$("#edit_requirements").val(),
-										"skill_and_capability":$("#edit_skill_and_capability").val(),
-										"required_train":$("#edit_required_train").val()
-								    },
-								    success:function(response){
-								    	if(response.success){
-								    	$.gritter.add({
-											title: '系统提示：',
-											text: '<h5>编辑成功！</h5>',
-											class_name: 'gritter-info'
-										});
-								    	ajaxQuery();
-								    	}else{
-								    		$.gritter.add({
-												title: '系统提示：',
-												text: '<h5>编辑失败！</h5><br>'+response.message,
-												class_name: 'gritter-info'
-											});
-								    	}
-								    }
-								});
-								$( this ).dialog( "close" );
-							} 
+		$("#editId").val(id);
+		$("#edit_tmp_order_type").val($(this).closest('tr').find('td').eq(1).html());
+		$("#edit_no").val($(this).closest('tr').find('td').eq(2).html());
+		$("#edit_order_no").val($(this).closest('tr').find('td').eq(3).html());
+		$("#edit_bus_type").val($(this).closest('tr').find('td').eq(4).html());
+		$("#edit_time").val($(this).closest('tr').find('td').eq(5).html());
+		$("#edit_tmp_name").val($(this).closest('tr').find('td').eq(6).html());
+		$("#edit_reason_content").val($(this).closest('tr').find('td').eq(7).html());
+		$("#edit_description").val($(this).closest('tr').find('td').eq(8).html());
+		$("#edit_single_hour").val($(this).closest('tr').find('td').eq(9).html());
+		$("#edit_order_type").val($(this).closest('tr').find('td').eq(10).html());
+		$("#edit_assesor").val($(this).closest('tr').find('td').eq(11).html());
+		$("#edit_assess_verifier").val($(this).closest('tr').find('td').eq(12).html());
+		$("#edit_duty_unit").val($(this).closest('tr').find('td').eq(13).html());
+		$("#edit_memo").val($(this).closest('tr').find('td').eq(14).html());
+		var dialog = $( "#dialog-edit" ).removeClass('hide').dialog({
+			width:600,
+			height:520,
+			modal: true,
+			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i>编辑额外工时库</h4></div>",
+			title_html: true,
+			buttons: [ 
+				{
+					text: "取消",
+					"class" : "btn btn-minier",
+					click: function() {
+						$( this ).dialog( "close" ); 
+					} 
+				},
+				{
+					text: "确定",
+					"class" : "btn btn-primary btn-minier",
+					click: function() {
+						if($("#edit_tmp_order_type").val()===""){
+							alert("额外类型不能为空！");
+							$("#edit_tmp_order_type").focus();
+							return false;
 						}
-					]
-				});	
-			}
-		})
-		
+						if($("#edit_no").val()===""){
+							alert("编号不能为空！");
+							$("#edit_no").focus();
+							return false;
+						}	
+						$.ajax({
+						    url: "editExtraWorkHourManager",
+						    dataType: "json",
+							type: "post",
+						    data: {
+						    	"id":$("#editId").val(),
+								"tmp_order_type":$("#edit_tmp_order_type").val(),
+								"no":$("#edit_no").val(),
+								"bus_type":$("#edit_bus_type").val(),
+								"order_no":$("#edit_order_no").val(),
+								"time":$("#edit_time").val(),
+								"tmp_name":$("#edit_tmp_name").val(),
+								"reason_content":$("#edit_reason_content").val(),
+								"description":$("#edit_description").val(),
+								"single_hour":$("#edit_single_hour").val(),
+								"order_type":$("#edit_order_type").val(),
+								"assesor":$("#edit_assesor").val(),
+								"assess_verifier":$("#edit_assess_verifier").val(),
+								"duty_unit":$("#edit_duty_unit").val(),
+								"memo":$("#edit_memo").val(),
+						    },
+						    success:function(response){
+						    	if(response.success){
+						    	$.gritter.add({
+									title: '系统提示：',
+									text: '<h5>编辑成功！</h5>',
+									class_name: 'gritter-info'
+								});
+						    	ajaxQuery();
+						    	}else{
+						    		$.gritter.add({
+										title: '系统提示：',
+										text: '<h5>编辑失败！</h5><br>'+response.message,
+										class_name: 'gritter-info'
+									});
+						    	}
+						    }
+						});
+						$( this ).dialog( "close" );
+					} 
+				}
+			]
+		});	
+	//}
 	});
 });
 
@@ -177,7 +194,10 @@ function ajaxQuery(){
 		ajax:function (data, callback, settings) {
 			var param ={
 				"draw":1,
-				"job_no":$("#search_job_no").val()
+				"order_no":$("#search_order_no").val(),
+				"bus_type":$("#search_bus_type").val(),
+				"order_type":$("#search_order_type").val(),
+				"reason_content":$("#search_reason_content").val()
 			};
             param.length = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
             param.start = data.start;//开始的记录序号
@@ -185,7 +205,7 @@ function ajaxQuery(){
 
             $.ajax({
                 type: "post",
-                url: "getPositionList",
+                url: "getExtraWorkHourManagerList",
                 cache: false,  //禁用缓存
                 data: param,  //传入组装的参数
                 dataType: "json",
@@ -194,9 +214,9 @@ function ajaxQuery(){
                 	//封装返回数据
                     var returnData = {};
                     returnData.draw = data.draw;//这里直接自行返回了draw计数器,应该由后台返回
-                    returnData.recordsTotal = result.total;//返回数据全部记录
-                    returnData.recordsFiltered = result.total;//后台不实现过滤功能，每次查询均视作全部结果
-                    returnData.data = result.rows;//返回的数据列表
+                    returnData.recordsTotal = result.recordsTotal;//返回数据全部记录
+                    returnData.recordsFiltered = result.recordsTotal;//后台不实现过滤功能，每次查询均视作全部结果
+                    returnData.data = result.data;//返回的数据列表
                     callback(returnData);
                 }
             });
@@ -206,22 +226,21 @@ function ajaxQuery(){
 			{"title":"<input type='checkbox' id='selectAll' onclick='selectAll()'/>","class":"center","data":"id","render": function ( data, type, row ) {
 			    return "<input id='id' value='"+data+"' type='hidden' /><input type='checkbox' fid='cb_"+data+"'>";
 			},"defaultContent": ""},
-            {"title":"岗位编号","class":"center","data":"job_no","defaultContent": ""},
-            {"title":"岗位名称","class":"center","data":"job_name","defaultContent": ""},
-            {"title":"基本职责","class":"center","data":"basic_besponsibilit","render": function ( data, type, row ) {
-			    return data!='' ? '<div title=\''+data+'\'>'+data.substring(0,8)+'...</div>' : '';
-			},"defaultContent": ""},
-            {"title":"任职资格","class":"center","data":"requirements","render": function ( data, type, row ) {
-			    return data!='' ? '<div title=\''+data+'\'>'+data.substring(0,8)+'...</div>' : '';
-			},"defaultContent": ""},
-            {"title":"具备技能","class":"center","data":"skill_and_capability","render": function ( data, type, row ) {
-			    return data!='' ? '<div title=\''+data+'\'>'+data.substring(0,8)+'...</div>' : '';
-			},"defaultContent": ""},	            
-            {"title":"上岗所需培训","class":"center","data":"required_train","render": function ( data, type, row ) {
-			    return data!='' ? '<div title=\''+data+'\'>'+data.substring(0,8)+'...</div>' : '';
-			},"defaultContent": ""},	            		            
-            {"title":"维护人","class":"center","data": "editor","defaultContent": ""},
-            {"title":"维护时间","class":"center","data":"edit_date","defaultContent": ""},
+            {"title":"额外类型","class":"center","data":"tmp_order_type","defaultContent": ""},
+            {"title":"编号","class":"center","data":"no","defaultContent": ""},
+            {"title":"订单","class":"center","data":"order_no","defaultContent": ""},
+            {"title":"车型","class":"center","data":"bus_type","defaultContent": ""},
+            {"title":"时间","class":"center","data":"time","defaultContent": ""},
+            {"title":"名称","class":"center","data":"tmp_name","defaultContent": ""},
+            {"title":"作业内容","class":"center","data":"reason_content","defaultContent": ""},
+            {"title":"说明","class":"center","data":"description","defaultContent": ""},
+            {"title":"单工时","class":"center","data":"single_hour","defaultContent": ""},
+            {"title":"评估人","class":"center","data":"assesor","defaultContent": ""},
+            {"title":"评估审核人","class":"center","data":"assess_verifier","defaultContent": ""},
+            {"title":"责任部门","class":"center","data":"duty_unit","defaultContent": ""},
+            	            		            
+            {"title":"派工类型","class":"center","data": "order_type","defaultContent": ""},
+            {"title":"备注","class":"center","data":"memo","defaultContent": ""},
             {"title":"编辑","class":"center","data":null,"render":function(data,type,row){
             	return "<i class=\"ace-icon fa fa-pencil bigger-130 edit\" style='color:green;cursor: pointer;'></i>"},
             	"defaultContent": "<i class=\"ace-icon fa fa-pencil bigger-130\" style='color:green;cursor: pointer;'></i>"}
@@ -266,13 +285,13 @@ function ajaxDelete(){
 	if(ids===''){
 		$.gritter.add({
 			title: '系统提示：',
-			text: '<h5>请至少勾选一个要删除的岗位！</h5>',
+			text: '<h5>请至少勾选一个要删除的记录！</h5>',
 			class_name: 'gritter-info'
 		});
 		return false;
 	}
 	$.ajax({
-	    url: "deletePositionData",
+	    url: "deleteExtraWorkHourManager",
 	    dataType: "json",
 		type: "get",
 	    data: {
@@ -282,7 +301,7 @@ function ajaxDelete(){
 	    	if(response.success){
 	    	$.gritter.add({
 				title: '系统提示：',
-				text: '<h5>删除岗位成功！</h5>',
+				text: '<h5>删除成功！</h5>',
 				class_name: 'gritter-info'
 			});
 	    	
@@ -290,7 +309,7 @@ function ajaxDelete(){
 	    	}else{
 	    		$.gritter.add({
 					title: '系统提示：',
-					text: '<h5>删除岗位失败！</h5><br>'+response.message,
+					text: '<h5>删除失败！</h5><br>'+response.message,
 					class_name: 'gritter-info'
 				});
 	    	}

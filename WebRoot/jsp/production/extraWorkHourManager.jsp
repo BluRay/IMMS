@@ -49,10 +49,20 @@
 				<div id="form" class="well form-search">
 					<table>
 						<tr>
-							<td>岗位编号：</td>
+							<td>车型：</td>
+							<td><select name="" id="search_bus_type" class="input-small"></select></td>
+							<td>订单编号：</td>
 							<td><input type="text" style="height: 30px;"
-								class="input-medium revise" placeholder="岗位编号..." value=""
-								id="search_job_no" /></td>
+								class="input-medium revise" placeholder="订单编号..." value=""
+								id="search_order_no" /></td>
+							<td>派工类型：</td>
+							<td><input type="text" style="height: 30px;"
+								class="input-medium revise" placeholder="派工类型..." value=""
+								id="search_order_type" /></td>
+							<td>作业内容/原因：</td>
+							<td><input type="text" style="height: 30px;"
+								class="input-medium revise" placeholder="作业内容/原因..." value=""
+								id="search_reason_content" /></td>
 							<td><input type="button"
 								class="btn btn-sm btn-primary btnQuery" id="btnQuery" value="查询"
 								style="margin-left: 2px;"></input>
@@ -86,53 +96,116 @@
 
 			<div id="dialog-edit" class="hide">
 				<form id="" class="form-horizontal">
-				    <input type="hidden" id="editId">
 					<div class="form-group">
 					    <div>
-							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newOrderName">*&nbsp;岗位编号</label>
+							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newOrderName">*&nbsp;临时派工类型</label>
 							<div class="col-sm-8">
 							    <input type="hidden" id="editId" />
-								<input type="text" class="input-medium" id="edit_job_no" />
+								<input type="text" class="input-medium" id="edit_tmp_order_type" />
 							</div>
 						</div>
 					</div>
 					<div class="form-group">
 					    <div>
-							<label  class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newOrderName">*&nbsp;岗位名称</label>
+							<label  class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newOrderName">*&nbsp;编号</label>
 							<div class="col-sm-8">
-								<input type="text" class="input-medium" id="edit_job_name" />
+								<input type="text" class="input-medium" id="edit_no" />
 							</div>
 						</div>
 					</div>
 					<div class="form-group">
 					    <div>
-							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newBrand">*&nbsp;基本职责</label>
+							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newBrand">*&nbsp;车型</label>
 							<div class="col-sm-8">
-								<textarea class="input-medium" id="edit_basic_besponsibilit" style="width: 355px" rows="3"></textarea>
+								<input class="input-medium" id="edit_bus_type" style="width: 355px" rows="3"></input>
 							</div>
 						</div>
 					</div>
 					<div class="form-group">
 					    <div>
-							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newManufacturer">*&nbsp;任职资格	</label>
+							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newManufacturer">*&nbsp;订单编号</label>
 							<div class="col-sm-8">
-								<textarea class="input-medium" id="edit_requirements" style="width: 355px" rows="3"></textarea>
+								<input class="input-medium" id="edit_order_no" style="width: 355px" rows="3"></input>
 							</div>
 						</div>
 					</div>
 					<div class="form-group">
 					    <div>
-							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newVehicleModel">*&nbsp;具备技能</label>
+							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newVehicleModel">*&nbsp;时间</label>
 							<div class="col-sm-8">
-								<textarea class="input-medium" id="edit_skill_and_capability" style="width: 355px" rows="3"></textarea>
+								<input class="input-medium" id="edit_time" style="width: 355px" rows="3"></input>
 							</div>
 						</div>
 					</div>
 					<div class="form-group">
 					    <div>
-							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newDriveMotor">*&nbsp;上岗所需培训</label>
+							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newDriveMotor">*&nbsp;名称</label>
 							<div class="col-sm-8">
-								<textarea class="input-medium" id="edit_required_train" style="width: 355px" rows="3"></textarea>
+								<input class="input-medium" id="edit_tmp_name" style="width: 355px" rows="3"></input>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+					    <div>
+							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newDriveMotor">*&nbsp;名作业原因/内容</label>
+							<div class="col-sm-8">
+								<input class="input-medium" id="edit_reason_content" style="width: 355px" rows="3"></input>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+					    <div>
+							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newDriveMotor">*&nbsp;说明</label>
+							<div class="col-sm-8">
+								<input class="input-medium" id="edit_description" style="width: 355px" rows="3"></input>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+					    <div>
+							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newDriveMotor">*&nbsp;单工时</label>
+							<div class="col-sm-8">
+								<input class="input-medium" id="edit_single_hour" style="width: 355px" rows="3"></input>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+					    <div>
+							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newDriveMotor">*&nbsp;派工类型</label>
+							<div class="col-sm-8">
+								<input class="input-medium" id="edit_order_type" style="width: 355px" rows="3"></input>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+					    <div>
+							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newDriveMotor">*&nbsp;工时评估人</label>
+							<div class="col-sm-8">
+								<input class="input-medium" id="edit_assesor" style="width: 355px" rows="3"></input>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+					    <div>
+							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newDriveMotor">*&nbsp;工时评估审核人</label>
+							<div class="col-sm-8">
+								<input class="input-medium" id="edit_assess_verifier" style="width: 355px" rows="3"></input>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+					    <div>
+							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newDriveMotor">*&nbsp;责任部门</label>
+							<div class="col-sm-8">
+								<input class="input-medium" id="edit_duty_unit" style="width: 355px" rows="3"></input>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+					    <div>
+							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newDriveMotor">*&nbsp;备注</label>
+							<div class="col-sm-8">
+								<input class="input-medium" id="edit_memo" style="width: 355px" rows="3"></input>
 							</div>
 						</div>
 					</div>

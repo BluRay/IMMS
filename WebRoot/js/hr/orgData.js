@@ -312,7 +312,24 @@ jQuery(function($) {
 							text: "确定",
 							"class" : "btn btn-primary btn-minier",
 							click: function() {
-								
+            					if(org_type == '4'){
+            				    	if(undefined == salary_model || 'undefined' == salary_model || salary_model ==""){
+        					    		$.gritter.add({
+        									title: '系统提示：',
+        									text: '<h5>必须维护小班组的计资模式！</h5><br>',
+        									class_name: 'gritter-info'
+        								});
+        					    		return false;
+            				    	}
+            				    	if(undefined == customer_no_flag || 'undefined' == customer_no_flag || customer_no_flag ==""){
+        					    		$.gritter.add({
+        									title: '系统提示：',
+        									text: '<h5>必须维护小班组的自编号规则！</h5><br>',
+        									class_name: 'gritter-info'
+        								});
+        					    		return false;
+            				    	}
+            					}
 								$.ajax({
 								    url: "addOrgData",
 								    dataType: "json",

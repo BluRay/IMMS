@@ -96,4 +96,61 @@ public class HrReportController extends BaseController {
 		model = mv.getModelMap();
 		return model;
 	}
+	
+	/******************** xioing.jianwu **********************/
+	
+	/**
+	 * 计件工时统计报表
+	 * @return
+	 */
+	@RequestMapping("/pieceTimeReport")
+	public ModelAndView pieceTimeReport(){
+		mv.setViewName("hr/pieceTimeReport");
+		return mv;
+	}
+	
+	/**
+	 * 查询计件工时统计报表数据
+	 * @return
+	 */
+	@RequestMapping("/getStaffPieceHours")
+	@ResponseBody
+	public ModelMap getStaffPieceHours(){
+		model.clear();
+		String factory=request.getParameter("factory");
+		String workshop=request.getParameter("workshop");
+		String workgroup=request.getParameter("workgroup");
+		String team = request.getParameter("team");
+		String salary_model=request.getParameter("salary_model");
+		String count_flag=request.getParameter("count_flag");
+		String order_id=request.getParameter("order_id");
+		String order_no=request.getParameter("order_no");
+		String bus_number=request.getParameter("bus_number");
+		String wdate_start=request.getParameter("wdate_start");
+		String wdate_end=request.getParameter("wdate_end");
+		String staff=request.getParameter("staff");//员工姓名或员工姓名
+		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
+		int start=(request.getParameter("start")!=null)?Integer.parseInt(request.getParameter("start")):0;		//分页数据起始数
+		int length=(request.getParameter("length")!=null)?Integer.parseInt(request.getParameter("length")):20;	//每一页数据条数
+		Map<String, Object> conditionMap = new HashMap<String, Object>();
+		conditionMap.put("draw", draw);
+		conditionMap.put("start", start);
+		conditionMap.put("length", length);
+		conditionMap.put("factory", factory);
+		conditionMap.put("workshop", workshop);
+		conditionMap.put("workgroup", workgroup);
+		conditionMap.put("team", team);
+		conditionMap.put("salary_model", salary_model);
+		conditionMap.put("count_flag", count_flag);
+		conditionMap.put("order_id", order_id);
+		conditionMap.put("bus_number", bus_number);
+		conditionMap.put("wdate_start", wdate_start);
+		conditionMap.put("wdate_end", wdate_end);
+		conditionMap.put("staff", staff);
+
+		hrReportService.getStaffPieceHours(conditionMap,model);
+		return model;
+	}
+	
+	/******************** xioing.jianwu **********************/
 }

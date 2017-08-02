@@ -32,8 +32,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.byd.bms.hr.service.IHrBaseDataService;
+import com.byd.bms.order.service.IOrderService;
 import com.byd.bms.production.model.ProductionException;
 import com.byd.bms.production.service.IProductionService;
+import com.byd.bms.setting.model.BmsBaseBusType;
 import com.byd.bms.setting.model.BmsBaseFactory;
 import com.byd.bms.setting.service.IBaseDataService;
 import com.byd.bms.util.ExcelModel;
@@ -59,6 +61,8 @@ public class ProductionController extends BaseController {
 	protected ICommonService commonService;
 	@Autowired
 	protected IBaseDataService baseDataService;
+	@Autowired
+	protected IOrderService orderService;
 	/****************************  xiongjianwu ***************************/
 	/**
 	 * 生产模块首页
@@ -935,6 +939,7 @@ public class ProductionController extends BaseController {
 		condMap.put("team", request.getParameter("team"));
 		condMap.put("bus_number", request.getParameter("bus_number"));
 		condMap.put("work_date", request.getParameter("work_date"));
+		condMap.put("work_month", request.getParameter("work_date").substring(0, 7));
 		condMap.put("swh_id", request.getParameter("swh_id"));
 		condMap.put("salary_model", request.getParameter("salary_model"));
 		
@@ -1439,7 +1444,7 @@ public class ProductionController extends BaseController {
 	}
 	public Map<String,Map<String,Object>> getWaitWorkTimeMap(List<Map<String,Object>> swh_list,String flag){
 		String factory_id=String.valueOf(session.getAttribute("factory_id"));
-		// Map<任务名称_工厂代码_车间名称,Map<String,Object>>
+		// Map<工厂代码_车间名称,Map<String,Object>>
 		BmsBaseFactory bmsBaseFactory=baseDataService.getFactoryById(factory_id);
 		String factory_code=bmsBaseFactory.getFactoryCode();
 		Map<String,Map<String,Object>> taskMap=new HashMap<String,Map<String,Object>>();
@@ -1665,6 +1670,180 @@ public class ProductionController extends BaseController {
 		mv.setViewName("production/extraWorkHourManager");
 		return mv;
 	}
+	/**额外工时库查询*/
+	@RequestMapping("/getExtraWorkHourManagerList")
+	@ResponseBody
+	public ModelMap getExtraWorkHourManagerList(){
+		String bus_type=request.getParameter("bus_type");
+		String order_no=request.getParameter("order_no");
+		String order_type=request.getParameter("order_type");
+		String reason_content=request.getParameter("reason_content");
+		int draw=Integer.parseInt(request.getParameter("draw")); 
+		int start=Integer.parseInt(request.getParameter("start"));
+		int length=Integer.parseInt(request.getParameter("length"));
+		
+		Map<String,Object> conditionMap=new HashMap<String,Object>();
+		conditionMap.put("bus_type",bus_type);
+		conditionMap.put("order_no",order_no);
+		conditionMap.put("draw", draw);
+		conditionMap.put("start", start);
+		conditionMap.put("length", length);
+		Map<String,Object> list = productionService.getExtraWorkHourManagerList(conditionMap);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(list);
+		model = mv.getModelMap();
+		return model;
+	}
+	@RequestMapping(value="/uploadExtraWorkHourManager",method=RequestMethod.POST)
+	@ResponseBody
+	public ModelMap uploadExtraWorkHourManager(@RequestParam(value="file",required=false) MultipartFile file){
+		logger.info("uploading.....");
+		String fileName="extraWorkHourManager.xls";
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String editor_id = request.getSession().getAttribute("user_id") + "";
+		try{
+		ExcelModel excelModel = new ExcelModel();
+		excelModel.setReadSheets(1);
+		excelModel.setStart(1);
+		Map<String, Integer> dataType = new HashMap<String, Integer>();
+		dataType.put("0", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("1", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("2", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("3", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("4", ExcelModel.CELL_TYPE_DATE);
+		dataType.put("5", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("5", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("6", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("7", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("8", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("9", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("10", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("11", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("12", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("13", ExcelModel.CELL_TYPE_CANNULL);
+		excelModel.setDataType(dataType);
+		excelModel.setPath(fileName);
+		File tempfile=new File(fileName);
+		file.transferTo(tempfile);
+		/**
+		 * 读取输入流中的excel文件，并且将数据封装到ExcelModel对象中
+		 */
+		InputStream is = new FileInputStream(tempfile);
+
+		ExcelTool excelTool = new ExcelTool();
+		excelTool.readExcel(is, excelModel);
+
+		List<Map<String, Object>> addList = new ArrayList<Map<String, Object>>();
+		boolean saveFlag=true;
+		String result="";
+		for (Object[] data : excelModel.getData()) {
+			Map<String, Object> infomap = new HashMap<String, Object>();
+
+			infomap.put("tmp_order_type", data[0] == null ? null : data[0].toString().trim());
+			infomap.put("no", data[1] == null ? null : data[1].toString().trim());
+			infomap.put("order_no", data[2] == null ? null : data[2].toString().trim());
+			if(data[2] != null){
+				Map<String, Object> querymap = new HashMap<String, Object>();
+				querymap.put("orderNo",data[2].toString().trim());
+				Map<String,Object> orderMap=orderService.getOrderByNo(querymap);
+				if(orderMap==null){
+					saveFlag=false;
+					result = data[2].toString().trim()+" 订单号不存在";
+					break;
+				}
+			}
+			if(data[3] != null){
+				Map<String, Object> querymap = new HashMap<String, Object>();
+				querymap.put("busTypeCode",data[3].toString().trim());
+				Map<String,Object> bustypeMap=baseDataService.getBusTypeList(querymap);
+				if((int)bustypeMap.get("recordsTotal")==0){
+					saveFlag=false;
+					result = data[3].toString().trim()+" 车型不存在";
+					break;
+				}
+			}
+			infomap.put("bus_type", data[3] == null ? null : data[3].toString().trim());
+			
+			infomap.put("time", data[4] == null ? null : data[4].toString().trim());
+			infomap.put("tmp_name", data[5] == null ? null : data[5].toString().trim());
+			infomap.put("reason_content", data[6] == null ? null : data[6].toString().trim());
+			infomap.put("description", data[7] == null ? null : data[7].toString().trim());
+			infomap.put("single_hour", data[8] == null ? null : data[8].toString().trim());
+			infomap.put("assesor", data[9] == null ? null : data[9].toString().trim());
+			infomap.put("assess_verifier", data[10] == null ? null : data[10].toString().trim());
+			infomap.put("duty_unit", data[11] == null ? null : data[11].toString().trim());
+			infomap.put("order_type", data[12] == null ? null : data[12].toString().trim());
+			infomap.put("memo", data[13] == null ? null : data[13].toString().trim());
+			addList.add(infomap);
+		}
+		if(saveFlag){
+			int returnVal=productionService.insertExtraWorkHourManager(addList);
+		    if(returnVal==1){
+		    	initModel(true,"导入成功！",addList);
+		    }else{
+		    	initModel(false,"导入失败！",null);
+		    }
+		}else{
+			initModel(false,result,null);
+		}
+		
+		
+		}catch(Exception e){
+			initModel(false,"导入失败！",null);
+		}
+		return mv.getModelMap();
+	}
+	@RequestMapping("/editExtraWorkHourManager")
+	@ResponseBody
+	public ModelMap editExtraWorkHourManager() {
+		try {
+			int id = Integer.parseInt(request.getParameter("id"));
+			
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String edit_date = df.format(new Date());
+			Map<String,Object> map=new HashMap<String,Object>();
+			map.put("id", id);
+			map.put("tmp_order_type",request.getParameter("tmp_order_type"));
+			map.put("no",request.getParameter("no"));
+			map.put("order_no", request.getParameter("order_no"));
+			map.put("bus_type", request.getParameter("bus_type"));
+			map.put("time", request.getParameter("time"));
+			map.put("tmp_name", request.getParameter("tmp_name"));
+			map.put("reason_content", request.getParameter("reason_content"));
+			map.put("description",request.getParameter("description"));
+			map.put("single_hour", request.getParameter("single_hour"));
+			map.put("assesor", request.getParameter("assesor"));
+			map.put("assess_verifier",request.getParameter("assess_verifier"));
+			map.put("duty_unit",request.getParameter("duty_unit"));
+			map.put("order_type",request.getParameter("order_type"));
+			map.put("memo",request.getParameter("memo"));
+			productionService.editExtraWorkHourManager(map);
+			initModel(true, "success", "");
+		} catch (Exception e) {
+			initModel(false, e.getMessage(), e.toString());
+		}
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/deleteExtraWorkHourManager")
+	@ResponseBody
+	public ModelMap deleteExtraWorkHourManager() {
+		try {
+			String ids = request.getParameter("ids");
+			List<String> idlist = new ArrayList<String>();
+			for(String id : ids.split(",")){
+				idlist.add(id);
+			}
+			productionService.delExtraWorkHourManager(idlist);
+			initModel(true, "success", "");
+		} catch (Exception e) {
+			initModel(false, e.getMessage(), e.toString());
+		}
+		model = mv.getModelMap();
+		return model;
+	}
 	/****************************  TANGJIN ***************************/
 	
 	/****************************  THW ***************************/
@@ -1800,6 +1979,9 @@ public class ProductionController extends BaseController {
 					if(null == data[0] || StringUtils.isBlank(data[0].toString().trim())){
 						success = false;
 						result = result+"第"+i+"行工号信息为必填项！\n";
+					}else{
+						staff_numbers.append(data[0].toString().trim());
+						staff_numbers.append(",");
 					}
 					if(null == data[2] || StringUtils.isBlank(data[2].toString().trim()) || 
 							null == data[3] || StringUtils.isBlank(data[3].toString().trim()) || 
@@ -1851,12 +2033,14 @@ public class ProductionController extends BaseController {
 						if(staffArray[ii].equals(staff_list.get(j).get("staff_number"))){
 							flag=false;
 							hrStaff_status= (String)staff_list.get(j).get("status");
-						} 
+							break;
+						}
 					}
 					if(flag){
 						success = false;
-						result = result+"工号为："+staffArray[ii]+"的员工在员工库存在！！\n";
-					}else if(hrStaff_status.equals("离职")){
+						result = result+"工号为："+staffArray[ii]+"的员工不存在！！\n";
+					}
+					if(hrStaff_status.equals("离职")){
 						success = false;
 						result = result+"工号为："+staffArray[ii]+"的员工已离职！！\n";
 					}
@@ -2017,37 +2201,37 @@ public class ProductionController extends BaseController {
 							Map<String, Object> attendanceInfo = new HashMap<String, Object>();
 							attendanceInfo.put("staff_number", data[0] == null?"0":data[0].toString().trim());
 							attendanceInfo.put("month", month);
-							attendanceInfo.put("D1", data[3] == null?"0":data[3].toString().trim());
-							attendanceInfo.put("D2", data[4] == null?"0":data[4].toString().trim());
-							attendanceInfo.put("D3", data[5] == null?"0":data[5].toString().trim());
-							attendanceInfo.put("D4", data[6] == null?"0":data[6].toString().trim());
-							attendanceInfo.put("D5", data[7] == null?"0":data[7].toString().trim());
-							attendanceInfo.put("D6", data[8] == null?"0":data[8].toString().trim());
-							attendanceInfo.put("D7", data[9] == null?"0":data[9].toString().trim());
-							attendanceInfo.put("D8", data[10] == null?"0":data[10].toString().trim());
-							attendanceInfo.put("D9", data[11] == null?"0":data[11].toString().trim());
-							attendanceInfo.put("D10", data[12] == null?"0":data[12].toString().trim());
-							attendanceInfo.put("D11", data[13] == null?"0":data[13].toString().trim());
-							attendanceInfo.put("D12", data[14] == null?"0":data[14].toString().trim());
-							attendanceInfo.put("D13", data[15] == null?"0":data[15].toString().trim());
-							attendanceInfo.put("D14", data[16] == null?"0":data[16].toString().trim());
-							attendanceInfo.put("D15", data[17] == null?"0":data[17].toString().trim());
-							attendanceInfo.put("D16", data[18] == null?"0":data[18].toString().trim());
-							attendanceInfo.put("D17", data[19] == null?"0":data[19].toString().trim());
-							attendanceInfo.put("D18", data[20] == null?"0":data[20].toString().trim());
-							attendanceInfo.put("D19", data[21] == null?"0":data[21].toString().trim());
-							attendanceInfo.put("D20", data[22] == null?"0":data[22].toString().trim());
-							attendanceInfo.put("D21", data[23] == null?"0":data[23].toString().trim());
-							attendanceInfo.put("D22", data[24] == null?"0":data[24].toString().trim());
-							attendanceInfo.put("D23", data[25] == null?"0":data[25].toString().trim());
-							attendanceInfo.put("D24", data[26] == null?"0":data[26].toString().trim());
-							attendanceInfo.put("D25", data[27] == null?"0":data[27].toString().trim());
-							attendanceInfo.put("D26", data[28] == null?"0":data[28].toString().trim());
-							attendanceInfo.put("D27", data[29] == null?"0":data[29].toString().trim());
-							attendanceInfo.put("D28", data[30] == null?"0":data[30].toString().trim());
-							attendanceInfo.put("D29", data[31] == null?"0":data[31].toString().trim());
-							attendanceInfo.put("D30", data[32] == null?"0":data[32].toString().trim());
-							attendanceInfo.put("D31", data[33] == null?"0":data[33].toString().trim());
+							attendanceInfo.put("D1", data[3] == null?"0":data[3].toString().trim() == ""?"0":data[3].toString().trim());
+							attendanceInfo.put("D2", data[4] == null?"0":data[4].toString().trim()== ""?"0":data[4].toString().trim());
+							attendanceInfo.put("D3", data[5] == null?"0":data[5].toString().trim()== ""?"0":data[5].toString().trim());
+							attendanceInfo.put("D4", data[6] == null?"0":data[6].toString().trim()== ""?"0":data[6].toString().trim());
+							attendanceInfo.put("D5", data[7] == null?"0":data[7].toString().trim()== ""?"0":data[7].toString().trim());
+							attendanceInfo.put("D6", data[8] == null?"0":data[8].toString().trim()== ""?"0":data[8].toString().trim());
+							attendanceInfo.put("D7", data[9] == null?"0":data[9].toString().trim()== ""?"0":data[9].toString().trim());
+							attendanceInfo.put("D8", data[10] == null?"0":data[10].toString().trim()== ""?"0":data[10].toString().trim());
+							attendanceInfo.put("D9", data[11] == null?"0":data[11].toString().trim()== ""?"0":data[11].toString().trim());
+							attendanceInfo.put("D10", data[12] == null?"0":data[12].toString().trim()== ""?"0":data[12].toString().trim());
+							attendanceInfo.put("D11", data[13] == null?"0":data[13].toString().trim()== ""?"0":data[13].toString().trim());
+							attendanceInfo.put("D12", data[14] == null?"0":data[14].toString().trim()== ""?"0":data[14].toString().trim());
+							attendanceInfo.put("D13", data[15] == null?"0":data[15].toString().trim()== ""?"0":data[15].toString().trim());
+							attendanceInfo.put("D14", data[16] == null?"0":data[16].toString().trim()== ""?"0":data[16].toString().trim());
+							attendanceInfo.put("D15", data[17] == null?"0":data[17].toString().trim()== ""?"0":data[17].toString().trim());
+							attendanceInfo.put("D16", data[18] == null?"0":data[18].toString().trim()== ""?"0":data[18].toString().trim());
+							attendanceInfo.put("D17", data[19] == null?"0":data[19].toString().trim()== ""?"0":data[19].toString().trim());
+							attendanceInfo.put("D18", data[20] == null?"0":data[20].toString().trim()== ""?"0":data[20].toString().trim());
+							attendanceInfo.put("D19", data[21] == null?"0":data[21].toString().trim()== ""?"0":data[21].toString().trim());
+							attendanceInfo.put("D20", data[22] == null?"0":data[22].toString().trim()== ""?"0":data[22].toString().trim());
+							attendanceInfo.put("D21", data[23] == null?"0":data[23].toString().trim()== ""?"0":data[23].toString().trim());
+							attendanceInfo.put("D22", data[24] == null?"0":data[24].toString().trim()== ""?"0":data[24].toString().trim());
+							attendanceInfo.put("D23", data[25] == null?"0":data[25].toString().trim()== ""?"0":data[25].toString().trim());
+							attendanceInfo.put("D24", data[26] == null?"0":data[26].toString().trim()== ""?"0":data[26].toString().trim());
+							attendanceInfo.put("D25", data[27] == null?"0":data[27].toString().trim()== ""?"0":data[27].toString().trim());
+							attendanceInfo.put("D26", data[28] == null?"0":data[28].toString().trim()== ""?"0":data[28].toString().trim());
+							attendanceInfo.put("D27", data[29] == null?"0":data[29].toString().trim()== ""?"0":data[29].toString().trim());
+							attendanceInfo.put("D28", data[30] == null?"0":data[30].toString().trim()== ""?"0":data[30].toString().trim());
+							attendanceInfo.put("D29", data[31] == null?"0":data[31].toString().trim()== ""?"0":data[31].toString().trim());
+							attendanceInfo.put("D30", data[32] == null?"0":data[32].toString().trim()== ""?"0":data[32].toString().trim());
+							attendanceInfo.put("D31", data[33] == null?"0":data[33].toString().trim()== ""?"0":data[33].toString().trim());
 							
 							int attendance_days = 0;
 							float attendance_hours = 0;
@@ -2059,6 +2243,8 @@ public class ProductionController extends BaseController {
 							}
 							attendanceInfo.put("attendance_days", attendance_days);
 							attendanceInfo.put("attendance_hours", attendance_hours);
+							attendanceInfo.put("editor_id",userid);
+							attendanceInfo.put("edit_date",curTime);
 							addList.add(attendanceInfo);
 						}
 						/*
@@ -2147,12 +2333,144 @@ public class ProductionController extends BaseController {
 	/****************************  THW ***************************/
 	
 	/****************************  Yangke 170731 *****************/
-	@RequestMapping("/getorderList")
+	@RequestMapping("/getTmpOrderList")
 	@ResponseBody
-	public ModelMap getorderList(){
-		
-		
+	public ModelMap getTmpOrderList(){
+		String conditions = request.getParameter("conditions");
+		String applier = request.getSession().getAttribute("staff_number") + "";
+		JSONObject jo=JSONObject.fromObject(conditions);
+		Map<String,Object> conditionMap=new HashMap<String,Object>();
+		for(Iterator<?> it=jo.keys();it.hasNext();){
+			String key=(String) it.next();
+			conditionMap.put(key, jo.get(key));
+		}
+		conditionMap.put("applier", applier);
+		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
+		int start=(request.getParameter("start")!=null)?Integer.parseInt(request.getParameter("start")):0;		//分页数据起始数
+		int length=(request.getParameter("length")!=null)?Integer.parseInt(request.getParameter("length")):500;	//每一页数据条数
+		conditionMap.put("draw", draw);
+		conditionMap.put("start", start);
+		conditionMap.put("length", length);
+		Map<String,Object> result= productionService.getTmpOrderList(conditionMap);
+		model.addAllAttributes(result);
 		return model;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/saveWorkHourInfo")
+	@ResponseBody
+	public ModelMap saveWorkHourInfo(){
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String createTime = df.format(new Date());
+		String editorId = request.getSession().getAttribute("staff_number") + "";
+		String conditions = request.getParameter("conditions");
+		JSONArray jsonArray=JSONArray.fromObject(conditions);
+		List<Map<String,Object>> swh_list=new ArrayList<Map<String,Object>>();
+		for(int i=0;i<jsonArray.size();i++){
+			 JSONObject object = (JSONObject)jsonArray.get(i);		
+			 object.put("editorId", editorId);
+			 object.put("editDate", createTime);
+			Map<String, Object> map = (Map<String, Object>) object;
+			swh_list.add(map);
+		}
+		
+		int result = productionService.saveWorkHourInfo(swh_list);	
+		initModel(true,String.valueOf(result),null);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/updateStaffTmpHourInfo")
+	@ResponseBody
+	public ModelMap updateStaffTmpHourInfo(){
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String createTime = df.format(new Date());
+		String editorId = request.getSession().getAttribute("staff_number") + "";
+		String conditions = request.getParameter("conditions");
+		String whflag = request.getParameter("whflag");
+		String tempOrderStaus = request.getParameter("tempOrderStaus");
+		String tempOrderId = request.getParameter("tempOrderId");
+		
+		JSONArray jsonArray=JSONArray.fromObject(conditions);
+		List<Map<String,Object>> swh_list=new ArrayList<Map<String,Object>>();
+		for(int i=0;i<jsonArray.size();i++){
+			 JSONObject object = (JSONObject)jsonArray.get(i);
+			 if("verify".equals(whflag)){
+				 object.put("approver_id", editorId);
+				 object.put("approve_date", createTime);
+				 object.put("status", "1");
+				 object.put("actionType", "verify");
+			 }else if("reject".equals(whflag)){
+				 object.put("approver_id", editorId);
+				 object.put("approve_date", createTime);
+				 object.put("status", "2");
+				 object.put("actionType", "reject");
+			 }else{
+				 object.put("editorId", editorId);
+				 object.put("status", "0");
+				 object.put("editDate", createTime);
+			 }
+			 Map<String, Object> map = (Map<String, Object>) object;
+			 swh_list.add(map);
+		}
+		Map<String,Object> m=new HashMap<String,Object>();
+		m.put("tempOrderId", tempOrderId);
+		m.put("auditor", editorId);
+		m.put("auditDate", createTime);
+		if("verify".equals(tempOrderStaus)){
+			productionService.verifyOrder(m);
+		}
+		if("reject".equals(tempOrderStaus)){
+			productionService.rejectOrder(m);
+		}
+		
+		int result = productionService.batchUpdateWorkHour(swh_list);
+		initModel(true,String.valueOf(result),null);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	
+	@RequestMapping("/deleteStaffTmpHourInfo")
+	@ResponseBody
+	public ModelMap deleteStaffTmpHourInfo(){
+		String conditions = request.getParameter("conditions");
+		JSONArray jsonArray=JSONArray.fromObject(conditions);
+		List<String> idlist=new ArrayList<String>();
+		for(int i=0;i<jsonArray.size();i++){
+			 JSONObject object = (JSONObject)jsonArray.get(i);
+			 idlist.add(object.getString("id"));
+		}
+		String ids=StringUtils.join(idlist, ",");
+		Map<String, Object> conditionMap=new HashMap<String,Object>();
+		conditionMap.put("ids", ids);
+		
+		int result = productionService.deleteStaffTmpHourInfo(conditionMap);
+		initModel(true,String.valueOf(result),null);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping("/getStaffTmpHours")
+	@ResponseBody
+	public ModelMap getStaffTmpHours(){
+		String conditions = request.getParameter("conditions");
+		JSONObject jo = JSONObject.fromObject(conditions);
+		Map<String, Object> conditionMap = new HashMap<String, Object>();
+		for (Iterator it = jo.keys(); it.hasNext();) {
+			String key = (String) it.next();
+			conditionMap.put(key, jo.get(key));
+		}
+		List<Map<String, String>> datalist = productionService.queryStaffTmpHours(conditionMap);
+		Map<String, Object> result = new HashMap<String,Object>();
+		result.put("data", datalist);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(result);
+		model = mv.getModelMap();
+		return model;
+	}
+	
 	/****************************  Yangke End *********************/
 }

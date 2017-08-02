@@ -1150,8 +1150,8 @@ public class HrBaseDataController extends BaseController {
 		dataType.put("18", ExcelModel.CELL_TYPE_CANNULL);
 		dataType.put("19", ExcelModel.CELL_TYPE_CANNULL);
 		dataType.put("20", ExcelModel.CELL_TYPE_CANNULL);
-		dataType.put("21", ExcelModel.CELL_TYPE_DATE);
-		dataType.put("22", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("21", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("22", ExcelModel.CELL_TYPE_DATE);
 		dataType.put("23", ExcelModel.CELL_TYPE_CANNULL);
 		dataType.put("24", ExcelModel.CELL_TYPE_CANNULL);
 		dataType.put("25", ExcelModel.CELL_TYPE_CANNULL);
@@ -1159,6 +1159,7 @@ public class HrBaseDataController extends BaseController {
 		dataType.put("27", ExcelModel.CELL_TYPE_CANNULL);
 		dataType.put("28", ExcelModel.CELL_TYPE_CANNULL);
 		dataType.put("29", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("30", ExcelModel.CELL_TYPE_CANNULL);
 		excelModel.setDataType(dataType);
 		excelModel.setPath(fileFileName);
 		String result = "";
@@ -1197,36 +1198,36 @@ public class HrBaseDataController extends BaseController {
 						result = result+"第"+i+"行工号信息为必填项！\n";
 					}
 					//工厂/部	科室	车间	班组	小班组
-					if(null == data[13] || StringUtils.isBlank(data[13].toString().trim())){
+					if(null == data[14] || StringUtils.isBlank(data[14].toString().trim())){
 						//工厂/部为必填值
 						success = false;
 						result = result+"第"+i+"行工厂/部门信息为必填项！\n";
 					}
 					//组织结构信息校验
 					Map queryOrgMap = new HashMap<String, Object>();
-					queryOrgMap.put("plant_org", data[13].toString());
+					queryOrgMap.put("plant_org", data[14].toString());
 					
-					if(StringUtils.isEmpty(data[14].toString().trim())&&"计件".equals(data[12].toString().trim())){
+					if(StringUtils.isEmpty(data[15].toString().trim())&&"计件".equals(data[13].toString().trim())){
 						success = false;
 						result = result+"第"+i+"行计件员工的车间/科室信息为必填项！\n";
 					}
-					if(StringUtils.isEmpty(data[15].toString().trim())&&"计件".equals(data[12].toString().trim())){
+					if(StringUtils.isEmpty(data[16].toString().trim())&&"计件".equals(data[13].toString().trim())){
 						success = false;
 						result = result+"第"+i+"行计件员工的班组信息为必填项！\n";
 					}
-					if(StringUtils.isEmpty(data[16].toString().trim())&&"计件".equals(data[12].toString().trim())){
+					if(StringUtils.isEmpty(data[17].toString().trim())&&"计件".equals(data[13].toString().trim())){
 						success = false;
 						result = result+"第"+i+"行计件员工的小班组信息为必填项！\n";
 					}
 					
-					if(null!=data[14] && !"".equals(data[14].toString().trim())){
-						queryOrgMap.put("workshop_org", data[14]==null?null:data[14].toString());
-					}
 					if(null!=data[15] && !"".equals(data[15].toString().trim())){
-						queryOrgMap.put("workgroup_org", data[15]==null?null:data[15].toString());
+						queryOrgMap.put("workshop_org", data[15]==null?null:data[15].toString());
 					}
 					if(null!=data[16] && !"".equals(data[16].toString().trim())){
-						queryOrgMap.put("team_org", data[16]==null?null:data[16].toString());
+						queryOrgMap.put("workgroup_org", data[16]==null?null:data[16].toString());
+					}
+					if(null!=data[17] && !"".equals(data[17].toString().trim())){
+						queryOrgMap.put("team_org", data[17]==null?null:data[17].toString());
 					}
 					
 					queryOrgList.add(queryOrgMap);
@@ -1254,16 +1255,16 @@ public class HrBaseDataController extends BaseController {
 							String workgroup_org = map.get("workgroup_org")==null?"":map.get("workgroup_org").toString();
 							String team_org = map.get("team_org")==null?"":map.get("team_org").toString();
 							
-							if(data[13] != null && !"".equals(data[13].toString()) && !data[13].equals(plant_org)){
+							if(data[14] != null && !"".equals(data[14].toString()) && !data[14].equals(plant_org)){
 								test = false;
 							}
-							if(data[14] != null && !"".equals(data[14].toString()) && !data[14].equals(workshop_org)){
+							if(data[15] != null && !"".equals(data[15].toString()) && !data[15].equals(workshop_org)){
 								test = false;
 							}
-							if(data[15] != null && !"".equals(data[15].toString()) && !data[15].equals(workgroup_org)){
+							if(data[16] != null && !"".equals(data[16].toString()) && !data[16].equals(workgroup_org)){
 								test = false;
 							}
-							if(data[16] != null && !"".equals(data[16].toString()) && !data[16].equals(team_org)){
+							if(data[17] != null && !"".equals(data[17].toString()) && !data[17].equals(team_org)){
 								test = false;
 							}
 							if(test){
@@ -1294,25 +1295,26 @@ public class HrBaseDataController extends BaseController {
 							staffInfo.put("identity_card", data[8] == null?null:data[8].toString().trim());
 							staffInfo.put("factory_incoming_date", data[9] == null?null:data[9].toString().trim());
 							staffInfo.put("staff_level", data[10] == null?null:data[10].toString().trim());
-							staffInfo.put("skill_parameter", data[11] == null?null:data[11].toString().trim());
-							staffInfo.put("salary_type", data[12] == null?null:data[12].toString().trim());
-							staffInfo.put("plant_org", data[13] == null?null:data[13].toString().trim());
-							staffInfo.put("workshop_org", data[14] == null?null:data[14].toString().trim());
-							staffInfo.put("workgroup_org", data[15] == null?null:data[15].toString().trim());
-							staffInfo.put("team_org", data[16] == null?null:data[16].toString().trim());
-							staffInfo.put("job", data[17] == null?null:data[17].toString().trim());
-							staffInfo.put("status", data[18] == null?null:data[18].toString().trim());
-							staffInfo.put("join_channel", data[19] == null?null:data[19].toString().trim());
-							staffInfo.put("leave_way", data[20] == null?null:data[20].toString().trim());
-							staffInfo.put("leave_date", data[21] == null?null:data[21].toString().trim());
-							staffInfo.put("leave_reason", data[22] == null?null:data[22].toString().trim());
-							staffInfo.put("last_company", data[23] == null?null:data[23].toString().trim());
-							staffInfo.put("last_leave_reason", data[24] == null?null:data[24].toString().trim());
-							staffInfo.put("phone", data[25] == null?null:data[25].toString().trim());
-							staffInfo.put("family_address", data[26] == null?null:data[26].toString().trim());
-							staffInfo.put("nation", data[27] == null?null:data[27].toString().trim());
-							staffInfo.put("corporation", data[28] == null?null:data[28].toString().trim());
-							staffInfo.put("workplace", data[29] == null?null:data[29].toString().trim());
+							staffInfo.put("basic_salary", data[11] == null?null:data[11].toString().trim());
+							staffInfo.put("skill_parameter", data[12] == null?null:data[12].toString().trim());
+							staffInfo.put("salary_type", data[13] == null?null:data[13].toString().trim());
+							staffInfo.put("plant_org", data[14] == null?null:data[14].toString().trim());
+							staffInfo.put("workshop_org", data[15] == null?null:data[15].toString().trim());
+							staffInfo.put("workgroup_org", data[16] == null?null:data[16].toString().trim());
+							staffInfo.put("team_org", data[17] == null?null:data[17].toString().trim());
+							staffInfo.put("job", data[18] == null?null:data[18].toString().trim());
+							staffInfo.put("status", data[19] == null?null:data[19].toString().trim());
+							staffInfo.put("join_channel", data[20] == null?null:data[20].toString().trim());
+							staffInfo.put("leave_way", data[21] == null?null:data[21].toString().trim());
+							staffInfo.put("leave_date", data[22] == null?null:data[22].toString().trim());
+							staffInfo.put("leave_reason", data[23] == null?null:data[23].toString().trim());
+							staffInfo.put("last_company", data[24] == null?null:data[24].toString().trim());
+							staffInfo.put("last_leave_reason", data[25] == null?null:data[25].toString().trim());
+							staffInfo.put("phone", data[26] == null?null:data[26].toString().trim());
+							staffInfo.put("family_address", data[27] == null?null:data[27].toString().trim());
+							staffInfo.put("nation", data[28] == null?null:data[28].toString().trim());
+							staffInfo.put("corporation", data[29] == null?null:data[29].toString().trim());
+							staffInfo.put("workplace", data[30] == null?null:data[30].toString().trim());
 							staffInfo.put("editor", editor_id);
 							staffInfo.put("edit_date", curTime);
 							

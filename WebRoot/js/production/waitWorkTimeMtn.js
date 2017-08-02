@@ -90,17 +90,25 @@ $(document).ready(function() {
 						var reason=$(radio).val()=='undefined'?'':$(radio).val();
 						//alert(reason);
 						var tr=$(radio).parent().parent();
-						var duty_unit=$(tr).children("td").eq(7).html();
-						var start_time=$(tr).data("start_time")==undefined?"":$(tr).data("start_time");
-						var finish_time=$(tr).data("finish_time")==undefined?"":$(tr).data("finish_time");
+						var duty_unit=$(tr).children("td").eq(8).html();
+//						var start_time=$(tr).data("start_time")==undefined?"":$(tr).data("start_time");
+//						var finish_time=$(tr).data("finish_time")==undefined?"":$(tr).data("finish_time");
+						var start_time=$(tr).children("td").eq(3).html();
+						var finish_time="";
+						if($(tr).children("td").eq(5).html()!=""){
+							var finish_time=$(tr).children("td").eq(5).html();
+						}
+						
 						if(reason==undefined){
 							alert("请选择停线原因！");
 						}else{
 							$( this ).dialog( "close" );
 							$("#reason_detail").val(reason);
 							$("#duty_unit").val(duty_unit).attr("readonly",true);
-							$("#reason_detail").data("start_time",start_time);
-							$("#reason_detail").data("finish_time",finish_time);
+//							$("#reason_detail").data("start_time",start_time);
+//							$("#reason_detail").data("finish_time",finish_time);
+							$("#select_start_date").val(start_time);
+							$("#select_finish_date").val(finish_time);
 							$("#reason_detail").attr("disabled",true);
 						}
 					} 
@@ -113,6 +121,8 @@ $(document).ready(function() {
 			$("#duty_unit").val("");
 			$("#reason_detail").attr("disabled",false);
 			$("#duty_unit").attr("readonly",false);
+			$("#select_start_date").val("");
+			$("#select_finish_date").val("");
 		}
 	});
 	$(document).on("click","#addStaff",function() {		
@@ -211,7 +221,7 @@ $(document).ready(function() {
 			            	return "<input name='exp_radio' value='"+row.reason_type+"' type='radio'>";
 			            }},
 			            {"title":"生产订单","class":"center","data":"order_list","defaultContent": ""},
-//			            {"title":"线别","class":"center","data":"line","defaultContent": ""},
+			            {"title":"线别","class":"center","data":"line","defaultContent": ""},
 			            {"title":"停线时间","class":"center","data":"start_time","defaultContent": ""},
 			            {"title":"预计恢复时间","class":"center","data": "pend_time","defaultContent": ""},
 			            {"title":"实际恢复时间","class":"center","data":"end_time","defaultContent":""},
@@ -236,8 +246,10 @@ $(document).ready(function() {
 		var dutyUnit=$("#duty_unit").val();
 		var stafflist = [];
 		var saveFlag=true;
-		var start_time=$("#reason_detail").data("start_time");
-		var finish_time=$("#reason_detail").data("finish_time");
+//		VAR START_TIME=$("#REASON_DETAIL").DATA("START_TIME");
+//		VAR FINISH_TIME=$("#REASON_DETAIL").DATA("FINISH_TIME");
+		var start_time=$("#select_start_date").val();
+		var finish_time=$("#select_finish_date").val();
 		var reasonDetail=$("#reason_detail").val();
 		var curDate=getCurDate();
 		if(finish_time==undefined||finish_time==""){
@@ -492,7 +504,15 @@ function ajaxSave(conditions) {
 		success : function(response) {
 			if (response.success) {				
 				alert(response.message);
-				
+				$("#wait_date").val("");
+				$("#reason_detail").val("");
+				$("#duty_unit").val("");
+				$("#workhour").val("");
+				$("#whereabouts").val("");
+				$("#workhourtotal").html("&nbsp;&nbsp;已录工时：");
+				$("#waitReason option[value='']").attr("selected","selected");
+				$("#tableResult tbody").remove();
+				$("#duty_unit").attr("readonly",false);
 			} else {
 				alert(response.message);
 			}

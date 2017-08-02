@@ -295,6 +295,28 @@ public class CommonController extends BaseController {
 	}
 	
 	/**
+	 * added by xjw for 查询小班组下拉列表(ORG表获取)
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/getTeamSelect")
+	@ResponseBody
+	public ModelMap getTeamSelect(){
+
+		String factory = request.getParameter("factory");
+		String workshop = request.getParameter("workshop");
+		String workgroup= request.getParameter("workgroup");
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("factory", factory);
+		condMap.put("workshop", workshop);
+		condMap.put("workgroup", workgroup);
+		model=new ModelMap();
+		model.put("data", commonService.getTeamSelect(condMap));
+
+		return model;
+	}
+	
+	/**
 	 * added by xjw for 查询各个车间下的班组下拉列表(ORG表获取)
 	 * 
 	 * @return

@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.ui.ModelMap;
 
 import com.byd.bms.hr.dao.IHrReportDao;
 import com.byd.bms.hr.service.IHrReportService;
@@ -25,4 +26,22 @@ public class HrReportServiceImpl implements IHrReportService {
 		result.put("rows", datalist);
 		return result;
 	}
+
+	@Override
+	public void getStaffPieceHours(Map<String, Object> conditionMap,
+			ModelMap model) {
+		int totalCount=hrReportDao.queryStaffPieceHoursCount(conditionMap);
+		List<Map<String,Object>> datalist =hrReportDao.queryStaffPieceHours(conditionMap);
+		//添加合计行数据
+		
+		
+		model.put("recordsTotal", totalCount);
+		model.put("draw", conditionMap.get("draw"));
+		model.put("recordsFiltered", totalCount);
+		model.put("data", datalist);
+		
+		
+	}
+	
+	
 }

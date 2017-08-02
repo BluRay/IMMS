@@ -10,6 +10,8 @@
 		<link rel="stylesheet" href="../assets/css/jquery-ui.min.css" />
 		<link rel="stylesheet" href="../assets/css/jquery-ui.custom.min.css" />
 		<link rel="stylesheet" href="../assets/css/jquery.gritter.css" />
+		<link rel="stylesheet" href="../assets/css/fixedColumns.bootstrap.min.css" />
+		<link rel="stylesheet" href="../assets/css/fixedColumns.dataTables.min.css" />
 	</head>
 	<body class="no-skin" style="font-family: 'Microsoft YaHei';">
 		<!-- 头 -->
@@ -70,11 +72,123 @@
 						</table>
 					</div>
 					
-					<table id="tableData" class="table table-striped table-bordered table-hover" style="font-size: 12px;">
-					</table>	
+					<table id="tableData" class="table table-striped table-bordered table-hover" style="width:1350px;overflow-x:auto;font-size: 12px;">
+					</table>
 					
 					</div>
 			</div><!-- /.main-content -->
+			
+			<div id="dialog-add" class="hide" style="align:center;width:780px;height:500px">
+				<table style="line-height:30px">
+					<tr>
+					<td width="140px" style="text-align:right">派工单号：</td>								
+					<td id="orderNo"></td>
+					</tr>
+					<tr>
+					<td width="140px" style="text-align:right">作业原因/内容：</td>								
+					<td id="reason"></td>	
+					</tr>
+				</table>
+				<table >
+					<tr>
+					<td width="60px" style="text-align:right">工厂：</td>
+					<td width="160px"><input id="factory" disabled="disabled" style="height: 30px;width:150px" type="text">
+					</td>
+					<td width="80px" style="text-align:right">车间：</td>
+					<td width="160px"><input id="workshop" disabled="disabled" style="height: 30px;width:150px" type="text">
+					</td>
+					<td></td>
+					<td></td>
+					</tr>
+					<tr>
+					<td width="60px" style="text-align:right">班组：</td>
+					<td width="160px"><select id="group" class="input-medium"><option value=''>请选择</option></select>
+					</td>
+					<td width="80px" style="text-align:right">小班组：</td>
+					<td width="160px"><select id="subgroup" class="input-medium"><option value=''>请选择</option></select>
+					</td>
+					<td width="80px" style="text-align:right">操作日期：</td>
+					<td>
+						<input type="text" id="mta_wdate" class="input-medium" placeholder="操作日期" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:new Date()})"/>
+					</td>
+					</tr>
+				</table>
+				
+				<h5 class="section-head">额外工时<span style="float:right;margin: 10px 20px;color:green" class="read_hours"></span></h5>
+				<div style="width:100%;height:300px;">
+					<table id="table_workhour" style="margin-left:0px;margin-top:0px;width:100%;text-align:left;" class="exp-table table">
+					<thead style="background-color: rgb(225, 234, 240)">
+						<tr>
+						<td style="width: 30px;"><i id="addWorkhour" class="fa fa-plus addWorkhour" style="cursor: pointer;color: blue;"></i></td>
+						<td >工号</td>
+						<td >姓名</td>
+						<td >岗位</td>
+						<td >额外工时</td>
+						<td >小班组</td>
+						<td >班组</td>
+						<td >车间</td>
+						<td >工厂</td>
+						</tr>
+					</thead>
+					<tbody class="exp-table" id="tb_workhour">
+					</tbody>
+				</table>
+				</div>
+			
+			</div>
+			
+			
+			<div id="dialog-edit" class="hide" style="align:center;width:780px;height:500px">
+				<table style="line-height:30px" >
+					<tr>
+					<td width="140px" style="text-align:right">派工单号：</td>								
+					<td id="edit_orderNo"></td>
+					</tr>
+					<tr>
+					<td width="140px" style="text-align:right">作业原因/内容：</td>								
+					<td id="edit_reason"></td>	
+					</tr>
+				</table>
+				<table class="form-search">
+					<tr>
+					<td width="60px" style="text-align:right">工号：</td>
+					<td width="160px">
+						<input type="text" class="input-medium" id="edit_cardNumber"/>
+					</td>
+					<td width="80px" style="text-align:right">操作日期：</td>
+					<td width="160px">
+						<input type="text" class="input-medium" id="edit_workDate" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+					</td>
+					<td><input type="button" class="btn btn-primary"
+						id="btnSwhQuery" value="查询" style="margin-left: 2px;height:30px;line-height:1px"></input>
+						</td>
+					<td></td>
+					</tr>								
+				</table>
+				<h5 class="section-head">额外工时<span style="float:right;margin: 10px 20px;color:green" class="read_hours"></span></h5>
+				<div style="width:100%;height:300px;">
+					<table style="margin-left:0px;width: 100%;"class="exp-table table" id="workhour_tb">
+						<thead style="background-color: rgb(225, 234, 240)">
+							<tr>
+							<td ><input type="checkbox" id="checkall"></td>
+							<td >工号</td>
+							<td >姓名</td>
+							<td >岗位</td>
+							<td >额外工时</td>
+							<td >小班组</td>
+							<td >班组</td>
+							<td >车间</td>
+							<td >工厂</td>
+							<td>状态</td>
+							<td >操作日期</td>
+							</tr>
+						</thead>
+						<tbody class="exp-table" id="workhour_list">
+						</tbody>
+					</table>
+				
+				</div>
+			</div>
 
 			<!-- 脚 -->
 			<%-- <jsp:include page="footer.jsp" flush="true"/> --%>

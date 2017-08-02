@@ -14,6 +14,7 @@
 <link rel="stylesheet"
 	href="../assets/css/fixedColumns.dataTables.min.css" />
 <link rel="stylesheet" href="../assets/css/jquery-ui.min.css" />
+<link rel="stylesheet" href="../assets/css/jquery.gritter.css" />
 <link rel="stylesheet" href="../css/zTreeStyle/metro.css"
 	type="text/css">
 </head>
@@ -78,6 +79,7 @@
 		<script src="../js/datePicker/WdatePicker.js"></script>
 		<script src="../assets/js/jquery.dataTables.min.js"></script>
 		<script src="../assets/js/jquery-ui.min.js"></script>
+		<script src="../assets/js/jquery.gritter.min.js"></script>
 		<script src="../assets/js/jquery.dataTables.bootstrap.js"></script>
 		<script src="../assets/js/dataTables.fixedColumns.min.js"></script>
 		<script src="../assets/js/bootstrap3-typeahead.js"></script>

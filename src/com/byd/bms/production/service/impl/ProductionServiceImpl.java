@@ -707,6 +707,19 @@ public class ProductionServiceImpl implements IProductionService {
 	public void deleteStaffHours(Map<String, Object> condMap, ModelMap model) {
 		try{
 			productionDao.deleteStaffHours(condMap);
+			String salary_modle=condMap.get("salary_model").toString();
+			if("技能系数".equals(salary_modle)){
+				productionDao.caculatePieceSalary_0(condMap);
+			}
+			if("承包制".equals(salary_modle)){
+				productionDao.caculatePieceSalary_1(condMap);
+			}
+			if("辅助人力".equals(salary_modle)){
+				productionDao.caculatePieceSalary_2(condMap);
+			}
+			if("底薪模式".equals(salary_modle)){
+				productionDao.caculatePieceSalary_3(condMap);
+			}
 			model.put("success", true);
 			model.put("message", "删除成功！");
 		}catch(Exception e){
@@ -1054,7 +1067,54 @@ public class ProductionServiceImpl implements IProductionService {
 	public int insertTmpOrderType(Map<String, Object> map) {
 		return productionDao.insertTmpOrderType(map);
 	}
-		
+	@Override
+	public Map<String, Object> getExtraWorkHourManagerList(
+			Map<String, Object> queryMap) {
+		int totalCount=0;
+		List<Map<String, Object>> datalist=productionDao.getExtraWorkHourManagerList(queryMap);
+		totalCount=productionDao.getExtraWorkHourManagerCount(queryMap);
+		Map<String, Object> result=new HashMap<String,Object>();
+		result.put("draw", queryMap.get("draw"));
+		result.put("recordsTotal", totalCount);
+		result.put("recordsFiltered", totalCount);
+		result.put("data", datalist);
+		return result;
+	}
+
+	@Override
+	public int editExtraWorkHourManager(Map<String, Object> map) {
+		return productionDao.editExtraWorkHourManager(map);
+	}
+
+	@Override
+	public void delExtraWorkHourManager(List<String> ids) {
+		for(String id : ids){
+			productionDao.delExtraWorkHourManager(id);
+		}
+	}
+
+	@Override
+	public int insertExtraWorkHourManager(List<Map<String, Object>> list) {
+		int result=0;
+		for(Map<String,Object> map : list){
+			Map<String,Object> conMap=new HashMap<String,Object>();
+			conMap.put("tmp_order_type", (String)map.get("tmp_order_type"));
+			conMap.put("no", (String)map.get("no"));
+			conMap.put("bus_type", (String)map.get("bus_type"));
+			conMap.put("order_no", (String)map.get("order_no"));
+			conMap.put("order_type", (String)map.get("order_type"));
+			
+			List<Map<String,Object>> plist=productionDao.getExtraWorkHourManagerList(conMap);
+			if(plist.size()>0){
+				Map pMap=plist.get(0);
+				map.put("id", pMap.get("id"));
+				result=productionDao.editExtraWorkHourManager(map);
+			}else{
+				result=productionDao.insertExtraWorkHourManager(map);
+			}
+		}
+		return result;
+	}		
 	
 	/*******************  tangjin end  **************************/
 	@Override
@@ -1125,37 +1185,37 @@ public class ProductionServiceImpl implements IProductionService {
 				conditionMap3 = new HashMap<String, Object>(); //删除已导入考勤信息条件
 				conditionMap3.put("month", attendanceInfo.get("month"));
 				staff_numbers += attendanceInfo.get("staff_number")+",";
-				attendanceInfo.put("D1", attendanceInfo.get("D1") == ""?list.get(0).get("D1"):attendanceInfo.get("D1"));
-				attendanceInfo.put("D2", attendanceInfo.get("D2")  == ""?list.get(0).get("D2"):attendanceInfo.get("D2") );
-				attendanceInfo.put("D3", attendanceInfo.get("D3") == ""?list.get(0).get("D3"):attendanceInfo.get("D3") );
-				attendanceInfo.put("D4", attendanceInfo.get("D4") == ""?list.get(0).get("D4"):attendanceInfo.get("D4"));
-				attendanceInfo.put("D5", attendanceInfo.get("D5") == ""?list.get(0).get("D5"):attendanceInfo.get("D5"));
-				attendanceInfo.put("D6", attendanceInfo.get("D6")  == ""?list.get(0).get("D6"):attendanceInfo.get("D6"));
-				attendanceInfo.put("D7", attendanceInfo.get("D7")  == ""?list.get(0).get("D7"):attendanceInfo.get("D7") );
-				attendanceInfo.put("D8", attendanceInfo.get("D8")  == ""?list.get(0).get("D8"):attendanceInfo.get("D8") );
-				attendanceInfo.put("D9", attendanceInfo.get("D9") == ""?list.get(0).get("D9"):attendanceInfo.get("D9") );
-				attendanceInfo.put("D10", attendanceInfo.get("D10")  == ""?list.get(0).get("D10"):attendanceInfo.get("D10"));
-				attendanceInfo.put("D11", attendanceInfo.get("D11")  == ""?list.get(0).get("D11"):attendanceInfo.get("D11") );
-				attendanceInfo.put("D12", attendanceInfo.get("D12")  == ""?list.get(0).get("D12"):attendanceInfo.get("D12") );
-				attendanceInfo.put("D13", attendanceInfo.get("D13") == ""?list.get(0).get("D13"):attendanceInfo.get("D13"));
-				attendanceInfo.put("D14", attendanceInfo.get("D14") == ""?list.get(0).get("D14"):attendanceInfo.get("D14") );
-				attendanceInfo.put("D15", attendanceInfo.get("D15") == ""?list.get(0).get("D15"):attendanceInfo.get("D15"));
-				attendanceInfo.put("D16", attendanceInfo.get("D16") == ""?list.get(0).get("D16"):attendanceInfo.get("D16") );
-				attendanceInfo.put("D17", attendanceInfo.get("D17") == ""?list.get(0).get("D17"):attendanceInfo.get("D17") );
-				attendanceInfo.put("D18", attendanceInfo.get("D18")  == ""?list.get(0).get("D18"):attendanceInfo.get("D18") );
-				attendanceInfo.put("D19", attendanceInfo.get("D19")  == ""?list.get(0).get("D19"):attendanceInfo.get("D19") );
-				attendanceInfo.put("D20", attendanceInfo.get("D20")  == ""?list.get(0).get("D20"):attendanceInfo.get("D20") );
-				attendanceInfo.put("D21", attendanceInfo.get("D21")  == ""?list.get(0).get("D21"):attendanceInfo.get("D21") );
-				attendanceInfo.put("D22", attendanceInfo.get("D22")  == ""?list.get(0).get("D22"):attendanceInfo.get("D22") );
-				attendanceInfo.put("D23", attendanceInfo.get("D23")  == ""?list.get(0).get("D23"):attendanceInfo.get("D23") );
-				attendanceInfo.put("D24", attendanceInfo.get("D24")  == ""?list.get(0).get("D24"):attendanceInfo.get("D24") );
-				attendanceInfo.put("D25", attendanceInfo.get("D25")  == ""?list.get(0).get("D25"):attendanceInfo.get("D25") );
-				attendanceInfo.put("D26", attendanceInfo.get("D26") == ""?list.get(0).get("D26"):attendanceInfo.get("D26") );
-				attendanceInfo.put("D27", attendanceInfo.get("D27")  == ""?list.get(0).get("D27"):attendanceInfo.get("D27") );
-				attendanceInfo.put("D28", attendanceInfo.get("D28")  == ""?list.get(0).get("D28"):attendanceInfo.get("D28") );
-				attendanceInfo.put("D29", attendanceInfo.get("D29")  == ""?list.get(0).get("D29"):attendanceInfo.get("D29") );
-				attendanceInfo.put("D30", attendanceInfo.get("D30")  == ""?list.get(0).get("D30"):attendanceInfo.get("D30") );
-				attendanceInfo.put("D31", attendanceInfo.get("D31")  == ""?list.get(0).get("D31"):attendanceInfo.get("D31") );
+				attendanceInfo.put("D1", attendanceInfo.get("D1") == "0"?list.get(0).get("D1"):attendanceInfo.get("D1"));
+				attendanceInfo.put("D2", attendanceInfo.get("D2")  == "0"?list.get(0).get("D2"):attendanceInfo.get("D2") );
+				attendanceInfo.put("D3", attendanceInfo.get("D3") == "0"?list.get(0).get("D3"):attendanceInfo.get("D3") );
+				attendanceInfo.put("D4", attendanceInfo.get("D4") == "0"?list.get(0).get("D4"):attendanceInfo.get("D4"));
+				attendanceInfo.put("D5", attendanceInfo.get("D5") == "0"?list.get(0).get("D5"):attendanceInfo.get("D5"));
+				attendanceInfo.put("D6", attendanceInfo.get("D6")  == "0"?list.get(0).get("D6"):attendanceInfo.get("D6"));
+				attendanceInfo.put("D7", attendanceInfo.get("D7")  == "0"?list.get(0).get("D7"):attendanceInfo.get("D7") );
+				attendanceInfo.put("D8", attendanceInfo.get("D8")  == "0"?list.get(0).get("D8"):attendanceInfo.get("D8") );
+				attendanceInfo.put("D9", attendanceInfo.get("D9") == "0"?list.get(0).get("D9"):attendanceInfo.get("D9") );
+				attendanceInfo.put("D10", attendanceInfo.get("D10")  == "0"?list.get(0).get("D10"):attendanceInfo.get("D10"));
+				attendanceInfo.put("D11", attendanceInfo.get("D11")  == "0"?list.get(0).get("D11"):attendanceInfo.get("D11") );
+				attendanceInfo.put("D12", attendanceInfo.get("D12")  == "0"?list.get(0).get("D12"):attendanceInfo.get("D12") );
+				attendanceInfo.put("D13", attendanceInfo.get("D13") == "0"?list.get(0).get("D13"):attendanceInfo.get("D13"));
+				attendanceInfo.put("D14", attendanceInfo.get("D14") == "0"?list.get(0).get("D14"):attendanceInfo.get("D14") );
+				attendanceInfo.put("D15", attendanceInfo.get("D15") == "0"?list.get(0).get("D15"):attendanceInfo.get("D15"));
+				attendanceInfo.put("D16", attendanceInfo.get("D16") == "0"?list.get(0).get("D16"):attendanceInfo.get("D16") );
+				attendanceInfo.put("D17", attendanceInfo.get("D17") == "0"?list.get(0).get("D17"):attendanceInfo.get("D17") );
+				attendanceInfo.put("D18", attendanceInfo.get("D18")  == "0"?list.get(0).get("D18"):attendanceInfo.get("D18") );
+				attendanceInfo.put("D19", attendanceInfo.get("D19")  == "0"?list.get(0).get("D19"):attendanceInfo.get("D19") );
+				attendanceInfo.put("D20", attendanceInfo.get("D20")  == "0"?list.get(0).get("D20"):attendanceInfo.get("D20") );
+				attendanceInfo.put("D21", attendanceInfo.get("D21")  == "0"?list.get(0).get("D21"):attendanceInfo.get("D21") );
+				attendanceInfo.put("D22", attendanceInfo.get("D22")  == "0"?list.get(0).get("D22"):attendanceInfo.get("D22") );
+				attendanceInfo.put("D23", attendanceInfo.get("D23")  == "0"?list.get(0).get("D23"):attendanceInfo.get("D23") );
+				attendanceInfo.put("D24", attendanceInfo.get("D24")  == "0"?list.get(0).get("D24"):attendanceInfo.get("D24") );
+				attendanceInfo.put("D25", attendanceInfo.get("D25")  == "0"?list.get(0).get("D25"):attendanceInfo.get("D25") );
+				attendanceInfo.put("D26", attendanceInfo.get("D26") == "0"?list.get(0).get("D26"):attendanceInfo.get("D26") );
+				attendanceInfo.put("D27", attendanceInfo.get("D27")  == "0"?list.get(0).get("D27"):attendanceInfo.get("D27") );
+				attendanceInfo.put("D28", attendanceInfo.get("D28")  == "0"?list.get(0).get("D28"):attendanceInfo.get("D28") );
+				attendanceInfo.put("D29", attendanceInfo.get("D29")  == "0"?list.get(0).get("D29"):attendanceInfo.get("D29") );
+				attendanceInfo.put("D30", attendanceInfo.get("D30")  == "0"?list.get(0).get("D30"):attendanceInfo.get("D30") );
+				attendanceInfo.put("D31", attendanceInfo.get("D31")  == "0"?list.get(0).get("D31"):attendanceInfo.get("D31") );
 				
 				//重新计算出勤天数和小时数
 				int attendance_days = 0;
@@ -1297,5 +1357,49 @@ public class ProductionServiceImpl implements IProductionService {
 		
 		return productionDao.insertAttendance(conditionMap);
 	}
+
+	@Override
+	public Map<String, Object> getTmpOrderList(Map<String, Object> conditionMap) {
+		int totalCount=0;
+		List<Map<String,String>> datalist = productionDao.getTmpOrderList(conditionMap);
+		totalCount = productionDao.getTmpOrderCount(conditionMap);
+		Map<String, Object> result = new HashMap<String,Object>();
+		result.put("draw", conditionMap.get("draw"));
+		result.put("recordsTotal", totalCount);
+		result.put("recordsFiltered", totalCount);
+		result.put("data", datalist);
+		return result;
+	}
+
+	@Override
+	public int saveWorkHourInfo(List<Map<String, Object>> swh_list) {
+		return productionDao.saveWorkHourInfo(swh_list);
+	}
+
+	@Override
+	public List<Map<String, String>> queryStaffTmpHours(Map<String, Object> conditionMap) {
+		return productionDao.queryStaffTmpHours(conditionMap);
+	}
+
+	@Override
+	public int deleteStaffTmpHourInfo(Map<String, Object> conditionMap) {
+		return productionDao.deleteStaffTmpHourInfo(conditionMap);
+	}
+
+	@Override
+	public void verifyOrder(Map<String, Object> m) {
+		productionDao.verifyOrder(m);
+	}
+
+	@Override
+	public void rejectOrder(Map<String, Object> m) {
+		productionDao.rejectOrder(m);
+	}
+
+	@Override
+	public int batchUpdateWorkHour(List<Map<String, Object>> swh_list) {
+		return productionDao.batchUpdateWorkHour(swh_list);
+	}
+
 
 }

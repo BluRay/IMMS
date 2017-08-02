@@ -411,7 +411,7 @@
 		FROM BMS_PD_PARTS_PLAN_FINISH p
 		LEFT JOIN BMS_BASE_FACTORY f ON p.factory_id = f.id
 		LEFT JOIN BMS_OR_ORDER o ON p.order_id = o.id
-		LEFT JOIN BMS_BASE_KEY k ON p.parts_id = k.id
+		LEFT JOIN BMS_BASE_KEY k ON p.parts_id = k.value and k.key_code='BASE_PARTS'
 		LEFT JOIN BMS_BASE_BUS_TYPE x ON x.id = o.bus_type_id
 		LEFT JOIN BMS_BASE_USER u on u.id=p.editor_id
 		where 1=1
@@ -421,7 +421,7 @@
 		<if test="order_no !=''">
 			and o.order_no = #{order_no}
 		</if>
-		<if test="parts_id !=''">
+		<if test="parts_id !='' and parts_id !=null">
 			and p.parts_id=#{parts_id}
 		</if>
 		<if test="search_date_start !=''">
@@ -449,7 +449,7 @@
 		<if test="order_no !=''">
 			and o.order_no = #{order_no}
 		</if>
-		<if test="parts_id !=''">
+		<if test="parts_id !='' and parts_id !=null">
 			and p.parts_id=#{parts_id}
 		</if>
 		<if test="search_date_start !=''">
@@ -782,16 +782,25 @@
 	</insert>
 	
 	<update id="deleteStaffHours" parameterType="Map" >
-		<if test="swh_id !=null and swh_id !=''">
+		<choose>
+			<when test="swh_id !=null and swh_id !=''">
 			delete from BMS_HR_STAFF_PIECE_HOURS
 			where id=#{swh_id}
-		</if>
-		<if test="bus_number !=null and bus_number !=''">
+			</when>
+			
+			<when test="bus_number !=null and bus_number !='' and (swh_id==null or swh_id=='')">
 			delete from BMS_HR_STAFF_PIECE_HOURS
 			where factory=#{factory} and workshop=#{workshop} and workgroup=#{workgroup} and team=#{team} 
 			and work_date=#{work_date} and salary_model=#{salary_model}
-			and bus_number=#{bus_number}	
-		</if>
+			and bus_number=#{bus_number}
+			</when>
+			
+			<when test="work_date !=null and work_date !='' and (bus_number==null or bus_number=='') and (swh_id==null or swh_id=='')">
+			delete from BMS_HR_STAFF_PIECE_HOURS
+			where factory=#{factory} and workshop=#{workshop} and workgroup=#{workgroup} and team=#{team} 
+			and work_date=#{work_date} and salary_model=#{salary_model}	
+			</when>
+		</choose>
 			
 	</update>
 	
@@ -1640,7 +1649,7 @@
 	
 	<select id="queryTeamStaffList" parameterType="Map" resultType="Map">		
 		select s.id,s.staff_number,s.name,s.job,s.basic_salary,s.plant_org,s.workshop_org,s.workgroup_org,s.team_org,
-		ifnull((select r.new_value from BMS_HR_STAFF_UPDATE_RECORD r where r.staff_number=s.staff_number 
+		ifnull((select r.new_value from BMS_HR_STAFF_UPDATE_RECORD r where r.staff_number=s.staff_number and r.type='skill_parameter'
 		<if test="work_date !=null and work_date !=''">
 			and substring(r.edit_date,1,10)&lt;=#{work_date}
 		</if>	
@@ -1794,7 +1803,7 @@
 	<!-- 查询奖惩信息 -->
 	<select id="getRewardsList" resultType="Map" parameterType='Map'>
 		SELECT r.*,s.name FROM BMS_HR_REWARDS r
-		LEFT JOIN BMS_HR_STAFF s ON r.staff_number = s.staff_number
+		LEFT JOIN BMS_HR_STAFF s ON r.staff_number = s.staff_number and s.status = '在职'  
 		WHERE 1=1
 		<if test="rewards_date!=null and rewards_date!=''">
 			AND r.rewards_date LIKE CONCAT('%',#{rewards_date},'%')
@@ -1817,7 +1826,7 @@
 	<select id="getRewardsListCount" resultType="int"
 		parameterType='Map'>
 		SELECT count(r.id) FROM BMS_HR_REWARDS r
-		LEFT JOIN BMS_HR_STAFF s ON r.staff_number = s.staff_number
+		LEFT JOIN BMS_HR_STAFF s ON r.staff_number = s.staff_number   and s.status = '在职'  
 		WHERE 1=1
 		<if test="rewards_date!=null and rewards_date!=''">
 			AND r.rewards_date LIKE CONCAT('%',#{rewards_date},'%')
@@ -2003,7 +2012,7 @@
 		FROM  BMS_HR_STAFF s 
 		LEFT JOIN BMS_HR_STAFF_ATTENDANCE a ON a.staff_number = s.staff_number and a.month = #{month}
 		where 1=1
-		and s.salary_type='计件'
+		and s.salary_type='计件' and s.status = '在职' 
 		<if test="factory!=null and factory!=''"> AND s.plant_org = #{factory} </if>
 		<if test="workshop!=null and workshop!=''"> AND s.workshop_org = #{workshop} </if>
 		<if test="workgroup!=null and workgroup!=''"> AND s.workgroup_org = #{workgroup} </if>
@@ -2020,7 +2029,7 @@
 		parameterType='Map'>
 		select count(distinct t1.staff_id) from (
 		select s.id staff_id from
-		BMS_HR_STAFF s where 1=1 and s.salary_type='计件'
+		BMS_HR_STAFF s where 1=1 and s.salary_type='计件' and s.status = '在职' 
 		<if test="factory!=null and factory!=''"> AND s.plant_org = #{factory} </if>
 		<if test="workshop!=null and workshop!=''"> AND s.workshop_org = #{workshop} </if>
 		<if test="workgroup!=null and workgroup!=''"> AND s.workgroup_org = #{workgroup} </if>
@@ -2049,7 +2058,7 @@
 		<foreach collection="list" index="index" item="item"
 			separator=";">
 			INSERT INTO
-			BMS_HR_STAFF_ATTENDANCE(staff_number,month,attendance_days,attendance_hours
+			BMS_HR_STAFF_ATTENDANCE(staff_number,month,attendance_days,attendance_hours,edit_date,editor_id
 			<if test="item.D1!=null and item.D1!=''">,D1</if>
 			<if test="item.D2!=null and item.D2!=''">,D2</if>
 			<if test="item.D3!=null and item.D3!=''">,D3</if>
@@ -2082,7 +2091,7 @@
 			<if test="item.D30!=null and item.D30!=''">,D30</if>
 			<if test="item.D31!=null and item.D31!=''">,D31</if>
 			)
-			VALUES(#{item.staff_number},#{item.month},#{item.attendance_days},#{item.attendance_hours}
+			VALUES(#{item.staff_number},#{item.month},#{item.attendance_days},#{item.attendance_hours},#{item.edit_date},#{item.editor_id}
 			<if test="item.D1!=null and item.D1!=''">,#{item.D1}</if>
 			<if test="item.D2!=null and item.D2!=''">,#{item.D2}</if>
 			<if test="item.D3!=null and item.D3!=''">,#{item.D3}</if>
@@ -2166,6 +2175,12 @@
 	</select>
 	<select id="getExtraWorkHourManagerList" parameterType="Map" resultType="Map">
 		SELECT s.* FROM BMS_PD_TMP_HOURS s WHERE 1=1
+		<if test="tmp_order_type !=null and tmp_order_type !=''">
+			and s.tmp_order_type=#{tmp_order_type}
+		</if>
+		<if test="no !=null and no !=''">
+			and s.no=#{no}
+		</if>
 		<if test="bus_type !=null and bus_type !=''">
 			and s.bus_type=#{bus_type}
 		</if>
@@ -2184,6 +2199,12 @@
 	</select>
 	<select id="getExtraWorkHourManagerCount" parameterType="Map" resultType="int">
 		SELECT count(1) FROM BMS_PD_TMP_HOURS s WHERE 1=1
+		<if test="tmp_order_type !=null and tmp_order_type !=''">
+			and s.tmp_order_type=#{tmp_order_type}
+		</if>
+		<if test="no !=null and no !=''">
+			and s.no=#{no}
+		</if>
 		<if test="bus_type !=null and bus_type !=''">
 			and s.bus_type=#{bus_type}
 		</if>
@@ -2197,4 +2218,365 @@
 			and s.reason_content LIKE CONCAT('%',#{reason_content},'%')
 		</if>
 	</select>
+	
+	<select id="getTmpOrderList" parameterType="Map" resultType="Map">
+		SELECT (select sum(ifnull(output,0)) from BMS_PD_TMP_ORDER_SCHEDULE s
+		where o.id=s.temp_order_id group by s.temp_order_id) finished_qty,
+		o.*,h.hour_total,h1.hour_total workhour_total
+		FROM BMS_PD_TMP_ORDER o
+		left join (
+		select
+		sum(h.work_hour) hour_total,h.factory,h.workshop,h.temp_order_id from BMS_HR_STAFF_TMP_HOURS h
+		left join BMS_PD_TMP_ORDER o on h.temp_order_id=o.id
+		where h.status in ('0','2')
+		<if test="factory !=null">
+			and h.factory = #{factory}
+		</if>
+		<if test="workshop !=null">
+			and find_in_set(h.workshop,#{workshop})>0
+		</if>
+		<if test="orderNo !=null and orderNo !=''">
+			and o.order_serial_no like concat('%',#{orderNo},'%')
+		</if>
+		group by o.id,h.factory,h.workshop
+		)h on h.temp_order_id=o.id and h.factory=o.factory and h.workshop=o.workshop
+		left join (
+		select sum(h.work_hour) hour_total,h.factory,h.workshop,h.temp_order_id from
+		BMS_HR_STAFF_TMP_HOURS h
+		left join BMS_PD_TMP_ORDER o on h.temp_order_id=o.id
+		where 1=1
+		<if test="factory !=null">
+			and h.factory = #{factory}
+		</if>
+		<if test="workshop !=null">
+			and find_in_set(h.workshop,#{workshop})>0
+		</if>
+		<if test="orderNo !=null and orderNo !=''">
+			and o.order_serial_no like concat('%',#{orderNo},'%')
+		</if>
+		group by o.id,h.factory,h.workshop )h1 on h1.temp_order_id=o.id and
+		h1.factory=o.factory and h1.workshop=o.workshop where 1=1
+		 <if test="actionType =='create'">
+			and o.applier=#{applier}
+		</if>
+		<if test="actionType =='assessVerify'">
+			and o.single_hour is not null
+		</if>
+		<if test="orderNo !=null and orderNo !=''">
+			and o.order_serial_no like concat('%',#{orderNo},'%')
+		</if>
+		<if test="status !=null and status !='all'">
+			and o.status = #{status}
+		</if>
+		<if test="reason_content !=null and reason_content !=''">
+			and o.reason_content like concat('%',#{reason_content},'%')
+		</if>
+		<if test="applyDateStart !=null and applyDateStart !=''">
+			<![CDATA[and substr(o.apply_date,1,10)>=#{applyDateStart}]]>
+		</if>
+		<if test="applyDateEnd !=null and applyDateEnd !=''">
+			<![CDATA[and substr(o.apply_date,1,10)<=#{applyDateEnd}]]>
+		</if>
+		<if test="factory !=null">
+			and o.factory = #{factory}
+		</if>
+		<if test="workshop !=null">
+			and find_in_set(o.workshop,#{workshop})>0
+		</if>
+		<if test="actionType=='hourVerify'">
+			<if test="hourstatus=='未审批'">
+				and h.hour_total>0
+			</if>
+			<if test="hourstatus=='已审批'">
+				and (h.hour_total is null or h.hour_total=0)
+			</if>
+		</if>
+		order by o.apply_date desc
+		<if test="start !=null">
+			LIMIT #{start} ,#{length} 
+		</if>
+	</select>
+	<select id="getTmpOrderCount" parameterType="Map" resultType="int">
+		SELECT count(o.id) FROM BMS_PD_TMP_ORDER o
+		left join (
+		select
+		sum(h.work_hour) hour_total,h.factory,h.workshop,h.temp_order_id from BMS_HR_STAFF_TMP_HOURS h
+		left join BMS_PD_TMP_ORDER o on h.temp_order_id=o.id
+		where h.status in ('0','2') 
+		<if test="factory !=null">
+			and h.factory = #{factory}
+		</if>
+		<if test="workshop !=null">
+			and find_in_set(h.workshop,#{workshop})>0
+		</if>
+		<if test="orderNo !=null and orderNo !=''">
+			and o.order_serial_no like concat('%',#{orderNo},'%')
+		</if>
+		group by o.id,h.factory,h.workshop
+		)h on h.temp_order_id=o.id and h.factory=o.factory and h.workshop=o.workshop
+		left join (
+		select sum(h.work_hour) hour_total,h.factory,h.workshop,h.temp_order_id from
+		BMS_HR_STAFF_TMP_HOURS h
+		left join BMS_PD_TMP_ORDER o on h.temp_order_id=o.id
+		where 1=1 
+		<if test="factory !=null">
+			and h.factory = #{factory}
+		</if>
+		<if test="workshop !=null">
+			and find_in_set(h.workshop,#{workshop})>0
+		</if>
+		<if test="orderNo !=null and orderNo !=''">
+			and o.order_serial_no like concat('%',#{orderNo},'%')
+		</if>
+		group by o.id,h.factory,h.workshop )h1 on h1.temp_order_id=o.id and
+		h1.factory=o.factory and h1.workshop=o.workshop where 1=1
+		 <if test="actionType =='create'">
+			and o.applier=#{applier}
+		</if>
+		<if test="actionType =='assessVerify'">
+			and o.single_hour is not null
+		</if>
+		<if test="orderNo !=null and orderNo !=''">
+			and o.order_serial_no like concat('%',#{orderNo},'%')
+		</if>
+		<if test="status !=null and status !='all'">
+			and o.status = #{status}
+		</if>
+		<if test="reason_content !=null and reason_content !=''">
+			and o.reason_content like concat('%',#{reason_content},'%')
+		</if>
+		<if test="applyDateStart !=null and applyDateStart !=''">
+			<![CDATA[and substr(o.apply_date,1,10)>=#{applyDateStart}]]>
+		</if>
+		<if test="applyDateEnd !=null and applyDateEnd !=''">
+			<![CDATA[and substr(o.apply_date,1,10)<=#{applyDateEnd}]]>
+		</if>
+		<if test="factory !=null">
+			and o.factory = #{factory}
+		</if>
+		<if test="workshop !=null">
+			and find_in_set(o.workshop,#{workshop})>0
+		</if>
+		<if test="actionType=='hourVerify'">
+			<if test="hourstatus=='未审批'">
+				and h.hour_total>0
+			</if>
+			<if test="hourstatus=='已审批'">
+				and (h.hour_total is null or h.hour_total=0)
+			</if>
+		</if>
+	</select>
+	
+	<update id="editExtraWorkHourManager" parameterType='Map'>
+		update 
+		BMS_PD_TMP_HOURS set 
+		<if test="tmp_order_type!=null and tmp_order_type !=''">
+			tmp_order_type=#{tmp_order_type},
+		</if>
+		<if test="no!=null and no !=''">
+			no=#{no},
+		</if>
+		<if test="bus_type!=null and bus_type !=''">
+			bus_type=#{bus_type},
+		</if>
+		<if test="order_no!=null and order_no !=''">
+			order_no=#{order_no},
+		</if>
+		<if test="time!=null and time !=''">
+			time=#{time},
+		</if>
+		<if test="tmp_name!=null and tmp_name !=''">
+			tmp_name=#{tmp_name},
+		</if>
+		<if test="reason_content!=null and reason_content !=''">
+			reason_content=#{reason_content},
+		</if>
+		<if test="description!=null and description !=''">
+			description=#{description},
+		</if>
+		<if test="single_hour!=null and single_hour !=''">
+			single_hour=#{single_hour},
+		</if>
+		<if test="order_type!=null and order_type !=''">
+			order_type=#{order_type},
+		</if>
+		<if test="assesor!=null and assesor !=''">
+			assesor=#{assesor},
+		</if>
+		<if test="assess_verifier!=null and assess_verifier !=''">
+			assess_verifier=#{assess_verifier},
+		</if>
+		<if test="duty_unit!=null and duty_unit !=''">
+			duty_unit=#{duty_unit},
+		</if>
+		memo=#{memo} WHERE id= #{id}
+	</update>
+	<insert id="insertExtraWorkHourManager" parameterType="Map">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+			INSERT INTO
+			BMS_PD_TMP_HOURS(tmp_order_type,no,bus_type,order_no,time,tmp_name,
+			reason_content,description,single_hour,order_type,assesor,assess_verifier,
+			duty_unit,deleted,memo)
+			VALUES(#{tmp_order_type},#{no},#{bus_type},#{order_no},#{time},#{tmp_name},
+			#{reason_content},#{description},#{single_hour},#{order_type},#{assesor},
+			#{assess_verifier},#{duty_unit},'0',#{memo})
+	</insert>
+	<update id="delExtraWorkHourManager" parameterType='String'>
+		delete from
+		BMS_PD_TMP_HOURS WHERE id= #{id}
+	</update>
+	
+	<insert id="saveWorkHourInfo" parameterType="list">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		<foreach collection="list" item="detail" index="index"
+			separator=";">
+			insert into BMS_HR_STAFF_TMP_HOURS
+			(org_id,temp_order_id,work_date,staff_number,work_hour,editor_id,edit_date,skill_parameter,factory,workshop,workgroup,team)
+			values
+			(#{detail.subgroupId},#{detail.temp_order_id},#{detail.workDate},#{detail.staff_number},#{detail.workHour},#{detail.editorId},#{detail.editDate},
+			#{detail.skillParameter},#{detail.factory},#{detail.workshop},#{detail.workgroup},#{detail.team})
+		</foreach>
+	</insert>
+	
+	<select id="queryStaffTmpHours" parameterType="Map" resultType="Map">
+		select h.id,h.work_hour,o.name work_org,s.staff_number,s.name
+		staff_name,s.plant_org,s.workshop_org,s.workgroup_org,s.team_org,s.job,h.work_date,
+		case h.status when '0' then '已维护' when '1' then '已审批' when '2' then
+		'已驳回' else '已锁定' end as status,u.username
+		editor,h.edit_date,u1.username approver,h.approve_date,u.email
+		from
+		BMS_HR_STAFF_TMP_HOURS h
+		left join BMS_BASE_ORG o on h.org_id=o.id
+		left join
+		BMS_HR_STAFF s on h.staff_number=s.staff_number
+		left join BMS_BASE_USER u on
+		u.id=h.editor_id
+		left join BMS_BASE_USER u1 on u1.id=h.approver_id
+		where 1=1 
+		<if test="orgId !=null and orgId !=''">
+			and h.org_id=#{orgId}
+		</if>
+		<if test="staffNum !=null and staffNum !=''">
+			and find_in_set(s.staff_number,#{staffNum})>0
+		</if>
+		<if test="workDate !=null and workDate !=''">
+			and h.work_date=#{workDate}
+		</if>
+		<if test="workMonth!=null and workMonth !=''">
+			and h.work_date like concat(#{workMonth},'%')
+		</if>
+		<if test="ecnTaskId !=null and ecnTaskId !=''">
+			and h.ecn_task_id=#{ecnTaskId}
+		</if>
+		<if test="factory !=null and factory !=''">
+			and h.factory=#{factory}
+		</if>
+		<if test="workshop !=null and workshop !=''">
+			and h.workshop=#{workshop}
+		</if>
+		order by h.status
+		<if test="offset!=null">
+			LIMIT #{offset} ,#{pageSize}
+		</if>
+	</select>
+	
+	<update id="deleteStaffTmpHourInfo" parameterType="Map">
+		delete from BMS_HR_STAFF_TMP_HOURS where 1=1 
+		<if test="swhid !=null and swhid !=''">
+			and id=#{swhid} and status ='2'
+		</if>
+		<if test="busNumber !=null and busNumber !=''">
+			and bus_number=#{busNumber}  and status ='2'
+		</if>
+		<if test="orgId !=null and orgId !=''">
+			and org_id=#{orgId} and status ='2'
+		</if>
+		<if test="workDate !=null and workDate !=''">
+			and work_date=#{workDate} and status ='2'
+		</if>
+		<if test="startDate !=null and startDate !=''">
+			and work_date>=#{startDate} and status ='2'
+		</if>
+		<if test="endDate !=null and endDate !=''">
+			and work_date&lt;=#{endDate} and status ='2'
+		</if>
+		<if test="ids !=null and ids !=''">
+			and find_in_set(id,#{ids})>0 and status ='2'
+		</if>
+		<if test="factory !=null and factory !=''">
+			and factory=#{factory} and status ='2'
+		</if>
+		<if test="workshop !=null and workshop !=''">
+			and workshop=#{workshop} and status ='2'
+		</if>
+		<if test="workgroup !=null and workgroup !=''">
+			and workgroup=#{workgroup} and status ='2'
+		</if>
+		<if test="team !=null and team !=''">
+			and team=#{team} and status ='2'
+		</if>
+
+	</update>
+	
+	<update id="verifyOrder" parameterType="Map">
+		update BMS_PD_TMP_ORDER
+		set status=
+		(case when total_qty=finished_qty then '5' else '3' end),
+		workhour_auditor=#{auditorId},workhour_auditor_date=#{auditDate}
+		where id =#{tempOrderId}
+	</update>
+	<update id="rejectOrder" parameterType="Map">
+		update BMS_PD_TMP_ORDER
+		set
+		status='6',workhour_auditor=#{auditor},workhour_auditor_date=#{auditDate}
+		where id =#{tempOrderId}
+	</update>
+	<update id="batchUpdateWorkHour" parameterType="List">
+		<foreach collection="list" item="detail" index="index" separator=";">
+			update BMS_HR_STAFF_TMP_HOURS
+			<trim prefix="SET" suffixOverrides=",">
+				<if test="detail.status!=null">
+					status=#{detail.status},
+				</if>
+				<if test="detail.participation!=null">
+					participation=#{detail.participation},
+				</if>
+				<if test="detail.distribution!=null">
+					distribution=#{detail.distribution},
+				</if>
+				<if test="detail.workHour !=null">
+					work_hour=#{detail.workHour},
+				</if>
+				<if test="detail.editor_id !=null">
+					editor_id=#{detail.editor_id},
+				</if>
+				<if test="detail.edit_date !=null">
+					edit_date=#{detail.edit_date},
+				</if>
+				<if test="detail.approver_id !=null">
+					approver_id=#{detail.approver_id},
+				</if>
+				<if test="detail.approve_date !=null">
+					approve_date=#{detail.approve_date},
+				</if>
+				<if test="detail.whereabouts !=null">
+					whereabouts=#{detail.whereabouts},
+				</if>
+				<if test="detail.bonus !=null and detail.bonus !=''">
+					bonus=#{detail.bonus},
+				</if>
+			</trim>
+			where id=#{detail.id}
+			<if test="detail.actionType!=null">
+				and status !='3'
+			</if>
+		</foreach>
+	</update>
+	
 </mapper>

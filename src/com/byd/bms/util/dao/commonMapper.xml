@@ -181,14 +181,23 @@
 	</select>
 	
 	<select id="queryWorkgroupList" parameterType="Map" resultType="Map">
-		SELECT o.foreign_id id,o.name 
+		SELECT o.foreign_id id,o.name,o.id org_id 
 		FROM BMS_BASE_ORG o
 		LEFT JOIN BMS_BASE_ORG o1 ON o.parent_id=o1.id
 		LEFT JOIN BMS_BASE_ORG o2 on o1.parent_id=o2.id
-		WHERE o.org_type='7' and o1.name = #{workshop} and o.deleted='0' and o2.name=#{factory}
+		WHERE o.org_type='3' and o1.name = #{workshop} and o.deleted='0' and o2.name=#{factory}
 		<if test="workgroup !=null and workgorup !=''">
 			and o.name like concat('%',#{workgroup},'%')
 		</if>
+	</select>
+	
+	<select id="queryTeamList" parameterType="Map" resultType="Map">		
+		SELECT o.foreign_id id,o.name,o.id org_id
+		FROM BMS_BASE_ORG o 
+		LEFT JOIN BMS_BASE_ORG o1 ON o.parent_id=o1.id 
+		LEFT JOIN BMS_BASE_ORG o2 on o1.parent_id=o2.id 
+		LEFT JOIN BMS_BASE_ORG o3 on o2.parent_id=o3.id
+		WHERE o.org_type='4' and o1.name =#{workgroup} and o.deleted='0' and o2.name=#{workshop} and o3.name=#{factory}
 	</select>
 	
 	<select id="queryWorkgroupListAll" parameterType="Map" resultType="Map">
@@ -728,7 +737,7 @@
 		  BMS_BASE_FACTORY f on f.id=p.factory_id
 		where f.factory_name=#{factory}		
 		and effective_date&lt;=#{workDate}
-		and hour_type=#{type}
+		and hour_type=(SELECT x.value FROM BMS_BASE_KEY x WHERE x.key_code='HOUR_PRICE' AND x.key_name = (SELECT k.key_name FROM BMS_BASE_KEY k WHERE k.key_code='WAIT_HOUR_TYPE' AND k.value= #{type}))
 		order by edit_date desc
 		limit 1
 	</select>

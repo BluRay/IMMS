@@ -850,7 +850,8 @@ function ajaxSave(staffHourList,salary_model,is_customer){
 			salary_model:salary_model
 		},
 		success:function(response){
-			alert(response.message);
+			//alert(response.message);
+			fadeMessageAlert("",response.message, response.success?"success":"danger")
 		}
 	});
 

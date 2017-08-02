@@ -142,7 +142,11 @@ public interface IProductionService {
 	public void editTmpOrderType(Map<String,Object> map);
 	public void delTmpOrderType(List<String> ids);
 	public int insertTmpOrderType(Map<String,Object> map);
-	
+	//额外临时库
+	public Map<String,Object> getExtraWorkHourManagerList(Map<String,Object> queryMap);
+	public int editExtraWorkHourManager(Map<String,Object> map);
+	public void delExtraWorkHourManager(List<String> ids);
+	public int insertExtraWorkHourManager(List<Map<String,Object>> list);
 	/******************* tangjin end**************************/
 
 	public List<Map<String,String>> getProductionSearch(Map<String,Object> queryMap);
@@ -157,4 +161,12 @@ public interface IProductionService {
 	public Map<String, Object> getAttendanceList(Map<String,Object> queryMap);
 	public int uoloadStaffAttendance(List<Map<String, Object>> addList);
 
+	public Map<String, Object> getTmpOrderList(Map<String, Object> conditionMap);
+	public int saveWorkHourInfo(List<Map<String, Object>> swh_list);
+	public List<Map<String, String>> queryStaffTmpHours(Map<String, Object> conditionMap);
+	public int deleteStaffTmpHourInfo(Map<String, Object> conditionMap);	
+	public void verifyOrder(Map<String, Object> m);
+	public void rejectOrder(Map<String, Object> m);
+	public int batchUpdateWorkHour(List<Map<String, Object>> swh_list);
+	
 }

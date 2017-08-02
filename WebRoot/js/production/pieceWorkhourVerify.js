@@ -293,7 +293,7 @@ function ajaxSave(bus_number_list,work_date_list,salary_model){
 			salary_model:salary_model
 		},
 		success:function(response){
-			alert(response.message);
+			fadeMessageAlert("",response.message, "success")
 			//先destroy datatable，隐藏form
 			if($.fn.dataTable.isDataTable("#tableResult")){
 				$('#tableResult').DataTable().destroy();

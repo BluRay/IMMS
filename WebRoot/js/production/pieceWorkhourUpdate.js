@@ -66,7 +66,8 @@ $(document).ready(function() {
 			},
 			success:function(response){
 				if(response.success){
-					alert("删除成功！")
+					//alert("删除成功！")
+					fadeMessageAlert("",response.message, "success")
 					//先destroy datatable
 					if($.fn.dataTable.isDataTable("#tableResult")){
 						$('#tableResult').DataTable().destroy();
@@ -79,7 +80,7 @@ $(document).ready(function() {
 						showStaffList(staff_hour_list);
 					}
 				}else{
-					alert(response.message)
+					fadeMessageAlert("",response.message, "danger")
 				}
 			}
 		})
@@ -440,7 +441,7 @@ function ajaxSave(staffHourList,salary_model,is_customer){
 			salary_model:salary_model
 		},
 		success:function(response){
-			alert(response.message);
+			fadeMessageAlert("",response.message, "success")
 			//先destroy datatable，隐藏form
 			if($.fn.dataTable.isDataTable("#tableResult")){
 				$('#tableResult').DataTable().destroy();
