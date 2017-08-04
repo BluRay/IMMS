@@ -130,12 +130,12 @@ public class HrReportController extends BaseController {
 		String wdate_end=request.getParameter("wdate_end");
 		String staff=request.getParameter("staff");//员工姓名或员工姓名
 		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
-		int start=(request.getParameter("start")!=null)?Integer.parseInt(request.getParameter("start")):0;		//分页数据起始数
+		/*int start=(request.getParameter("start")!=null)?Integer.parseInt(request.getParameter("start")):0;		//分页数据起始数
 		int length=(request.getParameter("length")!=null)?Integer.parseInt(request.getParameter("length")):20;	//每一页数据条数
-		Map<String, Object> conditionMap = new HashMap<String, Object>();
+*/		Map<String, Object> conditionMap = new HashMap<String, Object>();
 		conditionMap.put("draw", draw);
-		conditionMap.put("start", start);
-		conditionMap.put("length", length);
+		/*conditionMap.put("start", start);
+		conditionMap.put("length", length);*/
 		conditionMap.put("factory", factory);
 		conditionMap.put("workshop", workshop);
 		conditionMap.put("workgroup", workgroup);
@@ -150,6 +150,16 @@ public class HrReportController extends BaseController {
 
 		hrReportService.getStaffPieceHours(conditionMap,model);
 		return model;
+	}
+	
+	/**
+	 * 计件工资提交页面
+	 * @return
+	 */
+	@RequestMapping("/staffSalarySubmit")
+	public ModelAndView staffSalarySubmit(){
+		mv.setViewName("hr/staffSalarySubmit");
+		return mv;
 	}
 	
 	/******************** xioing.jianwu **********************/

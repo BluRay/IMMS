@@ -63,6 +63,12 @@ function limitMonthDate(e) {
 }
 
 function ajaxQuery(){
+	if($("#wdate_start").val().trim().length==0||$("#wdate_end").val().trim().length==0){
+		alert("请输入日期范围！");
+		return false;
+	}
+	
+	
 	$(".divLoading").addClass("fade in").show();
 	//先destroy datatable，隐藏form
 	if($.fn.dataTable.isDataTable("#tableResult")){
@@ -78,7 +84,7 @@ function ajaxQuery(){
 	var count_flag=$("#search_count_flag").val();
 	if(salary_model=="技能系数"){
 		if(count_flag=='车辆维度'){
-			rowsGroup=[0,1,2,3,4,5,6,7,8]
+			rowsGroup=[0,1,2,3,4,5,6,7,8,15]
 			columns= [
 			            {"title":"车号","class":"center","width":"160","data":"bus_number","defaultContent": ""},
 			            {"title":"订单","class":"center","width":"180","data":"order_desc","defaultContent": ""},
@@ -94,10 +100,11 @@ function ajaxQuery(){
 			            {"title":"岗位","class":"center","data": "job","defaultContent": ""},		            
 			            {"title":"技能系数","width":"80","class":"center","data":"skill_parameter","defaultContent": ""},		            
 			            {"title":"参与度/工时","width":"100","class":"center","data": "work_hour","defaultContent": ""},
-			            {"title":"计件工资","class":"center","data": "ppay","defaultContent": ""}	
+			            {"title":"计件工资","class":"center","data": "ppay","defaultContent": ""},
+			            {"title":"合计工资","class":"center","data": "total_ppay","defaultContent": ""}	
 			          ]	;
 		}else{
-			rowsGroup=[0,1,2,3,4,5,6]
+			rowsGroup=[0,1,2,3,4,5,6,15]
 			columns= [
 			          	{"title":"工号","class":"center","data":"staff_number","defaultContent": ""},
 			          	{"title":"姓名","class":"center","data":"staff_name","defaultContent": ""},
@@ -113,14 +120,15 @@ function ajaxQuery(){
 			            {"title":"补贴车","class":"center","data":"bonus","defaultContent": ""},
 			            {"title":"技能系数","width":"80","class":"center","data":"skill_parameter","defaultContent": ""},  		            
 			            {"title":"参与度/工时","width":"100","class":"center","data": "work_hour","defaultContent": ""},
-			            {"title":"计件工资","class":"center","data": "ppay","defaultContent": ""}	
+			            {"title":"计件工资","class":"center","data": "ppay","defaultContent": ""},
+			            {"title":"合计工资","class":"center","data": "total_ppay","defaultContent": ""}	
 			          ]	;
 		}
 	}
 	
 	if(salary_model=="承包制"){
 		if(count_flag=='车辆维度'){
-			rowsGroup=[0,1,2,3,4,5,6,7,8]
+			rowsGroup=[0,1,2,3,4,5,6,7,8,15]
 			columns= [
 			            {"title":"车号","class":"center","width":"160","data":"bus_number","defaultContent": ""},
 			            {"title":"订单","class":"center","width":"180","data":"order_desc","defaultContent": ""},
@@ -136,10 +144,11 @@ function ajaxQuery(){
 			            {"title":"岗位","class":"center","data": "job","defaultContent": ""},		            
 			            {"title":"分配金额","width":"80","class":"center","data":"distribution","defaultContent": ""},		            
 			            {"title":"参与度/工时","width":"100","class":"center","data": "work_hour","defaultContent": ""},
-			            {"title":"计件工资","class":"center","data": "ppay","defaultContent": ""}	
+			            {"title":"计件工资","class":"center","data": "ppay","defaultContent": ""},
+			            {"title":"合计工资","class":"center","data": "total_ppay","defaultContent": ""}	
 			          ]	;
 		}else{
-			rowsGroup=[0,1,2,3,4,5,6]
+			rowsGroup=[0,1,2,3,4,5,6,15]
 			columns= [
 			          	{"title":"工号","class":"center","data":"staff_number","defaultContent": ""},
 			          	{"title":"姓名","class":"center","data":"staff_name","defaultContent": ""},
@@ -155,14 +164,15 @@ function ajaxQuery(){
 			            {"title":"补贴车","class":"center","data":"bonus","defaultContent": ""},
 			            {"title":"分配金额","width":"80","class":"center","data":"distribution","defaultContent": ""},  		            
 			            {"title":"参与度/工时","width":"100","class":"center","data": "work_hour","defaultContent": ""},
-			            {"title":"计件工资","class":"center","data": "ppay","defaultContent": ""}	
+			            {"title":"计件工资","class":"center","data": "ppay","defaultContent": ""},
+			            {"title":"合计工资","class":"center","data": "total_ppay","defaultContent": ""}	
 			          ]	;
 		}
 	}
 	
 	if(salary_model=="辅助人力"){
 		if(count_flag=='日期维度'){
-			rowsGroup=[0,1,2,3,4]
+			rowsGroup=[0,1,2,3,4,11]
 			columns= [
 			            {"title":"操作日期","class":"center","data":"work_date","defaultContent": ""},
 			            {"title":"工厂","class":"center","data":"factory","defaultContent": ""},
@@ -174,10 +184,11 @@ function ajaxQuery(){
 			            {"title":"岗位","class":"center","data": "job","defaultContent": ""},		            
 			            {"title":"技能系数","width":"80","class":"center","data":"skill_parameter","defaultContent": ""},		            
 			            {"title":"参与度/工时","width":"100","class":"center","data": "work_hour","defaultContent": ""},
-			            {"title":"计件工资（月）","class":"center","data": "ppay","defaultContent": ""}	
+			            {"title":"计件工资（月）","class":"center","data": "ppay","defaultContent": ""},
+			            {"title":"合计工资","class":"center","data": "total_ppay","defaultContent": ""}	
 			          ]	;
 		}else{
-			rowsGroup=[0,1,2,3,4,5,6]
+			rowsGroup=[0,1,2,3,4,5,6,10,11]
 			columns= [
 			          	{"title":"工号","class":"center","data":"staff_number","defaultContent": ""},
 			          	{"title":"姓名","class":"center","data":"staff_name","defaultContent": ""},
@@ -189,14 +200,15 @@ function ajaxQuery(){
 			            {"title":"操作日期","class":"center","data":"work_date","defaultContent": ""},
 			            {"title":"技能系数","width":"80","class":"center","data":"skill_parameter","defaultContent": ""},  		            
 			            {"title":"参与度/工时","width":"100","class":"center","data": "work_hour","defaultContent": ""},
-			            {"title":"计件工资（月）","class":"center","data": "ppay","defaultContent": ""}	
+			            {"title":"计件工资（月）","class":"center","data": "ppay","defaultContent": ""},
+			            {"title":"合计工资","class":"center","data": "total_ppay","defaultContent": ""}	
 			          ]	;
 		}
 	}
 	
 	if(salary_model=="底薪模式"){
 		if(count_flag=='日期维度'){
-			rowsGroup=[0,1,2,3,4]
+			rowsGroup=[0,1,2,3,4,11,12]
 			columns= [
 			            {"title":"操作日期","class":"center","data":"work_date","defaultContent": ""},
 			            {"title":"工厂","class":"center","data":"factory","defaultContent": ""},
@@ -209,10 +221,11 @@ function ajaxQuery(){
 			            {"title":"底薪","class":"center","data": "basic_salary","defaultContent": ""},
 			            {"title":"技能系数","width":"80","class":"center","data":"skill_parameter","defaultContent": ""},		            
 			            {"title":"参与度/工时","width":"100","class":"center","data": "work_hour","defaultContent": ""},
-			            {"title":"计件工资（月）","class":"center","data": "ppay","defaultContent": ""}	
+			            {"title":"计件工资（月）","class":"center","data": "ppay","defaultContent": ""},
+			            {"title":"合计工资","class":"center","data": "total_ppay","defaultContent": ""}	
 			          ]	;
 		}else{
-			rowsGroup=[0,1,2,3,4,5,6,7]
+			rowsGroup=[0,1,2,3,4,5,6,7,11,12]
 			columns= [
 			          	{"title":"工号","class":"center","data":"staff_number","defaultContent": ""},
 			          	{"title":"姓名","class":"center","data":"staff_name","defaultContent": ""},
@@ -225,7 +238,8 @@ function ajaxQuery(){
 			            {"title":"操作日期","class":"center","data":"work_date","defaultContent": ""},
 			            {"title":"技能系数","width":"80","class":"center","data":"skill_parameter","defaultContent": ""},  		            
 			            {"title":"参与度/工时","width":"100","class":"center","data": "work_hour","defaultContent": ""},
-			            {"title":"计件工资（月）","class":"center","data": "ppay","defaultContent": ""}	
+			            {"title":"计件工资（月）","class":"center","data": "ppay","defaultContent": ""},
+			            {"title":"合计工资","class":"center","data": "total_ppay","defaultContent": ""}	
 			          ]	;
 		}
 	}

@@ -15,7 +15,9 @@ $(document).ready(function() {
 			mouseWheelLock: true,
 			alwaysVisible : true
 		});
-		getKeysSelect("WAIT_HOUR_TYPE", "", $("#search_wait_hour_type"),"全部",""); 
+		getKeysSelect("WAIT_HOUR_TYPE", "", $("#search_wait_hour_type"),"全部","");
+		$("#select_start_date").val("");
+		$("#select_finish_date").val("");
 	}
 	
 	$(document).on("input",".workhour",function(){
@@ -91,8 +93,6 @@ $(document).ready(function() {
 						//alert(reason);
 						var tr=$(radio).parent().parent();
 						var duty_unit=$(tr).children("td").eq(8).html();
-//						var start_time=$(tr).data("start_time")==undefined?"":$(tr).data("start_time");
-//						var finish_time=$(tr).data("finish_time")==undefined?"":$(tr).data("finish_time");
 						var start_time=$(tr).children("td").eq(3).html();
 						var finish_time="";
 						if($(tr).children("td").eq(5).html()!=""){
@@ -105,8 +105,6 @@ $(document).ready(function() {
 							$( this ).dialog( "close" );
 							$("#reason_detail").val(reason);
 							$("#duty_unit").val(duty_unit).attr("readonly",true);
-//							$("#reason_detail").data("start_time",start_time);
-//							$("#reason_detail").data("finish_time",finish_time);
 							$("#select_start_date").val(start_time);
 							$("#select_finish_date").val(finish_time);
 							$("#reason_detail").attr("disabled",true);
@@ -142,6 +140,13 @@ $(document).ready(function() {
 	// 工时删除
 	$(document).on("click",".fa-times", function(e) {
 		$(e.target).closest("tr").remove();
+		var workhourtotal=0;
+		$("#tableResult tbody").find(".workhour").each(function(){
+			if($(this).val()!=""){
+				workhourtotal+=parseFloat($(this).val());
+			}
+		});
+		$("#workhourtotal").text("已录工时："+workhourtotal);
 	});
 	$(document).on("change",".staff_number",function(){
 		 var staff=ajaxGetStaffDetail($(this).val());
@@ -246,8 +251,6 @@ $(document).ready(function() {
 		var dutyUnit=$("#duty_unit").val();
 		var stafflist = [];
 		var saveFlag=true;
-//		VAR START_TIME=$("#REASON_DETAIL").DATA("START_TIME");
-//		VAR FINISH_TIME=$("#REASON_DETAIL").DATA("FINISH_TIME");
 		var start_time=$("#select_start_date").val();
 		var finish_time=$("#select_finish_date").val();
 		var reasonDetail=$("#reason_detail").val();
@@ -428,25 +431,29 @@ function zTreeOnClick(event, treeId, treeNode) {
 	
 };
 function ajaxQueryTeamStaffDetail(){
+	if($.fn.dataTable.isDataTable("#tableResult")){
+		$('#tableResult').DataTable().destroy();
+		$('#tableResult').empty();
+	}
 	$("#tableResult").dataTable({
-		serverSide: true,
-		fixedColumns:   {
-            leftColumns: 0,
-            rightColumns:0
-        },
-        paging:false,
+		paiging:false,
 		ordering:false,
+		processing:true,
 		searching: false,
-		bAutoWidth:false,
-		destroy: true,
+		autoWidth:false,
+		paginate:false,
 		sScrollY: document.documentElement.clientHeight-250 + 'px',
-		scrollX: "100%",
+		scrollX: true,
+		scrollCollapse: true,
 		lengthChange:false,
 		orderMulti:false,
+		info:false,
 		language: {
-
+			processing: "正在查询，请稍后...",
+			emptyTable:"",					     
+			infoEmpty:"",
+			zeroRecords:"未查询到人员数据！"
 		},
-		
 		ajax:function (data, callback, settings) {
 			var param ={
 				factory:factory,
@@ -510,9 +517,13 @@ function ajaxSave(conditions) {
 				$("#workhour").val("");
 				$("#whereabouts").val("");
 				$("#workhourtotal").html("&nbsp;&nbsp;已录工时：");
-				$("#waitReason option[value='']").attr("selected","selected");
+				//$("#waitReason option[value='']").attr("selected","selected");
+				$("#waitReason option[index='0']").attr("selected","selected");
+				$("#search_wait_hour_type option[index='0']").attr("selected","selected");
 				$("#tableResult tbody").remove();
 				$("#duty_unit").attr("readonly",false);
+				$("#select_start_date").val("");
+				$("#select_finish_date").val("");
 			} else {
 				alert(response.message);
 			}

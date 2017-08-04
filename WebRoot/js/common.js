@@ -325,6 +325,50 @@ function getWorkshopSelect(url,factory,selectval,selectId,selectType,valName){
 	});
 }
 /**
+ * 班组选择下拉列表
+ * selectval:选中的值
+ * selectId:下拉框组件id
+ * selectType:下拉框组件类型：==全部==、==请选择==、== ==
+ * valName:option value值:id/name
+ */
+
+function getWorkgroupSelect(factory,workshop,selectval,selectId,selectType,valName){
+	$.ajax({
+		url : "/IMMS/common/getWorkgroupSelect",
+		dataType : "json",
+		data : {"factory":factory,"workshop":workshop},
+		async : false,
+		error : function(response) {
+			alert(response.message)
+		},
+		success : function(response) {
+			getSelects(response.data,selectval,selectId,selectType, valName);	
+		}
+	});
+}
+/**
+ * 小班组选择下拉列表
+ * selectval:选中的值
+ * selectId:下拉框组件id
+ * selectType:下拉框组件类型：==全部==、==请选择==、== ==
+ * valName:option value值:id/name
+ */
+
+function getTeamSelect(factory,workshop,workgroup,selectval,selectId,selectType,valName){
+	$.ajax({
+		url : "/IMMS/common/getTeamSelect",
+		dataType : "json",
+		data : {"factory":factory,"workshop":workshop,"workgroup":workgroup},
+		async : false,
+		error : function(response) {
+			alert(response.message)
+		},
+		success : function(response) {
+			getSelects(response.data,selectval,selectId,selectType, valName);	
+		}
+	});
+}
+/**
  * 根据工厂、车间获取线别下拉列表
  * @param factory
  * @param workshop

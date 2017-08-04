@@ -71,7 +71,7 @@
 											    </select>
 											</td>
 											<td>&nbsp;具体原因：</td>
-											<td><input id="reason_detail" style="height:30px;width:200px" placeholder="" class="col-sm-6" type="text"></td>
+											<td><input id="reason_detail" style="height:30px;width:120px" placeholder="" class="col-sm-6" type="text"></td>
 											<td>&nbsp;责任部门：</td>
 											<td><input id="duty_unit" style="height:30px;width:120px" placeholder="" class="col-sm-6" type="text"></td>
 										</tr>
@@ -84,8 +84,9 @@
 											<td>&nbsp;等待工时：</td>
 											<td><input id="workhour" style="height: 30px; width:100px;" type="text" class="input-medium revise" placeholder="" /></td>
 											<td>&nbsp;人员去向：</td>
-											<td><input id="whereabouts" style="height:30px;width:200px" placeholder="" class="col-sm-6" type="text"></td>
+											<td><input id="whereabouts" style="height:30px;width:120px" placeholder="" class="col-sm-6" type="text"></td>
 											<td id="workhourtotal">&nbsp;&nbsp;已录工时：</td>
+											<td></td>
 											<td>&nbsp;&nbsp;<input type="button" class="btn btn-sm btn-primary" id="btnSave" value="保存" style="margin-left: 2px;"></input></td>
 											
 										</tr>

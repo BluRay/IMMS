@@ -186,23 +186,28 @@ function ajaxQuery(){
 	swhupdatelist=[];
 	swhdelids="";
 	var returnData = {};
+	if($.fn.dataTable.isDataTable("#tableResult")){
+		$('#tableResult').DataTable().destroy();
+		$('#tableResult').empty();
+	}
 	$("#tableResult").dataTable({
-		serverSide: true,
-		
-        //rowsGroup:[1,2,3,4],
-        paging:false,
+		paiging:false,
 		ordering:false,
 		searching: false,
-		bAutoWidth:false,
-		destroy: true,
-		scrollY: $(window).height()-200+"px",
+		autoWidth:false,
+
+		paginate:false,
+		sScrollY: $(window).height()-210,
 		scrollX: true,
+		scrollCollapse: true,
 		lengthChange:false,
 		orderMulti:false,
+		info:false,
 		language: {
-
+			emptyTable:"",					     
+			infoEmpty:"",
+			zeroRecords:"未查询到人员数据！"
 		},
-		
 		ajax:function (data, callback, settings) {
 			var status=$("#status").val();
 			var wait_reason=$("#wait_reason").val();
@@ -238,24 +243,24 @@ function ajaxQuery(){
 		
 		columns: [
             {"title":"","width":"25px","class": "firsttd center","data":"","defaultContent": ""},
-            {"title":"等待日期","class":"center","data":"","defaultContent": ""},
-            {"title":"等待类别","class":"center","data":"","defaultContent": ""},
+            {"title":"等待日期","class":"center","width":"80px","data":"","defaultContent": ""},
+            {"title":"等待类别","class":"center","width":"80px","data":"","defaultContent": ""},
             {"title":"等待原因","class":"center","data": "","defaultContent": ""},
             {"title":"详细原因","class":"center","data":"detail_reason","defaultContent":""},
-            {"title":"工号","class":"center","data":"staff_number","defaultContent": ""},	
-            {"title":"姓名","class":"center","data":"staff_name","defaultContent":""},
-            {"title":"岗位","class":"center","data":"job","defaultContent": ""},
-            {"title":"工时","class":"center","data":"work_hour","render":function(data,type,row){
+            {"title":"工号","class":"center","width":"60px","data":"staff_number","defaultContent": ""},	
+            {"title":"姓名","class":"center","width":"60px","data":"staff_name","defaultContent":""},
+            {"title":"岗位","class":"center","width":"60px","data":"job","defaultContent": ""},
+            {"title":"工时","class":"center","width":"60px","data":"work_hour","render":function(data,type,row){
             	return "<input type='text' class='input-small workhour' value='"+data+"' style='width:60px;height:28px;'>";
             }},
-            {"title":"人员去向","class":"center","data":"whereabouts","width":"200px","render":function(data,type,row){
-            	return "<input type='text' class='input-small whereabouts' value='"+data+"' style='width:198px;height:28px;'>";
+            {"title":"人员去向","class":"center","data":"whereabouts","width":"100px","render":function(data,type,row){
+            	return "<input type='text' class='input-small whereabouts' value='"+data+"' style='width:100px;height:28px;'>";
             }},
-            {"title":"小班组","class":"center","data":"","defaultContent":""},
-            {"title":"班组","class":"center","data":"","defaultContent": ""},	
-            {"title":"状态","class":"center","data":"","defaultContent": ""},
-            {"title":"驳回人","class":"center","data":"","defaultContent": ""},
-            {"title":"驳回时间","class":"center","data":"","defaultContent": ""},
+            {"title":"小班组","class":"center","width":"60px","data":"","defaultContent":""},
+            {"title":"班组","class":"center","width":"60px","data":"","defaultContent": ""},	
+            {"title":"状态","class":"center","width":"60px","data":"","defaultContent": ""},
+//            {"title":"驳回人","class":"center","data":"","defaultContent": ""},
+//            {"title":"驳回时间","class":"center","data":"","defaultContent": ""},
             {"title":"","width":"25px","class":"center lasttd","data":"","defaultContent": ""}
         ],
 	});
@@ -265,7 +270,9 @@ function ajaxQuery(){
 	generateTb(swhlist);
 }
 function generateTb(swhlist){
-	$("#tableResult").find('tbody').find('tr').remove();
+	if(swhlist.length>0){
+		$("#tableResult").find('tbody').find('tr').remove();
+	}
 	var last_workdate="";
 	var last_detail_reason="";
 	var last_wait_reason="";
@@ -345,8 +352,8 @@ function generateTb(swhlist){
 		$("<td class=\"center\" />").html(swh.team_org).appendTo(tr);
 		$("<td class=\"center\" />").html(swh.workgroup_org).appendTo(tr);
 		$("<td class=\"center\" />").html(swh.status=='0' ? '已维护' : (swh.status=='1' ? '已审核' :(swh.status=='2' ? '已驳回' :'已锁定'))).appendTo(tr);
-		$("<td class=\"center\" />").html(swh.editor).appendTo(tr);
-		$("<td class=\"center\" />").html(swh.edit_date).appendTo(tr);
+//		$("<td class=\"center\" />").html(swh.editor).appendTo(tr);
+//		$("<td class=\"center\" />").html(swh.edit_date).appendTo(tr);
 		if(disabled=='disabled'){
 			$("<td style=\"width:25px\" />").html("").appendTo(tr);
 			

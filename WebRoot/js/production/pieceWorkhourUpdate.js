@@ -38,6 +38,7 @@ $(document).ready(function() {
 		var bus_number=null;
 		var work_date=null;
 		var swh_id=null;
+		var rowdata=null;
 		if(del_flag=='del_all'){//车号(操作日期)批量删除
 			if(salary_model=="技能系数"||salary_model=="承包制"){
 				bus_number=$(e.target).parent("td").next("td").html();
@@ -48,6 +49,10 @@ $(document).ready(function() {
 			
 		}else{//单条数据删除
 			swh_id=$(e.target).attr("swh_id");
+			rowdata=JSON.parse($(e.target).attr("row"));
+			bus_number=rowdata.bus_number;
+			work_date=rowdata.work_date;
+			
 		}
 		if(confirm("是否确认删除？"))
 		$.ajax({
@@ -300,7 +305,7 @@ function showStaffList(staff_hour_list){
 		            {"title":"车间","class":"center","data":"workshop_org","defaultContent":""},
 		            {"title":"工厂","class":"center","data":"plant_org","defaultContent": ""},
 		            {"title":"","width":"30","class":"center","data":"","defaultContent": "","render":function(data,type,row){
-		            	return "<i class=\"fa fa-times bigger-110\" del_flag='del_single' style=\"cursor: pointer;color: red;\" swh_id='"+row.id+"'></i>";
+		            	return "<i class=\"fa fa-times bigger-110\" del_flag='del_single' style=\"cursor: pointer;color: red;\" row='"+JSON.stringify(row)+"' swh_id='"+row.id+"'></i>";
 		            }}
 		          ]	;
 	}
@@ -329,7 +334,7 @@ function showStaffList(staff_hour_list){
 		            {"title":"车间","class":"center","data":"workshop_org","defaultContent":""},
 		            {"title":"工厂","class":"center","data":"plant_org","defaultContent": ""},
 		            {"title":"","width":"30","class":"center","data":"","defaultContent": "","render":function(data,type,row){
-		            	return "<i class=\"fa fa-times bigger-110\" del_flag='del_single' style=\"cursor: pointer;color: red;\" swh_id='"+row.id+"'></i>";
+		            	return "<i class=\"fa fa-times bigger-110\" del_flag='del_single' style=\"cursor: pointer;color: red;\" row='"+JSON.stringify(row)+"' swh_id='"+row.id+"'></i>";
 		            }}
 		          ]	;
 	}
@@ -354,7 +359,7 @@ function showStaffList(staff_hour_list){
 		            {"title":"车间","class":"center","data":"workshop_org","defaultContent":""},
 		            {"title":"工厂","class":"center","data":"plant_org","defaultContent": ""},
 		            {"title":"","width":"30","class":"center","data":"","defaultContent": "","render":function(data,type,row){
-		            	return "<i class=\"fa fa-times bigger-110\" del_flag='del_single' style=\"cursor: pointer;color: red;\" swh_id='"+row.id+"'></i>";
+		            	return "<i class=\"fa fa-times bigger-110\" del_flag='del_single' style=\"cursor: pointer;color: red;\" row='"+JSON.stringify(row)+"' swh_id='"+row.id+"'></i>";
 		            }}
 		          ]	;
 	}

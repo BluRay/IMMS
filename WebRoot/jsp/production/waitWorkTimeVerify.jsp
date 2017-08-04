@@ -74,10 +74,10 @@
 											<td>
 												<input style="width: 100px" class="input-medium"
 												placeholder="开始日期..." id="date_start"
-												onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});"
+												onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
 												type="text"> -<input style="width: 100px"
 												class="input-medium" placeholder="截止日期..." id="date_end"
-												onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});"
+												onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
 												type="text">
 											</td>
 											<td>&nbsp;状态：</td>
@@ -101,7 +101,7 @@
 							</div>
 							<div class="row" >
 								<div class="col-xs-12"  id="tableReusltDiv" style="padding-right:0px;">
-									<table id="tableResult" class="table table-striped table-bordered table-hover" style="table-layout:fixed;font-size: 12px; width:1200px;overflow:auto;">
+									<table id="tableResult" class="table table-striped table-bordered table-hover" style="table-layout:fixed;font-size: 12px; width:933px;overflow:auto;">
 									</table>
 								</div>
 							</div>
@@ -163,13 +163,12 @@
 			</div>
 			<!-- /.main-container -->
 		</div>
-
-		<script src="../js/datePicker/WdatePicker.js"></script>
+        <script src="../js/datePicker/WdatePicker.js"></script>
 		<script src="../assets/js/jquery.dataTables.min.js"></script>
 		<script src="../assets/js/jquery-ui.min.js"></script>
 		<script src="../assets/js/jquery.dataTables.bootstrap.js"></script>
-		<script src="../assets/js/dataTables.fixedColumns.min.js"></script>
 		<script src="../assets/js/dataTables.rowGroup.js"></script>
+		<script src="../assets/js/dataTables.fixedColumns.min.js"></script>
 		<script src="../assets/js/bootstrap3-typeahead.js"></script>
 		<script src="../js/ztree/jquery.ztree.core-3.5.min.js"></script>
 		<script src="../js/jquery.form.js"></script>

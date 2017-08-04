@@ -18,7 +18,7 @@ $(document).ready(function() {
 		// 通过top页面任务栏进入，设置查询条件
 		factory =decodeURI(getParamValue("factory"));
 		workshop = getParamValue("workshop");
-		if(factory!="" && workshop!=""){
+		if(factory!="" && workshop!="" && factory!=null && workshop!=null){
 			ajaxQuery();
 		}
 	}
@@ -107,31 +107,42 @@ function zTreeOnClick(event, treeId, treeNode) {
 
 };
 function ajaxQuery(){
-	if(workshop == ''){
+	if(workshop == '' || workshop ==null){
 		alert("请选择车间！");
 		return false;
+	}
+	//先destroy datatable，隐藏form
+	if($.fn.dataTable.isDataTable("#tableResult")){
+		$('#tableResult').DataTable().destroy();
+		$('#tableResult').empty();
 	}
 	swhlist=[];
 	swhupdatelist=[];
 	swhdelids="";
 	var returnData = {};
+	fixedColumns={
+            leftColumns: 2,
+            rightColumns:0
+        };
+	rowsGroup=[0,1];
 	$("#tableResult").dataTable({
-		serverSide: true,
-		
-        //rowsGroup:[1,2,3,4],
-        paging:false,
+		paiging:false,
 		ordering:false,
 		searching: false,
-		bAutoWidth:false,
-		destroy: true,
-		scrollY: $(window).height()-200+"px",
+		autoWidth:false,
+		rowsGroup:rowsGroup,
+		paginate:false,
+		sScrollY: $(window).height()-210,
 		scrollX: true,
+		scrollCollapse: true,
 		lengthChange:false,
 		orderMulti:false,
+		info:false,
 		language: {
-
+			emptyTable:"",					     
+			infoEmpty:"",
+			zeroRecords:"未查询到人员数据！"
 		},
-		
 		ajax:function (data, callback, settings) {
 			var status=$("#status").val();
 			var wait_reason=$("#wait_reason").val();
@@ -176,12 +187,9 @@ function ajaxQuery(){
             {"title":"工号","class":"center","data":"staff_number","defaultContent": ""},	
             {"title":"姓名","class":"center","data":"staff_name","defaultContent":""},
             {"title":"岗位","class":"center","data":"job","defaultContent": ""},
-            {"title":"工时","class":"center","data":"work_hour","render":function(data,type,row){
-            	return "<input type='text' class='input-small workhour' value='"+data+"' style='width:60px;height:28px;'>";
-            }},
-            {"title":"人员去向","class":"center","data":"whereabouts","width":"200px","render":function(data,type,row){
-            	return "<input type='text' class='input-small whereabouts' value='"+data+"' style='width:198px;height:28px;'>";
-            }},
+            {"title":"工时","class":"center","data":"work_hour","defaultContent": ""},
+            {"title":"工时单价","class":"center","data":"work_hour","defaultContent": ""},
+            {"title":"人员去向","class":"center","data":"whereabouts","width":"200px","defaultContent": ""},
             {"title":"小班组","class":"center","data":"","defaultContent":""},
             {"title":"班组","class":"center","data":"","defaultContent": ""},	
             {"title":"状态","class":"center","data":"","defaultContent": ""},
@@ -190,7 +198,9 @@ function ajaxQuery(){
 	generateTb(returnData.data);
 }
 function generateTb(swhlist){
-	$("#tableResult").find('tbody').find('tr').remove();
+	if(swhlist.length>0){
+		$("#tableResult").find('tbody').find('tr').remove();
+	}
 	var last_workdate="";
 	var last_detail_reason="";
 	var last_wait_reason="";
@@ -254,6 +264,7 @@ function generateTb(swhlist){
 		$("<td class=\"center\" />").html(swh.staff_name).appendTo(tr);
 		$("<td class=\"center\"/>").html(swh.job).appendTo(tr);
 		$("<td class=\"center\" />").html(swh.work_hour).appendTo(tr);
+		$("<td class=\"center\" />").html(swh.hour_price).appendTo(tr);
 		$("<td class=\"center\"/>").html(swh.whereabouts).appendTo(tr);
 		$("<td class=\"center\" />").html(swh.team_org).appendTo(tr);
 		$("<td class=\"center\" />").html(swh.workgroup_org).appendTo(tr);
@@ -299,48 +310,4 @@ function selectAll() {
     } else {
         $(":checkbox").prop("checked", false);
     }
-}
-function ajaxDelete(){
-	var ids = '';
-	$(":checkbox").each(function(){
-		if($(this).prop("checked")){
-			//alert($(this).attr('fid'));
-			if($(this).attr('fid')){
-				ids += $(this).attr('fid').split('_')[1] + ',';
-			}
-		}
-	});
-	if(ids===''){
-		$.gritter.add({
-			title: '系统提示：',
-			text: '<h5>请至少勾选一个要删除的记录！</h5>',
-			class_name: 'gritter-info'
-		});
-		return false;
-	}
-	$.ajax({
-	    url: "deleteWaitWorkTimeInfo",
-	    dataType: "json",
-		type: "get",
-	    data: {
-	    	"ids" : ids.substring(0,ids.length-1)
-	    },
-	    success:function(response){
-	    	if(response.success){
-	    	$.gritter.add({
-				title: '系统提示：',
-				text: '<h5>删除成功！</h5>',
-				class_name: 'gritter-info'
-			});
-	    	
-	    	ajaxQuery();
-	    	}else{
-	    		$.gritter.add({
-					title: '系统提示：',
-					text: '<h5>删除失败！</h5><br>'+response.message,
-					class_name: 'gritter-info'
-				});
-	    	}
-	    }
-	});
 }
