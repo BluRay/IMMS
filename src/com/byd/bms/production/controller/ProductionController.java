@@ -1580,8 +1580,8 @@ public class ProductionController extends BaseController {
 	@RequestMapping("/getTmpOrderTypeList")
 	@ResponseBody
 	public ModelMap getTmpOrderTypeList(){
-		String name=request.getParameter("search_name");
-		String cost_transfer=request.getParameter("search_cost_transfer");
+		String name=request.getParameter("name");
+		String cost_transfer=request.getParameter("cost_transfer");
 		int draw=Integer.parseInt(request.getParameter("draw"));//jquerydatatables 
 		int start=Integer.parseInt(request.getParameter("start"));//分页数据起始数
 		int length=Integer.parseInt(request.getParameter("length"));//每一页数据条数
@@ -1741,6 +1741,16 @@ public class ProductionController extends BaseController {
 			Map<String, Object> infomap = new HashMap<String, Object>();
 
 			infomap.put("tmp_order_type", data[0] == null ? null : data[0].toString().trim());
+			if(data[0] != null){
+				Map<String, Object> querymap = new HashMap<String, Object>();
+				querymap.put("name",data[0].toString().trim());
+				Map<String,Object> tmpOrderTypeMap=productionService.getTmpOrderTypeList(querymap);
+				if((int)tmpOrderTypeMap.get("recordsTotal")==0){
+					saveFlag=false;
+					result = data[0].toString().trim()+" 额外类型不存在";
+					break;
+				}
+			}
 			infomap.put("no", data[1] == null ? null : data[1].toString().trim());
 			infomap.put("order_no", data[2] == null ? null : data[2].toString().trim());
 			if(data[2] != null){
@@ -1838,6 +1848,152 @@ public class ProductionController extends BaseController {
 			}
 			productionService.delExtraWorkHourManager(idlist);
 			initModel(true, "success", "");
+		} catch (Exception e) {
+			initModel(false, e.getMessage(), e.toString());
+		}
+		model = mv.getModelMap();
+		return model;
+	}
+	/**创建临时派工单*/
+	@RequestMapping("/createTmpOrder")
+	public ModelAndView createTmpOrder(){
+		mv.setViewName("production/createTmpOrder");
+		return mv;
+	}
+	@RequestMapping("/getCreateTmpOrderList")
+	@ResponseBody
+	public ModelMap getCreateTmpOrderList(){
+		String tmp_order_no=request.getParameter("tmp_order_no");
+		String status=request.getParameter("status");
+		String apply_date_start=request.getParameter("apply_date_start");
+		String apply_date_end=request.getParameter("apply_date_end");
+		int draw=Integer.parseInt(request.getParameter("draw")); 
+		int start=Integer.parseInt(request.getParameter("start"));
+		int length=Integer.parseInt(request.getParameter("length"));
+		
+		Map<String,Object> conditionMap=new HashMap<String,Object>();
+		conditionMap.put("tmp_order_no",tmp_order_no);
+		conditionMap.put("status",status);
+		conditionMap.put("apply_date_start",apply_date_start);
+		conditionMap.put("apply_date_end",apply_date_end);
+		conditionMap.put("draw", draw);
+		conditionMap.put("start", start);
+		conditionMap.put("length", length);
+		Map<String,Object> list = productionService.getCreateTmpOrderList(conditionMap);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(list);
+		model = mv.getModelMap();
+		return model;
+	}
+	@RequestMapping("/addCreateTmpOrder")
+	@ResponseBody
+	public ModelMap addCreateTmpOrder() {
+		try {
+			String editor_id = request.getSession().getAttribute("user_id") + "";
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String edit_date = df.format(new Date());
+			Map<String,Object> map=new HashMap<String,Object>();
+			map.put("order_launcher", request.getParameter("order_launcher"));
+			map.put("factory",  request.getParameter("factory"));
+			map.put("workshop",  request.getParameter("workshop"));
+			map.put("head_launch_unit",  request.getParameter("head_launch_unit"));
+			map.put("acceptor",  request.getParameter("acceptor"));
+			map.put("reason_content",  request.getParameter("reason_content"));
+			map.put("total_qty",  request.getParameter("total_qty"));
+			map.put("order_type",  request.getParameter("order_type"));
+			map.put("duty_unit",  request.getParameter("duty_unit"));
+			map.put("labors",  request.getParameter("labors"));
+			map.put("single_hour",  request.getParameter("single_hour"));
+			map.put("assess_verifier",  request.getParameter("assess_verifier"));
+			map.put("is_cost_transfer",  request.getParameter("is_cost_transfer"));
+			map.put("cost_unit_signer",  request.getParameter("cost_unit_signer"));
+			map.put("order_serial_no",  request.getParameter("order_serial_no"));
+			map.put("sap_order",  request.getParameter("sap_order"));
+			map.put("assesor",  request.getParameter("assesor"));
+			map.put("tmp_order_no",  request.getParameter("tmp_order_no"));
+			map.put("applier", editor_id);
+			map.put("apply_date", edit_date);
+
+			int reuslt = productionService.insertCreateTmpOrder(map);
+			initModel(true, "success", reuslt);
+		} catch (Exception e) {
+			initModel(false, e.getMessage(), e.toString());
+		}
+		model = mv.getModelMap();
+		return model;
+	}
+	@RequestMapping("/editCreateTmpOrder")
+	@ResponseBody
+	public ModelMap editCreateTmpOrder() {
+		try {
+			String editor_id = request.getSession().getAttribute("user_id") + "";
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String edit_date = df.format(new Date());
+			Map<String,Object> map=new HashMap<String,Object>();
+			map.put("id", request.getParameter("id"));
+			map.put("order_launcher", request.getParameter("order_launcher"));
+			map.put("factory",  request.getParameter("factory"));
+			map.put("workshop",  request.getParameter("workshop"));
+			map.put("head_launch_unit",  request.getParameter("head_launch_unit"));
+			map.put("acceptor",  request.getParameter("acceptor"));
+			map.put("reason_content",  request.getParameter("reason_content"));
+			map.put("total_qty",  request.getParameter("total_qty"));
+			map.put("order_type",  request.getParameter("order_type"));
+			map.put("duty_unit",  request.getParameter("duty_unit"));
+			map.put("labors",  request.getParameter("labors"));
+			map.put("single_hour",  request.getParameter("single_hour"));
+			map.put("assess_verifier",  request.getParameter("assess_verifier"));
+			map.put("is_cost_transfer",  request.getParameter("is_cost_transfer"));
+			map.put("cost_unit_signer",  request.getParameter("cost_unit_signer"));
+			map.put("order_serial_no",  request.getParameter("order_serial_no"));
+			map.put("sap_order",  request.getParameter("sap_order"));
+			map.put("assesor",  request.getParameter("assesor"));
+			map.put("tmp_order_no",  request.getParameter("tmp_order_no"));
+
+			int reuslt = productionService.editCreateTmpOrder(map);
+			initModel(true, "success", reuslt);
+		} catch (Exception e) {
+			initModel(false, e.getMessage(), e.toString());
+		}
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/showTmpOrderDetail")
+	@ResponseBody
+	public ModelMap showTmpOrderDetail() {
+		try {
+			String id = request.getParameter("id");
+			String tmp_order_no = request.getParameter("tmp_order_no");
+			Map<String,Object> result=new HashMap<String,Object>();
+			Map<String,Object> queryMap=new HashMap<String,Object>();
+			Map tmpOrderMap=productionService.getCreateTmpOrderList(queryMap);
+			queryMap.put("id", id);
+			queryMap.put("tmp_order_no", tmp_order_no);
+			List<Map<String,Object>> tmpOrderProcedureList=
+					productionService.queryTmpOrderProcedureList(queryMap);
+			List<Map<String,Object>> assignList=productionService.queryAssignList(queryMap);
+			result.put("tmpOrderMap", tmpOrderMap);
+			result.put("tmpOrderProcedureList", tmpOrderProcedureList);
+			result.put("assignList", assignList);
+			model.addAllAttributes(result);
+		} catch (Exception e) {
+			initModel(false, e.getMessage(), e.toString());
+		}
+		return model;
+	}
+	@RequestMapping("/delCreateTmpOrder")
+	@ResponseBody
+	public ModelMap delCreateTmpOrder() {
+		try {
+			String id = request.getParameter("id");
+			int result=productionService.delCreateTmpOrder(id);
+			if(result==1){
+				initModel(true, "删除成功", "");
+			}else{
+				initModel(false, "删除失败", "");
+			}
+			
 		} catch (Exception e) {
 			initModel(false, e.getMessage(), e.toString());
 		}

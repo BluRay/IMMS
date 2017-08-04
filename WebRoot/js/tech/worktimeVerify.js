@@ -26,6 +26,13 @@ $(document).ready(function(){
 		return false;
 	});
 	
+	$("#checkall").click(function() {
+		if ($(this).prop("checked")) {
+			check_All_unAll("#workhour_tb", true);
+		} else{
+			check_All_unAll("#workhour_tb", false);
+		}
+	});
 });
 
 function ajaxQuery(){

@@ -1087,10 +1087,12 @@ public class ProductionServiceImpl implements IProductionService {
 	}
 
 	@Override
-	public void delExtraWorkHourManager(List<String> ids) {
+	public int delExtraWorkHourManager(List<String> ids) {
+		int result=0;
 		for(String id : ids){
-			productionDao.delExtraWorkHourManager(id);
+			result=productionDao.delExtraWorkHourManager(id);
 		}
+		return result;
 	}
 
 	@Override
@@ -1115,7 +1117,46 @@ public class ProductionServiceImpl implements IProductionService {
 		}
 		return result;
 	}		
+	@Override
+	public Map<String, Object> getCreateTmpOrderList(
+			Map<String, Object> queryMap) {
+		int totalCount=0;
+		List<Map<String, Object>> datalist=productionDao.getCreateTmpOrderList(queryMap);
+		totalCount=productionDao.getCreateTmpOrderCount(queryMap);
+		Map<String, Object> result=new HashMap<String,Object>();
+		result.put("draw", queryMap.get("draw"));
+		result.put("recordsTotal", totalCount);
+		result.put("recordsFiltered", totalCount);
+		result.put("data", datalist);
+		return result;
+	}
+
+	@Override
+	public int editCreateTmpOrder(Map<String, Object> map) {
+		return productionDao.editCreateTmpOrder(map);
+	}
+
+	@Override
+	public int delCreateTmpOrder(String id) {
 	
+	    return productionDao.delCreateTmpOrder(id);
+	
+	}
+
+	@Override
+	public int insertCreateTmpOrder(Map<String, Object> map) {
+		return productionDao.insertCreateTmpOrder(map);
+	}
+	@Override
+	public List<Map<String, Object>> queryTmpOrderProcedureList(
+			Map<String, Object> map) {
+		return productionDao.queryTmpOrderProcedureList(map);
+	}
+
+	@Override
+	public List<Map<String, Object>> queryAssignList(Map<String, Object> map) {
+		return productionDao.queryAssignList(map);
+	}
 	/*******************  tangjin end  **************************/
 	@Override
 	@DataSource("dataSourceSlave")
@@ -1375,7 +1416,6 @@ public class ProductionServiceImpl implements IProductionService {
 	public int saveWorkHourInfo(List<Map<String, Object>> swh_list) {
 		return productionDao.saveWorkHourInfo(swh_list);
 	}
-
 	@Override
 	public List<Map<String, String>> queryStaffTmpHours(Map<String, Object> conditionMap) {
 		return productionDao.queryStaffTmpHours(conditionMap);

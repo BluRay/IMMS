@@ -145,8 +145,15 @@ public interface IProductionService {
 	//额外临时库
 	public Map<String,Object> getExtraWorkHourManagerList(Map<String,Object> queryMap);
 	public int editExtraWorkHourManager(Map<String,Object> map);
-	public void delExtraWorkHourManager(List<String> ids);
+	public int delExtraWorkHourManager(List<String> ids);
 	public int insertExtraWorkHourManager(List<Map<String,Object>> list);
+	//创建临时派工单
+	public Map<String,Object> getCreateTmpOrderList(Map<String,Object> queryMap);
+	public int editCreateTmpOrder(Map<String,Object> map);
+	public int delCreateTmpOrder(String ids);
+	public int insertCreateTmpOrder(Map<String, Object> map);
+	public List<Map<String,Object>> queryTmpOrderProcedureList(Map<String,Object> map);
+	public List<Map<String,Object>> queryAssignList(Map<String,Object> map);
 	/******************* tangjin end**************************/
 
 	public List<Map<String,String>> getProductionSearch(Map<String,Object> queryMap);

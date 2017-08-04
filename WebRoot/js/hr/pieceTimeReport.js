@@ -14,6 +14,21 @@ $(document).ready(function(){
 		$("#search_count_flag").html(options);
 	})
 	
+	$(document).on("change","#search_factory",function(){
+		var factory=$("#search_factory :selected").text();
+		getWorkshopSelect("hrReport/pieceTimeReport",factory,"","#search_workshop",null,"id")
+		var workshop=$("#search_workshop :selected").text();
+		getWorkgroupSelect(factory,workshop,"","#search_workgroup","全部","id")
+		$("#search_team").html("<option value=''>全部</option>");
+	})
+	
+	$(document).on("change","#search_workshop",function(){
+		var factory=$("#search_factory :selected").text();
+		var workshop=$("#search_workshop :selected").text();
+		getWorkgroupSelect(factory,workshop,"","#search_workgroup","全部","id")
+		$("#search_team").html("<option value=''>全部</option>");
+	})
+	
 	$(document).on("change","#search_workgroup",function(){
 		var factory=$("#search_factory :selected").text();
 		var workshop=$("#search_workshop :selected").text();

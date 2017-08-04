@@ -2578,5 +2578,129 @@
 			</if>
 		</foreach>
 	</update>
-	
+	<select id="getCreateTmpOrderList" parameterType="Map" resultType="Map">
+		SELECT s.* FROM BMS_PD_TMP_ORDER s WHERE 1=1 and deleted='0'
+		<if test="tmp_order_no !=null and tmp_order_no !=''">
+			and s.tmp_order_no=#{tmp_order_no}
+		</if>
+		<if test="status !=null and status !=''">
+			and s.status=#{status}
+		</if>
+		<if test="apply_date_start !=null and apply_date_start !=''">
+			and s.apply_date  <![CDATA[ >=#{apply_date_start} ]]>
+		</if>
+		<if test="apply_date_end !=null and apply_date_end !=''">
+			and s.apply_date <![CDATA[<= #{apply_date_end}  ]]>
+		</if>
+		<if test="start !=null">
+			LIMIT #{start} ,#{length} 
+		</if>		
+	</select>
+	<select id="getCreateTmpOrderCount" parameterType="Map" resultType="int">
+		SELECT count(1) FROM BMS_PD_TMP_ORDER s WHERE 1=1 and deleted='0'
+		<if test="tmp_order_no !=null and tmp_order_no !=''">
+			and s.tmp_order_no=#{tmp_order_no}
+		</if>
+		<if test="status !=null and status !=''">
+			and s.status=#{status}
+		</if>
+		<if test="apply_date_start !=null and apply_date_start !=''">
+		<![CDATA[	and s.apply_date>= #{apply_date_start} ]]>
+		</if>
+		<if test="apply_date_end !=null and apply_date_end !=''">
+		<![CDATA[	and s.apply_date<= #{apply_date_end} ]]>
+		</if>
+	</select>
+	<update id="editCreateTmpOrder" parameterType='Map'>
+		update 
+		BMS_PD_TMP_ORDER set 
+		<if test="tmp_order_type!=null and tmp_order_type !=''">
+			tmp_order_type=#{tmp_order_type},
+		</if>
+		<if test="factory!=null and factory !=''">
+			factory=#{factory},
+		</if>
+		<if test="bus_type!=null and bus_type !=''">
+			bus_type=#{bus_type},
+		</if>
+		<if test="workshop!=null and workshop !=''">
+			workshop=#{workshop},
+		</if>
+		<if test="head_launch_unit!=null and head_launch_unit !=''">
+			head_launch_unit=#{head_launch_unit},
+		</if>
+		<if test="acceptor!=null and acceptor !=''">
+			acceptor=#{acceptor},
+		</if>
+		<if test="reason_content!=null and reason_content !=''">
+			reason_content=#{reason_content},
+		</if>
+		<if test="total_qty!=null and total_qty !=''">
+			total_qty=#{total_qty},
+		</if>
+		<if test="single_hour!=null and single_hour !=''">
+			single_hour=#{single_hour},
+		</if>
+		<if test="order_type!=null and order_type !=''">
+			order_type=#{order_type},
+		</if>
+		<if test="assesor!=null and assesor !=''">
+			assesor=#{assesor},
+		</if>
+		<if test="assess_verifier!=null and assess_verifier !=''">
+			assess_verifier=#{assess_verifier},
+		</if>
+		<if test="duty_unit!=null and duty_unit !=''">
+			duty_unit=#{duty_unit},
+		</if>
+		<if test="labors!=null and labors !=''">
+			labors=#{labors},
+		</if>
+		<if test="is_cost_transfer!=null and is_cost_transfer !=''">
+			is_cost_transfer=#{is_cost_transfer},
+		</if>
+		<if test="cost_unit_signer!=null and cost_unit_signer !=''">
+			cost_unit_signer=#{cost_unit_signer},
+		</if>
+		<if test="sap_order!=null and sap_order !=''">
+			sap_order=#{sap_order},
+		</if>
+		<if test="sap_order!=null and sap_order !=''">
+			order_serial_no=#{order_serial_no},
+		</if>
+		tmp_order_no=#{tmp_order_no} WHERE id= #{id}
+	</update>
+	<insert id="insertCreateTmpOrder" parameterType="Map">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+			INSERT INTO
+			BMS_PD_TMP_ORDER(tmp_order_no,order_serial_no,factory,workshop,sap_order,
+			order_launcher,reason_content,total_qty,single_hour,order_type,head_launch_unit,
+			acceptor,labors,total_hours,assesor,assess_verifier,is_cost_transfer,
+			cost_unit_signer,duty_unit,status,deleted,applier,apply_date)
+			VALUES(#{tmp_order_no},#{order_serial_no},#{factory},#{workshop},
+			#{sap_order},#{order_launcher},#{reason_content},#{total_qty},#{single_hour},#{order_type},
+			#{head_launch_unit},#{acceptor},#{labors},#{total_hours},#{assesor},
+			#{assess_verifier},#{is_cost_transfer},#{cost_unit_signer},
+			#{duty_unit},'0','0',#{applier},#{apply_date})
+	</insert>
+	<update id="delCreateTmpOrder" parameterType='String'>
+		update BMS_PD_TMP_ORDER set deleted='1' WHERE id= #{id}
+	</update>
+	<select id="queryTmpOrderProcedureList" parameterType="Map"
+		resultType="Map">
+		select * from BMS_PD_TMP_ORDER_SCHEDULE where
+		temp_order_id=#{id} order by record_date
+	</select>
+	<select id="queryAssignList" parameterType="Map" resultType="Map">
+	<![CDATA[
+		select sum(h.real_work_hour) total_hour,sum(h.work_hour) total_real_hour,
+		h.team work_org,h.staff_number,h.staff_name,h.plant_org,h.workshop_org,h.workgroup_org,h.team_org,h.job
+		from BMS_HR_TMP_SALARY h
+		where h.order_id=#{id}
+		group by h.staff_number
+	]]>
+	</select>
 </mapper>

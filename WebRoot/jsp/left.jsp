@@ -3,7 +3,7 @@
 <%
 String path = request.getContextPath();
 String rqip= request.getRemoteAddr();
-
+String staff_number = (String)session.getAttribute("staff_number");
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path;
 /* if(rqip!=request.getServerName()){
 	basePath=rqip+"/";
@@ -133,7 +133,6 @@ $(document).ready(function () {
  			$("#taskcount").html(data.count);
  			$("#task").html("需处理任务数 "+data.count+" 个");
 			var str="";
-            console.log("object",data);
 			$.each(data.datalist,function(index,item){
 				var url="<%=basePath%>/"+item.url;
 				if(item.params!=null && item.params!=undefined){
@@ -160,7 +159,12 @@ $(document).ready(function () {
 			var root = $('.nav-list');
 			
 			var li = $('<li  class="" />');
+
 			var a = $('<a href=\"<%=basePath%>/'+value.path+'\" ></a>');
+			if (value.path.substring(0,4) =="http"){
+				a = $('<a href=\"'+value.path+'<%=staff_number%>\" ></a>');
+			}
+			
 			if(value.icon==='' || value.icon==undefined){
 				var i = $('<i class="menu-icon fa fa-desktop"></i>');
 			}else{

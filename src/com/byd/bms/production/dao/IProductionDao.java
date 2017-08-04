@@ -166,8 +166,16 @@ public interface IProductionDao {
 	public List<Map<String,Object>> getExtraWorkHourManagerList(Map<String,Object> queryMap);
 	public int getExtraWorkHourManagerCount(Map<String,Object> queryMap);
 	public int editExtraWorkHourManager(Map<String,Object> map);
-	public void delExtraWorkHourManager(@Param("id") String id);
+	public int delExtraWorkHourManager(@Param("id") String id);
 	public int insertExtraWorkHourManager(Map<String,Object> map);
+	// 创建临时派工单
+	public List<Map<String,Object>> getCreateTmpOrderList(Map<String,Object> queryMap);
+	public int getCreateTmpOrderCount(Map<String,Object> queryMap);
+	public int editCreateTmpOrder(Map<String,Object> map);
+	public int delCreateTmpOrder(@Param("id") String id);
+	public int insertCreateTmpOrder(Map<String,Object> map);
+	public List<Map<String,Object>> queryTmpOrderProcedureList(Map<String,Object> map);
+	public List<Map<String,Object>> queryAssignList(Map<String,Object> map);
 	/******************* tangjin end**************************/
 
 	public List<Map<String,String>> getProductionSearch(Map<String,Object> queryMap);
