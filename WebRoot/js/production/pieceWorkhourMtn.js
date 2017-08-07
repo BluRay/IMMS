@@ -766,7 +766,7 @@ function ajaxGetStaffDetail(staff_number){
 			},
 			success:function(response){
 				if(response.staff_list.length==0){
-					alert("请输入有效员工号！");
+					alert("请输入在职有效员工号！");
 				}
 				staff=response.staff_list[0];				
 			}

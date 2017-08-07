@@ -1672,7 +1672,7 @@
 		</if>	
 		order by p.effective_date desc limit 1),0) standard_price
 		from BMS_HR_STAFF s
-		where s.salary_type='计件'
+		where s.salary_type='计件' and s.status='在职'
 		<if test="staff_number !=null and staff_number !=''">
 			and  s.staff_number=#{staff_number}
 		</if>

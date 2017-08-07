@@ -203,7 +203,7 @@ function ajaxQuery(){
 			            {"title":"合计工资","class":"center","data": "total_ppay","defaultContent": ""}	
 			          ]	;
 		}else{
-			rowsGroup=[0,1,2,3,4,5,6,10,11]
+			rowsGroup=[0,1,2,3,4,5,6,11]
 			columns= [
 			          	{"title":"工号","class":"center","data":"staff_number","defaultContent": ""},
 			          	{"title":"姓名","class":"center","data":"staff_name","defaultContent": ""},
@@ -223,7 +223,7 @@ function ajaxQuery(){
 	
 	if(salary_model=="底薪模式"){
 		if(count_flag=='日期维度'){
-			rowsGroup=[0,1,2,3,4,11,12]
+			rowsGroup=[0,1,2,3,4,12]
 			columns= [
 			            {"title":"操作日期","class":"center","data":"work_date","defaultContent": ""},
 			            {"title":"工厂","class":"center","data":"factory","defaultContent": ""},
@@ -240,7 +240,7 @@ function ajaxQuery(){
 			            {"title":"合计工资","class":"center","data": "total_ppay","defaultContent": ""}	
 			          ]	;
 		}else{
-			rowsGroup=[0,1,2,3,4,5,6,7,11,12]
+			rowsGroup=[0,1,2,3,4,5,6,7,12]
 			columns= [
 			          	{"title":"工号","class":"center","data":"staff_number","defaultContent": ""},
 			          	{"title":"姓名","class":"center","data":"staff_name","defaultContent": ""},
@@ -261,10 +261,10 @@ function ajaxQuery(){
 	
 	var tb=$("#tableResult").DataTable({
 		serverSide: true,
-		fixedColumns:   {
+	/*	fixedColumns:   {
             leftColumns: 2,
             rightColumns:2
-        },
+        },*/
 		dom: 'Bfrtip',
 		/*lengthMenu: [
 		             [ 20, 50, 100, -1 ],
@@ -354,7 +354,7 @@ function ajaxQuery(){
                     //console.log(result);
                 	//封装返回数据
                     var returnData = {};
-                    returnData.draw = data.draw;//这里直接自行返回了draw计数器,应该由后台返回
+                    returnData.draw = result.draw;//这里直接自行返回了draw计数器,应该由后台返回
                    /* returnData.recordsTotal = result.recordsTotal;//返回数据全部记录
                     returnData.recordsFiltered = result.recordsTotal;//后台不实现过滤功能，每次查询均视作全部结果
 */                    returnData.data = result.data;//返回的数据列表
@@ -362,6 +362,9 @@ function ajaxQuery(){
                     //调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
                     //此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
                     callback(returnData);
+                    var head_width=$(".dataTables_scrollHead").width();
+                    //alert(head_width)
+                    $(".dataTables_scrollHead").css("width",head_width-20);
                 }
             });
 		

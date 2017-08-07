@@ -138,7 +138,7 @@
 			</div>
 			
 			
-			<div id="dialog-edit" class="hide" style="align:center;width:780px;height:500px">
+			<div id="dialog-edit" class="hide" style="align:center;width:820px;height:500px">
 				<table style="line-height:30px" >
 					<tr>
 					<td width="140px" style="text-align:right">派工单号：</td>								

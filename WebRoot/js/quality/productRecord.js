@@ -341,7 +341,9 @@ function drawTplDetailTable(tableId,data,editable){
 		         	
 		          ]	
 	});
-		
+	var head_width=$("#tableDetail_wrapper .dataTables_scrollHead").width();
+    //alert(head_width)
+    $("#tableDetail_wrapper .dataTables_scrollHead").css("width",head_width-17);
 }
 
 /**

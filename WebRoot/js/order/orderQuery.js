@@ -1,5 +1,5 @@
 var cur_year="";
-var pageSize=10;
+var pageSize=20;
 
 $(document).ready(function(){
 	initPage();
@@ -34,8 +34,8 @@ function ajaxQuery(){
         },
 		dom: 'Bfrtip',
 		lengthMenu: [
-		             [ 10, 25, 50, -1 ],
-		             [ '显示10行', '显示25行', '显示50行', '全部' ]
+		             [ 20, 50,100, -1 ],
+		             [ '显示20行', '显示50行', '显示100行', '全部' ]
 		         ],
 	    buttons: [
 	        {extend:'excelHtml5',title:'data_export',className:'black',text:'<i class=\"fa fa-file-excel-o bigger-130\" tooltip=\"导出excel\"></i>'},
@@ -100,6 +100,9 @@ function ajaxQuery(){
                     //调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
                     //此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
                     callback(returnData);
+                    var head_width=$(".dataTables_scrollHead").width();
+                    //alert(head_width)
+                    $(".dataTables_scrollHead").css("width",head_width-20);
                 }
             });
 		

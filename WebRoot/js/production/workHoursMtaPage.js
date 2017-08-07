@@ -76,7 +76,7 @@ $(document).ready(function () {
 		var staffNum = $("#edit_cardNumber").val();
 		var workDate = $("#edit_workDate").val();
 		var tmpOrderId = cur_tmpOrderId;
-		var conditions = "{staffNum:'" + staffNum + "',workDate:'" + workDate + "',tempOrderId:" + tmpOrderId + "'}";
+		var conditions = "{staffNum:'" + staffNum + "',workDate:'" + workDate + "',temp_order_id:" + tmpOrderId + "'}";
 		console.log("-->conditions = " + conditions);
 		var swhlist = ajaxGetStaffWorkHours(conditions);
 		generateWorkhourTb(swhlist);
@@ -171,9 +171,9 @@ function ajaxQuery(){
 		            },
 		            {"title":"申请人",width:'100',"class":"center","data":"applier","defaultContent": ""},
 		            {"title":"申请时间",width:'100',"class":"center","data":"apply_date","defaultContent": ""},
-		            {"title":"状态",width:'100',"class":"center","data":"order_desc","defaultContent": "",
+		            {"title":"状态",width:'100',"class":"center","data":"status","defaultContent": "",
 		            	"render": function ( data, type, row ) {
-		            		return row.tech_order_type=='ECN'?'否':'是';
+		            		return status_arr[data];
 		            	},
 		            },
 		            {"title":"操作",width:'100',"class":"center","data":null,"defaultContent": "",
@@ -190,7 +190,7 @@ function ajaxQuery(){
 function editWorkTime(id,tmp_order_no,reason_content,total_qty,finished_qty,workhour_total,factory,workshop,tech_list){
 	$("#edit_orderNo").html(tmp_order_no);
 	$("#edit_reason").html(reason_content);
-	var conditions = "{tempOrderId:'" + id + "'}";
+	var conditions = "{temp_order_id:'" + id + "'}";
 	var response = ajaxGetStaffWorkHours(conditions)
 	var swhlist = response;
 	generateWorkhourTb(swhlist, true);
@@ -200,7 +200,7 @@ function editWorkTime(id,tmp_order_no,reason_content,total_qty,finished_qty,work
 		resizable: false,
 		title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-flag green"></i> 额外工时修改</h4></div>',
 		title_html: true,
-		width:'750px',
+		width:'820px',
 		modal: true,
 		buttons: [{
 					text: "取消",
@@ -409,7 +409,7 @@ function btnAddConfirm(id){
 		}
 		
 		var conditions = "{staffNum:'" + staffNum + "',workDate:'" + $("#mta_wdate").val()
-			+ "',tempOrderId:" + id + "}";
+			+ "',temp_order_id:" + id + "}";
 		console.log("-->conditions = " + conditions);
 		var sfwlist = ajaxGetStaffWorkHours(conditions);
 		if (sfwlist.length > 0) {

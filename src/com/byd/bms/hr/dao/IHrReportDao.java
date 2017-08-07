@@ -13,4 +13,11 @@ public interface IHrReportDao {
 	public int getRewardsCollectTotalCount(Map<String, Object> conditionMap);					//查询奖惩汇总数据数量
 	public int queryStaffPieceHoursCount(Map<String, Object> conditionMap);
 	public List<Map<String, Object>> queryStaffPieceHours(Map<String, Object> conditionMap);
+	public List<Map<String, Object>> queryStaffPieceSalary(Map<String, Object> conditionMap);
+	public void saveSubmitStaffSalary(Map<String, Object> conditionMap);
+	public List<Map<String,Object>> getEcnReportData(Map<String, Object> conditionMap);
+	public int queryBalanceSalaryCount(Map<String, Object> conditionMap);
+	public void deletePieceSalaryHistory(Map<String, Object> conditionMap);
+	public List<Map<String, Object>> queryBalanceStaffSalary(Map<String, Object> conditionMap);
+	public List<Map<String, Object>> queryStaffPieceSalaryHistory(Map<String, Object> conditionMap);
 }

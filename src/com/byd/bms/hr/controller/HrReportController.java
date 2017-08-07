@@ -1,7 +1,16 @@
 package com.byd.bms.hr.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,6 +47,13 @@ public class HrReportController extends BaseController {
 	@RequestMapping("/ecnReport")
 	public ModelAndView ecnReport() {
 		mv.setViewName("hr/ecnReport");
+		return mv;
+	}
+
+	//额外工时统计
+	@RequestMapping("/tmpReport")
+	public ModelAndView tmpReport() {
+		mv.setViewName("hr/tmpReport");
 		return mv;
 	}
 	
@@ -93,6 +109,26 @@ public class HrReportController extends BaseController {
 		Map<String, Object> selectList = productionService.getAttendanceList(conditionMap);
 		mv.clear();
 		mv.getModelMap().addAllAttributes(selectList);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping("/getEcnReportData")
+	@ResponseBody
+	public ModelMap getEcnReportData(){
+		String conditions = request.getParameter("conditions");
+		JSONObject jo=JSONObject.fromObject(conditions);
+		Map<String,Object> conditionMap=new HashMap<String,Object>();
+		for(Iterator it=jo.keys();it.hasNext();){
+			String key=(String) it.next();
+			conditionMap.put(key, jo.get(key));
+		}
+		List<Map<String, Object>> datalist = hrReportService.getEcnReportData(conditionMap);
+		Map<String, Object> result = new HashMap<String,Object>();
+		result.put("data", datalist);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(result);
 		model = mv.getModelMap();
 		return model;
 	}
@@ -160,6 +196,74 @@ public class HrReportController extends BaseController {
 	public ModelAndView staffSalarySubmit(){
 		mv.setViewName("hr/staffSalarySubmit");
 		return mv;
+	}
+	
+	/**
+	 * 计件工资提交页面工资列表查询
+	 * @return
+	 */
+	@RequestMapping("/getStaffPieceSalary")
+	@ResponseBody
+	public ModelMap getStaffPieceSalary(){
+		model.clear();
+		String factory = request.getParameter("factory");
+		String workshop = request.getParameter("workshop");
+		String workgroup = request.getParameter("workgroup");
+		String team = request.getParameter("team");
+		String staff = request.getParameter("staff");
+		String month = request.getParameter("month");
+		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
+		Map<String, Object> conditionMap = new HashMap<String, Object>();
+		conditionMap.put("draw", draw);
+		conditionMap.put("factory", factory);
+		conditionMap.put("workshop", workshop);
+		conditionMap.put("workgroup", workgroup);
+		conditionMap.put("team", team);
+		conditionMap.put("month", month);
+		conditionMap.put("staff", staff);
+		
+		hrReportService.getStaffPieceSalary(conditionMap,model);
+		return model;
+	}
+	
+	/**
+	 * 计件工资提交
+	 * @return
+	 */
+	@RequestMapping("/submitStaffSalary")
+	@ResponseBody
+	public ModelMap submitStaffSalary(){
+		model.clear();
+		String factory = request.getParameter("factory");
+		String workshop = request.getParameter("workshop");		
+		String staff_salary_list = request.getParameter("staff_salary_list");
+		String month = request.getParameter("month");		
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String saver=(String) session.getAttribute("user_name");
+		JSONArray jsa=JSONArray.fromObject(staff_salary_list);
+		Iterator it=jsa.iterator();
+		List<Map<String,String>> detail_list=new ArrayList<Map<String,String>>();
+		/**
+		 * 封装需要保存的数据
+		 */
+		while(it.hasNext()){
+			JSONObject el=(JSONObject) it.next();
+			Map<String,String> m=(Map<String,String>) JSONObject.toBean(el, Map.class);	
+			detail_list.add(m);
+		}
+		
+		Map<String, Object> conditionMap = new HashMap<String, Object>();
+		conditionMap.put("factory", factory);
+		conditionMap.put("workshop", workshop);
+		conditionMap.put("staff_salary_list", detail_list);
+		conditionMap.put("month", month);
+		conditionMap.put("saver", saver);
+		conditionMap.put("save_date", curTime);
+
+		
+		hrReportService.submitStaffSalary(conditionMap,model);
+		return model;
 	}
 	
 	/******************** xioing.jianwu **********************/
