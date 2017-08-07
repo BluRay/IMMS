@@ -157,8 +157,8 @@ function ajaxQuery(){
 		destroy: true,
 		sScrollY: document.documentElement.clientHeight-250 + 'px',
 		scrollX: "100%",
-		/*scrollCollapse: true,*/
-		pageLength: 10,
+		scrollCollapse: true,
+		pageLength: 20,
 		pagingType:"full_numbers",
 		lengthChange:false,
 		orderMulti:false,

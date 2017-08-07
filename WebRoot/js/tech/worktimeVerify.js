@@ -2,6 +2,7 @@ var pageSize=1;
 var table;
 var table_height = $(window).height()-270;
 var timeConfigCount = 0;
+var cur_tmpOrderId = 0;
 var ready_hour=0;
 var edit_list=[];
 var re_f = /^[0-9]+[0-9]*\.?[0|5]?$/;//浮点数正则表达式
@@ -28,10 +29,23 @@ $(document).ready(function(){
 	
 	$("#checkall").click(function() {
 		if ($(this).prop("checked")) {
-			check_All_unAll("#workhour_tb", true);
+			check_All_unAll("#work_hour_tb", true);
 		} else{
-			check_All_unAll("#workhour_tb", false);
+			check_All_unAll("#work_hour_tb", false);
 		}
+	});
+	
+	$("#btnSwhQuery").click (function () {
+		var staffNum=$("#edit_cardNumber").val();
+		var workDate=$("#edit_workDate").val();
+		var tempOrderId=cur_tmpOrderId;
+		var conditions="{staffNum:'"+staffNum+"',workMonth:'"+workDate+"',ecnTaskId:"+tempOrderId+"'}";
+		if(workDate==''||workDate==null){
+			alert("请选择操作月份！");
+			return false;
+		}
+		workhour_list=ajaxGetStaffWorkHours(conditions);
+		generateWorkhourTb(workhour_list,true);
 	});
 });
 
@@ -144,7 +158,7 @@ function verifyWorkTime(order_no,tech_order_no,task_content,task_detail_id,facto
 	var totalHour = 0;
 	var tech_num = 0;
 	var single_hour = 0;
-	
+	cur_tmpOrderId = task_detail_id;
 	var d = new Date();
 	var eYear = d.getFullYear();
 	var eMon = d.getMonth() + 1;

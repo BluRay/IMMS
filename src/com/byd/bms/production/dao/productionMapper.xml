@@ -2480,6 +2480,9 @@
 		<if test="workshop !=null and workshop !=''">
 			and h.workshop=#{workshop}
 		</if>
+		<if test="temp_order_id !=null and temp_order_id !=''">
+			and h.temp_order_id=#{temp_order_id}
+		</if>
 		order by h.status
 		<if test="offset!=null">
 			LIMIT #{offset} ,#{pageSize}
@@ -2692,14 +2695,16 @@
 	<select id="queryTmpOrderProcedureList" parameterType="Map"
 		resultType="Map">
 		select * from BMS_PD_TMP_ORDER_SCHEDULE where
-		temp_order_id=#{id} order by record_date
+		temp_order_id=#{temp_order_id} order by record_date
 	</select>
 	<select id="queryAssignList" parameterType="Map" resultType="Map">
 	<![CDATA[
 		select sum(h.real_work_hour) total_hour,sum(h.work_hour) total_real_hour,
-		h.team work_org,h.staff_number,h.staff_name,h.plant_org,h.workshop_org,h.workgroup_org,h.team_org,h.job
-		from BMS_HR_TMP_SALARY h
-		where h.order_id=#{id}
+		h.team work_org,h.staff_number,s.name staff_name,h.factory,h.workshop,h.workgroup,s.job
+		from BMS_HR_STAFF_TMP_HOURS h
+		left join
+		BMS_HR_STAFF s on h.staff_number=s.staff_number
+		where h.temp_order_id=#{temp_order_id}
 		group by h.staff_number
 	]]>
 	</select>

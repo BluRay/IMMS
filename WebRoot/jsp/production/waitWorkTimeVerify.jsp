@@ -92,7 +92,7 @@
 											<td>
 											  &nbsp;<input type="button" class="btn btn-sm btn-primary" id="btnQuery" value="查询" style="margin-left: 2px;"></input>
 											  &nbsp;<input type="button" class="btn btn-sm btn-info" id="btnVerify" value="审核" style="margin-left: 2px;"></input>
-											  &nbsp;<input type="button" class="btn btn-sm btn-warning" id="btnReturn" value="驳回" style="margin-left: 2px;"></input>
+											  &nbsp;<input type="button" class="btn btn-sm btn-danger" id="btnReturn" value="驳回" style="margin-left: 2px;"></input>
 											</td>
 											
 										</tr>

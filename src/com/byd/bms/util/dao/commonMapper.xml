@@ -217,7 +217,7 @@
 		sum(t.finish_count) finish_count,p.url,t.param,t.workshop_name from BMS_BASE_TASK t 
 		left join BMS_BASE_TASK_TYPE p on t.task_type_id=p.id
 		left join BMS_BASE_USER_ROLE r on (t.role_id=r.role_id)
-		 where t.count!=t.finish_count  
+		 where <![CDATA[t.count>t.finish_count]]>  
 		<if test="staff_number !=null and staff_number !=''"> 
 		    <!-- 默认 permission_key=1 对应工厂权限-->
 			and r.staff_number=#{staff_number} and r.permission_key='1'
@@ -237,7 +237,7 @@
 		sum(t.finish_count) finish_count,p.url,t.param,t.workshop_name from BMS_BASE_TASK t 
 		left join BMS_BASE_TASK_TYPE p on t.task_type_id=p.id
 		left join BMS_BASE_USER r on (t.staff_number=r.staff_number)
-		 where t.count!=t.finish_count  
+		 where <![CDATA[t.count>t.finish_count]]>  
 		<if test="staff_number !=null and staff_number !=''"> 
 			and r.staff_number=#{staff_number}
 		</if>

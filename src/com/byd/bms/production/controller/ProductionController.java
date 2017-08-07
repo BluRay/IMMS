@@ -1685,6 +1685,8 @@ public class ProductionController extends BaseController {
 		Map<String,Object> conditionMap=new HashMap<String,Object>();
 		conditionMap.put("bus_type",bus_type);
 		conditionMap.put("order_no",order_no);
+		conditionMap.put("order_type",order_type);
+		conditionMap.put("reason_content",reason_content);
 		conditionMap.put("draw", draw);
 		conditionMap.put("start", start);
 		conditionMap.put("length", length);
@@ -1963,19 +1965,21 @@ public class ProductionController extends BaseController {
 	@ResponseBody
 	public ModelMap showTmpOrderDetail() {
 		try {
-			String id = request.getParameter("id");
+			String temp_order_id = request.getParameter("temp_order_id");
 			String tmp_order_no = request.getParameter("tmp_order_no");
 			Map<String,Object> result=new HashMap<String,Object>();
 			Map<String,Object> queryMap=new HashMap<String,Object>();
-			Map tmpOrderMap=productionService.getCreateTmpOrderList(queryMap);
-			queryMap.put("id", id);
+			queryMap.put("temp_order_id", temp_order_id);
 			queryMap.put("tmp_order_no", tmp_order_no);
+			Map tmpOrderMap=productionService.getCreateTmpOrderList(queryMap);
 			List<Map<String,Object>> tmpOrderProcedureList=
 					productionService.queryTmpOrderProcedureList(queryMap);
 			List<Map<String,Object>> assignList=productionService.queryAssignList(queryMap);
+			List<Map<String, String>> staffTmpHoursList=productionService.queryStaffTmpHours(queryMap);
 			result.put("tmpOrderMap", tmpOrderMap);
 			result.put("tmpOrderProcedureList", tmpOrderProcedureList);
 			result.put("assignList", assignList);
+			result.put("staffTmpHoursList", staffTmpHoursList);
 			model.addAllAttributes(result);
 		} catch (Exception e) {
 			initModel(false, e.getMessage(), e.toString());

@@ -264,82 +264,87 @@
 				<div class="tab-content" id="new_accordion">
                     <div class="tab-pane" role="tabpanel" style="height:400px" id="baseinfo">
                        <table>
-							<tr style="height:30px;background-color:#f5f5f5"><th colspan=6><h5 style="line-height:30px;">工单内容</h5></th></tr>
+							<tr style="height:30px;background-color:#f5f5f5"><th colspan=6><h5 style="line-height:30px;">&nbsp;&nbsp;工单内容</h5></th></tr>
 							<tr style="height:30px">
-								<td align="right" style="width:120px">*派工发起人：</td>
+								<td align="right" style="width:120px">派工发起人：</td>
 								<td style="width:120px" id="show_order_launcher">
 								</td>
-								<td align="right" style="width:120px">*派工接收工厂：</td>
+								<td align="right" style="width:120px">派工接收工厂：</td>
 								<td style="width:120px" id="show_factory"></td>
-							    <td align="right" style="width:120px">*派工接收车间：</td>
+							    <td align="right" style="width:120px">派工接收车间：</td>
 								<td style="width:120px" id="show_workshop"></td>
 							</tr>
 							<tr style="height:30px">
-								<td align="right" style="width:120px">*发起部门主管：</td>
+								<td align="right" style="width:120px">发起部门主管：</td>
 								<td style="width:120px" id="show_head_launch_unit">
 								</td>
-								<td align="right" style="width:120px">* 验收人：</td>
+								<td align="right" style="width:120px">验收人：</td>
 								<td style="width:120px" id="show_acceptor"></td>
 							    <td align="right">&nbsp;作业原因/内容：</td>
 								<td colspan=5 id="show_reason_content">
 								</td>
 							</tr>
 							<tr style="height:30px">
-								<td align="right" style="width:120px">*总数量：</td>
+								<td align="right" style="width:120px">总数量：</td>
 								<td style="width:120px" id="show_total_qty">
 								</td>
-								<td align="right" style="width:120px">* 派工类型：</td>
+								<td align="right" style="width:120px">派工类型：</td>
 								<td style="width:120px" id="show_order_type"></td>
-							    <td align="right" style="width:120px">* 责任部门：</td>
+							    <td align="right" style="width:120px">责任部门：</td>
 								<td style="width:120px" id="show_duty_unit"></td>
 							</tr>
-							<tr style="height:30px"><th colspan=6 style="background-color:#f5f5f5"><h5 style="line-height:30px">工单评估内容</h5></th></tr>
+							<tr style="height:30px"><th colspan=6 style="background-color:#f5f5f5"><h5 style="line-height:30px">&nbsp;&nbsp;工单评估内容</h5></th></tr>
 		
 							<tr style="height:30px">
-							    <td align="right" style="width:120px">*所需人力：</td>
+							    <td align="right" style="width:120px">所需人力：</td>
 							    <td id="show_labors" ></td>
-								<td align="right" style="width:120px">*单工时：</td>
+								<td align="right" style="width:120px">单工时：</td>
 								<td  id="show_single_hour"></td>
 							    <td></td><td></td>
 							</tr>
 							<tr style="height:30px">
-							    <td align="right" style="width:120px">*工时评估人：</td><td  id="show_assesor" ></td>
-								<td align="right" style="width:120px">* 工时评估负责人：</td><td id="show_assess_verifier" ></td>
+							    <td align="right" style="width:120px">工时评估人：</td><td  id="show_assesor" ></td>
+								<td align="right" style="width:120px">工时评估负责人：</td><td id="show_assess_verifier" ></td>
 							    <td></td><td></td>
 							</tr>
-							<tr style="height:30px"><th colspan=6 style="background-color:#f5f5f5"><h5 style="line-height:30px">签批信息</h5></th></tr>
+							<tr style="height:30px"><th colspan=6 style="background-color:#f5f5f5"><h5 style="line-height:30px">&nbsp;&nbsp;签批信息</h5></th></tr>
 							<tr style="height:30px">
-								<td align="right" style="width:120px">*成本是否可转移：</td>
+								<td align="right" style="width:120px">成本是否可转移：</td>
 								<td style="width:120px" id="show_is_cost_transfer">
 								</td>
-								<td align="right" style="width:120px">*成本科签字：</td>
+								<td align="right" style="width:120px">成本科签字：</td>
 								<td style="width:120px" id="show_cost_unit_signer"></td>
-							    <td align="right" style="width:120px">*工单号：</td>
+							    <td align="right" style="width:120px">工单号：</td>
 								<td style="width:120px" id="show_sap_order"></td>
 							</tr>
 							<tr style="height:30px">
-							    <td align="right" style="width:120px">*派工流水号：</td><td id="show_tmp_order_no" ></td>
-								<td align="right" style="width:120px">*验收人签字：</td><td id="show_verifier"></td>
+							    <td align="right" style="width:120px">派工流水号：</td><td id="show_tmp_order_no" ></td>
+								<td align="right" style="width:120px">验收人签字：</td><td id="show_acceptor_sign"></td>
 							    <td></td><td></td>
 							</tr>
 							</table>
                     </div>
                     <div class="tab-pane" role="tabpanel" style="height:400px" id="productiondetailmtn">
-                        <div class="row">
-							<div class="col-xs-12">
-								<table id="productiondetailmtnResult"
-									class="table table-striped table-bordered table-hover" style="font-size: 12px; width:720px;overflow-x:auto ">
-								</table>	
+                        <div class="row" >
+							<div class="col-xs-12"  id="productiondetailmtnResultDiv" style="padding-right:0px;">
+								<table id="productiondetailmtnResult" class="table table-striped table-bordered table-hover" style="table-layout:fixed;font-size: 12px; width:745px;overflow:auto;">
+								</table>
 							</div>
 						</div>
                     </div>
-                    <div class="tab-pane" role="tabpanel" style="height:400px" id="workhourdetail">ccc</div>
+                    <div class="tab-pane" role="tabpanel" style="height:400px" id="workhourdetail">
+                        <div class="row" >
+							<div class="col-xs-12"  id="workhourdetailResultDiv" style="padding-right:0px;">
+								<table id="workhourdetailResult" class="table table-striped table-bordered table-hover" style="table-layout:fixed;font-size: 12px; width:745px;overflow:auto;">
+								</table>
+							</div>
+						</div>
+                    </div>
                     <div class="tab-pane" role="tabpanel" style="height:400px" id="workhourallot">
-                        <div class="row">
-							<div class="col-xs-12">
-								<table id="workhourallotResult"
-									class="table table-striped table-bordered table-hover" style="font-size: 12px; width:720px;overflow-x:auto ">
-								</table>	
+                        <div class="row" >
+							<div class="col-xs-12"  id="workhourallotResultDiv" style="padding-right:0px;">
+								<table id="workhourallotResult" class="table table-striped table-bordered table-hover" style="table-layout:fixed;font-size: 12px; width:745px;overflow:auto;">
+								</table>
 							</div>
 						</div>
                     </div>

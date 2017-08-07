@@ -86,16 +86,22 @@ function zTreeBeforeClick(treeId, treeNode, clickFlag) {
 function zTreeOnClick(event, treeId, treeNode) {
 	if(treeNode.org_type=='1'){
 		factory=treeNode.displayName;
+		workshop="";
+		workgroup="";
+		team="";
 	}	
 	if(treeNode.org_type == '2'){
 		factory=treeNode.getParentNode().displayName;
 		workshop=treeNode.displayName;
+		workgroup="";
+		team="";
 	}
 	
 	if(treeNode.org_type == '3'){
 		factory=treeNode.getParentNode().getParentNode().displayName;
 		workshop=treeNode.getParentNode().displayName;
 		workgroup=treeNode.displayName;
+		team="";
 	}
 	if(treeNode.org_type == '4'){
 		factory=treeNode.getParentNode().getParentNode().getParentNode().displayName;
@@ -141,7 +147,7 @@ function ajaxQuery(){
 		language: {
 			emptyTable:"",					     
 			infoEmpty:"",
-			zeroRecords:"未查询到人员数据！"
+			zeroRecords:""
 		},
 		ajax:function (data, callback, settings) {
 			var status=$("#status").val();
@@ -150,6 +156,7 @@ function ajaxQuery(){
 			var date_end=$("#date_end").val();
 			var staff_number=$("#staff_number").val();
 			var conditions = "{factory:'"+ factory + "',workshop:'"+workshop+ "'," +
+			        "workgroup:'"+ workgroup + "',team:'"+team+ "'," +
 			        "wait_reason:'"+wait_reason+"',staff_number:'"+staff_number+"',"+
 			        "date_start:'"+date_start+"',date_end:'"+date_end+"',"+
 					"status:'"+status+"'}";	
