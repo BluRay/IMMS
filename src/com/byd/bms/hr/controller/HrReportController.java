@@ -266,5 +266,14 @@ public class HrReportController extends BaseController {
 		return model;
 	}
 	
+	/**
+	 * 计件工资结算页面
+	 * @return
+	 */
+	@RequestMapping("/staffSalaryBalance")
+	public ModelAndView staffSalaryBalance(){
+		mv.setViewName("hr/staffSalaryBalance");
+		return mv;
+	}
 	/******************** xioing.jianwu **********************/
 }

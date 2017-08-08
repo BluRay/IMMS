@@ -52,10 +52,10 @@ $(document).ready(function(){
 				staff_salary_list:JSON.stringify(staff_salary_list)
 			},
 			success:function(response){
-				fadeMessageAlert("",response.message, response.success?"success":"danger")
+				fadeMessageAlert("",response.message, response.success?"gritter-success":"gritter-error")
 			},
 			error:function(){
-				fadeMessageAlert("","系统异常!","danger")
+				fadeMessageAlert("","系统异常!","gritter-error")
 			}
 		})
 		

@@ -1698,7 +1698,7 @@
 		<if test="team !=null and team !='' and team !='请选择'">
 			and s.team=#{team}
 		</if>
-		<if test="waitReason !=null and waitReason !=''">
+		<if test="wait_reason !=null and wait_reason !=''">
 			and s.wait_reason=#{wait_reason}
 		</if>		
 		<if test="workDate !=null and workDate !=''">

@@ -87,7 +87,7 @@
 											<td><input id="whereabouts" style="height:30px;width:120px" placeholder="" class="col-sm-6" type="text"></td>
 											<td id="workhourtotal">&nbsp;&nbsp;已录工时：</td>
 											<td></td>
-											<td>&nbsp;&nbsp;<input type="button" class="btn btn-sm btn-primary" id="btnSave" value="保存" style="margin-left: 2px;"></input></td>
+											<td>&nbsp;&nbsp;<input type="button" class="btn btn-sm btn-info" id="btnSave" value="保存" style="margin-left: 2px;"></input></td>
 											
 										</tr>
 									</table>
@@ -95,7 +95,7 @@
 							</div>
 							<div class="row" >
 								<div class="col-xs-12"  id="tableReusltDiv" style="padding-right:0px;">
-									<table id="tableResult" class="table table-striped table-bordered table-hover" style="table-layout:fixed;font-size: 12px; width:933px;overflow:auto;">
+									<table id="tableResult" class="table table-striped table-bordered table-hover" style="table-layout:fixed;font-size: 12px; width:936px;overflow:auto;">
 									</table>
 								</div>
 							</div>

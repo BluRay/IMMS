@@ -62,20 +62,20 @@
 										<tr>
 											<td>&nbsp;等待原因：</td>
 											<td>
-											    <select id="wait_reason" class="input-small" style='width:100px;height: 30px;'>
+											    <select id="wait_reason" class="input-small" style='width:95px;height: 30px;'>
 													<option value="">请选择</option>
 													<option value="停线">停线</option>
 													<option value="其他">其他</option>
 											    </select>
 											</td>
 											<td>&nbsp;工号：</td>
-											<td><input id="staff_number" style="height:30px;width:110px" placeholder="" class="col-sm-6" type="text"></td>
+											<td><input id="staff_number" style="height:30px;width:100px" placeholder="" class="col-sm-6" type="text"></td>
 											<td>&nbsp;等待日期：</td>
 											<td>
-												<input style="width: 100px" class="input-medium"
+												<input style="width: 95px" class="input-medium"
 												placeholder="开始日期..." id="date_start"
 												onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
-												type="text"> -<input style="width: 100px"
+												type="text"> -<input style="width: 95px"
 												class="input-medium" placeholder="截止日期..." id="date_end"
 												onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
 												type="text">
@@ -101,7 +101,7 @@
 							</div>
 							<div class="row" >
 								<div class="col-xs-12"  id="tableReusltDiv" style="padding-right:0px;">
-									<table id="tableResult" class="table table-striped table-bordered table-hover" style="table-layout:fixed;font-size: 12px; width:933px;overflow:auto;">
+									<table id="tableResult" class="table table-striped table-bordered table-hover" style="table-layout:fixed;font-size: 12px; width:936px;overflow:auto;">
 									</table>
 								</div>
 							</div>

@@ -43,7 +43,7 @@ function ajaxQuery(){
 	        {extend:'pageLength',/*text:'显示行'*/}
 	       
 	    ],
-        rowsGroup:[0,1,2,3,4],
+        rowsGroup:[0,1,2,3,4,5],
 		paiging:true,
 		ordering:false,
 		searching: false,
@@ -112,11 +112,11 @@ function ajaxQuery(){
 		            {"title":"订单类型","class":"center","data":"order_type","defaultContent": ""},
 		            {"title":"订单区域","class":"center","data":"order_area","defaultContent": ""},
 		            {"title":"订单交期","class":"center","data":"delivery_date","defaultContent": ""},
+		            {"title":"客户","class":"center","data":"customer","defaultContent":""},
 		            {"title":"生产工厂","class":"center","data": "factory_name","defaultContent": ""},
 		            {"title":"生产数量","class":"center","data":"production_qty","defaultContent": ""},		            
 		            {"title":"配置","class":"center","data":"order_config_name","defaultContent": ""},		            
-		            {"title":"配置数量","class":"center","data": "config_qty","defaultContent": ""},
-		            {"title":"客户","class":"center","data":"customer","defaultContent":""},
+		            {"title":"配置数量","class":"center","data": "config_qty","defaultContent": ""},		            
 		            {"title":"生产顺序","class":"center","data":"sequence","defaultContent": ""},
 		            
 		            {"title":"自制件下线","class":"center","data":"zzj_offline_count","defaultContent": ""},

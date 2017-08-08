@@ -119,6 +119,16 @@ $(document).ready(function() {
 	});
 	//修改
 	$("#btnModify").click(function(){
+		var updateFlag=false;
+		for(var i=0;i<swhlist.length;i++){
+			if(swhlist[i].status=='0'){
+				updateFlag=true;
+			}
+		}
+		if(!updateFlag &&swhdelids==""){
+			alert("未修改数据,无法保存");
+			return false;
+		}
 		if(swhlist.length>0){
 			ajaxUpdate(JSON.stringify(swhlist));
 		}
@@ -206,7 +216,7 @@ function ajaxQuery(){
 		language: {
 			emptyTable:"",					     
 			infoEmpty:"",
-			zeroRecords:"未查询到人员数据！"
+			zeroRecords:"未查询到数据！"
 		},
 		ajax:function (data, callback, settings) {
 			var status=$("#status").val();

@@ -732,7 +732,7 @@
 		FROM BMS_HR_PIECE_SALARY_HISTORY
 		WHERE month=#{month} AND submit_factory=#{factory} AND submit_workshop=#{workshop} AND status in('已提交','已结算')
 	</select>
-	<select id="getBasePrice" parameterType="map" resultType="map">
+	<select id="getBasePrice" parameterType="Map" resultType="Map">
 		select p.* from BMS_HR_HOUR_PRICE p left join
 		  BMS_BASE_FACTORY f on f.id=p.factory_id
 		where f.factory_name=#{factory}		

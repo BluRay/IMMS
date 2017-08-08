@@ -245,7 +245,11 @@ function ajaxQuery(){
 		            {"title":"技改台数",width:'60',"class":"center","data":"tech_num","defaultContent": ""},
 		            {"title":"完成台数",width:'60',"class":"center","data":"follow_num","defaultContent": ""},
 		            {"title":"已录入工时",width:'80',"class":"center","data":"ready_hour","defaultContent": ""},
-		            {"title":"车号信息",width:'60',"class":"center","data":"-","defaultContent": ""},
+		            {"title":"车号信息",width:'60',"class":"center","data":"-","defaultContent": "",
+		            	"render": function ( data, type, row ) {
+		            		return "<i class=\"glyphicon glyphicon-search bigger-130 showbus\" title=\"车号信息\" onclick='getTaskAllSelectedBusNum(\"" + row['order_no'] + "\",\""+ row['factory'] +"\",\""+ row['task_detail_id'] +"\",\""+ row['switch_mode'] +"\",\""+ row['workshop'] +"\")' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;";
+		            	},
+		            },
 		            {"title":"成本可否转移",width:'80',"class":"center","data":"order_desc","defaultContent": "",
 		            	"render": function ( data, type, row ) {
 		            		return row.tech_order_type=='ECN'?'否':'是';
@@ -258,6 +262,49 @@ function ajaxQuery(){
 		            	},
 		            }
 		          ],
+	});
+}
+
+function getTaskAllSelectedBusNum(order_no,factory,taskid,switch_mode,workshop){
+	$("#dialog-busnumber").removeClass('hide').dialog({
+		resizable: false,
+		title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-flag green"></i> 车号信息</h4></div>',
+		title_html: true,
+		width:'750px',
+		modal: true,
+		buttons: [{
+					text: "关闭",
+					"class" : "btn btn-minier",
+					click: function() {$( this ).dialog( "close" );} 
+				}
+			]
+	});
+	
+	$.ajax({
+		url: "getEcnTaskBusNumber",
+		dataType: "json",
+		type: "get",
+		data: {
+				"factory":factory,
+				"workshop":workshop,
+				"order_no" : order_no,
+				"task_detail_id" : taskid
+		},
+		async: false,
+		error: function () {alert(response.message);},
+		success: function (response) {
+			$("#busnumber_list").html("");
+			$.each(response.data,function(index,value){
+				var tr = $("<tr style='padding:5px'/>");
+				$("<td />").html(index+1).appendTo(tr);
+				$("<td />").html(value.bus_number).appendTo(tr);
+				$("<td />").html(value.factory).appendTo(tr);
+				$("<td />").html(value.process_name).appendTo(tr);
+				$("<td />").html(value.username).appendTo(tr);
+				$("<td />").html(value.confirmor_date).appendTo(tr);
+				$("#busnumber_list").append(tr);
+			});
+		}
 	});
 }
 

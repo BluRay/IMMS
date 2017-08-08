@@ -620,5 +620,10 @@ public class TechServiceImpl implements ITechService {
 		techDao.caculateEcnSalary(conditionMap);
 	}
 
+	@Override
+	public List<Map<String, String>> getBusNumberByOrder(Map<String, Object> conditionMap) {
+		return techDao.getBusNumberByOrder(conditionMap);
+	}
+
 		
 }

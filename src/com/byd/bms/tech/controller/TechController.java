@@ -1005,6 +1005,30 @@ public class TechController extends BaseController{
 		return model;
 	}
 	
+	@RequestMapping("/getEcnTaskBusNumber")
+	@ResponseBody
+	public ModelMap getEcnTaskBusNumber(){
+		String order_no = request.getParameter("order_no");
+		String factory = request.getParameter("factory");
+		String task_detail_id = request.getParameter("task_detail_id");
+		String workshop = request.getParameter("workshop");
+		Map<String, Object> conditionMap = new HashMap<String, Object>();
+		conditionMap.put("order_no", order_no);
+		conditionMap.put("factory", factory);
+		conditionMap.put("task_detail_id", task_detail_id);
+		conditionMap.put("workshop", workshop);
+		conditionMap.put("bus_num_start","");
+		conditionMap.put("bus_num_end", "");
+		
+		List<Map<String, String>> datalist = techService.getBusNumberByOrder(conditionMap);
+		Map<String, Object> result = new HashMap<String,Object>();
+		result.put("data", datalist);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(result);
+		model = mv.getModelMap();
+		return model;
+	}
+	
 	/**
 	 * @author xiong.jianwu
 	 * 技改跟进（移动端）

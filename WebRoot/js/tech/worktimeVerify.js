@@ -223,7 +223,7 @@ function verifyWorkTime(order_no,tech_order_no,task_content,task_detail_id,facto
 		resizable: false,
 		title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-flag green"></i> 工时审核</h4></div>',
 		title_html: true,
-		width:'750px',
+		width:'790px',
 		modal: true,
 		buttons: [{
 					text: "取消",
@@ -262,9 +262,10 @@ function btnEditConfirm(task_detail_id){
 	conditions.workshop=editModal_workshop;
 	conditions.workMonth=workDate;
 	edit_list=getSelectList(task_detail_id);
-	
+	console.log("-->edit_list = " , edit_list);
 	var orderStaus="verify";
 	var trs=$("#workhour_list").children("tr");
+	var tr_count = 0;
 	$.each(trs,function(index,tr){
 		var cbx=$(tr).find("td").find("input").attr("type");
 		if(cbx!=undefined){			
@@ -272,7 +273,9 @@ function btnEditConfirm(task_detail_id){
 			var status=$(tr).data("status");
 			var ischecked=$(c_checkbox).is(":checked");
 			if(ischecked){
-				edit_list[index].techSinglePrice=tech_single_price;
+				console.log("-->tech_single_price = " + tr_count + " : "+ edit_list[0].techSinglePrice);
+				edit_list[tr_count].techSinglePrice=tech_single_price;
+				tr_count++;
 			}
 			if(status=='已驳回'&&!ischecked){
 				orderStaus="reject";
@@ -311,6 +314,7 @@ function getSelectList(task_detail_id){
 		var swhindex=$(tr).data("swhindex");
 		obj=swhlist[swhindex];
 		obj.tech_task_id=task_detail_id;
+		obj.techSinglePrice = '0';
 		swhList.push(obj);
 	});
 	return swhList;
@@ -382,11 +386,12 @@ function ajaxGetStaffWorkHours(conditions){
 }
 
 function generateWorkhourTb(swhlist,caculate) {
+	ready_hour = 0;
 	caculate=caculate||false;
 	$("#workhour_list").html("");
 	$.each(swhlist, function(index, swh) {
 		var tr = $("<tr style='padding:5px'/>");
-		if (swh.status=="已锁定") {
+		if ((swh.status=="已锁定")||(swh.status=="已驳回")||(swh.status=="已审批")) {
 			$("<td />").html(swh.status).appendTo(tr);
 		} else {
 			$("<td />").html("<input type='checkbox' >").appendTo(tr);

@@ -851,7 +851,7 @@ function ajaxSave(staffHourList,salary_model,is_customer){
 		},
 		success:function(response){
 			//alert(response.message);
-			fadeMessageAlert("",response.message, response.success?"success":"danger")
+			fadeMessageAlert("",response.message, response.success?"gitter-success":"gitter-warning")
 		}
 	});
 

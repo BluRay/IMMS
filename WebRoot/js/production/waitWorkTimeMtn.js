@@ -297,7 +297,8 @@ $(document).ready(function() {
 			var standard_price=ajaxGetStandardPrice();
 			if(standard_price==0){
 				saveFlag=false;
-				alert("未维护等待工时单价！");
+				var type=$("#search_wait_hour_type :selected").text();
+				alert("未维护【"+type+"】等待工时单价！");
 				return false;
 			}		
 			$("#tableResult tbody").find("tr").each(function() {						

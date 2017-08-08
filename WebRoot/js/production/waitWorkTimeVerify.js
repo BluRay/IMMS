@@ -147,7 +147,7 @@ function ajaxQuery(){
 		language: {
 			emptyTable:"",					     
 			infoEmpty:"",
-			zeroRecords:""
+			zeroRecords:"没查找到符合条件的记录"
 		},
 		ajax:function (data, callback, settings) {
 			var status=$("#status").val();
@@ -187,7 +187,7 @@ function ajaxQuery(){
 			{"title":"<input type='checkbox' id='selectAll' onclick='selectAll()'/>","width":"25px","class":"center","data":"id","render": function ( data, type, row ) {
 			    return "<input id='id' value='"+data+"' type='hidden' /><input type='checkbox' fid='cb_"+data+"'>";
 			},"defaultContent": ""},
-            {"title":"等待日期","class":"center","data":"","defaultContent": ""},
+            {"title":"等待日期","class":"center","data":"","width":"80px","defaultContent": ""},
             {"title":"等待类别","class":"center","data":"","defaultContent": ""},
             {"title":"等待原因","class":"center","data": "","defaultContent": ""},
             {"title":"详细原因","class":"center","data":"detail_reason","defaultContent":""},
@@ -196,9 +196,9 @@ function ajaxQuery(){
             {"title":"岗位","class":"center","data":"job","defaultContent": ""},
             {"title":"工时","class":"center","data":"work_hour","defaultContent": ""},
             {"title":"工时单价","class":"center","data":"work_hour","defaultContent": ""},
-            {"title":"人员去向","class":"center","data":"whereabouts","width":"200px","defaultContent": ""},
+            {"title":"人员去向","class":"center","data":"whereabouts","width":"120px","defaultContent": ""},
+            {"title":"班组","class":"center","data":"","defaultContent": ""},
             {"title":"小班组","class":"center","data":"","defaultContent":""},
-            {"title":"班组","class":"center","data":"","defaultContent": ""},	
             {"title":"状态","class":"center","data":"","defaultContent": ""},
         ],
 	});
@@ -273,8 +273,8 @@ function generateTb(swhlist){
 		$("<td class=\"center\" />").html(swh.work_hour).appendTo(tr);
 		$("<td class=\"center\" />").html(swh.hour_price).appendTo(tr);
 		$("<td class=\"center\"/>").html(swh.whereabouts).appendTo(tr);
-		$("<td class=\"center\" />").html(swh.team_org).appendTo(tr);
 		$("<td class=\"center\" />").html(swh.workgroup_org).appendTo(tr);
+		$("<td class=\"center\" />").html(swh.team_org).appendTo(tr);
 		$("<td class=\"center\" />").html(swh.status=='0' ? '已维护' : (swh.status=='1' ? '已审核' :(swh.status=='2' ? '已驳回' :'已锁定'))).appendTo(tr);
 		$("#tableResult tbody").append(tr);
 		$(tr).data("swhid",swh.id);

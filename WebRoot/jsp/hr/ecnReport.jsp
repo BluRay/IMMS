@@ -68,9 +68,9 @@
 						</tr>
 						<tr>
 						<td style="text-align:right">工号/姓名：</td>
-						<td ><input id="bus_number" style="width:120px;height: 30px;" class="input-medium" placeholder="工号/姓名" type="text"></td>
+						<td ><input id="search_staff" style="width:120px;height: 30px;" class="input-medium" placeholder="工号/姓名" type="text"></td>
 						<td colspan='2' style="text-align:right">派工流水号/作业内容：</td>
-						<td colspan='2'><input id="bus_number" style="width:143px;height: 30px;" class="input-medium" placeholder="派工流水号/作业内容" type="text"></td>
+						<td colspan='2'><input id="search_task" style="width:143px;height: 30px;" class="input-medium" placeholder="派工流水号/作业内容" type="text"></td>
 						<td>&nbsp;统计维度：</td>
 						<td>
 							<select name="" id="search_count_flag" class="input-medium" style="width:100px;">

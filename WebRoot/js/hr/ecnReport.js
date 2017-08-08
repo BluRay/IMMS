@@ -69,7 +69,21 @@ function ajaxQuery(){
 		alert("请输入日期范围！");
 		return false;
 	}
-
+	var conditions = "{factory:'" + $("#search_factory").find("option:selected").text() + 
+	"',workshop:'" + $("#search_workshop").find("option:selected").text() + 
+	"',workgroup:'" + (($("#search_workgroup").find("option:selected").text()=="全部")?"":$("#search_workgroup").find("option:selected").text()) + 
+	"',team:'" + (($("#search_team").find("option:selected").text()=="全部")?"":$("#search_workgroup").find("option:selected").text()) +
+	"',dateStart:'" + $("#wdate_start").val() +
+	"',dateEnd:'" + $("#wdate_end").val() +
+	"',staff:'" + $("#search_staff").val() +
+	"',task:'" + $("#search_task").val() + "'}";
+	console.log("-->conditions = " + conditions);
+	
+	//先destroy datatable，隐藏form
+	if($.fn.dataTable.isDataTable("#tableResult")){
+		$('#tableResult').DataTable().destroy();
+		$('#tableResult').empty();
+	}
 	
 	var columns=[];
 	var fixedColumns={};
@@ -120,7 +134,7 @@ function ajaxQuery(){
 			
 			var param ={
 				"draw":1,
-				"conditions":"{factory:'长沙工厂',workshop:'焊装'}"
+				"conditions":conditions
 			};
 			$.ajax({
                 type: "post",

@@ -470,6 +470,9 @@ function ajaxQuery(){
                  // settings.rowsGroup=[0,1,2,3,4,5];
                    //alert("分页调用");
                     callback(returnData);
+                    var head_width=$(".dataTables_scrollHead").width();
+                    //alert(head_width)
+                    $(".dataTables_scrollHead").css("width",head_width-20);
                 }
             });
 		

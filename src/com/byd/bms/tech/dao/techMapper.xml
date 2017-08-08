@@ -897,7 +897,7 @@
 					approve_date=#{detail.approveDate},
 				</if>
 				<if test="detail.techSinglePrice !=null">
-					tech_single_price=#{detail.techSinglePrice},
+					hour_price=#{detail.techSinglePrice},
 				</if>
 			</trim>
 			where id=#{detail.id}
@@ -1693,6 +1693,16 @@ LEFT JOIN BMS_BASE_USER AS u ON u.id = f.confirmor_id
 			VALUES(#{task_content},#{tech_order_no},#{tech_point_num},#{tech_order_type},#{tech_type},#{tech_date},#{duty_unit},#{major_change},#{repeat_change},#{custom_change},#{custom_change_no},#{tech_order_file},#{custom_change_file},#{editor_id},#{edit_date})
 		]]>
 	</insert>
+	
+	<select id="getBusNumberByOrder" parameterType="Map" resultType="Map">
+		SELECT F.*,P.process_name,U.username FROM BMS_TECH_TASK_FOLLOW F 
+		LEFT OUTER JOIN BMS_PLAN_BUS B ON F.bus_number = B.bus_number
+		LEFT OUTER JOIN BMS_BASE_PROCESS P ON B.latest_process_id = P.id
+		LEFT OUTER JOIN BMS_BASE_USER U ON F.confirmor_id = U.staff_number
+		WHERE F.task_detail_id = #{task_detail_id} AND F.factory = #{factory}
+		AND F.workshop = #{workshop} AND F.order_no = #{order_no}
+		ORDER BY F.bus_number
+	</select>
 	
 	<select id="getSingleTaskList" parameterType="Map" resultType="map">
 		
