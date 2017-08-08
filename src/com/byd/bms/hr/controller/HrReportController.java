@@ -275,5 +275,118 @@ public class HrReportController extends BaseController {
 		mv.setViewName("hr/staffSalaryBalance");
 		return mv;
 	}
+	
+	/**
+	 * 计件工资结算页面工资列表查询
+	 * @return
+	 */
+	@RequestMapping("/getStaffPieceSalaryToBal")
+	@ResponseBody
+	public ModelMap getStaffPieceSalaryToBal(){
+		model.clear();
+		String factory = request.getParameter("factory");
+		String workshop = request.getParameter("workshop");
+		String workgroup = request.getParameter("workgroup");
+		String team = request.getParameter("team");
+		String staff = request.getParameter("staff");
+		String month = request.getParameter("month");
+		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
+		Map<String, Object> conditionMap = new HashMap<String, Object>();
+		conditionMap.put("draw", draw);
+		conditionMap.put("factory", factory);
+		conditionMap.put("workshop", workshop);
+		conditionMap.put("workgroup", workgroup);
+		conditionMap.put("team", team);
+		conditionMap.put("month", month);
+		conditionMap.put("staff", staff);
+		
+		hrReportService.getStaffPieceSalaryToBal(conditionMap,model);
+		return model;
+	}
+	
+	/**
+	 * 计件工资驳回
+	 * @return
+	 */
+	@RequestMapping("/rejectStaffSalary")
+	@ResponseBody
+	public ModelMap rejectStaffSalary(){
+		model.clear();
+		String factory = request.getParameter("factory");
+		String workshop = request.getParameter("workshop");	
+		String workgroup = request.getParameter("workgroup");
+		String team = request.getParameter("team");
+		String month = request.getParameter("month");	
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String saver=(String) session.getAttribute("user_name");
+		String staff_salary_list = request.getParameter("staff_salary_list");
+		JSONArray jsa=JSONArray.fromObject(staff_salary_list);
+		Iterator it=jsa.iterator();
+		List<Map<String,String>> detail_list=new ArrayList<Map<String,String>>();
+		/**
+		 * 封装需要保存的数据
+		 */
+		while(it.hasNext()){
+			JSONObject el=(JSONObject) it.next();
+			Map<String,String> m=(Map<String,String>) JSONObject.toBean(el, Map.class);	
+			detail_list.add(m);
+		}
+		Map<String, Object> conditionMap = new HashMap<String, Object>();
+		conditionMap.put("factory", factory);
+		conditionMap.put("workshop", workshop);
+		conditionMap.put("workgroup", workgroup);
+		conditionMap.put("team", team);
+		conditionMap.put("staff_salary_list", detail_list);
+		conditionMap.put("month", month);
+		conditionMap.put("saver", saver);
+		conditionMap.put("save_date", curTime);
+		conditionMap.put("status", "已驳回");
+		
+		hrReportService.rejectStaffSalary(conditionMap,model);
+		return model;
+	}
+	/**
+	 * 计件工资结算
+	 * @return
+	 */
+	@RequestMapping("/balanceStaffSalary")
+	@ResponseBody
+	public ModelMap balanceStaffSalary(){
+		model.clear();
+		String factory = request.getParameter("factory");
+		String workshop = request.getParameter("workshop");	
+		String workgroup = request.getParameter("workgroup");
+		String team = request.getParameter("team");
+		String month = request.getParameter("month");	
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String saver=(String) session.getAttribute("user_name");
+		String staff_salary_list = request.getParameter("staff_salary_list");
+		JSONArray jsa=JSONArray.fromObject(staff_salary_list);
+		Iterator it=jsa.iterator();
+		List<Map<String,String>> detail_list=new ArrayList<Map<String,String>>();
+		/**
+		 * 封装需要保存的数据
+		 */
+		while(it.hasNext()){
+			JSONObject el=(JSONObject) it.next();
+			Map<String,String> m=(Map<String,String>) JSONObject.toBean(el, Map.class);	
+			detail_list.add(m);
+		}
+		Map<String, Object> conditionMap = new HashMap<String, Object>();
+		conditionMap.put("factory", factory);
+		conditionMap.put("workshop", workshop);
+		conditionMap.put("workgroup", workgroup);
+		conditionMap.put("team", team);
+		conditionMap.put("staff_salary_list", detail_list);
+		conditionMap.put("month", month);
+		conditionMap.put("saver", saver);
+		conditionMap.put("save_date", curTime);
+		conditionMap.put("status", "已结算");
+		
+		hrReportService.balanceStaffSalary(conditionMap,model);
+		return model;
+	}
 	/******************** xioing.jianwu **********************/
 }

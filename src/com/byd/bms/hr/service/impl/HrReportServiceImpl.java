@@ -98,15 +98,50 @@ public class HrReportServiceImpl implements IHrReportService {
 				model.put("success", true);
 				model.put("message", "工资提交成功！");
 			}
-			
-					
-			
+	
 		}catch(Exception e){
 			model.put("success", false);
 			model.put("message", "工资提交失败！"+e.getMessage());
 			throw new RuntimeException(e.getMessage());
 		}
 		
+	}
+
+	@Override
+	public void getStaffPieceSalaryToBal(Map<String, Object> conditionMap,
+			ModelMap model) {
+		List<Map<String,Object>> datalist=hrReportDao.queryStaffPieceSalaryHistory(conditionMap);
+		model.put("draw", conditionMap.get("draw"));
+		model.put("data", datalist);
+	}
+
+	@Override
+	public void rejectStaffSalary(Map<String, Object> conditionMap,
+			ModelMap model) {
+		try{
+			hrReportDao.updateStaffSalaryStatus(conditionMap);
+			model.put("success", true);
+			model.put("message", "工资驳回成功！");
+		}catch(Exception e){
+			model.put("success", false);
+			model.put("message", "工资驳回失败！"+e.getMessage());
+			throw new RuntimeException(e.getMessage());
+		}
+		
+	}
+
+	@Override
+	public void balanceStaffSalary(Map<String, Object> conditionMap,
+			ModelMap model) {
+		try{
+			hrReportDao.updateStaffSalaryStatus(conditionMap);
+			model.put("success", true);
+			model.put("message", "工资结算成功！");
+		}catch(Exception e){
+			model.put("success", false);
+			model.put("message", "工资结算失败！"+e.getMessage());
+			throw new RuntimeException(e.getMessage());
+		}
 	}
 
 	@Override

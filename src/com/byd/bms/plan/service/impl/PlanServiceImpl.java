@@ -595,14 +595,20 @@ public class PlanServiceImpl implements IPlanService {
 	@Transactional
 	public int BingingVinMotor(Map<String, Object> queryMap) {
 		String update = queryMap.get("update").toString();	//left_motor_number right_motor_number bus_number
+		String update_val = queryMap.get("update_val").toString();
 		//判断是否重复绑定
 		if(update.equals("bus_number")){
-			int check = planDao.checkBusNumber(queryMap);
-			if(check == 0){
-				//此车号已经绑定了或不存在
-				return -1;
+			if(update_val==""){
+				//解除绑定
+				planDao.unBingingBusNumber(queryMap);
 			}else{
-				planDao.bingingBusNumber(queryMap);
+				int check = planDao.checkBusNumber(queryMap);
+				if(check == 0){
+					//此车号已经绑定了或不存在
+					return -1;
+				}else{
+					planDao.bingingBusNumber(queryMap);
+				}
 			}
 		}else{
 			int check = planDao.checkBingingVin(queryMap);

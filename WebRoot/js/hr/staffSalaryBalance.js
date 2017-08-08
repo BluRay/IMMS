@@ -28,23 +28,22 @@ $(document).ready(function(){
 		var workgroup=$("#search_workgroup :selected").text();
 		getTeamSelect(factory,workshop,workgroup,"","#search_team","全部","id");
 	})
-	
+
 	/**
-	 * 工资提交
+	 * 工资驳回
 	 */
-	$("#btnSubmit").click(function(){
+	$("#btnReject").click(function(){
 		var factory=$("#search_factory :selected").text();
 		var workshop=$("#search_workshop :selected").text();
 		var workgroup=$("#search_workgroup :selected").text();
 		var team=$("#search_team :selected").text();
 		var month=$("#month").val();
 		if(staff_salary_list.length==0){
-			alert("无需要提交的数据！");
+			alert("无需要驳回的工资！");
 			return false;
 		}
-		
 		$.ajax({
-			url:"submitStaffSalary",
+			url:"rejectStaffSalary",
 			type:"post",
 			dataType:"json",
 			data:{
@@ -56,7 +55,43 @@ $(document).ready(function(){
 				staff_salary_list:JSON.stringify(staff_salary_list)
 			},
 			success:function(response){
+				fadeMessageAlert("",response.message, response.success?"gritter-success":"gritter-error");
+				ajaxQuery();
+			},
+			error:function(){
+				fadeMessageAlert("","系统异常!","gritter-error")
+			}
+		})
+		
+	})
+	/**
+	 * 工资结算
+	 */
+	$("#btnBalance").click(function(){
+		var factory=$("#search_factory :selected").text();
+		var workshop=$("#search_workshop :selected").text();
+		var workgroup=$("#search_workgroup :selected").text();
+		var team=$("#search_team :selected").text();
+		var month=$("#month").val();
+		if(staff_salary_list.length==0){
+			alert("无需要结算的工资！");
+			return false;
+		}
+		$.ajax({
+			url:"balanceStaffSalary",
+			type:"post",
+			dataType:"json",
+			data:{
+				factory:factory,
+				workshop:workshop,
+				workgroup:workgroup,
+				team:team,
+				month:month,				
+				staff_salary_list:JSON.stringify(staff_salary_list)
+			},
+			success:function(response){
 				fadeMessageAlert("",response.message, response.success?"gritter-success":"gritter-error")
+				ajaxQuery()
 			},
 			error:function(){
 				fadeMessageAlert("","系统异常!","gritter-error")
@@ -102,6 +137,8 @@ function ajaxQuery(){
 	            {"title":"小班组","class":"center","width":"120","data":"team_org","defaultContent":""},
 	          	{"title":"岗位","class":"center","data": "job","defaultContent": ""},	
 	          	{"title":"在职","class":"center","data":"staff_status","defaultContent": ""},
+	          	/*{"title":"提交工厂","class":"center","data":"submit_factory","defaultContent": ""},
+	          	{"title":"提交车间","class":"center","data":"submit_workshop","defaultContent": ""},*/
 	            {"title":"出勤天数","class":"center","data":"attendance_days","defaultContent": ""},
 	            {"title":"车间产量","class":"center","data":"production_qty","defaultContent": ""},			            
 	            {"title":"计件产量","class":"center","data":"piece_total","defaultContent": ""},
@@ -160,13 +197,14 @@ function ajaxQuery(){
 	            	}
 	            	return salary_avg;
 	            }},
+	            {"title":"状态","class":"center","data": "status","defaultContent": ""}
 	          ]	;
 	
 	var tb=$("#tableResult").DataTable({
 		serverSide: true,
 		fixedColumns:   {
             leftColumns: 2,
-            rightColumns:2
+            rightColumns:3
         },
 		dom: 'Bfrtip',
 		/*lengthMenu: [
@@ -176,7 +214,7 @@ function ajaxQuery(){
 	    buttons: [
 	        {extend:'excelHtml5',title:'data_export',className:'black',text:'<i class=\"fa fa-file-excel-o bigger-130\" tooltip=\"导出excel\"></i>'},
 	        {extend:'colvis',text:'<i class=\"fa fa-list bigger-130\" tooltip=\"选择展示列\"></i>'},
-	       /* {extend:'pageLength',text:'显示行'}*/
+	        /*{extend:'pageLength',text:'显示20行'}*/
 	       
 	    ],
 	    paginate:false,
@@ -189,16 +227,17 @@ function ajaxQuery(){
 		sScrollY: $(window).height()-220,
 		scrollX: true,
 		/*scrollCollapse: true,*/
-/*		pageLength: 20,*/
+		/*pageLength: 20,
 		pagingType:"full_numbers",
-		lengthChange:true,
+		lengthChange:true,*/
 		info:false,
 		orderMulti:false,
 		language: {
 			emptyTable:"抱歉，未查询到数据！",
 			zeroRecords:"抱歉，未查询到数据！",
-			loadingRecords:"正在查询，请稍后..." 
-		/*	paginate: {
+			loadingRecords:"正在查询，请稍后..." ,
+			/*info:"共计 _TOTAL_ 条，当前第 _PAGE_ 页 共 _PAGES_ 页",
+			paginate: {
 			  first:"首页",
 		      previous: "上一页",
 		      next:"下一页",
@@ -217,13 +256,13 @@ function ajaxQuery(){
 				"staff":$("#staff_number").val(),
 				"month":$("#month").val()
 			};
-            /*param.length = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
-            param.start = data.start;//开始的记录序号
+            param.length = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
+          /*  param.start = data.start;//开始的记录序号
             param.page = (data.start / data.length)+1;//当前页码
 */
             $.ajax({
                 type: "post",
-                url: "getStaffPieceSalary",
+                url: "getStaffPieceSalaryToBal",
                 cache: false,  //禁用缓存
                 data: param,  //传入组装的参数
                 dataType: "json",
@@ -234,7 +273,9 @@ function ajaxQuery(){
                 	//封装返回数据
                     var returnData = {};
                     returnData.draw = result.draw;//这里直接自行返回了draw计数器,应该由后台返回
-                    returnData.data = result.data;//返回的数据列表
+                    /*returnData.recordsTotal = result.total;//返回数据全部记录
+                    returnData.recordsFiltered = result.total;//后台不实现过滤功能，每次查询均视作全部结果
+*/                    returnData.data = result.data;//返回的数据列表
                     //console.log(returnData);
                     //调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
                     //此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
@@ -253,4 +294,22 @@ function ajaxQuery(){
 	$("#tableResult_paginate").addClass('col-xs-6');
 	//alert('A ');
 	$(".dt-buttons").css("margin-top","-50px").find("a").css("border","0px");
+}
+
+function changeMonth(){
+	var cur_date=new Date();
+	var cur_month=cur_date.getMonth()+1;
+	var last_month=cur_date.getMonth();
+	
+	cur_month=cur_date.getFullYear()+"-"+(cur_month<10?("0"+cur_month):cur_month);
+	last_month=cur_date.getFullYear()+"-"+(last_month<10?("0"+last_month):last_month);
+	//alert(cur_month)
+	
+	if($("#month").val()!=cur_month&&$("#month").val()!=last_month){
+		$("#btnReject").hide();
+		$("#btnBalance").hide();
+	}else{
+		$("#btnReject").show();
+		$("#btnBalance").show();
+	}
 }

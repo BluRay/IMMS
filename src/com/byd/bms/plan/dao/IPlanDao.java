@@ -71,6 +71,7 @@ public interface IPlanDao {
 	public int bingingVin(Map<String,Object> queryMap);
 	public int checkBusNumber(Map<String,Object> queryMap);
 	public int bingingBusNumber(Map<String,Object> queryMap);
+	public int unBingingBusNumber(Map<String,Object> queryMap);
 	public List<Map<String,String>> getBusTransferOutList(Map<String,Object> queryMap);
 	public List<Map<String,String>> getBusTransferInList(Map<String,Object> queryMap);
 	public List<Map<String,String>> getBusInfo(String busNumber);

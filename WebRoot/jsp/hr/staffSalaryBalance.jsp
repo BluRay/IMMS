@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <meta charset="utf-8" />
-<title>计件工资提交</title>
+<title>计件工资结算</title>
 <meta name="description" content="Common Buttons &amp; Icons" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />	
@@ -34,7 +34,7 @@
 					<ul class="breadcrumb">
 						<li><i class="ace-icon fa fa-home home-icon"></i><a
 							href="<%=request.getContextPath()%>/index">首页</a></li>
-						<li class="active">计件工资提交</li>
+						<li class="active">计件工资结算</li>
 					</ul>
 					<!-- /.breadcrumb -->
 
@@ -74,18 +74,21 @@
 									<option value=''>全部</option>
 								</select>
 							</td>	
+							<!-- </tr>
+							<tr> -->
 							<td style="text-align:right" >姓名/工号：</td>
 							<td >
-								<input id="staff_number" class="input-medium" style="width:90px;height: 30px;" placeholder="姓名/工号" type="text">
+								<input id="staff_number" class="input-medium" style="width:80px;height: 30px;" placeholder="姓名/工号" type="text">
 							</td>						
 							<td style="text-align:right" >统计月份：</td>
 							<td >
-								<input id="month" style="width:90px;height: 30px;" class="input-small" 
-											onclick="WdatePicker({dateFmt:'yyyy-MM',minDate:'%y-{%M-1}',maxDate:'%y-%M'})" type="text">						
+								<input id="month" style="width:70px;height: 30px;" class="input-small" 
+											onclick="WdatePicker({dateFmt:'yyyy-MM',maxDate:'%y-%M',onpicked:function(){changeMonth();}})" type="text">						
 							</td>
 							<td>
-							<input class="btn btn-sm btn-primary" id="btnQuery" value="查询" style="margin-left: 5px;top:1px;" type="button">	
-							<input class="btn btn-sm btn-success" id="btnSubmit" value="提交" style="margin-left: 0px;top:1px;" type="button">							
+							<input class="btn btn-sm btn-primary" id="btnQuery" value="查询" style="margin-left:5px;top:1px;" type="button">	
+							<input class="btn btn-sm btn-danger" id="btnReject" value="驳回" style="margin-left: 0px;top:1px;" type="button">
+							<input class="btn btn-sm btn-success" id="btnBalance" value="结算" style="margin-left: 0px;top:1px;" type="button">							
 							</td>
 						</tr>						
 						</table>
@@ -122,7 +125,7 @@
 		<script src="../assets/js/buttons.html5.js"></script>
 		<script src="../assets/js/jquery.gritter.min.js"></script>
 		<script src="../js/common.js"></script>
-		<script src="../js/hr/staffSalarySubmit.js"></script>
+		<script src="../js/hr/staffSalaryBalance.js"></script>
 </body>
 
 </html>

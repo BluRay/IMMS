@@ -342,7 +342,7 @@
 	</select>
 	
 	<select id="queryStaffPieceSalaryHistory" parameterType="Map" resultType="Map">
-		select s.status,sh.*
+		select s.status staff_status,sh.*
 		from BMS_HR_PIECE_SALARY_HISTORY sh
 		left join (
 		select distinct ps.staff_number,ps.staff_name
@@ -401,6 +401,23 @@
 		where sh.month=#{month} and sh.submit_factory=#{factory} and sh.submit_workshop=#{workshop}
 		<if test="staff !=null and staff !=''">
 		and (st.staff_number like concat('%',#{staff},'%') or st.staff_name like concat('%',#{staff},'%') )
+		</if>
+	
+	</select>
+	
+	<select id="queryStaffPieceSalaryToBal" parameterType="Map" resultType="Map">
+		select s.status staff_status,sh.*
+		from BMS_HR_PIECE_SALARY_HISTORY sh
+		left join BMS_HR_STAFF s on s.staff_number=sh.staff_number
+		where sh.month=#{month} and s.plant_org=#{factory} and s.workshop_org=#{workshop}
+		<if test="workgroup !=null and workgroup !='全部'">
+		 and s.workgroup_org=#{workgroup}
+		</if>
+		<if test="team !=null and team !='全部'">
+		 and s.team_org=#{team}
+		</if>
+		<if test="staff !=null and staff !=''">
+		and (s.staff_number like concat('%',#{staff},'%') or s.staff_name like concat('%',#{staff},'%') )
 		</if>
 	
 	</select>
@@ -527,4 +544,14 @@
 		</if>
 	</delete>
 	
+	<update id="updateStaffSalaryStatus" parameterType="Map">
+		update BMS_HR_PIECE_SALARY_HISTORY set status=#{status},calculator=#{saver},calculate_date=#{save_date}
+		where submit_factory=#{factory} and submit_workshop=#{workshop}
+		<foreach collection="staff_salary_list" item="detail" open=" and staff_number in(" close=")" index="index" separator=",">
+			#{detail.staff_number}
+		</foreach>
+		<if test="month !=null and month !=''">
+			and month=#{month}
+		</if>
+	</update>
 </mapper>

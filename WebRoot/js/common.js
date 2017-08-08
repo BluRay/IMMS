@@ -881,7 +881,7 @@ function numAdd(num1, num2) {
 				//alert(response.message)
 			},
 			success : function(response) {
-				if(response.length>0){
+				if(response.data.length>0){
 					submit_flg= "true";
 				}else{
 					submit_flg= "false";

@@ -5,6 +5,7 @@ var timeConfigCount = 0;
 var cur_tmpOrderId = 0;
 var ready_hour=0;
 var edit_list=[];
+var swh_list = [];
 var re_f = /^[0-9]+[0-9]*\.?[0|5]?$/;//浮点数正则表达式
 var editModal_factory = "";
 var editModal_workshop = "";
@@ -45,6 +46,7 @@ $(document).ready(function(){
 			return false;
 		}
 		workhour_list=ajaxGetStaffWorkHours(conditions);
+		swh_list = workhour_list;
 		generateWorkhourTb(workhour_list,true);
 	});
 });
@@ -103,6 +105,9 @@ function ajaxQuery(){
                     //调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
                     //此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
                     callback(returnData);
+                    var head_width=$(".dataTables_scrollHead").width();
+                    //alert(head_width)
+                    $(".dataTables_scrollHead").css("width",head_width-20);
                 }
             });
 		},
@@ -211,6 +216,7 @@ function verifyWorkTime(order_no,tech_order_no,task_content,task_detail_id,facto
 	
 	var conditions="{ecnTaskId:'"+task_detail_id+"',workMonth:'"+workMonth+"',factory:'"+factory+"',workshop:'"+workshop+"'}";
 	swhlist = ajaxGetStaffWorkHours(conditions);
+	swh_list = swhlist;
 	generateWorkhourTb(swhlist,true);
 
 	$("#checkall").attr("checked",false);
@@ -312,9 +318,11 @@ function getSelectList(task_detail_id){
 		var obj={};
 		var tr=$(box).closest("tr");
 		var swhindex=$(tr).data("swhindex");
-		obj=swhlist[swhindex];
+		console.log("-->swhindex = " + swhindex);
+		obj=swh_list[swhindex];
+		console.log("-->obj = " , obj);
 		obj.tech_task_id=task_detail_id;
-		obj.techSinglePrice = '0';
+		obj.techSinglePrice = "0";
 		swhList.push(obj);
 	});
 	return swhList;

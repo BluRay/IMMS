@@ -644,6 +644,10 @@
 		right_motor_number=(SELECT left_motor_number FROM BMS_PD_VIN WHERE vin = #{vin})
 		WHERE bus_number = #{update_val}
 	</update>
+	<update id="unBingingBusNumber" parameterType="Map">
+		UPDATE BMS_PLAN_BUS SET vin = NULL
+		WHERE vin = #{vin}
+	</update>
 	
 	<select id="getBusTransferOutList" parameterType="Map" resultType="Map">
 		<![CDATA[

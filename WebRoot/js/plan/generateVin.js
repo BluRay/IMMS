@@ -193,6 +193,14 @@ $(document).ready(function () {
 		if(confirm("是否确定修改？")){
 			var vin = $(this).attr("vin")
 			var update_val=$(this).val();
+			console.log(update_val + "|" + $(this).attr("old_val"));
+			if($(this).attr("old_val") !== ""){
+				if(update_val !==""){
+					alert("如需修改车号，请先删除原车号，保存后再录入新车号绑定！");
+					$(this).val($(this).attr("old_val"))
+					return false;
+				}
+			}
 			ajaxUpdateVinMotor(vin,update_val,"bus_number",e);
 		}else{
 			$(this).val($(this).attr("old_val"))
@@ -231,6 +239,7 @@ function ajaxUpdateVinMotor(vin,update_val,update,e){
 					class_name: 'gritter-info'
 				});
 			}
+			ajaxQuery();
 		}
 	});
 }

@@ -16,4 +16,13 @@ public interface IHrReportService {
 	public void submitStaffSalary(Map<String, Object> conditionMap,ModelMap model);
 	
 	public List<Map<String,Object>> getEcnReportData(Map<String, Object> conditionMap);
+
+	public void getStaffPieceSalaryToBal(Map<String, Object> conditionMap,
+			ModelMap model);
+
+	public void rejectStaffSalary(Map<String, Object> conditionMap,
+			ModelMap model);
+
+	public void balanceStaffSalary(Map<String, Object> conditionMap,
+			ModelMap model);
 }
