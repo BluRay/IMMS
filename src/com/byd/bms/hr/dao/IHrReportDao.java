@@ -20,6 +20,8 @@ public interface IHrReportDao {
 	public void deletePieceSalaryHistory(Map<String, Object> conditionMap);
 	public List<Map<String, Object>> queryBalanceStaffSalary(Map<String, Object> conditionMap);
 	public List<Map<String, Object>> queryStaffPieceSalaryHistory(Map<String, Object> conditionMap);
+	public int queryStaffWaitHoursCount(Map<String, Object> conditionMap);
+	public List<Map<String, Object>> queryStaffWaitHours(Map<String, Object> conditionMap);
 	public List<Map<String, Object>> queryStaffPieceSalaryToBal(
 			Map<String, Object> conditionMap);
 	public void updateStaffSalaryStatus(Map<String, Object> conditionMap);

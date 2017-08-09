@@ -5,7 +5,7 @@ var re_f = /^[0-9]+[0-9]*\.?[0|5]?$/;// 浮点数正则表达式
 var ECN_CHANGE_TYPE = [];
 var pageSize=1;
 var table;
-var table_height = $(window).height()-250;
+var table_height = $(window).height()-270;
 $(document).ready(function(){
 	initPage();
 	
@@ -27,6 +27,11 @@ $(document).ready(function(){
 	
 	$("#btn_single_bus_num_query").click(function() {
 		ajaxQueryDetail($("#selectBusNumber_table_tbody"), $('#select_factory').val(), $('#select_workshop').val(), $('#select_order_no').val(), $('#select_tech_task_id').val(), null);
+		return false;
+	});
+	
+	$("#btn_single_bus_num_query_view").click(function() {
+		ajaxQueryDetail($("#selectBusNumber_table_tbody_view"), $('#select_factory_view').val(), $('#select_workshop_view').val(), $('#select_order_no_view').val(), $('#select_tech_task_id_view').val(), "view");
 		return false;
 	});
 	

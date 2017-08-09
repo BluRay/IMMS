@@ -76,8 +76,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<table id="RangeTable" class="table table-bordered table-striped" style="text-align: center;margin-left:17px; font-size: 12px;width:96%;max-width:96%;margin-top:-21px">
 						<thead>
 							<tr>
-							<th>车间</th><th>自制件</th><th>部件</th><th>焊装</th>
-							<th>玻璃钢</th><th>涂装</th><th>底盘</th><th>总装</th>
+							<th style="text-align:center">车间</th><th style="text-align:center">自制件</th><th style="text-align:center">部件</th><th style="text-align:center">焊装</th>
+							<th style="text-align:center">玻璃钢</th><th style="text-align:center">涂装</th><th style="text-align:center">底盘</th><th style="text-align:center">总装</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -98,23 +98,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<table id="MaterielInfoTable" class="table table-bordered table-striped" style="text-align: center;margin-left:17px; font-size: 12px;width:96%;max-width:96%">
 						<thead>
 							<tr>
-							<th style="vertical-align:middle"><!-- <input type="checkbox" onclick="selectAll()" id="selectAll"> --></th>
-							<th style="vertical-align:middle">SAP料号</th>
-							<th style="vertical-align:middle">物料描述</th>
-							<th style="vertical-align:middle">物料类型</th>
-							<th style="vertical-align:middle">材料/规格</th>
-							<th style="vertical-align:middle">单位</th>
-							<th style="vertical-align:middle">供应商<br>代码</th>
-							<th style="vertical-align:middle">单车损耗<br>（%）</th>
-							<th style="vertical-align:middle">层级用量</th>
-							<th style="vertical-align:middle">单重</th>
-							<th style="vertical-align:middle">单车用量<br>含损耗</th>
-							<th style="vertical-align:middle">使用车间</th>
-							<th style="vertical-align:middle">工序</th>
-							<th style="vertical-align:middle">装备位置</th>
-							<th style="vertical-align:middle">备注</th>
-							<th style="vertical-align:middle">确认人</th>
-							<th style="vertical-align:middle">确认时间</th>
+							<th style="vertical-align:middle;text-align:center;"><!-- <input type="checkbox" onclick="selectAll()" id="selectAll"> --></th>
+							<th style="vertical-align:middle;text-align:center;">SAP料号</th>
+							<th style="vertical-align:middle;text-align:center;">物料描述</th>
+							<th style="vertical-align:middle;text-align:center;">物料类型</th>
+							<th style="vertical-align:middle;text-align:center;">材料/规格</th>
+							<th style="vertical-align:middle;text-align:center;">单位</th>
+							<th style="vertical-align:middle;text-align:center;">供应商<br>代码</th>
+							<th style="vertical-align:middle;text-align:center;">单车损耗<br>（%）</th>
+							<th style="vertical-align:middle;text-align:center;">层级用量</th>
+							<th style="vertical-align:middle;text-align:center;">单重</th>
+							<th style="vertical-align:middle;text-align:center;">单车用量<br>含损耗</th>
+							<th style="vertical-align:middle;text-align:center;">使用车间</th>
+							<th style="vertical-align:middle;text-align:center;">工序</th>
+							<th style="vertical-align:middle;text-align:center;">装备位置</th>
+							<th style="vertical-align:middle;text-align:center;">备注</th>
+							<th style="vertical-align:middle;text-align:center;">确认人</th>
+							<th style="vertical-align:middle;text-align:center;">确认时间</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -122,6 +122,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					</table>
 				<center>
 				<input type="button" class="btn btn-primary" id="btnCheck" value="确认" style="margin-left: 2px;"></input>
+				<input type="button" class="btn btn-warning" id="btnClose" value="关闭" style="margin-left: 2px;"></input>
 				</center>
 				<input id="check_id"  type="text" style="display:none;width:410px;height:18px"></input>
 			</div>

@@ -235,7 +235,7 @@ function ajaxUpdateVinMotor(vin,update_val,update,e){
 			}else{
 				$.gritter.add({
 					title: '系统提示：',
-					text: '<h5>绑定成功！</h5>',
+					text: '<h5>操作成功！</h5>',
 					class_name: 'gritter-info'
 				});
 			}

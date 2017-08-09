@@ -9,11 +9,10 @@
 <meta name="description" content="Common Buttons &amp; Icons" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />	
-<link rel="stylesheet"
-	href="../assets/css/fixedColumns.bootstrap.min.css" />
-<link rel="stylesheet"
-	href="../assets/css/fixedColumns.dataTables.min.css" />
-<link rel="stylesheet" href="../assets/css/jquery-ui.min.css" />
+<link rel="stylesheet" href="../assets/css/fixedColumns.bootstrap.min.css" />
+<link rel="stylesheet" href="../assets/css/fixedColumns.dataTables.min.css" />
+<link rel="stylesheet" href="../assets/css/jquery-ui.min.css" /> 
+<link rel="stylesheet" href="../assets/css/jquery.gritter.css" />
 </head>
 <body class="no-skin" style="font-family: 'Microsoft YaHei';">
 	<!-- 头 -->
@@ -65,13 +64,13 @@
 								<td>
 									<select name="" id="search_status" class="input-medium" style="height: 30px;width:100px;" >
 									    <option value=''>全部</option>
-									    <option value='0'>已创建</option>
+									    <option value='0'>已评估</option>
 									    <option value='1'>已审批</option>
-									    <option value='2'>已分配 </option>
-									    <option value='3'>已评估 </option>
-									    <option value='4'>已验收 </option>
-									    <option value='5'>已完成 </option>
-									    <option value='6'>已驳回 </option>
+									    <option value='2'>已驳回</option>
+<!-- 									    <option value='3'>已评估 </option> -->
+<!-- 									    <option value='4'>已验收 </option> -->
+<!-- 									    <option value='5'>已完成 </option> -->
+<!-- 									    <option value='6'>已驳回 </option> -->
 									</select>
 								</td>						
 								<td><input type="button" class="btn btn-sm btn-primary" id="btnQuery" value="查询" style="margin-left: 2px;"></input>
@@ -83,7 +82,7 @@
 					</form>
 						
 					<div class="row">
-					<div class="col-xs-12">
+					<div class="col-xs-12" style="width: calc(100vw + 20px)">
 						<table id="tableResult"
 							class="table table-striped table-bordered table-hover" style="font-size: 12px; width:1300px;overflow-x:auto ">
 						</table>	
@@ -357,6 +356,7 @@
 	<script src="../js/datePicker/WdatePicker.js"></script>
 	<script src="../assets/js/jquery.dataTables.min.js"></script>
 	<script src="../assets/js/jquery-ui.min.js"></script>
+	<script src="../assets/js/jquery.gritter.min.js"></script>
 	<script src="../assets/js/jquery.dataTables.bootstrap.js"></script>
 	<script src="../assets/js/dataTables.fixedColumns.min.js"></script>
 	<script src="../assets/js/dataTables.rowGroup.js"></script>

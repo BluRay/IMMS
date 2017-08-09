@@ -1890,6 +1890,8 @@ public class ProductionController extends BaseController {
 	@RequestMapping("/addCreateTmpOrder")
 	@ResponseBody
 	public ModelMap addCreateTmpOrder() {
+		model.clear();
+		Map<String,Object> resultMap=new HashMap<String,Object>();
 		try {
 			String editor_id = request.getSession().getAttribute("user_id") + "";
 			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -1906,6 +1908,7 @@ public class ProductionController extends BaseController {
 			map.put("duty_unit",  request.getParameter("duty_unit"));
 			map.put("labors",  request.getParameter("labors"));
 			map.put("single_hour",  request.getParameter("single_hour"));
+			map.put("total_hours",  request.getParameter("total_hours"));
 			map.put("assess_verifier",  request.getParameter("assess_verifier"));
 			map.put("is_cost_transfer",  request.getParameter("is_cost_transfer"));
 			map.put("cost_unit_signer",  request.getParameter("cost_unit_signer"));
@@ -1917,16 +1920,26 @@ public class ProductionController extends BaseController {
 			map.put("apply_date", edit_date);
 
 			int reuslt = productionService.insertCreateTmpOrder(map);
-			initModel(true, "success", reuslt);
+			if(reuslt>0){
+				resultMap.put("success", true);
+				resultMap.put("message", "保存成功");
+			}else{
+				resultMap.put("success", false);
+				resultMap.put("message", "保存失败");
+			}
+			model.addAllAttributes(resultMap);
+			
 		} catch (Exception e) {
-			initModel(false, e.getMessage(), e.toString());
+			resultMap.put("success", false);
+			resultMap.put("message", e.getMessage());
 		}
-		model = mv.getModelMap();
 		return model;
 	}
 	@RequestMapping("/editCreateTmpOrder")
 	@ResponseBody
 	public ModelMap editCreateTmpOrder() {
+		model.clear();
+		Map<String,Object> resultMap=new HashMap<String,Object>();
 		try {
 			String editor_id = request.getSession().getAttribute("user_id") + "";
 			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -1944,6 +1957,7 @@ public class ProductionController extends BaseController {
 			map.put("duty_unit",  request.getParameter("duty_unit"));
 			map.put("labors",  request.getParameter("labors"));
 			map.put("single_hour",  request.getParameter("single_hour"));
+			map.put("total_hours",  request.getParameter("total_hours"));
 			map.put("assess_verifier",  request.getParameter("assess_verifier"));
 			map.put("is_cost_transfer",  request.getParameter("is_cost_transfer"));
 			map.put("cost_unit_signer",  request.getParameter("cost_unit_signer"));
@@ -1952,12 +1966,20 @@ public class ProductionController extends BaseController {
 			map.put("assesor",  request.getParameter("assesor"));
 			map.put("tmp_order_no",  request.getParameter("tmp_order_no"));
 
-			int reuslt = productionService.editCreateTmpOrder(map);
-			initModel(true, "success", reuslt);
+			int returnVal = productionService.editCreateTmpOrder(map);
+			if(returnVal>0){
+				resultMap.put("success", true);
+				resultMap.put("message", "编辑成功");
+			}else{
+				resultMap.put("success", false);
+				resultMap.put("message", "编辑失败");
+			}
+			model.addAllAttributes(resultMap);
+			
 		} catch (Exception e) {
-			initModel(false, e.getMessage(), e.toString());
+			resultMap.put("success", false);
+			resultMap.put("message", e.getMessage());
 		}
-		model = mv.getModelMap();
 		return model;
 	}
 	
@@ -1989,19 +2011,24 @@ public class ProductionController extends BaseController {
 	@RequestMapping("/delCreateTmpOrder")
 	@ResponseBody
 	public ModelMap delCreateTmpOrder() {
+		model.clear();
+		Map<String,Object> map=new HashMap<String,Object>();
 		try {
 			String id = request.getParameter("id");
 			int result=productionService.delCreateTmpOrder(id);
-			if(result==1){
-				initModel(true, "删除成功", "");
+			if(result>0){
+				map.put("success", true);
+				map.put("message", "删除成功");
 			}else{
-				initModel(false, "删除失败", "");
+				map.put("success", false);
+				map.put("message", "删除失败");
 			}
+			model.addAllAttributes(map);
 			
 		} catch (Exception e) {
-			initModel(false, e.getMessage(), e.toString());
+			map.put("success", false);
+			map.put("message", e.getMessage());
 		}
-		model = mv.getModelMap();
 		return model;
 	}
 	/****************************  TANGJIN ***************************/

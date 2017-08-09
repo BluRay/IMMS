@@ -122,6 +122,8 @@ function ajaxQuery(){
                     returnData.recordsFiltered = result.recordsTotal;//后台不实现过滤功能，每次查询均视作全部结果
                     returnData.data = result.data;//返回的数据列表
                     callback(returnData);
+                    var head_width=$(".dataTables_scrollHead").width();
+                    $(".dataTables_scrollHead").css("width",head_width-20);
                 }
             });
 		
@@ -143,11 +145,11 @@ function ajaxQuery(){
 		            {"title":"指定验收人","class":"center","data":"acceptor","defaultContent": ""},
 		            {"title":"派工类型","class":"center","data":"order_type","defaultContent": ""},
 		            {"title":"责任部门","class":"center","data":"duty_unit","defaultContent": ""},
-		            // 已评估【3】 ：可编辑、删除 ； 已驳回【6】：可编辑；其他：不能操作
+		            // 已评估【0】 ：可编辑、删除 ； 已驳回【2】：可编辑；其他：不能操作
 		            {"title":"操作","class":"center","data":"status","render":function(data,type,row){
-		            	return data=='3' ? "<i class=\"ace-icon fa fa-pencil bigger-130 editorder\" title='编辑' onclick = 'showEditPage(" + JSON.stringify(row)+ ");' style='color:green;cursor: pointer;'></i>&nbsp;&nbsp;"+
+		            	return data=='0' ? "<i class=\"ace-icon fa fa-pencil bigger-130 editorder\" title='编辑' onclick = 'showEditPage(" + JSON.stringify(row)+ ");' style='color:green;cursor: pointer;'></i>&nbsp;&nbsp;"+
 		            	"<i class=\"ace-icon glyphicon glyphicon-trash delete\" onclick=\'deleteData("+row.id+")\' style='color:green;cursor: pointer;'></i>"		            		
-		            	:(data=='6' ? "<i class=\"ace-icon fa fa-pencil bigger-130 editorder\" title='编辑' onclick = 'showEditPage(" + JSON.stringify(row)+ ");' style='color:green;cursor: pointer;'></i>" : "")
+		            	:(data=='2' ? "<i class=\"ace-icon fa fa-pencil bigger-130 editorder\" title='编辑' onclick = 'showEditPage(" + JSON.stringify(row)+ ");' style='color:green;cursor: pointer;'></i>" : "")
 		            }
 		            }
 		          ]
@@ -241,6 +243,29 @@ function ajaxAdd(){
 		$("#reason_content").focus();
 		return false;
 	}
+	if($("#total_qty").val()==undefined||$("#total_qty").val().trim()==''){
+		alert('总数量不能为空！');
+		$("#total_qty").focus();
+		return false;
+	}else{
+		if(!const_float_validate.test($("#total_qty").val())){
+			alert("总数量只能是数字！");
+			$("#total_qty").val("");
+			return false;
+		}
+	}
+	if($("#single_hour").val()==undefined||$("#single_hour").val().trim()==''){
+		alert('单工时不能为空！');
+		$("#single_hour").focus();
+		return false;
+	}else{
+		if(!const_float_validate.test($("#single_hour").val())){
+			alert("单工时只能是数字！");
+			$("#single_hour").val("");
+			return false;
+		}
+	}
+	
 	$.ajax({
 		type:"post",
 		url:"getCreateTmpOrderList",
@@ -272,6 +297,7 @@ function ajaxAdd(){
 						duty_unit:$("#duty_unit").val(),
 						labors:$("#labors").val(),
 						single_hour:$("#single_hour").val(),
+						total_hours:parseFloat($("#single_hour").val())*parseFloat($("#total_qty").val()),
 						assesor:$("#assesor").val(),
 						assess_verifier:$("#assess_verifier").val(),
 						is_cost_transfer:$("#is_cost_transfer").val(),
@@ -281,9 +307,21 @@ function ajaxAdd(){
 						sap_order:$("#sap_order").val()
 					},
 					success:function(response){
-						alert("保存成功");
 						$("#dialog-add").dialog( "close" ); 
-						ajaxQuery();
+						if(response.success){
+							$.gritter.add({
+								title: '系统提示：',
+								text: '<h5>'+response.message+'！</h5>',
+								class_name: 'gritter-info'
+							});
+							ajaxQuery();
+						}else{
+							$.gritter.add({
+								title: '系统提示：',
+								text: '<h5>'+response.message+'</h5><br>',
+								class_name: 'gritter-info'
+							});
+						}
 					},
 					error:function(response){
 						alert("保存失败");
@@ -311,6 +349,18 @@ function ajaxEdit(id){
 		$("#edit_tmp_order_no").focus();
 		return false;
 	}
+	if($("#edit_total_qty").val()==undefined||$("#edit_total_qty").val().trim()==''){
+		alert('总数量不能为空！');
+		$("#edit_total_qty").focus();
+		return false;
+	}else{
+		if(!const_float_validate.test($("#edit_total_qty").val())){
+			alert("总数量只能是数字！");
+			$("#edit_total_qty").val("");
+			return false;
+		}
+	}
+	
 	$.ajax({
 		type:"post",
 		url:"editCreateTmpOrder",
@@ -327,6 +377,7 @@ function ajaxEdit(id){
 			duty_unit:$("#edit_duty_unit").val(),
 			labors:$("#edit_labors").val(),
 			single_hour:$("#edit_single_hour").val(),
+			total_hours:parseFloat($("#edit_single_hour").val())*parseFloat($("#edit_total_qty").val()),
 			assesor:$("#edit_assesor").val(),
 			assess_verifier:$("#edit_assess_verifier").val(),
 			is_cost_transfer:$("#edit_is_cost_transfer").val(),
@@ -336,12 +387,21 @@ function ajaxEdit(id){
 			id:id
 		},
 		success:function(response){
-			alert("编辑成功");
 			$("#dialog-edit" ).dialog( "close" ); 
-			ajaxQuery();
-		},
-		error:function(response){
-			alert(response.message);
+			if(response.success){
+				$.gritter.add({
+					title: '系统提示：',
+					text: '<h5>'+response.message+'！</h5>',
+					class_name: 'gritter-info'
+				});
+				ajaxQuery();
+			}else{
+				$.gritter.add({
+					title: '系统提示：',
+					text: '<h5>'+response.message+'</h5><br>',
+					class_name: 'gritter-info'
+				});
+			}
 		}
 	})
 }
@@ -506,6 +566,9 @@ function getOrderType(elment){
 	});
 }
 function deleteData(id){
+	if(!confirm("确认删除该条数据？")){
+		return false;
+	}
 	$.ajax({
         type: "post",
         url: "delCreateTmpOrder",
@@ -663,9 +726,9 @@ function show(tmp_order_no,id){
   		            {"title":"姓名","class":"center","data":"staff_name","defaultContent": ""},
   		            {"title":"岗位","class":"center","data":"job","defaultContent": ""},
   		            {"title":"工时","class":"center","data":"work_hour","defaultContent": ""},
-  		            {"title":"记录入","class":"center","data":"editor","defaultContent": ""},
+  		            {"title":"记录人","class":"center","data":"editor","defaultContent": ""},
   		            {"title":"记录时间","class":"center","data":"edit_date","defaultContent": ""},
-  		            {"title":"审核入","class":"center","data":"approver","defaultContent": ""},
+  		            {"title":"审核人","class":"center","data":"approver","defaultContent": ""},
 		            {"title":"审核时间","class":"center","data":"approve_date","defaultContent": ""}
   		      ];
  

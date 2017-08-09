@@ -82,7 +82,7 @@
 												</select>
 											</td>
 											<td>&nbsp;等待工时：</td>
-											<td><input id="workhour" style="height: 30px; width:100px;" type="text" class="input-medium revise" placeholder="" /></td>
+											<td><input id="workhour" style="height: 30px; width:100px;" type="text" class="input-medium revise workhour" placeholder="" /></td>
 											<td>&nbsp;人员去向：</td>
 											<td><input id="whereabouts" style="height:30px;width:120px" placeholder="" class="col-sm-6" type="text"></td>
 											<td id="workhourtotal">&nbsp;&nbsp;已录工时：</td>

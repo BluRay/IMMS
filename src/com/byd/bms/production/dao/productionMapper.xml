@@ -2644,6 +2644,9 @@
 		<if test="single_hour!=null and single_hour !=''">
 			single_hour=#{single_hour},
 		</if>
+		<if test="total_hours!=null and total_hours !=''">
+			total_hours=#{total_hours},
+		</if>
 		<if test="order_type!=null and order_type !=''">
 			order_type=#{order_type},
 		</if>

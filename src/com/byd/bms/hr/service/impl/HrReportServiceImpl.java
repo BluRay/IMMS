@@ -149,5 +149,16 @@ public class HrReportServiceImpl implements IHrReportService {
 		return hrReportDao.getEcnReportData(conditionMap);
 	}
 	
-	
+	@Override
+	public void getStaffWaitHours(Map<String, Object> conditionMap,
+			ModelMap model) {
+		int totalCount=hrReportDao.queryStaffWaitHoursCount(conditionMap);
+		List<Map<String,Object>> datalist =hrReportDao.queryStaffWaitHours(conditionMap);	
+		
+		model.put("recordsTotal", totalCount);
+		model.put("draw", conditionMap.get("draw"));
+		model.put("recordsFiltered", totalCount);
+		model.put("data", datalist);		
+		
+	}
 }

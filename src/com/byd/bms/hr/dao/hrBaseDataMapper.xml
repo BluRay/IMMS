@@ -606,7 +606,7 @@
 		from BMS_HR_WORKGROUP_PRICE p
 		left join BMS_OR_ORDER o on o.id=p.order_id
 		left join BMS_BASE_BUS_TYPE t on t.id=o.bus_type_id
-		left join BMS_BASE_USER u on u.id=p.editor_id
+		left join BMS_BASE_USER u on u.staff_number=p.editor_id
 		where 1=1
 		<if test="factory !=null and factory !=''">
 			and p.factory =#{factory}

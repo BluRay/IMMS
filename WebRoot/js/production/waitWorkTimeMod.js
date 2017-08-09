@@ -20,17 +20,17 @@ $(document).ready(function() {
 		// 通过top页面任务栏进入，设置查询条件
 		factory =getParamValue("factory");
 		workshop = getParamValue("workshop");
-		if(factory!="" && workshop!=""){
+		if(factory!="" && workshop!="" && factory!=null && workshop!=null){
 			ajaxQuery();
 		}
 	}
 	
 	$(document).on("input",".workhour",function(){
-		if(isNaN(Number($(this).val()))){
-			alert("参与度/工时只能为数字！");
-			$(this).val("");
-			return false;
-		}
+//		if(isNaN(Number($(this).val()))){
+//			alert("参与度/工时只能为数字！");
+//			$(this).val("");
+//			return false;
+//		}
 	});
 	$(document).on("keydown",".workhour",function(event){
 		if (event.keyCode == "13") {								
@@ -43,9 +43,22 @@ $(document).ready(function() {
 		var workdateId=$(tr).data("workdateId");
 		var index=parseInt($(tr).data("swhlist_index"));
 		var old_value=$(this).attr("old_value");
-		 if(isNaN(Number(workHour))){
+		if(!const_float_validate.test(workHour) && workHour!=""){
 			alert("等待工时只能是数字！");
 			$(this).val(old_value);
+			return false;
+		}else if(!const_float_validate_one.test(workHour)){
+			alert("等待工时只能保留一位小数！");
+			$(this).val(old_value);
+			return false;
+		}else if(workHour<0||workHour>8){
+			alert("等待工时只能位于0到8之间！");
+			$(this).val(old_value);
+			return false;
+		}else if(workHour*10%5!=0){
+			alert("等待工时录入以半小时为单位，例如：1.0,1.5,2.0！");
+			$(this).val(old_value);
+			return false;
 		}else if(old_value!=workHour){
 			swhlist[index].work_hour=workHour;
 			swhlist[index].wpay=parseFloat(workHour)*parseFloat(swhlist[index].price);

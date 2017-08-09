@@ -21,8 +21,20 @@ $(document).ready(function() {
 	}
 	
 	$(document).on("input",".workhour",function(){
-		if(isNaN(Number($(this).val()))){
-			alert("参与度/工时只能为数字！");
+		var workHour=$(this).val();
+		if(!const_float_validate.test(workHour)&&workHour!=""){
+			alert("等待工时只能是数字！");
+			$(this).val("");
+			return false;
+		}else if(!const_float_validate_one.test(workHour)){
+			alert("等待工时只能保留一位小数！");
+			$(this).val("");
+			return false;
+		}else if(workHour<0||workHour>8){
+			alert("等待工时只能位于0到8之间！");
+			$(this).val("");return false;
+		}else if(workHour*10%5!=0){
+			alert("等待工时录入以半小时为单位，例如：1.0,1.5,2.0！");
 			$(this).val("");
 			return false;
 		}

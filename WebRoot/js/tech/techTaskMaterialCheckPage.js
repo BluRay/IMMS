@@ -6,6 +6,10 @@ $(document).ready(function(){
 	var ecnTaskId = GetQueryString('taskid');
 	getBaseInfo(ecnTaskId);
 	
+	$("#btnClose").click(function() {
+		window.opener=null;window.close();
+	});
+	
 	$("#btnCheck").click(function() {
 		if($("#check_id").val() === ''){
 			alert("请选择需要确认的物料！");

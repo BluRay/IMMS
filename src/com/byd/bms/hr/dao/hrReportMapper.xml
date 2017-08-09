@@ -543,7 +543,52 @@
 			and month=#{month}
 		</if>
 	</delete>
+	<select id="queryStaffWaitHours" parameterType="Map" resultType="Map">
+		select * from BMS_HR_WAIT_SALARY ws where status in ('1','3') and 1=1
+		    <if test="factory !=null and factory !='全部'">
+				and ws.factory=#{factory}
+			</if>
+			<if test="workshop !=null and workshop !='全部'">
+				and ws.workshop=#{workshop}
+			</if>
+			<if test="workgroup !=null and workgroup !='全部'">
+				and ws.workgroup=#{workgroup}
+			</if>
+			<if test="team !=null and team !='全部'">
+				and ws.team=#{team}
+			</if>
+			<if test="staff !=null and staff !=''">
+				and (ws.staff_number like concat('%',#{staff},'%') or ws.staff_name like concat('%',#{staff},'%') ) 
+			</if>
+			<if test="waitdate !=null and waitdate !=''">
+				and ws.work_date LIKE CONCAT('%',#{waitdate},'%')
+			</if>
+			<if test="start !=null and length !='' ">
+				LIMIT #{start} ,#{length} 
+			</if>	
+	</select>
 	
+	<select id="queryStaffWaitHoursCount" parameterType="Map" resultType="int">
+		select count(1) from BMS_HR_WAIT_SALARY ws where status in ('1','3') and 1=1
+	    <if test="factory !=null and factory !='全部'">
+			and ws.factory=#{factory}
+		</if>
+		<if test="workshop !=null and workshop !='全部'">
+			and ws.workshop=#{workshop}
+		</if>
+		<if test="workgroup !=null and workgroup !='全部'">
+			and ws.workgroup=#{workgroup}
+		</if>
+		<if test="team !=null and team !='全部'">
+			and ws.team=#{team}
+		</if>
+		<if test="staff !=null and staff !=''">
+			and (ws.staff_number like concat('%',#{staff},'%') or ws.staff_name like concat('%',#{staff},'%') ) 
+		</if>
+		<if test="waitdate !=null and waitdate !=''">
+			and ws.work_date LIKE CONCAT('%',#{waitdate},'%')
+		</if>
+	</select>
 	<update id="updateStaffSalaryStatus" parameterType="Map">
 		update BMS_HR_PIECE_SALARY_HISTORY set status=#{status},calculator=#{saver},calculate_date=#{save_date}
 		where submit_factory=#{factory} and submit_workshop=#{workshop}

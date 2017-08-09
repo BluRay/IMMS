@@ -48,6 +48,7 @@ jQuery(function($) {
 			alert("请选择文件！");
 			return false;
 		}
+		var file = $("#file").val();
 		var extName = file.substring(file.lastIndexOf(".")).toLowerCase();
 		if(extName !== ".xls"){
 			alert("请上传.xls类型的文件！");

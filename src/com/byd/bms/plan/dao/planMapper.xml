@@ -777,7 +777,7 @@
 		SELECT * FROM BMS_PLAN_PRODUCTION_PLAN WHERE order_id = 
 		(SELECT id FROM BMS_OR_ORDER WHERE order_no=#{order_no})
 		AND factory_id = (SELECT id FROM BMS_BASE_FACTORY WHERE factory_name = #{factory_name})
-		AND plan_date LIKE CONCAT('%',#{plan_date},'%')
+		AND REPLACE(plan_date,'-','') LIKE CONCAT('%',#{plan_date},'%')
 	</select>
 	
 	<select id="getPlanSerach" parameterType="Map" resultType="Map">

@@ -389,4 +389,42 @@ public class HrReportController extends BaseController {
 		return model;
 	}
 	/******************** xioing.jianwu **********************/
+	/******************** tangjin start **********************/
+	/**
+	 * 等待工资统计
+	 * @return
+	 */
+	@RequestMapping("/waitReport")
+	public ModelAndView waitReport(){
+		mv.setViewName("hr/waitReport");
+		return mv;
+	}
+	
+	@RequestMapping("/getStaffWaitHours")
+	@ResponseBody
+	public ModelMap getStaffWaitHours(){
+		model.clear();
+		String factory=request.getParameter("factory");
+		String workshop=request.getParameter("workshop");
+		String workgroup=request.getParameter("workgroup");
+		String team = request.getParameter("team");
+		String waitdate=request.getParameter("waitdate");
+		String staff=request.getParameter("staff");//员工姓名或员工姓名
+		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
+		
+		Map<String, Object> conditionMap = new HashMap<String, Object>();
+		conditionMap.put("draw", draw);
+		/*conditionMap.put("start", start);
+		conditionMap.put("length", length);*/
+		conditionMap.put("factory", factory);
+		conditionMap.put("workshop", workshop);
+		conditionMap.put("workgroup", workgroup);
+		conditionMap.put("team", team);
+		conditionMap.put("waitdate", waitdate);
+		conditionMap.put("staff", staff);
+
+		hrReportService.getStaffWaitHours(conditionMap,model);
+		return model;
+	}
+	/******************** tangjin end **********************/
 }
