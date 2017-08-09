@@ -492,9 +492,8 @@
 		t.passenger_num,t.max_speed,t.light_downdip,b.sequence,t.battery_capacity,b.dp_production_date AS productive_date,
 		b.zc_production_date,t.rated_voltage,b.bus_number,b.vin
 		FROM BMS_PLAN_BUS b
-		LEFT JOIN BMS_OR_ORDER_CONFIG oc ON b.order_config_id = oc.id
-		LEFT JOIN BMS_BASE_BUS_TYPE t ON t.vehicle_model=oc.bus_vehicle_type and
-		t.bus_type_code=substr(b.bus_number,1,LOCATE('-',b.bus_number)-1)
+		LEFT JOIN BMS_OR_ORDER o ON b.order_id = o.id
+		LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id = t.id
 		WHERE b.bus_number = #{bus_number} OR b.vin = #{bus_number}
 	</select>	
 	<select id="getProductionSearchException" parameterType="String" resultType="Map">
@@ -1632,7 +1631,7 @@
 			<if test="line !=null and line !=''">
 				AND p.line like CONCAT('%',#{line},'%')
 			</if>
-			AND warehousing_date LIKE CONCAT('%',#{cur_date},'%')
+			AND b.warehousing_date !='' AND b.dispatch_date =''
 			<if test="bus_number !=null and bus_number !=''">
 				AND b.bus_number LIKE CONCAT('%',#{bus_number},'%')
 			</if>

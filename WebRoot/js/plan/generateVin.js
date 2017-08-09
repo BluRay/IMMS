@@ -221,7 +221,7 @@ function ajaxUpdateVinMotor(vin,update_val,update,e){
 			if(response.message == '-1'){
 				$.gritter.add({
 					title: '系统提示：',
-					text: '<h5>绑定失败，此车号不存在或已经被绑定！</h5>',
+					text: '<h5>绑定失败，此车号的订单与VIN号的订单不配置或已经被绑定！</h5>',
 					class_name: 'gritter-error'
 				});
 				$("#"+e_id).val($("#"+e_id).attr("old_val"));

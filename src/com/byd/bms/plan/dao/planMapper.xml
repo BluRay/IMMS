@@ -637,6 +637,7 @@
 	<select id="checkBusNumber" parameterType="Map" resultType="int">
 		SELECT IFNULL(SUM(id),0) AS id FROM BMS_PLAN_BUS WHERE 
 		bus_number = #{update_val} AND (vin is NULL OR vin = '')
+		AND order_id = (SELECT V.order_id FROM BMS_PD_VIN V WHERE V.vin = #{vin})
 	</select>
 	<update id="bingingBusNumber" parameterType="Map">
 		UPDATE BMS_PLAN_BUS SET vin = #{vin},
