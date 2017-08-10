@@ -60,9 +60,9 @@
 							</td>							
 							<td style="text-align:right" >&nbsp;统计日期：</td>
 							<td colspan=3>
-								<input id="wdate_start" style="width:90px;height: 30px;" class="input-small" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{limitMonthDate(1);}',maxDate:'#F{$dp.$D(\'wdate_end\',{d:0})}'})" type="text">
+								<input id="wdate_start" style="width:90px;height: 30px;" placeholder="开始日期" class="input-small" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{limitMonthDate(1);}',maxDate:'#F{$dp.$D(\'wdate_end\',{d:0})}'})" type="text">
 								<span>-</span>
-								<input id="wdate_end" style="width:90px;height: 30px;" class="input-small" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'wdate_start\',{d:0})}',maxDate:'#F{limitMonthDate(2);}'})" type="text">
+								<input id="wdate_end" style="width:90px;height: 30px;" placeholder="结束日期" class="input-small" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'wdate_start\',{d:0})}',maxDate:'#F{limitMonthDate(2);}'})" type="text">
 							</td>
 							<td></td>
 						</tr>

@@ -3,6 +3,7 @@ package com.byd.bms.plan.model;
 public class PlanMasterIndex {
 	private String version;
 	private String order_no;
+	private String plan_month;
 	private String factory_name;
 	private String display_name;
 	private String create_date;
@@ -35,6 +36,12 @@ public class PlanMasterIndex {
 	}
 	public void setCreate_date(String create_date) {
 		this.create_date = create_date;
+	}
+	public String getPlan_month() {
+		return plan_month;
+	}
+	public void setPlan_month(String plan_month) {
+		this.plan_month = plan_month;
 	}
 	
 }

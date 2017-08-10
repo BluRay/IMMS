@@ -22,7 +22,7 @@
 	
 	<select id="getPlanMasterIndex" parameterType="Map" resultType="com.byd.bms.plan.model.PlanMasterIndex">
 		SELECT DISTINCT
-		m.version,o.order_no,f.factory_name,u.display_name,create_date FROM
+		m.version,o.order_no,m.plan_month,f.factory_name,u.display_name,create_date FROM
 		BMS_PLAN_MASTER_PLAN m
 		LEFT JOIN BMS_OR_ORDER o ON m.order_id = o.id
 		LEFT JOIN BMS_BASE_FACTORY f ON m.factory_id = f.id

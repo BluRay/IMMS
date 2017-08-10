@@ -95,11 +95,12 @@ function ajaxQuery(){
 		            {"title":"计划版本","class":"center","data":"version","defaultContent": ""},
 		            {"title":"生产工厂","class":"center","data":"factory_name","defaultContent": ""},
 		            {"title":"订单编号","class":"center","data":"order_no","defaultContent": ""},
+		            {"title":"计划月份","class":"center","data":"plan_month","defaultContent": ""},
 		            {"title":"导入人","class":"center","data":"display_name","defaultContent": ""},
 		            {"title":"导入时间","class":"center","data":"create_date","defaultContent": ""},
 		            {"title":"操作","class":"center","data": null,"id":"staff_number",
 		            	"render": function ( data, type, row ) {
-		                    return "<i class=\"glyphicon glyphicon-search bigger-130 showbus\" title=\"查看详情\" onclick=\"javascript:window.location = ('planPreview?version="+row['version']+ "&factory_id=" +$("#search_factory").val()+"')\" style='color:blue;cursor: pointer;'></i>&nbsp;";
+		                    return "<i class=\"glyphicon glyphicon-search bigger-130 showbus\" title=\"查看详情\" onclick=\"javascript:window.location = ('planPreview?version="+row['version'] + "&plan_month="+row['plan_month'] + "&factory_id=" +$("#search_factory").val()+"')\" style='color:blue;cursor: pointer;'></i>&nbsp;";
 		                },
 		            }
 		          ],

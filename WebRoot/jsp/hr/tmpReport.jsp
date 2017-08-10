@@ -60,9 +60,9 @@
 							</td>							
 							<td style="text-align:right" >&nbsp;统计日期：</td>
 							<td colspan=3>
-								<input id="wdate_start" style="width:90px;height: 30px;" class="input-small" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{limitMonthDate(1);}',maxDate:'#F{$dp.$D(\'wdate_end\',{d:0})}'})" type="text">
+								<input id="wdate_start" style="width:90px;height: 30px;" placeholder="开始日期" class="input-small" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{limitMonthDate(1);}',maxDate:'#F{$dp.$D(\'wdate_end\',{d:0})}'})" type="text">
 								<span>-</span>
-								<input id="wdate_end" style="width:90px;height: 30px;" class="input-small" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'wdate_start\',{d:0})}',maxDate:'#F{limitMonthDate(2);}'})" type="text">
+								<input id="wdate_end" style="width:90px;height: 30px;" placeholder="结束日期" class="input-small" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'wdate_start\',{d:0})}',maxDate:'#F{limitMonthDate(2);}'})" type="text">
 							</td>
 							<td></td>
 						</tr>
@@ -84,6 +84,14 @@
 						</tr>
 						</table>
 					</form>	
+					
+					<div class="row">
+						<div class="col-xs-12" style="width:100%">				
+							
+						<table id="tableResult" class="table table-striped table-bordered table-hover" style="font-size: 12px;overflow-x:auto;width:1600px;table-layout:fixed">
+						</table>
+						</div>
+					</div>
 					
 					</div>
 			</div><!-- /.main-content -->
