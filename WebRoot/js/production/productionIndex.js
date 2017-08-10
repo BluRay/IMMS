@@ -31,7 +31,7 @@ $(document).ready(function () {
 
 	function getWorkshopAuthList(){
 		$.ajax({
-			url : "/IMMS/common/getWorkshopSelectAuth",
+			url : "/BMS/common/getWorkshopSelectAuth",
 			dataType : "json",
 			data : {"function_url":'production/index',"factory":$("#search_factory :selected").text()},
 			async : false,
@@ -49,19 +49,19 @@ $(document).ready(function () {
 	function imgFoward(name,workshop){
 		
 		if(name=='VIN'){
-			window.location.href='/IMMS/production/showVinPrint';
+			window.location.href='/BMS/production/showVinPrint';
 		}
 		if(name=='铭牌'){
-			window.location.href='/IMMS/production/nameplatePrint';
+			window.location.href='/BMS/production/nameplatePrint';
 		}
 		if(name=='合格证'){
-			window.location.href='/IMMS/production/certificationPrint';
+			window.location.href='/BMS/production/certificationPrint';
 		}
 		if(name=='发车'){
 			window.location.href='busDispatch!planListPage.action';
 		}
 		if(name=='车身号'){
-			window.location.href='/IMMS/production/showBusNoPrint';
+			window.location.href='/BMS/production/showBusNoPrint';
 		}
 		if(name=='在制'){
 			window.location.href="productionsearch?workshop="+workshop+"&factory="+$("#search_factory").val();
@@ -105,7 +105,7 @@ $(document).ready(function () {
 		$.ajax({
 			type : "get",// 使用get方法访问后台
 			dataType : "json",// 返回json格式的数据
-			url : "/IMMS/common/getProductionIndexData",
+			url : "/BMS/common/getProductionIndexData",
 			async :false,
 			data : {
 				"factoryId" : factoryId,

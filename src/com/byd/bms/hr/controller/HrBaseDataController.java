@@ -593,11 +593,14 @@ public class HrBaseDataController extends BaseController {
 		//行号
 		int line=1;
 		String orgId="";
+		String result =null;
 		for (Object[] data : excelModel.getData()) {
+			line++;
 			Map<String, Object> infomap = new HashMap<String, Object>();
 			String factory_name=data[0].toString().trim();
 			String workshop_name=data[1]!=null ? data[1].toString().trim() : "";
 			String workgroup_name=data[2]!=null ? data[2].toString().trim() : "";
+			
 			String job_name=data[3]!=null ? data[3].toString().trim() : "";
 			
 			orgId=this.findTreeNodeByName(factory_name);
@@ -608,12 +611,14 @@ public class HrBaseDataController extends BaseController {
 				orgId=this.findChildNodeByName(workgroup_name, orgId);
 			}
 			//获得岗位id
+			boolean jobFlag= false;
 			for(Map<String,Object> m : positionDataList){
 				if(job_name.equals(m.get("job_name").toString())){
 					long job_id = (long)m.get("id");
 					infomap.put("job_id", job_id);
 					String job_no = (String)m.get("job_no");
 					infomap.put("job_no", job_no);
+					jobFlag = true;
 					break;
 				}
 			}
@@ -624,7 +629,19 @@ public class HrBaseDataController extends BaseController {
 			if("计件".equals(type)){
 				infomap.put("type", "1");
 			}
+			if(null == orgId || "".equals(orgId.trim())){
+				//组织结构填写有误
+				result += "第"+line+"行组织结构填写有误！";
+			}
+			if(!jobFlag){
+				//岗位在岗位库不存在
+				result += "第"+line+"行填写的岗位名称在标准岗位库不存在！";
+			}
+			
 			infomap.put("org_id", orgId);
+			infomap.put("factory", factory_name);
+			infomap.put("workshop", workshop_name);
+			infomap.put("workgroup", workgroup_name);
 			infomap.put("job_name", data[3] == null ? null : data[3].toString().trim());
 			infomap.put("standard_humans", data[4] == null ? null : data[4].toString().trim());
 			//infomap.put("type", type);
@@ -633,13 +650,17 @@ public class HrBaseDataController extends BaseController {
 			infomap.put("deleted", "0");
 			infomap.put("line", line);
 			addList.add(infomap);
-			line++;
 		}
-		Map<String,Object> resultMap=hrBaseDataService.addStandardHumanData(addList);
-		if(resultMap.get("error")==null){
-			initModel(true,"导入成功！",addList);
+		if(result!=null){
+			initModel(false,"导入失败："+result,null);
+			
 		}else{
-			initModel(false,(String)resultMap.get("error"),null);
+			Map<String,Object> resultMap=hrBaseDataService.addStandardHumanData(addList);
+			if(resultMap.get("error")==null){
+				initModel(true,"导入成功！",addList);
+			}else{
+				initModel(false,(String)resultMap.get("error"),null);
+			}
 		}
 		
 		}catch(Exception e){
@@ -696,6 +717,9 @@ public class HrBaseDataController extends BaseController {
 		Map<String, Object> queryMap = new HashMap<String, Object>();
 		String id = request.getParameter("id");
 		queryMap.put("org_id", id);
+		queryMap.put("factory", request.getParameter("factory"));
+		queryMap.put("workshop", request.getParameter("workshop"));
+		queryMap.put("workgroup", request.getParameter("workgroup"));
 		List result = hrBaseDataService.getStandardHumanData(queryMap);
 		Map<String, Object> map = new HashMap<String, Object>();  
         map.put( "data",result);

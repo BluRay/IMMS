@@ -2,7 +2,7 @@ $(document).ready(function(){
 	initPage();
 	//切换工厂、更新车间下拉列表
 	$(document).on("change","#search_factory",function(e){
-		getWorkshopSelect("production/workshopSupply",$("#search_factory :selected").text(),"","#search_supply_workshop",null,"id")
+		getWorkshopSelect("production/workshopSupply",$("#search_factory :selected").text(),"","#search_supply_workshop","全部","id")
 		getWorkshopSelect("",$("#search_factory :selected").text(),"","#search_receive_workshop","全部","id");
 	});
 	
@@ -78,7 +78,7 @@ $(document).ready(function(){
 
 function initPage(){
 	getFactorySelect("production/workshopSupply","","#search_factory",null,"id");
-	getWorkshopSelect("production/workshopSupply",$("#search_factory :selected").text(),"","#search_supply_workshop",null,"id")
+	getWorkshopSelect("production/workshopSupply",$("#search_factory :selected").text(),"","#search_supply_workshop","全部","id")
 	getWorkshopSelect("",$("#search_factory :selected").text(),"","#search_receive_workshop","全部","id")
 	getOrderNoSelect("#search_order_no","",null,null,"#search_factory");
 	getOrderNoSelect("#order","#order_id",null,null,"#factory","copy");

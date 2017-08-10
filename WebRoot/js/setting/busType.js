@@ -2,6 +2,8 @@ var pageSize=1;
 var table;
 var dt;
 $(document).ready(function(){
+	getKeysSelect("INTERNAL_BUS_TYPE", "车型内部名称", "#add_internalName","请选择","keyName");
+	getKeysSelect("INTERNAL_BUS_TYPE", "车型内部名称", "#edit_internalName","请选择","keyName");
 	
 	ajaxQuery();
 	
@@ -204,7 +206,7 @@ function ajaxAdd (argument) {
     $.ajax({
 		type: "post",
 		dataType: "json",
-		url: "/IMMS/setting/addBusType",
+		url: "/BMS/setting/addBusType",
 	    data: {
 			"busTypeCode":$("#add_busTypeCode").val(),
 			"internalName":$("#add_internalName").val(),
@@ -244,7 +246,7 @@ function ajaxEdit(id){
 
 	//查询订单信息
 	$.ajax({
-		url: "/IMMS/setting/getBusTypeById",
+		url: "/BMS/setting/getBusTypeById",
 		dataType: "json",
 		data: {"id" : id},
 		async: false,

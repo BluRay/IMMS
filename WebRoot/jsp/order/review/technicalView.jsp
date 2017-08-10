@@ -83,7 +83,7 @@
 		<script type="text/javascript">
 		    $(function(){
 		    	$("#btnBack").click(function(){
-            		window.open("/IMMS/order/review/internalReview","_parent");
+            		window.open("/BMS/order/review/internalReview","_parent");
                 });
 		    });
 		</script>

@@ -28,7 +28,7 @@ $(document).ready(function(){
 			return false;
 		}
 		$.ajax({
-			url: "/IMMS/order/getOrderByNo",
+			url: "/BMS/order/getOrderByNo",
 			dataType: "json",
 			data: {
 				"order_no":$(this).val()
@@ -50,7 +50,7 @@ $(document).ready(function(){
 function getBusType(){
 	$(".busType").empty();
 	$.ajax({
-		url: "/IMMS/common/getBusType",
+		url: "/BMS/common/getBusType",
 		dataType: "json",
 		data: {},
 		async: false,
@@ -250,7 +250,7 @@ function showBusNumberDetail(json){
  */
 function getBusTypeSelect(selectval,selectId,selectType,valName){
 	$.ajax({
-		url : "/IMMS/common/getBusType",
+		url : "/BMS/common/getBusType",
 		dataType : "json",
 		data : {},
 		async : false,
@@ -264,7 +264,7 @@ function getBusTypeSelect(selectval,selectId,selectType,valName){
 }
 function getOrderConfigSelect(order_id,selectval,selectId,selectType,valName){
 	$.ajax({
-		url : "/IMMS/common/getOrderConfigSelect",
+		url : "/BMS/common/getOrderConfigSelect",
 		dataType : "json",
 		data : {"order_id":order_id},
 		async : false,
@@ -287,7 +287,7 @@ function getOrderConfigSelect(order_id,selectval,selectId,selectType,valName){
 
 function getWorkshopSelect(url,factory,selectval,selectId,selectType,valName){
 	$.ajax({
-		url : "/IMMS/common/getWorkshopSelectAuth",
+		url : "/BMS/common/getWorkshopSelectAuth",
 		dataType : "json",
 		data : {"function_url":url,"factory":factory},
 		async : false,

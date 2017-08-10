@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="../assets/css/fixedColumns.bootstrap.min.css" />
 <link rel="stylesheet" href="../assets/css/fixedColumns.dataTables.min.css" />
 <link rel="stylesheet" href="../assets/css/jquery-ui.min.css" /> 
+<link rel="stylesheet" href="../assets/css/buttons.dataTables.css" /> 
 </head>
 <body class="no-skin" style="font-family: 'Microsoft YaHei';">
 	<!-- 头 -->
@@ -101,9 +102,10 @@
 						class="table table-bordered table-striped ">
 						<thead>
 							<tr>
-								<th style="text-align: center;">序号</th>
-								<th style="text-align: center;">车号</th>
-								<th style="text-align: center;">生产工厂</th>
+								<th style="text-align: center;width: 40px;">序号</th>
+								<th style="text-align: center;width: 130px;">车号</th>
+								<th style="text-align: center;width: 70px;">生产工厂</th>
+								<th style="text-align: center;width: 68px;">当前车间</th>
 								<th style="text-align: center;">当前工序</th>
 							</tr>
 						</thead>
@@ -346,6 +348,10 @@
 	<script src="../assets/js/ace/elements.onpage-help.js"></script>
 	<script src="../assets/js/ace/ace.onpage-help.js"></script>
 	<script src="../assets/js/bootstrap3-typeahead.js"></script>
+	<script src="../assets/js/jszip.min.js"></script>
+	<script src="../assets/js/dataTables.buttons.js"></script>
+	<script src="../assets/js/buttons.colVis.js"></script>
+    <script src="../assets/js/buttons.html5.js"></script>
 	<script src="../js/jsrender.min.js"></script>
 	<script src="../js/common.js"></script>
 	<script src="../js/order/maintain.js"></script>

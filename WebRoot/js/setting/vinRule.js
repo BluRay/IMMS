@@ -419,7 +419,7 @@ function ajaxQuery(){
 }
 function getBusType(element){
 	$.ajax({
-		url: "/IMMS/common/getBusType",
+		url: "/BMS/common/getBusType",
 		dataType: "json",
 		data: {},
 		async: false,

@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="../assets/css/fixedColumns.dataTables.min.css" />
 <link rel="stylesheet" href="../assets/css/jquery-ui.min.css" /> 
 <link rel="stylesheet" href="../assets/css/jquery.gritter.css" />
+<link rel="stylesheet" href="../assets/css/buttons.dataTables.css" /> 
 </head>
 <body class="no-skin" style="font-family: 'Microsoft YaHei';">
 	<!-- 头 -->
@@ -155,6 +156,7 @@
 	<script src="../assets/js/buttons.colVis.js"></script>
 	<script src="../assets/js/buttons.html5.js"></script>
 	<script src="../assets/js/buttons.flash.js"></script> 
+	<script src="../assets/js/jszip.min.js"></script>
 	
 	<script src="../js/jquery.form.js"></script>
 	<script src="../js/common.js"></script>

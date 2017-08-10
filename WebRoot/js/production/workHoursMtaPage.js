@@ -86,8 +86,8 @@ $(document).ready(function () {
 
 function ajaxQuery(){
 	$("#tableData").dataTable({
-		serverSide: true,paiging:true,ordering:false,searching: false,bAutoWidth:false,
-		destroy: true,sScrollY: table_height,sScrollX:true,orderMulti:false,
+		serverSide: true,paiging:true,ordering:false,searching: false,bAutoWidth:true,
+		destroy: true,sScrollY: table_height,sScrollX:true,orderMulti:false,scrollCollapse: true, scrollXInner: "150%",
 		pageLength: 25,pagingType:"full_numbers",lengthChange:false,
 		fixedColumns: {
             leftColumns:0,
@@ -169,7 +169,7 @@ function ajaxQuery(){
 		            		return workhourTotal.toFixed(2);
 		            	},
 		            },
-		            {"title":"申请人",width:'100',"class":"center","data":"applier","defaultContent": ""},
+		            {"title":"申请人",width:'100',"class":"center","data":"applier_name","defaultContent": ""},
 		            {"title":"申请时间",width:'100',"class":"center","data":"apply_date","defaultContent": ""},
 		            {"title":"状态",width:'100',"class":"center","data":"status","defaultContent": "",
 		            	"render": function ( data, type, row ) {

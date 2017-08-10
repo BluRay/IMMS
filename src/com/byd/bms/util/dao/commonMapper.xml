@@ -4,7 +4,7 @@
 
 	<select id="queryOrderList" parameterType="Map" resultType="Map">
 		select o.id,o.order_name name,o.order_no orderNo,o.order_code
-		orderCode,o.order_qty orderQty,t.internal_name busType,t.id bus_type_id
+		orderCode,o.order_qty orderQty,t.bus_type_code busType,t.id bus_type_id
 		from BMS_OR_ORDER o
 		left join BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id 
 		<if test="factory !=null and  factory !=''">
@@ -13,7 +13,7 @@
 		</if>		
 		where o.order_no like CONCAT('%',#{orderNo},'%') 
 		<if test="busType!=null and  busType!=''">
-			and t.internal_name=#{busType}
+			and t.bus_type_code=#{busType}
 		</if>
 		<if test="factory !=null and  factory !=''">
 			and f.factory_name=#{factory}

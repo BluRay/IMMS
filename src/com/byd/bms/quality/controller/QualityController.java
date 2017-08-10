@@ -964,7 +964,7 @@ public class QualityController extends BaseController {
     				File saveFile = new File(savedir, String.valueOf(System.currentTimeMillis()) + myFileName.substring(myFileName.indexOf("."),myFileName.length()));
                     System.out.println(myFileName);  
                     file.transferTo(saveFile);
-                    filepath = "/IMMS/file/upload/ProcessFault/" + saveFile.getName();
+                    filepath = "/BMS/file/upload/ProcessFault/" + saveFile.getName();
                 }
 			} catch (Exception e) {
 				e.printStackTrace();

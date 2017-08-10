@@ -136,7 +136,7 @@ function initPage(){
 	
 	$("#test_result").typeahead({
 			source : function(input, process) {
-				$.get("/IMMS/quality/getFaultListFuzzy", {
+				$.get("/BMS/quality/getFaultListFuzzy", {
 					"bug" : input
 				}, function(response) {
 					faultlist = response.data;
@@ -249,7 +249,7 @@ function ajaxValidate (){
 	$.ajax({
         type: "post",
         dataType: "json",
-        url : "/IMMS/production/getBusInfo",
+        url : "/BMS/production/getBusInfo",
         async:false,
         data: {
         	"bus_number": $('#bus_number').val(),
@@ -281,7 +281,7 @@ function ajaxValidate (){
 function getWorkgroupSelectAll(workshop_list){
 	workgroup_list=[];
 	$.ajax({
-		url:"/IMMS/common/getWorkgroupSelectAll",
+		url:"/BMS/common/getWorkgroupSelectAll",
 		async:false,
 		type:"post",
 		dataType:"json",

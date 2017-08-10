@@ -332,7 +332,7 @@ public class TechController extends BaseController{
     				File saveFile = new File(savedir, String.valueOf(System.currentTimeMillis()) + ".pdf");
                     System.out.println(myFileName);  
                     file.transferTo(saveFile);
-                    filepath = "/IMMS/file/upload/techTask/" + saveFile.getName();
+                    filepath = "/BMS/file/upload/techTask/" + saveFile.getName();
                 }
 			} catch (Exception e) {
 				e.printStackTrace();

@@ -78,7 +78,7 @@ function initPage(){
 
 function getFactorySelect() {
 	$.ajax({
-		url : "/IMMS/common/getFactorySelectAuth",
+		url : "/BMS/common/getFactorySelectAuth",
 		dataType : "json",
 		data : {},
 		async : false,
@@ -97,7 +97,7 @@ function getFactorySelect() {
 function getAllWorkshopSelect(workshop) {
 $("#exec_workshop").empty();
 $.ajax({
-	url : "/IMMS/common/getWorkshopSelectAuth",
+	url : "/BMS/common/getWorkshopSelectAuth",
 	dataType : "json",
 	data : {
 			factory:$("#exec_factory :selected").text()
@@ -115,7 +115,7 @@ $.ajax({
 function getAllLineSelect(line) {
 $("#exec_line").empty();
 $.ajax({
-	url : "/IMMS/common/getLineSelectAuth",
+	url : "/BMS/common/getLineSelectAuth",
 	dataType : "json",
 	data : {
 			factory:$("#exec_factory :selected").text(),

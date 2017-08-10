@@ -412,6 +412,16 @@ function ajaxQuery(){
             leftColumns: 2,
             rightColumns:1
         },
+		dom: 'Bfrtip',
+		lengthMenu: [
+		             [ 20, 30, 50, -1 ],
+		             [ '显示20行', '显示30行', '显示50行', '全部' ]
+		         ],
+	    buttons: [
+	        {extend:'excelHtml5',title:'data_export',className:'black',text:'<i class=\"fa fa-file-excel-o bigger-130\" tooltip=\"导出excel\"></i>'},
+	        {extend:'pageLength',/*text:'显示行'*/}
+	       
+	    ],
         rowsGroup:[0,1,2,3,4,5],
 		paiging:true,
 		ordering:false,
@@ -509,6 +519,9 @@ function ajaxQuery(){
 /*	dt.on('page.dt', function ( e, settings) {
 		new $.fn.dataTable.RowsGroup( dt.datatable, [0,1,2,3,4,5] );
 	})*/
+	$("#tableOrder_info").addClass('col-xs-6');
+	$("#tableOrder_paginate").addClass('col-xs-6');
+	$(".dt-buttons").css("margin-top","-50px").find("a").css("border","0px");
 }
 function setInput(value){
 	var input="<input type='text' value='"+value+"' />";
@@ -517,7 +530,7 @@ function setInput(value){
 
 function getFactorySelect() {
 	$.ajax({
-		url : "/IMMS/common/getFactorySelectAuth",
+		url : "/BMS/common/getFactorySelectAuth",
 		dataType : "json",
 		data : {"function_url":"order/maintain"},
 		async : false,
@@ -550,7 +563,7 @@ function getFactorySelect() {
 
 function getBusType(){
 	$.ajax({
-		url: "/IMMS/common/getBusType",
+		url: "/BMS/common/getBusType",
 		dataType: "json",
 		data: {},
 		async: false,
@@ -565,7 +578,7 @@ function getBusType(){
 function getLatestSeris(cur_year){
 	var bus_num=0;
 	$.ajax({
-		url: "/IMMS/order/getLatestBusSeries",
+		url: "/BMS/order/getLatestBusSeries",
 		dataType: "json",
 		data: {"productive_year" : cur_year},
 		async: false,
@@ -698,7 +711,7 @@ function ajaxEditConfirm (argument){
 	$.ajax({
 		type: "get",
 		dataType: "json",
-		url: "/IMMS/order/editOrder",
+		url: "/BMS/order/editOrder",
 	    data: {
 			"data_order_id":$("#dialog-order").data("order_id"),
 			"color":$("#edit_color").val(),
@@ -768,7 +781,7 @@ function ajaxAdd (argument) {
 	$.ajax({
 		type: "get",
 		dataType: "json",
-		url: "/IMMS/order/addOrder",
+		url: "/BMS/order/addOrder",
 	    data: {
 			"data_order_name":$("#newOrderName").val(),
 			"data_order_code":$("#newOrderCode").val().toUpperCase(),
@@ -804,7 +817,7 @@ function ajaxEdit(order_id){
 	reduce_series_list=new Array();//重置减少分配数量时剩余流水段
 	//查询订单信息
 	$.ajax({
-		url: "/IMMS/order/showOrderDetailList",
+		url: "/BMS/order/showOrderDetailList",
 		dataType: "json",
 		data: {"order_id" : order_id},
 		async: false,
@@ -899,7 +912,7 @@ function ajaxEdit(order_id){
 
 function ajaxShowBusNumber(order_id,factory_id){
 	$.ajax({
-		url: "/IMMS/order/showBusNumber",
+		url: "/BMS/order/showBusNumber",
 		dataType: "json",
 		data: {"order_id" : order_id,"factory_id":factory_id},
 		async: false,
@@ -912,6 +925,7 @@ function ajaxShowBusNumber(order_id,factory_id){
 	    			$("<td style=\"text-align:center;\" />").html(index+1).appendTo(tr);
 	    			$("<td style=\"text-align:center;\" />").html(value.bus_number).appendTo(tr);
 	    			$("<td style=\"text-align:center;\" />").html(value.factory_name).appendTo(tr);
+	    			$("<td style=\"text-align:center;\" />").html(value.workshop).appendTo(tr);
 	    			$("<td style=\"text-align:center;\" />").html(value.process_name).appendTo(tr);
 	    			$("#tableBusNumber tbody").append(tr);
 	    			
@@ -920,7 +934,7 @@ function ajaxShowBusNumber(order_id,factory_id){
 				alert(response.message);
 			}
 			var dialog = $( "#dialog-message" ).removeClass('hide').dialog({
-				width:600,
+				width:650,
 				height:500,
 				modal: true,
 				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i> 车辆明细</h4></div>",

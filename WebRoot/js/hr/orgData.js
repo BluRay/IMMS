@@ -694,7 +694,7 @@ function getNodeName(id){
 function getWorkshop(selectval){
 	var strs="<option value=''>--请选择--<option>";
 	$.ajax({
-		url : "/IMMS/setting/getAllWorkshopList",
+		url : "/BMS/setting/getAllWorkshopList",
 		dataType : "json",
 		data : {
 		},
@@ -728,7 +728,7 @@ function getWorkgroup(parentId){
 	}
 	//alert($("#new_org_type :selected").attr('keyvalue')+" "+$("#new_p_id :selected").attr('foreignid'));
 	$.ajax({
-		url : "/IMMS/setting/getWorkgroupList",
+		url : "/BMS/setting/getWorkgroupList",
 		dataType : "json",
 		data : {"id":id,
 		},

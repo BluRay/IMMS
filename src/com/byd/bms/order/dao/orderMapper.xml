@@ -4,7 +4,7 @@
 
 	<select id="getOrderList" parameterType="Map" resultType="Map">
 		SELECT f.production_qty,f.busnum_start,f.busnum_end,a.area,a.id AS 'factory_id',a.factory_name,f.edit_date,u.display_name as 'user_name',
-		t.bus_type_code,o.*,CONCAT(o.order_name,t.bus_type_code,o.order_qty,'台') AS 'order_name_str',f.status,a.factory_code,
+		t.bus_type_code,o.*,CONCAT(o.order_name,t.bus_type_code,'  ',o.order_qty,'台') AS 'order_name_str',f.status,a.factory_code,
 		f.bus_number_start,(f.bus_number_start+f.busnum_end-f.busnum_start) bus_number_end
 		FROM BMS_OR_ORDER o			
 		LEFT JOIN BMS_OR_FACTORY_ORDER f ON f.order_id = o.id
@@ -163,13 +163,15 @@
 	</insert>
 	
 	<select id="queryBusNumberByOrder" parameterType="Map" resultType="Map">
-		SELECT b.id,b.factory_id,f.factory_name,b.order_id,b.bus_number,b.vin,b.latest_process_id,p.process_name,
+		SELECT b.id,b.factory_id,f.factory_name,b.order_id,b.bus_number,b.vin,p.workshop,b.latest_process_id,
+		CASE WHEN ISNULL(k.key_name) THEN CONCAT(p.process_code ,' ', p.process_name) ELSE CONCAT(p.process_code ,' ',p.process_name,'(',k.key_name,')') END as process_name,
 		b.welding_online_date,b.welding_offline_date,b.painting_online_date,b.painting_offline_date,b.chassis_online_date,b.chassis_offline_date,
 		b.assembly_online_date,b.assembly_offline_date,b.warehousing_date,b.dispatch_date,o.order_no,o.order_name,o.order_qty 
 		FROM BMS_PLAN_BUS b
 		LEFT OUTER JOIN BMS_BASE_FACTORY f ON b.factory_id = f.id
 		LEFT OUTER JOIN BMS_OR_ORDER o ON b.order_id = o.id
 		LEFT OUTER JOIN BMS_BASE_PROCESS p ON b.latest_process_id = p.id
+		LEFT OUTER JOIN BMS_BASE_KEY k ON k.value = p.plan_node_id and k.key_code = 'PLAN_CODE' 
 		WHERE b.order_id = #{order_id} 
 		<if test="factory_id != null">
 			 and b.factory_id = #{factory_id} 
@@ -181,7 +183,7 @@
 	</select>
 	
 	<select id="getOrderConfigList" parameterType="Map" resultType="Map">
-		select o.id,c.id config_id,o.order_no,CONCAT(o.order_name,t.bus_type_code,o.order_qty,'台') AS order_name_str,
+		select o.id,c.id config_id,o.order_no,CONCAT(o.order_name,t.bus_type_code,'  ',o.order_qty,'台') AS order_name_str,
 		o.productive_year,o.delivery_date,c.battery_capacity,c.rated_voltage,c.spring_num,c.tire_type,c.passenger_num,
 		o.order_qty,c.order_config_name,c.sap_materialNo,c.material,c.config_file,c.config_qty,c.customer,c.bus_seats,
 		(select ifnull(sum(fc.product_qty),0) from BMS_OR_FACTORY_ORDER_CONFIG fc where fc.order_config_id=c.id) allot_qty,
@@ -303,7 +305,7 @@
 	</insert>
 	
 	<select id="queryConfigAllotList" parameterType="Map" resultType="Map">
-		SELECT fo.id factory_order_id,o.id order_id,c.id config_id,o.order_no,CONCAT(o.order_name,t.bus_type_code,o.order_qty,'台') AS order_name_str,
+		SELECT fo.id factory_order_id,o.id order_id,c.id config_id,o.order_no,CONCAT(o.order_name,t.bus_type_code,'  ',o.order_qty,'台') AS order_name_str,
 		f.factory_name,fo.production_qty,c.order_config_name,fc.product_qty,c.config_qty,fc.sequence,c.customer,f.id factory_id
 		FROM BMS_OR_ORDER o
 		LEFT JOIN BMS_OR_ORDER_CONFIG c ON o.id=c.order_id

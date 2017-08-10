@@ -84,7 +84,8 @@
 						<div  style="float:left;width:55%">
 							<label style="float:left;width:40%" class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newOrderName">*&nbsp;车辆内部名称</label>
 							<div style="float:left;width:60%" class="col-sm-8">
-								<input type="text" class="input-medium" placeholder="车辆内部名称..." id="edit_internalName" />
+								<select name="" id="edit_internalName" class="input-medium"></select>
+								<!-- <input type="text" class="input-medium" placeholder="车辆内部名称..." id="edit_internalName" /> -->
 							</div>
 						</div>
 					</div>
@@ -215,7 +216,8 @@
 						<div  style="float:left;width:55%">
 							<label style="float:left;width:40%" class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newOrderName">*&nbsp;车辆内部名称</label>
 							<div style="float:left;width:60%" class="col-sm-8">
-								<input type="text" class="input-medium" placeholder="车辆内部名称..." id="add_internalName" />
+								<select name="" id="add_internalName" class="input-medium"></select>
+								<!-- <input type="text" class="input-medium" placeholder="车辆内部名称..." id="add_internalName" /> -->
 							</div>
 						</div>
 					</div>

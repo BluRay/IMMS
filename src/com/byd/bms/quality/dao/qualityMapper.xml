@@ -17,8 +17,8 @@
 		<result property="editDate" column="edit_date" />
 	</resultMap>
 	<select id="getOrderConfigList" parameterType="Map" resultType="Map">
-		select o.id,c.id config_id,o.order_no,CONCAT(o.order_no,' ',o.order_name,t.bus_type_code,'  ',o.order_qty,'台') AS order_desc,
-		o.memo,t.internal_name bus_type,c.order_config_name,u.username editor,h.edit_date,o.bus_type_id
+		select o.id,c.id config_id,o.order_no,CONCAT(o.order_no,' ',o.order_name,t.bus_type_code,'  ',o.order_qty,' ','台') AS order_desc,
+		o.memo,t.bus_type_code bus_type,c.order_config_name,u.username editor,h.edit_date,o.bus_type_id
 		from BMS_OR_ORDER_CONFIG c 
 		left join BMS_OR_ORDER o on o.id=c.order_id
 		left join BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id 
@@ -714,7 +714,7 @@
 	</select>
 	
 	<select id="getMaterialExceptionLogsList" parameterType="Map" resultType="Map">
-		select t.*,f.factory_name, s.workshop_name,CONCAT(o.order_no,o.order_name) as order_name,
+		select t.*,f.factory_name, s.workshop_name,CONCAT(o.order_no,' ',o.order_name,ty.bus_type_code,'  ',o.order_qty,' ','台') as order_name,
 		o.order_no,ty.bus_type_code from BMS_QM_MATERIAL_EXCEPTION_LOGS t
 		LEFT JOIN BMS_BASE_FACTORY f on f.id=t.factory_id
 	    LEFT JOIN BMS_BASE_BUS_TYPE ty on ty.id=t.bus_type_id

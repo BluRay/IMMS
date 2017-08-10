@@ -5,14 +5,14 @@ $(document).ready(function () {
 		getBusNumberSelect('#nav-search-input');
 		$("#divBulkAdd").hide();
 		getOrderNoSelect("#search_order_no","#orderId");
-		getFactorySelect("plan/generateVin",'',"#search_factory",null,'id');
+		getFactorySelect("plan/generateVin",'',"#search_factory","全部",'id');
 		getFactorySelect("plan/generateVin",'',"#vin_factory",null,'id');
 		$("#btnPrint").attr("disabled","disabled"); 
 	};
 
 	$('#nav-search-input').bind('keydown', function(event) {
 		if (event.keyCode == "13") {
-			window.open("/IMMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
 			return false;
 		}
 	})
@@ -269,7 +269,7 @@ function initTable() {
         columns: [
         [
             {
-            	field: 'factory_name',title: '&nbsp;&nbsp;&nbsp;生产工厂&nbsp;&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
+            	field: 'factory_name',title: '&nbsp;&nbsp;生产工厂&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
                 sortable: true,visible: true,footerFormatter: totalTextFormatter,
                 cellStyle:function cellStyle(value, row, index, field) {
 	        	return {css: {"padding-left": "3px", "padding-right": "2px","font-size":"13px"}};
@@ -287,20 +287,20 @@ function initTable() {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
     	        	}
             },{
-            	field: 'left_motor_number',title: '&nbsp;&nbsp;左电机号&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
+            	field: 'left_motor_number',title: '&nbsp;左电机号&nbsp;',align: 'center',valign: 'middle',align: 'center',
                 sortable: false,visible: true,footerFormatter: totalTextFormatter,
                 cellStyle:function cellStyle(value, row, index, field) {
-    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
+    	        	return {css: {"padding-left": "1px", "padding-right": "1px","font-size":"13px"}};
     	        	},
     	        formatter:function(value, row, index){
     	        	var left_motor_number = (row.left_motor_number===null)?"":row.left_motor_number;
 	        		return "<input id='left_motor_"+index+"' class='left_motor' style='font-size: 12px;color: #333333;border:0;width:100%' value='"+left_motor_number+"' old_val='"+left_motor_number+"' vin='"+row.vin+"'>";
 	        	 }
             },{
-            	field: 'right_motor_number',title: '&nbsp;&nbsp;右电机号&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
+            	field: 'right_motor_number',title: '&nbsp;右电机号&nbsp;',align: 'center',valign: 'middle',align: 'center',
                 sortable: false,visible: true,footerFormatter: totalTextFormatter,
                 cellStyle:function cellStyle(value, row, index, field) {
-    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
+    	        	return {css: {"padding-left": "1px", "padding-right": "1px","font-size":"13px"}};
     	        	},
     	        formatter:function(value, row, index){
     	        	var right_motor_number = (row.right_motor_number===null)?"":row.right_motor_number;
@@ -310,7 +310,7 @@ function initTable() {
             	field: 'bus_number',title: '&nbsp;&nbsp;车号&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
                 sortable: false,visible: true,footerFormatter: totalTextFormatter,
                 cellStyle:function cellStyle(value, row, index, field) {
-    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
+    	        	return {css: {"padding-left": "1px", "padding-right": "1px","font-size":"13px"}};
     	        	},
     	        formatter:function(value, row, index){
     	        	var bus_number = (row.bus_number===null)?"":row.bus_number;
@@ -329,10 +329,10 @@ function initTable() {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
     	        	}
             },{
-            	field: 'print_sign',title: '&nbsp;&nbsp;打印标志&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
+            	field: 'print_sign',title: '&nbsp;打印标志&nbsp;',align: 'center',valign: 'middle',align: 'center',
                 sortable: false,visible: true,footerFormatter: totalTextFormatter,
                 cellStyle:function cellStyle(value, row, index, field) {
-    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
+    	        	return {css: {"padding-left": "1px", "padding-right": "1px","font-size":"13px"}};
     	        	},
 	        	formatter:function(value, row, index){
 	        		return (value == "1")?"已打印":"未打印";

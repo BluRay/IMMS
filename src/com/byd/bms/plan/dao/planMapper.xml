@@ -22,9 +22,10 @@
 	
 	<select id="getPlanMasterIndex" parameterType="Map" resultType="com.byd.bms.plan.model.PlanMasterIndex">
 		SELECT DISTINCT
-		m.version,o.order_no,m.plan_month,f.factory_name,u.display_name,create_date FROM
+		m.version,CONCAT(o.order_no,'  ',o.order_name,t.bus_type_code,'  ',o.order_qty,'台') as order_no,m.plan_month,f.factory_name,u.display_name,create_date FROM
 		BMS_PLAN_MASTER_PLAN m
 		LEFT JOIN BMS_OR_ORDER o ON m.order_id = o.id
+		LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id=t.id
 		LEFT JOIN BMS_BASE_FACTORY f ON m.factory_id = f.id
 		LEFT JOIN BMS_BASE_USER u ON m.creator_id = u.staff_number where 1=1
 		<if test="factory_id!=''">
@@ -59,9 +60,10 @@
 		SELECT
 		m.D1+m.D2+m.D3+m.D4+m.D5+m.D6+m.D7+m.D8+m.D9+m.D10+m.D11+m.D12+m.D13+m.D14+m.D15+m.D16+m.D17+m.D18+m.D19+m.D20+
 		m.D21+m.D22+m.D23+m.D24+m.D25+m.D26+m.D27+m.D28+m.D29+m.D30+m.D31 AS
-		sumQty, k.key_name AS plan_code_keyname, m.*,o.order_no,f.name AS factory_name
+		sumQty, k.key_name AS plan_code_keyname, m.*,CONCAT(o.order_no,'  ',o.order_name,t.bus_type_code,'  ',o.order_qty,'台') as order_no,f.name AS factory_name
 		FROM BMS_PLAN_MASTER_PLAN m
 		LEFT JOIN BMS_OR_ORDER o ON m.order_id = o.id
+		LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id=t.id
 		LEFT JOIN BMS_BASE_ORG f ON m.factory_id = f.foreign_id  AND f.org_type = 2 
 		LEFT JOIN
 		BMS_BASE_KEY k ON m.plan_code_value=k.value AND key_code = 'PLAN_CODE' 
@@ -166,7 +168,7 @@
 	<select id="getPlanIssuanceList" parameterType="Map" resultType="com.byd.bms.plan.model.PlanIssuance">
 	SELECT
 	f.order_config_name,a.order_id,a.order_config_id,a.product_qty,a.sequence,sum(IFNULL(p.plan_qty,0))
-	AS issed_qty,  concat(o.order_no,' ',o.order_name,t.internal_name,' ',ifnull(fo.production_qty,0),'台') as order_no 
+	AS issed_qty,  concat(o.order_no,' ',o.order_name,t.bus_type_code,' ',ifnull(fo.production_qty,0),'台') as order_no 
 	FROM BMS_OR_FACTORY_ORDER_CONFIG a
 	LEFT JOIN BMS_OR_ORDER_CONFIG f ON a.order_config_id = f.id
 	LEFT JOIN BMS_PLAN_PRODUCTION_PLAN p ON a.order_config_id = p.order_config_id
@@ -500,7 +502,7 @@
 	<select id="getPlanVin" parameterType="Map" resultType="com.byd.bms.plan.model.PlanVIN">
 		SELECT v.*,b.bus_number,b.productive_date,u.display_name AS
 		creator_name, u1.display_name as print_name,
-		o.order_code,t.bus_type_code,o.order_qty,o.order_name,o.order_no,f.factory_name
+		o.order_code,t.bus_type_code,o.order_qty,o.order_name,CONCAT(o.order_no,'  ',o.order_name,t.bus_type_code,'  ',o.order_qty,'台') as order_no,f.factory_name
 		FROM BMS_PD_VIN v
 		LEFT JOIN BMS_BASE_FACTORY f on f.id=v.factory_id
 		LEFT JOIN BMS_BASE_USER u ON v.creator_id = u.staff_number
@@ -785,7 +787,7 @@
 		select record.order_desc,record.key_name,record.production_qty,record.order_id,ifnull(record.real_qty,0) real_qty,ifnull(record.total_qty,0) total_qty,ifnull(p.total_plan_qty,0) total_plan_qty 
 		from
 		(
-		select '自制下线' key_name,fo.order_id,tmp.quantity1 real_qty,tmp.quantity total_qty,sum(fo.production_qty) production_qty,concat(o.order_no,' ',o.order_name,t.internal_name,' ',sum(fo.production_qty),'台') order_desc
+		select '自制下线' key_name,fo.order_id,tmp.quantity1 real_qty,tmp.quantity total_qty,sum(fo.production_qty) production_qty,concat(o.order_no,' ',o.order_name,t.bus_type_code,' ',sum(fo.production_qty),'台') order_desc
 		from BMS_OR_FACTORY_ORDER fo
 		left join BMS_OR_ORDER o on o.id=fo.order_id
 		left join BMS_BASE_BUS_TYPE  t on o.bus_type_id=t.id
@@ -810,7 +812,7 @@
 		group by fo.order_id
 		union all
 		select '部件上线' key_name,fo.order_id,tmp.real_qty,tmp.total_qty,sum(fo.production_qty) production_qty,
-		concat(o.order_no,' ',o.order_name,t.internal_name,' ',sum(fo.production_qty),'台') order_desc
+		concat(o.order_no,' ',o.order_name,t.bus_type_code,' ',sum(fo.production_qty),'台') order_desc
 		from BMS_OR_FACTORY_ORDER fo
 		left join BMS_OR_ORDER o on o.id=fo.order_id
 		left join BMS_BASE_BUS_TYPE  t on o.bus_type_id=t.id
@@ -834,7 +836,7 @@
 		group by fo.order_id 
 		union all
 		select '部件下线' key_name,fo.order_id,tmp.real_qty,tmp.total_qty,sum(fo.production_qty) production_qty,
-		concat(o.order_no,' ',o.order_name,t.internal_name,' ',sum(fo.production_qty),'台') order_desc
+		concat(o.order_no,' ',o.order_name,t.bus_type_code,' ',sum(fo.production_qty),'台') order_desc
 		from BMS_OR_FACTORY_ORDER fo
 		left join BMS_OR_ORDER o on o.id=fo.order_id
 		left join BMS_BASE_BUS_TYPE  t on o.bus_type_id=t.id
@@ -858,7 +860,7 @@
 		group by fo.order_id 
 		
 		union all
-		select '焊装上线' key_name,fo.order_id,tmp.real_qty,tmp.total_qty,sum(fo.production_qty) production_qty,concat(o.order_no,' ',o.order_name,t.internal_name,' ',sum(fo.production_qty),'台') order_desc 
+		select '焊装上线' key_name,fo.order_id,tmp.real_qty,tmp.total_qty,sum(fo.production_qty) production_qty,concat(o.order_no,' ',o.order_name,t.bus_type_code,' ',sum(fo.production_qty),'台') order_desc 
 		from BMS_OR_FACTORY_ORDER fo 
 		left join BMS_OR_ORDER o on o.id=fo.order_id 
 		left join BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id 
@@ -880,7 +882,7 @@
 		group by fo.order_id
 	
 		union all
-		select '焊装下线' key_name,fo.order_id,tmp.real_qty,tmp.total_qty,sum(fo.production_qty) production_qty,concat(o.order_no,' ',o.order_name,t.internal_name,' ',sum(fo.production_qty),'台') order_desc 
+		select '焊装下线' key_name,fo.order_id,tmp.real_qty,tmp.total_qty,sum(fo.production_qty) production_qty,concat(o.order_no,' ',o.order_name,t.bus_type_code,' ',sum(fo.production_qty),'台') order_desc 
 		from BMS_OR_FACTORY_ORDER fo 
 		left join BMS_OR_ORDER o on o.id=fo.order_id 
 		left join BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id 
@@ -902,7 +904,7 @@
 		group by fo.order_id
 		
 		union all
-		select '涂装上线' key_name,fo.order_id,tmp.real_qty,tmp.total_qty,sum(fo.production_qty) production_qty,concat(o.order_no,' ',o.order_name,t.internal_name,' ',sum(fo.production_qty),'台') order_desc 
+		select '涂装上线' key_name,fo.order_id,tmp.real_qty,tmp.total_qty,sum(fo.production_qty) production_qty,concat(o.order_no,' ',o.order_name,t.bus_type_code,' ',sum(fo.production_qty),'台') order_desc 
 		from BMS_OR_FACTORY_ORDER fo 
 		left join BMS_OR_ORDER o on o.id=fo.order_id 
 		left join BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id 
@@ -924,7 +926,7 @@
 		group by fo.order_id
 		
 		union all
-		select '涂装下线' key_name,fo.order_id,tmp.real_qty,tmp.total_qty,sum(fo.production_qty) production_qty,concat(o.order_no,' ',o.order_name,t.internal_name,' ',sum(fo.production_qty),'台') order_desc 
+		select '涂装下线' key_name,fo.order_id,tmp.real_qty,tmp.total_qty,sum(fo.production_qty) production_qty,concat(o.order_no,' ',o.order_name,t.bus_type_code,' ',sum(fo.production_qty),'台') order_desc 
 		from BMS_OR_FACTORY_ORDER fo 
 		left join BMS_OR_ORDER o on o.id=fo.order_id 
 		left join BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id 
@@ -946,7 +948,7 @@
 		group by fo.order_id
 		
 		union all
-		select '底盘上线' key_name,fo.order_id,tmp.real_qty,tmp.total_qty,sum(fo.production_qty) production_qty,concat(o.order_no,' ',o.order_name,t.internal_name,' ',sum(fo.production_qty),'台') order_desc 
+		select '底盘上线' key_name,fo.order_id,tmp.real_qty,tmp.total_qty,sum(fo.production_qty) production_qty,concat(o.order_no,' ',o.order_name,t.bus_type_code,' ',sum(fo.production_qty),'台') order_desc 
 		from BMS_OR_FACTORY_ORDER fo 
 		left join BMS_OR_ORDER o on o.id=fo.order_id 
 		left join BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id 
@@ -968,7 +970,7 @@
 		group by fo.order_id
 
 		union all
-		select '底盘下线' key_name,fo.order_id,tmp.real_qty,tmp.total_qty,sum(fo.production_qty) production_qty,concat(o.order_no,' ',o.order_name,t.internal_name,' ',sum(fo.production_qty),'台') order_desc 
+		select '底盘下线' key_name,fo.order_id,tmp.real_qty,tmp.total_qty,sum(fo.production_qty) production_qty,concat(o.order_no,' ',o.order_name,t.bus_type_code,' ',sum(fo.production_qty),'台') order_desc 
 		from BMS_OR_FACTORY_ORDER fo 
 		left join BMS_OR_ORDER o on o.id=fo.order_id 
 		left join BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id 
@@ -990,7 +992,7 @@
 		group by fo.order_id
 		
 		union all
-		select '总装上线' key_name,fo.order_id,tmp.real_qty,tmp.total_qty,sum(fo.production_qty) production_qty,concat(o.order_no,' ',o.order_name,t.internal_name,' ',sum(fo.production_qty),'台') order_desc 
+		select '总装上线' key_name,fo.order_id,tmp.real_qty,tmp.total_qty,sum(fo.production_qty) production_qty,concat(o.order_no,' ',o.order_name,t.bus_type_code,' ',sum(fo.production_qty),'台') order_desc 
 		from BMS_OR_FACTORY_ORDER fo 
 		left join BMS_OR_ORDER o on o.id=fo.order_id 
 		left join BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id 
@@ -1012,7 +1014,7 @@
 		group by fo.order_id
 		
 		union all
-		select '总装下线' key_name,fo.order_id,tmp.real_qty,tmp.total_qty,sum(fo.production_qty) production_qty,concat(o.order_no,' ',o.order_name,t.internal_name,' ',sum(fo.production_qty),'台') order_desc 
+		select '总装下线' key_name,fo.order_id,tmp.real_qty,tmp.total_qty,sum(fo.production_qty) production_qty,concat(o.order_no,' ',o.order_name,t.bus_type_code,' ',sum(fo.production_qty),'台') order_desc 
 		from BMS_OR_FACTORY_ORDER fo 
 		left join BMS_OR_ORDER o on o.id=fo.order_id 
 		left join BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id 
@@ -1034,7 +1036,7 @@
 		group by fo.order_id
 		
 		union all
-		select '入库' key_name,fo.order_id,tmp.real_qty,tmp.total_qty,sum(fo.production_qty) production_qty,concat(o.order_no,' ',o.order_name,t.internal_name,' ',sum(fo.production_qty),'台') order_desc 
+		select '入库' key_name,fo.order_id,tmp.real_qty,tmp.total_qty,sum(fo.production_qty) production_qty,concat(o.order_no,' ',o.order_name,t.bus_type_code,' ',sum(fo.production_qty),'台') order_desc 
 		from BMS_OR_FACTORY_ORDER fo 
 		left join BMS_OR_ORDER o on o.id=fo.order_id 
 		left join BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id 
@@ -1160,7 +1162,7 @@
 	</insert>
 	
 	<select id="getDispatchPlanList" parameterType="Map" resultType="Map">
-		SELECT P.*,F.factory_name,O.order_no,O.order_qty,T.bus_type_code, IFNULL(sum(d.qtys),0) AS plan_done_qty 
+		SELECT P.*,F.factory_name,CONCAT(O.order_no,'  ',O.order_name,T.bus_type_code,'  ',O.order_qty,'台') as order_no,O.order_qty,T.bus_type_code, IFNULL(sum(d.qtys),0) AS plan_done_qty 
 		FROM BMS_PLAN_BUS_DISPATCH_PLAN P
 		LEFT OUTER JOIN BMS_PLAN_BUS_DISPATCH d on P.id=d.dispatch_plan_id
 		LEFT OUTER JOIN BMS_BASE_FACTORY F ON P.factory_id = F.id
@@ -1284,7 +1286,7 @@
 		order_done_qty,order_qty-sum(plan_dispatch_qty) order_left,sum(plan_dispatch_qty) order_dispatch,dispatch_date
 		from(
 		select p.*,sum(qtys)
-		plan_done_qty,o.order_no,o.order_name,o.order_qty,f.factory_name,o.bus_type_id,b.internal_name bus_type
+		plan_done_qty,o.order_no,o.order_name,o.order_qty,f.factory_name,o.bus_type_id,b.bus_type_code bus_type
 		from BMS_PLAN_BUS_DISPATCH_PLAN p
 		left join BMS_PLAN_BUS_DISPATCH d on p.id=d.dispatch_plan_id
 		left join BMS_OR_ORDER o on p.order_id=o.id
@@ -1318,7 +1320,7 @@
 		order_done_qty,order_qty-sum(plan_dispatch_qty) order_left,sum(plan_dispatch_qty) order_dispatch
 		from(
 		select p.*,sum(qtys)
-		plan_done_qty,o.order_no,o.order_name,o.order_qty,f.factory_name,o.bus_type_id,b.internal_name bus_type
+		plan_done_qty,o.order_no,o.order_name,o.order_qty,f.factory_name,o.bus_type_id,b.bus_type_code bus_type
 		from BMS_PLAN_BUS_DISPATCH_PLAN p
 		left join BMS_PLAN_BUS_DISPATCH d on p.id=d.dispatch_plan_id
 		left join BMS_OR_ORDER o on p.order_id=o.id

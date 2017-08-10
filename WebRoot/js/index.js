@@ -114,7 +114,7 @@ $(document).ready(function() {
 		var bar_series=[0,0,0,0];
 		var pie_series=[0,0,0,0];
 		$.ajax({
-			url:'/IMMS/common/getIndexOrderData',
+			url:'/BMS/common/getIndexOrderData',
 			type:'get',
 			dataType:'json',
 			cache:false,
@@ -228,7 +228,7 @@ function drawOutputChart(){
 	var series=[];
 	var factory_data_list=[];
 	$.ajax({
-		url:'/IMMS/common/getIndexOutputData',
+		url:'/BMS/common/getIndexOutputData',
 		type:'get',
 		dataType:'json',
 		cache:false,
@@ -350,7 +350,7 @@ function drawOutputChart(){
 	function drawFactoryDailyChart(){
 
 		$.ajax({
-			url:'/IMMS/common/getIndexFactoryDailyData',
+			url:'/BMS/common/getIndexFactoryDailyData',
 			type:'get',
 			dataType:'json',
 			cache:false,
@@ -421,7 +421,7 @@ function drawOutputChart(){
 	function drawFactoryOrderChart(){
 		$("#factory_act_order").html("");
 		$.ajax({
-			url:'/IMMS/common/getIndexFactoryPrdOrdData',
+			url:'/BMS/common/getIndexFactoryPrdOrdData',
 			type:'get',
 			dataType:'json',
 			cache:false,
@@ -474,7 +474,7 @@ function drawOutputChart(){
 	function drawFactoryException(){
 		$("#exception").html("");
 		$.ajax({
-			url:'/IMMS/common/getIndexExceptionData',
+			url:'/BMS/common/getIndexExceptionData',
 			type:'get',
 			dataType:'json',
 			cache:false,
@@ -523,7 +523,7 @@ function drawStaffCountChart(){
 	var series=[];
 	var factory_data_list=[];
 	$.ajax({
-		url:'/IMMS/common/getIndexStaffCountData',
+		url:'/BMS/common/getIndexStaffCountData',
 		type:'get',
 		dataType:'json',
 		cache:false,

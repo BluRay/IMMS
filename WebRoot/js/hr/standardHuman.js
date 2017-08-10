@@ -1,12 +1,11 @@
 var factory="";
 var workshop="";
 var workgroup="";
-var team="";
 $(document).ready(function() {
     initPage();
 	
 	function initPage() {
-		getOrgAuthTree($("#workGroupTree"),'hrBaseData/staffManager',"1,2,3,4",'1',3);
+		getOrgAuthTree($("#workGroupTree"),'hrBaseData/staffManager',"1,2,3",'1',3);
 		$('#workGroupTree').height($(window).height()-200)
 		$('#workGroupTree').ace_scroll({
 			size: $(window).height()-200
@@ -50,12 +49,15 @@ function zTreeBeforeClick(treeId, treeNode, clickFlag) {
 function zTreeOnClick(event, treeId, treeNode) {
 	if(treeNode.org_type=='1'){
 		factory=treeNode.displayName;
+		workshop = "";
+		workgroup="";
 		$(".node").text(factory);
 		ajaxQuery(treeNode.id);
 	}	
 	if(treeNode.org_type == '2'){
 		factory=treeNode.getParentNode().displayName;
 		workshop=treeNode.displayName;
+		workgroup="";
 		$(".node").text(factory+"->"+workshop);
 		ajaxQuery(treeNode.id);
 	}
@@ -66,13 +68,7 @@ function zTreeOnClick(event, treeId, treeNode) {
 		$(".node").text(factory+"->"+workshop+"->"+workgroup);
 		ajaxQuery(treeNode.id);
 	}
-	if(treeNode.org_type == '4'){
-		factory=treeNode.getParentNode().getParentNode().getParentNode().displayName;
-		workshop=treeNode.getParentNode().getParentNode().displayName;
-		workgroup=treeNode.getParentNode().displayName;
-		team=treeNode.displayName;
-		$("#tableData").html("");
-	}
+
 	
 };
 function ajaxQuery(id){
@@ -101,7 +97,10 @@ function ajaxQuery(id){
 		ajax:function (data, callback, settings) {
 			var param ={
 //				"draw":1,
-				"id":id
+				"id":id,
+				"factory":factory,
+				"workshop":workshop,
+				"workgroup":workgroup
 			};
 //            param.length = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
 //            param.start = data.start;//开始的记录序号
@@ -128,9 +127,9 @@ function ajaxQuery(id){
 		},
 		columns: [
 			
-            {"title":"工厂/部门","class":"center","data":"factory_name","defaultContent": ""},
-            {"title":"科室/车间","class":"center","data":"workshop_name","defaultContent": ""},
-            {"title":"班组","class":"center","data":"workgroup_name","defaultContent": ""},
+            {"title":"工厂/部门","class":"center","data":"factory","defaultContent": ""},
+            {"title":"科室/车间","class":"center","data":"workshop","defaultContent": ""},
+            {"title":"班组","class":"center","data":"workgroup","defaultContent": ""},
             {"title":"岗位名称","class":"center","data":"job_name","defaultContent": ""},
             {"title":"标准人力","class":"center","data":"standard_humans","defaultContent": ""},
             {"title":"现有人力","class":"center","data":"realHuman","defaultContent": ""},

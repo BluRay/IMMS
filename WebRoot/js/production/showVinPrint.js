@@ -142,37 +142,52 @@ $(document).ready(function(){
 	$("#btnSave").click(function(){
 		var trs=$("#tableData tbody").find("tr");
 		var msg="确认保存？";
+		var saveFlag = true;
 		$.each(trs,function(i,tr){
 			var busNumber=$(tr).find(".busNumber").text();
 			var vin=$(tr).find(".vin").val();
 			var leftMotorNumber=$(tr).find(".leftMotor").val();
 			var rightMotorNumber=$(tr).find(".rightMotor").val();
-			if(vin.trim().length==0/*||leftMotorNumber.trim().length==0||rightMotorNumber.trim().length==0*/){
-				msg="VIN码未填写的无法保存,是否确认保存？"
+			if(leftMotorNumber.trim().length==0 && rightMotorNumber.trim().length==0){
+				alert("请至少输入一个左电机或者右电机，再保存！");
+				saveFlag = false;
+				
 			}else{
-				var obj={};
-				obj.bus_number=busNumber;
-				obj.vin=vin;
-				obj.left_motor_number=leftMotorNumber;
-				obj.right_motor_number=rightMotorNumber;
-				buslist.push(obj);
+				if(leftMotorNumber.trim().length==0){
+					leftMotorNumber = '/';
+				}
+				if(rightMotorNumber.trim().length==0){
+					rightMotorNumber = '/';
+				}
+				if(vin.trim().length==0/*||leftMotorNumber.trim().length==0||rightMotorNumber.trim().length==0*/){
+					msg="VIN码未填写的无法保存,是否确认保存？"
+				}else{
+					var obj={};
+					obj.bus_number=busNumber;
+					obj.vin=vin;
+					obj.left_motor_number=leftMotorNumber;
+					obj.right_motor_number=rightMotorNumber;
+					buslist.push(obj);
+				}
 			}
 		});
-		if(confirm(msg)){
-			if(buslist.length>0){
-				$.ajax({
-					url:"saveMotorNumber",
-					type: "post",
-					dataType:"json",
-					data:{"conditions":JSON.stringify(buslist)},
-					success:function(response){
-						alert(response.message);					
-					}		
-				});
-			}else{
-				alert("没有填写需要绑定的VIN码和左右电机号！");
+		if(saveFlag){
+			if(confirm(msg)){
+				if(buslist.length>0){
+					$.ajax({
+						url:"saveMotorNumber",
+						type: "post",
+						dataType:"json",
+						data:{"conditions":JSON.stringify(buslist)},
+						success:function(response){
+							alert(response.message);					
+						}		
+					});
+				}else{
+					alert("没有填写需要绑定的VIN码和左右电机号！");
+				}
+				
 			}
-			
 		}
 	});
 	
@@ -235,7 +250,7 @@ function ajaxQuery(){
 				return "<input id=rightMotor_"+(meta.row + meta.settings._iDisplayStart + 1)+" style='border:0;width:98%;text-align:center;background-color:white;' class='rightMotor' " +
 						" value='"+(data!=undefined ? data : '')+"'/><input class='rightMotorHide' style='width:0px;position:absolute;margin-top:-2000px />";
 			}
-			},
+			}/*,
             {"title":"打印状态","class":"center","data":"print_sign","defaultContent": ""},
             {"title":"最近打印人","class":"center","data":"printer","defaultContent": ""},
             {"title":"最近打印日期","class":"center","data":"print_date","defaultContent": ""},
@@ -243,7 +258,7 @@ function ajaxQuery(){
             {"title":"操作","class":"center","data":"","render":function(data,type,row){
             	return "<i class=\"glyphicon glyphicon-print bigger-130 btnPrint\" title=\"打印\" style='color:blue;cursor: pointer;'></i>";		            		
             	} 
-            }
+            }*/
           ],
 	});
 }

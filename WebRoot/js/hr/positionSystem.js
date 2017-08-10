@@ -9,11 +9,13 @@ $(document).ready(function(){
 		ajaxQuery();
 	}); 
 	$("#btnBulkAdd").click (function () {
+		$(".dt-buttons").css("margin-top","-120px");
 		$("#divBulkAdd").show();
 	});
 	
 	$("#btnBulkHide").click (function () {
 		$("#divBulkAdd").hide();
+		$(".dt-buttons").css("margin-top","-50px");
 	});
 	$(document).on("click","#btnAdd",function(){
 		
@@ -149,8 +151,15 @@ $(document).ready(function(){
 function ajaxQuery(){
 	dt=$("#tableData").DataTable({
 		serverSide: true,
-		
-        paging:true,
+		paging:true,
+        bLengthChange: true, //改变每页显示数据数量
+        iDisplayLength:10,
+		dom: 'Bfrtip',
+		lengthMenu: [[10, 20, 50, -1],[ 'Show 10 rows', 'Show 20 rows', 'Show 50 rows', 'All' ]],
+	    buttons: [
+	        {extend:'excelHtml5',title:'data_export',className:'black',text:'<i class=\"fa fa-file-excel-o bigger-130\" tooltip=\"导出excel\"></i>'},
+	        {extend:'pageLength',}
+	    ],
 		ordering:false,
 		searching: false,
 		bAutoWidth:false,
@@ -160,11 +169,12 @@ function ajaxQuery(){
 		scrollCollapse: true,
 		pageLength: 20,
 		pagingType:"full_numbers",
-		lengthChange:false,
+		lengthChange:true,
 		orderMulti:false,
 		language: {
 			emptyTable:"抱歉，未查询到数据！",
 			info:"共计 _TOTAL_ 条，当前第 _PAGE_ 页 共 _PAGES_ 页",
+			lengthMenu:"显示 _MENU_ 行",
 			infoEmpty:"",
 			paginate: {
 			  first:"首页",
@@ -227,7 +237,11 @@ function ajaxQuery(){
             	"defaultContent": "<i class=\"ace-icon fa fa-pencil bigger-130\" style='color:green;cursor: pointer;'></i>"}
           ],
 	});
-
+	$(".dt-buttons").css("margin-top","-50px").find("a").css("border","1px");
+	$(".dt-buttons").css("padding-right","20px");
+	
+	$("#tableData_info").addClass('col-xs-5');
+	$("#tableData_paginate").addClass('col-xs-7');
 }
 
 function ajaxAdd (argument) {

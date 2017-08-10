@@ -101,7 +101,7 @@ $(document).ready(function () {
 	
 	function getFactorySelect(){
 		$.ajax({
-			url : "/IMMS/common/getFactorySelect",
+			url : "/BMS/common/getFactorySelect",
 			dataType : "json",
 			data : {},
 			async : false,
@@ -298,7 +298,7 @@ function editUser(staff_name,display_name,email,cellphone,telephone,factory_id,d
 
 function getDepartmentByFactory(factory_id,select_id){
 	$.ajax({
-		url : "/IMMS/common/getDepartmentByFactory",
+		url : "/BMS/common/getDepartmentByFactory",
 		dataType : "json",
 		data : {"factory_id":factory_id},
 		async : false,

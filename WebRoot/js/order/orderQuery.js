@@ -350,7 +350,7 @@ function initTable() {
 //----------END bootstrap initTable ----------
 function ajaxShowBusNumber(order_id,factory_id,order_config_id){
 	$.ajax({
-		url: "/IMMS/order/showBusNumber",
+		url: "/BMS/order/showBusNumber",
 		dataType: "json",
 		data: {"order_id" : order_id,"factory_id":factory_id,"order_config_id":order_config_id},
 		async: false,
@@ -423,6 +423,7 @@ function drawBusInfoTable(data){
 		            {"title":"车号","class":"center","data":"bus_number","defaultContent": ""},
 		            {"title":"VIN","class":"center","data":"vin","defaultContent": ""},
 		            {"title":"生产工厂","class":"center","data":"factory_name","defaultContent": ""},
+		            {"title":"当前车间","class":"center","data":"workshop","defaultContent": ""},
 		            {"title":"当前工序","class":"center","data":"process_name","defaultContent": ""},
 		            {"title":"焊装上线","class":"center","data":"welding_online_date","defaultContent": ""},
 		            {"title":"焊装下线","class":"center","data":"welding_offline_date","defaultContent": ""},

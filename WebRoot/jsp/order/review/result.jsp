@@ -91,7 +91,7 @@
             $(function(){
             	$("#btnSave").click(function(){
             		$.ajax({
-            			url: "/IMMS/snaker/flow/process",
+            			url: "/BMS/snaker/flow/process",
             			dataType: "json",
             			data: {
             				"revisionpartsonlineDate" : $("#revisionpartsonlineDate").val(),
@@ -126,7 +126,7 @@
             		})
             	});
             	$("#btnBack").click(function(){
-            		window.open("/IMMS/order/review/internalReview","_parent");
+            		window.open("/BMS/order/review/internalReview","_parent");
                 });
             })
         </script>

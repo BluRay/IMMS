@@ -218,7 +218,7 @@ $(document).ready(function() {
 
 	            $.ajax({
 	                type: "post",
-	                url: "/IMMS/plan/getPauseList",
+	                url: "/BMS/plan/getPauseList",
 	                cache: false,  //禁用缓存
 	                data: param,  //传入组装的参数
 	                dataType: "json",
@@ -547,7 +547,7 @@ function ajaxSave(conditions) {
 function checkSalarySubmit(factory,workshop,month){
 	var submit_flg="";
 	$.ajax({
-		url : "/IMMS/common/getSubmitSalary",
+		url : "/BMS/common/getSubmitSalary",
 		dataType : "json",
 		data : {
 			"factory":factory,
@@ -585,7 +585,7 @@ function ajaxGetStandardPrice(){
 	$.ajax({
 		type : "get",// 使用get方法访问后台
 		dataType : "json",// 返回json格式的数据
-		url : "/IMMS/common/getBasePrice",
+		url : "/BMS/common/getBasePrice",
 		async :false,
 		data : {
 			"factory" : factory,

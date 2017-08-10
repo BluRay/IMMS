@@ -85,7 +85,7 @@ function initPage() {
 	
 	$("#new_staff_number").blur(function(){
 		$.ajax({
-			url: "/IMMS/common/getStaffNameByNumber",
+			url: "/BMS/common/getStaffNameByNumber",
 		    dataType: "json",
 		    async: false,
 		    type: "get",

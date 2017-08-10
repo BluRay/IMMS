@@ -428,7 +428,7 @@ $(document).ready(function () {
 	
 	function getFactorySelect() {
 		$.ajax({
-			url : "/IMMS/common/getFactorySelectAuth",
+			url : "/BMS/common/getFactorySelectAuth",
 			dataType : "json",
 			data : {},
 			async : false,
@@ -456,7 +456,7 @@ $(document).ready(function () {
 function getAllWorkshopSelect() {
 	$("#exec_workshop").empty();
 	$.ajax({
-		url : "/IMMS/common/getWorkshopSelectAuth",
+		url : "/BMS/common/getWorkshopSelectAuth",
 		dataType : "json",
 		data : {
 				factory:$("#exec_factory :selected").text()
@@ -474,7 +474,7 @@ function getAllWorkshopSelect() {
 function getAllLineSelect() {
 	$("#exec_line").empty();
 	$.ajax({
-		url : "/IMMS/common/getLineSelectAuth",
+		url : "/BMS/common/getLineSelectAuth",
 		dataType : "json",
 		data : {
 				factory:$("#exec_factory :selected").text(),

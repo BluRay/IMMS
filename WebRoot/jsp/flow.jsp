@@ -475,7 +475,7 @@
 					<a href="snaker/process/list" target="_blank">流程定义</a>
 					<a href="snaker/task/active" target="_blank">待办任务</a>
 					<a href="snaker/flow/order" target="_blank">流程实例</a>
-					<a href="/IMMS/snaker/flow/all?processId=4121681a818f4d108a5b7320dc04ef70&amp;processName=leave" target="_blank">请假</a>
+					<a href="/BMS/snaker/flow/all?processId=4121681a818f4d108a5b7320dc04ef70&amp;processName=leave" target="_blank">请假</a>
 				</div><!-- /.page-content -->
 			</div><!-- /.main-content -->
 

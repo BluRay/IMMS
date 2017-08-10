@@ -93,7 +93,7 @@
 								<div class="widget-body">
 									<div class="widget-main padding-8">
 									<div class="form-group">
-									    <table id="tableData" class="table table-striped table-bordered table-hover" style="font-size: 12px;"></table>
+									    <table id="tableData" class="table table-striped table-bordered table-hover" style="font-size: 12px;overflow:auto"></table>
 									</div>
 									</div>
 								</div>

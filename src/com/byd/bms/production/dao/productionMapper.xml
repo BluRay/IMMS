@@ -158,7 +158,7 @@
 	</insert>
 	
 	<select id="queryBusInfoList" parameterType="Map" resultType="Map">
-		SELECT b.*,CONCAT(o.order_name,t.bus_type_code,o.order_qty,'台') AS order_desc,f.factory_name,o.order_no
+		SELECT b.*,CONCAT(o.order_no,' ',o.order_name,t.bus_type_code,o.order_qty,' ','台') AS order_desc,f.factory_name,o.order_no
 		FROM BMS_PLAN_BUS b
 		LEFT JOIN BMS_OR_ORDER o on b.order_id=o.id
 		LEFT JOIN BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id
@@ -174,7 +174,7 @@
 			and b.bus_number like concat('%',#{bus_number},'%')
 		</if>
 		<if test="bus_type !=null and bus_type !='全部'">
-			and t.internal_name =#{bus_type}
+			and t.bus_type_code =#{bus_type}
 		</if>
 		<if test="start !=null">
 			LIMIT #{start} ,#{length} 
@@ -198,7 +198,7 @@
 			and b.bus_number like concat('%',#{bus_number},'%')
 		</if>
 		<if test="bus_type !=null and bus_type !='全部'">
-			and t.internal_name =#{bus_type}
+			and t.bus_type_code =#{bus_type}
 		</if>
 	</select>
 	
@@ -298,7 +298,7 @@
 	
 	<select id="queryWorkshopSupplyList" parameterType="Map" resultType="Map">
 		SELECT s.*,f.factory_name,s.supply_workshop workshop_name,s.receive_workshop,o.order_no,
-		CONCAT(o.order_no,' ',o.order_name,t.internal_name,' ',ifnull(fo.production_qty,0)) as order_desc,u.display_name editor,
+		CONCAT(o.order_no,' ',o.order_name,t.bus_type_code,' ',ifnull(fo.production_qty,0),' ', '台') as order_desc,u.display_name editor,
 		(select sum(quantity) from
 		BMS_PD_WORKSHOP_SUPPLY s1
 		where s1.factory_id=s.factory_id and s1.order_id=s.order_id
@@ -317,7 +317,7 @@
 		<if test="order_no!=''">
 			and o.order_no = #{order_no}
 		</if>
-		<if test="supply_workshop !='' and supply_workshop !=null">
+		<if test="supply_workshop !='' and supply_workshop !=null and supply_workshop !='全部'">
 			and find_in_set(s.supply_workshop, #{supply_workshop})>0
 		</if>
 		<if test="receive_workshop !='' and receive_workshop !='全部'">
@@ -348,7 +348,7 @@
 		<if test="order_no!=''">
 			and o.order_no = #{order_no}
 		</if>
-		<if test="supply_workshop !='' and supply_workshop !=null">
+		<if test="supply_workshop !='' and supply_workshop !=null and supply_workshop !='全部'">
 			and find_in_set(s.supply_workshop, #{supply_workshop})>0
 		</if>
 		<if test="receive_workshop !='' and receive_workshop !='全部'">
@@ -405,7 +405,7 @@
 	</update>
 	
 	<select id="queryPartsOnOffList" parameterType="Map" resultType="Map">
-		SELECT p.*,f.factory_name,CONCAT(o.order_no,' ',o.order_name,x.internal_name,' ',o.order_qty) as order_desc,k.key_name parts_name,u.username editor,o.order_no,
+		SELECT p.*,f.factory_name,CONCAT(o.order_no,' ',o.order_name,x.bus_type_code,' ',o.order_qty,' ' ,'台') as order_desc,k.key_name parts_name,u.username editor,o.order_no,
 		(select sum(p1.online_real_qty) from BMS_PD_PARTS_PLAN_FINISH p1 where p1.factory_id=p.factory_id and p1.order_id=p.order_id and p1.parts_id=p.parts_id ) online_total,
 		(select sum(p1.offline_real_qty) from BMS_PD_PARTS_PLAN_FINISH p1 where p1.factory_id=p.factory_id and p1.order_id=p.order_id and p1.parts_id=p.parts_id ) offline_total
 		FROM BMS_PD_PARTS_PLAN_FINISH p
@@ -488,7 +488,7 @@
 		OR b.vin = #{bus_number})
 	</select>
 	<select id="getNamePlateInfo" parameterType="String" resultType="Map">
-		select t.internal_name,t.brand,t.vehicle_model,t.motor_model,t.chassis_model,t.motor_power,t.max_weight,t.battery_model,
+		select t.bus_type_code,t.brand,t.vehicle_model,t.motor_model,t.chassis_model,t.motor_power,t.max_weight,t.battery_model,
 		t.passenger_num,t.max_speed,t.light_downdip,b.sequence,t.battery_capacity,b.dp_production_date AS productive_date,
 		b.zc_production_date,t.rated_voltage,b.bus_number,b.vin
 		FROM BMS_PLAN_BUS b
@@ -536,8 +536,8 @@
 	
 	<!-- VIN码打印 -->
 	<select id="getVinPrintList" parameterType="Map" resultType="Map">
-		select b.bus_number,b.vin,CONCAT(o.order_name,'
-		',t.bus_type_code,o.order_qty+'','辆') order_desc,
+		select b.bus_number,b.vin,CONCAT(o.order_no,' ',o.order_name,'
+		',t.bus_type_code,' ',o.order_qty+'','台') order_desc,
 		CONCAT(t.bus_type_code,'-',o.order_code,'-',o.order_qty)
 		order_code_desc,
 		case v.print_sign
@@ -553,7 +553,7 @@
 		left join
 		BMS_BASE_USER u on v.printer_id=u.id
 		where 1=1 and
-		 (b.chassis_online_date is not null or b.chassis_online_date!='' )
+		 (b.chassis_online_date is not null and b.chassis_online_date!='' )
 		and (b.chassis_offline_date is null or b.chassis_offline_date='')
 		and b.factory_id=#{factoryId}
 <!-- 		and b.factory_id=#{factoryId} -->
@@ -576,7 +576,7 @@
 		left join BMS_BASE_USER u on
 		v.printer_id=u.id
 		where 1=1 and
-		(b.chassis_online_date is not null or b.chassis_online_date!='' )
+		(b.chassis_online_date is not null and b.chassis_online_date!='' )
 		and (b.chassis_offline_date is null or b.chassis_offline_date='')
 		and b.factory_id=#{factoryId}
 		<if test="orderNo !=null and orderNo !=''">
@@ -1230,12 +1230,14 @@
 	</select>
 	<select id="getProductionSearchCarinfo" parameterType="Map" resultType="Map">
 		<if test="workshop =='welding'">
-			SELECT o.order_no,o.order_name,t.bus_type_code,o.order_qty,b.bus_number,b.welding_online_date
-			AS enterdate, CONCAT(p.process_code ,' ', p.process_name) AS process,p.line,'welding' AS workshop,b.production_status
+			SELECT o.order_no,o.order_name,t.bus_type_code,o.order_qty,b.bus_number,b.welding_online_date AS enterdate, 
+			CASE WHEN ISNULL(k.key_name) THEN CONCAT(p.process_code ,' ', p.process_name) ELSE CONCAT(p.process_code ,' ',p.process_name,'(',k.key_name,')') END as process,
+			p.line,'welding' AS workshop,b.production_status
 			FROM BMS_PLAN_BUS b
 			LEFT JOIN BMS_OR_ORDER o ON b.order_id = o.id
 			LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id = t.id
 			LEFT JOIN BMS_BASE_PROCESS p ON b.latest_process_id = p.id
+			LEFT OUTER JOIN BMS_BASE_KEY k ON k.value = p.plan_node_id and k.key_code = 'PLAN_CODE' 
 			WHERE factory_id = #{factory_id}
 			<if test="order_no !=''">
 				AND order_id = (SELECT id FROM BMS_OR_ORDER WHERE order_no=#{order_no})
@@ -2221,8 +2223,9 @@
 	<select id="getTmpOrderList" parameterType="Map" resultType="Map">
 		SELECT (select sum(ifnull(output,0)) from BMS_PD_TMP_ORDER_SCHEDULE s
 		where o.id=s.temp_order_id group by s.temp_order_id) finished_qty,
-		o.*,h.hour_total,h1.hour_total workhour_total
+		o.*,h.hour_total,h1.hour_total workhour_total,U.display_name applier_name
 		FROM BMS_PD_TMP_ORDER o
+		LEFT OUTER JOIN BMS_BASE_USER U ON o.applier = U.id
 		left join (
 		select
 		sum(h.work_hour) hour_total,h.factory,h.workshop,h.temp_order_id from BMS_HR_STAFF_TMP_HOURS h

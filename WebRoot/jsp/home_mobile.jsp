@@ -32,7 +32,7 @@
 
 					<!-- #section:basics/content.searchbox -->
 				 	<div class="nav-search" id="nav-search" style="top: 10px;font-size:14px;">
-						<a href="/IMMS/logout">
+						<a href="/BMS/logout">
 								<i class="ace-icon fa fa-power-off bigger-160" ></i>登出
 						</a>
 					</div>
@@ -105,16 +105,16 @@
 		function pageForward(flag){
 			var url="";
 			if(flag=='execution'){
-				url="/IMMS/production/execution_mobile"
+				url="/BMS/production/execution_mobile"
 			}
 			if(flag=='exception'){
-				url="/IMMS/production/exception_mobile"
+				url="/BMS/production/exception_mobile"
 			}
 			if(flag=='prdRcd'){
-				url="/IMMS/quality/prdRcdMobile"
+				url="/BMS/quality/prdRcdMobile"
 			}
 			if(flag=='tech_follow'){
-				url="/IMMS/tech/techFollowMobile"
+				url="/BMS/tech/techFollowMobile"
 			}
 			window.location=url
 		}

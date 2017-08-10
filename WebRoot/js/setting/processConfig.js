@@ -587,7 +587,7 @@ function getProcessListByFactory(factory){
 function getWorkshopOptions(factory){
 	var options=[];
 	$.ajax({
-		url : "/IMMS/common/getWorkshopSelectAuth",
+		url : "/BMS/common/getWorkshopSelectAuth",
 		dataType : "json",
 		data : {"function_url":'',"factory":factory},
 		async : false,

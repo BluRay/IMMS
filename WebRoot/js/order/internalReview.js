@@ -75,7 +75,7 @@ function ajaxQuery(){
 
             $.ajax({
                 type: "post",
-                url: "/IMMS/order/review/showOrderReviewList",
+                url: "/BMS/order/review/showOrderReviewList",
                 cache: true,  //禁用缓存
                 data: param,  //传入组装的参数
                 dataType: "json",
@@ -127,7 +127,7 @@ function ajaxQuery(){
 }
 function ajaxSearch(id){
 	$.ajax({
-		url:"/IMMS/order/review/getOrderReviewById",
+		url:"/BMS/order/review/getOrderReviewById",
 		type: "post",
 		data:{
 			"id":id
@@ -227,7 +227,7 @@ function ajaxReview(orderId,factoryId,orderNo){
 	 * orderId:订单ID;factoryId:工厂ID;orderNo:订单编号
 	 */
 	$.ajax({
-		url: "/IMMS/order/review/getReviewResult",
+		url: "/BMS/order/review/getReviewResult",
 		dataType: "json",
 		data: {
 			"orderId" : orderId,
@@ -246,7 +246,7 @@ function ajaxReview(orderId,factoryId,orderNo){
 						class_name: 'gritter-info'
 					});
 				}else{
-					url="/IMMS/snaker/flow/all?processId="+processId+"&processName=orderReview&reviewOrderId="+response.orderNo+"&factoryId="+factoryId+"&orderNo="+orderNo+"";
+					url="/BMS/snaker/flow/all?processId="+processId+"&processName=orderReview&reviewOrderId="+response.orderNo+"&factoryId="+factoryId+"&orderNo="+orderNo+"";
 					window.open(url,"_self");
 				}
 				
@@ -263,7 +263,7 @@ function ajaxReview(orderId,factoryId,orderNo){
 					var orderId=response.bmsOrderReviewResults.wfOrderId;
 					var processId=response.bmsOrderReviewResults.wfProcessId;
 					var taskId=getTaskByOrderId(orderId);
-					var url="/IMMS/snaker/flow/all?processId="+processId+"&orderId="+orderId+"&factoryId="+factoryId+"&orderNo="+orderNo+"";
+					var url="/BMS/snaker/flow/all?processId="+processId+"&orderId="+orderId+"&factoryId="+factoryId+"&orderNo="+orderNo+"";
 					
 					if(taskId!=null && taskId!="" && taskId!=undefined){
 						var taskActor=getTaskActorId(taskId);
@@ -280,7 +280,7 @@ function ajaxReview(orderId,factoryId,orderNo){
 function getProcessByName(processName){
 	var processId="";
 	$.ajax({
-		url: "/IMMS/order/review/getProcessByName",
+		url: "/BMS/order/review/getProcessByName",
 		dataType: "json",
 		async: false,
 		data: {
@@ -299,7 +299,7 @@ function getProcessByName(processName){
 function getTaskByOrderId(orderId){
 	var taskId="";
 	$.ajax({
-		url: "/IMMS/order/review/getTaskByOrderId",
+		url: "/BMS/order/review/getTaskByOrderId",
 		dataType: "json",
 		async: false,
 		data: {
@@ -318,7 +318,7 @@ function getTaskByOrderId(orderId){
 function getTaskActorId(taskId){
 	var taskActor="";
 	$.ajax({
-		url: "/IMMS/order/review/getTaskActorId",
+		url: "/BMS/order/review/getTaskActorId",
 		dataType: "json",
 		async: false,
 		data: {
@@ -337,7 +337,7 @@ function getTaskActorId(taskId){
 function isApplyPermission(factoryId,type){
 	var isPermission="";
 	$.ajax({
-		url: "/IMMS/order/review/isApplyPermission",
+		url: "/BMS/order/review/isApplyPermission",
 		dataType: "json",
 		async: false,
 		data: {
@@ -356,7 +356,7 @@ function isApplyPermission(factoryId,type){
 }
 function getFactorySelect() {
 	$.ajax({
-		url : "/IMMS/common/getFactorySelectAuth",
+		url : "/BMS/common/getFactorySelectAuth",
 		dataType : "json",
 		data : {"function_url":"order/maintain"},
 		async : false,

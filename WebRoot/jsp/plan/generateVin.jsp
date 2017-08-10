@@ -67,7 +67,7 @@
 								<input id="btnQuery" type="button" class="btn btn-sm btn-primary" value="查询" style="margin-left: 2px;"></input>
 								<input id="btnGenVin" type="button" class="btn btn-sm btn-success" value="生成VIN号" style="margin-left: 2px;"></input>
 								<input id="btnImport" type="button" class="btn btn-sm btn-danger" value="导入" style="margin-left: 2px;"></input>
-								<input id="btnPrint" type="button" class="btn btn-sm btn-info" value="打印VIN号" style="margin-left: 2px;"></input>	
+								<!-- <input id="btnPrint" type="button" class="btn btn-sm btn-info" value="打印VIN号" style="margin-left: 2px;"></input>	 -->
 							</td>
 							<td></td>
 						</tr>

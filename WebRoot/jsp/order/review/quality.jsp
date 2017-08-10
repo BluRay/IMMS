@@ -85,7 +85,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             			return false;
             		}
             		$.ajax({
-            			url: "/IMMS/snaker/flow/process",
+            			url: "/BMS/snaker/flow/process",
             			dataType: "json",
             			data: {
             				"qualityNode" : $('input:radio[name="S_qualityNode"]:checked').val(),

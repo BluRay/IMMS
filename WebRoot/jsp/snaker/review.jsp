@@ -112,7 +112,7 @@
 	    // 加载订单明细
 	    $.ajax({
 			type:'GET',
-			url:"/IMMS/snaker/process/json",
+			url:"/BMS/snaker/process/json",
 			data:"processId=${processId}&orderId=${orderId}",
 			async: false,
 			globle:false,
@@ -128,7 +128,7 @@
 	    queryOrderInfo(orderNo,factoryId);
 	    $.ajax({
 			type:'GET',
-			url:"/IMMS/snaker/flow/node",
+			url:"/BMS/snaker/flow/node",
 			data:{"processId":"${processId}"},
 			async: false,
 			globle:false,
@@ -142,7 +142,7 @@
 				var iscurrent = false;
 				for(var i = 0; i < data.length; i++) {
  					var node = data[i];
-					var iframeUrl = '/IMMS'+node.form + '?processId=${processId}&orderId=${orderId}&reviewOrderId=${reviewOrderId}&factoryId=${factoryId}&reviewResultId=${reviewResultId}&taskName=' + node.name;
+					var iframeUrl = '/BMS'+node.form + '?processId=${processId}&orderId=${orderId}&reviewOrderId=${reviewOrderId}&factoryId=${factoryId}&reviewResultId=${reviewResultId}&taskName=' + node.name;
 		
 					if(taskName == node.name || (taskName == '' && i == 0)) {
 						iscurrent = true;
@@ -189,7 +189,7 @@
 	function queryOrderInfo(orderNo,factoryId){
 		$.ajax({
 			type:'GET',
-			url:"/IMMS/order/review/showOrderDetailList",
+			url:"/BMS/order/review/showOrderDetailList",
 			data:{
 				"search_order_no":orderNo,
 				"search_factory":factoryId

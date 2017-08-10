@@ -375,7 +375,7 @@ function btnNewConfirm(){
 function getBusType(){
 	$(".busType").empty();
 	$.ajax({
-		url: "/IMMS/common/getBusType",
+		url: "/BMS/common/getBusType",
 		dataType: "json",
 		data: {},
 		async: false,

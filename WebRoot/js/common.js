@@ -123,7 +123,7 @@ function getOrderNoSelect(elementId, submitId, fn_backcall, bustype,factoryEleme
 					"factory":factory
 			};		
 			return $.ajax({
-				url:"/IMMS/common/getOrderFuzzySelect",
+				url:"/BMS/common/getOrderFuzzySelect",
 				dataType : "json",
 				type : "post",
 				data : data,
@@ -212,7 +212,7 @@ function select_selectOption(elementId,value){
  */
 function getKeysSelect(keyCode, selectval, element,selectType,valueItem) {
 	$.ajax({
-		url : "/IMMS/common/getKeysSelect",
+		url : "/BMS/common/getKeysSelect",
 		dataType : "json",
 		data : {
 			keyCode : keyCode
@@ -253,7 +253,7 @@ function getKeysSelect(keyCode, selectval, element,selectType,valueItem) {
 
 function generatekeys(keyCode, list) {
 	$.ajax({
-		url : "/IMMS/common/getKeysSelect",
+		url : "/BMS/common/getKeysSelect",
 		dataType : "json",
 		data : {
 			keyCode : keyCode
@@ -288,7 +288,7 @@ function generatekeys(keyCode, list) {
 
 function getFactorySelect(url,selectval,selectId,selectType,valName){
 	$.ajax({
-		url : "/IMMS/common/getFactorySelectAuth",
+		url : "/BMS/common/getFactorySelectAuth",
 		dataType : "json",
 		data : {"function_url":url},
 		async : false,
@@ -312,7 +312,7 @@ function getFactorySelect(url,selectval,selectId,selectType,valName){
 
 function getWorkshopSelect(url,factory,selectval,selectId,selectType,valName){
 	$.ajax({
-		url : "/IMMS/common/getWorkshopSelectAuth",
+		url : "/BMS/common/getWorkshopSelectAuth",
 		dataType : "json",
 		data : {"function_url":url,"factory":factory},
 		async : false,
@@ -334,7 +334,7 @@ function getWorkshopSelect(url,factory,selectval,selectId,selectType,valName){
 
 function getWorkgroupSelect(factory,workshop,selectval,selectId,selectType,valName){
 	$.ajax({
-		url : "/IMMS/common/getWorkgroupSelect",
+		url : "/BMS/common/getWorkgroupSelect",
 		dataType : "json",
 		data : {"factory":factory,"workshop":workshop},
 		async : false,
@@ -356,7 +356,7 @@ function getWorkgroupSelect(factory,workshop,selectval,selectId,selectType,valNa
 
 function getTeamSelect(factory,workshop,workgroup,selectval,selectId,selectType,valName){
 	$.ajax({
-		url : "/IMMS/common/getTeamSelect",
+		url : "/BMS/common/getTeamSelect",
 		dataType : "json",
 		data : {"factory":factory,"workshop":workshop,"workgroup":workgroup},
 		async : false,
@@ -375,7 +375,7 @@ function getTeamSelect(factory,workshop,workgroup,selectval,selectId,selectType,
  */
 function getLineSelect(factory,workshop,selectval,selectId,selectType,valName) {
 	$.ajax({
-		url : "/IMMS/common/getLineSelectAuth",
+		url : "/BMS/common/getLineSelectAuth",
 		dataType : "json",
 		data : {
 				factory:factory,
@@ -398,7 +398,7 @@ function getLineSelect(factory,workshop,selectval,selectId,selectType,valName) {
  */
 function getLineSelectStandard(selectval,selectId,selectType,valName){
 	$.ajax({
-		url : "/IMMS/common/getLineSelect",
+		url : "/BMS/common/getLineSelect",
 		dataType : "json",
 		data : {
 			},
@@ -498,7 +498,7 @@ function check_All_unAll(tableId, checkall) {
  */
 function getBusTypeSelect(selectval,selectId,selectType,valName){
 	$.ajax({
-		url : "/IMMS/common/getBusType",
+		url : "/BMS/common/getBusType",
 		dataType : "json",
 		data : {},
 		async : false,
@@ -521,7 +521,7 @@ function getPartsSelect(elementId, submitId, fn_backcall) {
 	var partslist;
 	$(elementId).typeahead({
 		source : function(input, process) {
-			$.get("/IMMS/common/getPartsSelect", {
+			$.get("/BMS/common/getPartsSelect", {
 				"parts" : input
 			}, function(response) {
 				partslist = response.data;
@@ -575,7 +575,7 @@ function getPartsSelect(elementId, submitId, fn_backcall) {
 function getPartsId(parts) {
 	var partsId = "0";
 	$.ajax({
-		url : "/IMMS/common/getPartsSelect",
+		url : "/BMS/common/getPartsSelect",
 		dataType : "json",
 		data : {
 			"parts" : parts
@@ -599,7 +599,7 @@ function getPartsId(parts) {
  */
 function getOrderConfigSelect(order_id,selectval,selectId,selectType,valName) {
 	$.ajax({
-		url : "/IMMS/common/getOrderConfigSelect",
+		url : "/BMS/common/getOrderConfigSelect",
 		dataType : "json",
 		data : {
 				order_id:order_id
@@ -621,7 +621,7 @@ function getBusNumberSelect(elementId, submitId, fn_backcall) {
 	var busNumberlist;
 	$(elementId).typeahead({
 		source : function(input, process) {
-			$.get("/IMMS/common/getBusNumberFuzzySelect", {
+			$.get("/BMS/common/getBusNumberFuzzySelect", {
 				"bus_input" : input
 			}, function(response) {
 				var data=response.data;
@@ -661,7 +661,7 @@ function getUserInfoByCard(cardId){
 		type : "get",// 使用get方法访问后台
 		dataType : "json",// 返回json格式的数据
 		async : false,
-		url : "/IMMS/common/getUserInfoByCard",
+		url : "/BMS/common/getUserInfoByCard",
 		data : {
 			"card_no" : cardId
 		},
@@ -714,8 +714,8 @@ function EnterPress(e){ //传入 event
 	if(e.keyCode == 13){ 
 		console.log("EnterPress");
 		//alert("-->EnterPress!!!" + $("#bus-search-input").val());
-		//window.open("/IMMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
-		window.open("/IMMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val(), '_blank').location;
+		//window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+		window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val(), '_blank').location;
 		return false;
 	} 
 }**/
@@ -760,7 +760,7 @@ function getOrgAuthTree(treeId,url,orgType,orgKind,level,nodeName_default){
 	zNodes=[];
 	zTreeObj=null;
 	$.ajax({
-		url: "/IMMS/common/getOrgAuthTree",
+		url: "/BMS/common/getOrgAuthTree",
 	    dataType: "json",
 	    async: false,
 	    type: "get",
@@ -868,7 +868,7 @@ function numAdd(num1, num2) {
 	function checkSalarySubmit(factory,workshop,month){
 		var submit_flg="";
 		$.ajax({
-			url : "/IMMS/common/getSubmitSalary",
+			url : "/BMS/common/getSubmitSalary",
 			dataType : "json",
 			data : {
 				"factory":factory,
@@ -893,7 +893,7 @@ function numAdd(num1, num2) {
 	
 	function getChildOrgSelect(elementId,parentId,selectVal,selectType){
 		$.ajax({
-			url : "/IMMS/common/getChildOrgList",
+			url : "/BMS/common/getChildOrgList",
 			dataType : "json",
 			data : {
 				"parentId" : parentId
@@ -920,7 +920,7 @@ function getStaffInfo(staffNum){
 		type : "get",// 使用get方法访问后台
 		dataType : "json",// 返回json格式的数据
 		async : false,
-		url : "/IMMS/common/getStaffInfo",
+		url : "/BMS/common/getStaffInfo",
 		data : {
 			"staffNum" : staffNum
 		},

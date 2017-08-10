@@ -448,7 +448,7 @@ function getWorkgroupListById(id,workshopId,nodeLayer){
 function getNodeName(id){
 	var nodeName="";
 	$.ajax({
-		url: "/IMMS/setting/getWorkgroupNodeName",
+		url: "/BMS/setting/getWorkgroupNodeName",
 		dataType: "json",
 		async: false,
 		data: {

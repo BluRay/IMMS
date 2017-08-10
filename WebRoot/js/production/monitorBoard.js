@@ -57,7 +57,7 @@ function intervalExceptionInfo() {
 function ajaxQueryExceptionInfo() {
 	//alert(factory_id)
 	$.ajax({
-		url : "/IMMS/common/getMonitorBoardInfo",
+		url : "/BMS/common/getMonitorBoardInfo",
 		type : "post",
 		data : {
 			'factory_id':factory_id,
@@ -85,7 +85,7 @@ function ajaxQueryExceptionInfo() {
 function ajaxQueryBoardInfo() {
 	// alert("boardinfo");
 	$.ajax({
-				url : "/IMMS/common/getMonitorBoardInfo",
+				url : "/BMS/common/getMonitorBoardInfo",
 				type : "post",
 				data : {'factory_id':factory_id,'factory_name':factory_name},
 				async : false,
@@ -247,7 +247,7 @@ function ajaxQueryBoardInfo() {
 
 function showClock(clock_div) {
 	/*$.ajax({
-		url : "/IMMS/common/getWorkshopBoardHeadInfo",
+		url : "/BMS/common/getWorkshopBoardHeadInfo",
 		type : "post",
 		data : {},
 		dataType : "json",

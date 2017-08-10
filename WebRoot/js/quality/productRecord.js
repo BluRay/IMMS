@@ -456,7 +456,7 @@ function getWorkshopList(index){
 	$(element).typeahead({
 		source : function(input, process) {
 			//alert($("#factory").val());
-			$.get("/IMMS/common/getWorkshopSelectAuth", {
+			$.get("/BMS/common/getWorkshopSelectAuth", {
 				"factory" : $("#factory :selected").text(),
 				"workshop":input
 			}, function(response) {
@@ -498,7 +498,7 @@ function getWorkgroupList(index,workshop){
 	$(element).typeahead({
 		source : function(input, process) {
 			//alert($("#factory").val());
-			$.get("/IMMS/common/getWorkgroupSelect", {
+			$.get("/BMS/common/getWorkgroupSelect", {
 				"factory" : $("#factory :selected").text(),
 				"workshop":workshop||$(td).parent("tr").find(".workshop").val(),
 				"workgroup":input
@@ -536,7 +536,7 @@ function getWorkgroupList(index,workshop){
 function getWorkgroupSelectAll(workshop_list){
 	workgroup_list=[];
 	$.ajax({
-		url:"/IMMS/common/getWorkgroupSelectAll",
+		url:"/BMS/common/getWorkgroupSelectAll",
 		async:false,
 		type:"post",
 		dataType:"json",

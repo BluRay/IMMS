@@ -99,7 +99,7 @@
             and job_name=#{job_name}
         </if>
         ORDER BY t.id ASC
-        <if test="start !=null">
+        <if test="start !=null and start>0">
 			LIMIT #{start} ,#{length} 
 		</if>
          
@@ -126,8 +126,8 @@
 	<!-- 添加标准人力 -->
 	<insert id="addStandardHumanData" useGeneratedKeys="true" keyProperty="id">
 		<![CDATA[
-			insert into BMS_HR_BASE_STANDARD_HUMAN(type,org_id,job_id,job_no,job_name,standard_humans,deleted,editor_id,edit_date) 
-			values(#{type},#{org_id},#{job_id},#{job_no},#{job_name},#{standard_humans},#{deleted},#{editor_id},#{edit_date})
+			insert into BMS_HR_BASE_STANDARD_HUMAN(type,org_id,factory,workshop,workgroup,job_id,job_no,job_name,standard_humans,deleted,editor_id,edit_date) 
+			values(#{type},#{org_id},#{factory},#{workshop},#{workgroup},#{job_id},#{job_no},#{job_name},#{standard_humans},#{deleted},#{editor_id},#{edit_date})
 		]]>
 	</insert>
 	<!-- 编辑标准人力-->
@@ -144,24 +144,25 @@
 	</update>
 	<!-- 获得标准人力 -->
 	<select id="getStandardHumanData" parameterType="Map" resultType="Map">
-			SELECT h.id,o.id as org_id,j.id as job_id,j.job_no,
-              j.job_name,h.standard_humans,o.name as org_name,o.org_kind,o.org_type
-              ,(SELECT count(1) FROM BMS_HR_STAFF s WHERE
-              case o.org_kind
-                 when '1' THEN
-                     s.plant_org=o.name
-                 when '2' THEN
-                     s.workshop_org=o.name
-                 when '3' THEN
-                     s.workgroup_org=o.name
-                 end
+			SELECT h.id,j.id as job_id,j.job_no,
+              j.job_name,h.standard_humans,h.factory,h.workshop,h.workgroup,
+              (SELECT count(1) FROM BMS_HR_STAFF s WHERE 1=1 
+						AND s.job = h.job_name 
+						AND ifnull(s.plant_org,'')=ifnull(h.factory,'') 
+						AND ifnull(s.workshop_org,'')=ifnull(h.workshop,'') 
+						AND ifnull(s.workgroup_org,'')=ifnull(h.workgroup,'') 
               ) as realHuman
             FROM BMS_HR_BASE_STANDARD_HUMAN h
               left join BMS_HR_BASE_JOB j on j.id=h.job_id
-              left join BMS_BASE_ORG o on o.id=h.org_id
             WHERE h.deleted='0' and j.deleted='0'
-              <if test="org_id!=null">
-              and h.org_id=#{org_id}
+              <if test="factory!=null and factory!=''" >
+              and h.factory=#{factory}
+              </if>
+              <if test="workshop!=null and workshop!=''">
+              and h.workshop=#{workshop}
+              </if>
+              <if test="workgroup!=null and workgroup!=''">
+              and h.workgroup=#{workgroup}
               </if>
               <if test="job_id!=null">
               and h.job_id=#{job_id}
@@ -602,7 +603,7 @@
 	
 	<select id="getWorkgroupPriceList" parameterType="Map" resultType="Map">
 		select p.id,p.factory,p.workshop,p.workgroup,p.team,p.standard_price stand_price,u.username editor,
-		p.edit_date,concat(o.order_no,' ',o.order_name,t.internal_name,' ',o.order_qty,'台') as order_desc,p.effective_date
+		p.edit_date,concat(o.order_no,' ',o.order_name,t.bus_type_code,' ',o.order_qty,'台') as order_desc,p.effective_date
 		from BMS_HR_WORKGROUP_PRICE p
 		left join BMS_OR_ORDER o on o.id=p.order_id
 		left join BMS_BASE_BUS_TYPE t on t.id=o.bus_type_id
@@ -722,7 +723,7 @@
 	
 	<select id="getStaffDistribution" parameterType="Map" resultType="Map">
 		SELECT d.factory,d.workshop,d.workgroup,d.team,s.staff_number,s.name staff_name,d.distribution,d.effective_date,
-		d.editor,d.edit_date,concat(o.order_no,' ',o.order_name,t.internal_name,' ',o.order_qty,'台') order_desc 
+		d.editor,d.edit_date,concat(o.order_no,' ',o.order_name,t.bus_type_code,' ',o.order_qty,'台') order_desc 
 		FROM BMS_HR_STAFF_DISTRIBUTION d
 		left join BMS_OR_ORDER o on d.order_id=o.id
 		left join BMS_BASE_BUS_TYPE t on t.id=o.bus_type_id

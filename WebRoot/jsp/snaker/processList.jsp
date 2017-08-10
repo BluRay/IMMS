@@ -87,7 +87,7 @@
 						${process.version}&nbsp;
 					</td>					
 					<td class="td_list_2" align=left nowrap>
-						<a href="/IMMS${process.instanceUrl }?processId=${process.id }&processName=${process.name }" class="btnStart" title="启动流程">启动流程</a>
+						<a href="/BMS${process.instanceUrl }?processId=${process.id }&processName=${process.name }" class="btnStart" title="启动流程">启动流程</a>
 						<a href="edit/${process.id }" class="btnEdit" title="编辑">编辑</a>
 						<a href="designer?processId=${process.id }" class="btnDesigner" title="设计">设计</a>
 						<a href="delete/${process.id }" class="btnDel" title="删除" onclick="return confirmDel();">删除</a>

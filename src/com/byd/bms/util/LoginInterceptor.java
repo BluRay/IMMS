@@ -70,7 +70,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter{
 			
 			//保存操作日志 TODO 先判断请求是否需要记录操作日志
 			//操作日志格式：	工号		IP地址		  请求地址	  请求数据
-			//				2074793 10.23.105.108 /IMMS/login order_no:123456 new_value:8888
+			//				2074793 10.23.105.108 /BMS/login order_no:123456 new_value:8888
 			Enumeration<?> enu=request.getParameterNames();
 			String str_request = "";
 			while(enu.hasMoreElements()){  

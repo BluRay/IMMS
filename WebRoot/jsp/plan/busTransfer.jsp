@@ -156,19 +156,19 @@
 							<table id="tableBusHisInfo" class="table table-striped table-bordered table-hover" style="font-size: 12px;">
 							<thead>
 							<tr id="0">
-							<th style="text-align:center;" width="50px">车号</th>					
+							<th style="text-align:center;" width="30px">车号</th>					
 							<th style="text-align:center;" width="20px">订单</th>					
 							<th style="text-align:center;" width="20px">车型</th>					
 							<th style="text-align:center;" width="20px">年份</th>					
 							<th style="text-align:center;" width="30px">客户</th>					
 							<th style="text-align:center;" width="30px">配置</th>					
-							<th style="text-align:center;" width="50px">VIN</th>
+							<th style="text-align:center;" width="30px">VIN</th>
 							<th style="text-align:center;" width="30px">调出工厂</th>					
 							<th style="text-align:center;" width="30px">调入工厂</th>			
-							<th style="text-align:center;" width="40px">调出时间</th>			
+							<th style="text-align:center;" width="30px">调出时间</th>			
 							<th style="text-align:center;" width="25px">调出人</th>			
 							<th style="text-align:center;" width="40px">接收时间</th>			
-							<th style="text-align:center;" width="25px">调收人</th>
+							<th style="text-align:center;" width="25px">接收人</th>
 							</tr>
 							</thead>
 							<tbody></tbody>
