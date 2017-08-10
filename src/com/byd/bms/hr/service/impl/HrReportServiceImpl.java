@@ -161,4 +161,73 @@ public class HrReportServiceImpl implements IHrReportService {
 		model.put("data", datalist);		
 		
 	}
+	
+	@Override
+	public void queryStaffWorkHoursList(Map<String, Object> conditionMap,
+			ModelMap model) {
+		int totalCount=hrReportDao.queryStaffWorkHoursCount(conditionMap);
+		List<Map<String,String>> datalist =hrReportDao.queryStaffWorkHoursList(conditionMap);	
+		//"计件=01:11.2;02:14;|额外=01:4;02:44;|技改=01:8;02:88;|等待=30:8;31:8;"; //
+		String[] typeArr={"计件","额外","技改","等待","出勤"};
+		List<Map<String,String>> resultList=new ArrayList<Map<String,String>>();
+		int count=1;
+		for(Map<String,String> map : datalist){
+			String workHours=(String)map.get("workhours");
+			String staffNumber=(String)map.get("staff_number");
+			String staffName=(String)map.get("staff_name");
+			String [] hoursArr = workHours.split("\\|");
+			for(String type : typeArr){
+				Map<String,String> newMap=new HashMap<String,String>();
+				newMap.putAll(createMap(type,map));
+				newMap.put("count", count+"");
+				newMap.put("staff_number", staffNumber);
+				newMap.put("staff_name", staffName);
+				newMap.put("type", type);
+				for(String str : hoursArr){
+					String [] hsarr=str.split("=");
+					String hstype=hsarr[0];//工时类型：计件，额外，技改，等待
+					if(type.equals(hstype)){
+						String hs=hsarr[1]; // 01:4;02:8
+						if(hs.length()>0){
+							String [] dateKeyValue=hs.split(";");
+							for(String date : dateKeyValue){
+								String [] keyValue=date.split(":"); // 01:4
+								String key=keyValue[0].substring(1, keyValue[0].toString().length()-1);
+								String value=keyValue[1].substring(1, keyValue[1].toString().length()-1);
+								newMap.put(key, value);
+							}
+						}
+					}
+				}
+				resultList.add(newMap);
+			}
+			count++;
+		}
+		model.put("recordsTotal", totalCount);
+		model.put("draw", conditionMap.get("draw"));
+		model.put("recordsFiltered", totalCount);
+		model.put("data", resultList);		
+	}
+	public Map<String,String> createMap(String type,Map map){
+		Map<String,String> newMap=new HashMap<String,String>();
+		if(type.equals("出勤")){
+			for(int i=1;i<=31;i++){
+				if(i<10){
+				    newMap.put("0"+i, map.get("D"+i)!=null ? (String)map.get("D"+i) :"");
+				}else{
+					newMap.put(i+"", map.get("D"+i)!=null ? (String)map.get("D"+i) :"");
+				}
+			}
+		}else{
+			for(int i=1;i<=31;i++){
+				if(i<10){
+					newMap.put("0"+i, "");
+				}else{
+					newMap.put(i+"", "");
+				}
+			}
+		}
+		
+		return newMap;
+	}
 }

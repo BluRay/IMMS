@@ -27,4 +27,6 @@ public interface IHrReportService {
 
 	public void balanceStaffSalary(Map<String, Object> conditionMap,
 			ModelMap model);
+	public void queryStaffWorkHoursList(Map<String, Object> conMap,
+			ModelMap model);
 }

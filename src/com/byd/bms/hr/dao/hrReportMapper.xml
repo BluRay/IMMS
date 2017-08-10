@@ -599,4 +599,248 @@
 			and month=#{month}
 		</if>
 	</update>
+	
+	<insert id="saveAttendanceReport" parameterType="List">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into BMS_HR_ATTENDENCE_REPORT (factory,workshop,team,direct_num_yd,direct_num_sd,short_num_yd,short_num_sd,assist_num_yd,
+		assist_num_sd,leave_num,holiday_num,absence_num,trip_num,callout_num,out_aid_num,work_num,out_aid_cs_num,out_aid_nj_num,
+		out_aid_hz_num,out_aid_dl_num,out_aid_qd_num,out_aid_cd_num,out_aid_wh_num,out_aid_sw_num,out_aid_ty_num,out_aid_sz_num,
+		out_aid_tj_num,out_aid_oth_num,out_aid_note,in_aid_cs_num,in_aid_nj_num,in_aid_hz_num,in_aid_dl_num,in_aid_qd_num,in_aid_cd_num,
+		in_aid_wh_num,in_aid_sw_num,in_aid_ty_num,in_aid_sz_num,in_aid_tj_num,in_aid_oth_num,in_aid_note,record_date,report_type,editor_id,edit_date)
+		values
+		<foreach collection="list" item="detail" index="index" separator=",">
+			(#{detail.factory},#{detail.workshop},#{detail.team},#{detail.direct_num_yd},#{detail.direct_num_sd},#{detail.short_num_yd},#{detail.short_num_sd},#{detail.assist_num_yd},#{detail.assist_num_sd},
+			#{detail.leave_num},#{detail.holiday_num},#{detail.absence_num},#{detail.trip_num},#{detail.callout_num},#{detail.out_aid_num},#{detail.work_num},#{detail.out_aid_cs_num},#{detail.out_aid_nj_num},
+			#{detail.out_aid_hz_num},#{detail.out_aid_dl_num},#{detail.out_aid_qd_num},#{detail.out_aid_cd_num},#{detail.out_aid_wh_num},#{detail.out_aid_sw_num},#{detail.out_aid_ty_num},#{detail.out_aid_sz_num},
+			#{detail.out_aid_tj_num},#{detail.out_aid_oth_num},#{detail.out_aid_note},#{detail.in_aid_cs_num},#{detail.in_aid_nj_num},#{detail.in_aid_hz_num},#{detail.in_aid_dl_num},#{detail.in_aid_qd_num},
+			#{detail.in_aid_cd_num},#{detail.in_aid_wh_num},#{detail.in_aid_sw_num},#{detail.in_aid_ty_num},#{detail.in_aid_sz_num},#{detail.in_aid_tj_num},#{detail.in_aid_oth_num},#{detail.in_aid_note},
+			#{detail.record_date},#{detail.report_type},#{detail.editor_id},#{detail.edit_date})
+		</foreach>
+	</insert>
+	
+	<update id="deleteAttendanceReport" parameterType="Map">
+		delete from BMS_HR_ATTENDENCE_REPORT where factory=#{factory} and workshop=#{workshop} and record_date=#{record_date} and report_type=#{report_type}
+	</update>
+	
+	<select id="queryAttendanceDetailData" parameterType="Map" resultType="Map">
+		select * from BMS_HR_ATTENDENCE_REPORT where 1=1
+		<if test="factory !=null and factory !=''">
+			and factory like concat('%',#{factroy},'%')
+		</if>
+		<if test="workshop !=null and workshop !=''">
+			and workshop like concat('%',#{workshop},'%')
+		</if>
+		<if test="record_date !=null and record_date !=''">
+			and record_date = #{record_date}
+		</if>
+			and report_type=#{report_type}
+	</select>
+	
+	<select id="queryAttendanceReportData" parameterType="Map" resultType="Map">
+		SELECT factory,workshop,record_date,sum(ifnull(direct_num_yd,0)) direct_num_yd,sum(ifnull(direct_num_sd,0)) direct_num_sd,
+		sum(ifnull(short_num_yd,0)) short_num_yd,sum(ifnull(short_num_sd,0)) short_num_sd,sum(ifnull(leave_num,0)) leave_num,sum(ifnull(holiday_num,0)) holiday_num,
+		sum(ifnull(absence_num,0)) absence_num,sum(ifnull(trip_num,0)) trip_num,sum(ifnull(out_aid_num,0)) out_aid_num,sum(ifnull(work_num,0)) work_num,
+		sum(ifnull(out_aid_cs_num,0)) out_aid_cs_num,sum(ifnull(out_aid_nj_num,0)) out_aid_nj_num,sum(ifnull(out_aid_hz_num,0)) out_aid_hz_num,sum(ifnull(out_aid_dl_num,0)) out_aid_dl_num,
+		sum(ifnull(out_aid_qd_num,0)) out_aid_qd_num,sum(ifnull(out_aid_cd_num,0)) out_aid_cd_num,sum(ifnull(out_aid_wh_num,0)) out_aid_wh_num,sum(ifnull(out_aid_dl_num,0)) out_aid_sw_num,
+		sum(ifnull(out_aid_ty_num,0)) out_aid_ty_num,sum(ifnull(out_aid_sz_num,0)) out_aid_sz_num,sum(ifnull(out_aid_tj_num,0)) out_aid_tj_num,sum(ifnull(out_aid_oth_num,0)) out_aid_oth_num,
+		sum(ifnull(out_aid_note,0)) out_aid_note,sum(ifnull(in_aid_cs_num,0)) in_aid_cs_num,sum(ifnull(in_aid_nj_num,0)) in_aid_nj_num,sum(ifnull(in_aid_hz_num,0)) in_aid_hz_num,
+		sum(ifnull(in_aid_dl_num,0)) in_aid_dl_num,sum(ifnull(in_aid_qd_num,0)) in_aid_qd_num,sum(ifnull(in_aid_cd_num,0)) in_aid_cd_num,sum(ifnull(in_aid_wh_num,0)) in_aid_wh_num,
+		sum(ifnull(in_aid_sw_num,0)) in_aid_sw_num,sum(ifnull(in_aid_ty_num,0)) in_aid_ty_num,sum(ifnull(in_aid_sz_num,0)) in_aid_sz_num,sum(ifnull(in_aid_tj_num,0)) in_aid_tj_num,
+		sum(ifnull(in_aid_oth_num,0)) in_aid_oth_num,sum(ifnull(in_aid_note,0)) in_aid_note
+		FROM BMS_HR_ATTENDENCE_REPORT
+		WHERE report_type='计件'
+		<if test="factory !=null and factory !=''">
+			and factory like concat('%',#{factroy},'%')
+		</if>
+		<if test="workshop !=null and workshop !=''">
+			and workshop like concat('%',#{workshop},'%')
+		</if>
+		<if test="record_date !=null and record_date !=''">
+			and record_date = #{record_date}
+		</if>
+		GROUP BY factory,workshop
+	</select>
+
+	<select id="queryStaffWorkHoursList" parameterType="Map" resultType="Map">
+		select group_concat(tmp.workHoursType,'=',tmp.participationStr order by tmp.staff_number separator '|') workhours,
+		tmp.staff_number,tmp.staff_name,
+		a.D1,a.D2,a.D3,a.D4,a.D5,a.D6,a.D7,a.D8,a.D9,a.D10,a.D11,a.D12,a.D13,a.D14,a.D15,a.D16,a.D17,a.D18,a.D19,a.D20, a.D21,a.D22,a.D23,a.D24,a.D25,a.D26,a.D27,a.D28,a.D29,a.D30,a.D31 
+		from
+		( SELECT a.staff_number,a.staff_name,a.workhour_type workHoursType,
+		group_concat('\"',substr(a.work_date,9,10),'\":\"',CONCAT(a.sum_participation,'\";') order by work_date separator '') AS participationStr 
+		FROM 
+		(select '计件' workhour_type,pp.staff_number,pp.staff_name,sum(pp.bus_count) sum_participation,pp.work_date 
+		from BMS_HR_PIECE_SALARY pp
+		where pp.work_date like CONCAT(#{work_date},'%') and FIND_IN_SET(pp.status,'1,3') and pp.distribution>0
+		<if test="factory!='全部'">
+			AND pp.factory = #{factory}
+		</if>
+		<if test="workshop!=''">
+			AND FIND_IN_SET(pp.workshop,#{workshop}) >0
+		</if>
+		<if test="workgroup!='全部'">
+			AND pp.workgroup = #{workgroup}
+		</if>
+		<if test="team!='全部'">
+			AND pp.team = #{team}
+		</if>
+		<if test="staff!=''">
+			AND (pp.staff_number = #{staff} OR pp.staff_name = #{staff})
+		</if>
+		GROUP BY pp.staff_number,pp.work_date 
+		union all
+		select '额外' workhour_type,tp.staff_number,tp.staff_name,sum(tp.real_work_hour) sum_participation,tp.work_date
+		from BMS_HR_TMP_SALARY tp
+		where tp.work_date like CONCAT(#{work_date},'%')  
+		<if test="factory!='全部'">
+			AND tp.factory = #{factory}
+		</if>
+		<if test="workshop!=''">
+			AND FIND_IN_SET(tp.workshop,#{workshop}) >0
+		</if>
+		<if test="workgroup!='全部'">
+			AND tp.workgroup = #{workgroup}
+		</if>
+		<if test="team!='全部'">
+			AND tp.team = #{team}
+		</if>
+		<if test="staff!=''">
+			AND (tp.staff_number = #{staff} OR tp.staff_name = #{staff})
+		</if>
+		GROUP BY tp.staff_number,tp.work_date 
+		union all
+		select '技改' workhour_type,ep.staff_number,ep.staff_name,sum(ep.real_work_hour) sum_participation,ep.work_date
+		from BMS_HR_TECH_SALARY ep
+		where ep.work_date like CONCAT(#{work_date},'%')  
+		<if test="factory!='全部'">
+			AND ep.factory = #{factory}
+		</if>
+		<if test="workshop!=''">
+			AND FIND_IN_SET(ep.workshop,#{workshop}) >0
+		</if>
+		<if test="workgroup!='全部'">
+			AND ep.workgroup = #{workgroup}
+		</if>
+		<if test="team!='全部'">
+			AND ep.team = #{team}
+		</if>
+		<if test="staff!=''">
+			AND (ep.staff_number = #{staff} OR ep.staff_name = #{staff})
+		</if>
+		GROUP BY ep.staff_number,ep.work_date 
+		union all
+		select '等待' workhour_type,wp.staff_number,wp.staff_name,sum(wp.work_hour) sum_participation,wp.work_date
+		from BMS_HR_WAIT_SALARY wp
+		where wp.work_date like CONCAT(#{work_date},'%')  
+		<if test="factory!='全部'">
+			AND wp.factory = #{factory}
+		</if>
+		<if test="workshop!=''">
+			AND FIND_IN_SET(wp.workshop,#{workshop}) >0
+		</if>
+		<if test="workgroup!='全部'">
+			AND wp.workgroup = #{workgroup}
+		</if>
+		<if test="team!='全部'">
+			AND wp.team = #{team}
+		</if>
+		<if test="staff!=''">
+			AND (wp.staff_number = #{staff} OR wp.staff_name = #{staff})
+		</if>
+		GROUP BY wp.staff_number,wp.work_date ) a 
+		GROUP BY a.staff_number,a.workhour_type) tmp 
+		LEFT JOIN BMS_HR_STAFF_ATTENDANCE a ON tmp.staff_number = a.staff_number and a.month=#{work_date}
+		group by tmp.staff_number
+		ORDER BY tmp.staff_number,tmp.workHoursType 
+		<if test="start!=null">
+			LIMIT #{start} ,#{length}
+		</if>	
+	</select>
+	<select id="queryStaffWorkHoursCount" parameterType="Map" resultType="int">
+		select count(distinct staff_number) from
+		 
+		(select '计件' workhour_type,pp.staff_number,pp.staff_name,sum(pp.bus_count) sum_participation,pp.work_date 
+		from BMS_HR_PIECE_SALARY pp
+		where pp.work_date like CONCAT(#{work_date},'%') and FIND_IN_SET(pp.status,'1,3') and pp.distribution>0
+		<if test="factory!='全部'">
+			AND pp.factory = #{factory}
+		</if>
+		<if test="workshop!=''">
+			AND FIND_IN_SET(pp.workshop,#{workshop}) >0
+		</if>
+		<if test="workgroup!='全部'">
+			AND pp.workgroup = #{workgroup}
+		</if>
+		<if test="team!='全部'">
+			AND pp.team = #{team}
+		</if>
+		<if test="staff!=''">
+			AND (pp.staff_number = #{staff} OR pp.staff_name = #{staff})
+		</if>
+		GROUP BY pp.staff_number,pp.work_date 
+		union all
+		select '额外' workhour_type,tp.staff_number,tp.staff_name,sum(tp.real_work_hour) sum_participation,tp.work_date
+		from BMS_HR_TMP_SALARY tp
+		where tp.work_date like CONCAT(#{work_date},'%')  
+		<if test="factory!='全部'">
+			AND tp.factory = #{factory}
+		</if>
+		<if test="workshop!=''">
+			AND FIND_IN_SET(tp.workshop,#{workshop}) >0
+		</if>
+		<if test="workgroup!='全部'">
+			AND tp.workgroup = #{workgroup}
+		</if>
+		<if test="team!='全部'">
+			AND tp.team = #{team}
+		</if>
+		<if test="staff!=''">
+			AND (tp.staff_number = #{staff} OR tp.staff_name = #{staff})
+		</if>
+		GROUP BY tp.staff_number,tp.work_date 
+		union all
+		select '技改' workhour_type,ep.staff_number,ep.staff_name,sum(ep.real_work_hour) sum_participation,ep.work_date
+		from BMS_HR_TECH_SALARY ep
+		where ep.work_date like CONCAT(#{work_date},'%')  
+		<if test="factory!='全部'">
+			AND ep.factory = #{factory}
+		</if>
+		<if test="workshop!=''">
+			AND FIND_IN_SET(ep.workshop,#{workshop}) >0
+		</if>
+		<if test="workgroup!='全部'">
+			AND ep.workgroup = #{workgroup}
+		</if>
+		<if test="team!='全部'">
+			AND ep.team = #{team}
+		</if>
+		<if test="staff!=''">
+			AND (ep.staff_number = #{staff} OR ep.staff_name = #{staff})
+		</if>
+		GROUP BY ep.staff_number,ep.work_date 
+		union all
+		select '等待' workhour_type,wp.staff_number,wp.staff_name,sum(wp.work_hour) sum_participation,wp.work_date
+		from BMS_HR_WAIT_SALARY wp
+		where wp.work_date like CONCAT(#{work_date},'%')  
+		<if test="factory!='全部'">
+			AND wp.factory = #{factory}
+		</if>
+		<if test="workshop!=''">
+			AND FIND_IN_SET(wp.workshop,#{workshop}) >0
+		</if>
+		<if test="workgroup!='全部'">
+			AND wp.workgroup = #{workgroup}
+		</if>
+		<if test="team!='全部'">
+			AND wp.team = #{team}
+		</if>
+		<if test="staff!=''">
+			AND (wp.staff_number = #{staff} OR wp.staff_name = #{staff})
+		</if>
+		GROUP BY wp.staff_number,wp.work_date )  tmp 
+	</select>
+
 </mapper>

@@ -102,7 +102,7 @@ function ajaxQuery(){
             });
 		},
 		columns: [
-		            {"title":"派工流水号",width:'150',"class":"center","data":"order_serial_no","defaultContent": ""},
+		            {"title":"派工流水号",width:'150',"class":"center","data":"tmp_order_no","defaultContent": ""},
 		            {"title":"工单号",width:'100',"class":"center","data":"sap_order","defaultContent": ""},
 		            {"title":"作业原因/内容",width:'200',"class":"center","data":"reason_content","defaultContent": ""},
 		            {"title":"总数量",width:'100',"class":"center","data":"total_qty","defaultContent": ""},
@@ -133,11 +133,11 @@ function ajaxQuery(){
 		            		return workhourTotal.toFixed(2);
 		            	},
 		            },
-		            {"title":"申请人",width:'100',"class":"center","data":"applier","defaultContent": ""},
+		            {"title":"申请人",width:'100',"class":"center","data":"applier_name","defaultContent": ""},
 		            {"title":"申请时间",width:'100',"class":"center","data":"apply_date","defaultContent": ""},
-		            {"title":"状态",width:'100',"class":"center","data":"order_desc","defaultContent": "",
+		            {"title":"状态",width:'100',"class":"center","data":"status","defaultContent": "",
 		            	"render": function ( data, type, row ) {
-		            		return row.tech_order_type=='ECN'?'否':'是';
+		            		return status_arr[data];
 		            	},
 		            },
 		            {"title":"操作",width:'100',"class":"center","data":null,"defaultContent": "",
@@ -160,7 +160,7 @@ function verifyWorkTime(id,tmp_order_no,reason_content,total_qty,finished_qty,wo
 	$("#edit_orderNo").html(tmp_order_no);
 	$("#edit_reason").html(reason_content);
 	
-	var conditions = "{tempOrderId:'" + id +"',workMonth:'"+workMonth+ "'}";
+	var conditions = "{temp_order_id:'" + id +"',workMonth:'"+workMonth+ "'}";
 	console.log("-->conditions = " + conditions);
 	workhour_list = ajaxGetStaffWorkHours(conditions);
 	generateWorkhourTb(workhour_list,true);

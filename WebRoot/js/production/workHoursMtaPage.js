@@ -138,7 +138,7 @@ function ajaxQuery(){
             });
 		},
 		columns: [
-		            {"title":"派工流水号",width:'150',"class":"center","data":"order_serial_no","defaultContent": ""},
+		            {"title":"派工流水号",width:'150',"class":"center","data":"tmp_order_no","defaultContent": ""},
 		            {"title":"工单号",width:'100',"class":"center","data":"sap_order","defaultContent": ""},
 		            {"title":"作业原因/内容",width:'200',"class":"center","data":"reason_content","defaultContent": ""},
 		            {"title":"总数量",width:'100',"class":"center","data":"total_qty","defaultContent": ""},

@@ -388,6 +388,29 @@ public class HrReportController extends BaseController {
 		hrReportService.balanceStaffSalary(conditionMap,model);
 		return model;
 	}
+	
+	/**
+	 * 考勤统计导入页面
+	 * @return
+	 */
+	@RequestMapping("/attendanceReport")
+	public ModelAndView attendanceReport(){
+		mv.setViewName("hr/attendanceReport");
+		return mv;
+	}
+	
+	/**
+	 * 考勤统计数据查询
+	 * @return
+	 */
+	@RequestMapping("/getAttendenceReport")
+	@ResponseBody
+	public ModelMap getAttendenceReport(){
+		model.clear();
+		
+		return model;
+	}
+	
 	/******************** xioing.jianwu **********************/
 	/******************** tangjin start **********************/
 	/**
@@ -424,6 +447,40 @@ public class HrReportController extends BaseController {
 		conditionMap.put("staff", staff);
 
 		hrReportService.getStaffWaitHours(conditionMap,model);
+		return model;
+	}
+	// 工时统计报表
+	@RequestMapping("/workHourReport")
+	public ModelAndView workHourReport(){
+		mv.setViewName("hr/workHourReport");
+		return mv;
+	}
+	
+	@RequestMapping("/queryStaffWorkHoursList")
+	@ResponseBody
+	public ModelMap queryStaffWorkHoursList(){
+		model.clear();
+		String factory=request.getParameter("factory");
+		String workshop=request.getParameter("workshop");
+		String workgroup=request.getParameter("workgroup");
+		String team = request.getParameter("team");
+		String work_date=request.getParameter("work_date");
+		String staff=request.getParameter("staff");//员工姓名或员工姓名
+		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
+		int start=(request.getParameter("start")!=null)?Integer.parseInt(request.getParameter("start")):0;		//分页数据起始数
+		int length=(request.getParameter("length")!=null)?Integer.parseInt(request.getParameter("length")):2;	//每一页数据条数
+		Map<String, Object> conditionMap = new HashMap<String, Object>();
+		conditionMap.put("draw", draw);
+		conditionMap.put("start", start);
+		conditionMap.put("length", length);
+		conditionMap.put("factory", factory);
+		conditionMap.put("workshop", workshop);
+		conditionMap.put("workgroup", workgroup);
+		conditionMap.put("team", team);
+		conditionMap.put("work_date", work_date);
+		conditionMap.put("staff", staff);
+
+		hrReportService.queryStaffWorkHoursList(conditionMap,model);
 		return model;
 	}
 	/******************** tangjin end **********************/
