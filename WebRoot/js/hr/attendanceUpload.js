@@ -6,15 +6,20 @@ $(document).ready(function(){
     	if($(this).val()=='计件'){
     		/*$("#attendanceTable").css("display","");
     		$("#attendanceTable_hour").css("display","none");*/
-    		$("#upload_template").attr("href","download/人员考勤模板-计件.xlsx");
+    		$("#upload_template").attr("href","../docs/人员考勤模板-计件.xlsx");
     	}else{
     		/*$("#attendanceTable").css("display","none");
     		$("#attendanceTable_hour").css("display","");*/
-    		$("#upload_template").attr("href","download/人员考勤模板-计时.xlsx");
+    		$("#upload_template").attr("href","../docs/人员考勤模板-计时.xlsx");
     	}
     });
     
-    $("#btnBulkAdd").click(function(){
+    $(document).on("change","#factory",function(){
+		var factory=$("#factory :selected").text();
+		getWorkshopSelect("hrReport/attendanceUpload",factory,"","#workshop","全部","id","")		
+	})
+	
+    $("#btnUpload").click(function(){
     	$("#divBulkAdd").css("display","");
     });
     
@@ -33,7 +38,10 @@ function initPage(){
 	var d = new Date(); 
     var s = d.getFullYear().toString() + '-'+addzero(d.getMonth() + 1)+"-"+d.getDate();
     $("#record_date").val(s);
-    $("#reportType").val("计件");	
+    $("#reportType").val("计件");
+    getFactorySelect("hrReport/attendanceUpload","","#factory",null,"id")	
+	getWorkshopSelect("hrReport/attendanceUpload",$("#factory :selected").text(),"","#workshop","全部","id","")
+	
 }
 
 function addzero(v) {
@@ -92,14 +100,32 @@ function LimitAttach(form, file) {
 function ajaxQuery(){
 	$("#divBulkAdd").css("display","none");
 	var conditions={};
-	var factory=$("#factory").val();
-	var workshop=$("#workshop").val();
+	var factory=$("#factory :selected").text();
+	var workshop=$("#workshop :selected").text();
 	var record_date=$("#record_date").val();
 	var report_type=$("#reportType").val();
 	conditions.factory=factory;
 	conditions.workshop=workshop;
 	conditions.record_date=record_date;
 	conditions.report_type=report_type;
+	
+	$('#attendanceTable').hide();
+	$('#attendanceTable_hour').hide();
+	
+	var tableId="#attendanceTable"
+	if(report_type=='计时'){
+		tableId="#attendanceTable_hour"
+	}
+	$(tableId).show();
+	
+	if ( $.fn.dataTable.isDataTable("#attendanceTable") ) {
+		$("#attendanceTable").dataTable().fnClearTable();
+	    $("#attendanceTable").dataTable().fnDestroy();
+	}
+	if ( $.fn.dataTable.isDataTable("#attendanceTable_hour") ) {
+		$("#attendanceTable_hour").dataTable().fnClearTable();
+	    $("#attendanceTable_hour").dataTable().fnDestroy();
+	}
 	
 	$.ajax({
 		url:"getReportData",
@@ -112,7 +138,7 @@ function ajaxQuery(){
 			var tableId=report_type=="计件"?"#attendanceTable":"#attendanceTable_hour"
 			$(tableId).find("tbody").html("");
 			if(report_type=="计件"){
-				$.each(response.reportList,function(index,value){
+				$.each(response.data,function(index,value){
 					var tr=$("<tr />");
 					$("<td />").html(value.factory).appendTo(tr)
 					$("<td />").html(value.workshop).appendTo(tr)
@@ -157,7 +183,7 @@ function ajaxQuery(){
 					$(tableId).find("tbody").append(tr);
 				})		
 			}else{
-				$.each(response.reportList,function(index,value){
+				$.each(response.data,function(index,value){
 					var tr=$("<tr />");
 					$("<td />").html(value.factory).appendTo(tr)
 					$("<td />").html(value.workshop).appendTo(tr)
@@ -200,6 +226,11 @@ function ajaxQuery(){
 					$(tableId).find("tbody").append(tr);
 				})		
 			}
+			/*$('#attendanceTable').hide();
+			$('#attendanceTable_hour').hide();
+			
+		
+			$(tableId).show();*/
 			
 			showTable(report_type);	
 		}			
@@ -208,24 +239,23 @@ function ajaxQuery(){
 }
 
 function showTable(report_type){
-	//先destroy datatable，隐藏form
-	if($.fn.dataTable.isDataTable("#attendanceTable")){
-		$('#attendanceTable').DataTable().destroy();
-		$('#attendanceTable').empty();
-	}
-	if($.fn.dataTable.isDataTable("#attendanceTable_hour")){
-		$('#attendanceTable_hour').DataTable().destroy();
-		$('#attendanceTable_hour').empty();
-	}
-	$('#attendanceTable').hide();
-	$('#attendanceTable_hour').hide();
-	
+	var conditions={};
+	var factory=$("#factory").val();
+	var workshop=$("#workshop").val();
+	var record_date=$("#record_date").val();
+	var report_type=$("#reportType").val();
+	conditions.factory=factory;
+	conditions.workshop=workshop;
+	conditions.record_date=record_date;
+	conditions.report_type=report_type;
 	var tableId="#attendanceTable"
 	if(report_type=='计时'){
-		tableId="#attendanceTable_hour"
+			tableId="#attendanceTable_hour"
 	}
-	$(tableId).show();
 	
+	/*if ( $.fn.dataTable.isDataTable(tableId) ) {
+	    table = $(tableId).DataTable();
+	}else*/
 	$(tableId).dataTable({
 		  dom: 'Bfrtip',
 		  buttons: [
@@ -247,7 +277,20 @@ function showTable(report_type){
 				loadingRecords:"正在查询，请稍后..." ,
 				infoEmpty:"抱歉，未查询到数据！",
 			},
+			
 	  });
+	
 	$(tableId).find('.dataTables_empty').css("padding-left","350px")
-	$(".dt-buttons").css("margin-top","-50px").find("a").css("border","0px");
+	$(".dt-buttons").css("position","fixed").css("left","92%");
+	$(".dt-buttons").css("top","110px").find("a").css("border","0px");
+	var head_width=$(".dataTables_scroll").width();
+	$(".dataTables_scrollBody").scrollTop(10);
+	//alert($(".dataTables_scrollBody").scrollTop());
+
+	if($(".dataTables_scrollBody").scrollTop()>0){
+		$(".dataTables_scrollHead").css("width",head_width-20);
+		$(".dataTables_scrollBody").scrollTop(0);
+	}
+    
+    
 }

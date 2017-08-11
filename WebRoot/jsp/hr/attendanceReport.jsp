@@ -56,11 +56,11 @@
 						<tr>
 							<td style="text-align:right">工厂/部门：</td>
 							<td>
-								<input type="text" id="factory" class="input-medium" style="width:100px;height:30px" />
+								<select id="factory" class="input-medium" style="width:100px; "></select>
 							</td>
 							<td style="text-align:right">车间/科室：</td>
 							<td>
-								<input type="text" id="workshop" class="input-medium" style="width:100px;height:30px" />
+								<select id="workshop" class="input-medium" style="width:100px; "></select>
 							</td>
 							<td style="text-align:right" >日期：</td>
 							<td >
@@ -84,7 +84,7 @@
 
 					<div class="row">
 						<div class="col-xs-12" >						
-							<table id="attendanceTable" style="table-layout: fixed;font-size:12px;width: 2350px;max-width:2350px;" class="table table-bordered table-striped" > <!--  -->
+							<table id="attendanceTable" style="table-layout: fixed;display:none;font-size:12px;text-align:center;width: 3500px;max-width:3500px;" class="table table-bordered table-striped" > <!--  -->
 								<thead>
 									<tr id="">
 										<th style="text-align:center;width:100px" rowspan=2>工厂/部门</th>
@@ -98,15 +98,15 @@
 										<th style="text-align:center;" colspan=13>被支援人数</th>										
 									</tr>
 									<tr>
-										<th style="text-align:center;">应到<br>人数</th>
-										<th style="text-align:center;">实到<br>人数</th>
-										<th style="text-align:center;">应到<br>人数</th>
-										<th style="text-align:center;">实到<br>人数</th>
+										<th style="text-align:center;">应到人数</th>
+										<th style="text-align:center;">实到人数</th>
+										<th style="text-align:center;">应到人数</th>
+										<th style="text-align:center;">实到人数</th>
 										<th style="text-align:center;">请假</th>
 										<th style="text-align:center;">放假</th>
 										<th style="text-align:center;">旷工</th>
 										<th style="text-align:center;">出差</th>
-										<th style="text-align:center;">外出<br>支援</th>
+										<th style="text-align:center;">外出支援</th>
 
 										<th style="text-align:center;">长沙</th>
 										<th style="text-align:center;">南京</th>
@@ -119,7 +119,7 @@
 										<th style="text-align:center;">太原</th>
 										<th style="text-align:center;">深圳</th>
 										<th style="text-align:center;">天津</th>
-										<th style="text-align:center;">其他<br>事业部</th>
+										<th style="text-align:center;">其他</th>
 										<th style="text-align:center;">备注</th>
 										<th style="text-align:center;">长沙</th>
 										<th style="text-align:center;">南京</th>
@@ -132,7 +132,7 @@
 										<th style="text-align:center;">太原</th>
 										<th style="text-align:center;">深圳</th>
 										<th style="text-align:center;">天津</th>
-										<th style="text-align:center;">其他<br>事业部</th>
+										<th style="text-align:center;">其他</th>
 										<th style="text-align:center;">备注</th>
 									</tr>
 								</thead>
@@ -140,7 +140,7 @@
 								</tbody>
 							</table>
 							
-							<table id="attendanceTable_hour" style="display:none;table-layout: fixed;font-size:12px;width: 2350px;max-width:2350px;" class="table table-bordered table-striped" > <!--  -->
+							<table id="attendanceTable_hour" style="display:none;table-layout: fixed;font-size:12px;text-align:center;width: 3500px;max-width:3500px;" class="table table-bordered table-striped" > <!--  -->
 								<thead>
 									<tr id="">
 										<th style="text-align:center;width:100px" rowspan=2>工厂/部门</th>
@@ -154,15 +154,15 @@
 										<th style="text-align:center;" colspan=13>被支援人数</th>										
 									</tr>
 									<tr>
-										<th style="text-align:center;">应到<br>人数</th>
-										<th style="text-align:center;">实到<br>人数</th>
+										<th style="text-align:center;">应到人数</th>
+										<th style="text-align:center;">实到人数</th>
 										<!-- <th style="text-align:center;">应到<br>人数</th>
 										<th style="text-align:center;">实到<br>人数</th> -->
 										<th style="text-align:center;">请假</th>
 										<th style="text-align:center;">放假</th>
 										<th style="text-align:center;">旷工</th>
 										<th style="text-align:center;">出差</th>
-										<th style="text-align:center;">外出<br>支援</th>
+										<th style="text-align:center;">外出支援</th>
 										<th style="text-align:center;">调出</th>
 
 										<th style="text-align:center;">长沙</th>
@@ -176,7 +176,7 @@
 										<th style="text-align:center;">太原</th>
 										<th style="text-align:center;">深圳</th>
 										<th style="text-align:center;">天津</th>
-										<th style="text-align:center;">其他<br>事业部</th>
+										<th style="text-align:center;">其他</th>
 										<th style="text-align:center;">备注</th>
 										<th style="text-align:center;">长沙</th>
 										<th style="text-align:center;">南京</th>
@@ -189,7 +189,7 @@
 										<th style="text-align:center;">太原</th>
 										<th style="text-align:center;">深圳</th>
 										<th style="text-align:center;">天津</th>
-										<th style="text-align:center;">其他<br>事业部</th>
+										<th style="text-align:center;">其他</th>
 										<th style="text-align:center;">备注</th>
 									</tr>
 								</thead>
