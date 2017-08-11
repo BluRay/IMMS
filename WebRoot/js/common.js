@@ -286,11 +286,12 @@ function generatekeys(keyCode, list) {
  * valName:option value值:id/name
  */
 
-function getFactorySelect(url,selectval,selectId,selectType,valName){
+function getFactorySelect(url,selectval,selectId,selectType,valName,orgKind){
+	orgKind=orgKind||'1';
 	$.ajax({
 		url : "/BMS/common/getFactorySelectAuth",
 		dataType : "json",
-		data : {"function_url":url},
+		data : {"function_url":url,"org_kind":orgKind},
 		async : false,
 		error : function(response) {
 			alert(response.message)
@@ -310,11 +311,12 @@ function getFactorySelect(url,selectval,selectId,selectType,valName){
  * valName:option value值:id/name
  */
 
-function getWorkshopSelect(url,factory,selectval,selectId,selectType,valName){
+function getWorkshopSelect(url,factory,selectval,selectId,selectType,valName,orgKind){
+	orgKind=orgKind==undefined?'1':orgKind;
 	$.ajax({
 		url : "/BMS/common/getWorkshopSelectAuth",
 		dataType : "json",
-		data : {"function_url":url,"factory":factory},
+		data : {"function_url":url,"factory":factory,"org_kind":orgKind},
 		async : false,
 		error : function(response) {
 			alert(response.message)

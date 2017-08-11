@@ -1,5 +1,8 @@
 package com.byd.bms.hr.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,11 +19,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.byd.bms.hr.service.IHrReportService;
 import com.byd.bms.production.service.IProductionService;
+import com.byd.bms.util.ExcelModel;
+import com.byd.bms.util.ExcelTool;
 import com.byd.bms.util.controller.BaseController;
 /**
  * HR工时报表控制器
@@ -390,7 +398,7 @@ public class HrReportController extends BaseController {
 	}
 	
 	/**
-	 * 考勤统计导入页面
+	 * 人员去向统计页面
 	 * @return
 	 */
 	@RequestMapping("/attendanceReport")
@@ -400,14 +408,352 @@ public class HrReportController extends BaseController {
 	}
 	
 	/**
-	 * 考勤统计数据查询
+	 * 人员去向统计数据查询
 	 * @return
 	 */
 	@RequestMapping("/getAttendenceReport")
 	@ResponseBody
 	public ModelMap getAttendenceReport(){
 		model.clear();
+		Map<String,Object> conditionMap=new HashMap<String,Object>();
+		JSONObject jo=JSONObject.fromObject(request.getParameter("conditions"));
+		for(Iterator it=jo.keys();it.hasNext();){
+			String key=(String) it.next();
+			System.out.println(key);
+			conditionMap.put(key, jo.get(key));
+		}
 		
+		hrReportService.getAttendenceReport(conditionMap,model);
+		
+		return model;
+	}
+	
+	/**
+	 * 人员去向导入页面
+	 * @return
+	 */
+	@RequestMapping("/attendanceUpload")
+	public ModelAndView attendanceUpload(){
+		mv.setViewName("hr/attendanceUpload");
+		return mv;
+	}
+	
+	/**
+	 * 人员去向数据导入（计件）
+	 * @return
+	 */
+	@RequestMapping(value="/uploadAttendenceData",method=RequestMethod.POST)
+	@ResponseBody
+	public ModelMap uploadAttendenceData(@RequestParam(value="file",required=false) MultipartFile file){
+		model.clear();
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String user_id = request.getSession().getAttribute("user_id").toString();
+		String record_date=request.getParameter("record_date");
+		String result = "导入成功！";
+		String fileFileName=file.getOriginalFilename();
+		if(fileFileName.contains("计时")){
+			result = "用户信息上传出错：导入维度不对，请选择正确的维度，重新导入！";
+			model.put("success", false);
+			model.put("message", result);
+		}
+		ExcelModel excelModel =new ExcelModel();
+		excelModel.setReadSheets(1);
+		excelModel.setStart(2);
+		Map<String,Integer> dataType = new HashMap<String,Integer>();
+		dataType.put("0", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("1", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("2", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("3", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("4", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("5", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("6", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("7", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("8", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("9", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("10", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("11", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("12", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("13", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("14", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("15", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("16", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("17", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("18", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("19", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("20", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("21", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("22", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("23", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("24", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("25", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("26", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("27", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("28", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("29", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("30", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("31", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("32", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("33", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("34", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("35", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("36", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("37", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("38", ExcelModel.CELL_TYPE_CANNULL);
+		
+		excelModel.setDataType(dataType);
+		excelModel.setPath(fileFileName);
+		
+		try{
+			File tempfile=new File(fileFileName);
+			file.transferTo(tempfile);
+			/**
+			 * 读取输入流中的excel文件，并且将数据封装到ExcelModel对象中
+			 */
+			InputStream is = new FileInputStream(tempfile);
+			
+			ExcelTool excelTool = new ExcelTool();
+			excelTool.readExcel(is, excelModel);
+			 
+			List<Map<String, Object>> addList = new ArrayList<Map<String,Object>>();
+			Map<String,Object> condMap=new HashMap<String,Object>();
+			
+			for(Object[] data : excelModel.getData()){
+				Map<String, Object> info = new HashMap<String, Object>();
+				String factory=data[0].toString().trim();
+				String workshop=data[1].toString().trim();
+				String team=data[2].toString().trim();
+				if(factory !=""&&workshop!=""){
+					info.put("factory", factory);
+					info.put("workshop", workshop);
+					info.put("team", team);
+					info.put("direct_num_yd", data[3] == null?null:data[3].toString().trim());
+					info.put("direct_num_sd", data[4] == null?null:data[4].toString().trim());
+					info.put("short_num_yd", data[5] == null?null:data[5].toString().trim());
+					info.put("short_num_sd", data[6] == null?null:data[6].toString().trim());
+					info.put("leave_num", data[7] == null?null:data[7].toString().trim());
+					info.put("holiday_num", data[8] == null?null:data[8].toString().trim());
+					info.put("absence_num", data[9] == null?null:data[9].toString().trim());
+					info.put("trip_num", data[10] == null?null:data[10].toString().trim());
+					info.put("out_aid_num", data[11] == null?null:data[11].toString().trim());
+					info.put("work_num", data[12] == null?null:data[12].toString().trim());
+					info.put("out_aid_cs_num", data[13] == null?null:data[13].toString().trim());
+					info.put("out_aid_nj_num", data[14] == null?null:data[14].toString().trim());
+					info.put("out_aid_hz_num", data[15] == null?null:data[15].toString().trim());
+					info.put("out_aid_dl_num", data[16] == null?null:data[16].toString().trim());
+					info.put("out_aid_qd_num", data[17] == null?null:data[17].toString().trim());
+					info.put("out_aid_cd_num", data[18] == null?null:data[18].toString().trim());
+					info.put("out_aid_wh_num", data[19] == null?null:data[19].toString().trim());
+					info.put("out_aid_sw_num", data[20] == null?null:data[20].toString().trim());
+					info.put("out_aid_ty_num", data[21] == null?null:data[21].toString().trim());
+					info.put("out_aid_sz_num", data[22] == null?null:data[22].toString().trim());
+					info.put("out_aid_tj_num", data[23] == null?null:data[23].toString().trim());
+					info.put("out_aid_oth_num", data[24] == null?null:data[24].toString().trim());
+					info.put("out_aid_note", data[25] == null?null:data[25].toString().trim());
+					info.put("in_aid_cs_num", data[26] == null?null:data[26].toString().trim());
+					info.put("in_aid_nj_num", data[27] == null?null:data[27].toString().trim());
+					info.put("in_aid_hz_num", data[28] == null?null:data[28].toString().trim());
+					info.put("in_aid_dl_num", data[29] == null?null:data[29].toString().trim());
+					info.put("in_aid_qd_num", data[30] == null?null:data[30].toString().trim());
+					info.put("in_aid_cd_num", data[31] == null?null:data[31].toString().trim());
+					info.put("in_aid_wh_num", data[32] == null?null:data[32].toString().trim());
+					info.put("in_aid_sw_num", data[33] == null?null:data[33].toString().trim());
+					info.put("in_aid_ty_num", data[34] == null?null:data[34].toString().trim());
+					info.put("in_aid_sz_num", data[35] == null?null:data[35].toString().trim());
+					info.put("in_aid_tj_num", data[36] == null?null:data[36].toString().trim());
+					info.put("in_aid_oth_num", data[37] == null?null:data[37].toString().trim());
+					info.put("in_aid_note", data[38] == null?null:data[38].toString().trim());
+
+					info.put("record_date", record_date);
+					info.put("report_type", "计件");
+					info.put("editor_id", user_id);
+					info.put("edit_date", curTime);
+					addList.add(info);					
+				}	
+			}
+			
+			condMap.put("factory", excelModel.getData().get(0)[0].toString());
+			condMap.put("workshop", excelModel.getData().get(0)[1].toString());
+			condMap.put("team", excelModel.getData().get(0)[2].toString());
+			condMap.put("record_date", record_date);
+			condMap.put("report_type", "计件");
+			condMap.put("dataList", addList);
+			//删除需要替换的数据,保存新的数据
+			hrReportService.uploadAttendenceData(condMap,model);
+		}catch(Exception e){
+			model.put("success", false);
+			model.put("message", "系统异常，导入失败!");
+		}
+		
+		
+		return model;
+	}
+	
+	/**
+	 * 人员去向数据导入（计时）
+	 * @return
+	 */
+	@RequestMapping(value="/uploadAttendenceHourData",method=RequestMethod.POST)
+	@ResponseBody
+	public ModelMap uploadAttendenceHourData(@RequestParam(value="file",required=false) MultipartFile file){
+		model.clear();
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String user_id = request.getSession().getAttribute("user_id").toString();
+		String record_date=request.getParameter("record_date");
+		String result = "导入成功！";
+		String fileFileName=file.getOriginalFilename();
+		if(fileFileName.contains("计件")){
+			result = "用户信息上传出错：导入维度不对，请选择正确的维度，重新导入！";
+			model.put("success", false);
+			model.put("message", result);
+		}
+		ExcelModel excelModel =new ExcelModel();
+		excelModel.setReadSheets(1);
+		excelModel.setStart(2);
+		Map<String,Integer> dataType = new HashMap<String,Integer>();
+		dataType.put("0", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("1", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("2", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("3", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("4", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("5", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("6", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("7", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("8", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("9", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("10", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("11", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("12", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("13", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("14", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("15", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("16", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("17", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("18", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("19", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("20", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("21", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("22", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("23", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("24", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("25", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("26", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("27", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("28", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("29", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("30", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("31", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("32", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("33", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("34", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("35", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("36", ExcelModel.CELL_TYPE_CANNULL);
+		
+		excelModel.setDataType(dataType);
+		excelModel.setPath(fileFileName);
+		
+		try{
+			File tempfile=new File(fileFileName);
+			file.transferTo(tempfile);
+			/**
+			 * 读取输入流中的excel文件，并且将数据封装到ExcelModel对象中
+			 */
+			InputStream is = new FileInputStream(tempfile);
+			
+			ExcelTool excelTool = new ExcelTool();
+			excelTool.readExcel(is, excelModel);
+			 
+			List<Map<String, Object>> addList = new ArrayList<Map<String,Object>>();
+			Map<String,Object> condMap=new HashMap<String,Object>();
+			
+			for(Object[] data : excelModel.getData()){
+				Map<String, Object> info = new HashMap<String, Object>();
+				String factory=data[0].toString().trim();
+				String workshop=data[1].toString().trim();
+				String team=data[2].toString().trim();
+				if(factory !=""&&workshop!=""){
+					info.put("factory", factory);
+					info.put("workshop", workshop);
+					info.put("assist_num_yd", data[2] == null?null:data[2].toString().trim());
+					info.put("assist_num_sd", data[3] == null?null:data[3].toString().trim());
+					info.put("leave_num", data[4] == null?null:data[4].toString().trim());
+					info.put("holiday_num", data[5] == null?null:data[5].toString().trim());
+					info.put("absence_num", data[6] == null?null:data[6].toString().trim());
+					info.put("trip_num", data[7] == null?null:data[7].toString().trim());
+					info.put("out_aid_num", data[8] == null?null:data[8].toString().trim());
+					info.put("callout_num", data[9] == null?null:data[9].toString().trim());
+					info.put("work_num", data[10] == null?null:data[10].toString().trim());
+					info.put("out_aid_cs_num", data[11] == null?null:data[11].toString().trim());
+					info.put("out_aid_nj_num", data[12] == null?null:data[12].toString().trim());
+					info.put("out_aid_hz_num", data[13] == null?null:data[13].toString().trim());
+					info.put("out_aid_dl_num", data[14] == null?null:data[14].toString().trim());
+					info.put("out_aid_qd_num", data[15] == null?null:data[15].toString().trim());
+					info.put("out_aid_cd_num", data[16] == null?null:data[16].toString().trim());
+					info.put("out_aid_wh_num", data[17] == null?null:data[17].toString().trim());
+					info.put("out_aid_sw_num", data[18] == null?null:data[18].toString().trim());
+					info.put("out_aid_ty_num", data[19] == null?null:data[19].toString().trim());
+					info.put("out_aid_sz_num", data[20] == null?null:data[20].toString().trim());
+					info.put("out_aid_tj_num", data[21] == null?null:data[21].toString().trim());
+					info.put("out_aid_oth_num", data[22] == null?null:data[22].toString().trim());
+					info.put("out_aid_note", data[23] == null?null:data[23].toString().trim());
+					info.put("in_aid_cs_num", data[24] == null?null:data[24].toString().trim());
+					info.put("in_aid_nj_num", data[25] == null?null:data[25].toString().trim());
+					info.put("in_aid_hz_num", data[26] == null?null:data[26].toString().trim());
+					info.put("in_aid_dl_num", data[27] == null?null:data[27].toString().trim());
+					info.put("in_aid_qd_num", data[28] == null?null:data[28].toString().trim());
+					info.put("in_aid_cd_num", data[29] == null?null:data[29].toString().trim());
+					info.put("in_aid_wh_num", data[30] == null?null:data[30].toString().trim());
+					info.put("in_aid_sw_num", data[31] == null?null:data[31].toString().trim());
+					info.put("in_aid_ty_num", data[32] == null?null:data[32].toString().trim());
+					info.put("in_aid_sz_num", data[33] == null?null:data[33].toString().trim());
+					info.put("in_aid_tj_num", data[34] == null?null:data[34].toString().trim());
+					info.put("in_aid_oth_num", data[35] == null?null:data[35].toString().trim());
+					info.put("in_aid_note", data[36] == null?null:data[36].toString().trim());
+
+					info.put("record_date", record_date);
+					info.put("report_type", "计时");
+					info.put("editor_id", user_id);
+					info.put("edit_date", curTime);
+					addList.add(info);					
+				}	
+			}
+			
+			condMap.put("factory", excelModel.getData().get(0)[0].toString());
+			condMap.put("workshop", excelModel.getData().get(0)[1].toString());
+			condMap.put("team", excelModel.getData().get(0)[2].toString());
+			condMap.put("record_date", record_date);
+			condMap.put("report_type", "计时");
+			condMap.put("dataList", addList);
+			//删除需要替换的数据,保存新的数据
+			hrReportService.uploadAttendenceData(condMap,model);
+
+		}catch(Exception e){
+			model.put("success", false);
+			model.put("message", "系统异常，导入失败!");
+		}
+		
+		return model;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/getReportData")
+	@ResponseBody
+	public ModelMap getReportData(){
+		model.clear();
+		String conditions=request.getParameter("conditions");
+		Map<String,Object> conditionMap=new HashMap<String,Object>();
+		JSONObject jo=JSONObject.fromObject(conditions);
+		for(Iterator it=jo.keys();it.hasNext();){
+			String key=(String) it.next();
+			System.out.println(key);
+			conditionMap.put(key, jo.get(key));
+		}
+		hrReportService.getReportData(conditionMap,model);
+
 		return model;
 	}
 	

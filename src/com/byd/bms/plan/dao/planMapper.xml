@@ -1133,7 +1133,7 @@
 		<if test="month !=''">
 			AND prod_date LIKE CONCAT('%',#{month},'%') 
 		</if>
-		  AND  parts_id = '194' 
+		  AND  parts_id = '0' 
 	</select>
 	<select id="getPlanSearchTotalRealZzjQty" parameterType="Map" resultType="int">
 		SELECT IFNULL(SUM(quantity),'0') AS real_qty FROM BMS_PD_WORKSHOP_SUPPLY 

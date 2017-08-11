@@ -815,6 +815,7 @@ public class PlanServiceImpl implements IPlanService {
 				//计算本月合计（跨月取第一个月的数据）
 				//计划
 				String workshop = detailList.get(i)[2];
+				int plan_code_id = 0;
 				if(workshop.substring(workshop.length()-2, workshop.length()).equals("计划")){
 					Map<String,Object> conditionMap2=new HashMap<String,Object>();
 					conditionMap2.put("factory_id", detailList.get(i)[0]);
@@ -841,7 +842,7 @@ public class PlanServiceImpl implements IPlanService {
 					conditionMap3.put("order_no", order_list.get(n));
 					conditionMap3.put("month", "");
 					
-					int plan_code_id = Integer.valueOf(detailList.get(i)[34]);
+					plan_code_id = Integer.valueOf(detailList.get(i)[34]);
 					switch(plan_code_id){
 					case 4:
 						conditionMap2.put("workshop", "welding_online_date");conditionMap3.put("workshop", "welding_online_date");break;
@@ -898,9 +899,8 @@ public class PlanServiceImpl implements IPlanService {
 				}
 				resultMap.put("total_month", String.valueOf(total_month));
 				resultMap.put("total_order", String.valueOf(total_order));
-				if(total >0){
-					datalist.add(resultMap);
-				}
+				datalist.add(resultMap);
+				
 			}
 		}
 		result.put("data", datalist);

@@ -30,5 +30,8 @@ public interface IHrReportDao {
 
 	public List<Map<String,String>> queryStaffWorkHoursList(Map<String, Object> conditionMap);
 	public int queryStaffWorkHoursCount(Map<String, Object> conditionMap);
+	public Map<String, Object> queryOrgInfo(Map<String, Object> condMap);
+	public List<Map<String,String>> queryAttendanceDetailData(Map<String, Object> conditionMap);
+	public List<Map<String,String>> queryAttendanceReportData(Map<String, Object> conditionMap);
 
 }

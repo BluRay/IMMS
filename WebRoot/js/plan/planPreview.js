@@ -14,7 +14,9 @@ $(document).ready(function () {
 		$("#search_plan_month").val(GetQueryString("plan_month"));
 		//$("#search_factory").find("option :contains("+GetQueryString("factory_name")+")").attr("selected",true);
 		$("#search_factory").val(GetQueryString("factory_id"));
-		ajaxQuery();
+		if($("#search_plan_month").val() !== ""){
+			ajaxQuery();
+		}
 	}
 
 	$('#nav-search-input').bind('keydown', function(event) {

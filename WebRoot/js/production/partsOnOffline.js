@@ -295,7 +295,7 @@ function ajaxEdit(id){
 
 function getPartsFinishCount(){
 	var factory=$("#factory").val();
-	var parts_id=$("#parts").attr("keyvalue")||"";
+	var parts_id=$("#parts :selected").attr("keyvalue")||"";
 	var order_no=$("#order").val();
 	var info={};
 	$.ajax({

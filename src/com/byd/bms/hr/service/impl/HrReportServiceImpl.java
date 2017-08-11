@@ -144,6 +144,48 @@ public class HrReportServiceImpl implements IHrReportService {
 		}
 	}
 
+	
+	@Override
+	@Transactional
+	public void uploadAttendenceData(Map<String, Object> condMap,ModelMap model) {
+		// 根据工厂、车间、班组校验填写的组织结构是否有效
+		Map<String,Object> orgInfo=hrReportDao.queryOrgInfo(condMap);
+		if(orgInfo==null){
+			model.put("success",false);
+			model.put("message", condMap.get("factory").toString()+"-"+
+					condMap.get("workshop").toString()+"-"+condMap.get("team").toString()+"组织结构不存在！");
+			return;
+		}
+		try{
+			//删除需要替换的数据
+			hrReportDao.deleteAttendanceReport(condMap);
+			//将数据保存到数据库
+			hrReportDao.saveAttendanceReport((List<Map<String, Object>>) condMap.get("dataList"));
+			model.put("success",true);
+			model.put("message","导入成功！");
+		}catch(Exception e){
+			model.put("success",false);
+			model.put("message","系统异常，导入失败！");
+		}	
+				
+	}
+
+	@Override
+	public void getReportData(Map<String, Object> conditionMap, ModelMap model) {
+		
+		model.put("data", hrReportDao.queryAttendanceDetailData(conditionMap));		
+	}
+
+	@Override
+	public void getAttendenceReport(Map<String, Object> conditionMap,
+			ModelMap model) {
+		if(conditionMap.get("report_type").equals("计时")){
+			model.put("data", hrReportDao.queryAttendanceDetailData(conditionMap));
+		}else
+			model.put("data", hrReportDao.queryAttendanceReportData(conditionMap));
+		
+	}
+
 	@Override
 	public List<Map<String, Object>> getEcnReportData(Map<String, Object> conditionMap) {
 		return hrReportDao.getEcnReportData(conditionMap);

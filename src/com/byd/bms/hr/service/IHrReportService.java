@@ -29,4 +29,11 @@ public interface IHrReportService {
 			ModelMap model);
 	public void queryStaffWorkHoursList(Map<String, Object> conMap,
 			ModelMap model);
+
+	public void uploadAttendenceData(Map<String, Object> condMap,ModelMap model);
+
+	public void getReportData(Map<String, Object> conditionMap, ModelMap model);
+
+	public void getAttendenceReport(Map<String, Object> conditionMap,
+			ModelMap model);
 }

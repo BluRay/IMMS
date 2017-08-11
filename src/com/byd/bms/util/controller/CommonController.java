@@ -76,9 +76,11 @@ public class CommonController extends BaseController {
 	public ModelMap getFactorySelectAuth(){
 		String staff_number = request.getSession().getAttribute("staff_number") + "";
 		String function_url = request.getParameter("function_url");
+		String org_kind = request.getParameter("org_kind");
 		Map<String,Object> condMap=new HashMap<String,Object>();
 		condMap.put("staff_number", staff_number);
 		condMap.put("function_url", function_url);
+		condMap.put("org_kind", org_kind);
 		model=new ModelMap();
 		model.put("data", commonService.getFactorySelectAuth(condMap));
 
@@ -139,11 +141,13 @@ public class CommonController extends BaseController {
 		String staff_number = request.getSession().getAttribute("staff_number") + "";
 		String function_url = request.getParameter("function_url");
 		String factory = request.getParameter("factory");
+		String org_kind = request.getParameter("org_kind");
 		Map<String,Object> condMap=new HashMap<String,Object>();
 		condMap.put("staff_number", staff_number);
 		condMap.put("function_url", function_url);
 		condMap.put("factory", factory);
 		condMap.put("workshop", request.getParameter("workshop"));
+		condMap.put("org_kind", org_kind);
 		model=new ModelMap();
 		model.put("data", commonService.getWorkshopSelectAuth(condMap));
 

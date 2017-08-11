@@ -628,15 +628,24 @@
 	<select id="queryAttendanceDetailData" parameterType="Map" resultType="Map">
 		select * from BMS_HR_ATTENDENCE_REPORT where 1=1
 		<if test="factory !=null and factory !=''">
-			and factory like concat('%',#{factroy},'%')
+			and factory=#{factory}
 		</if>
-		<if test="workshop !=null and workshop !=''">
-			and workshop like concat('%',#{workshop},'%')
+		<if test="workshop !=null and workshop !='全部'">
+			and workshop =#{workshop}
 		</if>
 		<if test="record_date !=null and record_date !=''">
 			and record_date = #{record_date}
 		</if>
 			and report_type=#{report_type}
+			order by factory,workshop
+	</select>
+	
+	<select id="queryOrgInfo" parameterType="Map" resultType="Map">
+		select o.id org_id
+		from BMS_BASE_ORG o
+		left join BMS_BASE_ORG o1 on o.parent_id=o1.id
+		left join BMS_BASE_ORG o2 on o1.parent_id=o2.id
+		where o.name=#{team} and o1.name=#{workshop} and o2.name=#{factory} 
 	</select>
 	
 	<select id="queryAttendanceReportData" parameterType="Map" resultType="Map">
@@ -653,15 +662,16 @@
 		FROM BMS_HR_ATTENDENCE_REPORT
 		WHERE report_type='计件'
 		<if test="factory !=null and factory !=''">
-			and factory like concat('%',#{factroy},'%')
+			and factory =#{factory}
 		</if>
-		<if test="workshop !=null and workshop !=''">
-			and workshop like concat('%',#{workshop},'%')
+		<if test="workshop !=null and workshop !='全部'">
+			and workshop =#{workshop}
 		</if>
 		<if test="record_date !=null and record_date !=''">
 			and record_date = #{record_date}
 		</if>
 		GROUP BY factory,workshop
+		order by factory,workshop
 	</select>
 
 	<select id="queryStaffWorkHoursList" parameterType="Map" resultType="Map">

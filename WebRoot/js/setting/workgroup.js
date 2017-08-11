@@ -134,7 +134,9 @@ jQuery(function($) {
 	    				}
 	    			}else{
 	    				if(value.sub_count !== 0){
-	    					fun_data[value.parent_id]['additionalParameters']['children'][value.id]['additionalParameters'] = subFun2[value.id];
+	    					if(fun_data[value.parent_id]!=undefined){
+		    					fun_data[value.parent_id]['additionalParameters']['children'][value.id]['additionalParameters'] = subFun2[value.id];
+	    					}
 	    				}
 	    			}
 	    		});
@@ -259,7 +261,7 @@ jQuery(function($) {
 								text: '<h5>编辑成功！</h5>',
 								class_name: 'gritter-info'
 							});
-					    	showtree2();
+					    	//showtree2();
 					    	getWorkgroupListById($("#new_parentId").val(),$("#new_workshopId").val());
 
 					    	}else{

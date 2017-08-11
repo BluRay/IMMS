@@ -39,9 +39,9 @@ jQuery(function($) {
 		var subFun = [];
 		var subFun1 = [];// 工厂级别
 		var subFun2 = [];// 车间级别
-		var subFun3 = [];// 工厂级别
-		var subFun4 = [];// 车间级别
-		var subFun5 = [];// 工厂级别
+		var subFun3 = [];
+		var subFun4 = [];
+		var subFun5 = [];
 
 		$.ajax({
 		    url: "getOrgDataTreeList",
@@ -173,13 +173,11 @@ jQuery(function($) {
 			    					});
 	    						}
 	    					});
-    						console.log("alert",fun_data['1']['additionalParameters']['children']['3']['additionalParameters']['children']['4']['additionalParameters']);
-	    					fun_data[ppp_id]['additionalParameters']['children'][pp_id]['additionalParameters']['children'][value.parent_id]['additionalParameters']['children'][value.id]['additionalParameters'] = subFun3[value.id];
-//	    					fun_data['1']['additionalParameters']['children']['3']
-//					    					['additionalParameters']['children']['4']
-//					    					['additionalParameters']['children']['18']
-//					    					['additionalParameters'] = subFun3[value.id];
-                            
+    						//console.log("alert",fun_data['1']['additionalParameters']['children']['3']['additionalParameters']['children']['4']['additionalParameters']);
+	    					if(fun_data[ppp_id]!=undefined){
+	    						fun_data[ppp_id]['additionalParameters']['children'][pp_id]['additionalParameters']['children'][value.parent_id]['additionalParameters']['children'][value.id]['additionalParameters'] = subFun3[value.id];
+	    					}
+                       
     					}
     				}
 	    			
@@ -197,10 +195,11 @@ jQuery(function($) {
 					'selected-icon' : null, // ace-icon fa fa-check
 					'unselected-icon' : null,//'ace-icon fa fa-check'
 				});
-		    	$("#tree2").find(".tree-folder-header").each(function(){  
+		    	
+		    	$("#tree2").find(".tree-folder-header").each(function(){
+		    		//alert($(this).parent().css("display"));
 				    if($(this).parent().css("display")=="block"){  
-
-				        $(this).trigger("click");
+                         $(this).trigger("click");
 				    }
 				}); 
 		    }
@@ -358,12 +357,53 @@ jQuery(function($) {
 							} 
 						}
 					]
-				});
-//		});
-//		
+				});	
 	});
-	
+	$("#new_org_kind").change(function() {
+		var pa = $('#new_name').parent();
+		$("#new_org_type").removeAttr("disabled");
+		var tp = parseInt($("#new_org_type :selected").attr('keyvalue'));
+		$('#new_org_type').prop("disabled","disabled");
+		if($("#new_org_kind").val()=='1'){
+			switch(tp){
+        	case 0 :
+        		
+        		pa.html('').html('<select id="new_name" class="input-large carType"></select>');
+        		//获得工厂
+        		getFactorySelect("hrBaseData/orgData",'',"#new_name",null,'id');
+        		break;
+//        	case 3 :
+//        		//科室任意
+//        		pa.html('').html('<input style="height: 30px;width:280px" type="text" class="input-medium revise carType" id="name" onkeyup="value=value.replace(/[^\u4E00-\u9FA5]/g,\'\')"  onbeforepaste="clipboardData.setData(\'text\',clipboardData.getData(\'text\').replace(/[^\u4E00-\u9FA5]/g,\'\'))"/>');
+//        		break;
+        	case 2 :
+        		//获得车间
+        		alert("获得车间");
+        		pa.html('').html('<select id="new_name" class="input-large carType"></select>');
+        		getWorkshop("");
+        		//$("#new_name option[value='']").remove();
+        		break;
+        	case 3 :
+        		alert("获得班组");
+        		//获得班组
+        		pa.html('').html('<select id="new_name" class="input-large carType"></select>');
+        		getWorkgroup($("#new_p_id").val());
+        		break;
+        	case 4 :
+        		//var pa = $('#name').parent();
+        		//获得小班组
+        		pa.html('').html('<select id="new_name" class="input-large carType"></select>');
+        		fillWorkGroupSelect(1);
+        		break;
+        	}
+		}else{
+			pa.html('').html('<input style="height: 30px;width:280px" type="text" class="input-medium revise carType" id="new_name" onkeyup="value=value.replace(/[^\u4E00-\u9FA5]/g,\'\')"  onbeforepaste="clipboardData.setData(\'text\',clipboardData.getData(\'text\').replace(/[^\u4E00-\u9FA5]/g,\'\'))"/>');
+		}
+	});
 	$(document).on("click",".editWorkgroup",function(){
+		$('#p_id').removeAttr("disabled");
+		$('#edit_org_type').removeAttr("disabled");
+		$('#edit_org_kind').removeAttr("disabled");
 		$.ajax({
             url: 'getOrgDataTreeList',
             dataType: 'json',
@@ -380,8 +420,11 @@ jQuery(function($) {
             		$("#editId").val(response.data[0].id);
             		$('#p_id').html('');
             		$('#p_id').html(option);
+            		$('#p_id').prop("disabled","disabled");
                 	$("#edit_org_type").find("option[keyvalue="+response.data[0].org_type+"]").prop("selected",true);
+                	$("#edit_org_type").prop("disabled","disabled");
                 	$("#edit_org_kind").find("option[value="+response.data[0].org_kind+"]").prop("selected",true);
+                	$("#edit_org_kind").prop("disabled","disabled");
                 	if(null!=response.data[0].salary_model&&undefined !=response.data[0].salary_model && ""!=response.data[0].salary_model.trim()&& response.data[0].salary_model>=0){
                 		
                 		$("#edit_salary_model").find("option[keyvalue="+response.data[0].salary_model+"]").prop("selected",true);
@@ -413,6 +456,9 @@ jQuery(function($) {
             					text: "确定",
             					"class" : "btn btn-primary btn-minier",
             					click: function() {
+            					$('#p_id').removeAttr("disabled");
+            					$('#edit_org_type').removeAttr("disabled");
+            					$('#edit_org_kind').removeAttr("disabled");
             					var org_type = $("#edit_org_type :selected").attr('keyvalue');
         				    	var salary_model = $("#edit_salary_model :selected").attr('keyvalue');
 						    	var customer_no_flag = $("#edit_customer_no_flag :selected").val();
@@ -458,7 +504,7 @@ jQuery(function($) {
 	            								text: '<h5>编辑成功！</h5>',
 	            								class_name: 'gritter-info'
 	            							});
-	            					    	showtree2();
+	            					    	//showtree2();
 	            					    	getWorkgroupListById($("#p_id").val(),"",$("#org_type"));
 
             					    	}else{
@@ -649,7 +695,6 @@ function fillDepartmentSelect (id) {
                 $opt = $('<option foreignid='+response.data[0].foreign_id+' />').val(response.data[0].id).html(response.data[0].display_name).appendTo($allOpts);
 
                 $('#new_p_id').html('').html($allOpts.html());
-                //$('#p_id').html('').html($allOpts.html());
             } else {
                 alert(response.message);
             }
@@ -692,9 +737,9 @@ function getNodeName(id){
 	return nodeName;
 }
 function getWorkshop(selectval){
-	var strs="<option value=''>--请选择--<option>";
+	var strs="<option value=''>--请选择--<option>"; // 
 	$.ajax({
-		url : "/BMS/setting/getAllWorkshopList",
+		url : "../setting/getAllWorkshopList",
 		dataType : "json",
 		data : {
 		},
@@ -719,16 +764,15 @@ function getWorkshop(selectval){
 	});
 }
 function getWorkgroup(parentId){
-	var strs="<option value=''>--请选择--<option>";
 	var id="";
 	if($("#org_type").val()=='3'){
-		id=$("#new_p_id :selected").attr('foreignid');
+		id=$("#new_p_id :selected").prop('foreignid');
 	}else{
-		id="t"+$("#new_p_id :selected").attr('foreignid');
+		id="t"+$("#new_p_id :selected").prop('foreignid');
 	}
 	//alert($("#new_org_type :selected").attr('keyvalue')+" "+$("#new_p_id :selected").attr('foreignid'));
 	$.ajax({
-		url : "/BMS/setting/getWorkgroupList",
+		url : "../setting/getWorkgroupList",
 		dataType : "json",
 		data : {"id":id,
 		},
@@ -736,6 +780,7 @@ function getWorkgroup(parentId){
 			alert(response.message)
 		},
 		success : function(response) {
+			var strs="<option>--请选择--<option>"; 
 			$("#new_name").html("");
 			$.each(response.data, function(index, value) {
 			     strs += "<option value=" + value.id + ">" + value.groupName+ "</option>";
