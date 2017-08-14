@@ -228,10 +228,9 @@
 							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 组织名称： </label>
 							<div class="col-sm-9">
                                 <input style="height: 30px;width:280px" type="text" 
-                                class="input-medium revise carType" id="edit_name" 
-                                onkeyup="value=value.replace(/[^\u4E00-\u9FA5]/g,'')" 
-                                onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\u4E00-\u9FA5]/g,''))"/>							</div>
-						    </div>
+                                class="input-medium revise carType" id="edit_name" readonly="readonly"/>							
+                            </div>
+					    </div>
 					</fieldset>
 					<fieldset>
 						<div class="form-group form-horizontal">

@@ -101,6 +101,7 @@ public class ProductionServiceImpl implements IProductionService {
 				productionDao.updateBusProcess(condMap);
 			}else{
 				condMap.put("last_process_name", lastPlanNode.get("process_name"));
+				//判断上一个计划节点是否扫描，未扫描则提示先扫描上一个计划节点
 				Map<String,Object> scanRecord=productionDao.queryScanLastPlanNode(condMap);
 				if(scanRecord==null){
 					rMap.put("success", false);
@@ -120,6 +121,35 @@ public class ProductionServiceImpl implements IProductionService {
 			
 			rMap.put("success", true);
 			rMap.put("message", "扫描成功！");
+			
+			Map<String,Object> m=new HashMap<String,Object>();
+			m.put("order_id", condMap.get("order_id"));
+			m.put("factory_id", condMap.get("factory_id"));
+			//车辆第一次扫描时，判断工厂订单所有车辆是否全部扫描完成，第一辆车扫描焊装上线时更新工厂订单状态为“生产中”，全部扫描入库完成则更新状态为“已完成”
+			if("焊装上线".equals(condMap.get("plan_node_name"))){
+				int welding_online_count=0;
+				welding_online_count=productionDao.queryWeldingOnlineCount(condMap);
+				if(welding_online_count==0){//第一辆车焊装上线扫描,更新BMS_OR_FACTORY_ORDER status为1：“生产中”					
+					m.put("status", "1");
+					productionDao.updateFactoryOrder(m);
+				}
+			}
+			if("车辆入库".equals(condMap.get("plan_node_name"))){
+				Map<String,Object> info=productionDao.queryWarehouseInfo(condMap);
+				int warehouse_count=(int)info.get("warehouse_count");
+				int factory_order_qty=(int)info.get("production_qty");
+				if(warehouse_count==factory_order_qty-1){//最后一台车入库，更新BMS_OR_FACTORY_ORDER status为2：“已完成”
+					m.put("status", "2");
+					productionDao.updateFactoryOrder(m);
+				}
+			}
+			
+			
+			
+			
+			
+			
+			
 		}else{  // 当前节点已扫描
 			if(partsList.size()>0){
 				productionDao.updateParts(partsList);

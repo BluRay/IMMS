@@ -602,7 +602,9 @@ public class HrBaseDataController extends BaseController {
 			String workgroup_name=data[2]!=null ? data[2].toString().trim() : "";
 			
 			String job_name=data[3]!=null ? data[3].toString().trim() : "";
-			
+			infomap.put("factory", factory_name);
+			infomap.put("workshop", workshop_name);
+			infomap.put("workgroup", workgroup_name);
 			orgId=this.findTreeNodeByName(factory_name);
 			if(!workshop_name.equals("")){
 				orgId=this.findChildNodeByName(workshop_name, orgId);
@@ -717,6 +719,7 @@ public class HrBaseDataController extends BaseController {
 		Map<String, Object> queryMap = new HashMap<String, Object>();
 		String id = request.getParameter("id");
 		queryMap.put("org_id", id);
+		queryMap.put("factory", request.getParameter("factory"));
 		queryMap.put("factory", request.getParameter("factory"));
 		queryMap.put("workshop", request.getParameter("workshop"));
 		queryMap.put("workgroup", request.getParameter("workgroup"));

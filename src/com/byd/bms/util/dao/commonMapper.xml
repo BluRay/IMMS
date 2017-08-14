@@ -57,7 +57,7 @@
 	</select>
 	
 	<select id="queryBusTypeList" parameterType="String" resultType="Map">
-		select id,bus_type_code code,internal_name name from BMS_BASE_BUS_TYPE
+		select id,bus_type_code name,internal_name code from BMS_BASE_BUS_TYPE
 		group by bus_type_code
 	</select>
 	

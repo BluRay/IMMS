@@ -842,6 +842,22 @@
 			and find_in_set(work_date,#{work_date_list})>0 and salary_model=#{salary_model}
 		</if>
 	</update>
+	
+	<select id="queryWeldingOnlineCount" parameterType="Map" resultType="int">
+		select count(id) from BMS_PLAN_BUS where factory_id=#{factory_id} and order_id=#{order_id}
+		and welding_online_date>0
+	</select>
+	
+	<select id="queryWarehouseInfo" parameterType="Map" resultType="Map">
+		select count(b.id) warehouse_count, fo.production_qty
+		from BMS_PLAN_BUS b 
+		left join BMS_OR_FACTORY_ORDER fo on b.order_id=fo.order_id and b.factory_id=fo.factory_id
+		where b.factory_id=#{factory_id} and b.order_id=#{order_id} and b.warehousing_date>0
+	</select>
+	
+	<update id="updateFactoryOrder" parameterType="Map">
+		update BMS_OR_FACTORY_ORDER set status=#{status} where factory_id=#{factory_id} and order_id=#{order_id}
+	</update>
 <!-- ########################### xiong jianwu end#############################-->
 
 	<update id="updateBusMotorNumber" parameterType="map">
@@ -2194,6 +2210,7 @@
 		<if test="reason_content !=null and reason_content !=''">
 			and s.reason_content LIKE CONCAT('%',#{reason_content},'%')
 		</if>
+		order by id desc
 		<if test="start !=null">
 			LIMIT #{start} ,#{length} 
 		</if>		

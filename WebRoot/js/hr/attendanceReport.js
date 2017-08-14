@@ -28,6 +28,7 @@ function addzero(v) {
 
 function ajaxQuery(){
 	$("#divBulkAdd").css("display","none");
+	$(".divLoading").addClass("fade in").show();
 	var conditions={};
 	var factory=$("#factory :selected").text();
 	var workshop=$("#workshop :selected").text();
@@ -219,5 +220,5 @@ function showTable(report_type){
 		$(".dataTables_scrollBody").scrollTop(0);
 	}
     
-    
+	$(".divLoading").hide();
 }

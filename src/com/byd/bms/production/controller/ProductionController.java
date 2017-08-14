@@ -247,6 +247,7 @@ public class ProductionController extends BaseController {
 	 * 保存扫描信息、关键零部件信息、更新bus表对应车辆的latest_process_id
 	 * @return
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping("/enterExecution")
 	@ResponseBody
 	public ModelMap enterExecution(){
@@ -270,6 +271,7 @@ public class ProductionController extends BaseController {
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String curTime = df.format(new Date());
 		String userid=String.valueOf(session.getAttribute("user_id"));
+		String order_id=request.getParameter("order_id");
 		
 		condMap.put("factory_id", factory_id);
 		condMap.put("factory_name", factory_name);
@@ -281,6 +283,7 @@ public class ProductionController extends BaseController {
 		condMap.put("bus_number", bus_number);
 		condMap.put("field_name", field_name.equals("")?"":(field_name+"_date"));
 		condMap.put("order_type", order_type);
+		condMap.put("order_id", order_id);
 		condMap.put("editor_id", userid);
 		condMap.put("edit_date", curTime);
 		
@@ -1609,6 +1612,13 @@ public class ProductionController extends BaseController {
 			String edit_date = df.format(new Date());
 			Map<String,Object> map=new HashMap<String,Object>();
 			map.put("name", name);
+			Map<String,Object> tmpOrderTypeMap = productionService.getTmpOrderTypeList(map);
+			if((int)tmpOrderTypeMap.get("recordsTotal")>0){
+				String message = name+" 已存在";
+				map.put("message", message);
+				model.addAllAttributes(map);
+				return model;
+			}
 			map.put("cost_transfer", cost_transfer);
 			map.put("editor", editor_id);
 			map.put("edit_date", edit_date);
@@ -2030,6 +2040,12 @@ public class ProductionController extends BaseController {
 			map.put("message", e.getMessage());
 		}
 		return model;
+	}
+	/**打印vin号*/
+	@RequestMapping("/printVin")
+	public ModelAndView printVin(){
+		mv.setViewName("production/printVin");
+		return mv;
 	}
 	/****************************  TANGJIN ***************************/
 	

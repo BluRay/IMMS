@@ -114,6 +114,12 @@ public interface IProductionDao {
 	
 	void updateStaffHoursStatus(Map<String, String> condMap);
 	
+	int queryWeldingOnlineCount(Map<String, Object> condMap);
+
+	Map<String, Object> queryWarehouseInfo(Map<String, Object> condMap);
+	
+	void updateFactoryOrder(Map<String, Object> m);
+	
 	/*****************************xiong jianwu end  *****************************/
 
 	/******************* tangjin start**************************/
@@ -202,5 +208,7 @@ public interface IProductionDao {
 	public void verifyOrder(Map<String, Object> m);
 	public void rejectOrder(Map<String, Object> m);
 	public int batchUpdateWorkHour(List<Map<String, Object>> swh_list);
+
+
 	
 }

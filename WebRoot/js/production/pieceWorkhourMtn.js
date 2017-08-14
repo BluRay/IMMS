@@ -548,7 +548,7 @@ function zTreeOnClick(event, treeId, treeNode) {
 	$("#form").css("display","none");
 	
 	if(salary_model ==undefined){
-		alert(team+"未维护计件模式，请联系人资维护计件模式！");
+		alert(team+"未维护计资模式，请联系人资维护计资模式！");
 		return false;
 	}	
 

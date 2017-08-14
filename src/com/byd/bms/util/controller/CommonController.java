@@ -1,27 +1,30 @@
 package com.byd.bms.util.controller;
 
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.byd.bms.util.EmailSender;
+import com.byd.bms.util.EmailSender.TableTable;
+import com.byd.bms.util.EmailSender.TableTable.TdTd;
 import com.byd.bms.util.service.ICommonService;
-
+import com.byd.bms.util.service.impl.MailSenderServiceImpl;
 @Controller
 @RequestMapping("/common")
 public class CommonController extends BaseController {
@@ -604,4 +607,89 @@ public class CommonController extends BaseController {
 		return model;
 	}
 	
+	
+	/**
+	 * 使用公用邮箱发送邮件
+	 * @return
+	 * @throws UnsupportedEncodingException 
+	 */
+	@RequestMapping("sendEmail")
+	@ResponseBody
+	public ModelMap sendEmail() throws UnsupportedEncodingException {
+		model.clear();
+		String thead=request.getParameter("thead");
+		String[] theadarr=thead.split(",");
+		String tbdatalist=request.getParameter("tbdatalist");
+		JSONArray jsa=JSONArray.fromObject(tbdatalist);
+		String mailTo= request.getParameter("mailTo");
+		String cc=request.getParameter("cc");
+		String mainTitle=request.getParameter("title");		
+		String content=request.getParameter("content");
+		
+		request.setCharacterEncoding("UTF-8");
+		// 邮件模块
+		MailSenderServiceImpl mss = new MailSenderServiceImpl();
+
+		JavaMailSenderImpl senderImpl = new JavaMailSenderImpl();
+		// 设定 Mail Server
+		senderImpl.setHost("smtp.byd.com");
+
+		// SMTP验证时，需要用户名和密码
+		senderImpl.setUsername("div19BMS@byd.com");
+		senderImpl.setPassword("rhc3@kxrz");
+		senderImpl.setPort(25);
+		mss.setMailSender(senderImpl);
+		mss.setDefaultFrom("div19BMS@byd.com");
+		// mss.send("duan.qiling@byd.com", "测试", "54321");
+
+		mss.setTemplet("classpath:com/byd/bms/util/emailTemplet.html");
+		mss.setEncode("utf-8");
+		
+		EmailSender emailSender = new EmailSender();
+		emailSender.setTo(mailTo);
+		emailSender.setCc(cc);
+		emailSender.getParam().put("content", content);
+		emailSender.getParam().put("subtitle", "");
+		emailSender.getParam().put("factory", "");
+		emailSender.getParam().put("maintitle", mainTitle);
+		emailSender.setSubject(mainTitle);
+		emailSender.setContent(content);
+		
+		emailSender.setMerge(true);
+		
+		//封装邮件内容表格
+		List<TableTable> tables = new ArrayList<TableTable>();
+		
+		TableTable tableX = emailSender.new TableTable();
+		List<TdTd> theadX = new ArrayList<TdTd>();
+		List<List<TdTd>> tbodyX = new ArrayList<List<TdTd>>();
+		for (int i=0;i<theadarr.length;i++) { //遍历keys封装thead
+	        String key = theadarr[i];
+	        theadX.add(tableX.new TdTd(key));
+		}
+		
+		for(ListIterator lit=jsa.listIterator();lit.hasNext();){
+			JSONObject jso=(JSONObject) lit.next();
+			  List<TdTd> tr = new ArrayList<TdTd>();
+			  /*for (Iterator iter = jso.keys(); iter.hasNext();) {//封装tbody 
+			        String key = (String)iter.next();			        
+					tr.add(tableX.new TdTd(jso.getString(key)));
+			  } */
+			  for (int i=0;i<theadarr.length;i++) { //遍历keys封装thead
+			        String key = theadarr[i];
+			        tr.add(tableX.new TdTd(jso.getString(key)));
+				}
+			  tbodyX.add(tr);
+			  
+		}
+		tableX.setThead(theadX);
+		tableX.setTbody(tbodyX);
+		tables.add(tableX);
+		
+		emailSender.setTables(tables);
+		
+		mss.send(emailSender,model);
+		
+		return model;
+	}
 }

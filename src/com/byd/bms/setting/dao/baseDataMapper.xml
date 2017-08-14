@@ -376,6 +376,9 @@
 		<if test="area !=null and area !=''">
 			and area=#{area}
 		</if>
+		<if test="start !=null and length!=-1">
+			LIMIT #{start} ,#{length} 
+		</if>
 	</select>
 	<select id="getVinRuleTotalCount" parameterType="Map" resultType="int">
 		select count(id) from BMS_BASE_VIN_RULE where 1=1 
@@ -471,7 +474,9 @@
 		<if test="busTypeCode !=null and busTypeCode !=''">
 			and bus_type_code=#{busTypeCode}
 		</if>
-		
+		<if test="start !=null and length!=-1">
+			LIMIT #{start} ,#{length} 
+		</if>
 	</select>
 	<select id="getBusTypeById" parameterType="Map" resultType="com.byd.bms.setting.model.BmsBaseBusType">
 		select id id,

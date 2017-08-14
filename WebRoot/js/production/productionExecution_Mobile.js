@@ -225,6 +225,7 @@ function initPage(){
 		            data: {
 		            	"factory_id" : $('#exec_factory').val(),
 		                "bus_number":$('#vinText').val(),
+		                "order_id":$('#vinText').data("order_id"),
 		                "process_id":$('#exec_process').val(),
 		                "factory_name":$('#exec_factory').find("option:selected").text(),
 		                "workshop_name":$('#exec_workshop').find("option:selected").text(),

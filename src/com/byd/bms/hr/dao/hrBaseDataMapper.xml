@@ -31,7 +31,7 @@
 		<if test="parent_id!=null and parent_id!=''">
 			and t.parent_id=#{parent_id}
 		</if>
-		order by sort_number ASC
+		order by org_kind DESC, sort_number ASC
 	</select>
 	<!-- 添加组织结构 -->
 	<insert id="addOrgData" useGeneratedKeys="true">
@@ -126,8 +126,12 @@
 	<!-- 添加标准人力 -->
 	<insert id="addStandardHumanData" useGeneratedKeys="true" keyProperty="id">
 		<![CDATA[
-			insert into BMS_HR_BASE_STANDARD_HUMAN(type,org_id,factory,workshop,workgroup,job_id,job_no,job_name,standard_humans,deleted,editor_id,edit_date) 
-			values(#{type},#{org_id},#{factory},#{workshop},#{workgroup},#{job_id},#{job_no},#{job_name},#{standard_humans},#{deleted},#{editor_id},#{edit_date})
+
+			insert into BMS_HR_BASE_STANDARD_HUMAN(type,org_id,factory,workshop,workgroup,
+			job_id,job_no,job_name,standard_humans,deleted,editor_id,edit_date) 
+			values(#{type},#{org_id},#{factory},#{workshop},#{workgroup},
+			#{job_id},#{job_no},#{job_name},#{standard_humans},#{deleted},#{editor_id},#{edit_date})
+
 		]]>
 	</insert>
 	<!-- 编辑标准人力-->
@@ -144,17 +148,21 @@
 	</update>
 	<!-- 获得标准人力 -->
 	<select id="getStandardHumanData" parameterType="Map" resultType="Map">
-			SELECT h.id,j.id as job_id,j.job_no,
-              j.job_name,h.standard_humans,h.factory,h.workshop,h.workgroup,
+			SELECT h.id,h.job_id,h.job_no,
+              h.job_name,h.standard_humans,h.factory,h.workshop,h.workgroup,
               (SELECT count(1) FROM BMS_HR_STAFF s WHERE 1=1 
 						AND s.job = h.job_name 
 						AND ifnull(s.plant_org,'')=ifnull(h.factory,'') 
 						AND ifnull(s.workshop_org,'')=ifnull(h.workshop,'') 
 						AND ifnull(s.workgroup_org,'')=ifnull(h.workgroup,'') 
-              ) as realHuman
+
+             ) as realHuman
             FROM BMS_HR_BASE_STANDARD_HUMAN h
-              left join BMS_HR_BASE_JOB j on j.id=h.job_id
-            WHERE h.deleted='0' and j.deleted='0'
+
+            WHERE h.deleted='0'
+              <if test="org_id!=null and org_id!=''">
+              and h.org_id=#{org_id}
+			</if>
               <if test="factory!=null and factory!=''" >
               and h.factory=#{factory}
               </if>
@@ -164,10 +172,11 @@
               <if test="workgroup!=null and workgroup!=''">
               and h.workgroup=#{workgroup}
               </if>
-              <if test="job_id!=null">
+               <if test="job_id!=null and job_id!=''">
+
               and h.job_id=#{job_id}
               </if>
-              <if test="job_no!=null">
+              <if test="job_no!=null and job_no!=''">
               and h.job_no=#{job_no}
               </if>
               <if test="id!=null">

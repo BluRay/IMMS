@@ -212,7 +212,7 @@ function ajaxQuery(){
             leftColumns: 0,
             rightColumns:0
         },
-        paging:false,
+        paging:true,
 		ordering:false,
 		searching: false,
 		bAutoWidth:false,
@@ -220,7 +220,7 @@ function ajaxQuery(){
 		sScrollY: document.documentElement.clientHeight-250 + 'px',
 		scrollX: "100%",
 		/*scrollCollapse: true,*/
-		pageLength: 10,
+		pageLength: 20,
 		pagingType:"full_numbers",
 		lengthChange:false,
 		orderMulti:false,

@@ -945,4 +945,26 @@ function check_All_unAll(tableId, checkall) {
 	}
 }
 
+//使用公用邮箱发送邮件	
+function sendEmail(mailTo,cc,title,thead,tbdatalist,content){
+		$.ajax({
+			url : "common!sendEmail.action",
+			dataType : "json",
+			data : {
+				"mailTo":mailTo,
+				"cc":cc,
+				"title":title,
+				"thead":thead,
+				"tbdatalist":tbdatalist,
+				"content":content
+			},
+			type:"post",
+			error : function(response) {
+				//alert(response.message)
+			},
+			success : function(response) {
+				
+			}
+		})
+	}
 	

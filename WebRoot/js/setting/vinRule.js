@@ -340,7 +340,7 @@ function ajaxQuery(){
             leftColumns: 0,
             rightColumns:0
         },
-        paging:false,
+        paging:true,
 		ordering:false,
 		searching: false,
 		bAutoWidth:false,
