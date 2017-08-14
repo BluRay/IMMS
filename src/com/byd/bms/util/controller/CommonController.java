@@ -692,4 +692,19 @@ public class CommonController extends BaseController {
 		
 		return model;
 	}
+	
+	/**
+	 * @author xiong.jianwu
+	 * 查询用户角色列表
+	 * @return
+	 */
+	@RequestMapping("/getRoleListAuth")
+	@ResponseBody
+	public ModelMap getRoleListAuth(){
+		model.clear();
+		String staff_number = request.getSession().getAttribute("staff_number").toString();
+		commonService.getRoleListAuth(staff_number,model);
+				
+		return model;
+	}
 }

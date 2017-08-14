@@ -264,6 +264,7 @@
 							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 自编号： </label>
 							<div class="col-sm-9">
                                	<select name="" id="edit_customer_no_flag" class="input-large carType">
+                               	    <option value=''>--请选择--</option>
                                		<option value='0'>否</option>
 			                    	<option value='1'>是</option>
 								</select>

@@ -635,15 +635,17 @@ function ajaxQueryTeamStaffDetail(){
 				salary_model=response.salary_model.salary_model;
 				is_customer=response.salary_model.customer_no_flag;
 			}
-			if(response.staff_list.length>0){
-				staff_list=response.staff_list;
-			}
+			staff_list=response.staff_list;
 			
 		}
 	})
 }
 
 function showStaffList(staff_list){
+	if(staff_list.length==0){
+		alert("未维护班组成员！");
+		return false;
+	}
 	var columns=[];
 	if(salary_model=='技能系数'){
 		columns= [

@@ -50,6 +50,12 @@
 	.node-rgl-5:hover {
 		cursor:pointer;
 	}
+	.node-rgl-6{
+		position:relative;z-index:20;height:25px;width:44px;font-size: 14px;
+	}
+	.node-rgl-6:hover {
+		cursor:pointer;
+	}
 	.execution{
 		background-image:url('../images/productionIndex.png');background-repeat:no-repeat;/* background-size:99.9% 99.9%; */
 		width:1100px;height:400px;color: #FFF;font-weight:bold;font-size:9px;text-align:center;overflow-y: hidden; 
@@ -162,6 +168,25 @@
 	.node-print-seat{
 		top: -650px;left: 760px;
 	}
+	.node-debug-area{
+		top: -829px;left: 918px;
+	}
+	.node-testline{
+		top: -829px; left: 966px;
+	}
+	.node-cpk{
+	    position: relative;
+		z-index: 20;
+		height: 35px;
+		width: 35px;
+		font-size: 14px;
+		cursor: pointer;
+		border-radius: 20px;
+		top: -860px;
+		left: 1018px;
+	}
+	
+	
 	.myselect {
 		border: 0px none;
 		-moz-appearance:none;
@@ -252,7 +277,7 @@
 	                  <div title="总装B线上线数" id="node-online-a-b" class="node-rgl-2 node-online-a-b" ></div>
 	                  <div title="总装A线下线数" id="node-offline-a-a" class="node-rgl-2 node-offline-a-a" ></div>
 	                  <div title="总装B线下线数" id="node-offline-a-b" class="node-rgl-2 node-offline-a-b" ></div>
-	                  <div title="总装在制数"  class="node-rgl-3 node-prod-a" onclick="imgFoward('在制','总装')">在制：<span id="node-prod-a" style="color:red"></span></div>
+	                  <div title="总装在制数"  class="node-rgl-3 node-prod-a" onclick="imgFoward('在制','总装')">在制：<span id="node-prod-a" style="color:red"></span></div>                 
 	                  
 	                  <div title="入库数" id="node-warehouse" class="node-rgl-2 node-warehouse" ></div>
 	                  
@@ -263,6 +288,11 @@
 	                  <div title="车身颜色" id="node-print-color" style="width: 100px;height: 30px;" class="node-rgl-5 node-print-color" onclick="imgFoward('车身颜色')"></div>
 	                  <div title="VIN打印" id="node-print-vin" class="node-rgl-5 node-print-vin" onclick="imgFoward('VIN')"></div>
 	                  <div title="座位数" id="node-print-seat" class="node-rgl-5 node-print-seat" onclick="imgFoward('座位数')"></div>
+	                  
+	                  <!-- <div title="调试区" id="node-debug-area" class="node-rgl-6 node-debug-area" onclick="executionFoward('调试区')"></div> -->
+	                  <div title="检测线" id="node-testline" class="node-rgl-6 node-testline" onclick="executionFoward('检测线')"></div>
+                  	  <div title="成品库" id="node-cpk" class="node-cpk" onclick="executionFoward('成品库')"></div>
+                  
                   </div>
                 </div>
 				</div>

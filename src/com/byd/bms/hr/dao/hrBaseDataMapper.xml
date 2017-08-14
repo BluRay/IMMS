@@ -205,7 +205,12 @@
 			AND FIND_IN_SET(s.team_org,#{orgStr})>0
 			and FIND_IN_SET(s.workshop_org,#{orgStr})>0
 		</if>
-
+		<if test="staff_level!=null and staff_level!=''">
+			AND staff_level = CONCAT(#{staff_level},'级')
+		</if>
+		<if test="salary_type!=null and salary_type!=''">
+			AND salary_type = #{salary_type}
+		</if>
 		<if test="staff_number!=null and staff_number!=''">
 			AND( LOCATE(s.staff_number,#{staff_number})>0 OR
 			LOCATE(s.name,#{staff_number})>0 )
@@ -219,6 +224,8 @@
 		<if test="workplace!=null and workplace!=''">
 			AND s.workplace LIKE CONCAT('%',#{workplace},'%')
 		</if>
+		
+		
 		<if test="status!=null and status!=''">
 			AND s.status = #{status}
 		</if>

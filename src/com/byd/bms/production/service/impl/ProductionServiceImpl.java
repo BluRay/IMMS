@@ -129,7 +129,7 @@ public class ProductionServiceImpl implements IProductionService {
 			if("焊装上线".equals(condMap.get("plan_node_name"))){
 				int welding_online_count=0;
 				welding_online_count=productionDao.queryWeldingOnlineCount(condMap);
-				if(welding_online_count==0){//第一辆车焊装上线扫描,更新BMS_OR_FACTORY_ORDER status为1：“生产中”					
+				if(welding_online_count==1){//第一辆车焊装上线扫描,更新BMS_OR_FACTORY_ORDER status为1：“生产中”					
 					m.put("status", "1");
 					productionDao.updateFactoryOrder(m);
 				}
@@ -138,7 +138,7 @@ public class ProductionServiceImpl implements IProductionService {
 				Map<String,Object> info=productionDao.queryWarehouseInfo(condMap);
 				int warehouse_count=(int)info.get("warehouse_count");
 				int factory_order_qty=(int)info.get("production_qty");
-				if(warehouse_count==factory_order_qty-1){//最后一台车入库，更新BMS_OR_FACTORY_ORDER status为2：“已完成”
+				if(warehouse_count==factory_order_qty){//最后一台车入库，更新BMS_OR_FACTORY_ORDER status为2：“已完成”
 					m.put("status", "2");
 					productionDao.updateFactoryOrder(m);
 				}

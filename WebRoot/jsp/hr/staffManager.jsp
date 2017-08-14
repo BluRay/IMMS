@@ -72,7 +72,7 @@
 												<td align="right">&nbsp;员工级别：</td>
 												<td><input id="search_staff_level" style="height:30px;width:120px" placeholder="如F3" class="col-sm-6" type="text"></td>
 												<td>&nbsp;计资方式：</td>
-												<td><select style="width:80px;height:30px;" name="search_salary_type" id="salary_type" class="input-small carSeries">
+												<td><select style="width:80px;height:30px;" name="search_salary_type" id="search_salary_type" class="input-small">
 												<option value="">全部</option><option value="计时">计时</option><option value="计件" >计件</option>
 												</select></td>
 												<td></td><td></td>
@@ -81,9 +81,12 @@
 												<td>工作地点：</td>
 												<td><input id="search_workplace" style="height: 30px;" placeholder="工作地点..." class="col-sm-10" type="text"></td>
 												<td>&nbsp;岗位：</td>
-												<td><select id="search_job_type" style='width:80px;height: 30px;' class="input-small carSeries">
+												<!--
+												<td>
+												<select id="search_job_type" style='width:80px;height: 30px;' class="input-small carSeries">
 													<option value="">全部</option><option value="0">管理类</option><option value="1">技术专家</option><option value="2">技能型</option><option value="3">操作型</option>
-												</select></td>
+												</select>
+												</td>-->
 												<td><input id="search_job"  style="height: 30px; width:100px;" type="text" class="input-medium revise" placeholder="岗位名称" />
 												<select id="search_stauts"><option value="在职">在职</option><option value="离职">离职</option></select>
 												</td>

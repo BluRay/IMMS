@@ -519,5 +519,12 @@ public class CommonServiceImpl implements ICommonService {
 		List<Map<String, Object>> teamList=commonDao.queryTeamList(condMap);
 		return teamList;
 	}
+	@Override
+	public void getRoleListAuth(String staff_number, ModelMap model) {
+		List<Map<String,Object>> datalist=new ArrayList<Map<String,Object>>();
+		datalist=commonDao.queryRoleListAuth(staff_number);
+		model.put("data", datalist);
+		
+	}
 	
 }

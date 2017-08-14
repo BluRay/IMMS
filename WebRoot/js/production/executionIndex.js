@@ -1,4 +1,5 @@
 var line_process = [];
+var role_list=[];
 var workshop_p;
 $(document).ready(
 			function() {				
@@ -22,6 +23,7 @@ $(document).ready(
 				}
 				
 				canvas.onclick=function(e){
+					role_list=getRoleList();
 					var p=getEventPosition(e);
 					//alert(p.x+"/"+p.y);
 					var x=p.x;
@@ -30,6 +32,11 @@ $(document).ready(
 					var rect=getRect(x,y);
 					//alert(rect.x+"/"+rect.y);
 					//alert(rect.name);
+					if($.inArray("下线扫描", role_list)==-1&&rect.plan_node.indexOf("下线")>0){
+						alert("抱歉，您没有该工序扫描权限！");
+						return false;
+					}
+					
 					if(rect.code&&rect.monitorFlag=='1'){
 						//alert(rect.lineName);
 						window.location.href="execution?factory_id="+rect.factoryId+
@@ -183,6 +190,7 @@ $(document).ready(
 					rect.lineName=process.lineName;
 					rect.factoryId=process.factoryId;
 					rect.monitorFlag=process.monitor_flag;
+					rect.plan_node=process.plan_node;
 					rect_list.push(rect);
 					ctx.closePath();
 

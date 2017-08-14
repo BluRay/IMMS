@@ -206,7 +206,7 @@ public class HrBaseDataController extends BaseController {
 			conditionMap
 					.put("sort_number", request.getParameter("sort_number"));
 			conditionMap.put("manager", request.getParameter("manager"));
-			conditionMap.put("foreign_id", request.getParameter("foreign_id"));
+			conditionMap.put("foreign_id", request.getParameter("foreign_id")!="" ? request.getParameter("foreign_id") : null);
 			conditionMap.put("responsibilities",
 					request.getParameter("responsibilities"));
 			conditionMap.put("deleted", "0");
@@ -1264,7 +1264,7 @@ public class HrBaseDataController extends BaseController {
 				
 				//导入信息准备
 				Map<String, Object> conditionMap = new HashMap<String, Object>();
-				conditionMap.put("staff_numbers", staff_numbers.toString().trim());
+				conditionMap.put("staff_numbers", staff_numbers.toString().trim());				
 				List<String> list = hrBaseDataService.getStaffListByStaffNumbers(conditionMap);
 				
 				List<Map<String, Object>> addList = new ArrayList<Map<String,Object>>();
@@ -1394,7 +1394,7 @@ public class HrBaseDataController extends BaseController {
 		condMap.put("workshop", request.getParameter("workshop"));
 		condMap.put("workgroup", request.getParameter("workgroup"));
 		condMap.put("team", request.getParameter("team"));
-		condMap.put("orderId", request.getParameter("orderId"));
+		condMap.put("order_no", request.getParameter("orderId"));
 		condMap.put("effctiveDateStart", request.getParameter("effctiveDateStart"));
 		condMap.put("effctiveDateEnd", request.getParameter("effctiveDateEnd"));
 		

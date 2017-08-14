@@ -215,7 +215,6 @@ function getOrgInfo(treeNode){
 
 //----------START bootstrap initTable ----------
 function initTable() {
-	
     $table.bootstrapTable({
         height: getHeight(),
         url:'getStaffList',

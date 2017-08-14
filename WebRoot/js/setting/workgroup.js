@@ -389,16 +389,10 @@ function getWorkgroupListById(id,workshopId,nodeLayer){
 		lengthChange:false,
 		orderMulti:false,
 		language: {
-			//emptyTable:"抱歉，未查询到数据！",
-			//info:"共计 _TOTAL_ 条，当前第 _PAGE_ 页 共 _PAGES_ 页",
-			//infoEmpty:"",
-//			paginate: {
-//			  first:"首页",
-//		      previous: "上一页",
-//		      next:"下一页",
-//		      last:"尾页",
-//		      loadingRecords: "请稍等,加载中...",		     
-//			}
+			processing: "正在查询，请稍后...",
+			emptyTable:"",					     
+			infoEmpty:"",
+			zeroRecords:"未查询到数据！"		     
 		},
 		ajax:function (data, callback, settings) {
 			var param ={

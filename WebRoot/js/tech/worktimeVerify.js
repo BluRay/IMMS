@@ -399,7 +399,7 @@ function generateWorkhourTb(swhlist,caculate) {
 	$("#workhour_list").html("");
 	$.each(swhlist, function(index, swh) {
 		var tr = $("<tr style='padding:5px'/>");
-		if ((swh.status=="已锁定")||(swh.status=="已驳回")||(swh.status=="已审批")) {
+		if (swh.status=="已锁定") {
 			$("<td />").html(swh.status).appendTo(tr);
 		} else {
 			$("<td />").html("<input type='checkbox' >").appendTo(tr);

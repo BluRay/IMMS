@@ -820,15 +820,17 @@ function expandLevel(treeObj,node,level){
     	treeObj.expandNode(node, true, false, false);  
     	return false;
     }
-    for(var i=0;i<childrenNodes.length;i++)  
-    {  
-        treeObj.expandNode(childrenNodes[i], true, false, false);  
-        level=level-1;  
-        if(level>0)  
+    if(childrenNodes!=undefined&&childrenNodes.length>0){
+    	for(var i=0;i<childrenNodes.length;i++)  
         {  
-            expandLevel(treeObj,childrenNodes[i],level);  
-        }  
-    }  
+            treeObj.expandNode(childrenNodes[i], true, false, false);  
+            level=level-1;  
+            if(level>0)  
+            {  
+                expandLevel(treeObj,childrenNodes[i],level);  
+            }  
+        } 
+    } 
 }
 /**
  * js 两个数字相加减消除进度损失
@@ -948,7 +950,7 @@ function check_All_unAll(tableId, checkall) {
 //使用公用邮箱发送邮件	
 function sendEmail(mailTo,cc,title,thead,tbdatalist,content){
 		$.ajax({
-			url : "common!sendEmail.action",
+			url : "/BMS/common/sendEmail",
 			dataType : "json",
 			data : {
 				"mailTo":mailTo,
@@ -967,4 +969,29 @@ function sendEmail(mailTo,cc,title,thead,tbdatalist,content){
 			}
 		})
 	}
+
+function getRoleList(){
+	var role_list=[];
+	$.ajax({
+		url : "/BMS/common/getRoleListAuth",
+		dataType : "json",
+		async:false,
+		data : {
+			
+		},
+		type:"post",
+		error : function(response) {
+			//alert(response.message)
+		},
+		success : function(response) {
+			//alert(response.data.length)
+			$.each(response.data,function(i,role){
+				role_list.push(role.role_name);
+			})
+			
+		}
+	})
+	return role_list;
+}
+
 	

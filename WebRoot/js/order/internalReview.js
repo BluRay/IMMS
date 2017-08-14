@@ -8,7 +8,7 @@ var dt;
 
 $(document).ready(function(){
 	cur_year = new Date().getFullYear();
-	
+	$("#search_productive_year").val(cur_year)
 	getFactorySelect();
 	getOrderNoSelect("#search_order_no","#orderId");
 	$(".btnQuery").on("click",function(){

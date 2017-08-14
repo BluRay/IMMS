@@ -1055,7 +1055,7 @@
 	
 	<select id="queryTaskMaterielInfo" parameterType="Map" resultType="Map">
 		SELECT t.*,u.display_name FROM BMS_TECH_MATERIAL t 
-		LEFT JOIN BMS_BASE_USER u on u.staff_number=t.material_checker_id
+		LEFT JOIN BMS_BASE_USER u on u.staff_number=CONCAT(t.material_checker_id,'')
 		WHERE t.tech_task_id = #{taskid}
 	</select>
 	

@@ -52,8 +52,8 @@ $(document).ready(function(){
 
 function initPage(){
 	cur_year = new Date().getFullYear();
-	cur_year = new Date().getFullYear();
-	$("#search_productive_year").html('<option value="'+cur_year+'">'+cur_year+'</option><option value="'+(cur_year-1)+'">'+(cur_year-1)+'</option><option value="'+(cur_year+1)+'">'+(cur_year+1)+'</option><option value="'+(cur_year+2)+'">'+(cur_year+2)+'</option>');	
+	$("#search_productive_year").val(cur_year)
+	/*$("#search_productive_year").html('<option value="'+cur_year+'">'+cur_year+'</option><option value="'+(cur_year-1)+'">'+(cur_year-1)+'</option><option value="'+(cur_year+1)+'">'+(cur_year+1)+'</option><option value="'+(cur_year+2)+'">'+(cur_year+2)+'</option>');	*/
 	getOrderNoSelect("#search_order_no","#orderId");
 	getOrderNoSelect("#order","#order_id",function(value){
 		$("#order").attr("order_qty",value.orderQty);

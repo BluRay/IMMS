@@ -328,7 +328,7 @@
 		<if test="factory !=null and factory !=''">
 			and find_in_set(fo.factory_id,#{factory})
 		</if>
-			order by o.order_no desc
+			order by o.order_no desc,fo.factory_id,c.id
 		<if test="start !=null and length !='-1'">
 			limit #{start},#{length}
 		</if>
@@ -442,7 +442,7 @@
 		<if test="status !=null and status !=''">
 			and fo.status=#{status}
 		</if>
-		 order by o.id,fo.factory_id desc
+		 order by o.id desc,fo.factory_id
 		<if test="start !=null and length !='-1'">
 			limit #{start},#{length}
 		</if>

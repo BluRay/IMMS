@@ -193,7 +193,7 @@
 	<select id="getProcessList" parameterType="Map" resultType="Map">
 		select p.*,k.key_name plan_node_name,u.username editor
 		from BMS_BASE_PROCESS p
-		left join BMS_BASE_KEY k on p.plan_node_id=k.id
+		left join BMS_BASE_KEY k on p.plan_node_id=k.value and k.key_code='PLAN_CODE'
 		left join BMS_BASE_USER u on p.editor_id=u.id
 		where 1=1 and p.delete_flag !='1'
 		<if test="factory !=null and factory !='全部'">

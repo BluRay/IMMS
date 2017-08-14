@@ -819,4 +819,10 @@
 		</choose>		
 	</select>
 	
+	<select id="queryRoleListAuth" parameterType="String" resultType="Map">
+		SELECT distinct r.role_name
+		FROM BMS_BASE_USER_ROLE ur
+		LEFT JOIN BMS_BASE_ROLE r on ur.role_id=r.id
+		WHERE ur.staff_number=#{staff_number}
+	</select>
 </mapper>

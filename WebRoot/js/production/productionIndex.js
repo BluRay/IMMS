@@ -58,7 +58,7 @@ $(document).ready(function () {
 			window.location.href='/BMS/production/certificationPrint';
 		}
 		if(name=='发车'){
-			window.location.href='busDispatch!planListPage.action';
+			window.location.href='/BMS/plan/busDispatch';
 		}
 		if(name=='车身号'){
 			window.location.href='/BMS/production/showBusNoPrint';

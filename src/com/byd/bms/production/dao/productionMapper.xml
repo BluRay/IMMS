@@ -5,8 +5,9 @@
 <!-- ########################### xiong jianwu start#############################-->
 	<select id="queryLineProcessList" parameterType="Map" resultType="Map">
 		SELECT p.line line_name,p.workshop workshop_name,p.factory factory_name,
-		concat('[',group_concat('{"id":',p.id,',"code":"',TRIM(p.process_code),'","monitor_flag":"',p.monitory_point_flag,'","name":"',TRIM(p.process_name),'"}' order by p.id),']') process_list
+		concat('[',group_concat('{"id":',p.id,',"code":"',TRIM(p.process_code),'","monitor_flag":"',p.monitory_point_flag,'","name":"',TRIM(p.process_name),'","plan_node":"',ifnull(k.key_name,''),'"}' order by p.id),']') process_list
 		FROM BMS_BASE_PROCESS p
+		left join BMS_BASE_KEY k on k.value=p.plan_node_id and k.key_code='PLAN_CODE'
 		where p.factory=#{factory} and p.workshop=#{workshop} and p.delete_flag='0'
 		group by p.line
 	</select>
@@ -16,7 +17,7 @@
 		from BMS_PD_SCAN_RULE r
 		left join BMS_BASE_PROCESS p on r.factory=p.factory and r.workshop=p.workshop 
 		and p.line=#{line} and p.process_name=r.process_name 
-		left join BMS_BASE_KEY k on k.id=p.plan_node_id 
+		left join BMS_BASE_KEY k on k.value=p.plan_node_id and k.key_code='PLAN_CODE'
 		where p.monitory_point_flag='1' and p.delete_flag='0' 
 		and r.factory=#{factory} and r.workshop=#{workshop} and p.line=#{line} 
 		and r.order_type=#{order_type}
@@ -70,7 +71,7 @@
 		FROM BMS_PD_SCAN_RULE r
 		LEFT JOIN BMS_BASE_PROCESS p on r.factory=p.factory and r.workshop=p.workshop 
 		and p.process_name=r.process_name and p.line=#{line_name}
-		LEFT JOIN BMS_BASE_KEY k on k.id=p.plan_node_id
+		LEFT JOIN BMS_BASE_KEY k on k.value=p.plan_node_id and k.key_code='PLAN_CODE'
 		where p.plan_node_id !=0 and r.factory=#{factory_name} <!-- and r.workshop=#{workshop_name} --> and r.sequence&lt;=(
 			select r1.sequence-1 from BMS_PD_SCAN_RULE r1 where r1.factory=#{factory_name} <!-- and r1.workshop=#{workshop_name} -->
 			and r1.process_name=#{process_name} and r1.order_type=#{order_type})

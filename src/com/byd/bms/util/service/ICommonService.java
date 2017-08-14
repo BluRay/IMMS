@@ -132,4 +132,11 @@ public interface ICommonService {
 	public List<Map<String,String>> queryStaffInfo(Map<String, Object> conditionMap);//查询员工信息
 
 	List<Map<String,Object>> getTeamSelect(Map<String, Object> condMap);
+	/**
+	 * @author xiong.jianwu
+	 * 查询用户角色列表
+	 * @param staff_number
+	 * @param model
+	 */
+	void getRoleListAuth(String staff_number, ModelMap model);
 }
