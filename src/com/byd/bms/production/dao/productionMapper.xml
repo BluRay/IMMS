@@ -509,7 +509,7 @@
 	</select>
 	<select id="getCertificationInfo" parameterType="String" resultType="Map">
 		select t.bus_type_code,t.brand,t.vehicle_model,oc.tire_type,t.motor_model,t.chassis_model,t.motor_power,
-		t.max_weight,t.battery_model,b.sequence,t.battery_capacity,concat(t.passengers,'/',b.bus_seats) passengers,
+		t.max_weight,t.battery_model,b.sequence,t.battery_capacity,b.passenger_num AS passengers,b.spring_num,
 		b.nameplate_print_date AS productive_date,t.rated_voltage,b.bus_number,b.vin,b.ccczs_date,b.dpgg_date,b.zcgg_date,
 		b.dp_production_date,b.zc_production_date,
 		case when b.right_motor_number is not null then CONCAT(b.left_motor_number,'/',b.right_motor_number)
@@ -851,9 +851,10 @@
 	</select>
 	
 	<select id="queryWarehouseInfo" parameterType="Map" resultType="Map">
-		select count(b.id) warehouse_count, fo.production_qty
+		select count(b.id) warehouse_count, 
+		(select fo.production_qty from BMS_OR_FACTORY_ORDER fo 
+		where fo.order_id=#{order_id} and fo.factory_id=#{factory_id}) production_qty
 		from BMS_PLAN_BUS b 
-		left join BMS_OR_FACTORY_ORDER fo on b.order_id=fo.order_id and b.factory_id=fo.factory_id
 		where b.factory_id=#{factory_id} and b.order_id=#{order_id} and b.warehousing_date>0
 	</select>
 	
@@ -1191,7 +1192,7 @@
 		where
 		b.factory_id=#{factory_id} and b.warehousing_date !='' and b.dispatch_date =''
 		<if test="order_no !=null and order_no !=''">
-			and b.order_id=#{order_no}
+			and b.order_id=(SELECT id from BMS_OR_ORDER WHERE order_no = #{order_no})
 		</if>
 		) h,
 		(SELECT count(b.bus_number) wp_wpi_count FROM BMS_PLAN_BUS b
@@ -2745,10 +2746,10 @@
 		left join BMS_PD_TMP_ORDER o on
 		h.temp_order_id=o.id
 		where h.status in ('0','2')
-		<if test="factory !=null">
+		<if test="factory !=null and factory !=''">
 			and h.factory = #{factory}
 		</if>
-		<if test="workshop !=null">
+		<if test="workshop !=null and workshop !=''">
 			and find_in_set(h.workshop,#{workshop})>0
 		</if>
 		<if test="tmp_order_no !=null and tmp_order_no !=''">
@@ -2764,10 +2765,10 @@
 		left join BMS_PD_TMP_ORDER o on
 		h.temp_order_id=o.id
 		where 1=1
-		<if test="factory !=null">
+		<if test="factory !=null and factory !=''">
 			and h.factory = #{factory}
 		</if>
-		<if test="workshop !=null">
+		<if test="workshop !=null and workshop !=''">
 			and find_in_set(h.workshop,#{workshop})>0
 		</if>
 		<if test="tmp_order_no !=null and tmp_order_no !=''">
@@ -2801,10 +2802,10 @@
 			<if test="apply_date_end !=null and apply_date_end !=''">
 				<![CDATA[and substr(o.apply_date,1,10)<=#{apply_date_end}]]>
 			</if>
-		<if test="factory !=null">
+		<if test="factory !=null and factory !=''">
 			and o.factory = #{factory}
 		</if>
-		<if test="workshop !=null">
+		<if test="workshop !=null and workshop !=''">
 			and find_in_set(o.workshop,#{workshop})>0
 		</if>
 		<if test="actionType=='hourVerify'">
@@ -2833,10 +2834,10 @@
 		left join BMS_PD_TMP_ORDER o on
 		h.temp_order_id=o.id
 		where h.status in ('0','2')
-		<if test="factory !=null">
+		<if test="factory !=null and factory !=''">
 			and h.factory = #{factory}
 		</if>
-		<if test="workshop !=null">
+		<if test="workshop !=null and workshop !=''">
 			and find_in_set(h.workshop,#{workshop})>0
 		</if>
 		<if test="tmp_order_no !=null and tmp_order_no !=''">
@@ -2849,7 +2850,7 @@
 		<if test="tmp_order_no !=null and tmp_order_no !=''">
 			and o.tmp_order_no like concat('%',#{tmp_order_no},'%')
 		</if>
-		<if test="status !=null and status !='all'">
+		<if test="status !=null and status !=''">
 			and o.status = #{status}
 		</if>
 		<if test="reason_content !=null and reason_content !=''">
@@ -2861,10 +2862,10 @@
 		<if test="apply_date_end !=null and apply_date_end !=''">
 			<![CDATA[and substr(o.apply_date,1,10)<=#{apply_date_end}]]>
 		</if>
-		<if test="factory !=null">
+		<if test="factory !=null and factory !=''">
 			and o.factory = #{factory}
 		</if>
-		<if test="workshop !=null">
+		<if test="workshop !=null and workshop !=''">
 			and find_in_set(o.workshop,#{workshop})>0
 		</if>
 		<if test="actionType=='hourVerify'">

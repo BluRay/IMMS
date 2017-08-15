@@ -628,7 +628,7 @@ function getWorkgroupListById(id,org_kind,org_type){
 		            {"title":"组织类型","class":"center","data":"org_kind","render": function ( data, type, row ) {
 	                    return data=="0" ? "管理型" : "生产型"
 	                },"defaultContent": ""},
-		            {"title":"英文名称","class":"center","data":"name_en","defaultContent": ""},
+		            {"title":"英文名称","class":"center","data":"name","defaultContent": ""},
 		            {"title":"计资模式","class":"center","data":"salary_model","defaultContent": ""},
 		            {"title":"自编号","class":"center","data":"customer_no_flag","defaultContent": "","render": function ( data, type, row ) {
 	                    if(data==null){return "否"}else{return data=="1" ? "是" : "否"}}

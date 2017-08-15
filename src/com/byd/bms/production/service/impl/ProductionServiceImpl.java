@@ -136,8 +136,8 @@ public class ProductionServiceImpl implements IProductionService {
 			}
 			if("车辆入库".equals(condMap.get("plan_node_name"))){
 				Map<String,Object> info=productionDao.queryWarehouseInfo(condMap);
-				int warehouse_count=(int)info.get("warehouse_count");
-				int factory_order_qty=(int)info.get("production_qty");
+				int warehouse_count=Integer.parseInt(info.get("warehouse_count").toString());
+				int factory_order_qty=Integer.parseInt(info.get("production_qty").toString());
 				if(warehouse_count==factory_order_qty){//最后一台车入库，更新BMS_OR_FACTORY_ORDER status为2：“已完成”
 					m.put("status", "2");
 					productionDao.updateFactoryOrder(m);

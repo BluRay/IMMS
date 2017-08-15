@@ -468,7 +468,7 @@ function generateWorkhourTb(swhlist, caculate) {
 		$("<td />").html(swh.job).appendTo(tr);
 		var disabled = (swh.status != '已驳回') ? 'disabled': "";
 		$("<td />").html("<input class='input-small edit_work_hour' "+ disabled
-								+ " onchange=\"checkEditWorkHours(this)\" style='text-align:center;margin-bottom: 0px;' type='text' value='"
+								+ " onchange=\"checkEditWorkHours(this)\" onkeydown=\"nextEditWorkHours(this)\" style='text-align:center;margin-bottom: 0px;' type='text' value='"
 								+ workhour + "' old_value='" + workhour + "'>").appendTo(tr);
 		$("<td />").html(swh.team_org).appendTo(tr);
 		$("<td />").html(swh.workgroup_org).appendTo(tr);
@@ -484,6 +484,13 @@ function generateWorkhourTb(swhlist, caculate) {
 		}
 	});
 	ready_hour = ready.toFixed(2);
+}
+
+function nextEditWorkHours(obj){
+	console.log("-->nextEditWorkHours");
+	if (event.keyCode == "13") {
+		$(obj).parent().parent().next().find("input").focus();
+	}
 }
 
 function checkEditWorkHours(obj){
@@ -516,7 +523,7 @@ function addWorkHourItem(staffId,cardNo, staffName, staffPost, workHour, subgrou
 					+ cardNo + "' staffId='"+staffId+"' " + cardNoDisabled + ">").appendTo(tr);
 	$("<td class='staff_name' />").html(staffName).appendTo(tr);
 	$("<td class='staff_post' />").html(staffPost).appendTo(tr);
-	$("<td />").html("<input class='input-small work_hour' onchange=\"checkWorkHours(this)\" style='text-align:center;margin-bottom: 0px;' type='text' value="+ workHour + " >").appendTo(tr);
+	$("<td />").html("<input class='input-small work_hour' onchange=\"checkWorkHours(this)\" onkeydown=\"nextEditWorkHours(this)\" style='text-align:center;margin-bottom: 0px;' type='text' value="+ workHour + " >").appendTo(tr);
 	$("<td class='staff_subgroup' />").html(subgroup).appendTo(tr);
 	$("<td class='staff_group' />").html(group).appendTo(tr);
 	$("<td class='staff_workshop' />").html(workshop).appendTo(tr);

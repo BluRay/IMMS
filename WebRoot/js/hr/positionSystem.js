@@ -10,12 +10,16 @@ $(document).ready(function(){
 	}); 
 	$("#btnBulkAdd").click (function () {
 		$(".dt-buttons").css("margin-top","-120px");
+		var head_width=$(".dataTables_scrollHead").width();
+        $(".dataTables_scrollHead").css("width",head_width-20);
 		$("#divBulkAdd").show();
 	});
 	
 	$("#btnBulkHide").click (function () {
 		$("#divBulkAdd").hide();
 		$(".dt-buttons").css("margin-top","-50px");
+		var head_width=$(".dataTables_scrollHead").width();
+        $(".dataTables_scrollHead").css("width",head_width+20);
 	});
 	$(document).on("click","#btnAdd",function(){
 		
@@ -155,7 +159,7 @@ function ajaxQuery(){
         bLengthChange: true, //改变每页显示数据数量
         iDisplayLength:10,
 		dom: 'Bfrtip',
-		lengthMenu: [[10, 20, 50, -1],[ 'Show 10 rows', 'Show 20 rows', 'Show 50 rows', 'All' ]],
+		lengthMenu: [[20, 30, 50, -1],[ 'Show 20 rows', 'Show 30 rows', 'Show 50 rows', 'All' ]],
 	    buttons: [
 	        {extend:'excelHtml5',title:'data_export',className:'black',text:'<i class=\"fa fa-file-excel-o bigger-130\" tooltip=\"导出excel\"></i>'},
 	        {extend:'pageLength',}
@@ -166,7 +170,7 @@ function ajaxQuery(){
 		destroy: true,
 		sScrollY: document.documentElement.clientHeight-250 + 'px',
 		scrollX: "100%",
-		scrollCollapse: true,
+		scrollCollapse: false,
 		pageLength: 20,
 		pagingType:"full_numbers",
 		lengthChange:true,
@@ -208,17 +212,19 @@ function ajaxQuery(){
                     returnData.recordsFiltered = result.total;//后台不实现过滤功能，每次查询均视作全部结果
                     returnData.data = result.rows;//返回的数据列表
                     callback(returnData);
+                    var head_width=$(".dataTables_scrollHead").width();
+                    $(".dataTables_scrollHead").css("width",head_width-10);
                 }
             });
 		
 		},
 		columns: [
-			{"title":"<input type='checkbox' id='selectAll' onclick='selectAll()'/>","class":"center","data":"id","render": function ( data, type, row ) {
+			{"title":"<input type='checkbox' id='selectAll' onclick='selectAll()'/>","class":"center","width":"30","data":"id","render": function ( data, type, row ) {
 			    return "<input id='id' value='"+data+"' type='hidden' /><input type='checkbox' fid='cb_"+data+"'>";
 			},"defaultContent": ""},
-            {"title":"岗位编号","class":"center","data":"job_no","defaultContent": ""},
-            {"title":"岗位名称","class":"center","data":"job_name","defaultContent": ""},
-            {"title":"基本职责","class":"center","data":"basic_besponsibilit","render": function ( data, type, row ) {
+            {"title":"岗位编号","class":"center","width":"70","data":"job_no","defaultContent": ""},
+            {"title":"岗位名称","class":"center","width":"120","data":"job_name","defaultContent": ""},
+            {"title":"基本职责","class":"center","width":"200","data":"basic_besponsibilit","render": function ( data, type, row ) {
 			    return data!='' ? '<div title=\''+data+'\'>'+data.substring(0,8)+'...</div>' : '';
 			},"defaultContent": ""},
             {"title":"任职资格","class":"center","data":"requirements","render": function ( data, type, row ) {
@@ -230,16 +236,15 @@ function ajaxQuery(){
             {"title":"上岗所需培训","class":"center","data":"required_train","render": function ( data, type, row ) {
 			    return data!='' ? '<div title=\''+data+'\'>'+data.substring(0,8)+'...</div>' : '';
 			},"defaultContent": ""},	            		            
-            {"title":"维护人","class":"center","data": "editor","defaultContent": ""},
-            {"title":"维护时间","class":"center","data":"edit_date","defaultContent": ""},
-            {"title":"编辑","class":"center","data":null,"render":function(data,type,row){
+            {"title":"维护人","class":"center","width":"68","data": "editor","defaultContent": ""},
+            {"title":"维护时间","class":"center","width":"138","data":"edit_date","defaultContent": ""},
+            {"title":"编辑","class":"center","width":"38","data":null,"render":function(data,type,row){
             	return "<i class=\"ace-icon fa fa-pencil bigger-130 edit\" style='color:green;cursor: pointer;'></i>"},
             	"defaultContent": "<i class=\"ace-icon fa fa-pencil bigger-130\" style='color:green;cursor: pointer;'></i>"}
           ],
 	});
 	$(".dt-buttons").css("margin-top","-50px").find("a").css("border","1px");
 	$(".dt-buttons").css("padding-right","20px");
-	
 	$("#tableData_info").addClass('col-xs-5');
 	$("#tableData_paginate").addClass('col-xs-7');
 }

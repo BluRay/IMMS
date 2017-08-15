@@ -77,10 +77,10 @@
 					</form>
 				</div>
 				<div class="row"  >
-					<div class="col-xs-12"  style="width:100%">
+					<div class="col-xs-12" style="width: calc(100vw + 20px)">
 						<table id="tableData" 
 							class="table table-striped table-bordered table-hover"
-							style="font-size: 12px;overflow:auto;table-layout:fixed" >
+							style="font-size: 12px;width:1120px;overflow:auto;table-layout:fixed" >
 						</table>
 					</div>
 				</div>
@@ -91,7 +91,7 @@
 				    <input type="hidden" id="editId">
 					<div class="form-group">
 					    <div>
-							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newOrderName">*&nbsp;岗位编号</label>
+							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right">*&nbsp;岗位编号</label>
 							<div class="col-sm-8">
 							    <input type="hidden" id="editId" />
 								<input type="text" class="input-medium" id="edit_job_no" />
@@ -100,7 +100,7 @@
 					</div>
 					<div class="form-group">
 					    <div>
-							<label  class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newOrderName">*&nbsp;岗位名称</label>
+							<label  class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right">*&nbsp;岗位名称</label>
 							<div class="col-sm-8">
 								<input type="text" class="input-medium" id="edit_job_name" />
 							</div>
@@ -108,7 +108,7 @@
 					</div>
 					<div class="form-group">
 					    <div>
-							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newBrand">*&nbsp;基本职责</label>
+							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right">*&nbsp;基本职责</label>
 							<div class="col-sm-8">
 								<textarea class="input-medium" id="edit_basic_besponsibilit" style="width: 355px" rows="3"></textarea>
 							</div>
@@ -116,7 +116,7 @@
 					</div>
 					<div class="form-group">
 					    <div>
-							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newManufacturer">*&nbsp;任职资格	</label>
+							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right">*&nbsp;任职资格</label>
 							<div class="col-sm-8">
 								<textarea class="input-medium" id="edit_requirements" style="width: 355px" rows="3"></textarea>
 							</div>
@@ -124,7 +124,7 @@
 					</div>
 					<div class="form-group">
 					    <div>
-							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newVehicleModel">*&nbsp;具备技能</label>
+							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right">*&nbsp;具备技能</label>
 							<div class="col-sm-8">
 								<textarea class="input-medium" id="edit_skill_and_capability" style="width: 355px" rows="3"></textarea>
 							</div>
@@ -132,7 +132,7 @@
 					</div>
 					<div class="form-group">
 					    <div>
-							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newDriveMotor">*&nbsp;上岗所需培训</label>
+							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right">*&nbsp;上岗所需培训</label>
 							<div class="col-sm-8">
 								<textarea class="input-medium" id="edit_required_train" style="width: 355px" rows="3"></textarea>
 							</div>

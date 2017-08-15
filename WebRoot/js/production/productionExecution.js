@@ -55,24 +55,25 @@ $(document).ready(function () {
 		if($('#exec_workshop :selected').text()=='底盘'){
 
 			$.each(parts_list,function(i,parts){
-				if(parts.parts_id !=undefined&&parts.process==$("#exec_processname").val()&&(parts.parts_name=='VIN编码'||parts.parts_name=='左电机号'||parts.parts_name=='右电机号')){
+				if(parts.process==$("#exec_processname").val()&&(parts.parts_name=='VIN编码'||parts.parts_name=='左电机号'||parts.parts_name=='右电机号')){
 					if(parts.batch==undefined||parts.batch.trim().length==0){
 						enterflag=false;
 						alert(plan_node+"扫描前，请将零部件信息录入完整！");
 						return false;
 					}
 				}
-				if(parts.parts=='VIN编码'&&parts.batch!=vin&&parts.process==$("#exec_processname").val()){
+
+				if(parts.parts_name=='VIN编码'&&parts.batch!=vin&&parts.process==$("#exec_processname").val()){
 					alert("VIN编码校验失败，请核对该车的VIN编码！");
 					enterflag=false;
 					return false;
 				}
-				if(parts.parts=='左电机号'&&parts.batch!=left_motor_number&&parts.process==$("#exec_processname").val()){
+				if(parts.parts_name=='左电机号'&&parts.batch!=left_motor_number&&parts.process==$("#exec_processname").val()){
 					alert("左电机号校验失败，请核对该车的左电机号！");
 					enterflag=false;
 					return false;
 				}
-				if(parts.parts=='右电机号'&&parts.batch!=right_motor_number&&parts.process==$("#exec_processname").val()){
+				if(parts.parts_name=='右电机号'&&parts.batch!=right_motor_number&&parts.process==$("#exec_processname").val()){
 					alert("右电机号校验失败，请核对该车的右电机号！");
 					enterflag=false;
 					return false;
@@ -256,13 +257,13 @@ $(document).ready(function () {
                 				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i> 校验</h4></div>",
                 				title_html: true,
                 				buttons: [ 
-                					{
+                					/*{
                 						text: "取消",
                 						"class" : "btn btn-minier",
                 						click: function() {
                 							$( this ).dialog( "close" ); 
                 						} 
-                					},
+                					},*/
                 					{
                 						text: "确定",
                 						"class" : "btn btn-primary btn-minier",
@@ -300,6 +301,7 @@ $(document).ready(function () {
             type: "get",
             dataType: "json",
             url : "getKeyParts",
+            async:false,
             data: {
             	"factory_id":$("#exec_factory").val(),
                 "bus_number": $('#vinText').val(),

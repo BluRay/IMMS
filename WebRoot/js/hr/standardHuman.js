@@ -88,7 +88,10 @@ function ajaxQuery(id){
 		lengthChange:false,
 		orderMulti:false,
 		language: {
-
+			processing: "正在查询，请稍后...",
+			emptyTable:"",					     
+			infoEmpty:"",
+			zeroRecords:"未查询到数据！"
 		},
 		dom: 'Bfrtip',
 		buttons: [

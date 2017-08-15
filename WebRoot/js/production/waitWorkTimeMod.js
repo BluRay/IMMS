@@ -132,6 +132,10 @@ $(document).ready(function() {
 	});
 	//修改
 	$("#btnModify").click(function(){
+		if($("#status :selected").val()!='2'){
+			alert($("#status :selected").text()+" 状态无法修改数据");
+			return false;
+		}
 		var updateFlag=false;
 		for(var i=0;i<swhlist.length;i++){
 			if(swhlist[i].status=='0'){

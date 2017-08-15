@@ -47,10 +47,20 @@ function ajaxQuery(){
 			}
 		},
 		ajax:function (data, callback, settings) {
+			var factory="",workshop="";
+			if($("#search_factory :selected").text()!="全部"){
+				factory=$("#search_factory :selected").text();
+			}
+			if($("#search_workshop :selected").text()!="全部" && $("#search_workshop :selected").text()!=undefined){
+				workshop=$("#search_workshop :selected").text();
+			}
 			var param ={
 					"draw":1,
 					"tmp_order_no":$("#search_tmp_order_no").val(),
 					"status":$("#search_status").val(),
+					"factory":factory,
+					"workshop":workshop,
+					"reason_content":$("#search_reason_content").val(),
 					"apply_date_start":$("#search_date_start").val(),
 					"apply_date_end":$("#search_date_end").val()
 					};
