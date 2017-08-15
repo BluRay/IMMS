@@ -157,7 +157,7 @@
 					</tr>
 					<tr style="height:35px">
 					    <td align="right" style="width:120px">*派工流水号：</td><td><input type="text" class="input-medium" id="edit_tmp_order_no" style="width:120px;height:30px;"/></td>
-						<td align="right" style="width:120px">*验收人签字：</td><td><input type="text" class="input-medium" id="new_verifier" style="width:120px;height:30px;"/></td>
+						<td align="right" style="width:120px">*验收人签字：</td><td><input type="text" class="input-medium" id="edit_acceptor_sign" style="width:120px;height:30px;"/></td>
 					    <td></td><td></td>
 					</tr>
 					</table>
@@ -231,16 +231,37 @@
 					</tr>
 					<tr style="height:35px;">
 					    <td align="right" style="width:120px;">*派工流水号：</td><td><input type="text" class="input-medium" id="tmp_order_no" style="width:120px;height:30px;"/></td>
-						<td align="right" style="width:120px;">*验收人签字：</td><td><input type="text" class="input-medium" id="new_verifier" style="width:120px;height:30px;"/></td>
+						<td align="right" style="width:120px;">*验收人签字：</td><td><input type="text" class="input-medium" id="new_acceptor_sign" style="width:120px;height:30px;"/></td>
 					</tr>
 					</table>
 				</form>
 			</div>
-		    <div id="div-dialog" class = "div-dialog" class="hide" >
-				<form id="form_edit">
-					<table id="tableDataDetail" class="table table-striped table-bordered table-hover dataTable no-footer"
-				            style="font-size: 12px;" role="grid" aria-describedby="tableDataDetail_info">
-					</table>
+		    <div id="div-dialog" class="hide" >
+				<form id="">
+				    <table style='margin-bottom:10px'>
+						<tr>
+							<td>车型：</td>
+							<td><select style="height: 30px;width:80px" id="search_bus_type" class="input-small" ></select></td>
+							<td>订单编号：</td>
+							<td><input type="text" style="height: 30px;width:120px"
+								class="input-medium revise" placeholder="订单编号..." value=""
+								id="search_order_no" /></td>
+							<td>派工类型：</td>
+							<td><input type="text" style="height: 30px;"
+								class="input-medium revise" placeholder="派工类型..." value=""
+								id="search_order_type" /></td>
+							<td>作业内容/原因：</td>
+							<td><input type="text" style="height: 30px;"
+								class="input-medium revise" placeholder="作业内容/原因..." value=""
+								id="search_reason_content" />
+							</td>
+							<td><input type="button" class="btn btn-sm btn-primary" id="btnQueryExtra" value="查询" style="margin-left: 2px;"></input>
+							</td>
+							</tr>
+						</table>
+						<table id="tableDataDetail" class="table table-striped table-bordered table-hover dataTable no-footer"
+					            style="font-size: 12px;" role="grid" aria-describedby="tableDataDetail_info">
+						</table>
 				</form>
 			</div>
 			<div id="dialog-show" class="hide" >

@@ -122,6 +122,7 @@ function initPage(){
 		var all_factory_ids=getAllFromOptions("#search_factory","id");
 		//alert(all_factory_ids.indexOf(factory_id))
 		if(all_factory_ids.indexOf(factory_id)<0){
+			$("#bus_number").val("");
 			alert('抱歉，您没有该车辆的操作权限！');		
 		}else{
 			$("#btnShowTpl").attr("disabled",false);
@@ -341,9 +342,12 @@ function drawTplDetailTable(tableId,data,editable){
 		         	
 		          ]	
 	});
-	var head_width=$("#tableDetail_wrapper .dataTables_scrollHead").width();
+	var head_width=$("#tableDetail_wrapper").width();
     //alert(head_width)
-    $("#tableDetail_wrapper .dataTables_scrollHead").css("width",head_width-17);
+	if(head_width>0){
+		$("#tableDetail_wrapper .dataTables_scrollHead").css("width",head_width-17);
+	}
+    
 }
 
 /**
@@ -671,6 +675,7 @@ function ajaxSave(){
 			},
 			success:function(response){
 				alert(response.message);
+				$("#btnShowTpl").attr("disabled",false);
 				ajaxQuery();
 				$("#dialog-config").dialog("close");
 			}
@@ -806,7 +811,7 @@ function showInfoPage(row){
 		width:1100,
 		height:550,
 		modal: true,
-		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i>成品记录表录入</h4></div>",
+		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i>成品记录表查看</h4></div>",
 		title_html: true,
 		buttons: [ 
 			{
@@ -850,6 +855,9 @@ function showEditPage(row){
 	
 	$(".divLoading").addClass("fade in").show();
 	var detail_list=getProductRecordDetail(row.bus_number,row.test_node,row.factory_id,row.test_card_template_head_id);
+	if(detail_list.length>0){
+		$("#btnShowTpl").attr("disabled",true);
+	}
 	var dialog = $( "#dialog-config" ).removeClass('hide').dialog({
 		width:1100,
 		height:550,

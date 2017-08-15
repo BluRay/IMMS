@@ -42,7 +42,7 @@ function ajaxQuery(){
 	        {extend:'pageLength',/*text:'显示行'*/}
 	       
 	    ],
-        rowsGroup:[0,1,2,3,4,5],
+        rowsGroup:[0,1,2,3,4,5,6],
 		paiging:true,
 		ordering:false,
 		searching: false,

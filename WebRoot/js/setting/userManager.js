@@ -65,7 +65,6 @@ $(document).ready(function () {
 							    	"password" : $("#new_staff_number").val(),
 							    	"display_name" : $("#new_username").val(),
 							    	"factory_id" : $("#new_factory_id").val(),
-							    	"department_id" : $("#new_department_id").val(),
 							    	"admin" : $("#new_admin").val()
 							    },
 							    success:function(response){
@@ -167,8 +166,7 @@ function ajaxQuery(){
 		            {"title":"电子邮件","class":"center","data":"email","defaultContent": ""},
 		            {"title":"手机号码","class":"center","data": "cellphone","defaultContent": ""},
 		            {"title":"办公电话","class":"center","data":"telephone","defaultContent": ""},		            
-		            {"title":"所属工厂","class":"center","data":"factory_name","defaultContent": ""},		            
-		            {"title":"所属部门","class":"center","data": "department","defaultContent": ""},         
+		            {"title":"所属工厂","class":"center","data":"factory_name","defaultContent": ""},		    
 		            {"title":"是否管理员","class":"center","data": "admin","defaultContent": "","render":function(data,type,row){
 		            	return data=="0"?"否":"是"}}, 
 		            {"title":"访问次数","class":"center","data": "login_count","defaultContent": ""}, 
@@ -276,7 +274,6 @@ function editUser(staff_name,display_name,email,cellphone,telephone,factory_id,d
 						    	"cellphone" : $("#edit_cellphone").val(),
 						    	"display_name" : $("#edit_username").val(),
 						    	"factory_id" : $("#edit_factory_id").val(),
-						    	"department_id" : $("#edit_department_id").val(),
 						    	"admin" : $("#edit_admin").val()
 						    },
 						    success:function(response){

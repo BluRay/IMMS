@@ -1754,14 +1754,24 @@ public class ProductionController extends BaseController {
 
 			infomap.put("tmp_order_type", data[0] == null ? null : data[0].toString().trim());
 			if(data[0] != null){
+				if(data[0].toString().trim().length()==0){
+					saveFlag=false;
+					result =" 额外工时类型不能为空";
+					break;
+				}
 				Map<String, Object> querymap = new HashMap<String, Object>();
 				querymap.put("name",data[0].toString().trim());
 				Map<String,Object> tmpOrderTypeMap=productionService.getTmpOrderTypeList(querymap);
 				if((int)tmpOrderTypeMap.get("recordsTotal")==0){
 					saveFlag=false;
-					result = data[0].toString().trim()+" 额外类型不存在";
+					result ="额外工时类型"+ data[0].toString().trim()+"没有维护";
 					break;
 				}
+				
+			}else{
+				saveFlag=false;
+				result ="额外工时类型不能为空";
+				break;
 			}
 			infomap.put("no", data[1] == null ? null : data[1].toString().trim());
 			infomap.put("order_no", data[2] == null ? null : data[2].toString().trim());

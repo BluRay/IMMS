@@ -100,7 +100,7 @@
 							<td width="100px" style="text-align:right">检验节点： </td>				
 							<td width="100px"><select id="check_node"  class="input-medium" style="width:100px;"></select></td>
 							<td width="80px" style="text-align:right">订单： </td>
-							<td ><span id="order" >D2017001 长沙K8 100台</span></td>
+							<td ><span id="order" ></span></td>
 							<td></td>
 						</tr>
 						<tr>

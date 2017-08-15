@@ -98,7 +98,7 @@
 				<form id="" class="form-horizontal">
 					<div class="form-group">
 					    <div>
-							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newOrderName">*&nbsp;临时派工类型</label>
+							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right">*&nbsp;临时派工类型</label>
 							<div class="col-sm-8">
 							    <input type="hidden" id="editId" />
 								<input type="text" class="input-medium" id="edit_tmp_order_type" />
@@ -107,7 +107,7 @@
 					</div>
 					<div class="form-group">
 					    <div>
-							<label  class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newOrderName">*&nbsp;编号</label>
+							<label  class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right">*&nbsp;编号</label>
 							<div class="col-sm-8">
 								<input type="text" class="input-medium" id="edit_no" />
 							</div>
@@ -115,25 +115,25 @@
 					</div>
 					<div class="form-group">
 					    <div>
-							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newBrand">*&nbsp;车型</label>
+							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right">*&nbsp;车型</label>
 							<div class="col-sm-8">
-								<input class="input-medium" id="edit_bus_type" style="width: 355px" rows="3"></input>
+								<input class="input-medium" id="edit_bus_type" style="width: 355px"></input>
 							</div>
 						</div>
 					</div>
 					<div class="form-group">
 					    <div>
-							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newManufacturer">*&nbsp;订单编号</label>
+							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right">*&nbsp;订单编号</label>
 							<div class="col-sm-8">
-								<input class="input-medium" id="edit_order_no" style="width: 355px" rows="3"></input>
+								<input class="input-medium" id="edit_order_no" style="width: 355px"></input>
 							</div>
 						</div>
 					</div>
 					<div class="form-group">
 					    <div>
-							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newVehicleModel">*&nbsp;时间</label>
+							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right">*&nbsp;时间</label>
 							<div class="col-sm-8">
-								<input class="input-medium" id="edit_time" style="width: 355px" rows="3"></input>
+								<input class="input-medium" id="edit_time" style="width: 355px"></input>
 							</div>
 						</div>
 					</div>
@@ -141,71 +141,71 @@
 					    <div>
 							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newDriveMotor">*&nbsp;名称</label>
 							<div class="col-sm-8">
-								<input class="input-medium" id="edit_tmp_name" style="width: 355px" rows="3"></input>
+								<input class="input-medium" id="edit_tmp_name" style="width: 355px"></input>
 							</div>
 						</div>
 					</div>
 					<div class="form-group">
 					    <div>
-							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newDriveMotor">*&nbsp;名作业原因/内容</label>
+							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right">*&nbsp;作业原因/内容</label>
 							<div class="col-sm-8">
-								<input class="input-medium" id="edit_reason_content" style="width: 355px" rows="3"></input>
+								<input class="input-medium" id="edit_reason_content" style="width: 355px"></input>
 							</div>
 						</div>
 					</div>
 					<div class="form-group">
 					    <div>
-							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newDriveMotor">*&nbsp;说明</label>
+							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right">*&nbsp;说明</label>
 							<div class="col-sm-8">
-								<input class="input-medium" id="edit_description" style="width: 355px" rows="3"></input>
+								<input class="input-medium" id="edit_description" style="width: 355px"></input>
 							</div>
 						</div>
 					</div>
 					<div class="form-group">
 					    <div>
-							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newDriveMotor">*&nbsp;单工时</label>
+							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right">*&nbsp;单工时</label>
 							<div class="col-sm-8">
-								<input class="input-medium" id="edit_single_hour" style="width: 355px" rows="3"></input>
+								<input class="input-medium" id="edit_single_hour" style="width: 355px"></input>
 							</div>
 						</div>
 					</div>
 					<div class="form-group">
 					    <div>
-							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newDriveMotor">*&nbsp;派工类型</label>
+							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right">*&nbsp;派工类型</label>
 							<div class="col-sm-8">
-								<input class="input-medium" id="edit_order_type" style="width: 355px" rows="3"></input>
+								<input class="input-medium" id="edit_order_type" style="width: 355px"></input>
 							</div>
 						</div>
 					</div>
 					<div class="form-group">
 					    <div>
-							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newDriveMotor">*&nbsp;工时评估人</label>
+							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right">*&nbsp;工时评估人</label>
 							<div class="col-sm-8">
-								<input class="input-medium" id="edit_assesor" style="width: 355px" rows="3"></input>
+								<input class="input-medium" id="edit_assesor" style="width: 355px"></input>
 							</div>
 						</div>
 					</div>
 					<div class="form-group">
 					    <div>
-							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newDriveMotor">*&nbsp;工时评估审核人</label>
+							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right">*&nbsp;工时评估审核人</label>
 							<div class="col-sm-8">
-								<input class="input-medium" id="edit_assess_verifier" style="width: 355px" rows="3"></input>
+								<input class="input-medium" id="edit_assess_verifier" style="width: 355px"></input>
 							</div>
 						</div>
 					</div>
 					<div class="form-group">
 					    <div>
-							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newDriveMotor">*&nbsp;责任部门</label>
+							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right">*&nbsp;责任部门</label>
 							<div class="col-sm-8">
-								<input class="input-medium" id="edit_duty_unit" style="width: 355px" rows="3"></input>
+								<input class="input-medium" id="edit_duty_unit" style="width: 355px"></input>
 							</div>
 						</div>
 					</div>
 					<div class="form-group">
 					    <div>
-							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newDriveMotor">*&nbsp;备注</label>
+							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right">*&nbsp;备注</label>
 							<div class="col-sm-8">
-								<input class="input-medium" id="edit_memo" style="width: 355px" rows="3"></input>
+								<input class="input-medium" id="edit_memo" style="width: 355px"></input>
 							</div>
 						</div>
 					</div>

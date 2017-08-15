@@ -431,7 +431,7 @@ $(document).ready(function () {
 		$.ajax({
 			url : "/BMS/common/getFactorySelectAuth",
 			dataType : "json",
-			data : {},
+			data : {"function_url":"production/index"},
 			async : false,
 			error : function(response) {
 				alert(response.message)

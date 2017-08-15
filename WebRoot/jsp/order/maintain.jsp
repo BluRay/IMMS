@@ -96,23 +96,8 @@
 
 			</div>
 			<div id="dialog-message" class="hide">
-				<form id="" class="form-horizontal">
-					<table id="tableBusNumber"
-						style="table-layout: fixed; font-size: 12px"
-						class="table table-bordered table-striped ">
-						<thead>
-							<tr>
-								<th style="text-align: center;width: 40px;">序号</th>
-								<th style="text-align: center;width: 130px;">车号</th>
-								<th style="text-align: center;width: 70px;">生产工厂</th>
-								<th style="text-align: center;width: 68px;">当前车间</th>
-								<th style="text-align: center;">当前工序</th>
-							</tr>
-						</thead>
-						<tbody>
-						</tbody>
+					<table id="tableBusNumber" style="font-size: 12px;width:2100px;overflow-x:auto" class="table table-bordered table-striped">
 					</table>
-				</form>
 			</div>
 
 			<div id="dialog-order" class="hide">

@@ -59,7 +59,7 @@ $(document).ready(function(){
 								$("#add_vinPrefix").focus();
 								return false;
 							}
-							var pattern = new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？]");
+							var pattern = new RegExp("[`~!@%#$^&*()=|{}':;',\\[\\].<>/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？]");
 							var rs = "";  
 							if(pattern.test(vinPrefix)){     
 							    alert("不能输入特殊字符！");  
@@ -171,7 +171,7 @@ $(document).ready(function(){
 								alert("请输入8位字符！");
 								return false;
 							}
-							var pattern = new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？]");
+							var pattern = new RegExp("[`~!@#%$^&*()=|{}':;',\\[\\].<>/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？]");
 							var rs = "";  
 							if(pattern.test(vinPrefix)){     
 							    alert("不能输入特殊字符！");  
@@ -189,7 +189,6 @@ $(document).ready(function(){
 							$("#edit_numberSize").focus();
 							return false;
 						}
-						
 					$.ajax({
 					    url: "updateVinRule",
 					    dataType: "json",

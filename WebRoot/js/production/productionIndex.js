@@ -10,7 +10,7 @@ $(document).ready(function () {
 	});
 	
 	function initPage(){
-		getFactorySelect("","","#search_factory",null,"id");
+		getFactorySelect("production/index","","#search_factory",null,"id");
 		getWorkshopAuthList();
 		ajaxQuery();
 	}

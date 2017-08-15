@@ -40,6 +40,10 @@ $(document).ready(function(){
 	$("#btnQuery").click(function(){
 		ajaxQuery();
 	});
+	
+	$("#btnQueryExtra").click(function(){
+		queryExtraWorkHourManager();
+	});
 	$('#new_factory').change(function(){ 
 		getWorkshopSelect("production/createTmpOrder",$("#new_factory :selected").text(),"","#new_workshop",null,"id");
 	});
@@ -59,9 +63,9 @@ $(document).ready(function(){
 
 function initPage(){
 	ajaxQuery();
-	getFactorySelect("production/createTmpOrder",'',"#new_factory","全部",'id');
+	getFactorySelect("production/createTmpOrder",'',"#new_factory","--请选择--",'id');
 	getWorkshopSelect("",$("#new_factory :selected").text(),"","#new_workshop",null,"id");
-	getFactorySelect("production/createTmpOrder",'',"#edit_factory","全部",'id');
+	getFactorySelect("production/createTmpOrder",'',"#edit_factory","--请选择--",'id');
 	
 }
 
@@ -135,7 +139,7 @@ function ajaxQuery(){
 		            {"title":"接收工厂","class":"center","data":"factory","defaultContent": ""},
 		            {"title":"接收车间","class":"center","data":"workshop","defaultContent": ""},
 		            {"title":"发起人","class":"center","data":"order_launcher","defaultContent": ""},
-		            {"title":"派工描述","class":"center","data": "","defaultContent": ""},
+		            {"title":"派工描述","class":"center","data": "reason_content","defaultContent": ""},
 		            {"title":"总数量","class":"center","data":"total_qty","defaultContent": ""},		            
 		            {"title":"工时","class":"center","data": "single_hour","defaultContent": ""},		  
 		            {"title":"所需人力","class":"center","data": "labors","defaultContent": ""},		
@@ -174,6 +178,7 @@ function showEditPage(row){
 	$("#edit_single_hour").val(row.single_hour);
 	$("#edit_assesor").val(row.assesor);
 	$("#edit_assess_verifier").val(row.assess_verifier);
+	$("#edit_acceptor_sign").val(row.acceptor);
 	var ops=document.getElementById("edit_is_cost_transfer");
     for(var i=0;i<ops.options.length;i++){
         ops.options[i].removeAttribute("selected");
@@ -183,7 +188,7 @@ function showEditPage(row){
 	$("#edit_cost_unit_signer").val(row.cost_unit_signer),
 	$("#edit_order_serial_no").val(row.order_serial_no),
 	$("#edit_tmp_order_no").val(row.tmp_order_no),
-	$("#edit_sap_order").val(row.sap_order)
+	$("#edit_sap_order").val(row.sap_order);
 	var dialog = $( "#dialog-edit" ).removeClass('hide').dialog({
 		width:800,
 		height:580,
@@ -213,6 +218,16 @@ function ajaxAdd(){
 	$("#order_type").removeAttr("disabled");
 	$("#is_cost_transfer").removeAttr("disabled");
 	//数据验证
+	if($("#tmp_order_no").val()==undefined||$("#tmp_order_no").val().trim().length==0){
+		alert('派工流水号不能为空！');
+		$("#tmp_order_no").focus();
+		return false;
+	}else{
+		if(!validateOrderSerialNo($("#tmp_order_no").val())){
+			alert("你输入的派工流水号不符合工厂简码+四位年+两位月+四位流水的规则，如CS2017120001！");
+			return false;
+		}
+	}
 	if($("#order_launcher").val()==undefined||$("#order_launcher").val().trim().length==0){
 		alert('派工发起人不能为空！');
 		$("#order_launcher").focus();
@@ -233,16 +248,24 @@ function ajaxAdd(){
 		$("#head_launch_unit").focus();
 		return false;
 	}
+	
 	if($("#acceptor").val()==undefined||$("#acceptor").val().trim().length==0){
 		alert('验收人不能为空！');
 		$("#acceptor").focus();
 		return false;
 	}
+	var acceptor=$("#acceptor").val();
 	if($("#reason_content").val()==undefined||$("#reason_content").val().trim().length==0){
 		alert('作业内容不能为空！');
 		$("#reason_content").focus();
 		return false;
 	}
+	if($("#labors").val()==undefined||$("#labors").val().trim().length==0){
+		alert('所需人力不能为空！');
+		$("#labors").focus();
+		return false;
+	}
+	
 	if($("#total_qty").val()==undefined||$("#total_qty").val().trim()==''){
 		alert('总数量不能为空！');
 		$("#total_qty").focus();
@@ -264,6 +287,29 @@ function ajaxAdd(){
 			$("#single_hour").val("");
 			return false;
 		}
+	}
+	if($("#sap_order").val()==undefined||$("#sap_order").val().trim().length==0){
+		alert('工单号不能为空！');
+		$("#sap_order").focus();
+		return false;
+	}
+	if($("#cost_unit_signer").val()==undefined||$("#cost_unit_signer").val().trim().length==0){
+		alert('成本科签字不能为空！');
+		$("#cost_unit_signer").focus();
+		return false;
+	}
+	if($("#sap_order").val()==undefined||$("#sap_order").val().trim().length==0){
+		alert('工单号不能为空！');
+		$("#sap_order").focus();
+		return false;
+	}
+	if($("#new_acceptor_sign").val()==undefined||$("#new_acceptor_sign").val().trim().length==0){
+		alert('验收人签字不能为空！');
+		$("#new_acceptor_sign").focus();
+		return false;
+	}else if(acceptor!=$("#new_acceptor_sign").val()){
+		alert("验收人和验收人签字不一致！");
+		return false;
 	}
 	
 	$.ajax({
@@ -344,9 +390,31 @@ function ajaxEdit(id){
 		alert('请选择接收工厂！');
 		return false;
 	}
+	if($("#edit_reason_content").val()==undefined||$("#edit_reason_content").val().trim().length==0){
+		alert('作业原因/内容不能为空！');
+		$("#edit_reason_content").focus();
+		return false;
+	}
+	
+	if($("#edit_acceptor").val()==undefined||$("#edit_acceptor").val().trim().length==0){
+		alert('请输入验收人！');
+		$("#edit_acceptor").focus();
+		return false;
+	}
+	var acceptor=$("#edit_acceptor").val();
 	if($("#edit_tmp_order_no").val()==undefined||$("#edit_tmp_order_no").val()==""){
 		alert("请输入派工流水号！");
 		$("#edit_tmp_order_no").focus();
+		return false;
+	}else{
+		if(!validateOrderSerialNo($("#edit_tmp_order_no").val())){
+			alert("你输入的派工流水号不符合工厂简码+四位年+两位月+四位流水的规则，如CS2017120001！");
+			return false;
+		}
+	}
+	if($("#edit_labors").val()==undefined||$("#edit_labors").val().trim().length==0){
+		alert('所需人力不能为空！');
+		$("#edit_labors").focus();
 		return false;
 	}
 	if($("#edit_total_qty").val()==undefined||$("#edit_total_qty").val().trim()==''){
@@ -359,6 +427,25 @@ function ajaxEdit(id){
 			$("#edit_total_qty").val("");
 			return false;
 		}
+	}
+	if($("#edit_cost_unit_signer").val()==undefined||$("#edit_cost_unit_signer").val().trim().length==0){
+		alert('成本科签字不能为空！');
+		$("#edit_cost_unit_signer").focus();
+		return false;
+	}
+	
+	if($("#edit_sap_order").val()==undefined||$("#edit_sap_order").val().trim().length==0){
+		alert('工单号不能为空！');
+		$("#edit_sap_order").focus();
+		return false;
+	}
+	if($("#edit_acceptor_sign").val()==undefined||$("#edit_acceptor_sign").val().trim().length==0){
+		alert('验收人签字不能为空！');
+		$("#edit_acceptor_sign").focus();
+		return false;
+	}else if(acceptor!=$("#edit_acceptor_sign").val()){
+		alert("验收人和验收人签字不一致！");
+		return false;
 	}
 	
 	$.ajax({
@@ -409,6 +496,8 @@ function ajaxEdit(id){
 function getExtraWorkHourManager(flag){
 	$("#order_type").removeAttr("disabled");
 	$("#is_cost_transfer").removeAttr("disabled");
+	getBusTypeSelect("","#search_bus_type","全部","id");
+	getOrderNoSelect("#search_order_no","#orderId");
 	$("#tableDataDetail").dataTable({
 		serverSide: true,
 		fixedColumns:   {
@@ -543,6 +632,72 @@ function getExtraWorkHourManager(flag){
 
 	});
 
+}
+function queryExtraWorkHourManager(){
+	$("#tableDataDetail").dataTable({
+		serverSide: true,
+		fixedColumns:   {
+            leftColumns: 0,
+            rightColumns:0
+        },
+        paiging:true,
+		ordering:false,
+		searching: false,
+		bAutoWidth:false,
+		destroy: true,
+		sScrollY: document.documentElement.clientHeight-300 + 'px',
+		scrollX: "100%",
+		lengthChange:false,
+		orderMulti:false,
+		language: {
+			emptyTable:"抱歉，未查询到数据！",
+			info:"共计 _TOTAL_ 条，当前第 _PAGE_ 页 共 _PAGES_ 页",
+			infoEmpty:"",
+			paginate: { first:"首页",previous: "上一页",next:"下一页",last:"尾页",loadingRecords: "请稍等,加载中..."}
+		
+		},
+		
+		ajax:function (data, callback, settings) {
+			var param ={
+				"draw":1,
+				"order_no":$("#search_order_no").val(),
+				"bus_type":$("#search_bus_type").val(),
+				"order_type":$("#search_order_type").val(),
+				"reason_content":$("#search_reason_content").val()
+			};
+			param.length = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
+            param.start = data.start;//开始的记录序号
+            param.page = (data.start / data.length)+1;//当前页码
+
+            $.ajax({
+                type: "post",
+                url: "getExtraWorkHourManagerList",
+                cache: false,  //禁用缓存
+                data: param,  //传入组装的参数
+                dataType: "json",
+                success: function (result) {
+                	var returnData = {};
+                    returnData.draw = data.draw;//这里直接自行返回了draw计数器,应该由后台返回
+                    returnData.recordsTotal = result.recordsTotal;//返回数据全部记录
+                    returnData.recordsFiltered = result.recordsTotal;//后台不实现过滤功能，每次查询均视作全部结果
+                    returnData.data = result.data;//返回的数据列表
+                    callback(returnData);
+                }
+            });
+		
+		},
+		columns: [
+		          {"title":"","width":"30","class":"center","data":"","defaultContent": "","render":function(data,type,row){
+		            	return "<input name='exp_radio' value='"+row.reason_type+"' type='radio'>";
+		            }},
+		            {"title":"派工类型","class":"center","data":"order_type","defaultContent": ""},
+		            {"title":"作业原因/内容","class":"center","data":"reason_content","defaultContent": ""},
+		            {"title":"单工时","class":"center","data":"single_hour","defaultContent": ""},
+		            {"title":"工时评估人","class":"center","data":"assesor","defaultContent": ""},
+		            {"title":"工时评估负责人","class":"center","data": "assess_verifier","defaultContent": ""},
+		            {"title":"责任部门","class":"center","data": "duty_unit","defaultContent": ""}
+          ],
+	});
 }
 function getOrderType(elment){
 	
@@ -743,7 +898,7 @@ function show(tmp_order_no,id){
           		rowsGroup:[0],
           		autoWidth:false,
           		paginate:false,
-          		sScrollY: $(window).height()-210,
+          		sScrollY: $(window).height()-250,
           		scrollX: true,
           		scrollCollapse: true,
           		lengthChange:false,
@@ -760,8 +915,8 @@ function show(tmp_order_no,id){
             columns=[
  		            {"title":"工号","class":"center","data":"staff_number","defaultContent": ""},
  		            {"title":"姓名","class":"center","data":"staff_name","defaultContent": ""},
- 		            {"title":"车间","class":"center","data":"workshop_org","defaultContent": ""},
- 		            {"title":"班组","class":"center","data":"workgroup_org","defaultContent": ""},
+ 		            {"title":"车间","class":"center","data":"workshop","defaultContent": ""},
+ 		            {"title":"班组","class":"center","data":"workgroup","defaultContent": ""},
  		            {"title":"岗位","class":"center","data":"job","defaultContent": ""},
  		            {"title":"个人总工时","class":"center total_hour","data":"total_real_hour","defaultContent": ""},
  		            {"title":"工时分配","class":"center total_hour_allot","data":"total_hour","defaultContent": ""}
@@ -776,7 +931,7 @@ function show(tmp_order_no,id){
          		searching: false,
          		autoWidth:false,
          		paginate:false,
-         		sScrollY: $(window).height()-210,
+         		sScrollY: $(window).height()-250,
          		scrollX: true,
          		scrollCollapse: true,
          		lengthChange:false,
@@ -836,4 +991,18 @@ function clearText(){
 	$("#show_tmp_order_no").text("");
 	$("#show_sap_order").text("");
 	$("#show_acceptor_sign").text("");
+}
+function validateOrderSerialNo(tmp_order_no){
+	var flag=true;
+	var factory_code=tmp_order_no.substring(0,2);
+	var series=tmp_order_no.substring(2,12);
+	
+	var reg_num=/^\d{10}$/
+	var reg_char=/^[A-Z]{2}$/;
+	if(!reg_char.test(factory_code)||!reg_num.test(series)){
+		//alert("你输入的派工流水号不符合工厂简码+四位年+两位月+四位流水的规则，如CS2016120001！");
+		flag=false;
+	}
+	return flag;
+	
 }

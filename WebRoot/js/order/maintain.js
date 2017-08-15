@@ -921,7 +921,7 @@ function ajaxShowBusNumber(order_id,factory_id){
 		success: function (response) {
 			if(response.success){
 				$("#tableBusNumber tbody").html("");
-	    		$.each(response.data,function (index,value) {
+	    		/*$.each(response.data,function (index,value) {
 	    			var tr = $("<tr />");
 	    			$("<td style=\"text-align:center;\" />").html(index+1).appendTo(tr);
 	    			$("<td style=\"text-align:center;\" />").html(value.bus_number).appendTo(tr);
@@ -930,12 +930,13 @@ function ajaxShowBusNumber(order_id,factory_id){
 	    			$("<td style=\"text-align:center;\" />").html(value.process_name).appendTo(tr);
 	    			$("#tableBusNumber tbody").append(tr);
 	    			
-	    		});
+	    		});*/
+				drawBusInfoTable(response.data)
 			} else {
 				alert(response.message);
 			}
 			var dialog = $( "#dialog-message" ).removeClass('hide').dialog({
-				width:650,
+				width:1000,
 				height:500,
 				modal: true,
 				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i> 车辆明细</h4></div>",
@@ -959,4 +960,54 @@ function ajaxShowBusNumber(order_id,factory_id){
 			});
 		}
 	})
+}
+
+function drawBusInfoTable(data){
+
+	var t=$("#tableBusNumber").dataTable({
+		paiging:false,
+		showRowNumber:true,
+		ordering:false,
+		searching: false,
+		autoWidth:false,
+		destroy: true,
+		paginate:false,
+		fixedColumns: {
+            leftColumns:1,
+        },
+/*		sScrollY: $("#dialog-message").height()-30,
+		scrollX: true,*/
+/*		createdRow: function ( row, data, index ) {
+			//alert(index)
+			 $('td', row).	eq(1).find("input").data("allot_config_id",data.allot_config_id||0);
+			 $('td', row).	eq(1).find("input").data("order_config_id",data.order_config_id);
+        },*/
+		scrollCollapse: false,
+		lengthChange:false,
+		orderMulti:false,
+		info:false,
+		language: {
+			emptyTable:"",					     
+			infoEmpty:"",
+			zeroRecords:"未查询到车辆信息！"
+		},
+		data:data,
+		columns: [
+		            {"title":"车号","class":"center","data":"bus_number","defaultContent": ""},
+		            {"title":"VIN","class":"center","data":"vin","defaultContent": ""},
+		            {"title":"生产工厂","class":"center","data":"factory_name","defaultContent": ""},
+		            {"title":"当前车间","class":"center","data":"workshop","defaultContent": ""},
+		            {"title":"当前工序","class":"center","data":"process_name","defaultContent": ""},
+		            {"title":"焊装上线","class":"center","data":"welding_online_date","defaultContent": ""},
+		            {"title":"焊装下线","class":"center","data":"welding_offline_date","defaultContent": ""},
+		            {"title":"涂装上线","class":"center","data":"painting_online_date","defaultContent": ""},
+		            {"title":"涂装下线","class":"center","data":"painting_offline_date","defaultContent": ""},
+		            {"title":"底盘上线","class":"center","data":"chassis_online_date","defaultContent": ""},
+		            {"title":"底盘下线","class":"center","data":"chassis_offline_date","defaultContent": ""},
+		            {"title":"总装上线","class":"center","data":"assembly_online_date","defaultContent": ""},
+		            {"title":"总装下线","class":"center","data":"assembly_offline_date","defaultContent": ""},
+		            {"title":"入库","class":"center","data":"warehousing_date","defaultContent": ""},
+		            {"title":"发车","class":"center","data":"dispatch_date","defaultContent": ""}
+		          ]	      
+	});
 }

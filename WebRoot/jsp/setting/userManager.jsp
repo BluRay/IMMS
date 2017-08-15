@@ -24,7 +24,7 @@
 			<div class="breadcrumbs" id="breadcrumbs">
 					<ul class="breadcrumb">
 						<li><i class="ace-icon fa fa-home home-icon"></i><a href="<%=request.getContextPath()%>/index">首页</a></li>
-						<li><a href="#">设置</a></li>
+						<li><a href="#">系统设置</a></li>
 						<li class="active">用户管理</li>
 					</ul>
 
@@ -99,15 +99,6 @@
 					</fieldset>
 					<fieldset style ="padding-top:4px">
 						<div class="form-group form-horizontal">
-							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 所属部门： </label>
-							<div class="col-sm-9">
-							<select id="new_department_id" class="col-sm-9" id="form-field-select-1">
-							</select>
-							</div>
-						</div>
-					</fieldset>
-					<fieldset style ="padding-top:4px">
-						<div class="form-group form-horizontal">
 							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 用户类型： </label>
 							<div class="col-sm-9">
 								<select id="new_admin" class="col-sm-9" id="form-field-select-1">
@@ -157,15 +148,6 @@
 						<div class="form-group form-horizontal">
 							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 所属工厂： </label>
 							<div class="col-sm-9"><select id="edit_factory_id" class="col-sm-9" id="form-field-select-1"></select></div>
-						</div>
-					</fieldset>
-					<fieldset style ="padding-top:4px">
-						<div class="form-group form-horizontal">
-							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 所属部门： </label>
-							<div class="col-sm-9">
-							<select id="edit_department_id" class="col-sm-9" id="form-field-select-1">
-							</select>
-							</div>
 						</div>
 					</fieldset>
 					<fieldset style ="padding-top:4px">

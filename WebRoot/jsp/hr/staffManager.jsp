@@ -68,7 +68,7 @@
 										<table>
 											<tr>
 												<td>工号/姓名：</td>
-												<td colspan=3><input id="search_staff_number" style="height: 30px;width:130%" placeholder="请输入工号/姓名..." class="col-sm-10" type="text"></td>
+												<td colspan=3><input id="search_staff_number" style="height: 30px;" placeholder="请输入工号/姓名..." class="col-sm-10" type="text"></td>
 												<td align="right">&nbsp;员工级别：</td>
 												<td><input id="search_staff_level" style="height:30px;width:120px" placeholder="如F3" class="col-sm-6" type="text"></td>
 												<td>&nbsp;计资方式：</td>

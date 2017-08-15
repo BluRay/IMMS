@@ -112,7 +112,7 @@ public class AccountController extends BaseController{
 		user.setCellphone(cellphone);
 		user.setDisplay_name(display_name);
 		user.setFactory_id(Integer.valueOf(factory_id));
-		user.setDepartment_id(Integer.valueOf(department_id));
+		//user.setDepartment_id(Integer.valueOf((department_id.equals(""))?"0":department_id));
 		user.setAdmin(admin);
 		user.setCreate_user(edit_user);
 		user.setCreate_time(edit_time);

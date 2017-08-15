@@ -65,7 +65,7 @@
 	<update id="editUser" parameterType="com.byd.bms.util.model.BmsBaseUser">
 		<![CDATA[
 		UPDATE BMS_BASE_USER SET username=#{username}, email=#{email}, telephone=#{telephone}, cellphone=#{cellphone}, display_name=#{display_name}, 
-		factory_id=#{factory_id}, department_id=#{department_id}, admin=#{admin}, modify_time=#{create_time}
+		factory_id=#{factory_id}, admin=#{admin}, modify_time=#{create_time}
 		WHERE staff_number=#{staff_number};
 		]]>
 	</update>
