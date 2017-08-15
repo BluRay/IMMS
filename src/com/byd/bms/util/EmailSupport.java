@@ -117,7 +117,7 @@ public class EmailSupport {
 	}
 
 	public static void main(String[] args){
-		String addr="jb51@163.com;";
+		String addr="zhou.hu@byd.com;zhang.yanqun@byd.com;wei.bo1@byd.com;zhu.yingchun@byd.com;wang.wenxin@byd.com;xia.fasheng@byd.com;liu.longjing@byd.com;xiao.yuguo@byd.com;chu.jianliang@byd.com;li.ruihong@byd.com;yu.chao1@byd.com;li.daoliang@byd.com;zhang.xiamei@byd.com;zong.yang@byd.com;tao.guoqing@byd.com;lion.wang@byd.com;peng.zheng@byd.com;";
 		String regex = "\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*";
 		List<String> toAdr=new ArrayList<String>();
 		String[] addresslist=addr.split(";");

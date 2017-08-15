@@ -76,8 +76,9 @@ public class MailSenderServiceImpl extends EmailSupport implements  MailSenderSe
 			model.put("message", "邮箱地址不正确，发送失败！");
 			throw new RuntimeException(e.getMessage());
 		}
+		sendWithEmailSender(emailSender, toAddress);
 		
-		if(toAddress.length <= autoComminute){
+		/*if(toAddress.length <= autoComminute){
 			sendWithEmailSender(emailSender, toAddress);
 		}else{
 			InternetAddress[] newAddress;
@@ -92,7 +93,7 @@ public class MailSenderServiceImpl extends EmailSupport implements  MailSenderSe
 				log.info("第"+(i+1)+"批 ==> "+newAddress);
 				sendWithEmailSender(emailSender, newAddress);
 			}
-		}
+		}*/
 		model.put("success", true);
 		model.put("message", "邮件发送成功！");
 		log.info("發送郵件成功");

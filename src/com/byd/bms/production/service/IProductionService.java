@@ -154,6 +154,8 @@ public interface IProductionService {
 	public int insertCreateTmpOrder(Map<String, Object> map);
 	public List<Map<String,Object>> queryTmpOrderProcedureList(Map<String,Object> map);
 	public List<Map<String,Object>> queryAssignList(Map<String,Object> map);
+	// 临时派工单查询
+	public Map<String,Object> queryTmpOrderList(Map<String,Object> queryMap);
 	/******************* tangjin end**************************/
 
 	public List<Map<String,String>> getProductionSearch(Map<String,Object> queryMap);

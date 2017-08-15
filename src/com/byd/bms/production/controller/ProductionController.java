@@ -2047,6 +2047,43 @@ public class ProductionController extends BaseController {
 		mv.setViewName("production/printVin");
 		return mv;
 	}
+	/**临时派工单查询*/
+	@RequestMapping("/queryTmpOrder")
+	public ModelAndView queryTmpOrder(){
+		mv.setViewName("production/queryTmpOrder");
+		return mv;
+	}
+	@RequestMapping("/queryTmpOrderList")
+	@ResponseBody
+	public ModelMap queryTmpOrderList(){
+		String tmp_order_no=request.getParameter("tmp_order_no");
+		String status=request.getParameter("status");
+		String factory=request.getParameter("factory");
+		String workshop=request.getParameter("workshop");
+		String reason_content=request.getParameter("reason_content");
+		String apply_date_start=request.getParameter("apply_date_start");
+		String apply_date_end=request.getParameter("apply_date_end");
+		int draw=Integer.parseInt(request.getParameter("draw")); 
+		int start=Integer.parseInt(request.getParameter("start"));
+		int length=Integer.parseInt(request.getParameter("length"));
+		
+		Map<String,Object> conditionMap=new HashMap<String,Object>();
+		conditionMap.put("tmp_order_no",tmp_order_no);
+		conditionMap.put("status",status);
+		conditionMap.put("factory",factory);
+		conditionMap.put("workshop",workshop);
+		conditionMap.put("reason_content",reason_content);
+		conditionMap.put("apply_date_start",apply_date_start);
+		conditionMap.put("apply_date_end",apply_date_end);
+		conditionMap.put("draw", draw);
+		conditionMap.put("start", start);
+		conditionMap.put("length", length);
+		Map<String,Object> list = productionService.queryTmpOrderList(conditionMap);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(list);
+		model = mv.getModelMap();
+		return model;
+	}
 	/****************************  TANGJIN ***************************/
 	
 	/****************************  THW ***************************/

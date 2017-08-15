@@ -1187,6 +1187,18 @@ public class ProductionServiceImpl implements IProductionService {
 	public List<Map<String, Object>> queryAssignList(Map<String, Object> map) {
 		return productionDao.queryAssignList(map);
 	}
+	@Override
+	public Map<String, Object> queryTmpOrderList(Map<String, Object> queryMap) {
+		int totalCount=0;
+		List<Map<String, Object>> datalist=productionDao.queryTmpOrderList(queryMap);
+		totalCount=productionDao.queryTmpOrderCount(queryMap);
+		Map<String, Object> result=new HashMap<String,Object>();
+		result.put("draw", queryMap.get("draw"));
+		result.put("recordsTotal", totalCount);
+		result.put("recordsFiltered", totalCount);
+		result.put("data", datalist);
+		return result;
+	}
 	/*******************  tangjin end  **************************/
 	@Override
 	@DataSource("dataSourceSlave")
@@ -1471,5 +1483,5 @@ public class ProductionServiceImpl implements IProductionService {
 		return productionDao.batchUpdateWorkHour(swh_list);
 	}
 
-
+	
 }
