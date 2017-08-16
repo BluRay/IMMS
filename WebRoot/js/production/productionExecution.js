@@ -8,6 +8,7 @@ var bus_seats;
 var workshop_name;
 var process_name;
 var order_name;
+var order_area;
 var bus_type_code;
 var order_qty;
 var orderType;
@@ -52,7 +53,7 @@ $(document).ready(function () {
 		var plan_node=$('#exec_process').find("option:selected").attr("plan_node");
 		var field_name=$('#exec_process').find("option:selected").attr("field_name");
 		
-		if($('#exec_workshop :selected').text()=='底盘'){
+		if($('#exec_workshop :selected').text()=='底盘'||$('#exec_workshop :selected').text()=='检测线'){
 
 			$.each(parts_list,function(i,parts){
 				if(parts.process==$("#exec_processname").val()&&(parts.parts_name=='VIN编码'||parts.parts_name=='左电机号'||parts.parts_name=='右电机号')){
@@ -89,7 +90,7 @@ $(document).ready(function () {
 		/**
 		 * 增加校验逻辑：总装下线校验VIN与车载终端是否绑定成功
 		 */
-		if(cur_key_name.indexOf("下线")>=0&&$('#exec_workshop :selected').text()=='总装'){
+		if(plan_node.indexOf("下线")>=0&&$('#exec_workshop :selected').text()=='总装'&&order_area=='中国'){
 			//alert(cur_key_name);
 			var conditions={};
 			conditions.vin=$('#vinText').data("vin");
@@ -105,6 +106,11 @@ $(document).ready(function () {
 				 },
 				 success: function(response){
 					 //alert(JSON.parse(response.data).rebackResut);
+					 if(response.data=="error"){
+						 alert("车载终端监控系统接口返回异常！");
+						 enterflag=false;
+						 return false;
+					 }
 					 var reback_data=JSON.parse(response.data);
 					 var reabck_msg="";
 					 reabck_msg+="企标绑定结果："+reback_data.rebackDesc+"\n";
@@ -196,6 +202,7 @@ $(document).ready(function () {
     }
 	
 	function ajaxValidate (){
+		var plan_node=$('#exec_process').find("option:selected").attr("plan_node");
 		$.ajax({
             type: "post",
             dataType: "json",
@@ -235,11 +242,13 @@ $(document).ready(function () {
                     	
                     	bus_production_status=bus.production_status;
                     	orderType=bus.order_type;
+                    	order_area=bus.order_area;
                     	vin=bus.vin;
                 		left_motor_number=bus.left_motor_number;
                 		right_motor_number=bus.right_motor_number;
                 		
                 		toggleVinHint(false);
+                		$("#infoVIN").html(vin);
                 		$("#infoColor").html(bus.bus_color);
                 		$("#infoSeats").html(bus.bus_seats);
                 		$("#infoWorkShop").html(bus.workshop);
@@ -249,7 +258,7 @@ $(document).ready(function () {
                 		$("#infoStatus").html(bus.status=='0'?'正常':'冻结');
                 		$("#btnSubmit").removeAttr("disabled");
                     	
-                    	if('检测线上线'==$("#exec_processname").val()&&(bus.testline_online_date.trim().length==0||!bus.testline_online_date)){
+                    	/*if('检测线上线'==plan_node&&(bus.testline_online_date.trim().length==0||!bus.testline_online_date)){
                     		var dialog = $("#dialog-config" ).removeClass('hide').dialog({
                 				width:400,
                 				height:300,
@@ -257,13 +266,13 @@ $(document).ready(function () {
                 				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i> 校验</h4></div>",
                 				title_html: true,
                 				buttons: [ 
-                					/*{
+                					{
                 						text: "取消",
                 						"class" : "btn btn-minier",
                 						click: function() {
                 							$( this ).dialog( "close" ); 
                 						} 
-                					},*/
+                					},
                 					{
                 						text: "确定",
                 						"class" : "btn btn-primary btn-minier",
@@ -273,7 +282,7 @@ $(document).ready(function () {
                 					}
                 				]
                 			});
-                    	}else{
+                    	}else{*/
        
                     		var cur_line=$("#exec_line option:selected").text();
                     		if(bus.order_type!='标准订单'){
@@ -289,7 +298,7 @@ $(document).ready(function () {
                     		//added by xjw 20160513 根据车号查出当前线别锁定线别，不允许跨线扫描                    		
                     		$("#exec_line").attr("disabled",true);
                     		
-                    	}
+                    	/*}*/
                     }
             },
             error:function(){alertError();}

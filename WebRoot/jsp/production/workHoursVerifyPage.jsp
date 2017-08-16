@@ -51,13 +51,12 @@
 								<td><input id="tmp_order_no" placeholder="请输入派工流水号..." style="height: 30px;width:120px" type="text"></td>
 								<td>&nbsp;申请时间：</td>
 								<td><input id="start_date" placeholder="开始时间..." style="height: 30px;width:100px" type="text" onClick="WdatePicker({el:'start_date',dateFmt:'yyyy-MM-dd'});"> - <input id="end_date" placeholder="结束时间..." style="height: 30px;width:100px" type="text" onClick="WdatePicker({el:'end_date',dateFmt:'yyyy-MM-dd'});"></td>
-								<td>&nbsp;状态：</td>
+								<td>&nbsp;工时状态：</td>
 								<td>
 									<select id="status" style="height: 30px;" class="input-small carType">
-										<option value='all'>全部</option>
-										<option value='3'>已评估</option>
-										<option value='5'>已完成</option>
-										<option value='6'>已驳回</option>
+										<option value='未审批'>未审批</option>
+										<option value='已审批'>已审批</option>
+										<option value='已驳回'>已驳回</option>
 									</select>
 								</td>
 								<td>&nbsp;制作工厂：</td>

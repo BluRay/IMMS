@@ -73,7 +73,7 @@
 							<td><select name="" id="search_factory" class="input-small">
 							</select>
 							 	<script id="tmplBusTypeSelect" type="text/x-jsrander">
-                                    <option value='{{:id}}'>{{:code}}</option>
+                                    <option value='{{:id}}'>{{:name}}</option>
                                 </script>
 							</td>
 							<td><input type="button"

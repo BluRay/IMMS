@@ -25,7 +25,7 @@
 	</select>
 	
 	<select id="queryBusInfo" parameterType="String" resultType="Map">
-		select b.*,f.factory_name,CONCAT(o.order_name,t.bus_type_code,' ',o.order_qty,'台') AS order_desc,
+		select b.*,f.factory_name,CONCAT(o.order_name,t.bus_type_code,' ',o.order_qty,'台') AS order_desc,o.order_area,
 		case b.status when '0' then '正常' else '冻结' end as status,p.factory,p.workshop,p.line,p.process_name,o.order_type,o.bus_type_id
 		from BMS_PLAN_BUS b
 		left join BMS_BASE_FACTORY f on b.factory_id=f.id
@@ -2240,6 +2240,67 @@
 		</if>
 	</select>
 	
+	<select id="getTmpOrderListForVerify" parameterType="Map" resultType="Map">
+	SELECT T.*,U.display_name AS applier_name FROM
+	(SELECT O.id,O.tmp_order_no,O.factory,O.workshop,O.reason_content,O.total_qty,O.labors,O.status,O.sap_order,
+	O.finished_qty,O.single_hour,O.applier,O.apply_date,SUM(H.work_hour) AS workhour_total,
+	GROUP_CONCAT(H.status),
+	IF((LOCATE('2', GROUP_CONCAT(H.status))>0),'已驳回','未驳回') AS '驳回状态',
+	IF((REPLACE(REPLACE(GROUP_CONCAT(H.status),',',''),'1','')=''),'已审批','未审批') AS '审批状态'
+	FROM BMS_PD_TMP_ORDER O
+	LEFT OUTER JOIN BMS_HR_STAFF_TMP_HOURS H ON H.temp_order_id = O.id 
+	GROUP BY O.id) T 
+	LEFT OUTER JOIN BMS_BASE_USER U ON T.applier = U.id
+	WHERE 1=1 
+	<if test="factory !=null">
+		and T.factory = #{factory}
+	</if>
+	<if test="workshop !=null">
+		and find_in_set(T.workshop,#{workshop})>0
+	</if>
+	<if test="orderNo !=null and orderNo !=''">
+		and T.tmp_order_no like concat('%',#{orderNo},'%')
+	</if>
+	<if test="hourstatus=='未审批'">
+		and T.审批状态 = '未审批'
+	</if>
+	<if test="hourstatus=='已审批'">
+		and T.审批状态 = '已审批'
+	</if>
+	<if test="hourstatus=='已驳回'">
+		and T.驳回状态 = '已驳回'
+	</if>
+	</select>
+	<select id="getTmpOrderForVerifyCount" parameterType="Map" resultType="int">
+	SELECT COUNT(T.id) FROM
+	(SELECT O.id,O.tmp_order_no,O.factory,O.workshop,O.reason_content,O.total_qty,
+	O.finished_qty,O.single_hour,O.applier,O.apply_date,SUM(H.work_hour) AS workhour_total,
+	GROUP_CONCAT(H.status),
+	IF((LOCATE('2', GROUP_CONCAT(H.status))>0),'已驳回','未驳回') AS '驳回状态',
+	IF((REPLACE(REPLACE(GROUP_CONCAT(H.status),',',''),'1','')=''),'已审批','未审批') AS '审批状态'
+	FROM BMS_PD_TMP_ORDER O
+	LEFT OUTER JOIN BMS_HR_STAFF_TMP_HOURS H ON H.temp_order_id = O.id 
+	GROUP BY O.id) T WHERE 1=1 
+	<if test="factory !=null">
+		and T.factory = #{factory}
+	</if>
+	<if test="workshop !=null">
+		and find_in_set(T.workshop,#{workshop})>0
+	</if>
+	<if test="orderNo !=null and orderNo !=''">
+		and T.tmp_order_no like concat('%',#{orderNo},'%')
+	</if>
+	<if test="hourstatus=='未审批'">
+		and T.审批状态 = '未审批'
+	</if>
+	<if test="hourstatus=='已审批'">
+		and T.审批状态 = '已审批'
+	</if>
+	<if test="hourstatus=='已驳回'">
+		and T.驳回状态 = '已驳回'
+	</if>
+	</select>
+	
 	<select id="getTmpOrderList" parameterType="Map" resultType="Map">
 		SELECT (select sum(ifnull(output,0)) from BMS_PD_TMP_ORDER_SCHEDULE s
 		where o.id=s.temp_order_id group by s.temp_order_id) finished_qty,
@@ -2258,7 +2319,7 @@
 			and find_in_set(h.workshop,#{workshop})>0
 		</if>
 		<if test="orderNo !=null and orderNo !=''">
-			and o.order_serial_no like concat('%',#{orderNo},'%')
+			and o.tmp_order_no like concat('%',#{orderNo},'%')
 		</if>
 		group by o.id,h.factory,h.workshop
 		)h on h.temp_order_id=o.id and h.factory=o.factory and h.workshop=o.workshop
@@ -2274,7 +2335,7 @@
 			and find_in_set(h.workshop,#{workshop})>0
 		</if>
 		<if test="orderNo !=null and orderNo !=''">
-			and o.order_serial_no like concat('%',#{orderNo},'%')
+			and o.tmp_order_no like concat('%',#{orderNo},'%')
 		</if>
 		group by o.id,h.factory,h.workshop )h1 on h1.temp_order_id=o.id and
 		h1.factory=o.factory and h1.workshop=o.workshop where 1=1
@@ -2285,7 +2346,7 @@
 			and o.single_hour is not null
 		</if>
 		<if test="orderNo !=null and orderNo !=''">
-			and o.order_serial_no like concat('%',#{orderNo},'%')
+			and o.tmp_order_no like concat('%',#{orderNo},'%')
 		</if>
 		<if test="status !=null and status !='all'">
 			and o.status = #{status}
@@ -2332,7 +2393,7 @@
 			and find_in_set(h.workshop,#{workshop})>0
 		</if>
 		<if test="orderNo !=null and orderNo !=''">
-			and o.order_serial_no like concat('%',#{orderNo},'%')
+			and o.tmp_order_no like concat('%',#{orderNo},'%')
 		</if>
 		group by o.id,h.factory,h.workshop
 		)h on h.temp_order_id=o.id and h.factory=o.factory and h.workshop=o.workshop
@@ -2348,7 +2409,7 @@
 			and find_in_set(h.workshop,#{workshop})>0
 		</if>
 		<if test="orderNo !=null and orderNo !=''">
-			and o.order_serial_no like concat('%',#{orderNo},'%')
+			and o.tmp_order_no like concat('%',#{orderNo},'%')
 		</if>
 		group by o.id,h.factory,h.workshop )h1 on h1.temp_order_id=o.id and
 		h1.factory=o.factory and h1.workshop=o.workshop where 1=1
@@ -2359,7 +2420,7 @@
 			and o.single_hour is not null
 		</if>
 		<if test="orderNo !=null and orderNo !=''">
-			and o.order_serial_no like concat('%',#{orderNo},'%')
+			and o.tmp_order_no like concat('%',#{orderNo},'%')
 		</if>
 		<if test="status !=null and status !='all'">
 			and o.status = #{status}
@@ -2559,7 +2620,7 @@
 	<update id="rejectOrder" parameterType="Map">
 		update BMS_PD_TMP_ORDER
 		set
-		status='6',workhour_auditor=#{auditor},workhour_auditor_date=#{auditDate}
+		status='2',workhour_auditor=#{auditor},workhour_auditor_date=#{auditDate}
 		where id =#{tempOrderId}
 	</update>
 	<update id="batchUpdateWorkHour" parameterType="List">

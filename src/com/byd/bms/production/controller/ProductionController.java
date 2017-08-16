@@ -3,10 +3,6 @@ package com.byd.bms.production.controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,10 +11,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,19 +24,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.byd.bms.hr.service.IHrBaseDataService;
 import com.byd.bms.order.service.IOrderService;
 import com.byd.bms.production.model.ProductionException;
 import com.byd.bms.production.service.IProductionService;
-import com.byd.bms.setting.model.BmsBaseBusType;
 import com.byd.bms.setting.model.BmsBaseFactory;
 import com.byd.bms.setting.service.IBaseDataService;
 import com.byd.bms.util.ExcelModel;
 import com.byd.bms.util.ExcelTool;
 import com.byd.bms.util.HttpUtil;
 import com.byd.bms.util.controller.BaseController;
-import com.byd.bms.util.model.BmsBaseUser;
 import com.byd.bms.util.service.ICommonService;
 /**
  * 生产模块Controller
@@ -2606,6 +2597,29 @@ public class ProductionController extends BaseController {
 		return model;
 	}
 	
+	@RequestMapping("/getTmpOrderListForVerify")
+	@ResponseBody
+	public ModelMap getTmpOrderListForVerify(){
+		String conditions = request.getParameter("conditions");
+		String applier = request.getSession().getAttribute("staff_number") + "";
+		JSONObject jo=JSONObject.fromObject(conditions);
+		Map<String,Object> conditionMap=new HashMap<String,Object>();
+		for(Iterator<?> it=jo.keys();it.hasNext();){
+			String key=(String) it.next();
+			conditionMap.put(key, jo.get(key));
+		}
+		conditionMap.put("applier", applier);
+		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
+		int start=(request.getParameter("start")!=null)?Integer.parseInt(request.getParameter("start")):0;		//分页数据起始数
+		int length=(request.getParameter("length")!=null)?Integer.parseInt(request.getParameter("length")):500;	//每一页数据条数
+		conditionMap.put("draw", draw);
+		conditionMap.put("start", start);
+		conditionMap.put("length", length);
+		Map<String,Object> result= productionService.getTmpOrderListForVerify(conditionMap);
+		model.addAllAttributes(result);
+		return model;
+	}
+	
 	@SuppressWarnings("unchecked")
 	@RequestMapping("/saveWorkHourInfo")
 	@ResponseBody
@@ -2646,6 +2660,7 @@ public class ProductionController extends BaseController {
 		List<Map<String,Object>> swh_list=new ArrayList<Map<String,Object>>();
 		for(int i=0;i<jsonArray.size();i++){
 			 JSONObject object = (JSONObject)jsonArray.get(i);
+			 //临时派工单状态：0-已评估、1-已完成、2-已驳回 （BMS_PD_TMP_ORDER）
 			 if("verify".equals(whflag)){
 				 object.put("approver_id", editorId);
 				 object.put("approve_date", createTime);

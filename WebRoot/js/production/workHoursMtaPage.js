@@ -3,7 +3,7 @@ var table;
 var table_height = $(window).height()-270;
 var cur_tmpOrderId = 0;
 var re_f = /^[0-9]+[0-9]*\.?[0|5]?$/;//浮点数正则表达式
-var status_arr = {"0" : "已创建","2" : "已分配","3" : "已评估","5" : "已完成","6" : "已驳回"};
+var status_arr = {"0" : "已评估","1" : "已完成","2" : "已驳回"};	// 0-已评估、1-已完成、2-已驳回
 var wh_status_arr={'0':'已维护','1':'已审批','2':'已驳回','3':'已锁定'};
 var edit_list = [];
 var ready_hour = 0;
@@ -12,7 +12,7 @@ $(document).ready(function () {
 	initPage();
 	
 	function initPage(){
-		$("#status").val("3");
+		//$("#status").val("3");
 		getFactorySelect("production/workHoursMtaPage",'',"#q_factory",null,'id');
 		getWorkshopSelect("production/workHoursMtaPage",$("#q_factory :selected").text(),"","#q_workshop",null,"id");
 	}

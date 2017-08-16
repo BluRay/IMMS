@@ -205,6 +205,8 @@ public interface IProductionDao {
 	
 	public List<Map<String,String>> getTmpOrderList(Map<String, Object> conditionMap);
 	public int getTmpOrderCount(Map<String, Object> conditionMap);
+	public List<Map<String,String>> getTmpOrderListForVerify(Map<String, Object> conditionMap);
+	public int getTmpOrderForVerifyCount(Map<String, Object> conditionMap);
 	public int saveWorkHourInfo(List<Map<String, Object>> swh_list);
 	public List<Map<String, String>> queryStaffTmpHours(Map<String, Object> conditionMap);
 	public int deleteStaffTmpHourInfo(Map<String, Object> conditionMap);	

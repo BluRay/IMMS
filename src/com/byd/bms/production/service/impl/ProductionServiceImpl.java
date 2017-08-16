@@ -1453,6 +1453,19 @@ public class ProductionServiceImpl implements IProductionService {
 		result.put("data", datalist);
 		return result;
 	}
+	
+	@Override
+	public Map<String, Object> getTmpOrderListForVerify(Map<String, Object> conditionMap) {
+		int totalCount=0;
+		List<Map<String,String>> datalist = productionDao.getTmpOrderListForVerify(conditionMap);
+		totalCount = productionDao.getTmpOrderForVerifyCount(conditionMap);
+		Map<String, Object> result = new HashMap<String,Object>();
+		result.put("draw", conditionMap.get("draw"));
+		result.put("recordsTotal", totalCount);
+		result.put("recordsFiltered", totalCount);
+		result.put("data", datalist);
+		return result;
+	}
 
 	@Override
 	public int saveWorkHourInfo(List<Map<String, Object>> swh_list) {

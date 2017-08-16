@@ -171,6 +171,7 @@ public interface IProductionService {
 	public int uoloadStaffAttendance(List<Map<String, Object>> addList);
 
 	public Map<String, Object> getTmpOrderList(Map<String, Object> conditionMap);
+	public Map<String, Object> getTmpOrderListForVerify(Map<String, Object> conditionMap);
 	public int saveWorkHourInfo(List<Map<String, Object>> swh_list);
 	public List<Map<String, String>> queryStaffTmpHours(Map<String, Object> conditionMap);
 	public int deleteStaffTmpHourInfo(Map<String, Object> conditionMap);	

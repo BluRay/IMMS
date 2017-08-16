@@ -12,7 +12,6 @@ $(document).ready(function () {
 	initPage();
 	
 	function initPage(){
-		$("#status").val("3");
 		getFactorySelect("production/workHoursVerifyPage",'',"#q_factory",null,'id');
 		getWorkshopSelect("production/workHoursVerifyPage",$("#q_factory :selected").text(),"","#q_workshop",null,"id");
 	}
@@ -75,14 +74,14 @@ function ajaxQuery(){
 			});
 			var workshop = $("#q_workshop :selected").text() == "全部" ? workshopAll : $("#q_workshop :selected").text();
 			var conditions = "{orderNo:'" + orderNo + "',applyDateStart:'"
-			+ applyDateStart + "',applyDateEnd:'" + applyDateEnd + "',status:'"
+			+ applyDateStart + "',applyDateEnd:'" + applyDateEnd + "',hourstatus:'"
 			+ status + "',factory:'" + factory + "',workshop:'" + workshop
 			+ "'}";
 			console.log('-->conditions = ' + conditions);
 			
 			$.ajax({
                 type: "post",
-                url: "getTmpOrderList",
+                url: "getTmpOrderListForVerify",
                 cache: false,  //禁用缓存
                 data: {"conditions":conditions},  //传入组装的参数
                 dataType: "json",
@@ -102,24 +101,12 @@ function ajaxQuery(){
             });
 		},
 		columns: [
-		            {"title":"派工流水号",width:'150',"class":"center","data":"tmp_order_no","defaultContent": ""},
+		            {"title":"临时派工单号",width:'150',"class":"center","data":"tmp_order_no","defaultContent": ""},
 		            {"title":"工单号",width:'100',"class":"center","data":"sap_order","defaultContent": ""},
 		            {"title":"作业原因/内容",width:'200',"class":"center","data":"reason_content","defaultContent": ""},
 		            {"title":"总数量",width:'100',"class":"center","data":"total_qty","defaultContent": ""},
 		            {"title":"已完成数量",width:'100',"class":"center","data":"finished_qty","defaultContent": "0"},
-		            {"title":"产量",width:'50',"class":"center","data":"totalQty","defaultContent": "",
-		            	"render": function ( data, type, row ) {
-		            		//0 已维护 1 已审批 2 驳回 3 锁定
-		            		var totalQty = row.total_qty == undefined ? "": row.total_qty;
-		            		var readyQty = row.finished_qty == undefined ? 0: row.finished_qty;
-		            		if (totalQty!=readyQty && (row.status =='2' || row.status=='1')){
-		            			return "<input class='productQty' id=\"prdqty_"
-								+ row.tmp_order_no
-								+ "\" style=\"border:1;width:30px;text-align:center;font-size: 12px\" />"
-		            		}
-		            	},
-		            },
-		            {"title":"工时",width:'50',"class":"center","data":"singleHour","defaultContent": ""},
+		            {"title":"工时",width:'50',"class":"center","data":"single_hour","defaultContent": ""},
 		            {"title":"所需人力",width:'100',"class":"center","data":"labors","defaultContent": ""},
 		            {"title":"总工时",width:'100',"class":"center","data":"-","defaultContent": "",
 		            	"render": function ( data, type, row ) {
@@ -135,7 +122,7 @@ function ajaxQuery(){
 		            },
 		            {"title":"申请人",width:'100',"class":"center","data":"applier_name","defaultContent": ""},
 		            {"title":"申请时间",width:'100',"class":"center","data":"apply_date","defaultContent": ""},
-		            {"title":"状态",width:'100',"class":"center","data":"status","defaultContent": "",
+		            {"title":"工单状态",width:'100',"class":"center","data":"status","defaultContent": "",
 		            	"render": function ( data, type, row ) {
 		            		return status_arr[data];
 		            	},

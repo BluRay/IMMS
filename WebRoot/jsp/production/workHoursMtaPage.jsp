@@ -55,9 +55,9 @@
 								<td>
 									<select id="status" style="height: 30px;" class="input-small carType">
 										<option value='all'>全部</option>
-										<option value='3'>已评估</option>
-										<option value='5'>已完成</option>
-										<option value='6'>已驳回</option>
+										<option value='0'>已评估</option>
+										<option value='1'>已完成</option>
+										<option value='2'>已驳回</option>
 									</select>
 								</td>
 								<td>&nbsp;制作工厂：</td>

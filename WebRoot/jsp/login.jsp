@@ -86,6 +86,7 @@
 													</div>
 
 													<div class="space-4"></div>
+													<input type="hidden" id="last_url" name="last_url" ></input>
 												</fieldset>
 											</form>
 
@@ -291,6 +292,9 @@
 			
 			$(document).ready(function() {
 				$('#username').focus();
+				var last_url=getQueryString("last_url");
+				//alert(last_url)
+				$("#last_url").val(last_url);
 			});
 			
 			//you don't need this, just used for changing background
@@ -360,6 +364,12 @@
 			    }
 			    return flag;
 			}
+			
+			function getQueryString(name) { 
+				var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"); 
+				var r = window.location.search.substr(1).match(reg); 
+				if (r != null) return decodeURI(r[2]); return null; 
+			} 
 		</script>
 	</body>
 </html>

@@ -4,18 +4,15 @@ $(document).ready(function(){
 	initPage();
 	
 	function initPage(){
-		getFactorySelect("tech/techTaskReport",'',"#search_factory",null,'id');
+		getFactorySelect("tech/techTaskReport",'',"#search_factory","全部",'id');
 		getOrderNoSelect("#search_order_no","#orderId");
-		getWorkshopSelect("tech/techTaskReport",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
-		
+		//getWorkshopSelect("tech/techTaskReport",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
 	}
 	
 	$("#btnQuery").click(function () {
 		$("#btnQuery").attr("disabled","disabled");
 		ajaxQuery();
     });
-	
-	
 	
 });
 
@@ -314,7 +311,7 @@ function initTable() {
         	params["order_no"] = $("#search_order_no").val();
         	params["status"] = $("#status").val();
         	params["factory"] = $("#search_factory").val();
-        	params["workshop"] = $("#search_workshop").val();
+        	//params["workshop"] = $("#search_workshop").val();
         	params["tech_date_start"] = $("#search_date_start").val();
         	params["tech_date_end"] = $("#search_date_end").val();   
         	params["tab_index"] = tab_index;	     	

@@ -4,8 +4,12 @@ $(document).ready(function(){
 	function initPage(){
 		getFactorySelect("tech/taskSearch",'',"#search_factory",null,'id');
 		getOrderNoSelect("#search_order_no","#orderId");
-		getWorkshopSelect("tech/taskSearch",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
+		getWorkshopSelect("tech/taskSearch",$("#search_factory :selected").text(),"","#search_workshop","全部","id");
 	}
+	
+	$('#search_factory').change(function(){ 
+		getWorkshopSelect("tech/taskSearch",$("#search_factory :selected").text(),"","#search_workshop","全部","id");
+	})
 	
 	$("#btnQuery").click(function() {
 		eachSeries(scripts, getScript, initTable);
