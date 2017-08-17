@@ -1,7 +1,7 @@
 var pageSize=1;
 var table;
 var table_height = $(window).height()-270;
-var status_arr = {"0" : "已创建","2" : "已分配","3" : "已评估","5" : "已完成","6" : "已驳回"};
+var status_arr = {"0" : "已评估","1" : "已完成","2" : "已驳回"};
 var wh_status_arr={'1':'已审批','2':'已驳回','3':'已锁定'}
 var cur_tmpOrderId = 0;
 var edit_list = [];
@@ -28,7 +28,7 @@ $(document).ready(function () {
 	$("#btnSwhQuery").click (function () {
 		var staffNum=$("#edit_cardNumber").val();
 		var workDate=$("#edit_workDate").val();
-		var conditions="{staffNum:'"+staffNum+"',workMonth:'"+workDate+"',tempOrderId:"+cur_tmpOrderId+"'}";
+		var conditions="{staffNum:'"+staffNum+"',workMonth:'"+workDate+"',temp_order_id:"+cur_tmpOrderId+"'}";
 		if(workDate==''||workDate==null){
 			alert("请选择操作月份！");
 			return false;
@@ -110,7 +110,7 @@ function ajaxQuery(){
 		            {"title":"所需人力",width:'100',"class":"center","data":"labors","defaultContent": ""},
 		            {"title":"总工时",width:'100',"class":"center","data":"-","defaultContent": "",
 		            	"render": function ( data, type, row ) {
-		            		var totalHour = parseFloat(row.single_hour)*parseFloat(row.total_qty);
+		            		var totalHour = parseFloat(row.single_hour)*parseFloat(row.total_qty);	            		
 		            		return totalHour.toFixed(2);
 		            	},
 		            },
@@ -129,7 +129,7 @@ function ajaxQuery(){
 		            },
 		            {"title":"操作",width:'100',"class":"center","data":null,"defaultContent": "",
 		            	"render": function ( data, type, row ) {
-		            		return "<i class=\"glyphicon glyphicon-check bigger-130 showbus\" title=\"审核\" onclick='verifyWorkTime(\"" + row['id'] + "\",\"" + row['tmp_order_no'] + "\",\""+ row['reason_content'] +"\",\""+ row['total_qty'] +"\",\""+ row['finished_qty'] +"\",\""+ row['workhour_total'] +"\",\""+ row['factory'] +"\",\""+ row['workshop'] +"\",\""+ row['tech_list'] +"\")' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;";
+		            		return "<i class=\"glyphicon glyphicon-check bigger-130 showbus\" title=\"审核\" onclick='verifyWorkTime(\"" + row['id'] + "\",\"" + row['tmp_order_no'] + "\",\"" + row['labors'] + "\",\""+ row['reason_content'] +"\",\""+ row['single_hour'] +"\",\""+ row['total_qty'] +"\",\""+ row['finished_qty'] +"\",\""+ row['workhour_total'] +"\",\""+ row['factory'] +"\",\""+ row['workshop'] +"\",\""+ row['tech_list'] +"\")' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;";
 		            	},
 		            }
 		          ],
@@ -137,7 +137,7 @@ function ajaxQuery(){
 	
 }
 
-function verifyWorkTime(id,tmp_order_no,reason_content,total_qty,finished_qty,workhour_total,factory,workshop,tech_list){
+function verifyWorkTime(id,tmp_order_no,labors,reason_content,single_hour,total_qty,finished_qty,workhour_total,factory,workshop,tech_list){
 	var d = new Date();
 	var eYear = d.getFullYear();
 	var eMon = d.getMonth() + 1;
@@ -151,7 +151,14 @@ function verifyWorkTime(id,tmp_order_no,reason_content,total_qty,finished_qty,wo
 	console.log("-->conditions = " + conditions);
 	workhour_list = ajaxGetStaffWorkHours(conditions);
 	generateWorkhourTb(workhour_list,true);
-	
+
+	$("#edit_workDate").val(workMonth);
+	$("#edit_orderNo").html(tmp_order_no);
+	$("#edit_reason").html(reason_content);
+	$("#edit_totalQty").html(total_qty);
+	$("#edit_singleHour").html(single_hour);
+	$("#edit_labors").html(labors);
+	$("#edit_totalHour").html(parseFloat(single_hour)*parseFloat(total_qty));
 	
 	$("#dialog-edit").removeClass('hide').dialog({
 		resizable: false,

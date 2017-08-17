@@ -2737,5 +2737,33 @@ public class ProductionController extends BaseController {
 		return model;
 	}
 	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping("/updateOrderProcedure")
+	@ResponseBody
+	public ModelMap updateOrderProcedure(){
+		String conditions = request.getParameter("conditions");
+		JSONObject jo=JSONObject.fromObject(conditions);
+		Map<String,Object> conditionMap=new HashMap<String,Object>();
+		for(Iterator it=jo.keys();it.hasNext();){
+			String key=(String) it.next();
+			conditionMap.put(key, jo.get(key));
+		}
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		String createTime = df.format(new Date());
+		String editorId = request.getSession().getAttribute("staff_number") + "";
+		conditionMap.put("workDate", createTime);
+		conditionMap.put("recorder", editorId);
+		
+		int result = productionService.saveTmpOrderProcedure(conditionMap);
+		Map<String,Object> conditionMap2=new HashMap<String,Object>();
+		conditionMap2.put("id", conditionMap.get("orderId"));
+		conditionMap2.put("finished_qty", String.valueOf(conditionMap.get("finishedQty")));
+		conditionMap2.put("status",conditionMap.get("status"));
+		result += productionService.updateTmpOrder(conditionMap2);
+		initModel(true,String.valueOf(result),null);
+		model = mv.getModelMap();
+		return model;
+	}
+	
 	/****************************  Yangke End *********************/
 }

@@ -2938,4 +2938,83 @@
 			</if>
 		</if>
 	</select>
+	
+	<update id="saveTmpOrderProcedure" parameterType="Map">
+		insert into
+		BMS_PD_TMP_ORDER_SCHEDULE (temp_order_id,output,recorder,record_date)
+		values(#{orderId},#{productQty},#{recorder},#{workDate})
+	</update>
+	<update id="updateTmpOrder" parameterType="Map">
+		update BMS_PD_TMP_ORDER
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="reason_content !=null">
+				reason_content=#{reason_content},
+			</if>
+			<if test="order_serial_no !=null">
+				order_serial_no=#{order_serial_no},
+			</if>
+			<if test="factory !=null">
+				factory=#{factory},
+			</if>
+			<if test="workshop !=null">
+				workshop=#{workshop},
+			</if>
+			<if test="sap_order !=null">
+				sap_order=#{sap_order},
+			</if>
+			<if test="order_launcher !=null">
+				order_launcher=#{order_launcher},
+			</if>
+			<if test="total_qty !=null">
+				total_qty=#{total_qty},
+			</if>
+			<if test="single_hour !=null">
+				single_hour=#{single_hour},
+			</if>
+			<if test="order_type !=null">
+				order_type=#{order_type},
+			</if>
+			<if test="head_launch_unit !=null">
+				head_launch_unit=#{head_launch_unit},
+			</if>
+			<if test="acceptor !=null">
+				acceptor=#{acceptor},
+			</if>
+			<if test="labors !=null">
+				labors=#{labors},
+			</if>
+			<if test="applier !=null">
+				applier=#{applier},
+			</if>
+			<if test="apply_date !=null">
+				apply_date=#{apply_date},
+			</if>
+			<if test="assesor !=null">
+				assesor=#{assesor},
+			</if>
+			<if test="assess_verifier !=null">
+				assess_verifier=#{assess_verifier},
+			</if>
+			<if test="is_cost_transfer !=null">
+				is_cost_transfer=#{is_cost_transfer},
+			</if>
+			<if test="cost_unit_signer !=null">
+				cost_unit_signer=#{cost_unit_signer},
+			</if>
+			<if test="factory_manager !=null">
+				factory_manager=#{factory_manager},
+			</if>
+			<if test="status !=null">
+				status=#{status},
+			</if>
+			<if test="duty_unit !=null">
+				duty_unit=#{duty_unit},
+			</if>
+			<if test="finished_qty !=null">
+				finished_qty=#{finished_qty}
+			</if>
+		</trim>
+		where id=#{id}
+	</update>
+	
 </mapper>

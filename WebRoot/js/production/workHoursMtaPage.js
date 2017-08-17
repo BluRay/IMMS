@@ -82,12 +82,20 @@ $(document).ready(function () {
 		generateWorkhourTb(swhlist);
 	});
 	
+	$("#checkall").click(function() {
+		if ($(this).prop("checked")) {
+			check_All_unAll("#workhour_tb", true);
+		} else{
+			check_All_unAll("#workhour_tb", false);
+		}
+	});
+	
 });
 
 function ajaxQuery(){
 	$("#tableData").dataTable({
-		serverSide: true,paiging:true,ordering:false,searching: false,bAutoWidth:true,
-		destroy: true,sScrollY: table_height,sScrollX:true,orderMulti:false,scrollCollapse: true, scrollXInner: "150%",
+		serverSide: true,paiging:true,ordering:false,searching: false,bAutoWidth:false,
+		destroy: true,sScrollY: table_height,sScrollX:true,orderMulti:false,
 		pageLength: 25,pagingType:"full_numbers",lengthChange:false,
 		fixedColumns: {
             leftColumns:0,
@@ -138,8 +146,12 @@ function ajaxQuery(){
             });
 		},
 		columns: [
-		            {"title":"派工流水号",width:'150',"class":"center","data":"tmp_order_no","defaultContent": ""},
+		            {"title":"派工流水号","class":"center","data":"tmp_order_no","defaultContent": "","render":function(data,type,row){
+		            	return "<a style=\"cursor:pointer\" onclick=show(\'"+data+"\',\'"+row.id+"\')>"+data+"</a>";
+		            }},
 		            {"title":"工单号",width:'100',"class":"center","data":"sap_order","defaultContent": ""},
+		            {"title":"工厂",width:'100',"class":"center","data":"factory","defaultContent": ""},
+		            {"title":"车间",width:'100',"class":"center","data":"workshop","defaultContent": ""},
 		            {"title":"作业原因/内容",width:'200',"class":"center","data":"reason_content","defaultContent": ""},
 		            {"title":"总数量",width:'100',"class":"center","data":"total_qty","defaultContent": ""},
 		            {"title":"已完成数量",width:'100',"class":"center","data":"finished_qty","defaultContent": "0"},
@@ -148,14 +160,15 @@ function ajaxQuery(){
 		            		//0 已维护 1 已审批 2 驳回 3 锁定
 		            		var totalQty = row.total_qty == undefined ? "": row.total_qty;
 		            		var readyQty = row.finished_qty == undefined ? 0: row.finished_qty;
+		            		var tmp_id = row.id;
 		            		if (totalQty!=readyQty && (row.status =='2' || row.status=='1')){
 		            			return "<input class='productQty' id=\"prdqty_"
 								+ row.tmp_order_no
-								+ "\" style=\"border:1;width:30px;text-align:center;font-size: 12px\" />"
+								+ "\" onchange=\"editProductQty(this,'"+totalQty+"','"+readyQty+"','"+tmp_id+"')\" style=\"border:1;width:30px;text-align:center;font-size: 12px\" />"
 		            		}
 		            	},
 		            },
-		            {"title":"工时",width:'50',"class":"center","data":"singleHour","defaultContent": ""},
+		            {"title":"工时",width:'50',"class":"center","data":"single_hour","defaultContent": ""},
 		            {"title":"所需人力",width:'100',"class":"center","data":"labors","defaultContent": ""},
 		            {"title":"总工时",width:'100',"class":"center","data":"-","defaultContent": "",
 		            	"render": function ( data, type, row ) {
@@ -184,6 +197,49 @@ function ajaxQuery(){
 		            }
 		          ],
 	});
+	
+}
+
+function editProductQty(obj,totalQty,readyQty,tmp_id){
+	console.log($(obj).val() + "|" + totalQty + "|" + readyQty + "|" + tmp_id);
+	var productQty = $(obj).val();
+	if (!const_int_validate.test(productQty)) {
+		alert("产量只能为整数");
+		$(obj).val("");
+		return false;
+	}else if (parseInt(totalQty) < parseInt(readyQty)+ parseInt(productQty)) {
+		alert("已完成数量不能超过总数量！");
+		$(obj).val("");
+		return false;
+	}else if (productQty != 0&& confirm("是否保存输入的产量？")) {
+		var order = {};
+		order.finishedQty = parseInt(readyQty)+parseInt(productQty);
+		order.productQty = productQty;
+		order.orderId = tmp_id;
+		// 已完成数量等于总数量时更新工单状态为‘已完成’
+		if (parseInt(totalQty) == parseInt(readyQty) + parseInt(productQty)) {
+			order.status = "5";
+		}
+		var conditions = JSON.stringify(order);
+		
+		$.ajax({
+			url : "updateOrderProcedure",
+			dataType : "json",
+			type : "get",
+			data : {
+				"conditions" : conditions
+			},
+			success : function(response) {
+				$.gritter.add({
+					title: '系统提示：',
+					text: '<h5>操作成功！</h5>',
+					class_name: 'gritter-info'
+				});
+				ajaxQuery();
+			}
+		});
+		
+	}
 	
 }
 
@@ -225,6 +281,215 @@ function editWorkTime(id,tmp_order_no,reason_content,total_qty,finished_qty,work
 				}
 			]
 	});
+}
+
+function show(tmp_order_no,id){
+	  
+	var dialog = $("#dialog-show").removeClass('hide').dialog({
+		width:800,
+		height:600,
+		modal: true,
+		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i> 临时派工单查看</h4></div>",
+		title_html: true,
+		buttons: [ 
+			{
+				text: "取消",
+				"class" : "btn btn-minier",
+				click: function() {
+					$( this ).dialog( 'close' ); 
+				} 
+			}
+		]
+	});
+	$("#baseinfo").addClass("active");
+	$("#div1").addClass("active");
+	$("#productiondetailmtn").removeClass("active");
+	$("#workhourdetail").removeClass("active");
+	$("#workhourallot").removeClass("active");
+	$("#div2").removeClass("active");
+	$("#div3").removeClass("active");
+	$("#div4").removeClass("active");
+	var param ={
+			"tmp_order_no":tmp_order_no,
+			"temp_order_id":id
+			};
+    $.ajax({
+        type: "post",
+        url: "showTmpOrderDetail",
+        cache: false,  //禁用缓存
+        data: param,  //传入组装的参数
+        dataType: "json",
+        success: function (result) {
+        	clearText();
+        	$("#show_order_launcher").text(result.tmpOrderMap.data[0].order_launcher);
+        	$("#show_factory").text(result.tmpOrderMap.data[0].factory);
+        	$("#show_workshop").text(result.tmpOrderMap.data[0].workshop);
+        	$("#show_head_launch_unit").text(result.tmpOrderMap.data[0].head_launch_unit);
+        	$("#show_acceptor").text(result.tmpOrderMap.data[0].acceptor);
+        	$("#show_reason_content").text(result.tmpOrderMap.data[0].reason_content);
+        	$("#show_total_qty").text(result.tmpOrderMap.data[0].total_qty);
+        	$("#show_order_type").text(result.tmpOrderMap.data[0].order_type);
+        	$("#show_duty_unit").text(result.tmpOrderMap.data[0].duty_unit);
+        	$("#show_labors").text(result.tmpOrderMap.data[0].labors);
+        	$("#show_single_hour").text(result.tmpOrderMap.data[0].single_hour);
+        	$("#show_assesor").text(result.tmpOrderMap.data[0].assesor);
+        	$("#show_assess_verifier").text(result.tmpOrderMap.data[0].assess_verifier);
+        	$("#show_is_cost_transfer").text(result.tmpOrderMap.data[0].is_cost_transfer=='0' ? '否':'是');
+        	$("#show_cost_unit_signer").text(result.tmpOrderMap.data[0].cost_unit_signer);
+        	$("#show_tmp_order_no").text(result.tmpOrderMap.data[0].tmp_order_no);
+        	$("#show_sap_order").text(result.tmpOrderMap.data[0].sap_order);
+        	$("#show_acceptor_sign").text(result.tmpOrderMap.data[0].acceptor);
+        	var columns=[];
+        	var tmpOrderProcedureList = result.tmpOrderProcedureList;
+        	var assignList = result.assignList;
+        	var staffTmpHoursList = result.staffTmpHoursList;
+            columns=[
+    		            {"title":"产量","class":"center","data":"output","defaultContent": ""},
+    		            {"title":"维护人","class":"center","data":"recorder","defaultContent": ""},
+    		            {"title":"维护时间","class":"center","data":"record_date","defaultContent": ""},
+              ];
+            //先destroy datatable，隐藏form
+          	if($.fn.dataTable.isDataTable("#productiondetailmtnResult")){
+          		$('#productiondetailmtnResult').DataTable().destroy();
+          		$('#productiondetailmtnResult').empty();
+          	}
+            $("#productiondetailmtnResult").DataTable({
+        		paiging:false,
+        		ordering:false,
+        		searching: false,
+        		autoWidth:false,
+        		paginate:false,
+        		sScrollY: $(window).height()-210,
+        		scrollX: true,
+        		scrollCollapse: true,
+        		lengthChange:false,
+        		orderMulti:false,
+        		info:false,
+        		language: {
+        			emptyTable:"",					     
+        			infoEmpty:"",
+        			zeroRecords:"未查询到数据！"
+        		},
+        		data:tmpOrderProcedureList,
+        		columns:columns
+        	});
+            columns=[
+                    {"title":"操作日期","class":"center","data":"work_date","defaultContent": ""},
+  		            {"title":"工号","class":"center","data":"staff_number","defaultContent": ""},
+  		            {"title":"姓名","class":"center","data":"staff_name","defaultContent": ""},
+  		            {"title":"岗位","class":"center","data":"job","defaultContent": ""},
+  		            {"title":"工时","class":"center","data":"work_hour","defaultContent": ""},
+  		            {"title":"记录人","class":"center","data":"editor","defaultContent": ""},
+  		            {"title":"记录时间","class":"center","data":"edit_date","defaultContent": ""},
+  		            {"title":"审核人","class":"center","data":"approver","defaultContent": ""},
+		            {"title":"审核时间","class":"center","data":"approve_date","defaultContent": ""}
+  		      ];
+ 
+          	 if($.fn.dataTable.isDataTable("#workhourdetailResult")){
+          		 $('#workhourdetailResult').DataTable().destroy();
+          		 $('#workhourdetailResult').empty();
+          	 }
+  		     $("#workhourdetailResult").DataTable({
+          		paiging:false,
+          		ordering:false,
+          		searching: false,
+          		rowsGroup:[0],
+          		autoWidth:false,
+          		paginate:false,
+          		sScrollY: $(window).height()-250,
+          		scrollX: true,
+          		scrollCollapse: true,
+          		lengthChange:false,
+          		orderMulti:false,
+          		info:false,
+          		language: {
+          			emptyTable:"",					     
+          			infoEmpty:"",
+          			zeroRecords:"未查询到数据！"
+          		},
+          		data:staffTmpHoursList,
+          		columns:columns
+          	});
+            columns=[
+ 		            {"title":"工号","class":"center","data":"staff_number","defaultContent": ""},
+ 		            {"title":"姓名","class":"center","data":"staff_name","defaultContent": ""},
+ 		            {"title":"车间","class":"center","data":"workshop","defaultContent": ""},
+ 		            {"title":"班组","class":"center","data":"workgroup","defaultContent": ""},
+ 		            {"title":"岗位","class":"center","data":"job","defaultContent": ""},
+ 		            {"title":"个人总工时","class":"center total_hour","data":"total_real_hour","defaultContent": ""},
+ 		            {"title":"工时分配","class":"center total_hour_allot","data":"total_hour","defaultContent": ""}
+ 		      ];
+             if($.fn.dataTable.isDataTable("#workhourallotResult")){
+         		 $('#workhourallotResult').DataTable().destroy();
+         		 $('#workhourallotResult').empty();
+         	 }
+ 		     $("#workhourallotResult").DataTable({
+         		paiging:false,
+         		ordering:false,
+         		searching: false,
+         		autoWidth:false,
+         		paginate:false,
+         		sScrollY: $(window).height()-250,
+         		scrollX: true,
+         		scrollCollapse: true,
+         		lengthChange:false,
+         		orderMulti:false,
+         		info:false,
+         		language: {
+         			emptyTable:"",					     
+         			infoEmpty:"",
+         			zeroRecords:"未查询到数据！"
+         		},
+         		data:assignList,
+         		columns:columns
+         	});
+ 		     // 合计处理
+ 		     if(assignList.length>0){
+ 		    	var workhourtotal=0;
+ 	 			$("#workhourallotResult tbody").find(".total_hour").each(function(){
+ 	 				if($(this).text()!=""){
+ 	 					workhourtotal+=parseFloat($(this).text());
+ 	 				}
+ 	 			});
+ 	 			var workhourallottotal=0;
+ 	 			$("#workhourallotResult tbody").find(".total_hour_allot").each(function(){
+ 	 				if($(this).text()!=""){
+ 	 					workhourallottotal+=parseFloat($(this).text());
+ 	 				}
+ 	 			});
+ 	 			var tr=$("<tr />");
+ 	 			$("<td class='center'/>").html("").appendTo(tr);
+ 	 			$("<td class='center'/>").html("").appendTo(tr);
+ 	 			$("<td class='center'/>").html("").appendTo(tr);
+ 	 			$("<td class='center'/>").html("").appendTo(tr);
+ 	 			$("<td class='center'/>").html("合计").appendTo(tr);
+ 	 			$("<td class='center'/>").html(workhourtotal).appendTo(tr);
+ 	 			$("<td class='center'/>").html(workhourallottotal).appendTo(tr);
+ 	 			$("#workhourallotResult tbody").append(tr);
+ 		     }
+        }
+    }); 
+}
+
+function clearText(){
+	$("#show_order_launcher").text("");
+	$("#show_factory").text("");
+	$("#show_workshop").text("");
+	$("#show_head_launch_unit").text("");
+	$("#show_acceptor").text("");
+	$("#show_reason_content").text("");
+	$("#show_total_qty").text("");
+	$("#show_order_type").text("");
+	$("#show_duty_unit").text("");
+	$("#show_labors").text("");
+	$("#show_single_hour").text("");
+	$("#show_assesor").text("");
+	$("#show_assess_verifier").text("");
+	$("#show_is_cost_transfer").text("");
+	$("#show_cost_unit_signer").text("");
+	$("#show_tmp_order_no").text("");
+	$("#show_sap_order").text("");
+	$("#show_acceptor_sign").text("");
 }
 
 function btnEditConfirm(){

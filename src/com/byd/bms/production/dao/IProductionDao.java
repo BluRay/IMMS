@@ -214,6 +214,6 @@ public interface IProductionDao {
 	public void rejectOrder(Map<String, Object> m);
 	public int batchUpdateWorkHour(List<Map<String, Object>> swh_list);
 
-
-	
+	public int saveTmpOrderProcedure(Map<String, Object> cmap);
+	public int updateTmpOrder(Map<String, Object> cmap);
 }

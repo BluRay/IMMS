@@ -1496,5 +1496,15 @@ public class ProductionServiceImpl implements IProductionService {
 		return productionDao.batchUpdateWorkHour(swh_list);
 	}
 
+	@Override
+	public int saveTmpOrderProcedure(Map<String, Object> cmap) {
+		return productionDao.saveTmpOrderProcedure(cmap);
+	}
+
+	@Override
+	public int updateTmpOrder(Map<String, Object> cmap) {
+		return productionDao.updateTmpOrder(cmap);
+	}
+
 	
 }

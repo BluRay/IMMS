@@ -4,6 +4,7 @@ var zTreeObj={};
 var const_email_validate=/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 var const_float_validate= /^[0-9]+[0-9]*\.?[0-9]*$/;//浮点数正则表达式
 var const_float_validate_one= /^\d*\.?\d?$/;//一位浮点数正则表达式
+var const_int_validate = /^[0-9]+[0-9]*$/;//整数正则表达式
 /*
  * 填充下拉列表 with id=>value;包括全部选项
  */
