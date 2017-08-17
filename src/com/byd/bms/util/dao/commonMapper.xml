@@ -261,6 +261,9 @@
 		<if test="staff_number !=null and staff_number !=''"> 
 			and t.staff_number=#{staff_number} 
 		</if>
+		<if test="factory_code !=null and factory_code !=''"> 
+			and t.factory_code=#{factory_code} 
+		</if>
 	</select>
 	<insert id="addTask" parameterType="Map"  useGeneratedKeys="true">
 		<selectKey resultType="int" keyProperty="id" order="AFTER">
@@ -282,9 +285,12 @@
 			finish_count=CAST(finish_count AS SIGNED)+CAST(#{finish_count} AS SIGNED),
 			handler=#{handler},finish_date=#{finish_date}
 		</if> 
-		where 1=1 and count!=finish_count
+		where 1=1 and <![CDATA[count>finish_count]]> 
 		<if test="task_type_name !=null and task_type_name !=''"> 
-			and task_type_id=(select id from BMS_BASE_TASK_TYPE t where t.task_type=#{task_type_name})
+			and task_type_id=(
+			select id from BMS_BASE_TASK_TYPE t where
+			 t.task_type=#{task_type_name} and t.factory_code=#{factory_code}
+			 )
 		</if>
 		<if test="id !=null and id !=''"> 
 			and id=${id}

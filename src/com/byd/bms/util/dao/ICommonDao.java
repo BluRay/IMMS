@@ -64,7 +64,7 @@ public interface ICommonDao {
 	
 	List<Map<String,Object>> queryTaskList(Map<String,Object>condMap);
 	
-	Map<String,Object> queryTaskType(Map<String,Object>condMap);
+	List<Map<String, Object>> queryTaskType(Map<String,Object>condMap);
 	
 	public int addTask(Map map);
 	

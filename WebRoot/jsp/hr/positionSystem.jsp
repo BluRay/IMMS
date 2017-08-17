@@ -28,7 +28,7 @@
 			<div class="breadcrumbs ace-save-state" id="breadcrumbs">
 				<ul class="breadcrumb">
 					<li><i class="ace-icon fa fa-home home-icon"></i><a
-						href="<%=request.getContextPath()%>/index">首页</a></li>
+						href="/BMS/index">首页</a></li>
 					<li><a href="#">计件工资</a></li>
 					<li><a href="#">基础数据</a></li>
 					<li class="active">标准岗位库</li>

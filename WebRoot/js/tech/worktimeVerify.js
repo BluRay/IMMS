@@ -152,14 +152,14 @@ function ajaxQuery(){
 		            },
 		            {"title":"操作",width:'60',"class":"center","data":null,"defaultContent": "",
 		            	"render": function ( data, type, row ) {
-		            		return "<i class=\"glyphicon glyphicon-ok bigger-130 showbus\" title=\"审核\" onclick='verifyWorkTime(\"" + row['order_no'] + "\",\""+ row['tech_order_no'] +"\",\""+ row['task_content'] +"\",\""+ row['task_detail_id'] +"\",\""+ row['factory'] +"\",\""+ row['workshop'] +"\",\""+ row['tech_list'] +"\",\""+ row['time_list'] +"\",\""+ row['follow_list'] +"\",\""+ row['ready_hour_list'] +"\")' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;";
+		            		return "<i class=\"glyphicon glyphicon-ok bigger-130 showbus\" title=\"审核\" onclick='verifyWorkTime(\"" + row['order_no'] + "\",\""+ row['tech_order_no'] +"\",\""+ row['task_content'] +"\",\""+ row['task_detail_id'] +"\",\""+ row['factory'] +"\",\""+ row['workshop'] +"\",\""+ row['tech_list'] +"\",\""+ row['time_list'] +"\",\""+ row['follow_list'] +"\",\""+ row['follow_list'] +"\",\""+ row['tech_single_price'] +"\")' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;";
 		            	},
 		            }
 		          ],
 	});
 }
 
-function verifyWorkTime(order_no,tech_order_no,task_content,task_detail_id,factory,workshop,tech_list,time_list,follow_list,ready_hour_list){
+function verifyWorkTime(order_no,tech_order_no,task_content,task_detail_id,factory,workshop,tech_list,time_list,follow_list,ready_hour_list,tech_single_price){
 	var totalHour = 0;
 	var tech_num = 0;
 	var single_hour = 0;
@@ -169,6 +169,7 @@ function verifyWorkTime(order_no,tech_order_no,task_content,task_detail_id,facto
 	var eMon = d.getMonth() + 1;
 	var workMonth=eYear+"-"+(eMon<10?"0"+eMon:eMon);
 	$("#edit_workDate").val(workMonth);
+	$("#edit_singlePrice").val(tech_single_price);
 	editModal_factory = factory;
 	editModal_workshop = workshop;
 	console.log("-->time_list = " + time_list);
@@ -215,6 +216,7 @@ function verifyWorkTime(order_no,tech_order_no,task_content,task_detail_id,facto
 	var singleHour=single_hour;
 	
 	var conditions="{ecnTaskId:'"+task_detail_id+"',workMonth:'"+workMonth+"',factory:'"+factory+"',workshop:'"+workshop+"'}";
+	console.log("-->tech_order_no = " + tech_order_no);
 	swhlist = ajaxGetStaffWorkHours(conditions);
 	swh_list = swhlist;
 	generateWorkhourTb(swhlist,true);
@@ -249,14 +251,14 @@ function verifyWorkTime(order_no,tech_order_no,task_content,task_detail_id,facto
 					id:"btn_ok",
 					"class" : "btn btn-success btn-minier",
 					click: function() {
-						btnEditConfirm(task_detail_id);
+						btnEditConfirm(task_detail_id,tech_order_no);
 					} 
 				}
 			]
 	});
 }
 
-function btnEditConfirm(task_detail_id){
+function btnEditConfirm(task_detail_id,tech_order_no){
 	var workDate=$("#edit_workDate").val();
 	var tech_single_price = $("#edit_singlePrice").val();
 	if(!const_float_validate.test(tech_single_price)){
@@ -281,6 +283,7 @@ function btnEditConfirm(task_detail_id){
 			if(ischecked){
 				console.log("-->tech_single_price = " + tr_count + " : "+ edit_list[0].techSinglePrice);
 				edit_list[tr_count].techSinglePrice=tech_single_price;
+				edit_list[tr_count].tech_order_no=tech_order_no;
 				tr_count++;
 			}
 			if(status=='已驳回'&&!ischecked){

@@ -29,7 +29,7 @@
 			<div class="main-content-inner">
 				<div class="breadcrumbs ace-save-state  breadcrumbs-fixed" id="breadcrumbs">
 					<ul class="breadcrumb">
-						<li><i class="ace-icon fa fa-home home-icon"></i><a href="<%=request.getContextPath()%>/index">首页</a></li>
+						<li><i class="ace-icon fa fa-home home-icon"></i><a href="/BMS/index">首页</a></li>
 						<li><a href="#">订单导入</a></li>
 						<li class="active">内部评审</li>
 					</ul>

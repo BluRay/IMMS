@@ -5,9 +5,24 @@ String rqip= request.getRemoteAddr();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path;
 String display_name = (String)session.getAttribute("display_name");
 %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>	
+<script src="/BMS/assets/js/jquery.min.js"></script>
+<script type="text/javascript">
+	
+	$(document).ready(function() {
+		//alert("top")
+		if(window.location.href.indexOf("10.23.1.74")>=0){
+			//alert("域名访问");
+			$("#a_logout").attr("href","http://websso.byd.com.cn/oam/server/logout?end_url=http://10.23.1.74");
+		}
+		
+	})
+</script>	
+</head>		
+<body>
 <div id="navbar" class="navbar navbar-default navbar-fixed-top">
-			
-
 			<div class="navbar-container" id="navbar-container">
 				<!-- #section:basics/sidebar.mobile.toggle -->
 				<button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler">
@@ -311,7 +326,7 @@ String display_name = (String)session.getAttribute("display_name");
 								<li class="divider"></li>
 
 								<li>
-									<a href="<%=basePath%>/logout">
+									<a id="a_logout" href="<%=basePath%>/logout">
 										<i class="ace-icon fa fa-power-off"></i>
 										登出
 									</a>
@@ -326,3 +341,6 @@ String display_name = (String)session.getAttribute("display_name");
 				<!-- /section:basics/navbar.dropdown -->
 			</div><!-- /.navbar-container -->
 		</div>
+</body>
+</html>
+		

@@ -964,6 +964,8 @@ public class TechController extends BaseController{
 		String conditions = request.getParameter("conditions");
 		String whflag = request.getParameter("whflag");
 		String status = "0";
+		String techSinglePrice = "0";
+		String tech_order_no = "";
 		if(whflag.equals("reject")){
 			status = "2";
 		}else{
@@ -977,10 +979,19 @@ public class TechController extends BaseController{
 			object.put("approveDate", curTime);
 			object.put("status", status);
 			object.put("actionType", "reject");
+			//System.out.println("---->techSinglePrice = " + object.get("techSinglePrice"));
+			//System.out.println("---->tech_order_no = " + object.get("tech_order_no"));
+			techSinglePrice = object.get("techSinglePrice").toString();
+			tech_order_no = object.get("tech_order_no").toString();
 			Map<String, Object> map = (Map<String, Object>) object;
 			swh_list.add(map);
 		}
+		Map<String, Object> conditionMap=new HashMap<String,Object>();
+		conditionMap.put("tech_single_price", techSinglePrice);
+		conditionMap.put("tech_order_no", tech_order_no);
+		
 		int result = techService.batchUpdateWorkHour(swh_list);
+		result += techService.updateTechTaskPrice(conditionMap);
 		mv.clear();
 		initModel(true,String.valueOf(result),null);
 		model = mv.getModelMap();

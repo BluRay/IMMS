@@ -2613,7 +2613,7 @@
 	<update id="verifyOrder" parameterType="Map">
 		update BMS_PD_TMP_ORDER
 		set status=
-		(case when total_qty=finished_qty then '5' else '3' end),
+		(case when total_qty=finished_qty then '1' else '0' end),
 		workhour_auditor=#{auditorId},workhour_auditor_date=#{auditDate}
 		where id =#{tempOrderId}
 	</update>

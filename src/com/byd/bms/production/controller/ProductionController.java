@@ -1541,7 +1541,7 @@ public class ProductionController extends BaseController {
 			}
             if(flag.equals("verify")){
             	Map<String,Map<String,Object>> taskMap=getWaitWorkTimeMap(swh_list,"");
-            	commonService.updateTask("等待工时修改",taskMap);			
+            	commonService.updateTask("等待工时审核",taskMap);			
             }
 			if(flag.equals("reject")){
 				Map<String,Map<String,Object>> taskMap=getWaitWorkTimeMap(swh_list,flag);
@@ -1549,10 +1549,10 @@ public class ProductionController extends BaseController {
 				commonService.updateTask("等待工时审核",taskMap);
 			}
 			result.put("success", true);
-			result.put("message","修改成功");
+			result.put("message","操作成功");
 		}else{
 			result.put("success", false);
-			result.put("message","修改失败");
+			result.put("message","操作失败");
 		}		
 		mv.clear();
 		mv.getModelMap().addAllAttributes(result);

@@ -256,7 +256,6 @@ $(document).ready(function() {
 		var workshop ="";	
 		var workgroup="";
 		var team="";
-		var total_distribution=0;
 		var staffNumlist="";
 		
 		var wait_date=$("#wait_date").val();

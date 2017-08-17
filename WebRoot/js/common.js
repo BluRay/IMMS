@@ -716,8 +716,8 @@ function EnterPress(e){ //传入 event
 	if(e.keyCode == 13){ 
 		console.log("EnterPress");
 		//alert("-->EnterPress!!!" + $("#bus-search-input").val());
-		//window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
-		window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val(), '_blank').location;
+		//window.open("/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+		window.open("/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val(), '_blank').location;
 		return false;
 	} 
 }**/

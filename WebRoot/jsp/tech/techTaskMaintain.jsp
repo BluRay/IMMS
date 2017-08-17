@@ -28,7 +28,7 @@
 			<div class="breadcrumbs ace-save-state" id="breadcrumbs">
 				<ul class="breadcrumb">
 					<li><i class="ace-icon fa fa-home home-icon"></i><a
-						href="<%=request.getContextPath()%>/index">首页</a></li>
+						href="/BMS/index">首页</a></li>
 					<li><a href="#">工程变更</a></li>
 					<li class="active">技改任务维护</li>
 				</ul>

@@ -625,5 +625,10 @@ public class TechServiceImpl implements ITechService {
 		return techDao.getBusNumberByOrder(conditionMap);
 	}
 
+	@Override
+	public int updateTechTaskPrice(Map<String, Object> conditionMap) {
+		return techDao.updateTechTaskPrice(conditionMap);
+	}
+
 		
 }

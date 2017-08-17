@@ -45,7 +45,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<div class="breadcrumbs ace-save-state" id="breadcrumbs">
 				<ul class="breadcrumb">
 					<li><i class="ace-icon fa fa-home home-icon"></i><a
-						href="<%=request.getContextPath()%>/index">首页</a></li>
+						href="/BMS/index">首页</a></li>
 					<li class="active">订单评审</li>
 				</ul>
 				<!-- /.breadcrumb -->

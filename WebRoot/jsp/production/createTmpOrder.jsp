@@ -28,7 +28,7 @@
 				<div class="breadcrumbs ace-save-state" id="breadcrumbs">
 					<ul class="breadcrumb">
 						<li><i class="ace-icon fa fa-home home-icon"></i><a
-							href="<%=request.getContextPath()%>/index">首页</a></li>
+							href="/BMS/index">首页</a></li>
 						<li><a href="#">生产执行</a></li>
 						<li><a href="#">创建临时派工单</a></li>
 					</ul>
@@ -123,7 +123,7 @@
 					<tr style="height:35px">
 						<td align="right" style="width:120px">*总数量：</td>
 						<td style="width:120px">
-						<input type="text" class="input-medium" id="edit_total_qty" style="width:120px;height:30px;"/>
+						<input type="text" class="input-medium" id="edit_total_qty" style="width:120px;height:30px;" readonly="readonly"/>
 						</td>
 						<td align="right" style="width:120px">* 派工类型：</td>
 						<td style="width:120px"><select style="width:120px" id="edit_order_type"></select></td>

@@ -84,4 +84,6 @@ public interface ITechService {
 	public void caculateEcnSalary(Map<String, Object> conditionMap);
 	
 	public List<Map<String,String>> getBusNumberByOrder(Map<String, Object> conditionMap);
+	
+	public int updateTechTaskPrice(Map<String, Object> conditionMap);
 }

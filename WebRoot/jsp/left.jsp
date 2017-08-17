@@ -12,22 +12,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<link rel="stylesheet" href="<%=basePath%>/assets/css/bootstrap.min.css" />
-<link rel="stylesheet" href="<%=basePath%>/assets/css/font-awesome.min.css" />
+<link rel="stylesheet" href="/BMS/assets/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/BMS/assets/css/font-awesome.min.css" />
 <!-- text fonts -->
-<link rel="stylesheet" href="<%=basePath%>/assets/css/ace-fonts.css" />
+<link rel="stylesheet" href="/BMS/assets/css/ace-fonts.css" />
 <!-- ace styles -->
-<link rel="stylesheet" href="<%=basePath%>/assets/css/ace.min.css" id="main-ace-style" />
-<link rel="stylesheet" href="<%=basePath%>/assets/css/ace-skins.min.css" />
-<link rel="stylesheet" href="<%=basePath%>/assets/css/ace-rtl.min.css" />
-<script src="<%=basePath%>/assets/js/jquery.min.js"></script>
-<script src="<%=basePath%>/assets/js/jquery.mobile.custom.min.js"></script>
-<script src="<%=basePath%>/assets/js/ace-extra.min.js"></script>
-<script src="<%=basePath%>/assets/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="/BMS/assets/css/ace.min.css" id="main-ace-style" />
+<link rel="stylesheet" href="/BMS/assets/css/ace-skins.min.css" />
+<link rel="stylesheet" href="/BMS/assets/css/ace-rtl.min.css" />
+<script src="/BMS/assets/js/jquery.min.js"></script>
+<script src="/BMS/assets/js/jquery.mobile.custom.min.js"></script>
+<script src="/BMS/assets/js/ace-extra.min.js"></script>
+<script src="/BMS/assets/js/bootstrap.min.js"></script>
 		<!-- page specific plugin scripts -->
 		<!-- ace scripts -->
-		<script src="<%=basePath%>/assets/js/ace-elements.min.js"></script>
-		<script src="<%=basePath%>/assets/js/ace.min.js"></script>
+		<script src="/BMS/assets/js/ace-elements.min.js"></script>
+		<script src="/BMS/assets/js/ace.min.js"></script>
 		<!-- inline scripts related to this page -->
 		<script type="text/javascript">
 			jQuery(function($) {
@@ -49,7 +49,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 var s = [];
 function ajaxQueryMenu(){
 	$.ajax({
-	    url: "<%=basePath%>/getMenu",
+	    url: "/BMS/getMenu",
 	    async: false,
 	    dataType: "json",
 		type: "get",
@@ -120,7 +120,7 @@ $(document).ready(function () {
 	ajaxQueryMenu();
 	$.ajax({
 		type:'GET',
-		url:"<%=basePath%>/common/getTaskList",
+		url:"/BMS/common/getTaskList",
 		data:{},
 		async: false,
 		globle:false,
@@ -134,7 +134,7 @@ $(document).ready(function () {
  			$("#task").html("需处理任务数 "+data.count+" 个");
 			var str="";
 			$.each(data.datalist,function(index,item){
-				var url="<%=basePath%>/"+item.url;
+				var url="/BMS/"+item.url;
 				if(item.params!=null && item.params!=undefined){
 					url+=item.params;
 				}
@@ -160,7 +160,7 @@ $(document).ready(function () {
 			
 			var li = $('<li  class="" />');
 
-			var a = $('<a href=\"<%=basePath%>/'+value.path+'\" ></a>');
+			var a = $('<a href=\"/BMS/'+value.path+'\" ></a>');
 			if (value.path.substring(0,4) =="http"){
 				a = $('<a href=\"'+value.path+'<%=staff_number%>\" ></a>');
 			}
@@ -252,7 +252,7 @@ function traverseTree(node,parentli,two){
 	var ul = $('<ul class="submenu" />');
 	$.each(node.list, function (index, value) {
 		var li = $('<li  class="" />');
-		var a = $('<a href=\"<%=basePath%>/'+value.path+'\" ></a>');
+		var a = $('<a href=\"/BMS/'+value.path+'\" ></a>');
 		if(value.list.length>0){
 			a.addClass('dropdown-toggle');
 			if(two){
@@ -328,7 +328,7 @@ function traverseTree(node,parentli,two){
 
 				<ul class="nav nav-list">
 					<li class="">
-						<a href="<%=basePath%>/index">
+						<a href="/BMS/index">
 							<i class="menu-icon fa fa-home green"></i>
 							<span class="menu-text"> 系统首页 </span>
 						</a>
@@ -348,7 +348,7 @@ function traverseTree(node,parentli,two){
 
 						<ul class="submenu">
 							<li class="">
-								<a href="<%=basePath%>/blank.html">
+								<a href="/BMS/blank.html">
 									<i class="menu-icon fa fa-caret-right"></i>
 									模板
 								</a>
@@ -357,7 +357,7 @@ function traverseTree(node,parentli,two){
 							</li>
 
 							<li class="">
-								<a href="<%=basePath%>/elements.html">
+								<a href="/BMS/elements.html">
 									<i class="menu-icon fa fa-caret-right"></i>
 									元素
 								</a>
@@ -366,7 +366,7 @@ function traverseTree(node,parentli,two){
 							</li>
 
 							<li class="">
-								<a href="<%=basePath%>/buttons.html">
+								<a href="/BMS/buttons.html">
 									<i class="menu-icon fa fa-caret-right"></i>
 									按钮 &amp; 图标
 								</a>
@@ -375,7 +375,7 @@ function traverseTree(node,parentli,two){
 							</li>
 
 							<li class="">
-								<a href="<%=basePath%>/treeview.html">
+								<a href="/BMS/treeview.html">
 									<i class="menu-icon fa fa-caret-right"></i>
 									树形菜单
 								</a>
@@ -384,7 +384,7 @@ function traverseTree(node,parentli,two){
 							</li>
 
 							<li class="">
-								<a href="<%=basePath%>/jqueryui.html">
+								<a href="/BMS/jqueryui.html">
 									<i class="menu-icon fa fa-caret-right"></i>
 									jQuery UI
 								</a>
@@ -406,7 +406,7 @@ function traverseTree(node,parentli,two){
 
 						<ul class="submenu">
 							<li class="">
-								<a href="<%=basePath%>/tables.html">
+								<a href="/BMS/tables.html">
 									<i class="menu-icon fa fa-caret-right"></i>
 									简单 &amp; 动态
 								</a>
@@ -428,7 +428,7 @@ function traverseTree(node,parentli,two){
 
 						<ul class="submenu">
 							<li class="">
-								<a href="<%=basePath%>/formelements.html">
+								<a href="/BMS/formelements.html">
 									<i class="menu-icon fa fa-caret-right"></i>
 									表单元素
 								</a>
@@ -437,7 +437,7 @@ function traverseTree(node,parentli,two){
 							</li>
 
 							<li class="">
-								<a href="<%=basePath%>/formwizard.html">
+								<a href="/BMS/formwizard.html">
 									<i class="menu-icon fa fa-caret-right"></i>
 									向导 &amp; 校验
 								</a>
@@ -446,7 +446,7 @@ function traverseTree(node,parentli,two){
 							</li>
 
 							<li class="">
-								<a href="<%=basePath%>/wysiwyg.html">
+								<a href="/BMS/wysiwyg.html">
 									<i class="menu-icon fa fa-caret-right"></i>
 									文本编辑器
 								</a>
@@ -455,7 +455,7 @@ function traverseTree(node,parentli,two){
 							</li>
 
 							<li class="">
-								<a href="<%=basePath%>/dropzone.html">
+								<a href="/BMS/dropzone.html">
 									<i class="menu-icon fa fa-caret-right"></i>
 									拖拽上传文件
 								</a>
@@ -463,7 +463,7 @@ function traverseTree(node,parentli,two){
 								<b class="arrow"></b>
 							</li>
 							<li class="">
-								<a href="<%=basePath%>/flow.html">
+								<a href="/BMS/flow.html">
 									<i class="menu-icon fa fa-caret-right"></i>
 									流程测试
 								</a>

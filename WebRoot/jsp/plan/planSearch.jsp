@@ -20,7 +20,7 @@
 			<!-- 路径和搜索框 -->
 			<div class="breadcrumbs" id="breadcrumbs">
 					<ul class="breadcrumb">
-						<li><i class="ace-icon fa fa-home home-icon"></i><a href="<%=request.getContextPath()%>/index">首页</a></li>
+						<li><i class="ace-icon fa fa-home home-icon"></i><a href="/BMS/index">首页</a></li>
 						<li><a href="#">生产计划</a></li>
 						<li class="active">计划完成</li>
 					</ul><!-- /.breadcrumb -->

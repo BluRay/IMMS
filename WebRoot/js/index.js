@@ -114,7 +114,7 @@ $(document).ready(function() {
 		var bar_series=[0,0,0,0];
 		var pie_series=[0,0,0,0];
 		$.ajax({
-			url:'/BMS/common/getIndexOrderData',
+			url:'common/getIndexOrderData',
 			type:'get',
 			dataType:'json',
 			cache:false,
@@ -228,7 +228,7 @@ function drawOutputChart(){
 	var series=[];
 	var factory_data_list=[];
 	$.ajax({
-		url:'/BMS/common/getIndexOutputData',
+		url:'common/getIndexOutputData',
 		type:'get',
 		dataType:'json',
 		cache:false,
@@ -350,7 +350,7 @@ function drawOutputChart(){
 	function drawFactoryDailyChart(){
 
 		$.ajax({
-			url:'/BMS/common/getIndexFactoryDailyData',
+			url:'common/getIndexFactoryDailyData',
 			type:'get',
 			dataType:'json',
 			cache:false,
@@ -421,7 +421,7 @@ function drawOutputChart(){
 	function drawFactoryOrderChart(){
 		$("#factory_act_order").html("");
 		$.ajax({
-			url:'/BMS/common/getIndexFactoryPrdOrdData',
+			url:'common/getIndexFactoryPrdOrdData',
 			type:'get',
 			dataType:'json',
 			cache:false,
@@ -474,7 +474,7 @@ function drawOutputChart(){
 	function drawFactoryException(){
 		$("#exception").html("");
 		$.ajax({
-			url:'/BMS/common/getIndexExceptionData',
+			url:'common/getIndexExceptionData',
 			type:'get',
 			dataType:'json',
 			cache:false,
@@ -523,7 +523,7 @@ function drawStaffCountChart(){
 	var series=[];
 	var factory_data_list=[];
 	$.ajax({
-		url:'/BMS/common/getIndexStaffCountData',
+		url:'common/getIndexStaffCountData',
 		type:'get',
 		dataType:'json',
 		cache:false,

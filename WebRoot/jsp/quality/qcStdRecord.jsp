@@ -26,7 +26,7 @@
 			<div class="main-content-inner">
 				<div class="breadcrumbs ace-save-state  breadcrumbs-fixed" id="breadcrumbs">
 					<ul class="breadcrumb">
-						<li><i class="ace-icon fa fa-home home-icon"></i><a href="<%=request.getContextPath()%>/index">首页</a></li>
+						<li><i class="ace-icon fa fa-home home-icon"></i><a href="/BMS/index">首页</a></li>
 						<li><a href="#">制程品质</a></li>
 						<li class="active">品质标准更新记录</li>
 					</ul>
