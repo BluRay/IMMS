@@ -216,4 +216,5 @@ public interface IProductionDao {
 
 	public int saveTmpOrderProcedure(Map<String, Object> cmap);
 	public int updateTmpOrder(Map<String, Object> cmap);
+	public String caculateTmpSalary(Map<String, Object> conditionMap);
 }

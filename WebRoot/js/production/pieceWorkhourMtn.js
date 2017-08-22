@@ -273,7 +273,12 @@ $(document).ready(function() {
 					save_flag=false;
 					return false;
 				}
-				var staff_number = $(tds).eq(1).find(".staff_number").val()||$(tds).eq(1).html();
+				var staff_number = $(tds).eq(1).html();
+				var input_staff_number=$(tds).eq(1).find("input");
+				//alert($(input_staff_number).html())
+				if(input_staff_number.html()){
+					staff_number=$(tds).eq(1).find(".staff_number").val()||"";
+				}
 				var staff_name=$(tds).eq(2).html();
 				var job=$(tds).eq(3).html();
 				if (staff_number.trim().length > 0) {
@@ -389,7 +394,9 @@ $(document).ready(function() {
 					return false;
 				}
 				var staff_number = $(tds).eq(1).html();
-				if($(tds).eq(1).find(".staff_number")){
+				var input_staff_number=$(tds).eq(1).find("input");
+				//alert($(input_staff_number).html())
+				if(input_staff_number.html()){
 					staff_number=$(tds).eq(1).find(".staff_number").val()||"";
 				}
 				var staff_name=$(tds).eq(2).html();
@@ -406,7 +413,7 @@ $(document).ready(function() {
 					staff.team=team;
 					staff.org_id=org_id;
 					staff.salary_model=salary_model;
-					staff.bus_number=bus_number;
+					staff.bus_number=bus_number||cutomer_number;
 					staff.bus_count=bus_count;
 					staff.bonus=bonus;
 					staff.work_date=work_date;
@@ -462,7 +469,12 @@ $(document).ready(function() {
 					save_flag=false;
 					return false;
 				}
-				var staff_number = $(tds).eq(1).find(".staff_number").val()||$(tds).eq(1).html();
+				var staff_number = $(tds).eq(1).html();
+				var input_staff_number=$(tds).eq(1).find("input");
+				//alert($(input_staff_number).html())
+				if(input_staff_number.html()){
+					staff_number=$(tds).eq(1).find(".staff_number").val()||"";
+				}
 				var staff_name=$(tds).eq(2).html();
 				var job=$(tds).eq(3).html();
 				if (staff_number.trim().length > 0) {

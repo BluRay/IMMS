@@ -1,6 +1,6 @@
 var pageSize=1;
 var table;
-
+var status_arr={'0':'非重大变更','1':'一般重大变更','2':'特别重大变更'}
 var extArray = new Array(".xls");
 var ECN_TYPE = [];
 var ECN_CHANGE_TYPE = [];
@@ -246,7 +246,10 @@ function ajaxQuery(){
 		            {"title":"责任单位","sWidth":"100px","class":"center","data":"duty_unit","render":function(data,type,row){
 		            	return getKeys(ECN_DUTY_UNIT, data)
 		            },"defaultContent": ""},		            
-		            {"title":"重大变更","sWidth":"100px","class":"center","data":"major_change","defaultContent": ""},		            
+		            {"title":"重大变更","sWidth":"100px","class":"center","data":"major_change","defaultContent": "","render":function(data,type,row){
+		            	return status_arr[data]
+		            	}
+		            },		            
 		            {"title":"顾客变更","sWidth":"100px","class":"center","data": "custom_change","defaultContent": ""},
 		            {"title":"顾客变更单","sWidth":"100px","class":"center","data":"custom_change_file","render": function(data,type,row){
 		            	return data==null?"":"<a href='#' onclick='window.open(\"" + data + "\")'>查看</a>" },"defaultContent":""
@@ -424,7 +427,8 @@ function showEditModal(techTaskId){
 				$("#edit_tech_order_file").after("<a href='#' onclick='window.open(\"" + value.tech_order_file + "\")'>" + (value.tech_order_file == "" ? "" : "查看") + "</a>");
 				$("#edit_tech_date").val(value.tech_date);
 				$("#edit_duty_unit").val(value.duty_unit);
-				value.major_change == "Y" ? $("#edit_major_change").attr('checked', true) : $("#edit_major_change").removeAttr('checked');
+				$("#edit_major_change").val(value.major_change);
+				//value.major_change == "Y" ? $("#edit_major_change").attr('checked', true) : $("#edit_major_change").removeAttr('checked');
 				value.custom_change == "Y" ? $("#edit_custom_change").attr('checked', true) : $("#edit_custom_change").removeAttr('checked');
 				value.repeat_change == "Y" ? $("#edit_repeat_change").attr('checked', true) : $("#edit_repeat_change").removeAttr('checked');
 

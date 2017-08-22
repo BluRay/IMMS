@@ -367,7 +367,24 @@ public class OrderServiceImpl implements IOrderService {
 				task.put("edit_date", curTime);
 				commonDao.updateTask(task);
 			}else{ // 新增一条记录
-				Map map=commonDao.queryTaskType(conditionMap);
+				List<Map<String, Object>> list=commonDao.queryTaskType(conditionMap);
+				if(list.size()>0){
+					Map<String,Object> map=list.get(0);
+					if(map!=null && !map.isEmpty()){
+						map.put("count", count);
+						map.put("finish_count", "0");
+						map.put("editor_id", Integer.parseInt(userid));
+						map.put("edit_date", curTime);
+						map.put("param", param);
+						map.put("factory_code", factoryCode);
+						result=commonDao.addTask(map);
+					}
+				}
+			}			
+		}else{ // 如果BMS_BASE_TASK的任务 都已完成，重新new一个task，新增一条记录
+			List<Map<String, Object>> list=commonDao.queryTaskType(conditionMap);
+			if(list.size()>0){
+				Map<String,Object> map=list.get(0);
 				if(map!=null && !map.isEmpty()){
 					map.put("count", count);
 					map.put("finish_count", "0");
@@ -377,17 +394,6 @@ public class OrderServiceImpl implements IOrderService {
 					map.put("factory_code", factoryCode);
 					result=commonDao.addTask(map);
 				}
-			}			
-		}else{ // 如果BMS_BASE_TASK的任务 都已完成，重新new一个task，新增一条记录
-			Map map=commonDao.queryTaskType(conditionMap);
-			if(map!=null && !map.isEmpty()){
-				map.put("count", count);
-				map.put("finish_count", "0");
-				map.put("editor_id", Integer.parseInt(userid));
-				map.put("edit_date", curTime);
-				map.put("param", param);
-				map.put("factory_code", factoryCode);
-				result=commonDao.addTask(map);
 			}
 		}
     	return result;

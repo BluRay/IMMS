@@ -22,7 +22,7 @@
 
 		<style type="text/css">
 			#main {
-				background: url(images/bg.jpg) no-repeat center;
+				
 				height: 650px;
 				display: -webkit-flex;
 				display: flex;
@@ -34,17 +34,19 @@
 			</style>
 	</head>
 
-	<body class="login-layout light-login" style="font-family: 'Microsoft YaHei';">
+	<body class="login-layout light-login" style="font-family: 'Microsoft YaHei';background: url(images/login.jpg) no-repeat center;background-size:cover;">
 		<div id="main" class="main-container">
+			
 			<div class="main-content">
 				<div class="row">
 					<div class="col-sm-10 col-sm-offset-1">
+						
 						<div class="login-container">
-							<div class="center">
-								<h2>
-									<img style="width:30px;height:30px;margin-top:-10px" alt="" src="images/favicon.ico">
-									<span id="id-text2">欢迎使用BMS</span>
-								</h2>
+							<div >
+								<h3>		
+									<img style="width:28%;height:28px;" alt="" src="images/bydlogo.png">							
+									<span id="id-text2" style="margin-left:20px">欢迎使用BMS</span>
+								</h3>
 							</div>
 
 							<div class="space-6"></div>
@@ -241,7 +243,7 @@
 								</div><!-- /.signup-box -->
 							</div><!-- /.position-relative -->
 
-							<div class="navbar-fixed-top align-right">
+						<!-- 	<div class="navbar-fixed-top align-right">
 								<br />
 								&nbsp;
 								<a id="btn-login-dark" href="#">黑色</a>
@@ -254,7 +256,7 @@
 								&nbsp;
 								<a id="btn-login-light" href="#">亮色</a>
 								&nbsp; &nbsp; &nbsp;
-							</div>
+							</div> -->
 						</div>
 					</div><!-- /.col -->
 				</div><!-- /.row -->

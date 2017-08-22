@@ -444,7 +444,7 @@
 	</insert>
 	
 	<select id="getEcnReportData" parameterType="Map" resultType="Map">
-		SELECT task_number,task_content,workshop,total_hours AS totalhours,total_hours*hour_price AS totalprice,
+		SELECT tech_order_no,task_content,workshop,total_hours AS totalhours,total_hours*hour_price AS totalprice,
 		work_date,staff_number,staff_name,job,workshop_org,workgroup_org,team_org,round(work_hour,4) AS work_hour,
 		round(hour_price*work_hour,4) AS salary,plant_org,round(real_work_hour,4) AS real_work_hour
 		FROM BMS_HR_TECH_SALARY
@@ -488,7 +488,7 @@
 			]]>
 		</if>
 		order by
-		task_number asc,
+		tech_order_no asc,
 		work_date asc
 	</select>
 	
@@ -744,7 +744,7 @@
 		union all
 		select '等待' workhour_type,wp.staff_number,wp.staff_name,sum(wp.work_hour) sum_participation,wp.work_date
 		from BMS_HR_WAIT_SALARY wp
-		where wp.work_date like CONCAT(#{work_date},'%')  
+		where wp.work_date like CONCAT(#{work_date},'%') and status in ('1','3') 
 		<if test="factory!='全部'">
 			AND wp.factory = #{factory}
 		</if>
@@ -834,7 +834,7 @@
 		union all
 		select '等待' workhour_type,wp.staff_number,wp.staff_name,sum(wp.work_hour) sum_participation,wp.work_date
 		from BMS_HR_WAIT_SALARY wp
-		where wp.work_date like CONCAT(#{work_date},'%')  
+		where wp.work_date like CONCAT(#{work_date},'%') and status in ('1','3')  
 		<if test="factory!='全部'">
 			AND wp.factory = #{factory}
 		</if>

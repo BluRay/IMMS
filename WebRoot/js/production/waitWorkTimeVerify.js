@@ -234,7 +234,7 @@ function generateTb(swhlist){
 			checkboxId="#chk_"+index;
 			swhids=index+",";
 			
-			if(swh.status=='0'){
+			if(swh.status=='0' || swh.status=='1'){
 				$("<td id='chk_"+index+"' rowspan=1 swhids="+swhids+"/>").html("<input type='checkbox' >").appendTo(tr);
 			}
 			else{

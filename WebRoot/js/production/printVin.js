@@ -5,7 +5,7 @@ $(document).ready(function () {
 		getBusNumberSelect('#nav-search-input');
 		getOrderNoSelect("#search_order_no","#orderId");
 		getFactorySelect("production/printVin",'',"#search_factory","全部",'id');
-		getFactorySelect("production/printVin",'',"#vin_factory",null,'id');
+//		getFactorySelect("production/printVin",'',"#vin_factory",null,'id');
 	};
 
 	$('#nav-search-input').bind('keydown', function(event) {
@@ -65,7 +65,7 @@ $(document).ready(function () {
 					+"<td style=\"text-align:left; font-size:26px; font-weight:bold;width:270px;height:35px;\">"+$(this).parents("tr").children().eq(6).text()+"</td></tr>"+
 					"<tr><td style=\"text-align:right; font-size:26px;font-weight:bold;height:35px;padding-left:0px\">VIN：</td>"
 					+"<td style=\"text-align:left; font-size:26px;font-weight:bold ;width:270px;height:35px; \">"+$(this).parents("tr").children().eq(3).text()+"</td></tr></table>"
-					+"<div id=\"bcTarget"+count+"\" style=\"width:300px; height:60px;margin-top:10px;text-align:center\"></div></div>";
+					+"<div id=\"bcTarget"+count+"\" style=\"width:300px; height:60px;margin-top:10px;text-align:center;margin:0 auto\"></div></div>";
 				count++;
 			}
 			
@@ -93,6 +93,11 @@ $(document).ready(function () {
 						       				
 			},0);
 	});
+	$(document).on('change', '.selectAll',function(){
+	    $('#table tbody :checkbox').prop("checked",this.checked); 
+	}); 
+
+
 
 });
 
@@ -106,7 +111,7 @@ function initTable() {
     $table.bootstrapTable({
         height: getHeight(),
         url:'../plan/showPlanVinList',
-        striped:true,
+        striped:false,
         paginationVAlign:'bottom',
         searchOnEnterKey:true,
         fixedColumns: false,				//冻结列
@@ -121,7 +126,7 @@ function initTable() {
         columns: [
         [
 			{
-				field: 'id',title: "&nbsp;<input type='checkbox' id='selectAll' onclick='selectAll()'/>&nbsp;",align: 'center',valign: 'middle',align: 'center',
+				field: 'id',title: "&nbsp;<input type='checkbox' class='selectAll'/>&nbsp;",align: 'center',valign: 'middle',align: 'center',
 			    sortable: false,visible: true,footerFormatter: totalTextFormatter,
 			    cellStyle:function cellStyle(value, row, index, field) {
 				return {css: {"padding-left": "3px", "padding-right": "2px","font-size":"13px"}};
@@ -278,11 +283,11 @@ var scripts = [
         return undefined;
     } 
   //复选框全选或反选
-    function selectAll() {
-    	alert($("#selectAll").prop("checked"));
-        if ($("#selectAll").is(":checked")) {
-            $("#table tbody :checkbox").prop("checked", true);
-        } else {
-            $("#table tbody :checkbox").prop("checked", false);
-        }
-    }
+//    function selectAll() {
+//    	//alert($("#selectAll").prop("checked"));
+//        if ( $("#table thead tr").find("#selectAll").prop("checked")) {
+//            $("#table tbody :checkbox").prop("checked", true);
+//        } else {
+//            $("#table tbody :checkbox").prop("checked", false);
+//        }
+//    }

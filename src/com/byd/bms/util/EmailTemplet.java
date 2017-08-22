@@ -11,7 +11,7 @@ public class EmailTemplet {
 		    "    *{font: normal 12px/1.6em Verdana, Arial, Helvetica, sans-serif;} "+
 		    "    table.dataTable{background-color:#C4BCC9;color:#666666;} "+
 		    "    table.dataTable tr{height:22px;} "+
-		    "    table{font-size:12px;border:1px;} "+
+		    "    table{font-size:12px;border:0.5px;} "+
 		    "    .mailTitle{font-size:26px;font-family:楷体_GB2312;font-weight:bolder;} "+
 		    "    .mailTitleInfo{font-size:26px;font-family:楷体_GB2312;font-weight:bolder;color:red;} "+
 		    "    hr{margin:0 0 5 0;}         "+

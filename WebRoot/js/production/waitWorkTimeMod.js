@@ -137,9 +137,13 @@ $(document).ready(function() {
 			return false;
 		}
 		var updateFlag=false;
+		var update_swhlist=[];
+		var index=0;
 		for(var i=0;i<swhlist.length;i++){
 			if(swhlist[i].status=='0'){
 				updateFlag=true;
+				update_swhlist[index]=swhlist[i];
+				index++;
 			}
 		}
 		if(!updateFlag &&swhdelids==""){
@@ -147,7 +151,7 @@ $(document).ready(function() {
 			return false;
 		}
 		if(swhlist.length>0){
-			ajaxUpdate(JSON.stringify(swhlist));
+			ajaxUpdate(JSON.stringify(update_swhlist));
 		}
 		if(swhdelids!=""){
 			var conditions={};

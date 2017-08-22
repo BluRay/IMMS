@@ -140,7 +140,11 @@
  					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right" for="">&nbsp;重大变更：</label>
 						<div class="col-sm-3">
-							<input value='重大变更' type="checkbox" name="new_major_change" title="" id="new_major_change"/>&nbsp;是
+							<select name="new_major_change" id="new_major_change" style="width:100%;" class="input-medium">
+								<option value="0">非重大变更</option>
+								<option value="1">一般重大变更</option>
+								<option value="2">特别重大变更</option>
+							</select>
 						</div>
 						<label class="col-sm-3 control-label no-padding-right" for="new_productive_year">&nbsp;重复变更：</label>
 						<div class="col-sm-3">
@@ -263,7 +267,11 @@
  					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right" for="">&nbsp;重大变更：</label>
 						<div class="col-sm-3">
-							<input value='重大变更' type="checkbox" name="edit_major_change" title="" id="edit_major_change"/>&nbsp;是
+							<select name="edit_major_change" id="edit_major_change" style="width:100%;" class="input-medium">
+								<option value="0">非重大变更</option>
+								<option value="1">一般重大变更</option>
+								<option value="2">特别重大变更</option>
+							</select>
 						</div>
 						<label class="col-sm-3 control-label no-padding-right" for="edit_repeat_change">&nbsp;重复变更：</label>
 						<div class="col-sm-3">

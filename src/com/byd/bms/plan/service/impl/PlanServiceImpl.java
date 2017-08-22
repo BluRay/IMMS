@@ -764,6 +764,7 @@ public class PlanServiceImpl implements IPlanService {
 			for(int m=0;m<orderlist.size();m++){
 				order_list.add(((Map<String,String>)orderlist.get(m)).get("order_no"));
 			}
+			
 		}else{
 			order_list.add(queryMap.get("order_no").toString());
 		}

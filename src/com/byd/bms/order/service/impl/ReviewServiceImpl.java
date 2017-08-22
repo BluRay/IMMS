@@ -63,7 +63,7 @@ public class ReviewServiceImpl implements IReviewService {
 					isResult=true;
 				}
 			}
-			map.put("permission", isResult);
+			map.put("permission", isResult); // 判断该用户是否有该订单的评审权限 【Y: true;N: false】
 		}
 		totalCount=reviewDao.getOrderReviewTotalCount(condMap);
 		Map<String, Object> result=new HashMap<String,Object>();

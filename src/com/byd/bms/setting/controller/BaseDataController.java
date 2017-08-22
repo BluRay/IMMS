@@ -835,6 +835,7 @@ public class BaseDataController extends BaseController {
             busType.setVehicleLength(request.getParameter("vehicleLength"));
             busType.setVehicleModel(request.getParameter("vehicleModel"));
             busType.setWheelbase(request.getParameter("wheelbase"));
+            busType.setPassengers(request.getParameter("passengers"));
             busType.setEditDate(edit_date);
             busType.setEditorId(editor_id);
 			int reuslt = baseDataService.addBusType(busType);
@@ -875,6 +876,7 @@ public class BaseDataController extends BaseController {
             busType.setVehicleLength(request.getParameter("vehicleLength"));
             busType.setVehicleModel(request.getParameter("vehicleModel"));
             busType.setWheelbase(request.getParameter("wheelbase"));
+            busType.setPassengers(request.getParameter("passengers"));
             busType.setEditDate(edit_date);
             busType.setEditorId(editor_id);
 			baseDataService.updateBusType(busType);

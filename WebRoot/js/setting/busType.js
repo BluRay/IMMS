@@ -108,8 +108,8 @@ function ajaxQuery(){
             {"title":"车辆长度","class":"center","data": "vehicleLength","defaultContent": ""},
             {"title":"轴距","class":"center","data":"wheelbase","defaultContent": ""},
             {"title":"最大允许总质量","class":"center","data":"maxWeight","defaultContent": ""},		            
-            {"title":"额定载客数量","class":"center","data": "passengerNum","defaultContent": ""},
-            //{"title":"燃料类型","class":"center","data":"fuelType","defaultContent": ""},
+            {"title":"额定载客人数","class":"center","data": "passengers","defaultContent": ""},
+            {"title":"座位数","class":"center","data":"passengerNum","defaultContent": ""},
             {"title":"驱动电机","class":"center","data": "driveMotor","defaultContent": ""},
             {"title":"电机型号","class":"center","data":"motorModel","defaultContent": ""},		            
             {"title":"电机最大功率","class":"center","data":"motorPower","defaultContent": ""},		            
@@ -225,6 +225,7 @@ function ajaxAdd (argument) {
 			"passengerNum":$("#add_passengerNum").val(),
 			"maxWeight":$("#add_maxWeight").val(),
 			"lightDowndip":$("#add_lightDowndip").val(),
+			"passengers":$("#add_passenger").val(),
 			"maxSpeed":$("#add_maxSpeed").val()
 		},
 		async: false,
@@ -269,7 +270,7 @@ function ajaxEdit(id){
 			$('#edit_driveMotor').val(response.data.driveMotor);
 			$('#edit_maxSpeed').val(response.data.maxSpeed);
 			$('#edit_lightDowndip').val(response.data.lightDowndip);
-
+			$('#edit_passenger').val(response.data.passengers);
 			var dialog = $( "#dialog-edit" ).removeClass('hide').dialog({
 				width:600,
 				height:520,
@@ -385,6 +386,7 @@ function ajaxEdit(id){
 									"passengerNum":$("#edit_passengerNum").val(),
 									"maxWeight":$("#edit_maxWeight").val(),
 									"lightDowndip":$("#edit_lightDowndip").val(),
+									"passengers":$("#edit_passenger").val(),
 									"maxSpeed":$("#edit_maxSpeed").val()
 							    },
 							    success:function(response){

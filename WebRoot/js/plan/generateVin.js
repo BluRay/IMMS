@@ -294,7 +294,7 @@ function initTable() {
     	        	},
     	        formatter:function(value, row, index){
     	        	var left_motor_number = (row.left_motor_number===null)?"":row.left_motor_number;
-	        		return "<input id='left_motor_"+index+"' class='left_motor' style='font-size: 12px;color: #333333;border:0;width:100%' value='"+left_motor_number+"' old_val='"+left_motor_number+"' vin='"+row.vin+"'>";
+	        		return "<span style='display:none'>"+left_motor_number+"</span><input id='left_motor_"+index+"' class='left_motor' style='font-size: 12px;color: #333333;border:0;width:100%' value='"+left_motor_number+"' old_val='"+left_motor_number+"' vin='"+row.vin+"'>";
 	        	 }
             },{
             	field: 'right_motor_number',title: '&nbsp;右电机号&nbsp;',align: 'center',valign: 'middle',align: 'center',
@@ -304,7 +304,7 @@ function initTable() {
     	        	},
     	        formatter:function(value, row, index){
     	        	var right_motor_number = (row.right_motor_number===null)?"":row.right_motor_number;
-	        		return "<input id='right_motor_"+index+"' class='right_motor' style='font-size: 12px;color: #333333;border:0;width:100%' value='"+right_motor_number+"' old_val='"+right_motor_number+"' vin='"+row.vin+"'>";
+	        		return "<span style='display:none'>"+right_motor_number+"</span><input id='right_motor_"+index+"' class='right_motor' style='font-size: 12px;color: #333333;border:0;width:100%' value='"+right_motor_number+"' old_val='"+right_motor_number+"' vin='"+row.vin+"'>";
 	        	 }
             },{
             	field: 'bus_number',title: '&nbsp;&nbsp;车号&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
@@ -314,7 +314,7 @@ function initTable() {
     	        	},
     	        formatter:function(value, row, index){
     	        	var bus_number = (row.bus_number===null)?"":row.bus_number;
-	        		return "<input id='bus_number_"+index+"' class='bus_number' style='font-size: 12px;color: #333333;border:0;width:100%' value='"+bus_number+"' old_val='"+bus_number+"' vin='"+row.vin+"'>";
+	        		return "<span style='display:none'>"+bus_number+"</span><input id='bus_number_"+index+"' class='bus_number' style='font-size: 12px;color: #333333;border:0;width:100%' value='"+bus_number+"' old_val='"+bus_number+"' vin='"+row.vin+"'>";
 	        	 }
             },{
             	field: 'creator_name',title: '&nbsp;&nbsp;生成者&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',

@@ -827,9 +827,9 @@
 		<if test="end_date !=null and end_date !=''">
 			and f1.prod_date &lt;= #{end_date}
 		</if>	
-		where f.factory_id=#{factory_id}  and p1.key_name='中段车架总成' group by f.order_id ) tmp
+		where f.factory_id=#{factory_id}  and p1.key_name='喷砂' group by f.order_id ) tmp
 		on tmp.order_id=fo.order_id	 
-		where fo.factory_id=#{factory_id} and fo.order_id is not null and fo.status='0'
+		where fo.factory_id=#{factory_id} and fo.order_id is not null and fo.status IN ('0','1')
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no like concat(#{order_no},'%')
 		</if>
@@ -853,7 +853,7 @@
 		</if>	
 		where f.factory_id=#{factory_id}  and p1.key_name='喷砂' group by f.order_id ) tmp
 		on tmp.order_id=fo.order_id	 
-		where fo.factory_id=#{factory_id} and fo.order_id is not null and fo.status='0'
+		where fo.factory_id=#{factory_id} and fo.order_id is not null and fo.status IN ('0','1')
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no like concat(#{order_no},'%')
 		</if>
@@ -869,13 +869,13 @@
 		from BMS_PLAN_BUS b 
 		left join BMS_PLAN_BUS b1 on b.id=b1.id 
 		<if test="start_date !=null and start_date !=''">
-			and b1.welding_online_date > CONCAT(date_sub(#{start_date},interval 1 day),' 17:10:00')
+			and b1.welding_online_date > CONCAT(date_sub(#{start_date},interval 1 day),' 17:30:00')
 		</if>
 		<if test="end_date !=null and end_date !=''">
-			and b1.welding_online_date &lt;=concat(#{end_date},' 17:10:00')
+			and b1.welding_online_date &lt;=concat(#{end_date},' 17:30:00')
 		</if>
 		where b.welding_online_date != '' and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=fo.order_id
-		where fo.factory_id=#{factory_id} and fo.status='0' 
+		where fo.factory_id=#{factory_id} and fo.status IN ('0','1')
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no like concat(#{order_no},'%')
 		</if>
@@ -891,13 +891,13 @@
 		from BMS_PLAN_BUS b 
 		left join BMS_PLAN_BUS b1 on b.id=b1.id 
 		<if test="start_date !=null and start_date !=''">
-			and b1.welding_offline_date > CONCAT(date_sub(#{start_date},interval 1 day),' 17:10:00')
+			and b1.welding_offline_date > CONCAT(date_sub(#{start_date},interval 1 day),' 17:30:00')
 		</if>
 		<if test="end_date !=null and end_date !=''">
-			and b1.welding_offline_date &lt;=concat(#{end_date},' 17:10:00')
+			and b1.welding_offline_date &lt;=concat(#{end_date},' 17:30:00')
 		</if>
 		where b.welding_offline_date != '' and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=fo.order_id
-		where fo.factory_id=#{factory_id} and fo.status='0' 
+		where fo.factory_id=#{factory_id} and fo.status IN ('0','1')
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no like concat(#{order_no},'%')
 		</if>
@@ -913,13 +913,13 @@
 		from BMS_PLAN_BUS b 
 		left join BMS_PLAN_BUS b1 on b.id=b1.id 
 		<if test="start_date !=null and start_date !=''">
-			and b1.painting_online_date > CONCAT(date_sub(#{start_date},interval 1 day),' 17:10:00')
+			and b1.painting_online_date > CONCAT(date_sub(#{start_date},interval 1 day),' 17:30:00')
 		</if>
 		<if test="end_date !=null and end_date !=''">
-			and b1.painting_online_date &lt;=concat(#{end_date},' 17:10:00')
+			and b1.painting_online_date &lt;=concat(#{end_date},' 17:30:00')
 		</if>
 		where b.painting_online_date != '' and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=fo.order_id
-		where fo.factory_id=#{factory_id} and fo.status='0' 
+		where fo.factory_id=#{factory_id} and fo.status IN ('0','1')
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no like concat(#{order_no},'%')
 		</if>
@@ -935,13 +935,13 @@
 		from BMS_PLAN_BUS b 
 		left join BMS_PLAN_BUS b1 on b.id=b1.id 
 		<if test="start_date !=null and start_date !=''">
-			and b1.painting_offline_date > CONCAT(date_sub(#{start_date},interval 1 day),' 17:10:00')
+			and b1.painting_offline_date > CONCAT(date_sub(#{start_date},interval 1 day),' 17:30:00')
 		</if>
 		<if test="end_date !=null and end_date !=''">
-			and b1.painting_offline_date &lt;=concat(#{end_date},' 17:10:00')
+			and b1.painting_offline_date &lt;=concat(#{end_date},' 17:30:00')
 		</if>
 		where b.painting_offline_date != '' and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=fo.order_id
-		where fo.factory_id=#{factory_id} and fo.status='0' 
+		where fo.factory_id=#{factory_id} and fo.status IN ('0','1')
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no like concat(#{order_no},'%')
 		</if>
@@ -957,13 +957,13 @@
 		from BMS_PLAN_BUS b 
 		left join BMS_PLAN_BUS b1 on b.id=b1.id 
 		<if test="start_date !=null and start_date !=''">
-			and b1.chassis_online_date > CONCAT(date_sub(#{start_date},interval 1 day),' 17:10:00')
+			and b1.chassis_online_date > CONCAT(date_sub(#{start_date},interval 1 day),' 17:30:00')
 		</if>
 		<if test="end_date !=null and end_date !=''">
-			and b1.chassis_online_date &lt;=concat(#{end_date},' 17:10:00')
+			and b1.chassis_online_date &lt;=concat(#{end_date},' 17:30:00')
 		</if>
 		where b.chassis_online_date != '' and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=fo.order_id
-		where fo.factory_id=#{factory_id} and fo.status='0' 
+		where fo.factory_id=#{factory_id} and fo.status IN ('0','1')
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no like concat(#{order_no},'%')
 		</if>
@@ -979,13 +979,13 @@
 		from BMS_PLAN_BUS b 
 		left join BMS_PLAN_BUS b1 on b.id=b1.id 
 		<if test="start_date !=null and start_date !=''">
-			and b1.chassis_offline_date > CONCAT(date_sub(#{start_date},interval 1 day),' 17:10:00')
+			and b1.chassis_offline_date > CONCAT(date_sub(#{start_date},interval 1 day),' 17:30:00')
 		</if>
 		<if test="end_date !=null and end_date !=''">
-			and b1.chassis_offline_date &lt;=concat(#{end_date},' 17:10:00')
+			and b1.chassis_offline_date &lt;=concat(#{end_date},' 17:30:00')
 		</if>
 		where b.chassis_offline_date != '' and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=fo.order_id
-		where fo.factory_id=#{factory_id} and fo.status='0' 
+		where fo.factory_id=#{factory_id} and fo.status IN ('0','1')
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no like concat(#{order_no},'%')
 		</if>
@@ -1001,13 +1001,13 @@
 		from BMS_PLAN_BUS b 
 		left join BMS_PLAN_BUS b1 on b.id=b1.id 
 		<if test="start_date !=null and start_date !=''">
-			and b1.assembly_online_date > CONCAT(date_sub(#{start_date},interval 1 day),' 17:10:00')
+			and b1.assembly_online_date > CONCAT(date_sub(#{start_date},interval 1 day),' 17:30:00')
 		</if>
 		<if test="end_date !=null and end_date !=''">
-			and b1.assembly_online_date &lt;=concat(#{end_date},' 17:10:00')
+			and b1.assembly_online_date &lt;=concat(#{end_date},' 17:30:00')
 		</if>
 		where b.assembly_online_date != '' and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=fo.order_id
-		where fo.factory_id=#{factory_id} and fo.status='0' 
+		where fo.factory_id=#{factory_id} and fo.status IN ('0','1')
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no like concat(#{order_no},'%')
 		</if>
@@ -1023,13 +1023,13 @@
 		from BMS_PLAN_BUS b 
 		left join BMS_PLAN_BUS b1 on b.id=b1.id 
 		<if test="start_date !=null and start_date !=''">
-			and b1.assembly_offline_date > CONCAT(date_sub(#{start_date},interval 1 day),' 17:10:00')
+			and b1.assembly_offline_date > CONCAT(date_sub(#{start_date},interval 1 day),' 17:30:00')
 		</if>
 		<if test="end_date !=null and end_date !=''">
-			and b1.assembly_offline_date &lt;=concat(#{end_date},' 17:10:00')
+			and b1.assembly_offline_date &lt;=concat(#{end_date},' 17:30:00')
 		</if>
 		where b.assembly_offline_date != '' and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=fo.order_id
-		where fo.factory_id=#{factory_id} and fo.status='0' 
+		where fo.factory_id=#{factory_id} and fo.status IN ('0','1')
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no like concat(#{order_no},'%')
 		</if>
@@ -1045,13 +1045,13 @@
 		from BMS_PLAN_BUS b 
 		left join BMS_PLAN_BUS b1 on b.id=b1.id 
 		<if test="start_date !=null and start_date !=''">
-			and b1.warehousing_date > CONCAT(date_sub(#{start_date},interval 1 day),' 17:10:00')
+			and b1.warehousing_date > CONCAT(date_sub(#{start_date},interval 1 day),' 17:30:00')
 		</if>
 		<if test="end_date !=null and end_date !=''">
-			and b1.warehousing_date &lt;=concat(#{end_date},' 17:10:00')
+			and b1.warehousing_date &lt;=concat(#{end_date},' 17:30:00')
 		</if>
 		where b.warehousing_date != '' and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=fo.order_id
-		where fo.factory_id=#{factory_id} and fo.status='0' 
+		where fo.factory_id=#{factory_id} and fo.status IN ('0','1')
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no like concat(#{order_no},'%')
 		</if>
@@ -1099,7 +1099,7 @@
 		SELECT IFNULL(SUM(${parts}),'0') AS real_qty FROM BMS_PD_PARTS_PLAN_FINISH WHERE 
 		factory_id = #{factory_id} AND order_id = (SELECT id FROM BMS_OR_ORDER WHERE order_no = #{order_no}) 
 		AND prod_date = #{plan_date}
-		AND parts_id = '194'
+		AND parts_id = '0'
 	</select>
 	<select id="getPlanSearchRealZzjQty" parameterType="Map" resultType="int">
 		SELECT IFNULL(SUM(quantity),'0') AS real_qty FROM BMS_PD_WORKSHOP_SUPPLY WHERE

@@ -83,21 +83,21 @@ function ajaxQuery(){
 	var fixedColumns={};
 	var rowsGroup=[];
 	columns= [
-        {"title":"技改单","class":"center","width":"160","data":"bus_number","defaultContent": ""},
-        {"title":"技改任务","class":"center","width":"180","data":"order_desc","defaultContent": ""},
-        {"title":"操作车间","class":"center","data":"work_date","defaultContent": ""},
-        {"title":"总工时","class":"center","data":"standard_price","defaultContent": ""},
-        {"title":"总费用","class":"center","data":"bonus","defaultContent": ""},
-        {"title":"操作日期","class":"center","data":"factory","defaultContent": ""},
-        {"title":"工号","class":"center","data":"workshop","defaultContent":""},
+        {"title":"技改单","class":"center","width":"160","data":"tech_order_no","defaultContent": ""},
+        {"title":"技改任务","class":"center","width":"180","data":"task_content","defaultContent": ""},
+        {"title":"操作车间","class":"center","data":"workshop","defaultContent": ""},
+        {"title":"总工时","class":"center","data":"totalhours","defaultContent": ""},
+        {"title":"总费用","class":"center","data":"totalprice","defaultContent": ""},
+        {"title":"操作日期","class":"center","data":"work_date","defaultContent": ""},
+        {"title":"工号","class":"center","data":"staff_number","defaultContent":""},
         {"title":"姓名","class":"center","data":"staff_name","defaultContent": ""},
-        {"title":"工厂","class":"center","data": "job","defaultContent": ""},		            
-        {"title":"车间","width":"80","class":"center","data":"skill_parameter","defaultContent": ""},		            
-        {"title":"班组","width":"100","class":"center","data": "work_hour","defaultContent": ""},
-        {"title":"小班组","class":"center","data": "ppay","defaultContent": ""},
-        {"title":"操作工时","class":"center","data": "total_ppay","defaultContent": ""},
-        {"title":"有效工时","class":"center","data": "total_ppay","defaultContent": ""}	,
-        {"title":"技改工资","class":"center","data": "total_ppay","defaultContent": ""}	
+        {"title":"工厂","class":"center","data": "plant_org","defaultContent": ""},		            
+        {"title":"车间","width":"80","class":"center","data":"workshop","defaultContent": ""},		            
+        {"title":"班组","width":"100","class":"center","data": "workgroup_org","defaultContent": ""},
+        {"title":"小班组","class":"center","data": "team_org","defaultContent": ""},
+        {"title":"操作工时","class":"center","data": "work_hour","defaultContent": ""},
+        {"title":"有效工时","class":"center","data": "real_work_hour","defaultContent": ""}	,
+        {"title":"技改工资","class":"center","data": "salary","defaultContent": ""}	
       ]	;
 	var tb=$("#tableResult").DataTable({
 		serverSide: true,

@@ -243,7 +243,7 @@ public class TechController extends BaseController{
 		infomap.put("tech_type", request.getParameter("new_tech_type"));
 		infomap.put("tech_date", request.getParameter("new_tech_date"));
 		infomap.put("duty_unit", request.getParameter("new_duty_unit"));
-		infomap.put("major_change", request.getParameter("new_major_change") == null ? "N" : "Y");
+		infomap.put("major_change", request.getParameter("new_major_change"));
 		infomap.put("repeat_change", request.getParameter("new_repeat_change") == null ? "N" : "Y");
 		infomap.put("custom_change", request.getParameter("new_custom_change") == null ? "N" : "Y");
 		infomap.put("custom_change_no", request.getParameter("new_custom_change_no"));
@@ -400,7 +400,7 @@ public class TechController extends BaseController{
 		infomap.put("tech_type", request.getParameter("edit_tech_type"));
 		infomap.put("tech_date", request.getParameter("edit_tech_date"));
 		infomap.put("duty_unit", request.getParameter("edit_duty_unit"));
-		infomap.put("major_change", request.getParameter("edit_major_change") == null ? "N" : "Y");
+		infomap.put("major_change", request.getParameter("edit_major_change"));
 		infomap.put("repeat_change", request.getParameter("edit_repeat_change") == null ? "N" : "Y");
 		infomap.put("custom_change", request.getParameter("edit_custom_change") == null ? "N" : "Y");
 		infomap.put("custom_change_no", request.getParameter("edit_custom_change_no"));

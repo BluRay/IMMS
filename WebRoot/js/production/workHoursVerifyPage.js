@@ -253,6 +253,7 @@ function ajaxUpdate(swhlist,conditions,whflag,tempOrderId,orderStatus) {
 			"tempOrderStaus":orderStatus
 		},
 		success : function(response) {
+			ajaxCaculateSalary(conditions);
 			if (response.success) {
 				$("#dialog-edit").dialog( "close" );
 				$.gritter.add({
@@ -261,6 +262,25 @@ function ajaxUpdate(swhlist,conditions,whflag,tempOrderId,orderStatus) {
 					class_name: 'gritter-info'
 				});
 				ajaxQuery();
+			} else {
+				alert(response.message);
+			}
+		}
+	});
+}
+
+//批准、驳回时重新计算临时派工单工资
+function ajaxCaculateSalary(conditions) {
+	$.ajax({
+		url : "caculateSalary",
+		dataType : "json",
+		type : "post",
+		data : {
+			"conditions" : conditions
+		},
+		success : function(response) {
+			if (response.success) {
+				
 			} else {
 				alert(response.message);
 			}

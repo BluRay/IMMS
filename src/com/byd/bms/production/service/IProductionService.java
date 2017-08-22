@@ -180,4 +180,5 @@ public interface IProductionService {
 	public int batchUpdateWorkHour(List<Map<String, Object>> swh_list);
 	public int saveTmpOrderProcedure(Map<String, Object> cmap);
 	public int updateTmpOrder(Map<String, Object> cmap);
+	public String caculateTmpSalary(Map<String, Object> conditionMap);
 }

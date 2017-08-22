@@ -79,7 +79,7 @@
 					</div>	
 				    <div id="toolbar"></div>
 					<table  style="font-weight:normal;width:100%;" id="table" data-toolbar="#toolbar" data-search="false" data-show-refresh="true"
-				           data-show-toggle="false" data-show-columns="true" data-show-export="true" data-detail-view="false"
+				           data-show-toggle="false" data-show-columns="false" data-show-export="true" data-detail-view="false"
 				           data-detail-formatter="detailFormatter" data-minimum-count-columns="2" data-show-pagination-switch="true"
 				           data-pagination="true" data-id-field="id" data-page-list="[50, 100, 200, 500, ALL]"
 				           data-show-footer="false" data-side-pagination="server" data-response-handler="responseHandler">

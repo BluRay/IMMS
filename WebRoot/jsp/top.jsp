@@ -62,12 +62,12 @@ String display_name = (String)session.getAttribute("display_name");
 							</a>
 
 							<ul class="dropdown-menu-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close" style="height:100px">
-								<li class="dropdown-header" id="task" style="width:280px;">
+								<li class="dropdown-header" id="task" style="width:100%;">
 									<i class="ace-icon fa fa-check"></i>
 <!-- 									4 Tasks to complete -->
 								</li>
 
-								<li id="foreach" style="width:280px">
+								<li id="foreach" style="width:100%">
 									<a href="#" id="taskUrl">
 										<div class="clearfix"><span class="pull-left" id="taskName"></span><span class="pull-right" id="taskFinishRadio"></span></div>
                                         <div class="progress progress-mini"><div class="progress-bar" id="process"></div></div>
@@ -122,7 +122,7 @@ String display_name = (String)session.getAttribute("display_name");
 							</ul>
 						</li>
 
-						<li class="purple">
+						<!-- <li class="purple">
 							<a data-toggle="dropdown" class="dropdown-toggle" href="#">
 								<i class="ace-icon fa fa-bell icon-animated-bell"></i>
 								<span class="badge badge-important">8</span>
@@ -184,12 +184,12 @@ String display_name = (String)session.getAttribute("display_name");
 									</a>
 								</li>
 							</ul>
-						</li>
+						</li> -->
 
-						<li class="green">
+						<%-- <li class="green">
 							<a data-toggle="dropdown" class="dropdown-toggle" href="#">
 								<i class="ace-icon fa fa-envelope icon-animated-vertical"></i>
-								<span class="badge badge-success">5</span>
+								<span class="badge badge-success">0</span>
 							</a>
 
 							<ul class="dropdown-menu-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
@@ -294,7 +294,7 @@ String display_name = (String)session.getAttribute("display_name");
 									</a>
 								</li>
 							</ul>
-						</li>
+						</li> --%>
 
 						<!-- #section:basics/navbar.user_menu -->
 						<li class="light-blue">

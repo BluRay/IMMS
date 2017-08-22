@@ -3,7 +3,7 @@
 <mapper namespace="com.byd.bms.order.dao.IReviewDao">
 	<select id="getOrderReviewList" parameterType="Map" resultType="Map">
 		SELECT f.production_qty,a.area,a.id AS 'factory_id',a.factory_code AS 'factory_code',
-		a.factory_name,a.factory_name,f.edit_date,u.display_name as 'user_name',
+		a.factory_name,f.edit_date,u.display_name as 'user_name',
 		t.bus_type_code,o.*,CONCAT(o.order_name,t.bus_type_code,o.order_qty,'台') AS 'order_name_str',f.status,
 		IFNULL(r.review_status,'0') as review_status,IFNULL(r.id,'') as reviewId
 		FROM BMS_OR_ORDER o			
@@ -20,7 +20,7 @@
 			and o.id=#{orderId}   
 		</if>
 		<if test="reviewStatus !=null and reviewStatus !=''">
-			and r.review_Status=#{reviewStatus}   
+			and IFNULL(r.review_status,'0')=#{reviewStatus}   
 		</if>
 		<if test="actYear !=null and actYear !=''">
 			and o.productive_year = #{actYear} 

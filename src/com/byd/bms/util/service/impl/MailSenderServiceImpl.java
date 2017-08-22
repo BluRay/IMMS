@@ -10,7 +10,9 @@ import java.util.Map;
 
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
+import javax.mail.Address;
 import javax.mail.MessagingException;
+import javax.mail.SendFailedException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
@@ -21,6 +23,7 @@ import org.one2team.highcharts.server.export.ExportType;
 import org.one2team.highcharts.server.export.HighchartsExporter;
 import org.one2team.highcharts.shared.ChartOptions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -147,9 +150,38 @@ public class MailSenderServiceImpl extends EmailSupport implements  MailSenderSe
     	    mailSender.send(mime);  
     	    log.info(">>>>>>>>>>>>>>>>>>>>>>>"+emailSender.getContent());
     	    
-        } catch (Exception e) {
-            throw new UnsupportedOperationException("發送郵件失敗!",e);
-        } 
+        }catch (MailSendException e) {
+    	   Exception[] exceptionArray = e.getMessageExceptions();
+           e.getFailedMessages();
+ 
+           SendFailedException x=null;
+           for(Exception e1 : exceptionArray){
+               if(e1 instanceof SendFailedException){     
+            	   x=(SendFailedException)e1;
+                   break;
+               }
+           }
+ 	   
+    	   	Address[] ad_invalid=x.getInvalidAddresses();
+        	 String invalidAddress = "";  
+             for(int i=0;i<ad_invalid.length;i++){  
+            	 invalidAddress += ad_invalid[i] + ";";  
+             } 
+             log.info("无效邮箱地址："+invalidAddress);
+             
+        	Address[] ad_unset=x.getValidUnsentAddresses();
+        	String unsetAddress = "";  
+            for(int i=0;i<ad_unset.length;i++){  
+            	unsetAddress += ad_unset[i] + ";";  
+            } 
+            InternetAddress[] resendAddress = parseAddress(unsetAddress);
+            
+            this.sendWithEmailSender(emailSender, resendAddress);
+        	
+            //throw new RuntimeException("發送郵件失敗!"+invalidAddress,e);
+        } catch (MessagingException e) {
+        	e.printStackTrace();
+        }
 	}
 	private String setParam(String  templetInner, Map<String, String> param){
 		 Object[] o = param.keySet().toArray(); 

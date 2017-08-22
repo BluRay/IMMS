@@ -2696,6 +2696,21 @@ public class ProductionController extends BaseController {
 		return model;
 	}
 	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping("/caculateSalary")
+	@ResponseBody
+	public ModelMap caculateSalary(){
+		String conditions = request.getParameter("conditions");
+		logger.info("---->caculateSalary conditions = " + conditions);
+		JSONObject jo=JSONObject.fromObject(conditions);
+		Map<String,Object> conditionMap=new HashMap<String,Object>();
+		for(Iterator it=jo.keys();it.hasNext();){
+			String key=(String) it.next();
+			conditionMap.put(key, jo.get(key));
+		}
+		productionService.caculateTmpSalary(conditionMap);
+		return model;
+	}
 	
 	@RequestMapping("/deleteStaffTmpHourInfo")
 	@ResponseBody

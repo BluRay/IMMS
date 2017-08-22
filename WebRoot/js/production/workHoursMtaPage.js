@@ -3,7 +3,7 @@ var table;
 var table_height = $(window).height()-270;
 var cur_tmpOrderId = 0;
 var re_f = /^[0-9]+[0-9]*\.?[0|5]?$/;//浮点数正则表达式
-var status_arr = {"0" : "已评估","1" : "已完成","2" : "已驳回"};	// 0-已评估、1-已完成、2-已驳回
+var status_arr = {"0" : "已维护","1" : "已完成","2" : "已驳回"};	// 0-已评估、1-已完成、2-已驳回
 var wh_status_arr={'0':'已维护','1':'已审批','2':'已驳回','3':'已锁定'};
 var edit_list = [];
 var ready_hour = 0;
@@ -161,7 +161,7 @@ function ajaxQuery(){
 		            		var totalQty = row.total_qty == undefined ? "": row.total_qty;
 		            		var readyQty = row.finished_qty == undefined ? 0: row.finished_qty;
 		            		var tmp_id = row.id;
-		            		if (totalQty!=readyQty && (row.status =='2' || row.status=='1')){
+		            		if (totalQty!=readyQty){
 		            			return "<input class='productQty' id=\"prdqty_"
 								+ row.tmp_order_no
 								+ "\" onchange=\"editProductQty(this,'"+totalQty+"','"+readyQty+"','"+tmp_id+"')\" style=\"border:1;width:30px;text-align:center;font-size: 12px\" />"
@@ -218,7 +218,7 @@ function editProductQty(obj,totalQty,readyQty,tmp_id){
 		order.orderId = tmp_id;
 		// 已完成数量等于总数量时更新工单状态为‘已完成’
 		if (parseInt(totalQty) == parseInt(readyQty) + parseInt(productQty)) {
-			order.status = "5";
+			order.status = "1";
 		}
 		var conditions = JSON.stringify(order);
 		
@@ -733,7 +733,7 @@ function generateWorkhourTb(swhlist, caculate) {
 		$("<td />").html(swh.job).appendTo(tr);
 		var disabled = (swh.status != '已驳回') ? 'disabled': "";
 		$("<td />").html("<input class='input-small edit_work_hour' "+ disabled
-								+ " onchange=\"checkEditWorkHours(this)\" onkeydown=\"nextEditWorkHours(this)\" style='text-align:center;margin-bottom: 0px;' type='text' value='"
+								+ " onchange=\"checkEditWorkHours(this)\" onkeydown=\"nextEditWorkHours(event,this)\" style='text-align:center;margin-bottom: 0px;' type='text' value='"
 								+ workhour + "' old_value='" + workhour + "'>").appendTo(tr);
 		$("<td />").html(swh.team_org).appendTo(tr);
 		$("<td />").html(swh.workgroup_org).appendTo(tr);
@@ -751,9 +751,13 @@ function generateWorkhourTb(swhlist, caculate) {
 	ready_hour = ready.toFixed(2);
 }
 
-function nextEditWorkHours(obj){
-	console.log("-->nextEditWorkHours");
-	if (event.keyCode == "13") {
+function nextEditWorkHours(e,obj){
+	console.log("-->nextEditWorkHours");	
+	e = e ? e : window.event;
+    var keyCode = e.which ? e.which : e.keyCode;
+	
+	if(keyCode==13){
+	//if (event.keyCode == "13") {
 		$(obj).parent().parent().next().find("input").focus();
 	}
 }
@@ -788,7 +792,7 @@ function addWorkHourItem(staffId,cardNo, staffName, staffPost, workHour, subgrou
 					+ cardNo + "' staffId='"+staffId+"' " + cardNoDisabled + ">").appendTo(tr);
 	$("<td class='staff_name' />").html(staffName).appendTo(tr);
 	$("<td class='staff_post' />").html(staffPost).appendTo(tr);
-	$("<td />").html("<input class='input-small work_hour' onchange=\"checkWorkHours(this)\" onkeydown=\"nextEditWorkHours(this)\" style='text-align:center;margin-bottom: 0px;' type='text' value="+ workHour + " >").appendTo(tr);
+	$("<td />").html("<input class='input-small work_hour' onchange=\"checkWorkHours(this)\" onkeydown=\"nextEditWorkHours(event,this)\" style='text-align:center;margin-bottom: 0px;' type='text' value="+ workHour + " >").appendTo(tr);
 	$("<td class='staff_subgroup' />").html(subgroup).appendTo(tr);
 	$("<td class='staff_group' />").html(group).appendTo(tr);
 	$("<td class='staff_workshop' />").html(workshop).appendTo(tr);

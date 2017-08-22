@@ -1506,5 +1506,10 @@ public class ProductionServiceImpl implements IProductionService {
 		return productionDao.updateTmpOrder(cmap);
 	}
 
+	@Override
+	public String caculateTmpSalary(Map<String, Object> conditionMap) {
+		return productionDao.caculateTmpSalary(conditionMap);
+	}
+
 	
 }

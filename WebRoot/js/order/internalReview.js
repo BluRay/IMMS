@@ -112,10 +112,10 @@ function ajaxQuery(){
 		            	return data=="0"?"未开始":(data=="1"?"生产中":"已完成")},"defaultContent":""
 		            },
 		            {"title":"评审状态",width:'80',"class":"center","data":"review_status","render":function(data,type,row){
-		            	return row.permission==true ? (data=="2"?"已评审":(data=="1"?"评审中":"未评审")) : ""},"defaultContent":""
+		            	return data=="2"?"已评审":(data=="1"?"评审中":"未评审")},"defaultContent":""
 		            },
 		            {"title":"评审结果",width:'80',"class":"center","data":"review_status","render":function(data,type,row){
-		            	return row.permission==true ? (data=="2"? "<i class=\"glyphicon glyphicon-search bigger-110 editorder\" onclick = 'ajaxSearch(" + row.reviewId+ ");' style='color:green;cursor: pointer;'></i>": "") : ""},
+		            	return data=="2"? "<i class=\"glyphicon glyphicon-search bigger-110 editorder\" onclick = 'ajaxSearch(" + row.reviewId+ ");' style='color:green;cursor: pointer;'></i>": ""},
 		            	"defaultContent": ""
 		            },
 		            {"title":"评审",width:'60',"class":"center","data":"review_status","render":function(data,type,row){

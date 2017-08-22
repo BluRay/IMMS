@@ -54,6 +54,7 @@
 								<td>&nbsp;工时状态：</td>
 								<td>
 									<select id="status" style="height: 30px;" class="input-small carType">
+										<option value=''>全部</option>
 										<option value='未审批'>未审批</option>
 										<option value='已审批'>已审批</option>
 										<option value='已驳回'>已驳回</option>
