@@ -74,8 +74,8 @@
 						<td>&nbsp;统计维度：</td>
 						<td>
 							<select name="" id="search_count_flag" class="input-medium" style="width:100px;">
-								<option value="工单维度">工单维度</option>
-								<option value="人员维度">人员维度</option>
+								<option value="1">工单维度</option>
+								<option value="2">人员维度</option>
 							</select>
 						</td>
 						<td>
@@ -86,10 +86,9 @@
 					</form>	
 					
 					<div class="row">
-						<div class="col-xs-12" style="width:100%">				
-							
+						<div id="div1" class="col-xs-12" style="width:100%">										
 							<table id="tableResult" class="table table-striped table-bordered table-hover" style="font-size: 12px;overflow-x:auto;width:1600px;table-layout:fixed">
-						</table>
+							</table>
 						</div>
 					</div>
 					

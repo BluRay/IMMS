@@ -50,7 +50,7 @@
 							<td><select name="" id="search_factory" class="input-medium" style="width:120px;"></select></td>							
 							<td style="text-align:right" >&nbsp;年份：</td>
 							<td colspan=3>
-								<input id="search_year" style="height: 30px;" placeholder="开始日期" class="input-medium" 
+								<input id="search_year" style="height: 30px;" placeholder="开始日期" class="input-small" 
 								onclick="WdatePicker({dateFmt:'yyyy'})" type="text">								
 							</td>
 							<td>
@@ -63,7 +63,7 @@
 					<div class="row">
 						<div class="col-xs-12" style="width:100%">				
 							
-							<table id="tableResult" class="table table-striped table-bordered table-hover" style="font-size: 12px;overflow-x:auto;width:1600px;table-layout:fixed">
+							<table id="tableResult" class="table table-striped table-bordered table-hover" style="font-size: 12px;table-layout:fixed">
 						</table>
 						</div>
 					</div>

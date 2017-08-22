@@ -190,6 +190,11 @@ public class HrReportServiceImpl implements IHrReportService {
 	public List<Map<String, Object>> getEcnReportData(Map<String, Object> conditionMap) {
 		return hrReportDao.getEcnReportData(conditionMap);
 	}
+
+	@Override
+	public List<Map<String, Object>> getEcnReportData1(Map<String, Object> conditionMap) {
+		return hrReportDao.getEcnReportData1(conditionMap);
+	}
 	
 	@Override
 	public void getStaffWaitHours(Map<String, Object> conditionMap,
@@ -271,5 +276,14 @@ public class HrReportServiceImpl implements IHrReportService {
 		}
 		
 		return newMap;
+	}
+
+	@Override
+	public List<Map<String, Object>> getTmpReportData(Map<String, Object> conditionMap) {
+		return hrReportDao.getTmpReportData(conditionMap);
+	}
+	@Override
+	public List<Map<String, Object>> getTmpReportData1(Map<String, Object> conditionMap) {
+		return hrReportDao.getTmpReportData1(conditionMap);
 	}
 }

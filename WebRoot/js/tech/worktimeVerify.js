@@ -243,7 +243,7 @@ function verifyWorkTime(order_no,tech_order_no,task_content,task_detail_id,facto
 					id:"btn_del",
 					"class" : "btn btn-warning btn-minier",
 					click: function() {
-						btnRejectConfirm(task_detail_id);
+						btnRejectConfirm(task_detail_id,tech_order_no);
 					} 
 				},
 				{
@@ -269,7 +269,7 @@ function btnEditConfirm(task_detail_id,tech_order_no){
 	conditions.factory=editModal_factory;
 	conditions.workshop=editModal_workshop;
 	conditions.workMonth=workDate;
-	edit_list=getSelectList(task_detail_id);
+	edit_list=getSelectList(task_detail_id,tech_order_no);
 	console.log("-->edit_list = " , edit_list);
 	var orderStaus="verify";
 	var trs=$("#workhour_list").children("tr");
@@ -298,13 +298,13 @@ function btnEditConfirm(task_detail_id,tech_order_no){
 	}
 }
 
-function btnRejectConfirm(task_detail_id){
+function btnRejectConfirm(task_detail_id,tech_order_no){
 	var workDate=$("#edit_workDate").val();
 	var conditions={};
 	conditions.factory = editModal_factory;
 	conditions.workshop = editModal_workshop;
 	conditions.workMonth = workDate;
-	edit_list=getSelectList(task_detail_id);
+	edit_list=getSelectList(task_detail_id,tech_order_no);
 	if(!edit_list){
 		return false;
 	}
@@ -313,7 +313,7 @@ function btnRejectConfirm(task_detail_id){
 	}
 }
 
-function getSelectList(task_detail_id){
+function getSelectList(task_detail_id,tech_order_no){
 	console.log("-->getSelectList" + task_detail_id);
 	var boxList=$("#workhour_list :checked");
 	var swhList=[];
@@ -326,6 +326,7 @@ function getSelectList(task_detail_id){
 		console.log("-->obj = " , obj);
 		obj.tech_task_id=task_detail_id;
 		obj.techSinglePrice = "0";
+		obj.tech_order_no=tech_order_no;
 		swhList.push(obj);
 	});
 	return swhList;

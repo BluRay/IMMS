@@ -937,10 +937,10 @@ public class HrBaseDataController extends BaseController {
 				Exception e=new Exception("请使用下载的模板导入！");
 				throw e;			
 			}
-			List<Map<String, Object>> addList = new ArrayList<Map<String,Object>>();
-			List<Map<String, Object>> upDateList = new ArrayList<Map<String,Object>>();
 			int dataFlag = 0;
 			for(Object[] data : excelModel.getData()){
+				List<Map<String, Object>> addList = new ArrayList<Map<String,Object>>();
+				List<Map<String, Object>> upDateList = new ArrayList<Map<String,Object>>();
 				Map<String, Object> info = new HashMap<String, Object>();
 				String factory = data[0].toString().trim(); 
 				info.put("factory", factory);

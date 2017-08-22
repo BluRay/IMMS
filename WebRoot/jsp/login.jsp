@@ -22,7 +22,8 @@
 
 		<style type="text/css">
 			#main {
-				
+				background: url(images/login.jpg) no-repeat center;
+				background-size:cover;
 				height: 650px;
 				display: -webkit-flex;
 				display: flex;
@@ -34,7 +35,7 @@
 			</style>
 	</head>
 
-	<body class="login-layout light-login" style="font-family: 'Microsoft YaHei';background: url(images/login.jpg) no-repeat center;background-size:cover;">
+	<body class="login-layout light-login" style="font-family: 'Microsoft YaHei';">
 		<div id="main" class="main-container">
 			
 			<div class="main-content">

@@ -1,3 +1,5 @@
+
+var status_arr={'0':'非重大变更','1':'一般重大变更','2':'特别重大变更'}
 $(document).ready(function(){
 	initPage();
 	
@@ -89,6 +91,9 @@ function initTable() {
                 sortable: false,visible: true,footerFormatter: totalTextFormatter,
                 cellStyle:function cellStyle(value, row, index, field) {
 	        	return {css: {"padding-left": "3px", "padding-right": "2px","font-size":"13px"}};
+	        	},
+	        	formatter:function(value, row, index){
+	        		return status_arr[value];
 	        	}
             },{
             	field: 'custom_change',title: '&nbsp;&nbsp;&nbsp;顾客变更&nbsp;&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',

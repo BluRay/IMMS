@@ -16,6 +16,9 @@ public interface IHrReportDao {
 	public List<Map<String, Object>> queryStaffPieceSalary(Map<String, Object> conditionMap);
 	public void saveSubmitStaffSalary(Map<String, Object> conditionMap);
 	public List<Map<String,Object>> getEcnReportData(Map<String, Object> conditionMap);
+	public List<Map<String,Object>> getEcnReportData1(Map<String, Object> conditionMap);
+	public List<Map<String,Object>> getTmpReportData(Map<String, Object> conditionMap);
+	public List<Map<String,Object>> getTmpReportData1(Map<String, Object> conditionMap);
 	public int queryBalanceSalaryCount(Map<String, Object> conditionMap);
 	public void deletePieceSalaryHistory(Map<String, Object> conditionMap);
 	public List<Map<String, Object>> queryBalanceStaffSalary(Map<String, Object> conditionMap);

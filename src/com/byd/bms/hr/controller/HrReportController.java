@@ -141,6 +141,68 @@ public class HrReportController extends BaseController {
 		return model;
 	}
 	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping("/getEcnReportData1")
+	@ResponseBody
+	public ModelMap getEcnReportData1(){
+		String conditions = request.getParameter("conditions");
+		JSONObject jo=JSONObject.fromObject(conditions);
+		Map<String,Object> conditionMap=new HashMap<String,Object>();
+		for(Iterator it=jo.keys();it.hasNext();){
+			String key=(String) it.next();
+			conditionMap.put(key, jo.get(key));
+		}
+		List<Map<String, Object>> datalist = hrReportService.getEcnReportData1(conditionMap);
+		Map<String, Object> result = new HashMap<String,Object>();
+		result.put("data", datalist);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(result);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping("/getTmpReportData")
+	@ResponseBody
+	public ModelMap getTmpReportData(){
+		String conditions = request.getParameter("conditions");
+		JSONObject jo=JSONObject.fromObject(conditions);
+		Map<String,Object> conditionMap=new HashMap<String,Object>();
+		for(Iterator it=jo.keys();it.hasNext();){
+			String key=(String) it.next();
+			conditionMap.put(key, jo.get(key));
+		}
+		
+		List<Map<String, Object>> datalist = hrReportService.getTmpReportData(conditionMap);
+		Map<String, Object> result = new HashMap<String,Object>();
+		result.put("data", datalist);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(result);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping("/getTmpReportData1")
+	@ResponseBody
+	public ModelMap getTmpReportData1(){
+		String conditions = request.getParameter("conditions");
+		JSONObject jo=JSONObject.fromObject(conditions);
+		Map<String,Object> conditionMap=new HashMap<String,Object>();
+		for(Iterator it=jo.keys();it.hasNext();){
+			String key=(String) it.next();
+			conditionMap.put(key, jo.get(key));
+		}
+		
+		List<Map<String, Object>> datalist = hrReportService.getTmpReportData1(conditionMap);
+		Map<String, Object> result = new HashMap<String,Object>();
+		result.put("data", datalist);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(result);
+		model = mv.getModelMap();
+		return model;
+	}
+	
 	/******************** xioing.jianwu **********************/
 	
 	/**

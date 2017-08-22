@@ -1,3 +1,4 @@
+var search_count_flag = "1";
 $(document).ready(function() {
     initPage();
 	
@@ -30,7 +31,14 @@ $(document).ready(function() {
 	})
 	
 	$("#btnQuery").click(function(){
-		ajaxQuery();
+		search_count_flag = $("#search_count_flag").val();
+		console.log("--search_count_flag = " + search_count_flag);
+		if(search_count_flag == "1"){
+			ajaxQuery();
+		}else{
+			ajaxQuery2();
+		}
+		
 	})
 	
 });
@@ -161,7 +169,112 @@ function ajaxQuery(){
 	$("#tableResult_info").addClass('col-xs-6');
 	$("#tableResult_paginate").addClass('col-xs-6');
 	$(".dt-buttons").css("margin-top","-50px").find("a").css("border","0px");
-
-	
 }
 
+function ajaxQuery2(){
+	if($("#wdate_start").val().trim().length==0||$("#wdate_end").val().trim().length==0){
+		alert("请输入日期范围！");
+		return false;
+	}
+	var workshopAll="";
+	$("#search_workshop option").each(function(){
+		workshopAll+=$(this).text()+",";
+	});
+	var conditions = "{factory:'" + $("#search_factory").find("option:selected").text()
+		+ "',workshop:'" + ($("#search_workshop").find("option:selected").text() == '全部' ? workshopAll : $("#search_workshop").find("option:selected").text())
+		+ "',workgroup:'"
+		+ ($("#search_workgroup").find("option:selected").text() == '全部' ? '' : $("#search_workgroup").find("option:selected").text())
+		+ "',team:'"
+		+ ($("#search_team").find("option:selected").text() == '全部' ? '' : $("#search_team").find("option:selected").text())
+		+ "',dateStart:'" + $("#wdate_start").val() + "',dateEnd:'"
+		+ $("#wdate_end").val() + "',staff:'" + $("#search_staff").val()
+		+ "',task:'" + $("#search_task").val() + "',ecn_document_number:''}";
+
+	console.log("-->conditions = " + conditions);
+	
+	//先destroy datatable，隐藏form
+	if($.fn.dataTable.isDataTable("#tableResult")){
+		$('#tableResult').DataTable().destroy();
+		$('#tableResult').empty();
+	}
+	
+	var columns=[];
+	var fixedColumns={};
+	var rowsGroup=[];
+	columns= [
+          {"title":"工号","class":"center","data":"staff_number","defaultContent":""},
+          {"title":"姓名","class":"center","data":"staff_name","defaultContent": ""},
+          {"title":"岗位","class":"center","data":"job","defaultContent": ""},
+          {"title":"小班组","class":"center","data": "team_org","defaultContent": ""},       
+          {"title":"班组","width":"100","class":"center","data": "workgroup_org","defaultContent": ""},
+          {"title":"工厂","class":"center","data": "plant_org","defaultContent": ""},		            
+          {"title":"操作车间","class":"center","data":"workshop","defaultContent": ""},	            
+          {"title":"技改单","class":"center","data":"tech_order_no","defaultContent": ""},	                    
+          {"title":"技改任务","class":"center","data":"task_content","defaultContent": ""},	
+          {"title":"操作日期","class":"center","data":"work_date","defaultContent": ""},	
+          {"title":"操作工时","class":"center","data": "work_hour","defaultContent": ""},
+          {"title":"有效工时","class":"center","data": "real_work_hour","defaultContent": ""}	,     
+          {"title":"技改工资","class":"center","data": "salary","defaultContent": ""}	
+      ]	;
+	var tb=$("#tableResult").DataTable({
+		serverSide: true,
+		dom: 'Bfrtip',
+		buttons: [
+			        {extend:'excelHtml5',title:'data_export',className:'black',text:'<i class=\"fa fa-file-excel-o bigger-130\" tooltip=\"导出excel\"></i>'},
+			        {extend:'colvis',text:'<i class=\"fa fa-list bigger-130\" tooltip=\"选择展示列\"></i>'},],
+        paginate:false,
+        rowsGroup:rowsGroup,
+        paiging:false,
+		ordering:false,
+		searching: false,
+		bAutoWidth:false,
+		destroy: true,
+		sScrollY: $(window).height()-250,
+		scrollX: true,
+		pageLength: 20,
+		pagingType:"full_numbers",
+		lengthChange:true,
+		info:false,
+		orderMulti:false,
+		language: {
+			emptyTable:"抱歉，未查询到数据！",
+			loadingRecords:"正在查询，请稍后..." ,
+			infoEmpty:"抱歉，未查询到数据！",
+		},
+		ajax:function (data, callback, settings) {
+			
+			var param ={
+				"draw":1,
+				"conditions":conditions
+			};
+			$.ajax({
+                type: "post",
+                url: "getEcnReportData1",
+                cache: false,  //禁用缓存
+                data: param,  //传入组装的参数
+                dataType: "json",
+                success: function (result) {
+                	//$(".divLoading").hide();
+                    //console.log(result);
+                	//封装返回数据
+                    var returnData = {};
+                    returnData.draw = result.draw;//这里直接自行返回了draw计数器,应该由后台返回
+                    returnData.data = result.data;//返回的数据列表
+                    //调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
+                    //此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
+                    callback(returnData);
+                }
+            });
+		
+		},
+		columns: columns,
+	});
+	$("#tableResult_info").addClass('col-xs-6');
+	$("#tableResult_paginate").addClass('col-xs-6');
+	$(".dt-buttons").css("margin-top","-50px").find("a").css("border","0px");
+	
+	
+	
+	
+	
+}

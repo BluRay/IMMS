@@ -74,8 +74,8 @@
 						<td>&nbsp;统计维度：</td>
 						<td>
 							<select name="" id="search_count_flag" class="input-medium" style="width:100px;">
-								<option value="工单维度">工单维度</option>
-								<option value="人员维度">人员维度</option>
+								<option value="1">工单维度</option>
+								<option value="2">人员维度</option>
 							</select>
 						</td>
 						<td>
