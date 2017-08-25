@@ -148,6 +148,7 @@ label {
 		<script src="../js/datePicker/WdatePicker.js"></script>		
 		<script src="../assets/js/jquery.dataTables.min.js"></script>
 		<script src="../assets/js/jquery.dataTables.bootstrap.js"></script>
+		<script src="../assets/js/bootstrap3-typeahead.js"></script>
 		<script src="../assets/js/jquery.gritter.min.js"></script>
 		<script src="../js/jquery.form.js"></script>
 		<script src="../js/common.js"></script>

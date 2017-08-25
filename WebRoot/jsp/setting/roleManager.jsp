@@ -145,6 +145,8 @@
 		</div><!-- /.main-container -->
 	</div>
 		<script src="../assets/js/fuelux/fuelux.tree.min.js"></script>
+		<script src="../assets/js/bootstrap3-typeahead.js"></script>
+		<script src="../js/common.js"></script>
 		<script src="../js/setting/roleManager.js"></script>
 		<script src="../assets/js/jquery-ui.min.js"></script>
 		<script src="../assets/js/jquery.ui.touch-punch.min.js"></script>

@@ -107,7 +107,7 @@
 </style>
 	<script type="text/javascript" src="../assets/js/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="../js/bootstrap-table.js"></script>
-	
+	<script src="../assets/js/bootstrap3-typeahead.js"></script>
 	<script type="text/javascript" src="../js/datePicker/WdatePicker.js"></script>
 	<script type="text/javascript" src="../js/common.js"></script>
 	<script type="text/javascript" src="../js/report/factoryOutputReport.js"></script>

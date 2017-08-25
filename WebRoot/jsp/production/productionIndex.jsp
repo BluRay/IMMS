@@ -300,7 +300,7 @@
 			</div>
 			<!-- /.main-container -->
 		</div>
-		
+	<script src="../assets/js/bootstrap3-typeahead.js"></script>
 	<script src="../js/common.js"></script>
 	<script src="../js/production/productionIndex.js"></script>
 </body>
