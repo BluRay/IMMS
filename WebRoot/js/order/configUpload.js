@@ -11,6 +11,13 @@ $(document).ready(function(){
 	$("#btnAdd").on("click",function(){		
 		showCreatePage();
 	})
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	
 	$("#configQty").change(function(){
 		//alert($(this).data("allot_qty"));
@@ -51,6 +58,7 @@ $(document).ready(function(){
 });
 
 function initPage(){
+	getBusNumberSelect('#nav-search-input');
 	cur_year = new Date().getFullYear();
 	$("#search_productive_year").val(cur_year)
 	/*$("#search_productive_year").html('<option value="'+cur_year+'">'+cur_year+'</option><option value="'+(cur_year-1)+'">'+(cur_year-1)+'</option><option value="'+(cur_year+1)+'">'+(cur_year+1)+'</option><option value="'+(cur_year+2)+'">'+(cur_year+2)+'</option>');	*/

@@ -9,11 +9,18 @@ $(document).ready(function(){
 	}
 	initPage();
 	function initPage(){
+		getBusNumberSelect('#nav-search-input');
 		getOrderNoSelect("#search_order","#orderId");
 		var buslist=[];
 		ajaxQuery();
 	}
-	
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	$("#btnQuery").click (function () {
 		ajaxQuery();
 	});

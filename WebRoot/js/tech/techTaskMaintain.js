@@ -7,6 +7,7 @@ var ECN_CHANGE_TYPE = [];
 var ECN_DUTY_UNIT = [];
 var selectedrows;
 $(document).ready(function(){
+	getBusNumberSelect('#nav-search-input');
 	generatekeys("ECN_TYPE", ECN_TYPE);
 	generatekeys("ECN_CHANGE_TYPE", ECN_CHANGE_TYPE);
 	generatekeys("ECN_DUTY_UNIT", ECN_DUTY_UNIT);
@@ -14,6 +15,13 @@ $(document).ready(function(){
 	$("#breadcrumbs").resize(function() {
 		ajaxQuery();
 	});
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	
 	ajaxQuery();
 	

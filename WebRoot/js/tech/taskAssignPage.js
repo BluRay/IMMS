@@ -3,6 +3,7 @@ $(document).ready(function (){
 	initPage();
 	
 	function initPage(){
+		getBusNumberSelect('#nav-search-input');
 		getFactorySelect("tech/taskAssignPage",'',"#search_factory","全部",'id');
 		getOrderNoSelect("#search_order_no","#orderId");
 		var d = new Date();
@@ -19,6 +20,13 @@ $(document).ready(function (){
 		$("#search_date_end").val(s);
 		//ajaxQuery();
 	}
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	
 	$("#breadcrumbs").resize(function() {
 		//eachSeries(scripts, getScript, initTable);

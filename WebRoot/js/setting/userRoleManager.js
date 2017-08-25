@@ -4,12 +4,20 @@ var this_staff_number = '';
 $(document).ready(function () {	
 	initPage();
 	function initPage(){
+		getBusNumberSelect('#nav-search-input');
 		if($(window).height() * 0.6 > 350){
 			$("#div_tree1").height($(window).height() * 0.6);
 			$("#div_tree2").height($(window).height() * 0.6);
 			$("#div_tree3").height($(window).height() * 0.6);
 		}
 	}
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 
 	var DataSourceTree = function(options) {
 		this._data 	= options.data;

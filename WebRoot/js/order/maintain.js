@@ -16,6 +16,7 @@ var dt;
     "rowsGroup":[0,1,2,3,4,5]
 } );*/
 $(document).ready(function(){
+	getBusNumberSelect('#nav-search-input');
 	cur_year = new Date().getFullYear();
 	$("#search_productive_year").val(cur_year);
 	/*cur_year = new Date().getFullYear();
@@ -33,6 +34,13 @@ $(document).ready(function(){
 	$(".btnQuery").on("click",function(){
 		ajaxQuery();
 	}); 
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	
 	$(document).on("click","#btnAdd",function(){
 		$("#dialog-order_new").data("bus_num_start","");

@@ -6,7 +6,15 @@ $(document).ready(function(){
 	$("#breadcrumbs").resize(function() {
 		ajaxQuery();
 	});
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	function initPage(){
+		getBusNumberSelect('#nav-search-input');
 		getBusType("#search_bustype");
 		getOrderNoSelect("#search_orderno","#orderId");
 		getOrderNoSelect("#new_orderNo","#orderId",setBusType);

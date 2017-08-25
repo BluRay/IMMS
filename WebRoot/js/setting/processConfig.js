@@ -2,6 +2,13 @@ var detaillist=[];
 
 $(document).ready(function(){
 	initPage();
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	
 	$("#btnQuery").click(function(){
 		ajaxQuery();
@@ -317,6 +324,7 @@ $(document).ready(function(){
 })
 
 function initPage(){
+	getBusNumberSelect('#nav-search-input');
 	getFactorySelect('','','#search_factory','全部','id');
 	ajaxQuery();
 	getKeysSelect("ORDER_TYPE", '', '#search_orderType','全部','name');

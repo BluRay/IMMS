@@ -2,10 +2,18 @@ var buslist=[];
 $(document).ready(function () {
 	initPage();
 	function initPage(){
+		getBusNumberSelect('#nav-search-input');
 		getFactorySelect("production/certificationPrint","","#search_factory",null,"id")
 		$("#search_factory").attr("disabled","disabled");
 		getOrderNoSelect("#search_order_no","#orderId");
 	}
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	
 	$("#btnQuery").click (function () {
 		//alert($("#search_bus_number").val().trim().length);

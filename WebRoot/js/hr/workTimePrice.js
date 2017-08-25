@@ -2,6 +2,7 @@ $(document).ready(function () {
 	initPage();
 	
 	function initPage() {
+		getBusNumberSelect('#nav-search-input');
 		getFactorySelect("hrBaseData/workTimePrice",'',"#search_factory","全部",'id');
 		getFactorySelect("hrBaseData/workTimePrice",'',"#edit_factory",null,'id');
 		getKeysSelect("HOUR_PRICE", "", "#edit_hour_type",null,"value");
@@ -11,6 +12,13 @@ $(document).ready(function () {
 		eachSeries(scripts, getScript, initTable);
 		ajaxQuery();
     });
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	
 	$("#btnAdd").on('click', function(e) {
 		getFactorySelect("hrBaseData/workTimePrice",'',"#new_factory",null,'id');

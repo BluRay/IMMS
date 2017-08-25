@@ -6,7 +6,15 @@ $(document).ready(function(){
 	$("#breadcrumbs").resize(function() {
 		ajaxQuery();
 	});
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	function initPage(){
+		getBusNumberSelect('#nav-search-input');
 		getFactorySelect("quality/processFault",'',"#search_factory",null,'id');
 		$('#new_report_file,#edit_report_file').ace_file_input({
 			no_file:'请选择要上传的文件...',

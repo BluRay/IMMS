@@ -1,4 +1,12 @@
 jQuery(function($) {
+
+	getBusNumberSelect('#nav-search-input');
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	//if($(window).height() * 0.6 > 350){
 		$("#div_tree1").height($(window).height() * 0.8);
 		$("#div_tree2").height($(window).height() * 0.8);

@@ -2,10 +2,18 @@ $(document).ready(function(){
 	initPage();
 	
 	function initPage(){
+		getBusNumberSelect('#nav-search-input');
 		getFactorySelect("tech/taskSearch",'',"#search_factory",null,'id');
 		getOrderNoSelect("#search_order_no","#orderId");
 		getWorkshopSelect("tech/taskSearch",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
 	}
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	
 	$('#search_factory').change(function(){ 
 		getWorkshopSelect("tech/taskSearch",$("#search_factory :selected").text(),"","#search_workshop",null,"id");

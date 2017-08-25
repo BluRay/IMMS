@@ -9,9 +9,17 @@ $(document).ready(function() {
 	LSTR_MM=parseInt(LSTR_MM) >= 10?LSTR_MM:("0"+LSTR_MM);
 	$("#search_rewards_date").val(LSTR_ndate.getFullYear() + "-" + LSTR_MM);
 	initPage();
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 })
 
 function initPage() {
+	getBusNumberSelect('#nav-search-input');
 	getOrgAuthTree($("#workGroupTree"),'hrReport/rewardsCollect',"1,2",'1',1);
 	$('#workGroupTree').height($(window).height()-110)
 	$('#workGroupTree').ace_scroll({

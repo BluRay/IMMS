@@ -1,6 +1,13 @@
 $(document).ready(function(){
 	
 	initPage();
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	
 	$("#btnQuery").click(function(){
 		ajaxQuery();
@@ -8,7 +15,7 @@ $(document).ready(function(){
 })
 
 function initPage(){
-	
+	getBusNumberSelect('#nav-search-input');
 	getFactorySelect("report/factoryOutputYear","","#search_factory",null,"id");
 	var year=new Date().getFullYear();
 	var month=new Date().getMonth()+1;

@@ -6,8 +6,15 @@ $(document).ready(function(){
 	function initPage(){
 		getFactorySelect("tech/techTaskReport",'',"#search_factory","全部",'id');
 		getOrderNoSelect("#search_order_no","#orderId");
-		//getWorkshopSelect("tech/techTaskReport",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
+		getBusNumberSelect('#nav-search-input');
 	}
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	
 	$("#btnQuery").click(function () {
 		$("#btnQuery").attr("disabled","disabled");

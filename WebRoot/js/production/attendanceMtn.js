@@ -12,6 +12,13 @@ $(document).ready(function() {
 	$("#search__date").val(LSTR_ndate.getFullYear() + "-" + LSTR_MM);
 	
 	initPage();
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	
 	$("#btnBulkAdd").click (function () {
 		$(".dt-buttons").css("margin-top","-120px");
@@ -41,6 +48,7 @@ $(document).ready(function() {
 })
 
 function initPage() {
+	getBusNumberSelect('#nav-search-input');
 	getOrgAuthTree($("#workGroupTree"),'production/attendanceIndex',"1,2,3,4",'1',3);
 	
 	$('#workGroupTree').height($(window).height()-110)

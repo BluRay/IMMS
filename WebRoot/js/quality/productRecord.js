@@ -4,6 +4,13 @@ var workshop_list=null;
 var workgroup_list=[];
 $(document).ready(function(){
 	initPage();
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	
 	//新增记录
 	$("#btnAdd").click(function(){
@@ -109,6 +116,7 @@ $(document).ready(function(){
 });
 
 function initPage(){
+	getBusNumberSelect('#nav-search-input');
 	getBusNumberSelect('#search_bus_number');
 	getKeysSelect("CHECK_NODE", "", "#search_node","全部","id");
 	getKeysSelect("CHECK_NODE", "", "#check_node","请选择","id");

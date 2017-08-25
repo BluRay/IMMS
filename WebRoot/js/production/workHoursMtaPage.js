@@ -12,10 +12,17 @@ $(document).ready(function () {
 	initPage();
 	
 	function initPage(){
-		//$("#status").val("3");
+		getBusNumberSelect('#nav-search-input');
 		getFactorySelect("production/workHoursMtaPage",'',"#q_factory",null,'id');
 		getWorkshopSelect("production/workHoursMtaPage",$("#q_factory :selected").text(),"","#q_workshop",null,"id");
 	}
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	
 	$("#q_factory").change(function() {
 		getWorkshopSelect("production/workHoursMtaPage",$("#q_factory :selected").text(),"","#q_workshop",null,"id");

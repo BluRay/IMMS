@@ -4,11 +4,17 @@ var table_height = $(window).height()-240;
 $(document).ready(function () {	
 	initPage();
 	function initPage(){
+		getBusNumberSelect('#nav-search-input');
 		getFactorySelect();
 		ajaxQuery();
 	}
-	
 
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	
 	$.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
 		_title: function(title) {

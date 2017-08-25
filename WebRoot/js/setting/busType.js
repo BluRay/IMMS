@@ -2,10 +2,18 @@ var pageSize=1;
 var table;
 var dt;
 $(document).ready(function(){
+	getBusNumberSelect('#nav-search-input');
 	getKeysSelect("INTERNAL_BUS_TYPE", "车型内部名称", "#add_internalName","请选择","keyName");
 	getKeysSelect("INTERNAL_BUS_TYPE", "车型内部名称", "#edit_internalName","请选择","keyName");
 	
 	ajaxQuery();
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	
 	$(".btnQuery").on("click",function(){
 		ajaxQuery();

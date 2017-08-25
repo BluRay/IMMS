@@ -7,6 +7,7 @@ jQuery(function($) {
 	initPage();
 	
 	function initPage() {
+		getBusNumberSelect('#nav-search-input');
 		getOrderNoSelect("#search_order_no","#orderId");
 		getOrgAuthTree($("#workGroupTree"),'hrBaseData/workgroupPrice',"1,2,3,4",'1',3);
 		$('#workGroupTree').height($(window).height()-200)
@@ -14,6 +15,13 @@ jQuery(function($) {
 			size: $(window).height()-200
 		});
 	}
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	
 	if($(window).height() * 0.6 > 350){
 		$("#div_tree1").height($(window).height()-105);

@@ -13,11 +13,19 @@ $(document).ready(function(){
 	initPage();
 	
 	function initPage(){
+		getBusNumberSelect('#nav-search-input');
 		getFactorySelect("tech/worktimeVerify",'',"#search_factory",null,'id');
 		getOrderNoSelect("#search_order_no","#orderId");
 		getWorkshopSelect("tech/worktimeVerify",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
 		ajaxQuery();
 	}
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	
 	$("#search_factory").change(function() {
 		getWorkshopSelect("tech/worktimeMaintain",$("#search_factory :selected").text(),"","#search_workshop",null,"id");

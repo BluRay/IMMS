@@ -8,9 +8,17 @@ $(document).ready(function(){
 	$('#search_factory').change(function(){ 
 		getWorkshopSelect("production/queryTmpOrder",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
 	});
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 });
 
 function initPage(){
+	getBusNumberSelect('#nav-search-input');
 	//ajaxQuery();
 	getFactorySelect("production/queryTmpOrder","","#search_factory","全部","id")	
 	getWorkshopSelect("production/queryTmpOrder",$("#search_factory :selected").text(),"","#search_workshop",null,"id");

@@ -17,6 +17,13 @@ $(document).ready(function() {
 		//alert("aa");
 		$("#order_no").attr("order_id","");
 	});
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	
 	$(document).on("click","#dstcopy",function(){
 		//$(".distribution :eq(0)").focus();
@@ -514,6 +521,7 @@ $(document).ready(function() {
 });
 
 function initPage() {
+	getBusNumberSelect('#nav-search-input');
 	getOrgAuthTree($("#workGroupTree"),'production/pieceWorkhourMtn',"1,2,3,4",'1',3);
 	$('#workGroupTree').height($(window).height()-110)
 	$('#workGroupTree').ace_scroll({

@@ -5,9 +5,17 @@ $(document).ready(function(){
 	$("#btnQuery").click(function(){
 		ajaxQuery();
 	})
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 })
 
 function initPage(){
+	getBusNumberSelect('#nav-search-input');
 	var factory_default=getQueryString("factory_id");
 	getFactorySelect("report/factoryOutputYear",factory_default,"#search_factory",null,"id");
 	var year=new Date().getFullYear();

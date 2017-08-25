@@ -4,8 +4,15 @@ $(document).ready(function(){
 	initPage();
 	
 	function initPage(){
-		
+		getBusNumberSelect('#nav-search-input');
 	}
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	
 	$("#btnQuery").click(function() {
 		eachSeries(scripts, getScript, initTable);

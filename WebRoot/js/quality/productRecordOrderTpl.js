@@ -4,6 +4,13 @@ $(document).ready(function(){
 	$("#btnQuery").on("click",function(){
 		ajaxQuery();
 	}); 
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	
 	$(document).on("input","#search_order_no",function(){
 		//alert("change");
@@ -77,6 +84,7 @@ $(document).ready(function(){
 })
 
 function initPage(){
+	getBusNumberSelect('#nav-search-input');
 	getBusTypeSelect('','#search_bus_type','全部','id');
 	getKeysSelect("CHECK_NODE", "", "#search_node","全部","id") 
 	getOrderNoSelect("#search_order_no","#orderId",null,$('#search_bus_type').val());

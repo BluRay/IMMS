@@ -7,8 +7,16 @@ $(document).ready(function(){
 	$("#breadcrumbs").resize(function() {
 		ajaxQuery();
 	});
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	
 	function initPage(){
+		getBusNumberSelect('#nav-search-input');
 		getFactorySelect("quality/problemImprove",'',"#search_factory","全部",'id');
 		getFactorySelect("quality/problemImprove",'',"#edit_factory","全部",'id');
 		getBusType();

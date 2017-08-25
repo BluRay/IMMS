@@ -59,6 +59,13 @@ $(document).ready(function () {
             return false;
         }
     });
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
     
     $("#reason_type").change(function(){
     	
@@ -71,6 +78,7 @@ $(document).ready(function () {
 })
 
 function initPage(){
+	getBusNumberSelect('#nav-search-input');
 	getKeysSelect("ABNORMAL_REASON", "", "#reason_type"); 
 	getKeysSelect("LACK_REASON", "", "#lack_reason"); 
 	getFactorySelect();

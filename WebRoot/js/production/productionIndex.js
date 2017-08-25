@@ -10,10 +10,18 @@ $(document).ready(function () {
 	});
 	
 	function initPage(){
+		getBusNumberSelect('#nav-search-input');
 		getFactorySelect("production/index","","#search_factory",null,"id");
 		getWorkshopAuthList();
 		ajaxQuery();
 	}
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	
 })
 

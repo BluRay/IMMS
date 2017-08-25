@@ -4,9 +4,17 @@ $(document).ready(function(){
 	initPage();
 	
 	function initPage(){
+		getBusNumberSelect('#nav-search-input');
 		getFactorySelect("tech/techTaskReport",'',"#search_factory","全部",'id');
 		getOrderNoSelect("#search_order_no","#orderId");
 	}
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	
 	$("#btnQuery").click(function () {
 		$("#btnQuery").attr("disabled","disabled");

@@ -6,9 +6,16 @@ $(document).ready(function(){
 	initPage();
 	
 	function initPage(){
-		//getPartsSelect("#input_parts");
+		getBusNumberSelect('#nav-search-input');
 		ajaxQuery();
 	}
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	
 	$("#btnQuery").click (function () {
 		ajaxQuery();

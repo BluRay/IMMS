@@ -1,6 +1,13 @@
 $(document).ready(function(){
 	
 	initPage();
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	$("#btnQuery").click(function(){
 		if($("#search_date").val()==''){
 			alert("请选择日期");
@@ -113,6 +120,7 @@ $(document).ready(function(){
 })
 
 function initPage(){
+	getBusNumberSelect('#nav-search-input');
 	$("#search_date").val(formatDate());
 }
 //格局化日期：yyyy-MM-dd 

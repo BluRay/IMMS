@@ -12,10 +12,17 @@ $(document).ready(function() {
 	$("#search__date").val(LSTR_ndate.getFullYear() + "-" + LSTR_MM);
 	
 	initPage();
-	
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 })
 
 function initPage() {
+	getBusNumberSelect('#nav-search-input');
 	getOrgAuthTree($("#workGroupTree"),'hrReport/staffAttendance',"1,2,3,4",'1',3);
 	$('#workGroupTree').height($(window).height()-110)
 	$('#workGroupTree').ace_scroll({

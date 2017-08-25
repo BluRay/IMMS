@@ -3,10 +3,18 @@ $(document).ready(function() {
     initPage();
 	
 	function initPage() {
+		getBusNumberSelect('#nav-search-input');
 		getFactorySelect("hrReport/tmpReport","","#search_factory",null,"id")	
 		getWorkshopSelect("hrReport/tmpReport",$("#search_factory :selected").text(),"","#search_workshop",null,"id")
 		getWorkgroupSelect($("#search_factory :selected").text(),$("#search_workshop :selected").text(),"","#search_workgroup","全部","id")
 	}
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	
 	$(document).on("change","#search_factory",function(){
 		var factory=$("#search_factory :selected").text();

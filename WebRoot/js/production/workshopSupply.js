@@ -13,6 +13,13 @@ $(document).ready(function(){
 		$("#supply_num").next("span").html("");
 		$("#supply_num").val("");
 	});
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	
 	//车间切换
 	$(document).on("change","#supply_workshop",function(e){
@@ -77,6 +84,7 @@ $(document).ready(function(){
 });
 
 function initPage(){
+	getBusNumberSelect('#nav-search-input');
 	getFactorySelect("production/workshopSupply","","#search_factory",null,"id");
 	getWorkshopSelect("production/workshopSupply",$("#search_factory :selected").text(),"","#search_supply_workshop","全部","id")
 	getWorkshopSelect("",$("#search_factory :selected").text(),"","#search_receive_workshop","全部","id")

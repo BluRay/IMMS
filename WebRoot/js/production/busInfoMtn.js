@@ -39,6 +39,13 @@ $(document).ready(function(){
 	$("#btnQuery").click(function(){
 		ajaxQuery();
 	});
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	
 	$("#bus_list").change(function(){
 		if($(this).val().trim().length>0){
@@ -53,6 +60,7 @@ $(document).ready(function(){
 });
 
 function initPage(){
+	getBusNumberSelect('#nav-search-input');
 	getBusNumberSelect('#search_bus_number');
 	$("#search_bus_number").val(getQueryString("bus_number"));
 	getFactorySelect("production/busInfoMtn","","#search_factory","全部","id");

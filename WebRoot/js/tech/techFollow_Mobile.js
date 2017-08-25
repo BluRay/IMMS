@@ -1,6 +1,7 @@
 var task_all_list={};
 var workshop_list=[];
 $(document).ready(function(){
+	getBusNumberSelect('#nav-search-input');
 	getFactorySelect("tech/followingUpPage","","#exec_factory","","id");
 	 $("#exec_factory").attr("disabled",true)
 	$('#bus_number').focus();
@@ -16,6 +17,13 @@ $(document).ready(function(){
             return false;
         }  
     });
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	
     $("#btn_save").click(function(){
         var id_array=new Array();  

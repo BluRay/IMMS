@@ -5,6 +5,13 @@ $(document).ready(function(){
 		ajaxQuery();
 	});
 
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
+
 	$(document).on("change","#search_factory",function(){
 		var factory=$("#search_factory :selected").text();
 		getWorkshopSelect("hrReport/waitReport",factory,"","#search_workshop",null,"id");
@@ -30,6 +37,7 @@ $(document).ready(function(){
 
 
 function initPage(){	
+	getBusNumberSelect('#nav-search-input');
 	$("#search_form")[0].reset();
 	getFactorySelect("hrReport/waitReport","","#search_factory",null,"id")	
 	getWorkshopSelect("hrReport/waitReport",$("#search_factory :selected").text(),"","#search_workshop",null,"id");

@@ -6,6 +6,7 @@ $(document).ready(function () {
 	initPage();
 	
 	function initPage() {
+		getBusNumberSelect('#nav-search-input');
 		getOrderNoSelect("#search_order_no","#orderId");
 		getOrgAuthTree($("#workGroupTree"),'hrBaseData/staffDistribution',"1,2,3,4",'1',3);
 		$('#workGroupTree').height($(window).height()-200)
@@ -13,6 +14,13 @@ $(document).ready(function () {
 			size: $(window).height()-200
 		});
 	}
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	
 	$("#btnQuery").click(function () {
 		eachSeries(scripts, getScript, initTable);

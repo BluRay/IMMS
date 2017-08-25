@@ -7,6 +7,7 @@ $(document).ready(function(){
 		//ajaxQuery();
 	});
 	function initPage(){
+		getBusNumberSelect('#nav-search-input');
 		getBusNumberSelect('#search_busNumber');
 		getFactorySelect("quality/keyPartsTrace",'',"#search_factory","全部",'id');
 		getBusTypeSelect("","#search_bus_type","全部","id");
@@ -14,6 +15,13 @@ $(document).ready(function(){
 		getOrderNoSelect("#search_order","#orderId");
 		ajaxQuery();
 	}
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	
 	$("#btnQuery").click (function () {
 		ajaxQuery();

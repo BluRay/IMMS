@@ -35,6 +35,13 @@ $(document).ready(function(){
 			]
 		});
 	})
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	
 	//点击查询
 	$("#btnQuery").click(function(){
@@ -62,6 +69,7 @@ $(document).ready(function(){
 });
 
 function initPage(){
+	getBusNumberSelect('#nav-search-input');
 	ajaxQuery();
 	getFactorySelect("production/createTmpOrder",'',"#new_factory","--请选择--",'id');
 	getWorkshopSelect("",$("#new_factory :selected").text(),"","#new_workshop",null,"id");

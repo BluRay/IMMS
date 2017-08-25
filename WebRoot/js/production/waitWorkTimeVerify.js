@@ -8,6 +8,7 @@ $(document).ready(function() {
     initPage();
 	
 	function initPage() {
+		getBusNumberSelect('#nav-search-input');
 		getOrgAuthTree($("#workGroupTree"),'production/waitWorkTimeVerify',"1,2,3,4",'1',3);
 		$('#workGroupTree').height($(window).height()-110)
 		$('#workGroupTree').ace_scroll({
@@ -22,6 +23,13 @@ $(document).ready(function() {
 			ajaxQuery();
 		}
 	}
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 
 	$("#btnQuery").click(function(e) {
 		ajaxQuery();

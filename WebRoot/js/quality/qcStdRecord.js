@@ -1,7 +1,15 @@
 
 $(document).ready(function(){
+	getBusNumberSelect('#nav-search-input');
 	$("#addForm")[0].reset()
 	ajaxQuery();
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	
 	$(".btnQuery").on("click",function(){
 		ajaxQuery();

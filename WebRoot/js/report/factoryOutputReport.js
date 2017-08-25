@@ -6,6 +6,7 @@ $(document).ready(function(){
 	initPage();
 	
 	function initPage(){
+		getBusNumberSelect('#nav-search-input');
 		getFactorySelect("report/factoryOutputReport",'',"#search_factory","全部",'id');
 		var now = new Date(); //当前日期
 		//var startDate=new Date(now.getTime()-6*24*3600*1000);
@@ -13,6 +14,13 @@ $(document).ready(function(){
 		$("#start_date").val(formatDate(now));
 		$("#end_date").val(formatDate(now));
 	}
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	
 	$(document).on("change","#search_index",function(){
 		var now = new Date(); 				//当前日期

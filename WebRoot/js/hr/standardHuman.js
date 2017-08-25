@@ -5,12 +5,20 @@ $(document).ready(function() {
     initPage();
 	
 	function initPage() {
+		getBusNumberSelect('#nav-search-input');
 		getOrgAuthTree($("#workGroupTree"),'hrBaseData/staffManager',"1,2,3",'1',3);
 		$('#workGroupTree').height($(window).height()-200)
 		$('#workGroupTree').ace_scroll({
 			size: $(window).height()-200
 		});
 	}
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	if($(window).height() * 0.6 > 350){
 		$("#div_tree1").height($(window).height()-120);
 		$("#div_tree2").height($(window).height()-120);

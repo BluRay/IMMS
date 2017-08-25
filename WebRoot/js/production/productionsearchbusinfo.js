@@ -14,6 +14,13 @@ $(document).ready(function () {
 			ajaxQuery();
 		}
 	}
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	
 	$("li").on('click',function(e){
 		if(this.id == "div1"){			//基本信息

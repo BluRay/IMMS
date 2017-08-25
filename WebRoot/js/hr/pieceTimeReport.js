@@ -4,6 +4,13 @@ $(document).ready(function(){
 	$("#btnQuery").click(function(){
 		ajaxQuery();
 	})
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	
 	$(document).on("change","#search_salary_model",function(){
 		var options="<option value='车辆维度'>车辆维度</option><option value='人员维度'>人员维度</option>";
@@ -39,6 +46,7 @@ $(document).ready(function(){
 
 
 function initPage(){	
+		getBusNumberSelect('#nav-search-input');
 		$("#search_form")[0].reset();
 		getOrderNoSelect("#search_order_no","#orderId");
 		getFactorySelect("hrReport/pieceTimeReport","","#search_factory",null,"id")	

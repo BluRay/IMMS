@@ -3,6 +3,7 @@ $(document).ready(function () {
 	initPage();
 	
 	function initPage(){
+		getBusNumberSelect('#nav-search-input');
 		//getBusNumberSelect('#vinText2');
 		//alert(location.href.substr(location.href.indexOf("action?")+7,location.href.length));
 		//$('#rightlink').attr('href','production!execution.action?' + location.href.substr(location.href.indexOf("action?")+7,location.href.length)); 
@@ -16,6 +17,13 @@ $(document).ready(function () {
 		}		
 		getFactorySelect();
 	};
+
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
 	
 	function resetPage () {
 		$("#vinText").removeAttr("disabled");
