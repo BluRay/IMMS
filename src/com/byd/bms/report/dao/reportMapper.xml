@@ -80,7 +80,7 @@
 			  from (
 				 (
 					 select f.id,f.factory_name,k.key_name,k.value from BMS_BASE_FACTORY f,BMS_BASE_KEY k 
-					 where key_code = 'PLAN_CODE' and k.value in (4,5,8,9)
+					 where key_code = 'PLAN_CODE' and k.value in (4,5,8,9) and capacity>0
 				 ) a
 				 LEFT JOIN BMS_PLAN_PRODUCTION_PLAN p on a.`value`=p.plan_code_value and a.id=p.factory_id
 			     and p.plan_date=#{plan_date}
@@ -297,7 +297,7 @@
 	</select>
 	
 	<select id="queryExceptionList" parameterType="Map" resultType="Map">
-		select tmp.workshop,group_concat(distinct tmp.mark separator '&lt;br/&gt;') as mark
+		select tmp.workshop,group_concat(distinct tmp.mark separator '||') as mark
 		from(
 		SELECT e.workshop, e.detailed_reasons as mark
 		FROM BMS_PD_PRODUCTION_EXCEPTION e

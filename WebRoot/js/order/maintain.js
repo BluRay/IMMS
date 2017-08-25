@@ -743,7 +743,9 @@ function ajaxEditConfirm (argument){
 
 function ajaxAdd (argument) {
 	//数据验证
-	if(($("#newOrderName").val() == '')||($("#newOrderCode").val() == '')||($("#new_order_qty").val() == '')||($("#new_delivery_date").val() == '')){
+	if(($("#newOrderName").val() == '')||($("#newOrderCode").val() == '')
+			||($("#new_order_qty").val() == '')||($("#new_delivery_date").val() == ''
+				||($("#new_customer").val() == ''))){
 		alert('请输入完整订单数据！');
 		$("#btnAddConfirm").removeAttr("disabled");
 		return false;

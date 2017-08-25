@@ -133,6 +133,8 @@ function zTreeOnClick(event, treeId, treeNode) {
 	ajaxGetStaffHoursDetail();
 	if(staff_hour_list.length>0){
 		showStaffList(staff_hour_list);
+	}else{
+		alert("抱歉，未查询到工时信息!");
 	}
 	
 };

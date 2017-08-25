@@ -8,9 +8,11 @@ $(document).ready(function(){
 })
 
 function initPage(){
-	getFactorySelect("report/factoryOutputYear","","#search_factory",null,"id");
+	var factory_default=getQueryString("factory_id");
+	getFactorySelect("report/factoryOutputYear",factory_default,"#search_factory",null,"id");
 	var year=new Date().getFullYear();
 	$("#search_year").val(year);
+	ajaxQuery()
 }
 
 function ajaxQuery(){

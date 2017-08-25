@@ -31,4 +31,7 @@ public interface ISettingService {
 	public List<BmsUserRole> getOneUserRole(String staff_number,String role_id);
 	public int saveUserRole(String staff_number,String this_role,String role_permission,String factory_permission,String workshop_permission,String line_permission,String edit_user);
 	public Map<String,Object> getUserInfoByStaffnumber(String staff_number);
+	public int checkUserPassword(Map<String,Object> queryMap);
+	public int updateUserPassword(Map<String,Object> queryMap);
+	public int updateUserInfo(Map<String,Object> queryMap);
 }

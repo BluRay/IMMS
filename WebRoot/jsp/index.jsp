@@ -62,7 +62,7 @@
 										<!-- #section:custom/widget-box -->
 										<div class="widget-box ui-sortable-handle">
 											<div class="widget-header">
-												<h5 class="widget-title">工厂日计划达成</h5>
+												<h5 class="widget-title"><a href='#' onclick="reportFoward('plan/planSearch')">工厂日计划达成</a></h5>
 
 												<!-- #section:custom/widget-box.toolbar -->
 												<div class="widget-toolbar">
@@ -156,7 +156,7 @@
 					<div class="col-xs-12 col-sm-7 widget-container-col ui-sortable" >
 								<div class="widget-box ui-sortable-handle">
 									<div class="widget-header">
-										<h5 class="widget-title">订单情况(事业部)</h5>
+										<h5 class="widget-title"><a href='#' onclick="">订单情况(事业部)</a></h5>
 
 										<!-- #section:custom/widget-box.toolbar -->
 										<div class="widget-toolbar">
@@ -184,7 +184,7 @@
 				<div class="col-xs-12 col-sm-5 widget-container-col ui-sortable">
 					<div class="widget-box ui-sortable-handle">
 								<div class="widget-header">
-									<h5 class="widget-title">工厂在制订单</h5>
+									<h5 class="widget-title"><a href='#' onclick="reportFoward('order/orderQuery')">工厂在制订单</a></h5>
 									<div class="widget-toolbar">
 										<a href="#" data-action="fullscreen" class="orange2">
 											<i class="ace-icon fa fa-expand"></i>
@@ -207,7 +207,7 @@
 				<div class="col-xs-12 col-sm-7 widget-container-col ui-sortable" >
 					<div class="widget-box ui-sortable-handle" >
 								<div class="widget-header">
-									<h5 class="widget-title">产量（事业部）</h5>
+									<h5 class="widget-title"><a href='#' onclick="reportFoward('report/factoryOutputYear')">产量（事业部）</a></h5>
 									<div class="widget-toolbar">
 										<a href="#" data-action="fullscreen" class="orange2" >
 											<i class="ace-icon fa fa-expand"></i>

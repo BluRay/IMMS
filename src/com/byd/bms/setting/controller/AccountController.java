@@ -307,11 +307,48 @@ public class AccountController extends BaseController{
 	
 	@RequestMapping("/editUserPassword")
 	@ResponseBody
-	public ModelMap editUserPassword(){
-		String old_password=request.getParameter("old_password");
-		String new_password=request.getParameter("new_password");
-		
-		
+	public ModelMap editUserPassword() throws NoSuchAlgorithmException, UnsupportedEncodingException{
+		String staff_number = request.getSession().getAttribute("staff_number") + "";
+		String old_password = request.getParameter("old_password");
+		String new_password = request.getParameter("new_password");
+		int result = 0;
+		String oldmd5 = MD5Util.getEncryptedPwd(old_password);
+		String newmd5 = MD5Util.getEncryptedPwd(new_password);
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("staff_number", staff_number);
+		condMap.put("password", oldmd5);
+		int checkPassword = settingService.checkUserPassword(condMap);
+		if(checkPassword == 0){
+			result = -1;
+		}else{
+			Map<String,Object> condMap2=new HashMap<String,Object>();
+			condMap2.put("staff_number", staff_number);
+			condMap2.put("password", newmd5);
+			result += settingService.updateUserPassword(condMap2);
+		}
+		mv.clear();
+		initModel(true,String.valueOf(result),null);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/editUserInfo")
+	@ResponseBody
+	public ModelMap editUserInfo(){
+		String staff_number = request.getParameter("staff_number");
+		String email = request.getParameter("email");
+		String telephone = request.getParameter("telephone");
+		String cellphone = request.getParameter("cellphone");
+		int result = 0;
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("staff_number", staff_number);
+		condMap.put("email", email);
+		condMap.put("telephone", telephone);
+		condMap.put("cellphone", cellphone);
+		result = settingService.updateUserInfo(condMap);
+		mv.clear();
+		initModel(true,String.valueOf(result),null);
+		model = mv.getModelMap();
 		return model;
 	}
 

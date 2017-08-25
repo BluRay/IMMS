@@ -8,17 +8,18 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 
 import com.byd.bms.report.dao.IReportDao;
 import com.byd.bms.report.service.IReportService;
+import com.byd.bms.util.DataSource;
 @Service
 public class ReportServiceImpl implements IReportService {
 	@Resource(name="reportDao")
 	private IReportDao reportDao;
 	
 	@Override
+	@DataSource("dataSourceSlave")
 	public void getFactoryOutputYear(Map<String, Object> condMap, ModelMap model) {
 		List<Map<String,Object>> resultList=new ArrayList<Map<String,Object>>();
 		String[] keys=new String[12];
@@ -77,6 +78,7 @@ public class ReportServiceImpl implements IReportService {
 	}
 
 	@Override
+	@DataSource("dataSourceSlave")
 	public List<Map<String, Object>> showFactoryOutputReportData(Map<String, Object> queryMap) {		
 		List<Map<String, Object>> datalist=new ArrayList<Map<String, Object>>();
 		String date_array = queryMap.get("date_array").toString();
@@ -226,6 +228,7 @@ public class ReportServiceImpl implements IReportService {
 	}
 
 	@Override
+	@DataSource("dataSourceSlave")
 	public void getOnlineAndOfflineData(Map<String, Object> condMap,
 			ModelMap model) {
 		List<Map<String,Object>> datalist=reportDao.queryOnlineAndOfflineData(condMap);
@@ -233,6 +236,7 @@ public class ReportServiceImpl implements IReportService {
 	}
 
 	@Override
+	@DataSource("dataSourceSlave")
 	public void getFactoryPlanRateData(Map<String, Object> condMap,
 			ModelMap model) {
 		List<Map<String,Object>> resultList=new ArrayList<Map<String,Object>>();

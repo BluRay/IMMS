@@ -6,6 +6,27 @@ $(document).ready(function () {
 		getUserInfo();
 	}
 	
+	$("#btnEditInfo").on('click', function(e) {	
+		$.ajax({
+		    url: "editUserInfo",
+		    dataType: "json",
+			type: "get",
+		    data: {
+		    	"staff_number" : $("#staff_number").val(),
+		    	"email" : $("#email").val(),
+		    	"telephone" : $("#telephone").val(),
+		    	"cellphone" : $("#cellphone").val()
+		    },
+		    success:function(response){
+		    	$.gritter.add({
+					title: '系统提示：',
+					text: '<h5>操作成功！</h5>',
+					class_name: 'gritter-info'
+				});
+		    }
+		});
+	});
+	
 	$("#btnEditPassword").on('click', function(e) {	
 		$("#dialog-edit").removeClass('hide').dialog({
 			resizable: false,
@@ -47,12 +68,21 @@ $(document).ready(function () {
 							    	"new_password" : $("#new_password").val()
 							    },
 							    success:function(response){
-							    	$.gritter.add({
-										title: '系统提示：',
-										text: '<h5>操作成功！</h5>',
-										class_name: 'gritter-info'
-									});
-							    	//ajaxQuery();
+							    	if(response.message == "-1"){
+							    		$.gritter.add({
+											title: '系统提示：',
+											text: '<h5>原密码错误！</h5>',
+											class_name: 'gritter-warning'
+										});
+							    	}else{
+							    		$.gritter.add({
+											title: '系统提示：',
+											text: '<h5>操作成功！</h5>',
+											class_name: 'gritter-info'
+										});
+							    		$("#dialog-edit").dialog( "close" );
+							    	}
+							    	getUserInfo();
 							    }
 							});
 						} 

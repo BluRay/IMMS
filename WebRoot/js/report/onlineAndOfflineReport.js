@@ -76,7 +76,7 @@ $(document).ready(function(){
 	            		addTotalJson={"factory_name":"合计",
 	            				"welding_online":welding_onlinetotal,"welding_offline":welding_offlinetotal,
 	            				"chassis_online":chassis_onlinetotal,"chassis_offline":chassis_offlinetotal};
-	            		addFinishRaioJson={"factory_name":"完成率",
+	            		addFinishRaioJson={"factory_name":"达成率",
 	            				"welding_online":'',"welding_offline":weldingFinishRadio,
 	            				"chassis_online":'',"chassis_offline":chassisFinishRadio};
 	            		returnData.data.push(addTotalJson);
@@ -95,7 +95,7 @@ $(document).ready(function(){
 			            	return data!='0' ? data : ''
 			            },"defaultContent": ""},
 			            {"title":"欠产","class":"center","data": "","render":function(data,type,row){
-			            	return (row.factory_name!='完成率' && row.welding_online!='0' && row.welding_offline!='0')  ? row.welding_online-row.welding_offline :''
+			            	return (row.factory_name!='达成率' && (row.welding_online!='0' || row.welding_offline!='0'))  ? row.welding_online-row.welding_offline :''
 			            },"defaultContent": ""},
 			            {"title":"底盘上线累计计划","class":"center chassis_online","data":"chassis_online","render":function(data,type,row){
 			            	return data!='0' ? data : ''
@@ -104,7 +104,7 @@ $(document).ready(function(){
 			            	return data!='0' ? data : ''
 			            },"defaultContent": ""},
 			            {"title":"欠产","class":"center","data": "","render":function(data,type,row){
-			            	return (row.factory_name!='完成率' && row.chassis_online!='0' && row.chassis_offline!='0')  ? row.chassis_online-row.chassis_offline : ''
+			            	return (row.factory_name!='达成率' && (row.chassis_online!='0' || row.chassis_offline!='0'))  ? row.chassis_online-row.chassis_offline : ''
 			            },"defaultContent": ""},
 			          ]
 		});
@@ -113,6 +113,21 @@ $(document).ready(function(){
 })
 
 function initPage(){
-	//
+	$("#search_date").val(formatDate());
+}
+//格局化日期：yyyy-MM-dd 
+function formatDate() { 
+	var date=new Date();
+	var myyear = date.getFullYear(); 
+	var mymonth = date.getMonth()+1; 
+	var myweekday = date.getDate();
+
+	if(mymonth < 10){ 
+		mymonth = "0" + mymonth; 
+	} 
+	if(myweekday < 10){ 
+		myweekday = "0" + myweekday; 
+	} 
+	return (myyear+"-"+mymonth + "-" + myweekday); 
 }
 

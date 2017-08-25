@@ -40,4 +40,7 @@ public interface ISettingDao {
 	public int delOneUserRole(@Param("staff_number")String staff_number,@Param("role")String role);
 	public List<Map<String,Object>> getPermissionByMap(Map<String,Object> queryMap);
 	public Map<String,Object> getUserInfoByStaffnumber(String staff_number);
+	public int checkUserPassword(Map<String,Object> queryMap);
+	public int updateUserPassword(Map<String,Object> queryMap);
+	public int updateUserInfo(Map<String,Object> queryMap);
 }

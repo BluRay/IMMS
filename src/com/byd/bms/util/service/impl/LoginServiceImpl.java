@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.byd.bms.util.DataSource;
 import com.byd.bms.util.dao.ILoginDao;
 import com.byd.bms.util.model.BmsBaseUser;
 import com.byd.bms.util.service.ILoginService;
@@ -35,6 +36,7 @@ public class LoginServiceImpl implements ILoginService {
 
 	}
 	@Override
+	@DataSource("dataSourceMaster")
 	public int saveUserLoginInfo(BmsBaseUser user) {
 		return loginDao.saveUserLoginInfo(user);
 	}

@@ -193,4 +193,19 @@ public class SettingServiceImpl implements ISettingService {
 		return settingDao.getUserInfoByStaffnumber(staff_number);
 	}
 
+	@Override
+	public int checkUserPassword(Map<String, Object> queryMap) {
+		return settingDao.checkUserPassword(queryMap);
+	}
+
+	@Override
+	public int updateUserPassword(Map<String, Object> queryMap) {
+		return settingDao.updateUserPassword(queryMap);
+	}
+
+	@Override
+	public int updateUserInfo(Map<String, Object> queryMap) {
+		return settingDao.updateUserInfo(queryMap);
+	}
+
 }

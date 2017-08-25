@@ -194,4 +194,18 @@
 		FROM BMS_BASE_USER u  LEFT OUTER JOIN BMS_BASE_FACTORY f ON u.factory_id = f.id
 		WHERE u.staff_number = #{staff_number}
 	</select>
+	
+	<select id="checkUserPassword" parameterType="Map" resultType="int">
+		SELECT COUNT(id) FROM BMS_BASE_USER WHERE staff_number = #{staff_number} AND password = #{password}
+	</select>
+	<update id="updateUserPassword" parameterType="Map">
+		<![CDATA[
+		UPDATE BMS_BASE_USER SET password = #{password} WHERE staff_number = #{staff_number}
+		]]>
+	</update>
+	<update id="updateUserInfo" parameterType="Map">
+		<![CDATA[
+		UPDATE BMS_BASE_USER SET email = #{email},telephone = #{telephone},cellphone = #{cellphone} WHERE staff_number = #{staff_number}
+		]]>
+	</update>
 </mapper>

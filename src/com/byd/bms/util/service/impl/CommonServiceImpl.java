@@ -456,6 +456,7 @@ public class CommonServiceImpl implements ICommonService {
 	 * @author xiong.jianwu
 	 */
 	@Override
+	@DataSource("dataSourceSlave")
 	public void getProductionIndexData(Map<String,Object>condMap, ModelMap model) {
 		List<Map<String,Object>> datalist=new ArrayList<Map<String,Object>>();
 		datalist=commonDao.queryProductionIndexData(condMap);

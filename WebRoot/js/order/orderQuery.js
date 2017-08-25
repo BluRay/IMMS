@@ -14,9 +14,10 @@ $(document).ready(function(){
 
 function initPage(){
 	var cur_year = new Date().getFullYear();
+	var factory_default=getQueryString("factory_id");
 	$("#search_productive_year").val(cur_year);
 	getOrderNoSelect("#search_order_no","#orderId");
-	getFactorySelect("","","#search_factory","全部","id")
+	getFactorySelect("",factory_default,"#search_factory","全部","id")
 	ajaxQuery();
 	
 }

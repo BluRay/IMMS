@@ -4,8 +4,9 @@ $(document).ready(function () {
 	initPage();
 	
 	function initPage(){
+		var factory_default=getQueryString("factory_id");
 		getBusNumberSelect('#nav-search-input');
-		getFactorySelect("plan/planSearch",'',"#search_factory",null,'id');
+		getFactorySelect("plan/planSearch",factory_default,"#search_factory",null,'id');
 		getOrderNoSelect("#search_order_no","#orderId");
 		getWorkshopSelect("plan/planSearch",$("#search_factory :selected").text(),"","#search_workshop",'全部',"id");
 		
@@ -15,6 +16,7 @@ $(document).ready(function () {
 		$("#end_date").val(formatDate(now));
 		//$("#home").css("height",div_height);
 		//$("#messages").css("height",div_height);
+		ajaxQuery();
 	}
 
 	$('#nav-search-input').bind('keydown', function(event) {

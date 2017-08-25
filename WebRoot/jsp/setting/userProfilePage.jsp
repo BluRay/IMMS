@@ -101,7 +101,7 @@
 							<div class="profile-info-name"></div>
 
 							<div class="profile-info-value">
-								<input id="btnQuery" type="button" class="btn btn-sm btn-success" value="更新个人信息"></input>
+								<input id="btnEditInfo" type="button" class="btn btn-sm btn-success" value="更新个人信息"></input>
 								<input id="btnEditPassword" type="button" class="btn btn-sm btn-info" value="修改登录密码"></input>
 							</div>
 						</div>

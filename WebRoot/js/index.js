@@ -652,3 +652,12 @@ function reload(flag){
 		drawStaffCountChart();
 	}
 }
+
+function reportFoward(url){
+	var factory_id=$("#search_factory").val();
+	if(url){
+		url+="?factory_id="+factory_id;
+		window.open(url,'_self');
+	}
+	
+}
