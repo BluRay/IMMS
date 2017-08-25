@@ -298,7 +298,17 @@ jQuery(function($) {
 							text: "确定",
 							"class" : "btn btn-primary btn-minier",
 							click: function() {
-            					if(org_type == '4'){
+								if($("#new_org_kind").val()==''){
+									$.gritter.add({
+    									title: '系统提示：',
+    									text: '<h5>必须维护组织类型！</h5><br>',
+    									class_name: 'gritter-info'
+    								});
+    					    		return false;
+								}
+								
+            					if($("#new_org_type :selected").attr('keyvalue') == '4'){
+            						var salary_model=$("#new_salary_model :selected").attr('keyvalue');
             				    	if(undefined == salary_model || 'undefined' == salary_model || salary_model ==""){
         					    		$.gritter.add({
         									title: '系统提示：',
@@ -307,6 +317,8 @@ jQuery(function($) {
         								});
         					    		return false;
             				    	}
+            				    	
+            				    	var customer_no_flag=$("#new_customer_no_flag :selected").val();
             				    	if(undefined == customer_no_flag || 'undefined' == customer_no_flag || customer_no_flag ==""){
         					    		$.gritter.add({
         									title: '系统提示：',
@@ -324,6 +336,14 @@ jQuery(function($) {
             					if($("#new_name").attr("type")=="text"){
             						name=$("#new_name").val();
             					}
+            					if(name=='' || name==undefined || name=='--请选择--'){
+									$.gritter.add({
+    									title: '系统提示：',
+    									text: '<h5>必须维护组织名称！</h5><br>',
+    									class_name: 'gritter-info'
+    								});
+    					    		return false;
+								}
 								$.ajax({
 								    url: "addOrgData",
 								    dataType: "json",
@@ -342,13 +362,21 @@ jQuery(function($) {
 								    	"customer_no_flag" :$("#new_customer_no_flag :selected").val()
 								    },
 								    success:function(response){
-
-								    	$("#dialog-confirm").dialog("close");
-								    	showtree2();  
-								    	getWorkgroupListById($("#parent_id").val(),$("#org_kind").val(),$("#org_type").val());
+                                        if(response.success){
+                                        	$("#dialog-confirm").dialog("close");
+    								    	showtree2();  
+    								    	getWorkgroupListById($("#parent_id").val(),$("#org_kind").val(),$("#org_type").val());
+                                        }else{
+                                        	$.gritter.add({
+            									title: '系统提示：',
+            									text: '<h5>'+response.message+'</h5><br>',
+            									class_name: 'gritter-info'
+            								});
+                                        }
+								    	
 								    }
 								});
-								$( this ).dialog( "close" ); 
+								//$( this ).dialog( "close" ); 
 							} 
 						}
 					]
@@ -507,7 +535,7 @@ jQuery(function($) {
             		});
                 	
                 } else {
-                    alert(response.message);
+                    //alert(response.message);
                 }
             }
         });	
@@ -661,14 +689,14 @@ function fillDepartmentSelect (id) {
         },
         success: function (response) {
             if(response.success) {
-            	console.log("data",response.data);
+            	//console.log("data",response.data);
                 $allOpts = $('<div />');
                 foreign_id=response.data[0].foreign_id;
                 $opt = $('<option foreignid='+response.data[0].foreign_id+' />').val(response.data[0].id).html(response.data[0].display_name).appendTo($allOpts);
 
                 $('#new_p_id').html('').html($allOpts.html());
             } else {
-                alert(response.message);
+                //alert(response.message);
             }
         }
     });

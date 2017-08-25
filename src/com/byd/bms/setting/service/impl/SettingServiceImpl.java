@@ -188,4 +188,9 @@ public class SettingServiceImpl implements ISettingService {
 		return settingDao.getOneUserRole(staff_number,role_id);
 	}
 
+	@Override
+	public Map<String, Object> getUserInfoByStaffnumber(String staff_number) {
+		return settingDao.getUserInfoByStaffnumber(staff_number);
+	}
+
 }

@@ -366,7 +366,7 @@
 		where  fo.factory_id=#{factory_id}
 		group by fo.order_id,fo.factory_id) tmp
 		where tmp.finished_qty&lt;tmp.production_qty
-		)
+		) and fo.status in ('0','1')
 		group by fo.order_id,fo.factory_id
 		order by fo.order_id) tmp
 		group by tmp.order_id

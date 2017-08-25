@@ -129,11 +129,18 @@
     };
 
     BootstrapTable.prototype.fitBodyColumns = function () {
-        var that = this,
-            top = -(parseInt(this.$el.css('margin-top')) - 2),
-            // the fixed height should reduce the scorll-x height
-            height = this.$tableBody.height() - 14;
-
+    	var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
+    	var myheight = -(parseInt(this.$el.css('margin-top')) - 2);
+    	if (userAgent.indexOf("Firefox") > -1) {
+    		myheight = 35;
+    	}
+    	
+    	var that = this,
+        top = myheight,
+        // the fixed height should reduce the scorll-x height
+        height = this.$tableBody.height() - 14;
+    	
+    	
         if (!this.$body.find('> tr[data-index]').length) {
             this.$fixedBody.hide();
             return;

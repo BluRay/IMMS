@@ -4,11 +4,11 @@ $(document).ready(function(){
 	function initPage(){
 		getFactorySelect("tech/taskSearch",'',"#search_factory",null,'id');
 		getOrderNoSelect("#search_order_no","#orderId");
-		getWorkshopSelect("tech/taskSearch",$("#search_factory :selected").text(),"","#search_workshop","全部","id");
+		getWorkshopSelect("tech/taskSearch",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
 	}
 	
 	$('#search_factory').change(function(){ 
-		getWorkshopSelect("tech/taskSearch",$("#search_factory :selected").text(),"","#search_workshop","全部","id");
+		getWorkshopSelect("tech/taskSearch",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
 	})
 	
 	$("#btnQuery").click(function() {

@@ -144,8 +144,8 @@
 		</if>
 		
 		order by t.tech_date desc
-		<if test="offset!=null">
-			LIMIT #{offset} ,#{limit} 
+		<if test="start!=null">
+			LIMIT #{start} ,#{length} 
 		</if>
 		
 	</select>
@@ -1066,7 +1066,7 @@
 	<select id="queryTaskOrderFinishInfo" parameterType="Map" resultType="Map">
 		SELECT GROUP_CONCAT(S.finish) AS finish_str FROM (
 		SELECT (CONCAT(t.workshop,':',COUNT(distinct(t.bus_number)))) AS finish FROM BMS_TECH_TASK_FOLLOW t 
-		WHERE t.tech_task_id = #{taskid} AND t.order_no = #{order_no} AND t.factory = #{factory} GROUP BY workshop
+		WHERE t.tech_task_id = #{taskid} AND t.order_no = #{order_no} AND t.factory = #{factory} AND t.confirmor_id  IS NOT NULL GROUP BY workshop
 		) S
 	</select>
 	

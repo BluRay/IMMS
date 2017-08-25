@@ -108,6 +108,12 @@ public class LoginController extends BaseController{
         return mv;  
     }  
 	
+	@RequestMapping("/profile")  
+    public ModelAndView profile(){ 
+		mv.setViewName("profile");
+        return mv;  
+    }  
+	
 	@RequestMapping("/dropzone")  
     public ModelAndView dropzone(){ 
 		mv.setViewName("dropzone");

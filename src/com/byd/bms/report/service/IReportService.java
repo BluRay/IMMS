@@ -1,8 +1,8 @@
 package com.byd.bms.report.service;
 
+import java.util.List;
 import java.util.Map;
 
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 
 public interface IReportService {
@@ -13,4 +13,16 @@ public interface IReportService {
 	 * @param model
 	 */
 	void getFactoryOutputYear(Map<String,Object> condMap,ModelMap model);
+	// 焊装、底盘上下线完成情况
+	void getOnlineAndOfflineData(Map<String,Object> condMap,ModelMap model);
+	
+	public List<Map<String, Object>> showFactoryOutputReportData(Map<String, Object> queryMap);
+	/**
+	 * 获取工厂月计划达成数据
+	 * @author xiong.jianwu
+	 * @param condMap
+	 * @param model
+	 */
+	void getFactoryPlanRateData(Map<String, Object> condMap, ModelMap model);
+	
 }

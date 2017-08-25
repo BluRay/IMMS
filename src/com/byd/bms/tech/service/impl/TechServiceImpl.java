@@ -356,13 +356,16 @@ public class TechServiceImpl implements ITechService {
 	@SuppressWarnings("rawtypes")
 	@Override
 	@DataSource("dataSourceSlave")
-	public Map<String, Object> searchTaskList(String conditions) {
+	public Map<String, Object> searchTaskList(String conditions,int draw,int start,int length) {
 		JSONObject jo=JSONObject.fromObject(conditions);
 		Map<String,Object> conditionMap=new HashMap<String,Object>();
 		for(Iterator it=jo.keys();it.hasNext();){
 			String key=(String) it.next();
 			conditionMap.put(key, jo.get(key));
 		}
+		conditionMap.put("draw", draw);
+		conditionMap.put("start", start);
+		conditionMap.put("length", length);
 		String workshops=(String) conditionMap.get("workshop_list");
 		List<String> workshopList=Arrays.asList(workshops.split(","));
 		conditionMap.put("workshop_list", workshopList);

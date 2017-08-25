@@ -51,6 +51,12 @@ public class AccountController extends BaseController{
 		mv.setViewName("setting/userRoleManager");
         return mv;  
 	}
+
+	@RequestMapping("/userProfilePage")
+	public ModelAndView userProfilePage(){
+		mv.setViewName("setting/userProfilePage");
+        return mv;  
+	}
 	
 	@RequestMapping("/addUser")
 	@ResponseBody
@@ -286,6 +292,26 @@ public class AccountController extends BaseController{
 		int reuslt = settingService.saveUserRole(staff_number, this_role, role_permission, factory_permission, workshop_permission, line_permission,edit_user);
 		initModel(true,"success",reuslt);
 		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/getUserInfo")
+	@ResponseBody
+	public ModelMap getUserInfo(){
+		String staff_number = request.getSession().getAttribute("staff_number") + "";
+		Map<String, Object> userInfo = settingService.getUserInfoByStaffnumber(staff_number);
+		initModel(true,"success",userInfo);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/editUserPassword")
+	@ResponseBody
+	public ModelMap editUserPassword(){
+		String old_password=request.getParameter("old_password");
+		String new_password=request.getParameter("new_password");
+		
+		
 		return model;
 	}
 

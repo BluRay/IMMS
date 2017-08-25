@@ -124,7 +124,7 @@
 										</div>
 									</div><!-- /.widget-body -->
 								</div><!-- /.login-box -->
-								<h5 class="blue" id="id-company-text">&copy; 比亚迪汽车有限公司 信息中心</h5>
+								<h5 class="blue" id="id-company-text">&copy; 比亚迪股份有限公司 信息中心</h5>
 
 								<div id="forgot-box" class="forgot-box widget-box no-border">
 									<div class="widget-body">

@@ -16,10 +16,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,6 +74,7 @@ public class HrBaseDataController extends BaseController {
 	@RequestMapping("/getOrgDataTreeList")
 	@ResponseBody
 	public ModelMap getOrgDataTreeList() {
+		model.clear();
 		Map<String, Object> queryMap = new HashMap<String, Object>();
 		String id = request.getParameter("id");
 		queryMap.put("id", id);
@@ -96,6 +93,7 @@ public class HrBaseDataController extends BaseController {
 	@RequestMapping("/getOrgDataByParentId")
 	@ResponseBody
 	public ModelMap getOrgDataByParentId() {
+		model.clear();
 		Map<String, Object> conditionMap = new HashMap<String, Object>();
 		String id = request.getParameter("id");
 		String parent_id = request.getParameter("parent_id");
@@ -104,6 +102,7 @@ public class HrBaseDataController extends BaseController {
 		List result = hrBaseDataService.getOrgDataByParentId(conditionMap);
 		Map<String, Object> map = new HashMap<String, Object>();  
         map.put( "data",result);
+        map.put( "success",true);
         model.addAllAttributes(map);
         return model;
 	}
@@ -116,6 +115,7 @@ public class HrBaseDataController extends BaseController {
 	@RequestMapping("/editOrgData")
 	@ResponseBody
 	public ModelMap editOrgData() throws UnsupportedEncodingException {
+		model.clear();
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String curTime = df.format(new Date());
 		String editor_id = request.getSession().getAttribute("user_id") + "";
@@ -154,6 +154,7 @@ public class HrBaseDataController extends BaseController {
 	@RequestMapping("/deleteOrgData")
 	@ResponseBody
 	public ModelMap deleteOrgData() throws UnsupportedEncodingException {
+		model.clear();
 		int result=0;
 		Map<String, Object> conditionMap = new HashMap<String, Object>();
 		String ids=request.getParameter("ids");
@@ -214,7 +215,13 @@ public class HrBaseDataController extends BaseController {
 			conditionMap.put("edit_date", curTime);
 			conditionMap.put("salary_model", request.getParameter("salary_model"));
 			conditionMap.put("customer_no_flag", request.getParameter("customer_no_flag"));
-			
+			List resultList = hrBaseDataService.getOrgDataTreeList(conditionMap);
+			if(resultList.size()>0){
+				conditionMap.put("success",false);
+				conditionMap.put("message",request.getParameter("name")+" 已维护");
+				model.addAllAttributes(conditionMap);
+				return model;
+			}
 			//数据插入成功后返回新插入数据的id
 			conditionMap.put("id", "");
 			
@@ -937,10 +944,10 @@ public class HrBaseDataController extends BaseController {
 				Exception e=new Exception("请使用下载的模板导入！");
 				throw e;			
 			}
+			List<Map<String, Object>> addList = new ArrayList<Map<String,Object>>();
+			List<Map<String, Object>> upDateList = new ArrayList<Map<String,Object>>();
 			int dataFlag = 0;
 			for(Object[] data : excelModel.getData()){
-				List<Map<String, Object>> addList = new ArrayList<Map<String,Object>>();
-				List<Map<String, Object>> upDateList = new ArrayList<Map<String,Object>>();
 				Map<String, Object> info = new HashMap<String, Object>();
 				String factory = data[0].toString().trim(); 
 				info.put("factory", factory);

@@ -1522,7 +1522,7 @@ public class ProductionController extends BaseController {
 				 object.put("approver", user_name);
 				 object.put("approve_date", curTime);
 			 }else{
-				 object.put("wpay", null);
+				 object.put("wpay", "");
 				 object.put("editor", user_name);
 				 object.put("edit_date", curTime);
 			 }

@@ -8,12 +8,15 @@
          (SELECT COUNT(1) FROM BMS_BASE_ORG f2 WHERE f2.parent_id = t.id) AS sub_count,
          (SELECT name FROM BMS_BASE_ORG f2 WHERE f2.id = t.parent_id) AS parent_name
         FROM BMS_BASE_ORG t  <!--    t left join BMS_BASE_KEY k on t.org_type=k.org_type -->
-           WHERE t.deleted = 0 
+           WHERE t.deleted = 0
          <if test="id!=null">
              AND t.id=#{id} 
          </if>
-         <if test="parent_id!=null">
+         <if test="parent_id!=null and parent_id!=''">
              AND t.parent_id=#{parent_id} 
+         </if>
+         <if test="name!=null and name!=''">
+             AND t.name=#{name} 
          </if>
          ORDER BY org_type ASC	
 	</select>

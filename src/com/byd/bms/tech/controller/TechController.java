@@ -754,7 +754,10 @@ public class TechController extends BaseController{
 	@ResponseBody
 	public ModelMap searchTaskList(){
 		String conditions = request.getParameter("conditions");		
-		Map<String, Object> list = techService.searchTaskList(conditions);	
+		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
+		int start=(request.getParameter("offset")!=null)?Integer.parseInt(request.getParameter("offset")):0;		//分页数据起始数
+		int length=(request.getParameter("limit")!=null)?Integer.parseInt(request.getParameter("limit")):20;	//每一页数据条数
+		Map<String, Object> list = techService.searchTaskList(conditions,draw,start,length);	
 		mv.clear();
 		mv.getModelMap().addAllAttributes(list);
 		model = mv.getModelMap();

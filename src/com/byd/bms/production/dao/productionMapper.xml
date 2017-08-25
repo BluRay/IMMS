@@ -2678,6 +2678,7 @@
 		<if test="apply_date_end !=null and apply_date_end !=''">
 			and s.apply_date <![CDATA[<= #{apply_date_end}  ]]>
 		</if>
+		order by s.apply_date desc
 		<if test="start !=null">
 			LIMIT #{start} ,#{length} 
 		</if>		
@@ -2786,7 +2787,7 @@
 	</select>
 	<select id="queryAssignList" parameterType="Map" resultType="Map">
 	<![CDATA[
-		select sum(h.real_work_hour) total_hour,sum(h.work_hour) total_real_hour,
+		select ROUND(sum(h.real_work_hour),-2) total_hour,ROUND(sum(h.work_hour),-2) total_real_hour,
 		h.team work_org,h.staff_number,s.name staff_name,h.factory,h.workshop,h.workgroup,s.job
 		from BMS_HR_TMP_SALARY h
 		left join

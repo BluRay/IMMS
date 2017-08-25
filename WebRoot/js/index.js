@@ -360,13 +360,13 @@ function drawOutputChart(){
 			},
 			success:function(response){
 				var data=response.data;
-				var welding_plan_done="";
+				var welding_plan_done="0/0";
 				var welding_percent=0;
-				var painting_plan_done="";
+				var painting_plan_done="0/0";
 				var painting_percent=0;
-				var chassis_plan_done="";
+				var chassis_plan_done="0/0";
 				var chassis_percent=0;
-				var assembly_plan_done="";
+				var assembly_plan_done="0/0";
 				var assembly_percent=0;
 				
 				$.each(response.data,function(i,data){
