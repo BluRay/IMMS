@@ -6,6 +6,7 @@ $(document).ready(function () {
 		getFactorySelect("hrBaseData/workTimePrice",'',"#search_factory","全部",'id');
 		getFactorySelect("hrBaseData/workTimePrice",'',"#edit_factory",null,'id');
 		getKeysSelect("HOUR_PRICE", "", "#edit_hour_type",null,"value");
+		getKeysSelect("HOUR_PRICE", "", $("#search_type"),"全部","");
 	}
 	
 	$("#btnQuery").click(function () {
@@ -161,6 +162,7 @@ function initTable() {
         queryParams:function(params) {
         	params["factory_id"] = $("#search_factory").val(); 
         	params["effective_date"] = $("#effective_date").val(); 
+        	params["key_name"] = $("#search_type :selected").text();
         	return params;
         },
         columns: [

@@ -382,7 +382,7 @@ function drawOutputChart(){
 						chassis_plan_done=(data.finished_qty+"/"+data.plan_qty);
 						chassis_percent=data.finished_qty/data.plan_qty||0
 					}
-					if(data.key_name=='总装上线'){
+					if(data.key_name=='总装下线'){
 						assembly_plan_done=(data.finished_qty+"/"+data.plan_qty);
 						assembly_percent=data.finished_qty/data.plan_qty||0
 					}

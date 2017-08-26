@@ -216,14 +216,10 @@ public class ReportServiceImpl implements IReportService {
 			for(int i = 0; i < dateArray.length; i++) {	
 				map_sum.put(dateArray[i], Double.valueOf(map_sum.get(dateArray[i]).toString()) + Double.valueOf(output_result.get(0).get(dateArray[i]).toString()));
 			}
-			
-			
 			//计划工厂汇总
 			map_sum.put("WORKSHOP", "汇总");
 			datalist.add(map_sum);
 		}
-		
-		
 		return datalist;
 	}
 
@@ -313,6 +309,27 @@ public class ReportServiceImpl implements IReportService {
 	
 		model.put("data", resultList);
 		model.put("order_names", th_orderNames);
+	}
+
+	@Override
+	public List<Map<String, Object>> queryPlanQty(
+			Map<String, Object> conditionMap) {
+		return reportDao.queryPlanQty(conditionMap);
+	}
+
+	@Override
+	public List<Map<String, String>> getPlanSearchRealCount(List queryMapList) {
+		return reportDao.getPlanSearchRealCount(queryMapList);
+	}
+
+	@Override
+	public int getPlanPartsRealCount(Map<String, Object> conditionMap) {
+		return reportDao.getPlanPartsRealCount(conditionMap);
+	}
+
+	@Override
+	public int getPlanZzjRealCount(Map<String, Object> conditionMap) {
+		return reportDao.getPlanZzjRealCount(conditionMap);
 	}
 	
 	

@@ -142,7 +142,22 @@
 							</div>
 							
 							<div id="div_4" style="overflow:auto" class="tab-pane fade">
-								div_4
+								<table id="table04" class="table table-bordered" style="font-size: 12px;">
+									<thead>
+										<tr>
+											<th style="text-align:center;">序号</th>
+											<th style="text-align:center;">工序编号</th>
+											<th style="text-align:center;">工序名称</th>
+											<th style="text-align:center;">零部件编号</th>
+											<th style="text-align:center;">零部件名称</th>
+											<th style="text-align:center;">批次</th>
+											<th style="text-align:center;">记录人</th>
+											<th style="text-align:center;">记录时间</th>
+										</tr>
+									</thead>
+									<tbody>
+									</tbody>
+								</table>
 							</div>
 							
 							<div id="div_5" style="overflow:auto" class="tab-pane fade">

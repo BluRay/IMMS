@@ -83,6 +83,7 @@ public class OrderServiceImpl implements IOrderService {
 		order.setId(order_id);
 		order.setDelivery_date((String) ordermap.get("delivery_date"));
 		order.setMemo((String)ordermap.get("memo"));
+		order.setCustomer(ordermap.get("customer").toString());
 		orderDao.updateOrder(order);
 		
 		/**

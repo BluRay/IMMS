@@ -20,5 +20,11 @@ public interface IReportDao {
 	List<Map<String, Object>> queryPlanNodeOrderList(Map<String, Object> condMap);
 
 	List<Map<String, Object>> queryExceptionList(Map<String, Object> condMap);
+	
+	//public List<Map<String,String>> getPlanRate(Map<String,Object> queryMap);  //工厂计划达成率报表
+	public List<Map<String,Object>> queryPlanQty(Map<String,Object> conditionMap);
+	public List<Map<String,String>> getPlanSearchRealCount(List queryMapList);		//查询订单完成实际完成数[订单查询页面]
+	public int getPlanPartsRealCount(Map<String,Object> conditionMap);
+	public int getPlanZzjRealCount(Map<String,Object> conditionMap);
 
 }

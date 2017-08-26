@@ -727,6 +727,7 @@ function ajaxEditConfirm (argument){
 			"seats":$("#edit_seats").val(),
 			"delivery_date":$("#edit_delivery_date").val(),
 			"memo":$("#edit_memo").val(),
+			"customer":$("#edit_customer").val(),
 			"factoryOrderDetail":JSON.stringify(factoryOrderDetail),
 			"productive_year":$("#edit_productive_year").val(),
 			"del_order_list":JSON.stringify(del_order_list)
@@ -844,11 +845,12 @@ function ajaxEdit(order_id){
 						$("#editOrderCode").val(value.order_code);
 						$("#editOrderType").val(value.order_type);
 						$("#editOrderArea").val(value.order_area);
+						$("#edit_customer").val(value.customer);
 						//$("#editBusType").val(value.bus_type_code);
 						select_selectOption("#editBusType",value.bus_type_code)
 						$("#edit_order_qty").val(value.order_qty);
 						$("#edit_order_descriptive").val(value.order_name + value.bus_type_code + " " + value.order_qty + "台");
-						$("#edit_productive_year").val(value.productive_year);
+						$("#edit_productive_year").val(value.productive_year).attr("disabled",true);
 						$("#edit_delivery_date").val(value.delivery_date);
 						$("#edit_memo").val(value.memo);
 						$("#dialog-order").data("bus_num_start",value.busnum_start);

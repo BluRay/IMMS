@@ -152,6 +152,7 @@ function ajaxQuery(){
 		            {"title":"工时","class":"center","data": "single_hour","defaultContent": ""},		  
 		            {"title":"所需人力","class":"center","data": "labors","defaultContent": ""},		
 		            {"title":"总工时","class":"center","data": "total_hours","defaultContent": ""},	
+		            {"title":"工单号","class":"center","data":"sap_order","defaultContent": ""},
 		            {"title":"工时评估人","class":"center","data":"assesor","defaultContent": ""},
 		            {"title":"工时评估负责人","class":"center","data":"assess_verifier","defaultContent": ""},
 		            {"title":"指定验收人","class":"center","data":"acceptor","defaultContent": ""},

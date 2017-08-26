@@ -147,6 +147,7 @@ public class OrderController extends BaseController{
 		ordermap.put("memo", request.getParameter("memo"));
 		ordermap.put("curTime", curTime);
 		ordermap.put("userid", userid);
+		ordermap.put("customer",request.getParameter("customer"));
 		
 /*		JsonArray jsar_del=new JsonArray();
 		JsonParser parser = new JsonParser();

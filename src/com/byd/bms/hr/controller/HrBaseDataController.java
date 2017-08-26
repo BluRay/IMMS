@@ -862,6 +862,7 @@ public class HrBaseDataController extends BaseController {
 		condMap.put("length", length);
 		condMap.put("factory_id", request.getParameter("factory_id"));
 		condMap.put("effective_date", request.getParameter("effective_date"));
+		condMap.put("key_name", request.getParameter("key_name"));
 		
 		Map<String,Object> list = hrBaseDataService.getWorkTimePrice(condMap);
 		mv.clear();

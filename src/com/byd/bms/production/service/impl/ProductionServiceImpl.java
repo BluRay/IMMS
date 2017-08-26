@@ -324,6 +324,12 @@ public class ProductionServiceImpl implements IProductionService {
 	public List<Map<String,String>> getQmTestCardList(String bus_number){
 		return productionDao.getQmTestCardList(bus_number);
 	}
+	
+	@Override
+	@DataSource("dataSourceSlave")
+	public List<Map<String,String>> getKeyPartsList(String bus_number){
+		return productionDao.getKeyPartsList(bus_number);
+	}
 
 	@Override
 	public void getNameplatePrintList(Map<String, Object> condMap, ModelMap model) {

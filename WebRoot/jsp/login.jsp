@@ -23,7 +23,7 @@
 		<style type="text/css">
 			#main {
 				background: url(images/login.jpg) no-repeat center;
-				background-size:cover;
+				background-size:1366px 768px;
 				height: 650px;
 				display: -webkit-flex;
 				display: flex;

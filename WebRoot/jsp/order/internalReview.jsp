@@ -105,16 +105,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<table id="tableData" class="table table-striped table-bordered table-hover dataTable no-footer"
 					            style="font-size: 14px;width:900px" role="grid" aria-describedby="tableData_info">
 						 <tr role="row" class="odd">
-				            <th class="sorting_disabled center" rowspan="1" colspan=7 style="width: 96px;font-size:18px">十九事业部订单评审评估表</th>
+				            <td class="sorting_disabled center" rowspan="1" colspan=7 style="width: 96px;font-size:18px;font-weight:bold;">十九事业部订单评审评估表</td>
 						 </tr>
 						 <tr role="row" class="odd">
-				            <th class="sorting_disabled center" rowspan="1" style="width: 96px;">客户</th>
-				            <th class="sorting_disabled center" rowspan="1" style="width: 96px;">车型</th>
-				            <th class="sorting_disabled center" rowspan="1" style="width: 96px;">生产数量</th>
-				            <th class="sorting_disabled center" rowspan="1" style="width: 96px;">生产工厂</th>
-				            <th class="sorting_disabled center" rowspan="1" style="width: 96px;">订单类型</th>
-				            <th class="sorting_disabled center" rowspan="1" style="width: 96px;">交付日期</th>
-				            <th class="sorting_disabled center" rowspan="1" style="width: 96px;">产能/天</th>
+				            <td class="sorting_disabled center" rowspan="1" style="width: 96px;font-weight:bold;">客户</td>
+				            <td class="sorting_disabled center" rowspan="1" style="width: 96px;font-weight:bold;">车型</td>
+				            <td class="sorting_disabled center" rowspan="1" style="width: 96px;font-weight:bold;">生产数量</td>
+				            <td class="sorting_disabled center" rowspan="1" style="width: 96px;font-weight:bold;">生产工厂</td>
+				            <td class="sorting_disabled center" rowspan="1" style="width: 96px;font-weight:bold;">订单类型</td>
+				            <td class="sorting_disabled center" rowspan="1" style="width: 96px;font-weight:bold;">交付日期</td>
+				            <td class="sorting_disabled center" rowspan="1" style="width: 96px;font-weight:bold;">产能/天</td>
 						 </tr>
 						 <tr role="row" class="odd">
 						    <td id="customer" class="center Chinese"></td>
@@ -126,7 +126,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<td id="capacity" class="center english"></td>
 						</tr>
 						 <tr role="row" class="odd">
-						    <th class="sorting_disabled center" rowspan="2" style="width: 96px;">订单启动节点</th>
+						    <td class="sorting_disabled center" rowspan="2" style="width: 96px;font-weight:bold;">订单启动节点</td>
 				            <td class="sorting_disabled center" rowspan="1" style="width: 96px;">部件上线</td>
 							<td class="sorting_disabled center" rowspan="1" style="width: 96px;">焊装上线</td>
 							<td class="sorting_disabled center" rowspan="1" style="width: 96px;">涂装上线</td>
@@ -143,7 +143,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<td id="warehousingDate" class="center english"></td>
 						</tr>
 					    <tr>
-					        <th class="sorting_disabled center" rowspan="2" style="width: 96px;">资料需求节点</th>
+					        <td class="sorting_disabled center" rowspan="2" style="width: 96px;font-weight:bold;">资料需求节点</td>
 						    <td class="sorting_disabled center" style="width: 96px;font-size:13px">&nbsp;数模输出时间</td>
 							<td class="sorting_disabled center" style="width: 96px;">下料明细</td>
 							<td class="sorting_disabled center english" style="width: 96px;">BOM</td>
@@ -160,7 +160,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<td id="sipdemandNode" class="center english"></td>
 						</tr>
 						<tr>
-						    <th class="sorting_disabled center" rowspan="4" style="width: 96px;">技术部</th>
+						    <td class="sorting_disabled center" rowspan="4" style="width: 96px;font-weight:bold;">技术部</td>
 						    <td class="sorting_disabled center" rowspan="4" style="width: 96px;">技术资料完善及可行性</td>
 							<td class="sorting_disabled center" style="width: 96px;">配置表</td>
 							<td class="sorting_disabled center" style="width: 96px;">型材清单</td>
@@ -188,7 +188,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<td colspan=2 id="technical_create_time" class="english"></td>
 						</tr>
 						<tr>
-						    <th class="sorting_disabled center" rowspan="2" style="width: 96px;">工艺部</th>
+						    <td class="sorting_disabled center" rowspan="2" style="width: 96px;font-weight:bold;">工艺部</td>
 						    <td class="sorting_disabled center" rowspan="2" style="width: 96px;">是否有新增工装、模具、工艺等</td>
 							<td class="sorting_disabled center" style="width: 96px;">资料需求节点</td>
 							<td id="technicsNode" class="english"></td>
@@ -202,7 +202,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<td colspan=2 id="technology_create_time"  class="english"></td>
 						</tr>
 						<tr>
-						    <th class="sorting_disabled center" rowspan=2 style="width: 96px;">品质部</th>
+						    <td class="sorting_disabled center" rowspan=2 style="width: 96px;font-weight:bold;">品质部</td>
 						    <td class="sorting_disabled center" rowspan=2 style="width: 96px;">首车生产是否有指导文件</td>
 							<td class="sorting_disabled center" style="width: 96px;">资料需求节点</td>
 							<td id="qualityNode" class="english"></td>
@@ -216,7 +216,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<td colspan=2 id="quality_create_time"  class="english"></td>
 						</tr>
 						<tr>
-						    <th class="sorting_disabled center" rowspan=2 style="width: 96px;">工厂内部</th>
+						    <td class="sorting_disabled center" rowspan=2 style="width: 96px;font-weight:bold;">工厂内部</td>
 						    <td class="sorting_disabled center" rowspan=2 style="width: 96px;">人员、场地、设备等</td>
 							<td class="sorting_disabled center" style="width: 96px;">资料需求节点</td>
 							<td id="factoryNode" class="english"></td>
@@ -230,7 +230,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<td colspan=2 id="factory_create_time" class="english"></td>
 						</tr>
 						<tr>
-						    <th class="sorting_disabled center" rowspan=2 style="width: 96px;">综合计划部物控</th>
+						    <td class="sorting_disabled center" rowspan=2 style="width: 96px;font-weight:bold;">综合计划部物控</td>
 						    <td class="sorting_disabled center" rowspan=2 style="width: 96px;">物料风险</td>
 							<td class="sorting_disabled center" style="width: 96px;">资料需求节点</td>
 							<td id="materialcontrolNode" class="english"></td>
@@ -245,7 +245,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						</tr>
 						
 						<tr>
-						    <th class="sorting_disabled center" rowspan=2 style="width: 96px;">综合计划部计划</th>
+						    <td class="sorting_disabled center" rowspan=2 style="width: 96px;font-weight:bold;">综合计划部计划</td>
 						    <td class="sorting_disabled center" rowspan=2 style="width: 96px;">计划风险</td>
 							<td class="sorting_disabled center" style="width: 96px;">资料需求节点</td>
 							<td id="plandepNode" class="english"></td>
@@ -259,7 +259,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<td colspan=2 id="plandep_create_time" class="english"></td>
 						</tr>
 						<tr role="row" class="odd">
-					    	<th class="sorting_disabled center" style="width: 96px;" rowspan=4>评审结果修正</th>
+					    	<td class="sorting_disabled center" style="width: 96px;font-weight:bold;" rowspan=4>评审结果修正</td>
 						    <td class="sorting_disabled center" style="width: 96px;" rowspan=2>订单启动节点</td>
 				            <td class="sorting_disabled center" style="width: 96px;">部件上线</td>
 							<td class="sorting_disabled center" style="width: 96px;">焊装上线</td>
@@ -308,8 +308,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script src="<%=basePath%>/assets/js/ace/elements.onpage-help.js"></script>
 	<script src="<%=basePath%>/assets/js/ace/ace.onpage-help.js"></script>
 	<script src="<%=basePath%>/assets/js/bootstrap3-typeahead.js"></script>
+<%-- 	<script src="<%=basePath%>/js/bootstrap-table-export.js"></script> --%>
 	<script src="<%=basePath%>/js/jsrender.min.js"></script>
 	<script src="<%=basePath%>/js/common.js"></script>
+	<script src="<%=basePath%>/js/tableExport.js"></script>
+<%-- 	<script src="<%=basePath%>/js/jquery.base64.js"></script> --%>
+<%-- 	<script src="<%=basePath%>/js/jspdf.js"></script> --%>
+<%-- 	<script src="<%=basePath%>/js/Base64.js"></script> --%>
+<%-- 	<script src="<%=basePath%>/js/sprintf.js"></script> --%>
+<%-- 	<script src="<%=basePath%>/js/autotable.js"></script> --%>
 	<script src="<%=basePath%>/js/order/internalReview.js"></script>
 </body>
 

@@ -310,5 +310,69 @@
 		) tmp
 		group by tmp.workshop
 	</select>
-	
+	<!-- 获取计划数量 -->
+	<select id="queryPlanQty" parameterType="Map" resultType="Map">
+		<![CDATA[
+			SELECT k.key_name,sum(p.plan_qty) plan_qty FROM BMS_PLAN_PRODUCTION_PLAN p 
+				LEFT JOIN BMS_BASE_FACTORY f ON p.factory_id = f.id
+				LEFT JOIN BMS_BASE_KEY k ON p.plan_code_value = k.value and k.key_code ='PLAN_CODE'
+				 WHERE p.plan_code_value IN (
+				SELECT k.value FROM BMS_BASE_KEY k
+					WHERE k.key_code = 'PLAN_CODE' AND k.key_name IN('自制下线','部件下线','焊装下线','涂装下线','底盘下线','总装下线','成品库上线','车辆入库')
+				)
+				AND p.factory_id in (
+				  		select case when LOCATE(p.factory_id,#{factory_id})>0 then p.factory_id else 0 end as factory_id
+							from BMS_BASE_FACTORY f )
+				AND p.plan_date >=	left(#{start_date},10) AND p.plan_date <= left(#{end_date},10)
+			GROUP BY p.plan_code_value ORDER BY p.plan_code_value
+		]]>
+	</select>
+	<!-- 获取部件车间实际完成数量 -->
+	<select id="getPlanPartsRealCount" parameterType="Map"
+		resultType="int">
+		SELECT IFNULL(SUM(${workshop}),0) AS count FROM
+		BMS_PD_PARTS_PLAN_FINISH b
+		WHERE b.factory_id in (
+		select case when
+		LOCATE(b.factory_id,#{factory_id})>0 then b.factory_id else
+		0 end as
+		factory_id
+		from BMS_BASE_FACTORY f )
+		AND b.parts_id = '194'
+		<if test="start_date !=null and start_date!=''">
+			<![CDATA[ AND b.prod_date >=  left(#{start_date},10) ]]>
+		</if>
+		<if test="end_date !=null and end_date!=''">
+			<![CDATA[ AND b.prod_date <=  left(#{end_date},10) ]]>
+		</if>
+	</select>
+	<select id="getPlanZzjRealCount" parameterType="Map" resultType="int">
+		SELECT IFNULL(SUM(quantity),0) AS count FROM BMS_PD_WORKSHOP_SUPPLY 
+		WHERE factory_id = #{factory_id} 
+		AND supply_workshop = '自制件'
+		AND receive_workshop = '部件' 
+		AND supply_date >= left(#{start_date},10) 
+		<![CDATA[ AND supply_date <= left(#{end_date},10) ]]>
+	</select>
+	<!-- 获取四大车间实际完成数量 -->
+	<select id="getPlanSearchRealCount" parameterType="List"
+		resultType="map">
+		<foreach collection="list" index="index" item="item"
+			separator="UNION ALL">
+			SELECT IFNULL(COUNT(id),0) AS count FROM BMS_PLAN_BUS b
+			WHERE
+			b.factory_id in (
+			select case when
+			LOCATE(b.factory_id,#{item.factory_id})>0 then
+			b.factory_id else 0 end
+			as factory_id
+			from BMS_BASE_FACTORY f )
+			<if test="item.start_date !=null and item.start_date!=''">
+				<![CDATA[ AND ${item.workshop} > left(#{item.start_date},10) ]]>
+			</if>
+			<if test="item.end_date !=null and item.end_date!=''">
+				<![CDATA[ AND ${item.workshop} <= left(#{item.end_date},10) ]]>
+			</if>
+		</foreach>
+	</select>
 </mapper>

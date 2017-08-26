@@ -852,6 +852,9 @@
 		<if test="effective_date !=null and effective_date !=''">
 			and P.effective_date =#{effective_date}
 		</if>
+		<if test="key_name !=null and key_name !='全部'">
+			and K.key_name =#{key_name}
+		</if>
 		<if test="start !=null">
 			LIMIT #{start} ,#{length} 
 		</if>

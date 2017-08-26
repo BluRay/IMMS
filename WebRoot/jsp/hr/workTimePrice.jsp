@@ -51,7 +51,11 @@
 								<td><select id="search_factory" class="input-small" style="height: 30px;width:100px"></select></td>
 								<td>&nbsp;有效期：</td>
 								<td><input id="effective_date" type="text" placeholder="有效期.." style="width:100px" class="input-medium" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/></td>
-								<td></td>
+								<td>工时类型：</td>
+								<td>
+									<select id="search_type" class="input-small" style="height: 30px;width:100px">
+									</select>
+								</td>
 								<td>&nbsp;&nbsp;<input id="btnQuery" type="button" class="btn btn-sm btn-success" value="查询" style="margin-left: 2px;"></input>&nbsp;&nbsp;<input id="btnAdd" class="btn btn-sm btn-info" value="增加" type="button">&nbsp;</td>
 							</tr>
 						</table>

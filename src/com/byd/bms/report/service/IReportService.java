@@ -25,4 +25,12 @@ public interface IReportService {
 	 */
 	void getFactoryPlanRateData(Map<String, Object> condMap, ModelMap model);
 	
+	public List<Map<String,Object>> queryPlanQty(Map<String,Object> conditionMap);
+	
+	public List<Map<String,String>> getPlanSearchRealCount(List queryMapList);		//查询订单完成实际完成数[订单查询页面]
+	
+	public int getPlanPartsRealCount(Map<String,Object> conditionMap);
+	
+	public int getPlanZzjRealCount(Map<String,Object> conditionMap);
+	
 }

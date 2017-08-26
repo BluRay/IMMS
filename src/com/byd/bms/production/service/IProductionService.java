@@ -57,6 +57,8 @@ public interface IProductionService {
 	public List<Map<String,String>> getEcnTasksByBusNumber(String bus_number);
 	
 	public List<Map<String,String>> getQmTestCardList(String bus_number);
+	
+	public List<Map<String,String>> getKeyPartsList(String bus_number);
 
 	public void getNameplatePrintList(Map<String, Object> conditionMap, ModelMap model);
 

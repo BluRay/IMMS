@@ -1184,6 +1184,18 @@ public class ProductionController extends BaseController {
 		return model;
 	}
 	
+	@RequestMapping("/getKeyPartsList")
+	@ResponseBody
+	public ModelMap getKeyPartsList(){
+		List<Map<String, String>> datalist = productionService.getKeyPartsList(request.getParameter("bus_number"));
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("data", datalist);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(result);
+		model = mv.getModelMap();
+		return model;
+	}
+	
 	/**************************** TANGJIN  ************************/
 	
 	/**打印VIN码*/

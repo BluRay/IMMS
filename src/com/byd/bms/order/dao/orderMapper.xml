@@ -145,7 +145,7 @@
 	</update>
 	
 	<update id="updateOrder" parameterType="com.byd.bms.order.model.BmsOrder">
-		update BMS_OR_ORDER set delivery_date=#{delivery_date},memo=#{memo}
+		update BMS_OR_ORDER set delivery_date=#{delivery_date},memo=#{memo},customer=#{customer}
 		where id=#{id}
 	</update>
 	

@@ -139,7 +139,7 @@
 															<div class="col-xs-6 ">
 																<div class="col-xs-6 center" style="line-height:20px;height:75px;top:10px;">
 																	<p style="color:green;font-size:24px;" id="assembly_plan_done"></p>
-																	<p style="font-size:15px;">总装上线</p>
+																	<p style="font-size:15px;">总装下线</p>
 																</div>
 																<div class="col-xs-6 center">
 																	<div id="assembly_percent" class="easy-pie-chart percentage" data-percent="0" data-color="#D15B47">

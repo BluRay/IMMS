@@ -534,6 +534,11 @@
 		WHERE (T.bus_number = #{bus_number} OR T.bus_number = (SELECT B.bus_number FROM BMS_PLAN_BUS B WHERE B.VIN = #{bus_number}))
 		ORDER BY T.test_node DESC
 	</select>	
+	<select id="getKeyPartsList" parameterType="String" resultType="Map">
+		SELECT P.process_number,P.process_name,P.parts_no,P.parts_name,P.batch,U.display_name,P.edit_date FROM BMS_QM_KEY_PARTS P 
+		LEFT OUTER JOIN BMS_BASE_USER U ON P.editor_id = U.id
+		WHERE (P.bus_number = #{bus_number} OR P.bus_number = (SELECT B.bus_number FROM BMS_PLAN_BUS B WHERE B.VIN = #{bus_number}))
+	</select>	
 	
 	
 	<!-- VIN码打印 -->

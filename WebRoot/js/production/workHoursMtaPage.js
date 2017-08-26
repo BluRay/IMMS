@@ -153,7 +153,7 @@ function ajaxQuery(){
             });
 		},
 		columns: [
-		            {"title":"派工流水号","class":"center","data":"tmp_order_no","defaultContent": "","render":function(data,type,row){
+		            {"title":"派工流水号",width:'120',"class":"center","data":"tmp_order_no","defaultContent": "","render":function(data,type,row){
 		            	return "<a style=\"cursor:pointer\" onclick=show(\'"+data+"\',\'"+row.id+"\')>"+data+"</a>";
 		            }},
 		            {"title":"工单号",width:'100',"class":"center","data":"sap_order","defaultContent": ""},

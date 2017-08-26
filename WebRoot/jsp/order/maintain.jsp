@@ -138,6 +138,13 @@
 						</div>
 					</div>
 					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="">*&nbsp;客户</label>
+						<div class="col-sm-9">
+							<input type="text" class="input-medium"
+								placeholder="客户..." id="edit_customer" />
+						</div>
+					</div> 
+					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="">*&nbsp;车型</label>
 						<div class="col-sm-9">
 							<select name="" disabled="disabled" id="editBusType"

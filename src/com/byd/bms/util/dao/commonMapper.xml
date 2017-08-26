@@ -327,7 +327,7 @@
 		(select sum(p.plan_qty) plan_qty,k.key_name
 		from BMS_PLAN_PRODUCTION_PLAN p
 		left join BMS_BASE_KEY k on p.plan_code_value=k.value and k.key_code='PLAN_CODE'
-		where p.factory_id=#{factory_id} and p.plan_date=#{query_date} and k.key_name in('焊装上线','涂装上线','底盘上线','总装上线')
+		where p.factory_id=#{factory_id} and p.plan_date=#{query_date} and k.key_name in('焊装上线','涂装上线','底盘上线','总装下线')
 		group by k.key_name) a
 		left join
 		(select count(b.id) finished_qty,'焊装上线' key_name
@@ -342,9 +342,9 @@
 		from BMS_PLAN_BUS b
 		where b.factory_id=#{factory_id} and b.chassis_online_date like concat('%',#{query_date},'%')
 		union
-		select count(b.id) finished_qty,'总装上线' key_name
+		select count(b.id) finished_qty,'总装下线' key_name
 		from BMS_PLAN_BUS b
-		where b.factory_id=#{factory_id} and b.assembly_online_date like concat('%',#{query_date},'%')
+		where b.factory_id=#{factory_id} and b.assembly_offline_date like concat('%',#{query_date},'%')
 		) b on b.key_name=a.key_name
 	</select>
 	

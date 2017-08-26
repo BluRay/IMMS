@@ -10,7 +10,8 @@ $(document).ready(function(){
 	getBusNumberSelect('#nav-search-input');
 	cur_year = new Date().getFullYear();
 	$("#search_productive_year").val(cur_year)
-	getFactorySelect();
+	//getFactorySelect();
+	getFactorySelect("order/internalReview",'',"#search_factory","全部",'id');
 	getOrderNoSelect("#search_order_no","#orderId");
 	$(".btnQuery").on("click",function(){
 		ajaxQuery();
@@ -156,7 +157,6 @@ function ajaxSearch(id){
 			$('#drawingexportDate').text(data.drawingexport_date);
 			$('#sopdemandNode').text(data.sopdemand_node);
 			$("#sipdemandNode").text(data.sipdemand_node);
-			
 			$('#configTable').text(data.config_table);
 			$('#proximatematter').text(data.proximatematter);
 			$('#modeljudging').text(data.modeljudging);
@@ -188,7 +188,6 @@ function ajaxSearch(id){
 			$("#plandep_create_time").text(data.plandep_create_time);
 			$('#revisionpartsonlineDate').text(data.revisionpartsonline_date);
 			$("#revisionweldingonlineDate").text(data.revisionweldingonline_date);
-			
 			$('#revisionpaintonlineDate').text(data.revisionpaintonline_date);
 			$('#revisionchassisonlineDate').text(data.revisionchassisonline_date);
 			$('#revisionassemblyonlineDate').text(data.revisionassemblyonline_date);
@@ -220,13 +219,14 @@ function ajaxSearch(id){
 				$( this ).dialog( "close" ); 
 			} 
 		},
-//		{
-//			text: "打印",
-//			"class" : "btn btn-primary btn-minier",
-//			click: function() {
-//				$( this ).dialog( "close" ); 
-//			} 
-//		}
+		{
+			text: "导出",
+			"class" : "btn btn-primary btn-minier",
+			click: function() {
+				
+				$('#tableData').tableExport({type:'excel',escape:'false'});
+			} 
+		}
 	]
 });
 }
@@ -362,35 +362,35 @@ function isApplyPermission(factoryId,type){
 	})
 	return isPermission;
 }
-function getFactorySelect() {
-	$.ajax({
-		url : "/BMS/common/getFactorySelectAuth",
-		dataType : "json",
-		data : {"function_url":"order/maintain"},
-		async : false,
-		error : function(response) {
-			alert(response.message)
-		},
-		success : function(response) {
-			getSelects(response.data, "", "#search_factory","全部");
-			getSelects_noall(response.data, "", "#factory_id1");
-			
-			select_str = "<select name='' id='factory_id1' class='input-small'>";
-			select_str1 = "<select name='' id='factory_id2' class='input-small'>";
-			$.each(response.data, function(index, value){
-				select_str += "<option value=" + value.id + ">" + value.name + "</option>";
-				select_str2 += "<option value=" + value.id + ">" + value.name + "</option>";
-			});
-			select_str += "</select>";
-			select_str2 += "</select>";
-			
-			var paramHtml="<tr><td><button disabled=\"disabled\" type=\"button\" class=\"close add\" aria-label=\"Close\" ><span aria-hidden=\"true\">&times;</span></button></td>" +
-			"<td>" + select_str + "</td>" +
-			"<td><input type='text' style='width:60px' class='input-small orderNum add' value='0' id='production_qty1'/></td>" +
-			"<td><input type='text' style='width:60px' disabled='disabled' class='input-small busNum' value='0' id='busnum_start1'/></td>" +
-			"<td><input type='text' style='width:60px' disabled='disabled' class='input-small busNum' value='0' id='busnum_end1'/></td>" +
-			"</tr>";
-			$(paramHtml).appendTo("#factoryOrder_parameters");
-		}
-	});
-}
+//function getFactorySelect() {
+//	$.ajax({
+//		url : "/BMS/common/getFactorySelectAuth",
+//		dataType : "json",
+//		data : {"function_url":"order/maintain"},
+//		async : false,
+//		error : function(response) {
+//			alert(response.message)
+//		},
+//		success : function(response) {
+//			getSelects(response.data, "", "#search_factory","全部");
+//			getSelects_noall(response.data, "", "#factory_id1");
+//			
+//			select_str = "<select name='' id='factory_id1' class='input-small'>";
+//			select_str1 = "<select name='' id='factory_id2' class='input-small'>";
+//			$.each(response.data, function(index, value){
+//				select_str += "<option value=" + value.id + ">" + value.name + "</option>";
+//				select_str2 += "<option value=" + value.id + ">" + value.name + "</option>";
+//			});
+//			select_str += "</select>";
+//			select_str2 += "</select>";
+//			
+//			var paramHtml="<tr><td><button disabled=\"disabled\" type=\"button\" class=\"close add\" aria-label=\"Close\" ><span aria-hidden=\"true\">&times;</span></button></td>" +
+//			"<td>" + select_str + "</td>" +
+//			"<td><input type='text' style='width:60px' class='input-small orderNum add' value='0' id='production_qty1'/></td>" +
+//			"<td><input type='text' style='width:60px' disabled='disabled' class='input-small busNum' value='0' id='busnum_start1'/></td>" +
+//			"<td><input type='text' style='width:60px' disabled='disabled' class='input-small busNum' value='0' id='busnum_end1'/></td>" +
+//			"</tr>";
+//			$(paramHtml).appendTo("#factoryOrder_parameters");
+//		}
+//	});
+//}

@@ -78,6 +78,8 @@ public interface IProductionDao {
 	
 	public List<Map<String,String>> getQmTestCardList(String bus_number);
 	
+	public List<Map<String,String>> getKeyPartsList(String bus_number);
+	
 	List<Map<String, Object>> getNameplatePrintList(Map<String, Object> condMap);
 
 	int getNameplatePrintCount(Map<String, Object> condMap);
