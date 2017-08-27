@@ -32,7 +32,7 @@ function ajaxQuery(){
 		searching: false,
 		bAutoWidth:false,
 		fixedColumns:   {
-			leftColumns:3,
+			leftColumns:1,
             rightColumns:0
         },
 		destroy: true,
@@ -101,7 +101,7 @@ function ajaxQuery(){
 		            {"title":"派工流水号","class":"center","data":"tmp_order_no","defaultContent": "","render":function(data,type,row){
 		            	return "<a style=\"cursor:pointer\" onclick=show(\'"+data+"\',\'"+row.id+"\')>"+data+"</a>";
 		            }},
-		            {"title":"作业原因/内容","class":"center","data": "reason_content","defaultContent": ""},
+		            {"title":"作业原因/内容","class":"center","width":"500px","data": "reason_content","defaultContent": ""},
 		            {"title":"工单号","class":"center","data": "sap_order","defaultContent": ""},
 		            {"title":"总数量","class":"center","data":"total_qty","defaultContent": ""},		 
 		            {"title":"已完成","class":"center","data": "finished_qty","defaultContent": ""},		  
@@ -301,7 +301,8 @@ function show(tmp_order_no,id){
         	$("#show_workshop").text(result.tmpOrderMap.data[0].workshop);
         	$("#show_head_launch_unit").text(result.tmpOrderMap.data[0].head_launch_unit);
         	$("#show_acceptor").text(result.tmpOrderMap.data[0].acceptor);
-        	$("#show_reason_content").text(result.tmpOrderMap.data[0].reason_content);
+        	var reason_content=result.tmpOrderMap.data[0].reason_content;
+        	$("#show_reason_content").html('<div title=\''+reason_content+'\'>'+reason_content.substring(0,8)+'...</div>');
         	$("#show_total_qty").text(result.tmpOrderMap.data[0].total_qty);
         	$("#show_order_type").text(result.tmpOrderMap.data[0].order_type);
         	$("#show_duty_unit").text(result.tmpOrderMap.data[0].duty_unit);

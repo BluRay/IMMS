@@ -434,7 +434,7 @@ function getBusType(element){
 		success: function (response) {
 			var options="<option value=''>-请选择-</option>";
 			$.each(response.data,function(index,value){
-				options += "<option value=" + value.id + ">"+ value.code + "</option>";
+				options += "<option value=" + value.id + ">"+ value.name + "</option>";
 			});
 			$(element).append(options);
 		}

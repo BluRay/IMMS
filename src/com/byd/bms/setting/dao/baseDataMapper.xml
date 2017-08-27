@@ -301,7 +301,7 @@
 		select distinct p.workshop,p.process_name ,case  p.monitory_point_flag when '0' then 'N' else 'Y' end as monitory_point_flag,
 		case p.key_process_flag when '0' then 'N' else 'Y' end as key_process_flag, ifnull(k.key_name,'') plan_node
 		from BMS_BASE_PROCESS p 
-		left join BMS_BASE_KEY k on p.plan_node_id=k.id
+		left join BMS_BASE_KEY k on p.plan_node_id=k.value and k.key_code='PLAN_CODE' 
 		left join BMS_BASE_WORKSHOP w on w.workshop_name=p.workshop and w.delete_flag='0'
 		where p.delete_flag !='1'
 		<if test="factory !=null and factory !=''">
@@ -320,7 +320,7 @@
 		select distinct p.factory,p.workshop,p.process_name ,case  p.monitory_point_flag when '0' then 'N' else 'Y' end as monitory_point_flag,
 				case p.key_process_flag when '0' then 'N' else 'Y' end as key_process_flag, ifnull(k.key_name,'') plan_node
 				from BMS_BASE_PROCESS p 
-				left join BMS_BASE_KEY k on p.plan_node_id=k.id
+				left join BMS_BASE_KEY k on p.plan_node_id=k.value and k.key_code='PLAN_CODE' 
 				where p.delete_flag !='1' and p.factory=#{factory}
 		) p on r.factory=p.factory and p.workshop=r.workshop and r.process_name=p.process_name
 		where r.factory=#{factory} and r.order_type=#{order_type}
@@ -334,7 +334,7 @@
 		select distinct p.workshop,p.process_name ,case  p.monitory_point_flag when '0' then 'N' else 'Y' end as monitory_point_flag,
 		case p.key_process_flag when '0' then 'N' else 'Y' end as key_process_flag, ifnull(k.key_name,'') plan_node,cast(substring(p.process_code,3) as signed) seq
 		from BMS_BASE_PROCESS p 
-		left join BMS_BASE_KEY k on p.plan_node_id=k.id
+		left join BMS_BASE_KEY k on p.plan_node_id=k.value and k.key_code='PLAN_CODE' 
 		where p.delete_flag !='1' and p.factory=#{factory}) p
 		group by p.workshop
 	</select>

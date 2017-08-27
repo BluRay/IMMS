@@ -82,7 +82,7 @@
 					<div class="row">
 					<div class="col-xs-12" style="width: calc(100vw + 20px)">
 						<table id="tableResult"
-							class="table table-striped table-bordered table-hover" style="font-size: 12px; width:1300px;overflow-x:auto ">
+							class="table table-striped table-bordered table-hover" style="font-size: 12px; width:1800px;overflow-x:auto ">
 						</table>	
 					</div>
 					</div>

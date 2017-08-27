@@ -656,7 +656,7 @@
 		<if test="orderconfigId!=null and orderconfigId!=''">
 			and c.id=#{orderconfigId}
 		</if>
-			group by t.bus_number,t.factory_id,t.workshop
+			group by t.bus_number,t.factory_id,t.workshop order by edit_date desc
 		<if test="start!=null">
 			limit #{start},#{length}
 		</if>

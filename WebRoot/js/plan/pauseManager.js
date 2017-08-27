@@ -371,6 +371,14 @@ function ajaxQuery(){
                     //调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
                     //此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
                     callback(returnData);
+                    var head_width=$(".dataTables_scroll").width();
+                	$(".dataTables_scrollBody").scrollTop(10);
+                	//alert($(".dataTables_scrollBody").scrollTop());
+
+                	if($(".dataTables_scrollBody").scrollTop()>0){
+                		$(".dataTables_scrollHead").css("width",head_width-20);
+                		$(".dataTables_scrollBody").scrollTop(0);
+                	}
                 }
             });
 		},
@@ -384,7 +392,10 @@ function ajaxQuery(){
 		            {"title":"实际恢复时间",width:'120',"class":"center","data":"end_time","defaultContent": ""},
 		            {"title":"累计停线时间",width:'120',"class":"center","data":"hours","defaultContent": ""},
 		            {"title":"停线原因",width:'80',"class":"center","data":"reason_type","defaultContent": ""},
-		            {"title":"详细原因",width:'120',"class":"center","data":"detailed_reason","defaultContent": ""},
+		            {"title":"详细原因",width:'300',"class":"center","data":"detailed_reason","defaultContent": "","render":function(data,type,row){
+		            	var html="<i style='font-style:normal' title='"+data+"'>"+(data.length>50?(data.substring(0,25)+"..."):data)+"</i>";
+		            	return html;
+		            }},
 		            {"title":"责任部门",width:'80',"class":"center","data":"duty_department","defaultContent": ""},
 		            {"title":"损失人数",width:'80',"class":"center","data":"human_lossed","defaultContent": ""},
 		            {"title":"损失产能",width:'80',"class":"center","data":"capacity_lossed","defaultContent": ""},

@@ -147,7 +147,7 @@ function ajaxQuery(){
 		            {"title":"接收工厂","class":"center","data":"factory","defaultContent": ""},
 		            {"title":"接收车间","class":"center","data":"workshop","defaultContent": ""},
 		            {"title":"发起人","class":"center","data":"order_launcher","defaultContent": ""},
-		            {"title":"派工描述","class":"center","data": "reason_content","defaultContent": ""},
+		            {"title":"派工描述","class":"center","width":"500px","data": "reason_content","defaultContent": ""},
 		            {"title":"总数量","class":"center","data":"total_qty","defaultContent": ""},		            
 		            {"title":"工时","class":"center","data": "single_hour","defaultContent": ""},		  
 		            {"title":"所需人力","class":"center","data": "labors","defaultContent": ""},		
@@ -779,7 +779,8 @@ function show(tmp_order_no,id){
         	$("#show_workshop").text(result.tmpOrderMap.data[0].workshop);
         	$("#show_head_launch_unit").text(result.tmpOrderMap.data[0].head_launch_unit);
         	$("#show_acceptor").text(result.tmpOrderMap.data[0].acceptor);
-        	$("#show_reason_content").text(result.tmpOrderMap.data[0].reason_content);
+        	var reason_content=result.tmpOrderMap.data[0].reason_content;
+        	$("#show_reason_content").html('<div title=\''+reason_content+'\'>'+reason_content.substring(0,8)+'...</div>');
         	$("#show_total_qty").text(result.tmpOrderMap.data[0].total_qty);
         	$("#show_order_type").text(result.tmpOrderMap.data[0].order_type);
         	$("#show_duty_unit").text(result.tmpOrderMap.data[0].duty_unit);

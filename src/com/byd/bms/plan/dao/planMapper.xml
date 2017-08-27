@@ -364,6 +364,7 @@
 	<if test="pause_id!=null">
 		AND P.id= #{pause_id}
 	</if>
+	order by create_time desc
 	<if test="start !=null">
 		LIMIT #{start} ,#{length} 
 	</if>	

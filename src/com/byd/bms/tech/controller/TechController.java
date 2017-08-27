@@ -144,8 +144,8 @@ public class TechController extends BaseController{
 		String tech_date_end=request.getParameter("tech_date_end");		//技改单日期-结束
 		String status=request.getParameter("status");					//技改任务状态
 		condMap.put("draw", request.getParameter("draw"));
-		condMap.put("start", request.getParameter("offset"));
-		condMap.put("length", request.getParameter("limit"));
+		condMap.put("start", request.getParameter("start"));
+		condMap.put("length", request.getParameter("length"));
 		condMap.put("tech_order_no", tech_order_no);
 		condMap.put("task_content", task_content);
 		condMap.put("tech_date_start",tech_date_start);

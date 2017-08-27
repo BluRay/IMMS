@@ -112,7 +112,7 @@ function showTable(data,th_order_list){
 		if(value.mark.trim().length==0){
 			$("<td id='mark_"+i+"' style='text-align:left;' rowspan=1 width='300px'/>").html("").appendTo(tr);
 		}else{			
-			$("<td id='mark_"+i+"' style='text-align:left;' rowspan=1 width='300px'/>").html("<i title='"+mark_title+"'>"+
+			$("<td id='mark_"+i+"' style='text-align:left;' rowspan=1 width='300px'/>").html("<i style='font-style:normal' title='"+mark_title+"'>"+
 					(mark_title.length>25?(mark_title.substring(0,25)+"..."):mark_title)+"</i>").appendTo(tr);
 
 		}
