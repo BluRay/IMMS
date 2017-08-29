@@ -149,7 +149,9 @@
 	<select id="queryFactoryPlanRateList" parameterType="Map" resultType="Map">
 		select a.plan_qty,a.key_name as workshop,ifnull(b.quantity,0) as quantity,concat(round(ifnull(b.quantity,0)/a.plan_qty*100,1) ,'%') as rate
 		from
-		(select sum(p.plan_qty) plan_qty,k.key_name
+		(select sum(p.plan_qty) plan_qty,
+		case k.key_name when '自制下线' then '自制件下线'  when '车辆入库' then '入库' else k.key_name
+		end as key_name
 		from BMS_PLAN_PRODUCTION_PLAN p
 		left join BMS_BASE_KEY k on k.value=p.plan_code_value and k.key_code='PLAN_CODE'
 		where p.factory_id=#{factory_id} and p.plan_date like concat(#{month},'%')

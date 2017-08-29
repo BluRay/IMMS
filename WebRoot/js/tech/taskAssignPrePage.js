@@ -4,7 +4,7 @@ $(document).ready(function () {
 	
 	function initPage(){
 		getBusNumberSelect('#nav-search-input');
-		getFactorySelect("tech/taskAssignPrePage",'',"#search_factory",null,'id');
+		getFactorySelect("",'',"#search_factory",null,'id');
 		getOrderNoSelect("#search_order_no","#orderId");
 		var d = new Date();
 		var vYear = d.getFullYear();

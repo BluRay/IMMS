@@ -6,7 +6,7 @@ $(document).ready(function(){
 	
 	function initPage(){
 		getBusNumberSelect('#nav-search-input');
-		getFactorySelect("tech/workHourEstimatePage",'',"#search_factory","全部",'id');
+		getFactorySelect("",'',"#search_factory","全部",'id');
 		getOrderNoSelect("#search_order_no","#orderId");
 	}
 

@@ -118,7 +118,7 @@ function showTable(data,th_order_list){
 			$("<td id='mark_"+i+"' style='text-align:left;' rowspan=1 width='300px'/>").html("").appendTo(tr);
 		}else{			
 			$("<td id='mark_"+i+"' style='text-align:left;' rowspan=1 width='300px'/>").html("<i style='font-style:normal' title='"+mark_title+"'>"+
-					(mark_title.length>25?(mark_title.substring(0,25)+"..."):mark_title)+"</i>").appendTo(tr);
+					(mark_title.length>40?(mark_title.substring(0,40)+"..."):mark_title)+"</i>").appendTo(tr);
 
 		}
 		last_workshop=value.workshop.slice(0,-2);
