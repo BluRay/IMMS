@@ -406,12 +406,13 @@
 	</update>
 	
 	<select id="queryPartsOnOffList" parameterType="Map" resultType="Map">
-		SELECT p.*,f.factory_name,CONCAT(o.order_no,' ',o.order_name,x.bus_type_code,' ',o.order_qty,' ' ,'台') as order_desc,k.key_name parts_name,u.username editor,o.order_no,
+		SELECT p.*,f.factory_name,CONCAT(o.order_no,' ',o.order_name,x.bus_type_code,' ',fo.production_qty,' ' ,'台') as order_desc,k.key_name parts_name,u.username editor,o.order_no,
 		(select sum(p1.online_real_qty) from BMS_PD_PARTS_PLAN_FINISH p1 where p1.factory_id=p.factory_id and p1.order_id=p.order_id and p1.parts_id=p.parts_id ) online_total,
 		(select sum(p1.offline_real_qty) from BMS_PD_PARTS_PLAN_FINISH p1 where p1.factory_id=p.factory_id and p1.order_id=p.order_id and p1.parts_id=p.parts_id ) offline_total
 		FROM BMS_PD_PARTS_PLAN_FINISH p
 		LEFT JOIN BMS_BASE_FACTORY f ON p.factory_id = f.id
 		LEFT JOIN BMS_OR_ORDER o ON p.order_id = o.id
+		LEFT JOIN BMS_OR_FACTORY_ORDER fo on fo.order_id=p.order_id and fo.factory_id=p.factory_id
 		LEFT JOIN BMS_BASE_KEY k ON p.parts_id = k.value and k.key_code='BASE_PARTS'
 		LEFT JOIN BMS_BASE_BUS_TYPE x ON x.id = o.bus_type_id
 		LEFT JOIN BMS_BASE_USER u on u.id=p.editor_id

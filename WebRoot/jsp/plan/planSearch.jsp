@@ -74,8 +74,12 @@
 								            <th style="text-align:center;">自制件下线</th>
 								            <th style="text-align:center;">部件下线</th>
 								            <th style="text-align:center;">焊装上线</th>
+								            <th style="text-align:center;">焊装下线</th>
 								            <th style="text-align:center;">涂装上线</th>
+								            <th style="text-align:center;">涂装下线</th>
 								            <th style="text-align:center;">底盘上线</th>
+								            <th style="text-align:center;">底盘下线</th>
+								            <th style="text-align:center;">总装上线</th>
 								            <th style="text-align:center;">总装下线</th>
 								            <th style="text-align:center;">入库</th>
 								        </tr>
@@ -83,6 +87,10 @@
 									<tbody>
 										<tr id="tr_plan">
 											<td>计划数量</td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
 											<td></td>
 											<td></td>
 											<td></td>
@@ -100,9 +108,31 @@
 											<td></td>
 											<td></td>
 											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
 										</tr>
 										<tr id="tr_doneRate">
 											<td>实际达成率</td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+										</tr>
+										<tr id="tr_undone">
+											<td>欠产数量</td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
 											<td></td>
 											<td></td>
 											<td></td>

@@ -109,7 +109,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter{
 			return false;
 		}else{
 			BmsBaseUser user=loginService.getUser(loginName);
-			if(!"loginName".equals(user.getStaff_number())){
+			if(!loginName.equals(user.getStaff_number())){
 				logger.info("用户"+loginName+" 在BMS系统不存在！");
 				response.sendRedirect(request.getContextPath()+"/loginPage");
 				return false;
