@@ -744,6 +744,7 @@
 		<if test="occurDateEnd!=null and  occurDateEnd!=''">
 			<![CDATA[and t.occur_date < #{occurDateEnd}]]>
 		</if>
+		order by creat_date desc
 		<if test="start!=null">
 			limit #{start},#{length}
 		</if>

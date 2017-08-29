@@ -1,6 +1,8 @@
 $(document).ready(function(){
 	initPage();
-
+	$('#search_factory').change(function(){ 
+		getWorkshopSelect("production/createTmpOrder",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
+	});
 	//新增
 	$(document).on("click","#btnAdd",function(e){
 		
@@ -70,11 +72,12 @@ $(document).ready(function(){
 
 function initPage(){
 	getBusNumberSelect('#nav-search-input');
-	ajaxQuery();
 	getFactorySelect("production/createTmpOrder",'',"#new_factory","--请选择--",'id');
 	getWorkshopSelect("",$("#new_factory :selected").text(),"","#new_workshop",null,"id");
 	getFactorySelect("production/createTmpOrder",'',"#edit_factory","--请选择--",'id');
-	
+	getFactorySelect("production/createTmpOrder","","#search_factory",null,"id")	
+	getWorkshopSelect("production/createTmpOrder",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
+	ajaxQuery();
 }
 
 function ajaxQuery(){
@@ -108,12 +111,21 @@ function ajaxQuery(){
 			}
 		},
 		ajax:function (data, callback, settings) {
+			var factory="",workshop="";
+			if($("#search_factory :selected").text()!="全部"){
+				factory=$("#search_factory :selected").text();
+			}
+			if($("#search_workshop :selected").text()!="全部" && $("#search_workshop :selected").text()!=undefined){
+				workshop=$("#search_workshop :selected").text();
+			}
 			var param ={
 					"draw":1,
 					"tmp_order_no":$("#search_tmp_order_no").val(),
 					"status":$("#search_status").val(),
 					"apply_date_start":$("#search_date_start").val(),
-					"apply_date_end":$("#search_date_end").val()
+					"apply_date_end":$("#search_date_end").val(),
+					"factory":factory,
+					"workshop":workshop
 					};
             param.length = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
             param.start = data.start;//开始的记录序号

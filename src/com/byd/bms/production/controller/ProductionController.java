@@ -1247,7 +1247,7 @@ public class ProductionController extends BaseController {
 			result.put("message", "保存成功");
 		}else{
 			result.put("success", false);
-			result.put("message", "打印失败");
+			result.put("message", "保存失败");
 		}
 		model.addAllAttributes(result);
 		return model;
@@ -1895,10 +1895,13 @@ public class ProductionController extends BaseController {
 		int draw=Integer.parseInt(request.getParameter("draw")); 
 		int start=Integer.parseInt(request.getParameter("start"));
 		int length=Integer.parseInt(request.getParameter("length"));
-		
+		String factory=request.getParameter("factory");
+		String workshop=request.getParameter("workshop");
 		Map<String,Object> conditionMap=new HashMap<String,Object>();
 		conditionMap.put("tmp_order_no",tmp_order_no);
 		conditionMap.put("status",status);
+		conditionMap.put("factory",factory);
+		conditionMap.put("workshop",workshop);
 		conditionMap.put("apply_date_start",apply_date_start);
 		conditionMap.put("apply_date_end",apply_date_end);
 		conditionMap.put("draw", draw);

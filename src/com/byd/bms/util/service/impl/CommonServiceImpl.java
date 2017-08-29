@@ -90,6 +90,11 @@ public class CommonServiceImpl implements ICommonService {
 		return factoryList;
 	}
 	@Override
+	public List<Map<String, Object>> getAllFactorySelect(Map<String, Object> condMap) {
+		List<Map<String, Object>> factoryList=commonDao.queryAllFactoryList(condMap);
+		return factoryList;
+	}
+	@Override
 	public List<Map<String, Object>> getWorkshopSelectAuth(Map<String, Object> condMap) {
 		List<Map<String, Object>> workshopList=commonDao.queryWorkshopListAuth(condMap);
 		return workshopList;

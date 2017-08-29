@@ -986,6 +986,7 @@ public class PlanController extends BaseController{
 		String staff_number = request.getSession().getAttribute("staff_number") + "";
 		Map<String,Object> condMap=new HashMap<String,Object>();
 		condMap.put("factory_id", request.getParameter("factory_id"));
+		condMap.put("vin_factory_id", request.getParameter("vin_factory_id"));
 		condMap.put("order_no", request.getParameter("order_no"));
 		condMap.put("vinCount", request.getParameter("vinCount"));
 		condMap.put("year", request.getParameter("year"));

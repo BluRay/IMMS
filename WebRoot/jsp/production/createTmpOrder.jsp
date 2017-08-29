@@ -70,7 +70,15 @@
 <!-- 									    <option value='5'>已完成 </option> -->
 <!-- 									    <option value='6'>已驳回 </option> -->
 									</select>
-								</td>						
+								</td>
+								<td style="text-align:right">工厂：</td>
+								<td>
+									<select name="" id="search_factory" class="input-medium" style="width:90px;"></select>
+								</td>
+								<td style="text-align:right">车间：</td>
+								<td>
+									<select name="" id="search_workshop" class="input-medium" style="width:90px;"></select>
+								</td>							
 								<td><input type="button" class="btn btn-sm btn-primary" id="btnQuery" value="查询" style="margin-left: 2px;"></input>
 								<input type="button" class="btn btn-sm btn-info" id="btnAdd" value="新增" style="margin-left: 2px;"></input>						
 								</td>

@@ -114,6 +114,8 @@ function getSearch(){
     		
     		var tplan_rk=0;
     		var treal_rk=0;
+    		
+    		//订单计划达成
     		$.each(response.data,function (index,value) {
     			var tr = $("<tr id= '"+value.id+"'/>");  			
     			if(last_order==value.order_desc){
@@ -159,29 +161,55 @@ function getSearch(){
         		tplan_rk+=(value.key_name=='车辆入库'?parseInt(value.total_plan_qty):0);
         		treal_rk+=(value.key_name=='车辆入库'?parseInt(value.real_qty):0);			
     		});
+    		
+    		//车间计划达成
     		$("#tr_plan").find("td").eq("1").html(tplan_zzj);
     		$("#tr_plan").find("td").eq("2").html(tplan_bjoff);
     		$("#tr_plan").find("td").eq("3").html(tplan_hzon);
-    		$("#tr_plan").find("td").eq("4").html(tplan_tzon);
-    		$("#tr_plan").find("td").eq("5").html(tplan_dpon);
-    		$("#tr_plan").find("td").eq("6").html(tplan_zzoff);
-    		$("#tr_plan").find("td").eq("7").html(tplan_rk);
+    		$("#tr_plan").find("td").eq("4").html(tplan_hzoff);
+    		$("#tr_plan").find("td").eq("5").html(tplan_tzon);
+    		$("#tr_plan").find("td").eq("6").html(tplan_tzoff);
+    		$("#tr_plan").find("td").eq("7").html(tplan_dpon);
+    		$("#tr_plan").find("td").eq("8").html(tplan_dpoff);
+    		$("#tr_plan").find("td").eq("9").html(tplan_zzon);
+    		$("#tr_plan").find("td").eq("10").html(tplan_zzoff);
+    		$("#tr_plan").find("td").eq("11").html(tplan_rk);
     		
     		$("#tr_realDone").find("td").eq("1").html(treal_zzj);
     		$("#tr_realDone").find("td").eq("2").html(treal_bjoff);
     		$("#tr_realDone").find("td").eq("3").html(treal_hzon);
-    		$("#tr_realDone").find("td").eq("4").html(treal_tzon);
-    		$("#tr_realDone").find("td").eq("5").html(treal_dpon);
-    		$("#tr_realDone").find("td").eq("6").html(treal_zzon);
-    		$("#tr_realDone").find("td").eq("7").html(treal_rk);
+    		$("#tr_realDone").find("td").eq("4").html(treal_hzoff);
+    		$("#tr_realDone").find("td").eq("5").html(treal_tzon);
+    		$("#tr_realDone").find("td").eq("6").html(treal_tzoff);
+    		$("#tr_realDone").find("td").eq("7").html(treal_dpon);
+    		$("#tr_realDone").find("td").eq("8").html(treal_dpoff);
+    		$("#tr_realDone").find("td").eq("9").html(treal_zzon);
+    		$("#tr_realDone").find("td").eq("10").html(treal_zzoff);
+    		$("#tr_realDone").find("td").eq("11").html(treal_rk);
     		
     		$("#tr_doneRate").find("td").eq("1").html(tplan_zzj==0?"-":(Math.round(treal_zzj/tplan_zzj * 10000) / 100.00 + "%"));
     		$("#tr_doneRate").find("td").eq("2").html(tplan_bjoff==0?"-":(Math.round(treal_bjoff/tplan_bjoff * 10000) / 100.00 + "%"));
     		$("#tr_doneRate").find("td").eq("3").html(tplan_hzon==0?"-":(Math.round(treal_hzon/tplan_hzon * 10000) / 100.00 + "%"));
-    		$("#tr_doneRate").find("td").eq("4").html(tplan_tzon==0?"-":(Math.round(treal_tzon/tplan_tzon * 10000) / 100.00 + "%"));
-    		$("#tr_doneRate").find("td").eq("5").html(tplan_dpon==0?"-":(Math.round(treal_dpon/tplan_dpon * 10000) / 100.00 + "%"));
-    		$("#tr_doneRate").find("td").eq("6").html(tplan_zzoff==0?"-":(Math.round(treal_zzoff/tplan_zzoff * 10000) / 100.00 + "%"));
-    		$("#tr_doneRate").find("td").eq("7").html(tplan_rk==0?"-":(Math.round(treal_rk/tplan_rk * 10000) / 100.00 + "%"));
+    		$("#tr_doneRate").find("td").eq("4").html(tplan_hzoff==0?"-":(Math.round(treal_hzoff/tplan_hzoff * 10000) / 100.00 + "%"));
+    		$("#tr_doneRate").find("td").eq("5").html(tplan_tzon==0?"-":(Math.round(treal_tzon/tplan_tzon * 10000) / 100.00 + "%"));
+    		$("#tr_doneRate").find("td").eq("6").html(tplan_tzoff==0?"-":(Math.round(treal_tzoff/tplan_tzoff * 10000) / 100.00 + "%"));
+    		$("#tr_doneRate").find("td").eq("7").html(tplan_dpon==0?"-":(Math.round(treal_dpon/tplan_dpon * 10000) / 100.00 + "%"));
+    		$("#tr_doneRate").find("td").eq("8").html(tplan_dpoff==0?"-":(Math.round(treal_dpoff/tplan_dpoff * 10000) / 100.00 + "%"));
+    		$("#tr_doneRate").find("td").eq("9").html(tplan_zzon==0?"-":(Math.round(treal_zzon/tplan_zzon * 10000) / 100.00 + "%"));
+    		$("#tr_doneRate").find("td").eq("10").html(tplan_zzoff==0?"-":(Math.round(treal_zzoff/tplan_zzoff * 10000) / 100.00 + "%"));
+    		$("#tr_doneRate").find("td").eq("11").html(tplan_rk==0?"-":(Math.round(treal_rk/tplan_rk * 10000) / 100.00 + "%"));
+    		
+    		$("#tr_undone").find("td").eq("1").html((treal_zzj-tplan_zzj)<0?"<span style='color:red'>"+(treal_zzj-tplan_zzj):(treal_zzj-tplan_zzj));
+    		$("#tr_undone").find("td").eq("2").html((treal_bjoff-tplan_bjoff)<0?"<span style='color:red'>"+(treal_bjoff-tplan_bjoff):(treal_bjoff-tplan_bjoff));
+    		$("#tr_undone").find("td").eq("3").html((treal_hzon-tplan_hzon)<0?"<span style='color:red'>"+(treal_hzon-tplan_hzon):(treal_hzon-tplan_hzon));
+    		$("#tr_undone").find("td").eq("4").html((treal_hzoff-tplan_hzoff)<0?"<span style='color:red'>"+(treal_hzoff-tplan_hzoff):(treal_hzoff-tplan_hzoff));
+    		$("#tr_undone").find("td").eq("5").html((treal_tzon-tplan_tzon)<0?"<span style='color:red'>"+(treal_tzon-tplan_tzon):(treal_tzon-tplan_tzon));
+    		$("#tr_undone").find("td").eq("6").html((treal_tzoff-tplan_tzoff)<0?"<span style='color:red'>"+(treal_tzoff-tplan_tzoff):(treal_tzoff-tplan_tzoff));
+    		$("#tr_undone").find("td").eq("7").html((treal_dpon-tplan_dpon)<0?"<span style='color:red'>"+(treal_dpon-tplan_dpon):(treal_dpon-tplan_dpon));
+    		$("#tr_undone").find("td").eq("8").html((treal_dpoff-tplan_dpoff)<0?"<span style='color:red'>"+(treal_dpoff-tplan_dpoff):(treal_dpoff-tplan_dpoff));
+    		$("#tr_undone").find("td").eq("9").html((treal_zzon-tplan_zzon)<0?"<span style='color:red'>"+(treal_zzon-tplan_zzon):(treal_zzon-tplan_zzon));
+    		$("#tr_undone").find("td").eq("10").html((treal_zzoff-tplan_zzoff)<0?"<span style='color:red'>"+(treal_zzoff-tplan_zzoff):(treal_zzoff-tplan_zzoff));
+    		$("#tr_undone").find("td").eq("11").html((treal_rk-tplan_rk)<0?"<span style='color:red'>"+(treal_rk-tplan_rk):(treal_rk-tplan_rk));
 
 	    	
 	    }

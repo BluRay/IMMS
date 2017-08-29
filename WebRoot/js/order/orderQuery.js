@@ -432,7 +432,7 @@ function drawBusInfoTable(data){
 		            {"title":"VIN","class":"center","data":"vin","defaultContent": ""},
 		            {"title":"生产工厂","class":"center","data":"factory_name","defaultContent": ""},
 		            {"title":"当前车间","class":"center","data":"workshop","defaultContent": ""},
-		            {"title":"当前工序","class":"center","data":"process_name","defaultContent": ""},
+		            {"title":"当前工序","width":"200","class":"center","data":"process_name","defaultContent": ""},
 		            {"title":"焊装上线","class":"center","data":"welding_online_date","defaultContent": ""},
 		            {"title":"焊装下线","class":"center","data":"welding_offline_date","defaultContent": ""},
 		            {"title":"涂装上线","class":"center","data":"painting_online_date","defaultContent": ""},

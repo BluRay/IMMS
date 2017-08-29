@@ -17,6 +17,7 @@ public interface ICommonDao {
 	List<Map<String, Object>> queryFactoryList(Map<String, Object> condMap);
 	
 	List<Map<String,Object>> queryFactoryListAuth(Map<String, Object> condMap);
+	List<Map<String,Object>> queryAllFactoryList(Map<String, Object> condMap);
 
 	List<Map<String, Object>> queryBusTypeList();
 	

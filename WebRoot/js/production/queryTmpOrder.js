@@ -20,7 +20,7 @@ $(document).ready(function(){
 function initPage(){
 	getBusNumberSelect('#nav-search-input');
 	//ajaxQuery();
-	getFactorySelect("production/queryTmpOrder","","#search_factory","全部","id")	
+	getFactorySelect("production/queryTmpOrder","","#search_factory",null,"id")	
 	getWorkshopSelect("production/queryTmpOrder",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
 	
 }

@@ -1013,19 +1013,19 @@
 		<if test="onoff=='上线'">
 			and b.welding_online_date is not null
 			<if test="start_date !=null and start_date !=''">
-				and b.welding_online_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+				and b.welding_online_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:30:00')
 			</if>
 			<if test="end_date !=null and end_date !=''">
-				and b.welding_online_date &lt;=CONCAT(#{end_date},' 17:10:00')
+				and b.welding_online_date &lt;=CONCAT(#{end_date},' 17:30:00')
 			</if>
 		</if>
 		<if test="onoff=='下线'">
 			and b.welding_offline_date is not null
 			<if test="start_date !=null and start_date !=''">
-				and b.welding_offline_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+				and b.welding_offline_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:30:00')
 			</if>
 			<if test="end_date !=null and end_date !=''">
-				and b.welding_offline_date &lt;=CONCAT(#{end_date},' 17:10:00')
+				and b.welding_offline_date &lt;=CONCAT(#{end_date},' 17:30:00')
 			</if>
 		</if>
 		<if test="onoff==''">
@@ -1041,10 +1041,10 @@
 		<if test="onoff=='下线'">
 			and b.fiberglass_offline_date is not null
 			<if test="start_date !=null and start_date !=''">
-				and b.fiberglass_offline_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+				and b.fiberglass_offline_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:30:00')
 			</if>
 			<if test="end_date !=null and end_date !=''">
-				and b.fiberglass_offline_date &lt;=CONCAT(#{end_date},' 17:10:00')
+				and b.fiberglass_offline_date &lt;=CONCAT(#{end_date},' 17:30:00')
 			</if>
 		</if>
 		<if test="onoff==''">
@@ -1059,19 +1059,19 @@
 		<if test="onoff=='上线'">
 			and b.painting_online_date is not null
 			<if test="start_date !=null and start_date !=''">
-				and b.painting_online_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+				and b.painting_online_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:30:00')
 			</if>
 			<if test="end_date !=null and end_date !=''">
-				and b.painting_online_date &lt;=CONCAT(#{end_date},' 17:10:00')
+				and b.painting_online_date &lt;=CONCAT(#{end_date},' 17:30:00')
 			</if>
 		</if>
 		<if test="onoff=='下线'">
 			and b.painting_offline_date !=''
 			<if test="start_date !=null and start_date !=''">
-				and b.painting_offline_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+				and b.painting_offline_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:30:00')
 			</if>
 			<if test="end_date !=null and end_date !=''">
-				and b.painting_offline_date &lt;=CONCAT(#{end_date},' 17:10:00')
+				and b.painting_offline_date &lt;=CONCAT(#{end_date},' 17:30:00')
 			</if>
 		</if>
 		<if test="onoff=='' or onoff ==null">
@@ -1086,19 +1086,19 @@
 		<if test="onoff=='上线'">
 			and b.chassis_online_date !=''
 			<if test="start_date !=null and start_date !=''">
-				and b.chassis_online_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+				and b.chassis_online_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:30:00')
 			</if>
 			<if test="end_date !=null and end_date !=''">
-				and b.chassis_online_date &lt;=CONCAT(#{end_date},' 17:10:00')
+				and b.chassis_online_date &lt;=CONCAT(#{end_date},' 17:30:00')
 			</if>
 		</if>
 		<if test="onoff=='下线'">
 			and b.chassis_offline_date !=''
 			<if test="start_date !=null and start_date !=''">
-				and b.chassis_offline_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+				and b.chassis_offline_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:30:00')
 			</if>
 			<if test="end_date !=null and end_date !=''">
-				and b.chassis_offline_date &lt;=CONCAT(#{end_date},' 17:10:00')
+				and b.chassis_offline_date &lt;=CONCAT(#{end_date},' 17:30:00')
 			</if>
 		</if>
 		<if test="onoff=='' or onoff ==null">
@@ -1113,19 +1113,19 @@
 		<if test="onoff=='上线'">
 			and b.assembly_online_date !=''
 			<if test="start_date !=null and start_date !=''">
-				and b.assembly_online_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+				and b.assembly_online_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:30:00')
 			</if>
 			<if test="end_date !=null and end_date !=''">
-				and b.assembly_online_date &lt;=CONCAT(#{end_date},' 17:10:00')
+				and b.assembly_online_date &lt;=CONCAT(#{end_date},' 17:30:00')
 			</if>
 		</if>
 		<if test="onoff=='下线'">
 			and b.assembly_offline_date !=''
 			<if test="start_date !=null and start_date !=''">
-				and b.assembly_offline_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+				and b.assembly_offline_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:30:00')
 			</if>
 			<if test="end_date !=null and end_date !=''">
-				and b.assembly_offline_date &lt;=CONCAT(#{end_date},' 17:10:00')
+				and b.assembly_offline_date &lt;=CONCAT(#{end_date},' 17:30:00')
 			</if>
 		</if>
 		<if test="onoff=='' or onoff ==null">
@@ -1141,19 +1141,19 @@
 		<if test="onoff=='上线'">
 			and b.debugarea_online_date !=''
 			<if test="start_date !=null and start_date !=''">
-				and b.debugarea_online_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+				and b.debugarea_online_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:30:00')
 			</if>
 			<if test="end_date !=null and end_date !=''">
-				and b.debugarea_online_date &lt;=CONCAT(#{end_date},' 17:10:00')
+				and b.debugarea_online_date &lt;=CONCAT(#{end_date},' 17:30:00')
 			</if>
 		</if>
 		<if test="onoff=='下线'">
 			and b.debugarea_offline_date !=''
 			<if test="start_date !=null and start_date !=''">
-				and b.debugarea_offline_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+				and b.debugarea_offline_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:30:00')
 			</if>
 			<if test="end_date !=null and end_date !=''">
-				and b.debugarea_offline_date &lt;=CONCAT(#{end_date},' 17:10:00')
+				and b.debugarea_offline_date &lt;=CONCAT(#{end_date},' 17:30:00')
 			</if>
 		</if>
 		<if test="onoff=='' or onoff ==null">
@@ -1169,19 +1169,19 @@
 		<if test="onoff=='上线'">
 			and b.testline_online_date !=''
 			<if test="start_date !=null and start_date !=''">
-				and b.testline_online_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+				and b.testline_online_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:30:00')
 			</if>
 			<if test="end_date !=null and end_date !=''">
-				and b.testline_online_date &lt;=CONCAT(#{end_date},' 17:10:00')
+				and b.testline_online_date &lt;=CONCAT(#{end_date},' 17:30:00')
 			</if>
 		</if>
 		<if test="onoff=='下线'">
 			and b.testline_offline_date !=''
 			<if test="start_date !=null and start_date !=''">
-				and b.testline_offline_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+				and b.testline_offline_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:30:00')
 			</if>
 			<if test="end_date !=null and end_date !=''">
-				and b.testline_offline_date &lt;=CONCAT(#{end_date},' 17:10:00')
+				and b.testline_offline_date &lt;=CONCAT(#{end_date},' 17:30:00')
 			</if>
 		</if>
 		<if test="onoff=='' or onoff ==null">
@@ -1272,19 +1272,19 @@
 			<if test="onoff =='上线'">
 				and welding_online_date !=''
 				<if test="start_date !=null and start_date !=''">
-					and b.welding_online_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+					and b.welding_online_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:30:00')
 				</if>
 				<if test="end_date !=null and end_date !=''">
-					and b.welding_online_date &lt;=CONCAT(#{end_date},' 17:10:00')
+					and b.welding_online_date &lt;=CONCAT(#{end_date},' 17:30:00')
 				</if>
 			</if>
 			<if test="onoff=='下线'">
 				and welding_offline_date !=''
 				<if test="start_date !=null and start_date !=''">
-					and b.welding_offline_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+					and b.welding_offline_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:30:00')
 				</if>
 				<if test="end_date !=null and end_date !=''">
-					and b.welding_offline_date &lt;=CONCAT(#{end_date},' 17:10:00')
+					and b.welding_offline_date &lt;=CONCAT(#{end_date},' 17:30:00')
 				</if>
 			</if>
 			<if test="onoff=='' or onoff ==null">
@@ -1331,19 +1331,19 @@
 			<if test="onoff =='上线'">
 				and painting_online_date !=''
 				<if test="start_date !=null and start_date !=''">
-					and b.painting_online_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+					and b.painting_online_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:30:00')
 				</if>
 				<if test="end_date !=null and end_date !=''">
-					and b.painting_online_date &lt;=CONCAT(#{end_date},' 17:10:00')
+					and b.painting_online_date &lt;=CONCAT(#{end_date},' 17:30:00')
 				</if>
 			</if>
 			<if test="onoff=='下线'">
 				and painting_offline_date !=''
 				<if test="start_date !=null and start_date !=''">
-					and b.painting_offline_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+					and b.painting_offline_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:30:00')
 				</if>
 				<if test="end_date !=null and end_date !=''">
-					and b.painting_offline_date &lt;=CONCAT(#{end_date},' 17:10:00')
+					and b.painting_offline_date &lt;=CONCAT(#{end_date},' 17:30:00')
 				</if>
 			</if>
 			<if test="onoff=='' or onoff ==null">
@@ -1370,19 +1370,19 @@
 			<if test="onoff =='上线'">
 				and chassis_online_date !=''
 				<if test="start_date !=null and start_date !=''">
-					and b.chassis_online_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+					and b.chassis_online_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:30:00')
 				</if>
 				<if test="end_date !=null and end_date !=''">
-					and b.chassis_online_date &lt;=CONCAT(#{end_date},' 17:10:00')
+					and b.chassis_online_date &lt;=CONCAT(#{end_date},' 17:30:00')
 				</if>
 			</if>
 			<if test="onoff=='下线'">
 				and chassis_offline_date !=''
 				<if test="start_date !=null and start_date !=''">
-					and b.chassis_offline_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+					and b.chassis_offline_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:30:00')
 				</if>
 				<if test="end_date !=null and end_date !=''">
-					and b.chassis_offline_date &lt;=CONCAT(#{end_date},' 17:10:00')
+					and b.chassis_offline_date &lt;=CONCAT(#{end_date},' 17:30:00')
 				</if>
 			</if>
 			<if test="onoff=='' or onoff ==null">
@@ -1409,19 +1409,19 @@
 			<if test="onoff =='上线'">
 				and assembly_online_date !=''
 				<if test="start_date !=null and start_date !=''">
-					and b.assembly_online_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+					and b.assembly_online_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:30:00')
 				</if>
 				<if test="end_date !=null and end_date !=''">
-					and b.assembly_online_date &lt;=CONCAT(#{end_date},' 17:10:00')
+					and b.assembly_online_date &lt;=CONCAT(#{end_date},' 17:30:00')
 				</if>
 			</if>
 			<if test="onoff=='下线'">
 				and assembly_offline_date !=''
 				<if test="start_date !=null and start_date !=''">
-					and b.assembly_offline_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+					and b.assembly_offline_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:30:00')
 				</if>
 				<if test="end_date !=null and end_date !=''">
-					and b.assembly_offline_date &lt;=CONCAT(#{end_date},' 17:10:00')
+					and b.assembly_offline_date &lt;=CONCAT(#{end_date},' 17:30:00')
 				</if>
 			</if>
 			<if test="onoff=='' or onoff ==null">
@@ -1448,19 +1448,19 @@
 			<if test="onoff =='上线'">
 				and debugarea_online_date !=''
 				<if test="start_date !=null and start_date !=''">
-					and b.debugarea_online_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+					and b.debugarea_online_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:30:00')
 				</if>
 				<if test="end_date !=null and end_date !=''">
-					and b.debugarea_online_date &lt;=CONCAT(#{end_date},' 17:10:00')
+					and b.debugarea_online_date &lt;=CONCAT(#{end_date},' 17:30:00')
 				</if>
 			</if>
 			<if test="onoff=='下线'">
 				and debugarea_offline_date !=''
 				<if test="start_date !=null and start_date !=''">
-					and b.debugarea_offline_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+					and b.debugarea_offline_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:30:00')
 				</if>
 				<if test="end_date !=null and end_date !=''">
-					and b.debugarea_offline_date &lt;=CONCAT(#{end_date},' 17:10:00')
+					and b.debugarea_offline_date &lt;=CONCAT(#{end_date},' 17:30:00')
 				</if>
 			</if>
 			<if test="onoff=='' or onoff ==null">
@@ -1487,19 +1487,19 @@
 			<if test="onoff =='上线'">
 				and testline_online_date !=''
 				<if test="start_date !=null and start_date !=''">
-					and b.testline_online_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+					and b.testline_online_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:30:00')
 				</if>
 				<if test="end_date !=null and end_date !=''">
-					and b.testline_online_date &lt;=CONCAT(#{end_date},' 17:10:00')
+					and b.testline_online_date &lt;=CONCAT(#{end_date},' 17:30:00')
 				</if>
 			</if>
 			<if test="onoff=='下线'">
 				and testline_offline_date !=''
 				<if test="start_date !=null and start_date !=''">
-					and b.testline_offline_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:10:00')
+					and b.testline_offline_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:30:00')
 				</if>
 				<if test="end_date !=null and end_date !=''">
-					and b.testline_offline_date &lt;=CONCAT(#{end_date},' 17:10:00')
+					and b.testline_offline_date &lt;=CONCAT(#{end_date},' 17:30:00')
 				</if>
 			</if>
 			<if test="onoff=='' or onoff ==null">
@@ -2677,6 +2677,12 @@
 		<if test="status !=null and status !=''">
 			and s.status=#{status}
 		</if>
+		<if test="factory !=null and factory !=''">
+			and s.factory = #{factory}
+		</if>
+		<if test="workshop !=null and workshop !=''">
+			and find_in_set(s.workshop,#{workshop})>0
+		</if>
 		<if test="apply_date_start !=null and apply_date_start !=''">
 			and s.apply_date  <![CDATA[ >=#{apply_date_start} ]]>
 		</if>
@@ -2695,6 +2701,12 @@
 		</if>
 		<if test="status !=null and status !=''">
 			and s.status=#{status}
+		</if>
+		<if test="factory !=null and factory !=''">
+			and s.factory = #{factory}
+		</if>
+		<if test="workshop !=null and workshop !=''">
+			and find_in_set(s.workshop,#{workshop})>0
 		</if>
 		<if test="apply_date_start !=null and apply_date_start !=''">
 		<![CDATA[	and s.apply_date>= #{apply_date_start} ]]>

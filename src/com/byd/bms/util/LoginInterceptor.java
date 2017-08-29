@@ -21,7 +21,7 @@ import com.byd.bms.util.service.ILoginService;
  * 登录拦截器
  */
 public class LoginInterceptor extends HandlerInterceptorAdapter{
-	static Logger logger = Logger.getLogger("[BMS]");
+	static Logger logger = Logger.getLogger(LoginInterceptor.class);
 	@Autowired
 	protected ICommonService commonService;
 	@Autowired
@@ -109,6 +109,11 @@ public class LoginInterceptor extends HandlerInterceptorAdapter{
 			return false;
 		}else{
 			BmsBaseUser user=loginService.getUser(loginName);
+			if(!"loginName".equals(user.getStaff_number())){
+				logger.info("用户"+loginName+" 在BMS系统不存在！");
+				response.sendRedirect(request.getContextPath()+"/loginPage");
+				return false;
+			}
 			boolean ipOK = false;
 			
 			// WEB服务器IP配置需要从配置文件读取，如果WEB服务器是APACHE,IHS之类的，有多个服务器，IP可以用逗号隔开，

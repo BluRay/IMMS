@@ -103,10 +103,15 @@ function showTable(data,th_order_list){
 			mark_id="#mark_"+i;
 			$("<td id='mark_"+i+"' style='text-align:left' rowspan=1 />").html(value.mark).appendTo(tr);
 		}*/
-		var marks=value.mark.split("||");
+		var marks=value.mark.trim().split("||");
+		$.each(marks,function(i,v){
+			if(v==undefined||v.trim().length==0){
+				marks.splice(i,1)
+			}
+		})
 		var mark_title="";
-		$.each(marks,function(i,value){
-			mark_title+=(i+1)+". "+value+"  ";
+		$.each(marks,function(i,v){
+			mark_title+=(i+1)+". "+v+"  ";
 		})
 		//alert(value.mark.trim().length)
 		if(value.mark.trim().length==0){

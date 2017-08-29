@@ -86,8 +86,8 @@ public class SendPlanEmailJob  implements Job {
 		String workshop = "";
 		/*if (!request.getParameter("workshop").equals("全部")) workshop = request.getParameter("workshop");*/
 		conditionMap.put("workshop", workshop);
-		conditionMap.put("start_date", sdf.format(new Date()).replaceAll("-", ""));
-		conditionMap.put("end_date", sdf.format(new Date()).replaceAll("-", ""));
+		conditionMap.put("start_date", sdf.format(new Date()));
+		conditionMap.put("end_date", sdf.format(new Date()));
 		List<Map<String,String>> datalist=new ArrayList();
 		datalist = planDao.getPlanSerach(conditionMap);
 		
@@ -179,7 +179,7 @@ public class SendPlanEmailJob  implements Job {
 		}
 		tableX.setTbody(tbodyX);
 		
-		tableX.setTbody(tbodyX);
+		//tableX.setTbody(tbodyX);
 		tables.add(tableX);
 		
 		emailSender.setTables(tables);

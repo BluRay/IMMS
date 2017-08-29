@@ -25,7 +25,7 @@
        <!-- 0 15 10 L * ? 每月最后一天的23点15分触发  -->
        <!-- 0 15 10 * * ? * 每天10点15分触发                -->
        <property name="cronExpression">
-           <value>0 10 17 * * ?</value>
+           <value>0 40 17 * * ?</value>
        </property>
      </bean>
     

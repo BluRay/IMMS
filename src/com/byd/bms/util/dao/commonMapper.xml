@@ -55,6 +55,10 @@
 		)
 		</if>
 	</select>
+	<select id="queryAllFactoryList" parameterType="Map" resultType="Map">			
+		SELECT o.id,o.factory_name name 
+		FROM BMS_BASE_FACTORY o WHERE o.delete_flag = '0'
+	</select>
 	
 	<select id="queryBusTypeList" parameterType="String" resultType="Map">
 		select id,bus_type_code name,internal_name code from BMS_BASE_BUS_TYPE
@@ -427,71 +431,71 @@
 		select CONCAT('焊装','上线') process_node,count(b.bus_number) process_num, p.line
 		from BMS_PLAN_BUS b 
 		left join BMS_BASE_PROCESS p on b.latest_process_id=p.id
-		where b.welding_online_date &lt;=CONCAT(#{curDate},' 17:10:00') 
-		and b.welding_online_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:10:00') 
+		where b.welding_online_date &lt;=CONCAT(#{curDate},' 17:30:00') 
+		and b.welding_online_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:30:00') 
 		and b.factory_id=#{factoryId}
 		group by p.line
 		union all
 		select CONCAT('焊装','下线') process_node,count(b.bus_number) process_num,p.line
 				from BMS_PLAN_BUS b 
 				left join BMS_BASE_PROCESS p on b.latest_process_id=p.id
-				where b.welding_offline_date &lt;=CONCAT(#{curDate},' 17:10:00') 
-				and b.welding_offline_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:10:00') 
+				where b.welding_offline_date &lt;=CONCAT(#{curDate},' 17:30:00') 
+				and b.welding_offline_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:30:00') 
 				and b.factory_id=#{factoryId}
 				group by p.line
 		union all
 		select CONCAT('涂装','上线') process_node,count(b.bus_number) process_num, p.line
 				from BMS_PLAN_BUS b 
 				left join BMS_BASE_PROCESS p on b.latest_process_id=p.id
-				where b.painting_online_date &lt;=CONCAT(#{curDate},' 17:10:00') 
-				and b.painting_online_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:10:00') 
+				where b.painting_online_date &lt;=CONCAT(#{curDate},' 17:30:00') 
+				and b.painting_online_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:30:00') 
 				and b.factory_id=#{factoryId}
 				group by p.line
 		union all
 		select CONCAT('涂装','下线') process_node,count(b.bus_number) process_num, p.line
 				from BMS_PLAN_BUS b 
 				left join BMS_BASE_PROCESS p on b.latest_process_id=p.id
-				where b.painting_offline_date &lt;=CONCAT(#{curDate},' 17:10:00') 
-				and b.painting_offline_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:10:00') 
+				where b.painting_offline_date &lt;=CONCAT(#{curDate},' 17:30:00') 
+				and b.painting_offline_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:30:00') 
 				and b.factory_id=#{factoryId}
 				group by p.line
 		union all
 		select CONCAT('底盘','上线') process_node,count(b.bus_number) process_num, p.line
 				from BMS_PLAN_BUS b 
 				left join BMS_BASE_PROCESS p on b.latest_process_id=p.id
-				where b.chassis_online_date &lt;=CONCAT(#{curDate},' 17:10:00') 
-				and b.chassis_online_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:10:00') 
+				where b.chassis_online_date &lt;=CONCAT(#{curDate},' 17:30:00') 
+				and b.chassis_online_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:30:00') 
 				and b.factory_id=#{factoryId}
 				group by p.line
 		union all
 		select CONCAT('底盘','下线') process_node,count(b.bus_number) process_num, p.line
 				from BMS_PLAN_BUS b 
 				left join BMS_BASE_PROCESS p on b.latest_process_id=p.id
-				where b.chassis_offline_date &lt;=CONCAT(#{curDate},' 17:10:00') 
-				and b.chassis_offline_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:10:00') 
+				where b.chassis_offline_date &lt;=CONCAT(#{curDate},' 17:30:00') 
+				and b.chassis_offline_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:30:00') 
 				and b.factory_id=#{factoryId}
 				group by p.line
 		union all
 		select CONCAT('总装','上线') process_node,count(b.bus_number) process_num, p.line
 				from BMS_PLAN_BUS b 
 				left join BMS_BASE_PROCESS p on b.latest_process_id=p.id
-				where b.assembly_online_date &lt;=CONCAT(#{curDate},' 17:10:00') 
-				and b.assembly_online_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:10:00') 
+				where b.assembly_online_date &lt;=CONCAT(#{curDate},' 17:30:00') 
+				and b.assembly_online_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:30:00') 
 				and b.factory_id=#{factoryId}
 				group by p.line
 		union all
 		select CONCAT('总装','下线') process_node,count(b.bus_number) process_num, p.line
 				from BMS_PLAN_BUS b 
 				left join BMS_BASE_PROCESS p on b.latest_process_id=p.id
-				where b.assembly_offline_date &lt;=CONCAT(#{curDate},' 17:10:00') 
-				and b.assembly_offline_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:10:00') 
+				where b.assembly_offline_date &lt;=CONCAT(#{curDate},' 17:30:00') 
+				and b.assembly_offline_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:30:00') 
 				and b.factory_id=#{factoryId}
 				group by p.line
 		union all
 		select '入库' process_node,count(b.bus_number) process_num,'' line
 				from BMS_PLAN_BUS b 		
-				where b.warehousing_date &lt;=CONCAT(#{curDate},' 17:10:00') 
-				and b.warehousing_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:10:00') 
+				where b.warehousing_date &lt;=CONCAT(#{curDate},' 17:30:00') 
+				and b.warehousing_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:30:00') 
 				and b.factory_id=#{factoryId}
 		union all
 		SELECT 'WIP_WP' process_code,count(b.bus_number) process_num,'' line
@@ -579,32 +583,32 @@
 		b where
 		<if test="workshop=='焊装'">
 		<![CDATA[
-			b.welding_online_date <=CONCAT(#{curDate},' 17:10:00') 
-			and b.welding_online_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:10:00') 
+			b.welding_online_date <=CONCAT(#{curDate},' 17:30:00') 
+			and b.welding_online_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:30:00') 
 		]]>
 		</if>
 		<if test="workshop=='涂装'">
 		<![CDATA[
-			b.painting_online_date <=CONCAT(#{curDate},' 17:10:00') 
-			and b.painting_online_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:10:00')			
+			b.painting_online_date <=CONCAT(#{curDate},' 17:30:00') 
+			and b.painting_online_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:30:00')			
 		]]>
 		</if>
 		<if test="workshop=='底盘'">
 		<![CDATA[
-			b.chassis_online_date <=CONCAT(#{curDate},' 17:10:00') 
-			and b.chassis_online_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:10:00')
+			b.chassis_online_date <=CONCAT(#{curDate},' 17:30:00') 
+			and b.chassis_online_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:30:00')
 		]]>
 		</if>
 		<if test="workshop=='总装'">
 		<![CDATA[
-			b.assembly_online_date <=CONCAT(#{curDate},' 17:10:00') 
-			and b.assembly_online_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:10:00')
+			b.assembly_online_date <=CONCAT(#{curDate},' 17:30:00') 
+			and b.assembly_online_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:30:00')
 		]]>
 		</if>
 		<if test="workshop=='检测线'">
 		<![CDATA[
-			b.testline_online_date <=CONCAT(#{curDate},' 17:10:00') 
-			and b.testline_online_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:10:00')
+			b.testline_online_date <=CONCAT(#{curDate},' 17:30:00') 
+			and b.testline_online_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:30:00')
 		]]>
 		</if>
 
@@ -628,38 +632,38 @@
 		b where
 		<if test="workshop=='焊装'">
 		<![CDATA[
-			b.welding_offline_date <=CONCAT(#{curDate},' 17:10:00') 
-			and b.welding_offline_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:10:00')
+			b.welding_offline_date <=CONCAT(#{curDate},' 17:30:00') 
+			and b.welding_offline_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:30:00')
 		]]>
 		</if>
 		<if test="workshop=='涂装'">
 		<![CDATA[
-			b.painting_offline_date <=CONCAT(#{curDate},' 17:10:00') 
-			and b.painting_offline_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:10:00')
+			b.painting_offline_date <=CONCAT(#{curDate},' 17:30:00') 
+			and b.painting_offline_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:30:00')
 		]]>
 		</if>
 		<if test="workshop=='底盘'">
 		<![CDATA[
-			b.chassis_offline_date <=CONCAT(#{curDate},' 17:10:00') 
-			and b.chassis_offline_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:10:00')
+			b.chassis_offline_date <=CONCAT(#{curDate},' 17:30:00') 
+			and b.chassis_offline_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:30:00')
 		]]>
 		</if>
 		<if test="workshop=='总装'">
 		<![CDATA[
-			b.assembly_offline_date <=CONCAT(#{curDate},' 17:10:00') 
-			and b.assembly_offline_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:10:00')
+			b.assembly_offline_date <=CONCAT(#{curDate},' 17:30:00') 
+			and b.assembly_offline_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:30:00')
 		]]>
 		</if>
 		<if test="workshop=='检测线'">
 		<![CDATA[
-			b.testline_offline_date <=CONCAT(#{curDate},' 17:10:00') 
-			and b.testline_offline_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:10:00')
+			b.testline_offline_date <=CONCAT(#{curDate},' 17:30:00') 
+			and b.testline_offline_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:30:00')
 		]]>
 		</if>
 		<if test="workshop=='玻璃钢'">
 		<![CDATA[
-			b.fiberglass_offline_date <=CONCAT(#{curDate},' 17:10:00') 
-			and b.fiberglass_offline_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:10:00')			
+			b.fiberglass_offline_date <=CONCAT(#{curDate},' 17:30:00') 
+			and b.fiberglass_offline_date >CONCAT(date_add(#{curDate},interval '-1' DAY),' 17:30:00')			
 		]]>
 		</if>
 		<if test="factoryId !=null">

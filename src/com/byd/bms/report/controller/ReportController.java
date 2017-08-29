@@ -1,7 +1,5 @@
 package com.byd.bms.report.controller;
 
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -11,13 +9,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,7 +17,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.byd.bms.report.service.IReportService;
 import com.byd.bms.util.controller.BaseController;
 
@@ -158,10 +149,10 @@ public class ReportController extends BaseController {
 			calendar.setTime(startDate);//把当前时间赋给日历
 			calendar.add(Calendar.DAY_OF_MONTH, -1);  //设置为前一天
 			startDate = calendar.getTime();   //得到前一天的时间
-			start_date = sdf.format(startDate)+" 17:10:00";    //格式化前一天
+			start_date = sdf.format(startDate)+" 17:30:00";    //格式化前一天
 
 			conditionMap2.put("start_date", start_date);
-			conditionMap2.put("end_date", request.getParameter("end_date").concat(" 17:10:00"));
+			conditionMap2.put("end_date", request.getParameter("end_date").concat(" 17:30:00"));
 			
 			Map<String,Object> conditionMap3=new HashMap<String,Object>();
 			Map<String,Object> conditionMap4=new HashMap<String,Object>();

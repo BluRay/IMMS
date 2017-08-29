@@ -15,6 +15,7 @@ public interface ICommonService {
 	List<Map<String,Object>> getFactorySelect(Map<String, Object> condMap);
 	
 	List<Map<String,Object>> getFactorySelectAuth(Map<String, Object> condMap);
+	List<Map<String,Object>> getAllFactorySelect(Map<String, Object> condMap);
 
 	List<Map<String,Object>> getBusTypeSelect();
 

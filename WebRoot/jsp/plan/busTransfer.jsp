@@ -53,7 +53,7 @@
 						</li>
 					</ul>
 					<div class="tab-content">
-						<div id="out" class="tab-pane fade in active">
+						<div id="out" style="overflow-x:auto;overflow-y:auto;" class="tab-pane fade in active">
 							<div class="well">
 								<table>
 									<tr>
@@ -90,7 +90,7 @@
 							<tbody></tbody>
 							</table>
 						</div>
-						<div id="in" class="tab-pane fade in">
+						<div id="in" style="overflow-x:auto;overflow-y:auto;" class="tab-pane fade in">
 							<div class="well">
 								<table>
 									<tr>
@@ -130,7 +130,7 @@
 							</table>
 							
 						</div>
-						<div id="his" class="tab-pane fade in">
+						<div id="his" style="overflow-x:auto;overflow-y:auto;" class="tab-pane fade in">
 							<div class="well">
 								<table>
 									<tr>
@@ -157,16 +157,16 @@
 							<thead>
 							<tr id="0">
 							<th style="text-align:center;" width="30px">车号</th>					
-							<th style="text-align:center;" width="20px">订单</th>					
+							<th style="text-align:center;" width="45px">订单</th>					
 							<th style="text-align:center;" width="20px">车型</th>					
 							<th style="text-align:center;" width="20px">年份</th>					
 							<th style="text-align:center;" width="30px">客户</th>					
 							<th style="text-align:center;" width="30px">配置</th>					
 							<th style="text-align:center;" width="30px">VIN</th>
-							<th style="text-align:center;" width="30px">调出工厂</th>					
-							<th style="text-align:center;" width="30px">调入工厂</th>			
+							<th style="text-align:center;" width="40px">调出工厂</th>					
+							<th style="text-align:center;" width="40px">调入工厂</th>			
 							<th style="text-align:center;" width="30px">调出时间</th>			
-							<th style="text-align:center;" width="25px">调出人</th>			
+							<th style="text-align:center;" width="35px">调出人</th>			
 							<th style="text-align:center;" width="40px">接收时间</th>			
 							<th style="text-align:center;" width="25px">接收人</th>
 							</tr>

@@ -338,7 +338,7 @@
 		0 end as
 		factory_id
 		from BMS_BASE_FACTORY f )
-		AND b.parts_id = '194'
+		AND b.parts_id = '0'
 		<if test="start_date !=null and start_date!=''">
 			<![CDATA[ AND b.prod_date >=  left(#{start_date},10) ]]>
 		</if>

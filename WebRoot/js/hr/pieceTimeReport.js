@@ -322,6 +322,7 @@ function ajaxQuery(){
 			emptyTable:"抱歉，未查询到数据！",
 			loadingRecords:"正在查询，请稍后..." ,
 			infoEmpty:"抱歉，未查询到数据！",
+			zeroRecords:"抱歉，未查询到数据！",
 		/*	paginate: {
 			  first:"首页",
 		      previous: "上一页",

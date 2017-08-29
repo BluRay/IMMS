@@ -1,6 +1,6 @@
 var pageSize=1;
 var table;
-var table_height = $(window).height()-270;
+var table_height = $(window).height()-280;
 $(document).ready(function(){
 	initPage();
 	
@@ -116,14 +116,14 @@ function showConfigModal(id,tech_task_id,factory,time_list,tech_list){
 	});
 	var total_hour = 0;
 	$(".unit_time").each(function(index, value){
-		total_hour += Number($(this).val());
+		total_hour =numAdd(total_hour,Number($(this).val()));
 	});
 	$("#config_totalhour").html(total_hour);
 	
 	$(".unit_time").blur(function(){
 		total_hour = 0;
 		$(".unit_time").each(function(index, value){
-			total_hour += Number($(this).val());
+			total_hour =numAdd(total_hour,Number($(this).val()));
 		});
 		$("#config_totalhour").html(total_hour);
 	});
@@ -201,7 +201,8 @@ function showConfigModal(id,tech_task_id,factory,time_list,tech_list){
 								for (key in jsonobj) {
 									for (key1 in jsonobj1) {
 										if(key==key1){
-											total_hour += parseFloat(jsonobj1[key1]) * parseFloat(jsonobj[key]);
+											total_hour =numAdd(total_hour,parseFloat(jsonobj1[key1]) * parseFloat(jsonobj[key]));
+											//total_hour += parseFloat(jsonobj1[key1]) * parseFloat(jsonobj[key]);
 										}
 									}
 								}

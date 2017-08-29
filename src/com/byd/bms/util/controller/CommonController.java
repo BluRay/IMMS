@@ -14,6 +14,7 @@ import net.sf.json.JSONObject;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -27,6 +28,7 @@ import com.byd.bms.util.service.ICommonService;
 import com.byd.bms.util.service.impl.MailSenderServiceImpl;
 @Controller
 @RequestMapping("/common")
+@Scope("prototype") 
 public class CommonController extends BaseController {
 	@Autowired
 	protected ICommonService commonService;
@@ -87,6 +89,16 @@ public class CommonController extends BaseController {
 		model=new ModelMap();
 		model.put("data", commonService.getFactorySelectAuth(condMap));
 
+		return model;
+	}
+	@RequestMapping("/getAllFactorySelect")
+	@ResponseBody
+	public ModelMap getAllFactorySelect(){
+		String staff_number = request.getSession().getAttribute("staff_number") + "";
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("staff_number", staff_number);
+		model=new ModelMap();
+		model.put("data", commonService.getAllFactorySelect(condMap));
 		return model;
 	}
 	

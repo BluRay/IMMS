@@ -490,7 +490,7 @@ public class PlanServiceImpl implements IPlanService {
 		//String order_no = queryMap.get("order_no").toString();
 		String vin_prefix = queryMap.get("vin_prefix").toString();
 		
-		String factory_prefix = planDao.GetFactoryVinPrefix(Integer.valueOf(queryMap.get("factory_id").toString()));
+		String factory_prefix = planDao.GetFactoryVinPrefix(Integer.valueOf(queryMap.get("vin_factory_id").toString()));
 		String year = queryMap.get("year").toString();
 		String WMI_extension = queryMap.get("WMI_extension").toString();
 		//获取当前年份最大的VIN流水号

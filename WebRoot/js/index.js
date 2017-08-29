@@ -22,14 +22,14 @@ $(document).ready(function() {
 				}
 			});
 			
-			setInterval(function () {			
-				drawFactoryDailyChart();			
+			setInterval(function () {										
 				ajaxGetOrderChartData();		
 				drawFactoryOrderChart();
 				drawOutputChart();				
-			},1000*60*20);
+			},1000*60*60);
 			
-			setInterval(function () {			
+			setInterval(function () {
+				drawFactoryDailyChart();
 				drawFactoryException();			
 			},1000*60*10);
 			
@@ -118,7 +118,7 @@ $(document).ready(function() {
 			type:'get',
 			dataType:'json',
 			cache:false,
-			async:false,
+			//async:false,
 			data:{},
 			success:function(response){
 				var data=response.data;
@@ -232,7 +232,7 @@ function drawOutputChart(){
 		type:'get',
 		dataType:'json',
 		cache:false,
-		async:false,
+		//async:false,
 		data:{
 		},
 		success:function(response){
@@ -354,7 +354,7 @@ function drawOutputChart(){
 			type:'get',
 			dataType:'json',
 			cache:false,
-			async:false,
+			//async:false,
 			data:{
 				factory_id:$("#search_factory").val()
 			},
@@ -425,7 +425,7 @@ function drawOutputChart(){
 			type:'get',
 			dataType:'json',
 			cache:false,
-			async:false,
+			//async:false,
 			data:{
 				factory_id:$("#search_factory").val()
 			},
@@ -478,7 +478,7 @@ function drawOutputChart(){
 			type:'get',
 			dataType:'json',
 			cache:false,
-			async:false,
+			//async:false,
 			data:{
 				factory:$("#search_factory :selected").text()
 			},
@@ -527,7 +527,7 @@ function drawStaffCountChart(){
 		type:'get',
 		dataType:'json',
 		cache:false,
-		async:false,
+		//async:false,
 		data:{
 		},
 		success:function(response){

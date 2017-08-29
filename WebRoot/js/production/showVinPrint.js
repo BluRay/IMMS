@@ -70,7 +70,7 @@ $(document).ready(function(){
 		$(this).parent("td").find(classHide).focus();
 		
 	});
-	$('body').on('keydown', ".vinHide,.leftMotorHide,.rightMotorHide",function(event){
+	$(document).on('keydown', ".vinHide,.leftMotorHide,.rightMotorHide",function(event){
 		
 		var classHide=$(this).attr("class");
 
@@ -79,7 +79,7 @@ $(document).ready(function(){
 		if (event.keyCode == "13") {
 			if(className==".vin"){
 				if($(this).val().trim().length==17){
-					$(this).parent("td").find(className).css("border","0px").val($(this).val());	
+					$(this).parent("td").find(className).css("border","0px").val($(this).val().toUpperCase());	
 				}else{
 					$(this).parent("td").find(className).css("border","0px").val("");
 					alert("请扫描VIN编码！");	
@@ -87,7 +87,7 @@ $(document).ready(function(){
 				
 			}else{
 				if($(this).val().trim().length>9){
-					$(this).parent("td").find(className).css("border","0px").val($(this).val().substr(-9));	
+					$(this).parent("td").find(className).css("border","0px").val($(this).val().substr(-9).toUpperCase());	
 				}else{
 					$(this).parent("td").find(className).css("border","0px").val("");
 					alert("请扫描电机号！");	
@@ -124,7 +124,6 @@ $(document).ready(function(){
 	});
 	//vin输入框change事件
 	$('body').on('change',".vin",function(e){
-		alert("change");
 		var vin=$(e.target).val();
 		var busNumber=$(e.target).parent("td").parent("tr").find(".busNumber").val();
 		var leftMotorNumber=$(e.target).parent("td").parent("tr").find(".leftMotor").val();
@@ -148,46 +147,65 @@ $(document).ready(function(){
 	
 	$("#btnSave").click(function(){
 		var trs=$("#tableData tbody").find("tr");
-		var msg="确认保存？";
-		var saveFlag = true;
-		$.each(trs,function(i,tr){
-			var busNumber=$(tr).find(".busNumber").text();
-			var vin=$(tr).find(".vin").val();
-			var leftMotorNumber=$(tr).find(".leftMotor").val();
-			var rightMotorNumber=$(tr).find(".rightMotor").val();
-			if(leftMotorNumber.trim().length==0 && rightMotorNumber.trim().length==0){
-				alert("请至少输入一个左电机或者右电机，再保存！");
-				saveFlag = false;
-				
-			}else{
-				if(leftMotorNumber.trim().length==0){
-					leftMotorNumber = '/';
-				}
-				if(rightMotorNumber.trim().length==0){
-					rightMotorNumber = '/';
-				}
-				if(vin.trim().length==0/*||leftMotorNumber.trim().length==0||rightMotorNumber.trim().length==0*/){
-					msg="VIN码未填写的无法保存,是否确认保存？"
-				}else{
-					var obj={};
-					obj.bus_number=busNumber;
-					obj.vin=vin;
-					obj.left_motor_number=leftMotorNumber;
-					obj.right_motor_number=rightMotorNumber;
-					buslist.push(obj);
+		var ids = '';
+		$(":checkbox").each(function(){
+			if($(this).prop("checked")){
+				if($(this).attr('fid')){
+					ids += $(this).attr('fid').split('_')[1] + ',';
 				}
 			}
 		});
+		if(ids===''){
+			alert("请至少勾选一条记录");
+			return false;
+		}
+		var msg="确认保存？";
+		var saveFlag = true;
+		var addbuslist=[];
+		$.each(trs,function(i,tr){
+			if($(tr).find(".check").prop("checked")){
+				var busNumber=$(tr).find(".busNumber").text();
+				var vin=$(tr).find(".vin").val();
+				var leftMotorNumber=$(tr).find(".leftMotor").val();
+				var rightMotorNumber=$(tr).find(".rightMotor").val();
+				if(leftMotorNumber.trim().length==0 && rightMotorNumber.trim().length==0){
+					alert("请至少输入一个左电机或者右电机，再保存！");
+					saveFlag = false;
+					return false;
+				}else{
+					if(leftMotorNumber.trim().length==0){
+						leftMotorNumber = '/';
+					}
+					if(rightMotorNumber.trim().length==0){
+						rightMotorNumber = '/';
+					}
+					if(vin.trim().length==0/*||leftMotorNumber.trim().length==0||rightMotorNumber.trim().length==0*/){
+						msg="VIN码未填写的无法保存,是否确认保存？"
+					}else{
+						var obj={};
+						obj.bus_number=busNumber;
+						obj.vin=vin;
+						obj.left_motor_number=leftMotorNumber;
+						obj.right_motor_number=rightMotorNumber;
+						addbuslist.push(obj);
+					}
+				}
+			}
+		});
+		console.log("addbuslist",addbuslist);
 		if(saveFlag){
 			if(confirm(msg)){
-				if(buslist.length>0){
+				if(addbuslist.length>0){
 					$.ajax({
 						url:"saveMotorNumber",
 						type: "post",
 						dataType:"json",
-						data:{"conditions":JSON.stringify(buslist)},
+						data:{"conditions":JSON.stringify(addbuslist)},
 						success:function(response){
-							alert(response.message);					
+							alert(response.message);	
+							if(response.success){
+								ajaxQuery();
+							}					
 						}		
 					});
 				}else{
@@ -239,10 +257,13 @@ function ajaxQuery(){
             });
 		},
 		columns: [
+			{"title":"<input type='checkbox' id='selectAll' onclick='selectAll()'/>","class":"center","data":"bus_number","render": function ( data, type, row ) {
+			    return "<input id='id' type='hidden' /><input class='check' type='checkbox' fid='cb_"+data+"'>";
+			},"defaultContent": ""},
             {"title":"订单描述","class":"center orderCodeDesc","data":"order_desc","defaultContent": ""},
             {"title":"车号","class":"center busNumber","data":"bus_number","defaultContent": ""},
             {"title":"VIN","class":"center","data":"vin","defaultContent": "","render":function(data,type,row){
-            	return data==undefined? "<input style='border:0;width:98%;text-align:center;background-color:white;' class='vin' " +
+            	return (data==undefined || data==null || data=='')? "<input style='border:0;width:98%;text-align:center;background-color:white;' class='vin' " +
 						" value=''/><input class='vinHide' style='width:0px;position:absolute;margin-top:-2000px' />": 
 							"<input style='border:0;width:98%;text-align:center;background-color:white;' class='vin' " +
 						" value='"+data+"' readonly='true'/>"}
@@ -250,12 +271,18 @@ function ajaxQuery(){
 			},
 			{"title":"左电机号","class":"center","data":"left_motor_number","defaultContent": "","render":function(data,type,row,meta){ // margin-top:-2000px
 				return "<input id=leftMotor_"+(meta.row + meta.settings._iDisplayStart + 1)+" style='border:0;width:98%;text-align:center;background-color:white;' class='leftMotor' " +
-						" value='"+(data!=undefined ? data : '')+"'/><input class='leftMotorHide' style='width:0px;position:absolute; margin-top:-2000px' />";
+						" value='"+((data!=undefined && data!=null && data!='') ? data : '')+"'/><input class='leftMotorHide' style='width:0px;position:absolute; margin-top:-2000px' />";
 			}
 			},
-			{"title":"右电机号","class":"center","data":"left_motor_number","defaultContent": "","render":function(data,type,row,meta){
-				return "<input id=rightMotor_"+(meta.row + meta.settings._iDisplayStart + 1)+" style='border:0;width:98%;text-align:center;background-color:white;' class='rightMotor' " +
-						" value='"+(data!=undefined ? data : '')+"'/><input class='rightMotorHide' style='width:0px;position:absolute;margin-top:-2000px />";
+			{"title":"右电机号","class":"center","data":"right_motor_number","defaultContent": "","render":function(data,type,row,meta){
+				//alert(data);
+				var right_motor_number=((data!=undefined && data!=null && data!='') ? data : '');
+				
+				
+				var str= "<input id=rightMotor_"+(meta.row + meta.settings._iDisplayStart + 1)+" style='border:0;width:98%;text-align:center;background-color:white;' class='rightMotor' " +
+						" value='"+right_motor_number+"'/><input type='text' class='rightMotorHide' style='width:0px;position:absolute;margin-top:-2000px' />";
+				//console.log("strstr = ",str);
+				return str;
 			}
 			}/*,
             {"title":"打印状态","class":"center","data":"print_sign","defaultContent": ""},
@@ -336,4 +363,11 @@ function isContain(vin,vinList){
 	})
 	return flag;
 }
-
+//复选框全选或反选
+function selectAll() {
+    if ($("#selectAll").prop("checked")) {
+        $(":checkbox").prop("checked", true);
+    } else {
+        $(":checkbox").prop("checked", false);
+    }
+}

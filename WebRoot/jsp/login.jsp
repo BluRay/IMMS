@@ -56,7 +56,7 @@
 								<div id="login-box" class="login-box visible widget-box no-border">
 									<div class="widget-body">
 										<div class="widget-main">
-											<h4 class="header blue lighter bigger"><i class="ace-icon fa fa-coffee green"></i>请登录</h4>
+											<h4 class="header blue bigger"><i class="ace-icon fa fa-users green"></i>请登录</h4>
 											<div class="space-6"></div>
 											<form id="login" action="" method="post" >
 												<fieldset>
@@ -111,11 +111,13 @@
 										</div><!-- /.widget-main -->
 
 										<div class="toolbar clearfix">
-											<div>
+											<div style="width:100%;height:25px">
 												<a href="#" data-target="#forgot-box" class="forgot-password-link">
 													<i class="ace-icon fa fa-arrow-left"></i>
 													忘记密码
-												</a>
+												</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+												<a href="../MozillaFirefox.rar" class="forgot-password-link">FireFox浏览器</a>
+												<a href="../BMS系统操作手册20170822.pptx" class="forgot-password-link">操作手册</a>
 											</div>
 											<div>
 												<!-- <a href="#" data-target="#signup-box" class="user-signup-link">我要注册<i class="ace-icon fa fa-arrow-right"></i>

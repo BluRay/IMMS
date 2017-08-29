@@ -9,8 +9,8 @@ $(document).ready(function () {
 		getFactorySelect("plan/busTransfer",'',"#transfer_out_factory",null,'id');
 		getFactorySelect("plan/busTransfer",'',"#transfer_in_factory",null,'id');
 		getFactorySelect("plan/busTransfer",'',"#transfer_in_factory2",null,'id');
-		getFactorySelect("plan/busTransfer",'',"#transfer_his_out_factory","全部",'id');
-		getFactorySelect("plan/busTransfer",'',"#transfer_his_in_factory","全部",'id');
+		getFactorySelect("plan/busTransfer",'',"#transfer_his_out_factory",null,'id');
+		getFactorySelect("plan/busTransfer",'',"#transfer_his_in_factory",null,'id');
 		getOrderNoSelect("#transfer_his_orderno","#orderId");
 		$("#btnTransferOut").attr("disabled","disabled"); 
 		$("#btnTransferIn").attr("disabled","disabled");

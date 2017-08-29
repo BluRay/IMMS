@@ -6,7 +6,9 @@ $(document).ready(function () {
 		$("#divBulkAdd").hide();
 		getOrderNoSelect("#search_order_no","#orderId");
 		getFactorySelect("plan/generateVin",'',"#search_factory","全部",'id');
-		getFactorySelect("plan/generateVin",'',"#vin_factory",null,'id');
+		//getFactorySelect("plan/generateVin",'',"#vin_factory",null,'id');
+		//生成工厂取全部
+		getAllFactorySelect();
 		$("#btnPrint").attr("disabled","disabled"); 
 	};
 
@@ -16,6 +18,21 @@ $(document).ready(function () {
 			return false;
 		}
 	})
+	
+	function getAllFactorySelect(){
+		$.ajax({
+			url : "/BMS/common/getAllFactorySelect",
+			dataType : "json",
+			data : {},
+			async : false,
+			error : function(response) {
+				alert(response.message)
+			},
+			success : function(response) {
+				getSelects(response.data,"","#vin_factory",null, "id");	
+			}
+		});
+	}
 	
 	$("#btnQuery").click (function () {
 		$("#divBulkAdd").hide();
@@ -149,7 +166,8 @@ $(document).ready(function () {
 			url : "getGenerateVin",
 			dataType : "json",
 			data : {
-				"factory_id":$('#vin_factory').val(),
+				"factory_id":$('#search_factory').val(),
+	    		"vin_factory_id": $('#vin_factory').val(),
 				"order_no":$('#new_order_no').val(),
 				"vinCount":$('#new_vinCount').val(),
 				"year":$('#new_year').val(),
