@@ -335,7 +335,8 @@
 			});
 			$('#password').bind('keydown', function(event) {
 				if (event.keyCode == "13") {
-					document.getElementById("login").submit()
+					//document.getElementById("login").submit()
+					doSubmit();
 					return false;
 				}
 			});

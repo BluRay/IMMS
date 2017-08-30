@@ -167,7 +167,6 @@ public class PlanServiceImpl implements IPlanService {
 	}
 
 	@Override
-	@Transactional
 	public int reVisionPlan(String factory_id, String order_no, String revision_str, String plan_month,String userId) {
 		List<PlanMasterPlan> datalist=new ArrayList<PlanMasterPlan>();
 		//复制指定工厂ID指定订单编号 最新版本 最大flag 的计划，保存flag+1

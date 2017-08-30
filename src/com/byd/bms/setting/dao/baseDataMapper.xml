@@ -472,7 +472,7 @@
 		  left join BMS_BASE_USER u ON t.editor_id=u.id
 		   where 1=1 
 		<if test="busTypeCode !=null and busTypeCode !=''">
-			and bus_type_code=#{busTypeCode}
+			and bus_type_code LIKE CONCAT('%',#{busTypeCode},'%')
 		</if>
 		<if test="internal_name !=null and internal_name !=''">
 			and internal_name=#{internal_name}
@@ -503,7 +503,7 @@
 	<select id="getBusTypeTotalCount" parameterType="Map" resultType="int">
 		select count(id) from BMS_BASE_BUS_TYPE where 1=1 
 		<if test="busTypeCode !=null and busTypeCode !=''">
-			and bus_type_code=#{busTypeCode}
+			and bus_type_code  LIKE CONCAT('%',#{busTypeCode},'%')
 		</if>
 		<if test="internal_name !=null and internal_name !=''">
 			and internal_name=#{internal_name}

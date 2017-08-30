@@ -95,4 +95,8 @@
     <error-code>404</error-code>
     <location>/jsp/404.jsp</location>
   </error-page>
+  <!-- 配置Session失效时间 -->  
+	<session-config>  
+		<session-timeout>60</session-timeout>  
+	</session-config>
 </web-app>

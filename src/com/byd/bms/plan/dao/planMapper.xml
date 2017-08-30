@@ -60,7 +60,7 @@
 		SELECT
 		m.D1+m.D2+m.D3+m.D4+m.D5+m.D6+m.D7+m.D8+m.D9+m.D10+m.D11+m.D12+m.D13+m.D14+m.D15+m.D16+m.D17+m.D18+m.D19+m.D20+
 		m.D21+m.D22+m.D23+m.D24+m.D25+m.D26+m.D27+m.D28+m.D29+m.D30+m.D31 AS
-		sumQty, k.key_name AS plan_code_keyname, m.*,CONCAT(o.order_no,'  ',o.order_name,t.bus_type_code,'  ',o.order_qty,'台') as order_no,f.name AS factory_name
+		sumQty, k.key_name AS plan_code_keyname, m.*,o.order_no AS order_no,f.name AS factory_name
 		FROM BMS_PLAN_MASTER_PLAN m
 		LEFT JOIN BMS_OR_ORDER o ON m.order_id = o.id
 		LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id=t.id
