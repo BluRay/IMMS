@@ -62,7 +62,9 @@ $(document).ready(function(){
 
 
 function ajaxQuery() {
-	
+	$("#btnQuery").prop("disabled","disabled");
+	$("#btnQuery").val("查询中...");
+	$('#tableData').empty();
 	$("#tableData").dataTable({
 		serverSide: true,paiging:true,ordering:false,searching: false,bAutoWidth:false,
 		destroy: true,sScrollY: table_height,scrollX: "100%",orderMulti:false,
@@ -107,6 +109,8 @@ function ajaxQuery() {
                     //调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
                     //此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
                     callback(returnData);
+                    $("#btnQuery").removeAttr("disabled");
+                	$("#btnQuery").val("查询");
                 }
             });
 		},

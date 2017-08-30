@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.byd.bms.hr.service.IHrBaseDataService;
+import com.byd.bms.setting.model.BmsBaseBusType;
+import com.byd.bms.setting.service.IBaseDataService;
 import com.byd.bms.util.ExcelModel;
 import com.byd.bms.util.ExcelTool;
 import com.byd.bms.util.controller.BaseController;
@@ -43,6 +46,8 @@ public class HrBaseDataController extends BaseController {
 	static Logger logger = Logger.getLogger("HR");
 	@Autowired
 	protected IHrBaseDataService hrBaseDataService;
+	@Autowired
+	protected IBaseDataService baseDataService;
     private static List orgList;
 	
 	public List getOrgList() {
@@ -576,6 +581,7 @@ public class HrBaseDataController extends BaseController {
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String curTime = df.format(new Date());
 		String editor_id = request.getSession().getAttribute("user_id") + "";
+		Map<String,Object> queryMap=new HashMap<String,Object>();
 		try{
 		ExcelModel excelModel = new ExcelModel();
 		excelModel.setReadSheets(1);
@@ -585,8 +591,10 @@ public class HrBaseDataController extends BaseController {
 		dataType.put("1", ExcelModel.CELL_TYPE_CANNULL);
 		dataType.put("2", ExcelModel.CELL_TYPE_CANNULL);
 		dataType.put("3", ExcelModel.CELL_TYPE_CANNULL);
-		dataType.put("4", ExcelModel.CELL_TYPE_NUMERIC);
+		dataType.put("4", ExcelModel.CELL_TYPE_CANNULL);
 		dataType.put("5", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("6", ExcelModel.CELL_TYPE_NUMERIC);
+		dataType.put("7", ExcelModel.CELL_TYPE_CANNULL);
 		excelModel.setDataType(dataType);
 		excelModel.setPath(fileName);
 		File tempfile=new File(fileName);
@@ -611,8 +619,10 @@ public class HrBaseDataController extends BaseController {
 			String factory_name=data[0].toString().trim();
 			String workshop_name=data[1]!=null ? data[1].toString().trim() : "";
 			String workgroup_name=data[2]!=null ? data[2].toString().trim() : "";
+			String bus_type=data[3]!=null ? data[3].toString().trim() : "";
 			
-			String job_name=data[3]!=null ? data[3].toString().trim() : "";
+			String capacity=data[4]!=null ? data[4].toString().trim() : "";
+			String job_name=data[5]!=null ? data[5].toString().trim() : "";
 			infomap.put("factory", factory_name);
 			infomap.put("workshop", workshop_name);
 			infomap.put("workgroup", workgroup_name);
@@ -635,12 +645,21 @@ public class HrBaseDataController extends BaseController {
 					break;
 				}
 			}
-			String type=data[5]!=null ? data[5].toString().trim() : "";
+			String type=data[7]!=null ? data[7].toString().trim() : "";
 			if("计时".equals(type)){
 				infomap.put("type", "0");
 			}
 			if("计件".equals(type)){
 				infomap.put("type", "1");
+				if(!bus_type.equals("")){
+					queryMap.put("internal_name", bus_type);
+					Map map=baseDataService.getBusTypeList(queryMap);
+					if(Integer.parseInt(map.get("recordsTotal").toString())==0){
+						result += "第"+line+"行车型没有维护！";
+					}
+				}else{
+					result += "第"+line+"行计件类型必须录入车型！";
+				}
 			}
 			if(null == orgId || "".equals(orgId.trim())){
 				//组织结构填写有误
@@ -655,10 +674,11 @@ public class HrBaseDataController extends BaseController {
 			infomap.put("factory", factory_name);
 			infomap.put("workshop", workshop_name);
 			infomap.put("workgroup", workgroup_name);
-			infomap.put("job_name", data[3] == null ? null : data[3].toString().trim());
-			infomap.put("standard_humans", data[4] == null ? null : data[4].toString().trim());
-			//infomap.put("type", type);
-			infomap.put("editor_id", editor_id);
+			infomap.put("job_name", data[5] == null ? null : data[5].toString().trim());
+			infomap.put("standard_humans", data[6] == null ? null : data[6].toString().trim());
+			infomap.put("bus_type", bus_type);
+			infomap.put("capacity", capacity);
+            infomap.put("editor_id", editor_id);
 			infomap.put("edit_date", curTime);
 			infomap.put("deleted", "0");
 			infomap.put("line", line);
@@ -733,6 +753,7 @@ public class HrBaseDataController extends BaseController {
 		queryMap.put("factory", request.getParameter("factory"));
 		queryMap.put("workshop", request.getParameter("workshop"));
 		queryMap.put("workgroup", request.getParameter("workgroup"));
+		queryMap.put("bus_type", request.getParameter("bus_type"));
 		List result = hrBaseDataService.getStandardHumanData(queryMap);
 		Map<String, Object> map = new HashMap<String, Object>();  
         map.put( "data",result);

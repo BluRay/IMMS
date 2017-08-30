@@ -288,7 +288,7 @@ function drawChart(container, type, title, subtitle, tooltip, categories,
 							plotBackgroundColor : null,// "#6DBFBB"主图表区背景颜色
 							plotBorderColor : "#d0e0ec",// 主图表边框颜色
 							plotBorderWidth : 1,// 主图表边框宽度
-							shadow : true,// 是否设置阴影
+							//shadow : true,// 是否设置阴影
 							zoomType : 'xy'// 拖动鼠标放大图表的方向
 						},
 						// 图表标题

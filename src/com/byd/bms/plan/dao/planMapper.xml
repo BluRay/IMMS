@@ -833,7 +833,7 @@
 		<if test="end_date !=null and end_date !=''">
 			and f1.prod_date &lt;= #{end_date}
 		</if>	
-		where f.factory_id=#{factory_id}  and p1.key_name='喷砂' group by f.order_id ) tmp
+		where f.factory_id=#{factory_id}  and p1.key_name='前段车架总成' group by f.order_id ) tmp
 		on tmp.order_id=fo.order_id	 
 		where fo.factory_id=#{factory_id} and fo.order_id is not null and fo.status IN ('0','1')
 		<if test="order_no !=null and order_no !=''">
@@ -1139,7 +1139,7 @@
 		<if test="month !=''">
 			AND prod_date LIKE CONCAT('%',#{month},'%') 
 		</if>
-		  AND  parts_id = '0' 
+		  AND parts_id = #{parts_id}
 	</select>
 	<select id="getPlanSearchTotalRealZzjQty" parameterType="Map" resultType="int">
 		SELECT IFNULL(SUM(quantity),'0') AS real_qty FROM BMS_PD_WORKSHOP_SUPPLY 

@@ -91,6 +91,7 @@ public class HrBaseDataServiceImpl implements IHrBaseDataService {
 			conMap.put("factory", map.get("factory"));
 			conMap.put("workshop", map.get("workshop"));
 			conMap.put("workgroup", map.get("workgroup"));
+			conMap.put("bus_type", map.get("bus_type"));
 			List<Map<String,Object>> plist=hrBaseDataDao.getStandardHumanData(conMap);
 			if(plist.size()>0){
 				Map pMap=plist.get(0);

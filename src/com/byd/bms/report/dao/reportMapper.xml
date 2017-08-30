@@ -71,23 +71,31 @@
 	</select>
 	<select id="queryOnlineAndOfflineData" parameterType="Map" resultType="Map">  
 		select id,factory_name,
-         max(case key_name when '焊装上线' then plan_qty else 0 end) welding_online,<!-- 焊装上线,  -->
-         max(case key_name when '焊装下线' then plan_qty else 0 end) welding_offline,<!-- 焊装下线,  -->
-         max(case key_name when '底盘上线' then plan_qty else 0 end) chassis_online,<!-- 底盘上线,  -->
-         max(case key_name when '底盘下线' then plan_qty else 0 end) chassis_offline<!-- 底盘下线  -->
+         sum(case key_name when '焊装上线' then plan_qty else 0 end) welding_online,
+         (
+           select count(id) from BMS_PLAN_BUS b1 where 
+           b1.factory_id=c.id and b1.welding_online_date>CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:30:00') AND 
+          b1.welding_online_date&lt;=CONCAT(#{end_date},' 17:30:00')) welding_offline,
+         sum(case key_name when '底盘上线' then plan_qty else 0 end) chassis_online,
+         (select count(id) from BMS_PLAN_BUS b2 where 
+         b2.factory_id=c.id and b2.chassis_online_date>CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:30:00') AND 
+          b2.chassis_online_date&lt;=CONCAT(#{end_date},' 17:30:00')) chassis_offline
 		from (
-			select a.id,a.factory_name,a.key_name,sum(plan_qty) plan_qty 
+			select a.id,a.factory_name,a.key_name,sum(plan_qty) plan_qty,p.plan_date
 			  from (
 				 (
 					 select f.id,f.factory_name,k.key_name,k.value from BMS_BASE_FACTORY f,BMS_BASE_KEY k 
-					 where key_code = 'PLAN_CODE' and k.value in (4,5,8,9) and capacity>0
-				 ) a
-				 LEFT JOIN BMS_PLAN_PRODUCTION_PLAN p on a.`value`=p.plan_code_value and a.id=p.factory_id
-			     and p.plan_date=#{plan_date}
-			  )
-			  GROUP BY factory_name,key_name 
-		) c GROUP BY factory_name order by id;
-
+						 where key_code = 'PLAN_CODE' and k.value in (4,8) and capacity>0
+					 ) a
+					 LEFT JOIN BMS_PLAN_PRODUCTION_PLAN p on a.`value`=p.plan_code_value and a.id=p.factory_id and 
+					  plan_date&gt;=#{start_date} and plan_date&lt;=#{end_date}
+         )
+			  GROUP BY id,factory_name,key_name 
+		) c where 1=1 
+		<if test="factory!=null and factory!='全部'">
+		   and factory_name=#{factory}
+		</if>
+		 GROUP BY factory_name order by id
 		
 	</select>
 	
@@ -325,7 +333,7 @@
 				AND p.factory_id in (
 				  		select case when LOCATE(p.factory_id,#{factory_id})>0 then p.factory_id else 0 end as factory_id
 							from BMS_BASE_FACTORY f )
-				AND p.plan_date >=	left(#{start_date},10) AND p.plan_date <= left(#{end_date},10)
+				AND p.plan_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:30:00') AND p.plan_date <= CONCAT(#{end_date},' 17:30:00')
 			GROUP BY p.plan_code_value ORDER BY p.plan_code_value
 		]]>
 	</select>
@@ -342,10 +350,10 @@
 		from BMS_BASE_FACTORY f )
 		AND b.parts_id = '0'
 		<if test="start_date !=null and start_date!=''">
-			<![CDATA[ AND b.prod_date >=  left(#{start_date},10) ]]>
+			<![CDATA[ AND b.prod_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:30:00')  ]]>
 		</if>
 		<if test="end_date !=null and end_date!=''">
-			<![CDATA[ AND b.prod_date <=  left(#{end_date},10) ]]>
+			<![CDATA[ AND b.prod_date <= CONCAT(#{end_date},' 17:30:00') ]]>
 		</if>
 	</select>
 	<select id="getPlanZzjRealCount" parameterType="Map" resultType="int">
@@ -353,8 +361,8 @@
 		WHERE factory_id = #{factory_id} 
 		AND supply_workshop = '自制件'
 		AND receive_workshop = '部件' 
-		AND supply_date >= left(#{start_date},10) 
-		<![CDATA[ AND supply_date <= left(#{end_date},10) ]]>
+		AND supply_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:30:00') 
+		<![CDATA[ AND supply_date <= CONCAT(#{end_date},' 17:30:00') ]]>
 	</select>
 	<!-- 获取四大车间实际完成数量 -->
 	<select id="getPlanSearchRealCount" parameterType="List"
@@ -370,10 +378,10 @@
 			as factory_id
 			from BMS_BASE_FACTORY f )
 			<if test="item.start_date !=null and item.start_date!=''">
-				<![CDATA[ AND ${item.workshop} > left(#{item.start_date},10) ]]>
+				<![CDATA[ AND ${item.workshop} >CONCAT(date_add(#{item.start_date},interval '-1' DAY),' 17:30:00') ]]>
 			</if>
 			<if test="item.end_date !=null and item.end_date!=''">
-				<![CDATA[ AND ${item.workshop} <= left(#{item.end_date},10) ]]>
+				<![CDATA[ AND ${item.workshop} <= CONCAT(#{item.end_date},' 17:30:00') ]]>
 			</if>
 		</foreach>
 	</select>

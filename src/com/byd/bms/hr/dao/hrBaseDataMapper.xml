@@ -130,9 +130,9 @@
 	<insert id="addStandardHumanData" useGeneratedKeys="true" keyProperty="id">
 		<![CDATA[
 
-			insert into BMS_HR_BASE_STANDARD_HUMAN(type,org_id,factory,workshop,workgroup,
+			insert into BMS_HR_BASE_STANDARD_HUMAN(bus_type,capacity,type,org_id,factory,workshop,workgroup,
 			job_id,job_no,job_name,standard_humans,deleted,editor_id,edit_date) 
-			values(#{type},#{org_id},#{factory},#{workshop},#{workgroup},
+			values(#{bus_type},#{capacity},#{type},#{org_id},#{factory},#{workshop},#{workgroup},
 			#{job_id},#{job_no},#{job_name},#{standard_humans},#{deleted},#{editor_id},#{edit_date})
 
 		]]>
@@ -151,10 +151,10 @@
 	</update>
 	<!-- 获得标准人力 -->
 	<select id="getStandardHumanData" parameterType="Map" resultType="Map">
-			SELECT h.id,h.job_id,h.job_no,
+			SELECT h.id,h.job_id,h.job_no,h.bus_type,h.capacity,
               h.job_name,h.standard_humans,h.factory,h.workshop,h.workgroup,
               (SELECT count(1) FROM BMS_HR_STAFF s WHERE 1=1 
-						AND s.job = h.job_name 
+						AND s.job = h.job_name and s.status='在职'
 						AND ifnull(s.plant_org,'')=ifnull(h.factory,'') 
 						AND ifnull(s.workshop_org,'')=ifnull(h.workshop,'') 
 						AND ifnull(s.workgroup_org,'')=ifnull(h.workgroup,'') 
@@ -175,6 +175,12 @@
               <if test="workgroup!=null and workgroup!=''">
               and h.workgroup=#{workgroup}
               </if>
+              <if test="bus_type!=null and bus_type!='全部'">
+              and h.bus_type=#{bus_type}
+              </if>
+<!--               <if test="capacity!=null and capacity!=''"> -->
+<!--               and h.capacity=#{capacity} and ifnull(s.workgroup_org,'')='' -->
+<!--               </if> -->
                <if test="job_id!=null and job_id!=''">
 
               and h.job_id=#{job_id}

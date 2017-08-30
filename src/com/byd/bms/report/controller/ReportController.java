@@ -107,8 +107,11 @@ public class ReportController extends BaseController {
 	public ModelMap getOnlineAndOfflineData(){
 		model.clear();
 		Map<String,Object> condMap=new HashMap<String,Object>();
-		String plan_date=request.getParameter("reportDate");
-		condMap.put("plan_date", plan_date);
+		String start_date=request.getParameter("start_date");
+		String end_date=request.getParameter("end_date");
+		condMap.put("factory", request.getParameter("factory"));
+		condMap.put("start_date", start_date);
+		condMap.put("end_date", end_date);
 		reportService.getOnlineAndOfflineData(condMap, model);
 		
 		return model;
@@ -143,16 +146,16 @@ public class ReportController extends BaseController {
 			conditionMap2.put("factory_id", request.getParameter("factory_id"));
 			
 			String start_date = request.getParameter("start_date");
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			Date startDate = sdf.parse(start_date);
-			Calendar calendar = Calendar.getInstance(); //得到日历
-			calendar.setTime(startDate);//把当前时间赋给日历
-			calendar.add(Calendar.DAY_OF_MONTH, -1);  //设置为前一天
-			startDate = calendar.getTime();   //得到前一天的时间
-			start_date = sdf.format(startDate)+" 17:30:00";    //格式化前一天
+//			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//			Date startDate = sdf.parse(start_date);
+//			Calendar calendar = Calendar.getInstance(); //得到日历
+//			calendar.setTime(startDate);//把当前时间赋给日历
+//			calendar.add(Calendar.DAY_OF_MONTH, -1);  //设置为前一天
+//			startDate = calendar.getTime();   //得到前一天的时间
+//			start_date = sdf.format(startDate)+" 17:30:00";    //格式化前一天
 
 			conditionMap2.put("start_date", start_date);
-			conditionMap2.put("end_date", request.getParameter("end_date").concat(" 17:30:00"));
+			conditionMap2.put("end_date", request.getParameter("end_date"));
 			
 			Map<String,Object> conditionMap3=new HashMap<String,Object>();
 			Map<String,Object> conditionMap4=new HashMap<String,Object>();
@@ -165,8 +168,8 @@ public class ReportController extends BaseController {
 			
 			if (resultMap.get("key_name").equals("部件下线")){
 				conditionMap3.put("factory_id", request.getParameter("factory_id"));
-				conditionMap3.put("start_date", request.getParameter("start_date").replaceAll("-", ""));
-				conditionMap3.put("end_date", request.getParameter("end_date").replaceAll("-", ""));
+				conditionMap3.put("start_date", request.getParameter("start_date"));
+				conditionMap3.put("end_date", request.getParameter("end_date"));
 				conditionMap3.put("workshop", "offline_real_qty");
 		
 				int realNum = reportService.getPlanPartsRealCount(conditionMap3);

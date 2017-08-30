@@ -5,14 +5,14 @@ var exceptionInfo;
 var factory_id;
 var factory_name;
 var workshop;
-var welcome="欢迎长沙市政府各位领导来长沙工厂指导工作！";
+var welcome="欢迎各位领导来长沙工厂指导工作！";
 
 $(document).ready(function() {
 	factory_id=getQueryString("factory")||"";
 	factory_name=getQueryString("factory_name")||"";
 	workshop=getQueryString("workshop")||"";
 	$("#board_title").html(factory_name+"欢迎您");
-	$("#welcome").html(welcome)
+	$("#welcome").html(welcome.replace("长沙工厂",factory_name))
 	showClock();
 	ajaxQueryBoardInfo();
 	ajaxQueryExceptionInfo();

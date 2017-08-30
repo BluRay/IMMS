@@ -26,7 +26,7 @@
 					<ul class="breadcrumb">
 						<li><i class="ace-icon fa fa-home home-icon"></i><a href="/BMS/index">首页</a></li>
 						<li><a href="#">报表</a></li>
-						<li class="active">焊装、底盘上下线完成情况</li>
+						<li class="active">工厂焊装、底盘上线</li>
 					</ul><!-- /.breadcrumb -->
 
 					<!-- #section:basics/content.searchbox -->
@@ -46,16 +46,31 @@
 					<form id="search_form" class="well form-search">
 						<table style="line-height:1.7">
 						<tr>
-							<td style="text-align:right" >&nbsp;生产日期：</td>
-							<td>
-							<input id="search_date" placeholder="生产日期..." 
-							style="height: 30px;width:100px" type="text" 
-							  onClick="WdatePicker({el:'search_date',dateFmt:'yyyy-MM-dd'});"></td>
+<!-- 							<td style="text-align:right" >&nbsp;生产日期：</td> -->
+<!-- 							<td> -->
+<!-- 							<input id="search_date" placeholder="生产日期..."  -->
+<!-- 							style="height: 30px;width:100px" type="text"  -->
+<!-- 							  onClick="WdatePicker({el:'search_date',dateFmt:'yyyy-MM-dd'});"></td> -->
 
-							<td>
-							<input class="btn btn-sm btn-primary" id="btnQuery" value="查询" style="margin-left: 10px;top:1px;" type="button">							
-							</td>
-						</tr>						
+<!-- 							<td> -->
+<!-- 							<input class="btn btn-sm btn-primary" id="btnQuery" value="查询" style="margin-left: 10px;top:1px;" type="button">							 -->
+<!-- 							</td> -->
+                                <td>工厂：</td>
+								<td><select id="search_factory" class="input-small" style="height: 30px;width:100px"></select></td>
+								<td>&nbsp;生产日期：</td>
+								<td><input id="start_date" placeholder="开始时间..." style="height: 30px;width:125px" type="text" onClick="WdatePicker({el:'start_date',dateFmt:'yyyy-MM-dd'});"> - 
+								<input id="end_date" placeholder="结束时间..." style="height: 30px;width:125px" type="text" onClick="WdatePicker({el:'end_date',dateFmt:'yyyy-MM-dd'});"></td>
+								<td>&nbsp;查询范围：</td>
+								<td>
+									<select id="search_index" class="input-small" style="height: 30px;width:60px">
+										<option value="0">今天</option>
+										<option value="1">本周</option>
+										<option value="2">本月</option>
+									</select>
+								</td>
+								<td><input id="btnQuery" type="button" class="btn btn-sm btn-success" value="查询" style="margin-left: 2px;"></td>
+								<td></td>
+						    </tr>						
 						</table>
 					</form>	
 					
@@ -83,7 +98,6 @@
 	<script src="../assets/js/jquery-ui.min.js"></script>
 	<script src="../assets/js/jquery.dataTables.min.js"></script>
 	<script src="../assets/js/jquery.dataTables.bootstrap.js"></script>
-	<script src="../assets/js/dataTables.fixedColumns.min.js"></script>
 	<script src="../assets/js/dataTables.rowGroup.js"></script>
 	<script src="../assets/js/ace/elements.onpage-help.js"></script>
 	<script src="../assets/js/ace/ace.onpage-help.js"></script>

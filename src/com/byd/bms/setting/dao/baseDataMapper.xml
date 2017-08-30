@@ -474,6 +474,9 @@
 		<if test="busTypeCode !=null and busTypeCode !=''">
 			and bus_type_code=#{busTypeCode}
 		</if>
+		<if test="internal_name !=null and internal_name !=''">
+			and internal_name=#{internal_name}
+		</if>
 		order by id desc
 		<if test="start !=null and length!=-1">
 			LIMIT #{start} ,#{length} 
@@ -502,7 +505,9 @@
 		<if test="busTypeCode !=null and busTypeCode !=''">
 			and bus_type_code=#{busTypeCode}
 		</if>
-		
+		<if test="internal_name !=null and internal_name !=''">
+			and internal_name=#{internal_name}
+		</if>
 	</select>
 	<update id="updateBusType" parameterType="com.byd.bms.setting.model.BmsBaseBusType">
 		update BMS_BASE_BUS_TYPE set 

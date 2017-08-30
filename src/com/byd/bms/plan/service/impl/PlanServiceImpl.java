@@ -167,6 +167,7 @@ public class PlanServiceImpl implements IPlanService {
 	}
 
 	@Override
+	@Transactional
 	public int reVisionPlan(String factory_id, String order_no, String revision_str, String plan_month,String userId) {
 		List<PlanMasterPlan> datalist=new ArrayList<PlanMasterPlan>();
 		//复制指定工厂ID指定订单编号 最新版本 最大flag 的计划，保存flag+1
@@ -867,16 +868,20 @@ public class PlanServiceImpl implements IPlanService {
 						conditionMap2.put("workshop", "warehousing_date");conditionMap3.put("workshop", "warehousing_date");break;
 					}
 					if(plan_code_id==2||plan_code_id==3){
-						if(plan_code_id==2){
+						if(plan_code_id==2){	//部件上线 取[前段车架总成][6]
 							conditionMap2.put("parts", "online_real_qty");
-							conditionMap2.put("month", month);							
+							conditionMap2.put("month", month);						
+							conditionMap2.put("parts_id", "6");						
 							conditionMap3.put("parts", "online_real_qty");
-							conditionMap3.put("month", "");
-						}else{
+							conditionMap3.put("month", "");				
+							conditionMap3.put("parts_id", "6");		
+						}else{					//部件下线 取[喷砂][0]
 							conditionMap2.put("parts", "offline_real_qty");
-							conditionMap2.put("month", month);					
+							conditionMap2.put("month", month);							
+							conditionMap2.put("parts_id", "0");				
 							conditionMap3.put("parts", "offline_real_qty");
-							conditionMap3.put("month", "");
+							conditionMap3.put("month", "");				
+							conditionMap3.put("parts_id", "0");		
 						}
 						total_month = planDao.getPlanSearchTotalRealPartsQty(conditionMap2);
 						total_order = planDao.getPlanSearchTotalRealPartsQty(conditionMap3);

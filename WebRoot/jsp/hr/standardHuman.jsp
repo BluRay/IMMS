@@ -72,18 +72,24 @@
 <!-- 									<a class="dt-button buttons-excel buttons-html5 black" tabindex="0" aria-controls="tableData" href="#"> -->
 									
 <!-- 									<button id="btn_delete" style="float:right;margin-top:2px" class="btn btn-sm btn-purple">导出</button>&nbsp;&nbsp; -->
-<!-- 									</a> -->
-									<button id="btnBulkAdd" style="float:right;margin-top:2px;margin-right:2px" class="btn btn-sm btn-success">导入</button>
+<!-- 									</a> btnBulkAdd-->
+<!-- 									<button id="btnQuery" style="float:right;margin-top:2px;margin-right:2px" class="btn btn-sm btn-success">查询</button> -->
 								    
 								</div>
-								<div id="divBulkAdd" class="well" style="display:none;">
-								    <button id="btnBulkHide" type="button" class="close"><i class="ace-icon fa fa-times"></i></button>
+								<div id="divBulkAdd" class="well" >  <!-- style="display:none;" -->
+<!-- 								    <button id="btnBulkHide" type="button" class="close"><i class="ace-icon fa fa-times"></i></button> -->
 									<form id="uploadForm" action="#" enctype="multipart/form-data" method="post">
 									<table>
 										<tr>
-											<td><input id="file" type="file" name="file" accept="*.xls"/></td>
-											<td><input id="btn_upload" type="button" class="btn btn-sm btn-primary" value="上传并导入" onclick="javascript:return LimitAttach(this.form, this.form.file.value)"/></td>
-											<td></td><td><a href="../docs/standardHuman.xls">下载批导模板</a></td>
+										    <td>车型：</td>
+											<td><select id="add_bus_type" name="bus_type" style="height:30px;width:100px"></select></td>
+<!--                                             <td>产能：</td>											 -->
+<!--                                             <td><input id="add_capacity" name="capacity" style="height:30px;width:100px" type="text"/></td> -->
+											<td><button id="btnQuery" style="margin-top:2px;margin-left:5px;margin-right:5px" class="btn btn-sm btn-success">查询</button></td>
+											<td style="width:20px"></td>
+											<td style="width:200px"><input id="file" type="file" name="file" accept="*.xls"/></td>
+											<td>&nbsp;&nbsp;<input id="btn_upload" type="button" class="btn btn-sm btn-primary" value="上传并导入"/></td>
+											<td></td><td>&nbsp;&nbsp;<a href="../docs/standardHuman.xls">下载批导模板</a></td>
 										</tr>
 									</table>
 									</form>
