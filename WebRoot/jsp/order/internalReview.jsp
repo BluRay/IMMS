@@ -19,14 +19,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <link rel="stylesheet" href="<%=basePath%>/assets/css/jquery.gritter.css" /> 
 <style type="text/css" media="screen">
       .english{
-          font-size:14px;
+          font-size:13px;
           font-family: "Times New Roman", Times, serif;
       }
       .Chinese{
 	      margin:0px;
 	      padding:0px;
 	      font-family:"微软雅黑","黑体","仿宋";
-	      font-size:14px;
+	      font-size:13px;
 
 	  }
 </style> 
@@ -103,7 +103,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</div>
 				<div id="dialog-edit" class="hide">
 					<table id="tableData" class="table table-striped table-bordered table-hover dataTable no-footer"
-					            style="font-size: 14px;width:900px" role="grid" aria-describedby="tableData_info">
+					            style="font-size: 13px;width:900px" role="grid" aria-describedby="tableData_info">
 						 <tr role="row" class="odd">
 				            <td class="sorting_disabled center" rowspan="1" colspan=7 style="width: 96px;font-size:18px;font-weight:bold;">十九事业部订单评审评估表</td>
 						 </tr>

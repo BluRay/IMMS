@@ -51,7 +51,7 @@
 								<td>&nbsp;车间：</td>
 								<td><select id="search_workshop" class="input-small" style="height: 30px;width:80px"></select></td>
 								<td>&nbsp;线别：</td>
-								<td><select id="search_line" class="input-small" style="height: 30px;width:60px"><option value='A'>A线</option><option value='B'>B线</option></select></td>
+								<td><select id="search_line" class="input-small" style="height: 30px;width:60px"><option value=''> 全部</option><option value='A'>A线</option><option value='B'>B线</option></select></td>
 								<td>&nbsp;车号：</td>
 								<td><input id="search_busnumber" placeholder="请输入车号..." style="height: 30px;width:110px" type="text"></td>
 								<td>&nbsp;严重等级：</td>

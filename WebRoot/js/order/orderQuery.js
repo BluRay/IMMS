@@ -78,7 +78,7 @@ function ajaxQuery(){
 			}
 		},
 		ajax:function (data, callback, settings) {
-			
+			$(".divLoading").addClass("fade in").show();
 			var param ={
 				"draw":1,
 				"order_no":$("#search_order_no").val(),
@@ -111,6 +111,8 @@ function ajaxQuery(){
                     var head_width=$(".dataTables_scrollHead").width();
                     //alert(head_width)
                     $(".dataTables_scrollHead").css("width",head_width-20);
+                    
+                    $(".divLoading").hide();
                 }
             });
 		

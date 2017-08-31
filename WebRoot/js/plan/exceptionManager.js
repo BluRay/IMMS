@@ -4,7 +4,7 @@ $(document).ready(function () {
 	function initPage(){
 		getBusNumberSelect('#nav-search-input');
 		getFactorySelect("plan/exceptionManager",'',"#search_factory",null,'id');
-		getWorkshopSelect("plan/exceptionManager",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
+		getWorkshopSelect("plan/exceptionManager",$("#search_factory :selected").text(),"","#search_workshop","全部","id");
 		setSelects();
 	};
 
@@ -16,7 +16,7 @@ $(document).ready(function () {
 	})
 	
 	$('#search_factory').change(function(){ 
-		getWorkshopSelect("plan/exceptionManager",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
+		getWorkshopSelect("plan/exceptionManager",$("#search_factory :selected").text(),"","#search_workshop","全部","id");
 	})
 	
 	$('#edit_factory').change(function(){ 

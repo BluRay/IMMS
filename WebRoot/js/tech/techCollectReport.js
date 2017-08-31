@@ -197,7 +197,7 @@ function initTable() {
     $(window).resize(function () {
         $table.bootstrapTable('resetView', {height: getHeight()});
     });
-    function getHeight() {return $(window).height()-45;}
+    function getHeight() {return $(window).height()-55;}
     function getWidth() {return $(window).width()-220;}
 }
 //----------END bootstrap initTable ----------

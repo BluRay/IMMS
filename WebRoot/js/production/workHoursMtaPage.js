@@ -149,6 +149,14 @@ function ajaxQuery(){
                     //调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
                     //此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
                     callback(returnData);
+                    var head_width=$(".dataTables_scroll").width();
+                	$(".dataTables_scrollBody").scrollTop(10);
+                	//alert($(".dataTables_scrollBody").scrollTop());
+
+                	if($(".dataTables_scrollBody").scrollTop()>0){
+                		$(".dataTables_scrollHead").css("width",head_width-20);
+                		$(".dataTables_scrollBody").scrollTop(0);
+                	}
                 }
             });
 		},
@@ -156,10 +164,18 @@ function ajaxQuery(){
 		            {"title":"派工流水号",width:'120',"class":"center","data":"tmp_order_no","defaultContent": "","render":function(data,type,row){
 		            	return "<a style=\"cursor:pointer\" onclick=show(\'"+data+"\',\'"+row.id+"\')>"+data+"</a>";
 		            }},
-		            {"title":"工单号",width:'100',"class":"center","data":"sap_order","defaultContent": ""},
+		            {"title":"工单号",width:'150',"class":"center","data":"sap_order","defaultContent": ""},
 		            {"title":"工厂",width:'100',"class":"center","data":"factory","defaultContent": ""},
 		            {"title":"车间",width:'100',"class":"center","data":"workshop","defaultContent": ""},
-		            {"title":"作业原因/内容",width:'200',"class":"center","data":"reason_content","defaultContent": ""},
+		            {"title":"作业原因/内容",width:'500',"class":"center","data":"reason_content","defaultContent": "","render":function(data,type,row){
+		            	var html="";
+		            	if(data.length>45){
+		            		html="<i title='"+data+"' style='font-style: normal'>"+data.substring(1,45)+"...</i>"
+		            	}else{
+		            		html=data;
+		            	}
+		            	return html;
+		            }},
 		            {"title":"总数量",width:'100',"class":"center","data":"total_qty","defaultContent": ""},
 		            {"title":"已完成数量",width:'100',"class":"center","data":"finished_qty","defaultContent": "0"},
 		            {"title":"产量",width:'50',"class":"center","data":"totalQty","defaultContent": "",
@@ -190,13 +206,13 @@ function ajaxQuery(){
 		            	},
 		            },
 		            {"title":"申请人",width:'100',"class":"center","data":"applier_name","defaultContent": ""},
-		            {"title":"申请时间",width:'100',"class":"center","data":"apply_date","defaultContent": ""},
+		            {"title":"申请时间",width:'150',"class":"center","data":"apply_date","defaultContent": ""},
 		            {"title":"状态",width:'100',"class":"center","data":"status","defaultContent": "",
 		            	"render": function ( data, type, row ) {
 		            		return status_arr[data];
 		            	},
 		            },
-		            {"title":"操作",width:'100',"class":"center","data":null,"defaultContent": "",
+		            {"title":"操作",width:'80',"class":"center","data":null,"defaultContent": "",
 		            	"render": function ( data, type, row ) {
 		            		return "<i class=\"glyphicon glyphicon-plus bigger-130 showbus\" title=\"维护\" onclick='addWorkTime(\"" + row['id'] + "\",\"" + row['tmp_order_no'] + "\",\""+ row['reason_content'] +"\",\""+ row['total_qty'] +"\",\""+ row['finished_qty'] +"\",\""+ row['workhour_total'] +"\",\""+ row['factory'] +"\",\""+ row['workshop'] +"\",\""+ row['tech_list'] +"\")' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;" + 
 		            		"<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"编辑\" onclick='editWorkTime(\"" + row['id'] + "\",\"" + row['tmp_order_no'] + "\",\""+ row['reason_content'] +"\",\""+ row['total_qty'] +"\",\""+ row['finished_qty'] +"\",\""+ row['workhour_total'] +"\",\""+ row['factory'] +"\",\""+ row['workshop'] +"\",\""+ row['tech_list'] +"\")' style='color:blue;cursor: pointer;'></i>";

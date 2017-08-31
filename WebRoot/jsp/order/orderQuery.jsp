@@ -82,9 +82,7 @@
 
 					<div class="row">
 						<div class="col-xs-12" style="width: calc(100vw + 20px)">
-							<div style="display: none;position:fixed;z-index:999;margin-top:150px;margin-left:500px" class="divLoading" >
-				            	<span><i class="fa fa-spinner fa-spin fa-4x" style="height:1em;"></i></span>
-				        	</div>
+							
 						<!-- 	<div style="padding-left:0px;padding-right:0px;padding-top:0px">
 							<div id="toolbar"></div>
 							<table style="font-weight:normal;width:1500px;" id="table" data-toolbar="#toolbar" data-search="false" data-show-refresh="true"

@@ -181,7 +181,7 @@ public class QualityController extends BaseController {
 			initModel(true,"保存成功！",null);
 		}catch(Exception e){
 			logger.error(e.getMessage());
-			initModel(false,"保存失败！",null);
+			initModel(false,"保存失败！"+e.getMessage(),null);
 		}
 		return mv.getModelMap();
 	}

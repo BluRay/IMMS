@@ -34,26 +34,31 @@ $(document).ready(function(){
 			$('#tableResult').empty();
 		}
 		$("#tableResult").DataTable({
+			serverSide: true,
+			fixedColumns:   {
+	            leftColumns: 2,
+	            rightColumns:2
+	        },
+			dom: 'Bfrtip',
+		    buttons: [
+		        {extend:'excelHtml5',title:'data_export',className:'black',text:'<i class=\"fa fa-file-excel-o bigger-130\" tooltip=\"导出excel\"></i>'},
+		    ],
+		    paginate:false,
 			paiging:false,
 			ordering:false,
 			searching: false,
-			autoWidth:false,
-			paginate:false,
-			sScrollY: $(window).height()-230,
+			bAutoWidth:false,
+			destroy: true,
+			sScrollY: $(window).height()-220,
 			scrollX: true,
-			scrollCollapse: true,
-			dom: 'Bfrtip',
-		    buttons: [
-		        {extend:'excelHtml5',title:'data_export',className:'black',text:'<i class=\"fa fa-file-excel-o bigger-130\" tooltip=\"导出excel\"></i>'},		       
-		    ],
-			lengthChange:false,
-			orderMulti:false,
+			pagingType:"full_numbers",
+			lengthChange:true,
 			info:false,
-			showFooter:true,
+			orderMulti:false,
 			language: {
-				emptyTable:"",					     
-				infoEmpty:"",
-				zeroRecords:"没查找到符合条件的记录"
+				emptyTable:"抱歉，未查询到数据！",
+				zeroRecords:"抱歉，未查询到数据！",
+				loadingRecords:"正在查询，请稍后..." 
 			},
 			aoColumnDefs : [
                 {
@@ -116,7 +121,7 @@ $(document).ready(function(){
 			            	return data!='0' ? data : '-'
 			            },"defaultContent": ""},
 			            {"title":"焊装累计完成","class":"center welding_offline","data":"welding_offline","render":function(data,type,row){
-			            	return data!='0' ? data : '-'
+			            	return (data!='0' && data!='0%') ? data : '-'
 			            },"defaultContent": ""},
 			            {"title":"欠产","class":"center","data": "-","render":function(data,type,row){
 			            	return (row.factory_name!='达成率' && (row.welding_online!='0' || row.welding_offline!='0'))  ? row.welding_online-row.welding_offline :'-'
@@ -125,7 +130,7 @@ $(document).ready(function(){
 			            	return data!='0' ? data : '-'
 			            },"defaultContent": ""},	            
 			            {"title":"底盘累计完成","class":"center chassis_offline","data": "chassis_offline","render":function(data,type,row){
-			            	return data!='0' ? data : '-'
+			            	return (data!='0' && data!='0%') ? data : '-'
 			            },"defaultContent": ""},
 			            {"title":"欠产","class":"center","data": "-","render":function(data,type,row){
 			            	return (row.factory_name!='达成率' && (row.chassis_online!='0' || row.chassis_offline!='0'))  ? row.chassis_online-row.chassis_offline : '-'

@@ -86,8 +86,10 @@ public class SendPlanEmailJob  implements Job {
 		String workshop = "";
 		/*if (!request.getParameter("workshop").equals("全部")) workshop = request.getParameter("workshop");*/
 		conditionMap.put("workshop", workshop);
-		conditionMap.put("start_date", sdf.format(new Date()));
-		conditionMap.put("end_date", sdf.format(new Date()));
+		/*conditionMap.put("start_date", sdf.format(new Date()));
+		conditionMap.put("end_date", sdf.format(new Date()));*/
+		conditionMap.put("start_date", "2017-08-29");
+		conditionMap.put("end_date", "2017-08-29");
 		List<Map<String,String>> datalist=new ArrayList();
 		datalist = planDao.getPlanSerach(conditionMap);
 		
@@ -133,6 +135,52 @@ public class SendPlanEmailJob  implements Job {
 		
 		List<TableTable> tables = new ArrayList<TableTable>();
 		
+		Map<String,Integer> m_zzj=new HashMap<String,Integer>();
+		m_zzj.put("plan", 0);
+		m_zzj.put("real", 0);
+		m_zzj.put("undone", 0);
+		Map<String,Integer> m_bj=new HashMap<String,Integer>();
+		m_bj.put("plan", 0);
+		m_bj.put("real", 0);
+		m_bj.put("undone", 0);
+		Map<String,Integer> m_hzon=new HashMap<String,Integer>();
+		m_hzon.put("plan", 0);
+		m_hzon.put("real", 0);
+		m_hzon.put("undone", 0);
+		Map<String,Integer> m_hzoff=new HashMap<String,Integer>();
+		m_hzoff.put("plan", 0);
+		m_hzoff.put("real", 0);
+		m_hzoff.put("undone", 0);
+		Map<String,Integer> m_tzon=new HashMap<String,Integer>();
+		m_tzon.put("plan", 0);
+		m_tzon.put("real", 0);
+		m_tzon.put("undone", 0);
+		Map<String,Integer> m_tzoff=new HashMap<String,Integer>();
+		m_tzoff.put("plan", 0);
+		m_tzoff.put("real", 0);
+		m_tzoff.put("undone", 0);
+		Map<String,Integer> m_dpon=new HashMap<String,Integer>();
+		m_dpon.put("plan", 0);
+		m_dpon.put("real", 0);
+		m_dpon.put("undone", 0);
+		Map<String,Integer> m_dpoff=new HashMap<String,Integer>();
+		m_dpoff.put("plan", 0);
+		m_dpoff.put("real", 0);
+		m_dpoff.put("undone", 0);
+		Map<String,Integer> m_zzon=new HashMap<String,Integer>();
+		m_zzon.put("plan", 0);
+		m_zzon.put("real", 0);
+		m_zzon.put("undone", 0);
+		Map<String,Integer> m_zzoff=new HashMap<String,Integer>();
+		m_zzoff.put("plan", 0);
+		m_zzoff.put("real", 0);
+		m_zzoff.put("undone", 0);
+		Map<String,Integer> m_rk=new HashMap<String,Integer>();
+		m_rk.put("plan", 0);
+		m_rk.put("real", 0);
+		m_rk.put("undone", 0);
+		
+		//订单计划达成表格封装
 		TableTable tableX = emailSender.new TableTable();
 		List<TdTd> theadX = new ArrayList<TdTd>();
 		
@@ -153,6 +201,63 @@ public class SendPlanEmailJob  implements Job {
 			tr.add(tableX.new TdTd(String.valueOf(m1.get("total_plan_qty"))));
 			tr.add(tableX.new TdTd(String.valueOf(m1.get("real_qty"))));
 			tr.add(tableX.new TdTd(String.valueOf(m1.get("total_qty"))));
+			if(m1.get("key_name").equals("自制件下线")){
+				m_zzj.put("plan", Integer.valueOf(String.valueOf(m1.get("total_plan_qty")))+m_zzj.get("plan"));
+				m_zzj.put("real", Integer.valueOf(String.valueOf(m1.get("real_qty")))+m_zzj.get("real"));
+				m_zzj.put("undone", m_zzj.get("real")-m_zzj.get("plan"));
+			}
+			if(m1.get("key_name").equals("部件下线")){
+				m_bj.put("plan", Integer.valueOf(String.valueOf(m1.get("total_plan_qty")))+m_bj.get("plan"));
+				m_bj.put("real", Integer.valueOf(String.valueOf(m1.get("real_qty")))+m_bj.get("real"));
+				m_bj.put("undone", m_bj.get("real")-m_bj.get("plan"));
+			}
+			if(m1.get("key_name").equals("焊装上线")){
+				m_hzon.put("plan", Integer.valueOf(String.valueOf(m1.get("total_plan_qty")))+m_hzon.get("plan"));
+				m_hzon.put("real", Integer.valueOf(String.valueOf(m1.get("real_qty")))+m_hzon.get("real"));
+				m_hzon.put("undone", m_hzon.get("real")-m_hzon.get("plan"));
+			}
+			if(m1.get("key_name").equals("焊装下线")){
+				m_hzoff.put("plan", Integer.valueOf(String.valueOf(m1.get("total_plan_qty")))+m_hzoff.get("plan"));
+				m_hzoff.put("real", Integer.valueOf(String.valueOf(m1.get("real_qty")))+m_hzoff.get("real"));
+				m_hzoff.put("undone", m_hzoff.get("real")-m_hzoff.get("plan"));
+			}
+			if(m1.get("key_name").equals("涂装上线")){
+				m_tzon.put("plan", Integer.valueOf(String.valueOf(m1.get("total_plan_qty")))+m_tzon.get("plan"));
+				m_tzon.put("real", Integer.valueOf(String.valueOf(m1.get("real_qty")))+m_tzon.get("real"));
+				m_tzon.put("undone", m_tzon.get("real")-m_tzon.get("plan"));
+			}
+			if(m1.get("key_name").equals("涂装下线")){
+				m_tzoff.put("plan", Integer.valueOf(String.valueOf(m1.get("total_plan_qty")))+m_tzoff.get("plan"));
+				m_tzoff.put("real", Integer.valueOf(String.valueOf(m1.get("real_qty")))+m_tzoff.get("real"));
+				m_tzoff.put("undone", m_tzoff.get("real")-m_tzoff.get("plan"));
+			}
+			if(m1.get("key_name").equals("底盘上线")){
+				m_dpon.put("plan", Integer.valueOf(String.valueOf(m1.get("total_plan_qty")))+m_dpon.get("plan"));
+				m_dpon.put("real", Integer.valueOf(String.valueOf(m1.get("real_qty")))+m_dpon.get("real"));
+				m_dpon.put("undone", m_dpon.get("real")-m_dpon.get("plan"));
+			}
+			if(m1.get("key_name").equals("底盘下线")){
+				m_dpoff.put("plan", Integer.valueOf(String.valueOf(m1.get("total_plan_qty")))+m_dpoff.get("plan"));
+				m_dpoff.put("real", Integer.valueOf(String.valueOf(m1.get("real_qty")))+m_dpoff.get("real"));
+				m_dpoff.put("undone", m_dpoff.get("real")-m_dpoff.get("plan"));
+			}
+			if(m1.get("key_name").equals("总装上线")){
+				m_zzon.put("plan", Integer.valueOf(String.valueOf(m1.get("total_plan_qty")))+m_zzon.get("plan"));
+				m_zzon.put("real", Integer.valueOf(String.valueOf(m1.get("real_qty")))+m_zzon.get("real"));
+				m_zzon.put("undone", m_zzon.get("real")-m_zzon.get("plan"));
+			}
+			if(m1.get("key_name").equals("总装下线")){
+				m_zzoff.put("plan", Integer.valueOf(String.valueOf(m1.get("total_plan_qty")))+m_zzoff.get("plan"));
+				m_zzoff.put("real", Integer.valueOf(String.valueOf(m1.get("real_qty")))+m_zzoff.get("real"));
+				m_zzoff.put("undone", m_zzoff.get("real")-m_zzoff.get("plan"));
+			}
+			if(m1.get("key_name").equals("入库")){
+				m_rk.put("plan", Integer.valueOf(String.valueOf(m1.get("total_plan_qty")))+m_rk.get("plan"));
+				m_rk.put("real", Integer.valueOf(String.valueOf(m1.get("real_qty")))+m_rk.get("real"));
+				m_rk.put("undone", m_rk.get("real")-m_rk.get("plan"));
+			}
+						
+			
 			
 			if(m1.get("key_name").endsWith("下线")){
 				Map<String,Object> conditionMap1 = new HashMap<String,Object>();
@@ -178,13 +283,153 @@ public class SendPlanEmailJob  implements Job {
 			tbodyX.add(tr);
 		}
 		tableX.setTbody(tbodyX);
+			
+		
+		//车间计划达成表格封装
+		TableTable tableW = emailSender.new TableTable();
+		List<TdTd> theadW = new ArrayList<TdTd>();
+		List<List<TdTd>> tbodyW = new ArrayList<List<TdTd>>();
+		
+		theadW.add(tableW.new TdTd("生产车间"));
+		theadW.add(tableW.new TdTd("自制件下线"));
+		theadW.add(tableW.new TdTd("部件下线"));
+		theadW.add(tableW.new TdTd("焊装上线"));
+		theadW.add(tableW.new TdTd("焊装下线"));
+		theadW.add(tableW.new TdTd("涂装上线"));
+		theadW.add(tableW.new TdTd("涂装下线"));
+		theadW.add(tableW.new TdTd("底盘上线"));
+		theadW.add(tableW.new TdTd("底盘下线"));
+		theadW.add(tableW.new TdTd("总装上线"));
+		theadW.add(tableW.new TdTd("总装下线"));
+		theadW.add(tableW.new TdTd("入库"));
+		tableW.setThead(theadW);
+		
+		List<TdTd> tr_plan = new ArrayList<TdTd>();
+		tr_plan.add(tableW.new TdTd("计划数量"));
+		tr_plan.add(tableW.new TdTd(m_zzj.get("plan").toString()));
+		tr_plan.add(tableW.new TdTd(m_bj.get("plan").toString()));
+		tr_plan.add(tableW.new TdTd(m_hzon.get("plan").toString()));
+		tr_plan.add(tableW.new TdTd(m_hzoff.get("plan").toString()));
+		tr_plan.add(tableW.new TdTd(m_tzon.get("plan").toString()));
+		tr_plan.add(tableW.new TdTd(m_tzoff.get("plan").toString()));
+		tr_plan.add(tableW.new TdTd(m_dpon.get("plan").toString()));
+		tr_plan.add(tableW.new TdTd(m_dpoff.get("plan").toString()));
+		tr_plan.add(tableW.new TdTd(m_zzon.get("plan").toString()));
+		tr_plan.add(tableW.new TdTd(m_zzoff.get("plan").toString()));
+		tr_plan.add(tableW.new TdTd(m_rk.get("plan").toString()));
+		tbodyW.add(tr_plan);
+		
+		List<TdTd> tr_real = new ArrayList<TdTd>();
+		tr_real.add(tableW.new TdTd("实际完成量"));
+		tr_real.add(tableW.new TdTd(m_zzj.get("real").toString()));
+		tr_real.add(tableW.new TdTd(m_bj.get("real").toString()));
+		tr_real.add(tableW.new TdTd(m_hzon.get("real").toString()));
+		tr_real.add(tableW.new TdTd(m_hzoff.get("real").toString()));
+		tr_real.add(tableW.new TdTd(m_tzon.get("real").toString()));
+		tr_real.add(tableW.new TdTd(m_tzoff.get("real").toString()));
+		tr_real.add(tableW.new TdTd(m_dpon.get("real").toString()));
+		tr_real.add(tableW.new TdTd(m_dpoff.get("real").toString()));
+		tr_real.add(tableW.new TdTd(m_zzon.get("real").toString()));
+		tr_real.add(tableW.new TdTd(m_zzoff.get("real").toString()));
+		tr_real.add(tableW.new TdTd(m_rk.get("real").toString()));
+		tbodyW.add(tr_real);
+		
+		List<TdTd> tr_rate = new ArrayList<TdTd>();
+		tr_rate.add(tableW.new TdTd("实际达成率"));
+		String rate_zzj="-";
+		if(Integer.parseInt(m_zzj.get("plan").toString())>0){
+			rate_zzj=Integer.parseInt(m_zzj.get("real").toString())*100/Integer.parseInt(m_zzj.get("plan").toString())+"%";
+		}
+		tr_rate.add(tableW.new TdTd(rate_zzj));
+		
+		String rate_bj="-";
+		if(Integer.parseInt(m_bj.get("plan").toString())>0){
+			rate_bj=Integer.parseInt(m_bj.get("real").toString())*100/Integer.parseInt(m_bj.get("plan").toString())+"%";
+		}
+		tr_rate.add(tableW.new TdTd(rate_bj));
+		
+		String rate_hzon="-";
+		if(Integer.parseInt(m_hzon.get("plan").toString())>0){
+			rate_hzon=Integer.parseInt(m_hzon.get("real").toString())*100/Integer.parseInt(m_hzon.get("plan").toString())+"%";
+		}
+		tr_rate.add(tableW.new TdTd(rate_hzon));
+		
+		String rate_hzoff="-";
+		if(Integer.parseInt(m_hzoff.get("plan").toString())>0){
+			rate_hzoff=Integer.parseInt(m_hzoff.get("real").toString())*100/Integer.parseInt(m_hzoff.get("plan").toString())+"%";
+		}
+		tr_rate.add(tableW.new TdTd(rate_hzoff));
+		
+		String rate_tzon="-";
+		if(Integer.parseInt(m_tzon.get("plan").toString())>0){
+			rate_tzon=Integer.parseInt(m_hzon.get("real").toString())*100/Integer.parseInt(m_hzon.get("plan").toString())+"%";
+		}
+		tr_rate.add(tableW.new TdTd(rate_tzon));
+		
+		String rate_tzoff="-";
+		if(Integer.parseInt(m_tzoff.get("plan").toString())>0){
+			rate_tzoff=Integer.parseInt(m_tzoff.get("real").toString())*100/Integer.parseInt(m_tzoff.get("plan").toString())+"%";
+		}
+		tr_rate.add(tableW.new TdTd(rate_tzoff));
+		
+		String rate_dpon="-";
+		if(Integer.parseInt(m_dpon.get("plan").toString())>0){
+			rate_dpon=Integer.parseInt(m_dpon.get("real").toString())*100/Integer.parseInt(m_dpon.get("plan").toString())+"%";
+		}
+		tr_rate.add(tableW.new TdTd(rate_dpon));
+		
+		String rate_dpoff="-";
+		if(Integer.parseInt(m_dpoff.get("plan").toString())>0){
+			rate_dpoff=Integer.parseInt(m_dpoff.get("real").toString())*100/Integer.parseInt(m_dpoff.get("plan").toString())+"%";
+		}
+		tr_rate.add(tableW.new TdTd(rate_dpoff));
+		
+		String rate_zzon="-";
+		if(Integer.parseInt(m_zzon.get("plan").toString())>0){
+			rate_zzon=Integer.parseInt(m_zzon.get("real").toString())*100/Integer.parseInt(m_zzon.get("plan").toString())+"%";
+		}
+		tr_rate.add(tableW.new TdTd(rate_zzon));
+		
+		String rate_zzoff="-";
+		if(Integer.parseInt(m_zzoff.get("plan").toString())>0){
+			rate_zzoff=Integer.parseInt(m_zzoff.get("real").toString())*100/Integer.parseInt(m_zzoff.get("plan").toString())+"%";
+		}
+		tr_rate.add(tableW.new TdTd(rate_zzoff));
+		
+		String rate_rk="-";
+		if(Integer.parseInt(m_rk.get("plan").toString())>0){
+			rate_rk=Integer.parseInt(m_rk.get("real").toString())*100/Integer.parseInt(m_rk.get("plan").toString())+"%";
+		}
+		tr_rate.add(tableW.new TdTd(rate_rk));
+		tbodyW.add(tr_rate);
+		
+		List<TdTd> tr_undone = new ArrayList<TdTd>();
+		tr_undone.add(tableW.new TdTd("欠产数量"));
+		tr_undone.add(tableW.new TdTd(m_zzj.get("undone").toString()));
+		tr_undone.add(tableW.new TdTd(m_bj.get("undone").toString()));
+		tr_undone.add(tableW.new TdTd(m_hzon.get("undone").toString()));
+		tr_undone.add(tableW.new TdTd(m_hzoff.get("undone").toString()));
+		tr_undone.add(tableW.new TdTd(m_tzon.get("undone").toString()));
+		tr_undone.add(tableW.new TdTd(m_tzoff.get("undone").toString()));
+		tr_undone.add(tableW.new TdTd(m_dpon.get("undone").toString()));
+		tr_undone.add(tableW.new TdTd(m_dpoff.get("undone").toString()));
+		tr_undone.add(tableW.new TdTd(m_zzon.get("undone").toString()));
+		tr_undone.add(tableW.new TdTd(m_zzoff.get("undone").toString()));
+		tr_undone.add(tableW.new TdTd(m_rk.get("undone").toString()));
+		tbodyW.add(tr_undone);
+		
+		tableW.setTbody(tbodyW);
+		
 		
 		//tableX.setTbody(tbodyX);
-		tables.add(tableX);
+		tables.add(0,tableW);
+		tables.add(1,tableX);
 		
 		emailSender.setTables(tables);
 		
 		mss.send(emailSender,new ModelMap());
 	}
-	
+
 }
+
+

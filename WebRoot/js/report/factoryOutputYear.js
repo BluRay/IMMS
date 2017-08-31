@@ -17,7 +17,7 @@ $(document).ready(function(){
 function initPage(){
 	getBusNumberSelect('#nav-search-input');
 	var factory_default=getQueryString("factory_id");
-	getFactorySelect("report/factoryOutputYear",factory_default,"#search_factory",null,"id");
+	getFactorySelect("",factory_default,"#search_factory","全部","id");
 	var year=new Date().getFullYear();
 	$("#search_year").val(year);
 	ajaxQuery()

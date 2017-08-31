@@ -7,64 +7,100 @@
 		from(
 		select '自制件下线' workshop,ifnull(sum(s.quantity),0) quantity,substring(s.supply_date,6,2) month
 		from BMS_PD_WORKSHOP_SUPPLY s 
-		where s.supply_workshop='自制件' and s.receive_workshop='部件' and s.factory_id=#{factory_id} 
+		where s.supply_workshop='自制件' and s.receive_workshop='部件' 		
+		<if test="factory_id !=null and factory_id !=''">
+			and s.factory_id=#{factory_id}
+		</if> 
 		and s.supply_date like concat(#{year},'%')
 		group by substring(s.supply_date,1,7)
 		union all
 		select '部件下线' workshop,ifnull(sum(f.offline_real_qty),0) quantity,substring(f.prod_date,6,2) month
 		from BMS_PD_PARTS_PLAN_FINISH f
 		left join BMS_BASE_KEY p1 on p1.value=f.parts_id AND p1.key_code ='BASE_PARTS'
-		where f.factory_id=#{factory_id}  and p1.key_name='喷砂' and f.prod_date like concat(#{year},'%')
+		where p1.key_name='喷砂' and f.prod_date like concat(#{year},'%')
+		<if test="factory_id !=null and factory_id !=''">
+			and f.factory_id=#{factory_id} 
+		</if> 
 		group by substring(f.prod_date,1,7)
 		union all
 		select '焊装上线' workshop,count(b.bus_number) quanity,substring(b.welding_online_date,6,2) month
 		from BMS_PLAN_BUS b
-		where b.factory_id=#{factory_id}  and b.welding_online_date like concat(#{year},'%')
+		where b.welding_online_date like concat(#{year},'%')
+		<if test="factory_id !=null and factory_id !=''">
+			and b.factory_id=#{factory_id} 
+		</if> 
 		group by substring(b.welding_online_date,1,7) 
 		union all
 		select '焊装下线' workshop,count(b.bus_number) quanity,substring(b.welding_offline_date,6,2) month
 		from BMS_PLAN_BUS b
-		where b.factory_id=#{factory_id}  and b.welding_offline_date like concat(#{year},'%')
+		where b.welding_offline_date like concat(#{year},'%')
+		<if test="factory_id !=null and factory_id !=''">
+			and b.factory_id=#{factory_id} 
+		</if> 
 		group by substring(b.welding_offline_date,1,7) 
 		union all
 		select '涂装上线' workshop,count(b.bus_number) quanity,substring(b.painting_online_date,6,2) month
 		from BMS_PLAN_BUS b
-		where b.factory_id=#{factory_id}  and b.painting_online_date like concat(#{year},'%')
+		where b.painting_online_date like concat(#{year},'%')
+		<if test="factory_id !=null and factory_id !=''">
+			and b.factory_id=#{factory_id} 
+		</if> 
 		group by substring(b.painting_online_date,1,7) 
 		union all
 		select '涂装下线' workshop,count(b.bus_number) quanity,substring(b.painting_offline_date,6,2) month
 		from BMS_PLAN_BUS b
-		where b.factory_id=#{factory_id}  and b.painting_offline_date like concat(#{year},'%')
+		where b.painting_offline_date like concat(#{year},'%')
+		<if test="factory_id !=null and factory_id !=''">
+			and b.factory_id=#{factory_id} 
+		</if> 
 		group by substring(b.painting_offline_date,1,7) 
 		union all
 		select '底盘上线' workshop,count(b.bus_number) quanity,substring(b.chassis_online_date,6,2) month
 		from BMS_PLAN_BUS b
-		where b.factory_id=#{factory_id}  and b.chassis_online_date like concat(#{year},'%')
+		where b.chassis_online_date like concat(#{year},'%')
+		<if test="factory_id !=null and factory_id !=''">
+			and b.factory_id=#{factory_id} 
+		</if> 
 		group by substring(b.chassis_online_date,1,7) 
 		union all
 		select '底盘下线' workshop,count(b.bus_number) quanity,substring(b.chassis_offline_date,6,2) month
 		from BMS_PLAN_BUS b
-		where b.factory_id=#{factory_id}  and b.chassis_offline_date like concat(#{year},'%')
+		where b.chassis_offline_date like concat(#{year},'%')
+		<if test="factory_id !=null and factory_id !=''">
+			and b.factory_id=#{factory_id} 
+		</if> 
 		group by substring(b.chassis_offline_date,1,7) 
 		union all
 		select '总装上线' workshop,count(b.bus_number) quanity,substring(b.assembly_online_date,6,2) month
 		from BMS_PLAN_BUS b
-		where b.factory_id=#{factory_id}  and b.assembly_online_date like concat(#{year},'%')
+		where b.assembly_online_date like concat(#{year},'%')
+		<if test="factory_id !=null and factory_id !=''">
+			and b.factory_id=#{factory_id} 
+		</if> 
 		group by substring(b.assembly_online_date,1,7) 
 		union all
 		select '总装下线' workshop,count(b.bus_number) quanity,substring(b.assembly_offline_date,6,2) month
 		from BMS_PLAN_BUS b
-		where b.factory_id=#{factory_id}  and b.assembly_offline_date like concat(#{year},'%')
+		where b.assembly_offline_date like concat(#{year},'%')
+		<if test="factory_id !=null and factory_id !=''">
+			and b.factory_id=#{factory_id} 
+		</if> 
 		group by substring(b.assembly_offline_date,1,7) 
 		union all
 		select '入库' workshop,count(b.bus_number) quanity,substring(b.warehousing_date,6,2) month
 		from BMS_PLAN_BUS b
-		where b.factory_id=#{factory_id}  and b.warehousing_date like concat(#{year},'%')
+		where b.warehousing_date like concat(#{year},'%')
+		<if test="factory_id !=null and factory_id !=''">
+			and b.factory_id=#{factory_id} 
+		</if> 
 		group by substring(b.warehousing_date,1,7) 
 		union all
 		select '发车' workshop,count(b.bus_number) quanity,substring(b.dispatch_date,6,2) month
 		from BMS_PLAN_BUS b
-		where b.factory_id=#{factory_id}  and b.dispatch_date like concat(#{year},'%')
+		where b.dispatch_date like concat(#{year},'%')
+		<if test="factory_id !=null and factory_id !=''">
+			and b.factory_id=#{factory_id} 
+		</if> 
 		group by substring(b.dispatch_date,1,7) 
 		) tmp
 		group by tmp.workshop;
