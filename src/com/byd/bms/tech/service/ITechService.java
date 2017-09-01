@@ -72,7 +72,7 @@ public interface ITechService {
 	
 	public void getTechtaskListByBus(String bus_number, ModelMap model);
 	
-	public void followTechTaskByBus(String bus_number, String tech_task_follow_ids,int userid,String curTime,ModelMap model);
+	public void followTechTaskByBus(String bus_number, String tech_task_follow_ids,String staff_number,String curTime,ModelMap model);
 	
 	public Map<String,Object> querySingleTasklist(String conditions);
 

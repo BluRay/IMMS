@@ -1,8 +1,8 @@
 var task_all_list={};
 var workshop_list=[];
 $(document).ready(function(){
-	getBusNumberSelect('#nav-search-input');
-	getFactorySelect("tech/followingUpPage","","#exec_factory","","id");
+	getBusNumberSelect('#bus_number');
+	getFactorySelect("tech/followingUpPage","","#exec_factory",null,"id");
 	 $("#exec_factory").attr("disabled",true)
 	$('#bus_number').focus();
 	//输入回车，发ajax进行校验；成功则显示并更新车辆信息

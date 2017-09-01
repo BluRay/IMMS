@@ -487,11 +487,11 @@ public class TechServiceImpl implements ITechService {
 
 	@Override
 	@Transactional
-	public void followTechTaskByBus(String bus_number, String tech_task_follow_ids,int userid,String curTime,ModelMap model) {
+	public void followTechTaskByBus(String bus_number, String tech_task_follow_ids,String staff_number,String curTime,ModelMap model) {
 		List<Map<String, String>> taskList = new ArrayList<Map<String, String>>();
 		Map<String,Object> condMap=new HashMap<String,Object>();
 		condMap.put("tech_task_follow_ids", tech_task_follow_ids);
-		condMap.put("confirmor_id", userid);
+		condMap.put("confirmor_id", staff_number);
 		condMap.put("confirmor_date", curTime);
 		
 		try{		

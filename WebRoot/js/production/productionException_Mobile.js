@@ -78,7 +78,7 @@ $(document).ready(function () {
 })
 
 function initPage(){
-	getBusNumberSelect('#nav-search-input');
+	getBusNumberSelect('#vinText');
 	getKeysSelect("ABNORMAL_REASON", "", "#reason_type"); 
 	getKeysSelect("LACK_REASON", "", "#lack_reason"); 
 	getFactorySelect();

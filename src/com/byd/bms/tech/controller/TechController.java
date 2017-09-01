@@ -1078,12 +1078,12 @@ public class TechController extends BaseController{
 		model.clear();
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String curTime = df.format(new Date());
-		int userid=(int) session.getAttribute("user_id");
+		String staff_number=session.getAttribute("staff_number").toString();
 		String bus_number=request.getParameter("bus_number");
 		String tech_task_follow_ids=request.getParameter("tech_task_follow_ids");
 
 		
-		techService.followTechTaskByBus(bus_number,tech_task_follow_ids,userid,curTime,model);
+		techService.followTechTaskByBus(bus_number,tech_task_follow_ids,staff_number,curTime,model);
 		return model;
 	}
 }

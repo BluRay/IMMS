@@ -115,6 +115,7 @@ $(document).ready(function () {
 
 function initPage(){
 		getFactorySelect();
+		getBusNumberSelect('#vinText');
 		$('#vinText').focus();
 		//alert(getQueryString("factory_name"));
 		//$(".page-content").css("height",document.body.clientHeight-10);

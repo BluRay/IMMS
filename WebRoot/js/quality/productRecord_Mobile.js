@@ -132,6 +132,7 @@ function initPage(){
 	$("#workgroup").val("");
 	$("#save").removeAttr("disabled","");
 	getFactorySelect("quality/prdRcdIn","","#factory","请选择","id")
+	getBusNumberSelect('#bus_number');
 	$(".btn-next").show();
 	
 	$("#test_result").typeahead({

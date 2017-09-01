@@ -182,7 +182,7 @@ $(document).ready(function() {
 		                    enabled: true,
 		                    allowOverlap: true,
 		                	inside:true,
-		                	distance: 10
+		                	distance: 5
 		                }
 		            }
 		        },
@@ -202,8 +202,8 @@ $(document).ready(function() {
 					data : bar_series
 				}, {
 					type : 'pie',
-					center:['85%','40%'],
-					size:'80%',
+					center:['80%','40%'],
+					size:'75%',
 					dataLabels: {
 		                enabled: true,
 		                format: '{y} %',

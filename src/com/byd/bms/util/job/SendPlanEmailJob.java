@@ -86,10 +86,10 @@ public class SendPlanEmailJob  implements Job {
 		String workshop = "";
 		/*if (!request.getParameter("workshop").equals("全部")) workshop = request.getParameter("workshop");*/
 		conditionMap.put("workshop", workshop);
-		/*conditionMap.put("start_date", sdf.format(new Date()));
-		conditionMap.put("end_date", sdf.format(new Date()));*/
-		conditionMap.put("start_date", "2017-08-29");
-		conditionMap.put("end_date", "2017-08-29");
+		conditionMap.put("start_date", sdf.format(new Date()));
+		conditionMap.put("end_date", sdf.format(new Date()));
+		/*conditionMap.put("start_date", "2017-08-29");
+		conditionMap.put("end_date", "2017-08-29");*/
 		List<Map<String,String>> datalist=new ArrayList();
 		datalist = planDao.getPlanSerach(conditionMap);
 		
@@ -204,57 +204,57 @@ public class SendPlanEmailJob  implements Job {
 			if(m1.get("key_name").equals("自制件下线")){
 				m_zzj.put("plan", Integer.valueOf(String.valueOf(m1.get("total_plan_qty")))+m_zzj.get("plan"));
 				m_zzj.put("real", Integer.valueOf(String.valueOf(m1.get("real_qty")))+m_zzj.get("real"));
-				m_zzj.put("undone", m_zzj.get("real")-m_zzj.get("plan"));
+				m_zzj.put("undone", m_zzj.get("plan")-m_zzj.get("real"));
 			}
 			if(m1.get("key_name").equals("部件下线")){
 				m_bj.put("plan", Integer.valueOf(String.valueOf(m1.get("total_plan_qty")))+m_bj.get("plan"));
 				m_bj.put("real", Integer.valueOf(String.valueOf(m1.get("real_qty")))+m_bj.get("real"));
-				m_bj.put("undone", m_bj.get("real")-m_bj.get("plan"));
+				m_bj.put("undone", m_bj.get("plan")-m_bj.get("real"));
 			}
 			if(m1.get("key_name").equals("焊装上线")){
 				m_hzon.put("plan", Integer.valueOf(String.valueOf(m1.get("total_plan_qty")))+m_hzon.get("plan"));
 				m_hzon.put("real", Integer.valueOf(String.valueOf(m1.get("real_qty")))+m_hzon.get("real"));
-				m_hzon.put("undone", m_hzon.get("real")-m_hzon.get("plan"));
+				m_hzon.put("undone", m_hzon.get("plan")-m_hzon.get("real"));
 			}
 			if(m1.get("key_name").equals("焊装下线")){
 				m_hzoff.put("plan", Integer.valueOf(String.valueOf(m1.get("total_plan_qty")))+m_hzoff.get("plan"));
 				m_hzoff.put("real", Integer.valueOf(String.valueOf(m1.get("real_qty")))+m_hzoff.get("real"));
-				m_hzoff.put("undone", m_hzoff.get("real")-m_hzoff.get("plan"));
+				m_hzoff.put("undone", m_hzoff.get("plan")-m_hzoff.get("real"));
 			}
 			if(m1.get("key_name").equals("涂装上线")){
 				m_tzon.put("plan", Integer.valueOf(String.valueOf(m1.get("total_plan_qty")))+m_tzon.get("plan"));
 				m_tzon.put("real", Integer.valueOf(String.valueOf(m1.get("real_qty")))+m_tzon.get("real"));
-				m_tzon.put("undone", m_tzon.get("real")-m_tzon.get("plan"));
+				m_tzon.put("undone", m_tzon.get("plan")-m_tzon.get("real"));
 			}
 			if(m1.get("key_name").equals("涂装下线")){
 				m_tzoff.put("plan", Integer.valueOf(String.valueOf(m1.get("total_plan_qty")))+m_tzoff.get("plan"));
 				m_tzoff.put("real", Integer.valueOf(String.valueOf(m1.get("real_qty")))+m_tzoff.get("real"));
-				m_tzoff.put("undone", m_tzoff.get("real")-m_tzoff.get("plan"));
+				m_tzoff.put("undone", m_tzoff.get("plan")-m_tzoff.get("real"));
 			}
 			if(m1.get("key_name").equals("底盘上线")){
 				m_dpon.put("plan", Integer.valueOf(String.valueOf(m1.get("total_plan_qty")))+m_dpon.get("plan"));
 				m_dpon.put("real", Integer.valueOf(String.valueOf(m1.get("real_qty")))+m_dpon.get("real"));
-				m_dpon.put("undone", m_dpon.get("real")-m_dpon.get("plan"));
+				m_dpon.put("undone", m_dpon.get("plan")-m_dpon.get("real"));
 			}
 			if(m1.get("key_name").equals("底盘下线")){
 				m_dpoff.put("plan", Integer.valueOf(String.valueOf(m1.get("total_plan_qty")))+m_dpoff.get("plan"));
 				m_dpoff.put("real", Integer.valueOf(String.valueOf(m1.get("real_qty")))+m_dpoff.get("real"));
-				m_dpoff.put("undone", m_dpoff.get("real")-m_dpoff.get("plan"));
+				m_dpoff.put("undone", m_dpoff.get("plan")-m_dpoff.get("real"));
 			}
 			if(m1.get("key_name").equals("总装上线")){
 				m_zzon.put("plan", Integer.valueOf(String.valueOf(m1.get("total_plan_qty")))+m_zzon.get("plan"));
 				m_zzon.put("real", Integer.valueOf(String.valueOf(m1.get("real_qty")))+m_zzon.get("real"));
-				m_zzon.put("undone", m_zzon.get("real")-m_zzon.get("plan"));
+				m_zzon.put("undone", m_zzon.get("plan")-m_zzon.get("real"));
 			}
 			if(m1.get("key_name").equals("总装下线")){
 				m_zzoff.put("plan", Integer.valueOf(String.valueOf(m1.get("total_plan_qty")))+m_zzoff.get("plan"));
 				m_zzoff.put("real", Integer.valueOf(String.valueOf(m1.get("real_qty")))+m_zzoff.get("real"));
-				m_zzoff.put("undone", m_zzoff.get("real")-m_zzoff.get("plan"));
+				m_zzoff.put("undone", m_zzoff.get("plan")-m_zzoff.get("real"));
 			}
 			if(m1.get("key_name").equals("入库")){
 				m_rk.put("plan", Integer.valueOf(String.valueOf(m1.get("total_plan_qty")))+m_rk.get("plan"));
 				m_rk.put("real", Integer.valueOf(String.valueOf(m1.get("real_qty")))+m_rk.get("real"));
-				m_rk.put("undone", m_rk.get("real")-m_rk.get("plan"));
+				m_rk.put("undone", m_rk.get("plan")-m_rk.get("real"));
 			}
 						
 			

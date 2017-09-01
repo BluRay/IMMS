@@ -93,6 +93,7 @@ label {
 			<!-- /.main-container -->
 		</div>
 		<script src="../assets/js/jquery.gritter.min.js"></script>
+		<script src="../assets/js/bootstrap3-typeahead.js"></script>
 		<script type="text/javascript" src="../js/common.js"></script>
 		<script src="../js/tech/techFollow_Mobile.js"></script>
 </div>
