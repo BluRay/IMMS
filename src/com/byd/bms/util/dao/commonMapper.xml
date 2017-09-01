@@ -333,22 +333,26 @@
 		left join BMS_BASE_KEY k on p.plan_code_value=k.value and k.key_code='PLAN_CODE'
 		where p.factory_id=#{factory_id} and p.plan_date=#{query_date} and k.key_name in('焊装上线','涂装上线','底盘上线','总装下线')
 		group by k.key_name) a
-		left join
+		right join
 		(select count(b.id) finished_qty,'焊装上线' key_name
 		from BMS_PLAN_BUS b
-		where b.factory_id=#{factory_id} and b.welding_online_date like concat('%',#{query_date},'%')
+		where b.factory_id=#{factory_id} and b.welding_online_date > CONCAT(date_sub(#{query_date},interval 1 day),' 17:30:00')
+		 and b.welding_online_date &lt;=CONCAT(#{query_date},' 17:30:00')
 		union
 		select count(b.id) finished_qty,'涂装上线' key_name
 		from BMS_PLAN_BUS b
-		where b.factory_id=#{factory_id} and b.painting_online_date like concat('%',#{query_date},'%')
+		where b.factory_id=#{factory_id}  and b.painting_online_date > CONCAT(date_sub(#{query_date},interval 1 day),' 17:30:00')
+		 and b.painting_online_date &lt;=CONCAT(#{query_date},' 17:30:00')
 		union
 		select count(b.id) finished_qty,'底盘上线' key_name
 		from BMS_PLAN_BUS b
-		where b.factory_id=#{factory_id} and b.chassis_online_date like concat('%',#{query_date},'%')
+		where b.factory_id=#{factory_id}  and b.chassis_online_date > CONCAT(date_sub(#{query_date},interval 1 day),' 17:30:00')
+		 and b.chassis_online_date &lt;=CONCAT(#{query_date},' 17:30:00')
 		union
 		select count(b.id) finished_qty,'总装下线' key_name
 		from BMS_PLAN_BUS b
-		where b.factory_id=#{factory_id} and b.assembly_offline_date like concat('%',#{query_date},'%')
+		where b.factory_id=#{factory_id} and b.assembly_offline_date > CONCAT(date_sub(#{query_date},interval 1 day),' 17:30:00')
+		 and b.assembly_offline_date &lt;=CONCAT(#{query_date},' 17:30:00')
 		) b on b.key_name=a.key_name
 	</select>
 	
@@ -729,11 +733,11 @@
 		select t1.online_total-t2.offline_total as balance from
 		(select ifnull(sum(offline_real_qty),0) online_total
 		from BMS_PD_PARTS_PLAN_FINISH f
-		left join BMS_BASE_KEY k on f.parts_id=k.id
+		left join BMS_BASE_KEY k on f.parts_id=k.value and k.key_code='BASE_PARTS'
 		where k.key_name='喷砂' and f.factory_id=#{factoryId}) t1,
 		(select ifnull(count(distinct b.bus_number),0) offline_total
 		from BMS_PLAN_BUS b
-		where b.factory_id=#{factoryId} and b.welding_online_date is not null) t2
+		where b.factory_id=#{factoryId} and b.welding_online_date>0) t2
 	</select>
 	<!-- 获取权限组织结构树 -->
 	<select id="getOrgAuthTree" statementType="CALLABLE" resultType="Map" parameterType='Map'>

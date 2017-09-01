@@ -112,7 +112,14 @@ function ajaxQuery(){
 			
 			$.each(response.data, function(index, value) {
 				var workshop = value.key_name;
-				if(workshop!='入库') workshop = workshop.substring(0,workshop.length-2);
+				if(workshop=='车辆入库'){
+					workshop = "入库";
+				}else if(workshop=='自制下线'){
+					workshop = "自制件";
+				}else{
+					workshop = workshop.substring(0,workshop.length-2);
+				}
+				
 				plan_qty_array[categories.indexOf(workshop)] = Number(value.plan_qty);
 				real_qty_array[categories.indexOf(workshop)] = Number(value.real_qty);
 				rate_array[categories.indexOf(workshop)] = Number(value.rate);

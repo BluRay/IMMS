@@ -421,4 +421,51 @@
 			</if>
 		</foreach>
 	</select>
+	<!-- 获取各节点的计划数量之和 group by工厂-->
+	<select id="queryFactoryPlanQty" parameterType="Map" resultType="Map">
+		<![CDATA[
+			SELECT f.factory_name,ifnull(sum(plan_qty),0) plan_qty FROM BMS_BASE_FACTORY f
+				LEFT JOIN (
+	                select p.factory_id,p.plan_qty from BMS_PLAN_PRODUCTION_PLAN p 
+					LEFT JOIN BMS_BASE_KEY k ON p.plan_code_value = k.value and k.key_code ='PLAN_CODE' 
+	                WHERE p.plan_code_value IN (
+					SELECT k.value FROM BMS_BASE_KEY k WHERE k.key_code = 'PLAN_CODE'
+						 AND k.key_name IN('自制下线','部件下线','焊装下线','涂装下线',
+						'底盘下线','总装下线','焊装上线','涂装上线','底盘上线','总装上线','车辆入库')
+					) 
+				    AND p.plan_date >=#{start_date} AND p.plan_date <=#{end_date} 
+			    ) t ON f.id=t.factory_id where f.capacity>0
+            GROUP BY f.id ORDER BY f.id
+		]]>
+	</select>
+	<!-- 获取工厂实际完成数量 -->
+	<select id="getFactoryPlanRealCount" parameterType="List" resultType="map">
+		select factory_name,sum(qty) real_qty from (
+		<foreach collection="list" index="index" item="item"
+			separator="UNION ALL">
+			SELECT b.factory_id,count(1) qty FROM BMS_PLAN_BUS b
+			WHERE 1=1
+			<if test="item.start_date !=null and item.start_date!=''">
+				<![CDATA[ AND ${item.workshop} >CONCAT(date_add(#{item.start_date},interval '-1' DAY),' 17:30:00') ]]>
+			</if>
+			<if test="item.end_date !=null and item.end_date!=''">
+				<![CDATA[ AND ${item.workshop} <= CONCAT(#{item.end_date},' 17:30:00') ]]>
+			</if>
+		</foreach>
+		union all
+		    SELECT factory_id,IFNULL(SUM(quantity),0) AS qty FROM BMS_PD_WORKSHOP_SUPPLY 
+			WHERE supply_workshop = '自制件' AND receive_workshop = '部件' 
+			AND supply_date >CONCAT(date_add(#{list[0].start_date},interval '-1' DAY),' 17:30:00') 
+			<![CDATA[ AND supply_date <= CONCAT(#{list[0].end_date},' 17:30:00') ]]>
+		union all
+		    SELECT factory_id,IFNULL(SUM(offline_real_qty),0) AS qty FROM
+			BMS_PD_PARTS_PLAN_FINISH b WHERE b.parts_id = '0'
+			<if test="list[0].start_date !=null and list[0].start_date!=''">
+				<![CDATA[ AND b.prod_date >CONCAT(date_add(#{list[0].start_date},interval '-1' DAY),' 17:30:00')  ]]>
+			</if>
+			<if test="list[0].end_date !=null and list[0].end_date!=''">
+				<![CDATA[ AND b.prod_date <= CONCAT(#{list[0].end_date},' 17:30:00') ]]>
+			</if>
+		) t left join BMS_BASE_FACTORY f on f.id=t.factory_id group by factory_id
+	</select>
 </mapper>

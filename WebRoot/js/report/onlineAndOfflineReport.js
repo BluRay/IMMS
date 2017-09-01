@@ -62,7 +62,7 @@ $(document).ready(function(){
 			},
 			aoColumnDefs : [
                 {
-                    "aTargets" :[3,6],
+                    "aTargets" :[4,8],
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) { 
                     	if(parseFloat($(nTd).text())>0){
                     		$(nTd).css('color', '#ff0000');
@@ -105,11 +105,11 @@ $(document).ready(function(){
 	            		addTotalJson={"factory_name":"合计",
 	            				"welding_online":welding_onlinetotal,"welding_offline":welding_offlinetotal,
 	            				"chassis_online":chassis_onlinetotal,"chassis_offline":chassis_offlinetotal};
-	            		addFinishRaioJson={"factory_name":"达成率",
-	            				"welding_online":'',"welding_offline":weldingFinishRadio,
-	            				"chassis_online":'',"chassis_offline":chassisFinishRadio};
+//	            		addFinishRaioJson={"factory_name":"达成率",
+//	            				"welding_online":'',"welding_offline":weldingFinishRadio,
+//	            				"chassis_online":'',"chassis_offline":chassisFinishRadio};
 	            		returnData.data.push(addTotalJson);
-	            		returnData.data.push(addFinishRaioJson);
+//	            		returnData.data.push(addFinishRaioJson);
 	                    callback(returnData);
 	                }
 	            });
@@ -117,23 +117,35 @@ $(document).ready(function(){
 			},
 			columns: [
 			            {"title":"工厂","class":"center","data":"factory_name","defaultContent": ""},
-			            {"title":"焊装累计计划","class":"center welding_online","data":"welding_online","render":function(data,type,row){
+			            {"title":"焊装上线累计计划","class":"center welding_online","data":"welding_online","render":function(data,type,row){
 			            	return data!='0' ? data : '-'
 			            },"defaultContent": ""},
 			            {"title":"焊装累计完成","class":"center welding_offline","data":"welding_offline","render":function(data,type,row){
 			            	return (data!='0' && data!='0%') ? data : '-'
 			            },"defaultContent": ""},
-			            {"title":"欠产","class":"center","data": "-","render":function(data,type,row){
-			            	return (row.factory_name!='达成率' && (row.welding_online!='0' || row.welding_offline!='0'))  ? row.welding_online-row.welding_offline :'-'
+			            {"title":"达成率","class":"center","data":"","render":function(data,type,row){
+			            	var number1=row.welding_offline;
+			            	var number2=row.welding_online!=0 ? row.welding_online : 1;
+			            	var result=Math.round(number1 / number2 * 10000) / 100.00 + "%";// 小数点后两位百分比
+                            return (result!='0%') ? result : '-'
 			            },"defaultContent": ""},
-			            {"title":"底盘累计计划","class":"center chassis_online","data":"chassis_online","render":function(data,type,row){
+			            {"title":"欠产","class":"center","data": "-","render":function(data,type,row){
+			            	return (row.factory_name!='达成率' && (row.welding_online!='0' || row.welding_offline!='0'))  ? row.welding_offline-row.welding_online :'-'
+			            },"defaultContent": ""},
+			            {"title":"底盘上线累计计划","class":"center chassis_online","data":"chassis_online","render":function(data,type,row){
 			            	return data!='0' ? data : '-'
 			            },"defaultContent": ""},	            
 			            {"title":"底盘累计完成","class":"center chassis_offline","data": "chassis_offline","render":function(data,type,row){
 			            	return (data!='0' && data!='0%') ? data : '-'
 			            },"defaultContent": ""},
+			            {"title":"达成率","class":"center","data":"","render":function(data,type,row){
+			            	var number1=row.chassis_offline;
+			            	var number2=row.chassis_online!=0 ? row.chassis_online : 1;
+			            	var result=Math.round(number1 / number2 * 10000) / 100.00 + "%";// 小数点后两位百分比
+                            return (result!='0%') ? result : '-'
+			            },"defaultContent": ""},
 			            {"title":"欠产","class":"center","data": "-","render":function(data,type,row){
-			            	return (row.factory_name!='达成率' && (row.chassis_online!='0' || row.chassis_offline!='0'))  ? row.chassis_online-row.chassis_offline : '-'
+			            	return ((row.chassis_online!='0' || row.chassis_offline!='0'))  ? row.chassis_offline-row.chassis_online : '-'
 			            },"defaultContent": ""},
 			          ]
 		});

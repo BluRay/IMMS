@@ -790,7 +790,8 @@
 	</select>
 	
 	<select id="getPlanSerach" parameterType="Map" resultType="Map">
-		select record.order_desc,record.key_name,record.production_qty,record.order_id,ifnull(record.real_qty,0) real_qty,ifnull(record.total_qty,0) total_qty,ifnull(p.total_plan_qty,0) total_plan_qty 
+		select record.order_desc,case record.key_name when '自制下线' then '自制件下线' when '车辆入库' then '入库' else record.key_name end as key_name
+		,record.production_qty,record.order_id,ifnull(record.real_qty,0) real_qty,ifnull(record.total_qty,0) total_qty,ifnull(p.total_plan_qty,0) total_plan_qty 
 		from
 		(
 		select '自制下线' key_name,fo.order_id,tmp.quantity1 real_qty,tmp.quantity total_qty,sum(fo.production_qty) production_qty,concat(o.order_no,' ',o.order_name,t.bus_type_code,' ',sum(fo.production_qty),'台') order_desc
@@ -811,7 +812,7 @@
 		and s1.factory_id=#{factory_id}
 		where s.supply_workshop='自制件' and s.receive_workshop='部件' and s.factory_id=#{factory_id} 
 		group by s.order_id) tmp on tmp.order_id=fo.order_id
-		where fo.order_id is not null and fo.factory_id=#{factory_id} and fo.status='0'
+		where fo.order_id is not null and fo.factory_id=#{factory_id} 
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no like concat(#{order_no},'%')
 		</if>
@@ -835,7 +836,7 @@
 		</if>	
 		where f.factory_id=#{factory_id}  and p1.key_name='前段车架总成' group by f.order_id ) tmp
 		on tmp.order_id=fo.order_id	 
-		where fo.factory_id=#{factory_id} and fo.order_id is not null and fo.status IN ('0','1')
+		where fo.factory_id=#{factory_id} and fo.order_id is not null
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no like concat(#{order_no},'%')
 		</if>
@@ -859,7 +860,7 @@
 		</if>	
 		where f.factory_id=#{factory_id}  and p1.key_name='喷砂' group by f.order_id ) tmp
 		on tmp.order_id=fo.order_id	 
-		where fo.factory_id=#{factory_id} and fo.order_id is not null and fo.status IN ('0','1')
+		where fo.factory_id=#{factory_id} and fo.order_id is not null
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no like concat(#{order_no},'%')
 		</if>
@@ -881,7 +882,7 @@
 			and b1.welding_online_date &lt;=concat(#{end_date},' 17:30:00')
 		</if>
 		where b.welding_online_date != '' and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=fo.order_id
-		where fo.factory_id=#{factory_id} and fo.status IN ('0','1')
+		where fo.factory_id=#{factory_id} 
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no like concat(#{order_no},'%')
 		</if>
@@ -903,7 +904,7 @@
 			and b1.welding_offline_date &lt;=concat(#{end_date},' 17:30:00')
 		</if>
 		where b.welding_offline_date != '' and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=fo.order_id
-		where fo.factory_id=#{factory_id} and fo.status IN ('0','1')
+		where fo.factory_id=#{factory_id} 
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no like concat(#{order_no},'%')
 		</if>
@@ -925,7 +926,7 @@
 			and b1.painting_online_date &lt;=concat(#{end_date},' 17:30:00')
 		</if>
 		where b.painting_online_date != '' and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=fo.order_id
-		where fo.factory_id=#{factory_id} and fo.status IN ('0','1')
+		where fo.factory_id=#{factory_id}
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no like concat(#{order_no},'%')
 		</if>
@@ -947,7 +948,7 @@
 			and b1.painting_offline_date &lt;=concat(#{end_date},' 17:30:00')
 		</if>
 		where b.painting_offline_date != '' and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=fo.order_id
-		where fo.factory_id=#{factory_id} and fo.status IN ('0','1')
+		where fo.factory_id=#{factory_id}
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no like concat(#{order_no},'%')
 		</if>
@@ -969,7 +970,7 @@
 			and b1.chassis_online_date &lt;=concat(#{end_date},' 17:30:00')
 		</if>
 		where b.chassis_online_date != '' and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=fo.order_id
-		where fo.factory_id=#{factory_id} and fo.status IN ('0','1')
+		where fo.factory_id=#{factory_id}
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no like concat(#{order_no},'%')
 		</if>
@@ -991,7 +992,7 @@
 			and b1.chassis_offline_date &lt;=concat(#{end_date},' 17:30:00')
 		</if>
 		where b.chassis_offline_date != '' and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=fo.order_id
-		where fo.factory_id=#{factory_id} and fo.status IN ('0','1')
+		where fo.factory_id=#{factory_id}
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no like concat(#{order_no},'%')
 		</if>
@@ -1013,7 +1014,7 @@
 			and b1.assembly_online_date &lt;=concat(#{end_date},' 17:30:00')
 		</if>
 		where b.assembly_online_date != '' and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=fo.order_id
-		where fo.factory_id=#{factory_id} and fo.status IN ('0','1')
+		where fo.factory_id=#{factory_id}
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no like concat(#{order_no},'%')
 		</if>
@@ -1035,14 +1036,14 @@
 			and b1.assembly_offline_date &lt;=concat(#{end_date},' 17:30:00')
 		</if>
 		where b.assembly_offline_date != '' and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=fo.order_id
-		where fo.factory_id=#{factory_id} and fo.status IN ('0','1')
+		where fo.factory_id=#{factory_id}
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no like concat(#{order_no},'%')
 		</if>
 		group by fo.order_id
 		
 		union all
-		select '入库' key_name,fo.order_id,tmp.real_qty,tmp.total_qty,sum(fo.production_qty) production_qty,concat(o.order_no,' ',o.order_name,t.bus_type_code,' ',sum(fo.production_qty),'台') order_desc 
+		select '车辆入库' key_name,fo.order_id,tmp.real_qty,tmp.total_qty,sum(fo.production_qty) production_qty,concat(o.order_no,' ',o.order_name,t.bus_type_code,' ',sum(fo.production_qty),'台') order_desc 
 		from BMS_OR_FACTORY_ORDER fo 
 		left join BMS_OR_ORDER o on o.id=fo.order_id 
 		left join BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id 
@@ -1057,7 +1058,7 @@
 			and b1.warehousing_date &lt;=concat(#{end_date},' 17:30:00')
 		</if>
 		where b.warehousing_date != '' and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=fo.order_id
-		where fo.factory_id=#{factory_id} and fo.status IN ('0','1')
+		where fo.factory_id=#{factory_id}
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no like concat(#{order_no},'%')
 		</if>
@@ -1082,7 +1083,7 @@
 		<if test="workshop !=null and workshop !=''">
 			and record.key_name like concat(#{workshop},'%')
 		</if>		
-		order by record.order_id,k.id
+		order by record.order_id,cast(k.value as signed)
 	</select>
 	
 	<select id="getPlanOrderList" parameterType="Map" resultType="Map">

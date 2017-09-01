@@ -1,6 +1,7 @@
 package com.byd.bms.report.service.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -331,6 +332,74 @@ public class ReportServiceImpl implements IReportService {
 	public int getPlanZzjRealCount(Map<String, Object> conditionMap) {
 		return reportDao.getPlanZzjRealCount(conditionMap);
 	}
+	public void getFactoryRateRankData(Map<String, Object> conditionMap,
+		  List queryMapList,ModelMap model) {
+		java.text.DecimalFormat   df = new   java.text.DecimalFormat("##.##");
+		List<Map<String,Object>> ratelist=new ArrayList<Map<String,Object>>();
+		List<Map<String,Object>> detaillist=new ArrayList<Map<String,Object>>();
+		
+		List<Map<String,Object>> plan_datalist=reportDao.queryFactoryPlanQty(conditionMap);
+		List<Map<String,Object>> real_datalist=reportDao.getFactoryPlanRealCount(queryMapList);
+		for(Map<String,Object> planmap : plan_datalist){
+			Map<String,Object> resultMap=new HashMap<String,Object>();
+			Map<String,Object> resultdetailMap=new HashMap<String,Object>();
+		     String plan_factory_name=(String)planmap.get("factory_name"); 
 	
-	
+		     Integer plan_qty=Integer.parseInt(planmap.get("plan_qty").toString());
+		     resultMap.put("factory_name", plan_factory_name);
+			 resultMap.put("rate", 0);
+		     resultdetailMap.putAll(resultMap);
+		     resultdetailMap.put("detail_info", "计划数:"+plan_qty+";完成数:0");
+		     for(Map<String,Object> realmap : real_datalist){
+				 String real_factroy_name=(String)realmap.get("factory_name");
+				 Integer real_qty=Integer.parseInt(realmap.get("real_qty").toString());
+				 if(plan_factory_name.equals(real_factroy_name)){
+					 double rate = Double.parseDouble(df.format(real_qty/(plan_qty!=0 ? plan_qty : 1)*100));
+					 resultMap.put("factory_name", plan_factory_name);
+					 resultMap.put("rate", rate);
+					 resultdetailMap.putAll(resultMap);
+				     resultdetailMap.put("detail_info", "计划数:"+plan_qty+";完成数:"+real_qty);
+				 }
+			 }
+		     ratelist.add(resultMap);
+			 detaillist.add(resultdetailMap);
+		}
+		// 排序
+		Object[] mapArr=ratelist.toArray();
+		for(int i=0;i<mapArr.length;i++){
+			Map<String,Object> imap=(Map<String, Object>) mapArr[i];
+			Double maxrate=Double.parseDouble(imap.get("rate").toString());
+			for(int j=i+1;j<mapArr.length;j++){
+				Map<String,Object> jmap=(Map<String, Object>) mapArr[j];
+				Double rate=Double.parseDouble(jmap.get("rate").toString());
+				if(rate>maxrate){
+					Map<String,Object> temp=null;
+					maxrate=rate;
+					temp=(Map<String, Object>)mapArr[i];
+					mapArr[i]=mapArr[j];
+					mapArr[j]=temp;
+				}
+			}	
+		}
+		int rank=1; // 排名值
+		double lastrate=0.0;
+		for(int i=0;i<mapArr.length;i++){
+			Map<String,Object> imap=(Map<String, Object>) mapArr[i];
+			double curmaxrate=Double.parseDouble(imap.get("rate").toString());
+			if(lastrate==curmaxrate){ // 相同达成率，跳过循环
+				continue;
+			}
+			lastrate=curmaxrate;
+			for(int k=0;k<detaillist.size();k++){
+				Map<String,Object> kmap=(Map<String, Object>) detaillist.get(k);
+				double currate=Double.parseDouble(kmap.get("rate").toString());
+				if(curmaxrate==currate){
+					kmap.put("rank", rank);
+				}
+			}
+			rank++;
+		}
+		model.put("series", Arrays.asList(mapArr));
+		model.put("factory_data", detaillist);
+	}
 }

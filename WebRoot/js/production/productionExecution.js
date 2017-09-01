@@ -342,7 +342,7 @@ $(document).ready(function () {
             		if(parts['3C_no'].trim().length>0){
             			$("<td />").html(parts['3C_no']).appendTo(tr);
             		}else{
-            			$("<td />").html("<input class='batch' style='border:0;background:transparent;text-align:center;width:100%' value='"+(parts.batch||'')+"'>").appendTo(tr);
+            			$("<td />").html("<input class='batch' placeholder='请输入批次号' style='border:1;background:transparent;text-align:center;width:100%;height:100%;' value='"+(parts.batch||'')+"'>").appendTo(tr);
             		}
             		$(tr).data("parts_index",index);
             		$("#partsListTable tbody").append(tr);

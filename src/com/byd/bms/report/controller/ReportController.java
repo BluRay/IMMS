@@ -146,14 +146,6 @@ public class ReportController extends BaseController {
 			conditionMap2.put("factory_id", request.getParameter("factory_id"));
 			
 			String start_date = request.getParameter("start_date");
-//			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-//			Date startDate = sdf.parse(start_date);
-//			Calendar calendar = Calendar.getInstance(); //得到日历
-//			calendar.setTime(startDate);//把当前时间赋给日历
-//			calendar.add(Calendar.DAY_OF_MONTH, -1);  //设置为前一天
-//			startDate = calendar.getTime();   //得到前一天的时间
-//			start_date = sdf.format(startDate)+" 17:30:00";    //格式化前一天
-
 			conditionMap2.put("start_date", start_date);
 			conditionMap2.put("end_date", request.getParameter("end_date"));
 			
@@ -248,5 +240,37 @@ public class ReportController extends BaseController {
 		model = mv.getModelMap();
 		return model;
 	}
-
+	/**
+	 * 工厂计划达成率排名
+	 * @return
+	 */
+	@RequestMapping("/factoryRateRankReport")
+	public ModelAndView factoryRateRankReport(){
+		mv.setViewName("report/factoryRateRankReport");
+		return mv;
+	}
+	@RequestMapping("/getfactoryRateRankData")
+	@ResponseBody
+	public ModelMap getfactoryRateRankData(){
+		Map<String,Object> conditionMap=new HashMap<String,Object>();
+		String start_date = request.getParameter("start_date");
+		String end_date = request.getParameter("end_date");
+		conditionMap.put("start_date", start_date);
+		conditionMap.put("end_date", end_date);
+        List plan_code=new ArrayList();
+        String [] arr={"welding_online_date","welding_offline_date",
+        	"painting_online_date","painting_offline_date",
+        	"chassis_online_date","chassis_offline_date",
+        	"assembly_online_date","assembly_offline_date","warehousing_date"};
+		
+		for(String str : arr){
+			Map<String,Object> conditionMap2=new HashMap<String,Object>();
+			conditionMap2.put("start_date", start_date);
+			conditionMap2.put("end_date", end_date);
+			conditionMap2.put("workshop", str);
+			plan_code.add(conditionMap2);
+		}
+		reportService.getFactoryRateRankData(conditionMap, plan_code, model);
+		return model;
+	}
 }

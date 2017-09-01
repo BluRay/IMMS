@@ -4,7 +4,7 @@
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta charset="utf-8" />
-		<title>焊装、底盘上下线完成情况</title>
+		<title>工厂焊装、底盘上线</title>
 		<meta name="description" content="Common Buttons &amp; Icons" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 		<link rel="stylesheet" href="../assets/css/fixedColumns.bootstrap.min.css" />
@@ -45,16 +45,7 @@
 					
 					<form id="search_form" class="well form-search">
 						<table style="line-height:1.7">
-						<tr>
-<!-- 							<td style="text-align:right" >&nbsp;生产日期：</td> -->
-<!-- 							<td> -->
-<!-- 							<input id="search_date" placeholder="生产日期..."  -->
-<!-- 							style="height: 30px;width:100px" type="text"  -->
-<!-- 							  onClick="WdatePicker({el:'search_date',dateFmt:'yyyy-MM-dd'});"></td> -->
-
-<!-- 							<td> -->
-<!-- 							<input class="btn btn-sm btn-primary" id="btnQuery" value="查询" style="margin-left: 10px;top:1px;" type="button">							 -->
-<!-- 							</td> -->
+						    <tr>
                                 <td>工厂：</td>
 								<td><select id="search_factory" class="input-small" style="height: 30px;width:100px"></select></td>
 								<td>&nbsp;生产日期：</td>

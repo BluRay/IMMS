@@ -33,4 +33,7 @@ public interface IReportService {
 	
 	public int getPlanZzjRealCount(Map<String,Object> conditionMap);
 	
+	public void getFactoryRateRankData(Map<String, Object> conditionMap,
+			List queryMapList,ModelMap model);
+	
 }

@@ -615,7 +615,7 @@ function drawConfigListTable(data,table){
 	$.each(data.data,function (index,value) {
 		var tr = $("<tr />");
 		$("<td />").html(value.sap_no).appendTo(tr);
-		$("<td />").html(value.material_spec).appendTo(tr);
+		$("<td />").html(value.material_desc).appendTo(tr);
 		$("<td />").html(value.material_type).appendTo(tr);
 		$("<td />").html(value.material_spec).appendTo(tr);
 		$("<td />").html(value.unit).appendTo(tr);
