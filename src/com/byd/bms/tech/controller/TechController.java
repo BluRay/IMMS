@@ -710,10 +710,11 @@ public class TechController extends BaseController{
 		conditionMap.put("order_no", request.getParameter("order_no"));
 		conditionMap.put("tech_task_id", request.getParameter("tech_task_id"));
 		
-		List<Map<String, Object>> list = techService.getFollowingUpDetailList1(conditionMap);
-		
+		List<Map<String, Object>> list = techService.getFollowingUpDetailList1(conditionMap);		
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("data", list);
 		mv.clear();
-		mv.getModelMap().addAllAttributes(list);
+		mv.getModelMap().addAllAttributes(result);
 		model = mv.getModelMap();
 		return model;
 	}
@@ -737,7 +738,7 @@ public class TechController extends BaseController{
 	@ResponseBody
 	public ModelMap editFollowingUp1(){
 		String curTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-		String edit_user = request.getSession().getAttribute("staff_number") + "";
+		String edit_user = request.getSession().getAttribute("user_id") + "";
 		String tech_task_id = request.getParameter("tech_task_id");
 		String factory = request.getParameter("factory");
 		String workshop = request.getParameter("workshop");

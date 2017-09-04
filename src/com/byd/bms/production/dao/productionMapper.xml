@@ -364,13 +364,20 @@
 	</select>
 	
 	<select id="queryPartsFinishCount" parameterType="Map" resultType="Map">
-		select ifnull(sum(f.online_real_qty),0) online_total,ifnull(sum(f.offline_real_qty),0) offline_total,fo.production_qty
+		select ifnull(sum(f.online_real_qty),0) online_total,ifnull(sum(f.offline_real_qty),0) offline_total,
+		(select sum(fo.production_qty) from BMS_OR_FACTORY_ORDER fo where fo.order_id=f.order_id and fo.factory_id=f.factory_id) production_qty
+		from BMS_PD_PARTS_PLAN_FINISH f
+		left join BMS_OR_ORDER o on f.order_id=o.id
+		where o.order_no=#{order_no} and f.factory_id=#{factory_id} and f.parts_id=#{parts_id}
+		group by f.order_id,f.factory_id
+		
+		<!-- select ifnull(sum(f.online_real_qty),0) online_total,ifnull(sum(f.offline_real_qty),0) offline_total,fo.production_qty
 		from BMS_OR_FACTORY_ORDER fo
 		left join BMS_PD_PARTS_PLAN_FINISH f on f.order_id=fo.order_id and
 		f.factory_id=fo.factory_id and f.parts_id=#{parts_id}
 		left join BMS_OR_ORDER o on fo.order_id=o.id
 		where o.order_no=#{order_no} and fo.factory_id=#{factory_id}
-		group by fo.order_id,fo.factory_id
+		group by fo.order_id,fo.factory_id -->
 	</select>
 	
 		<insert id="savePartsOnOffRecord" parameterType="Map" useGeneratedKeys="true" keyProperty="id">
@@ -406,13 +413,25 @@
 	</update>
 	
 	<select id="queryPartsOnOffList" parameterType="Map" resultType="Map">
-		SELECT p.*,f.factory_name,CONCAT(o.order_no,' ',o.order_name,x.bus_type_code,' ',fo.production_qty,' ' ,'台') as order_desc,k.key_name parts_name,u.username editor,o.order_no,
+		<!-- SELECT p.*,f.factory_name,CONCAT(o.order_no,' ',o.order_name,x.bus_type_code,' ',fo.production_qty,' ' ,'台') as order_desc,k.key_name parts_name,u.username editor,o.order_no,
 		(select sum(p1.online_real_qty) from BMS_PD_PARTS_PLAN_FINISH p1 where p1.factory_id=p.factory_id and p1.order_id=p.order_id and p1.parts_id=p.parts_id ) online_total,
 		(select sum(p1.offline_real_qty) from BMS_PD_PARTS_PLAN_FINISH p1 where p1.factory_id=p.factory_id and p1.order_id=p.order_id and p1.parts_id=p.parts_id ) offline_total
 		FROM BMS_PD_PARTS_PLAN_FINISH p
 		LEFT JOIN BMS_BASE_FACTORY f ON p.factory_id = f.id
 		LEFT JOIN BMS_OR_ORDER o ON p.order_id = o.id
 		LEFT JOIN BMS_OR_FACTORY_ORDER fo on fo.order_id=p.order_id and fo.factory_id=p.factory_id
+		LEFT JOIN BMS_BASE_KEY k ON p.parts_id = k.value and k.key_code='BASE_PARTS'
+		LEFT JOIN BMS_BASE_BUS_TYPE x ON x.id = o.bus_type_id
+		LEFT JOIN BMS_BASE_USER u on u.id=p.editor_id
+		where 1=1 -->
+		SELECT p.*,f.factory_name,CONCAT(o.order_no,' ',o.order_name,x.bus_type_code,' ',(
+		select sum(fo.production_qty) from BMS_OR_FACTORY_ORDER fo where fo.order_id=p.order_id and fo.factory_id=p.factory_id
+		),' ' ,'台') as order_desc,k.key_name parts_name,u.username editor,o.order_no,
+		(select sum(p1.online_real_qty) from BMS_PD_PARTS_PLAN_FINISH p1 where p1.factory_id=p.factory_id and p1.order_id=p.order_id and p1.parts_id=p.parts_id ) online_total,
+		(select sum(p1.offline_real_qty) from BMS_PD_PARTS_PLAN_FINISH p1 where p1.factory_id=p.factory_id and p1.order_id=p.order_id and p1.parts_id=p.parts_id ) offline_total
+		FROM BMS_PD_PARTS_PLAN_FINISH p
+		LEFT JOIN BMS_BASE_FACTORY f ON p.factory_id = f.id
+		LEFT JOIN BMS_OR_ORDER o ON p.order_id = o.id
 		LEFT JOIN BMS_BASE_KEY k ON p.parts_id = k.value and k.key_code='BASE_PARTS'
 		LEFT JOIN BMS_BASE_BUS_TYPE x ON x.id = o.bus_type_id
 		LEFT JOIN BMS_BASE_USER u on u.id=p.editor_id

@@ -2,6 +2,7 @@ package com.byd.bms.plan.dao;
 
 import java.util.List;
 import java.util.Map;
+
 import org.springframework.stereotype.Repository;
 
 import com.byd.bms.order.model.BmsOrder;
@@ -110,4 +111,6 @@ public interface IPlanDao {
 	public int getBusDispatchTotalCount(Map<String, Object> conditionMap);
 	public List<Map<String,Object>> getBusDispatchDetailList(Map<String, Object> conditionMap);//查询发车记录明细
 	public int getBusDispatchDetailCount(Map<String, Object> conditionMap);
+	public List<ProductionException> getExceptionPauseList(
+			Map<String, Object> conditionMap1);
 }

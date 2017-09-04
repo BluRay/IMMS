@@ -160,7 +160,9 @@ function showEditPage(row){
 	//$("#parts").val(row.parts_id);
 	$("#parts option:contains('"+row.parts_name+"')").prop("selected", true);
 	$("#online_num").val(row.online_real_qty);
+	$("#online_num").attr("old_value",row.online_real_qty);
 	$("#offline_num").val(row.offline_real_qty);
+	$("#offline_num").attr("old_value",row.offline_real_qty);
 	
 	var dialog = $( "#dialog-config" ).removeClass('hide').dialog({
 		width:400,
@@ -212,11 +214,11 @@ function ajaxAdd(){
 	//查询生产部件、订单下 上下线总数
 	var info=getPartsFinishCount();
 	
-	if($("#online_num").val()>(info.production_qty-info.online_total)){
+	if(Number($("#online_num").val())>(Number(info.production_qty||0)-Number(info.online_total||0))){
 		alert("上线不能超出工厂订单数！");
 		return false;
 	}
-	if($("#offline_num").val()>(info.production_qty-info.offline_total)){
+	if(Number($("#offline_num").val())>(Number(info.production_qty||0)-Number(info.offline_total||0))){
 		alert("下线不能超出工厂订单数！");
 		return false;
 	}
@@ -271,13 +273,14 @@ function ajaxEdit(id){
 	}
 	//查询生产部件、订单下 上下线总数
 	var info=getPartsFinishCount();
-	
-	if($("#online_num").val()>info.online_left_qty){
-		alert("上线数不能超出工厂订单数！");
+	var online_left=(Number($("#online_num").val())-Number($("#online_num").attr("old_value")||0));
+	var offline_left=(Number($("#offline_num").val())-Number($("#offline_num").attr("old_value")||0));
+	if(online_left>(Number(info.production_qty||0)-Number(info.online_total||0))){
+		alert("上线不能超出工厂订单数！");
 		return false;
 	}
-	if($("#offline_num").val()>info.offline_left_qty){
-		alert("下线数不能超出工厂订单数！");
+	if(offline_left>(Number(info.production_qty||0)-Number(info.offline_total||0))){
+		alert("下线不能超出工厂订单数！");
 		return false;
 	}
 	$.ajax({

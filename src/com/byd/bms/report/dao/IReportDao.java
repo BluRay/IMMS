@@ -13,6 +13,8 @@ public interface IReportDao {
 	public List<Map<String, Object>> queryFactoryOutputReportData(List<Map<String, Object>> conditionMap);
 	public List<Map<String, Object>> queryFactoryZzjOutputReportData(List<Map<String, Object>> conditionMap);
 	public List<Map<String, Object>> queryFactoryBjOutputReportData(List<Map<String, Object>> conditionMap);
+	public List<Map<String,Object>> queryDPUData(Map<String, Object> conditionMap);				//DPU报表
+	public List<Map<String,Object>> queryPassRateData(Map<String, Object> conditionMap);		//一次校检合格率报表
 
 	List<Map<String, Object>> queryOnlineAndOfflineData(Map<String, Object> condMap);
 

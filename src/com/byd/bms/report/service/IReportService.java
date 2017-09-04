@@ -16,6 +16,8 @@ public interface IReportService {
 	// 焊装、底盘上下线完成情况
 	void getOnlineAndOfflineData(Map<String,Object> condMap,ModelMap model);
 	
+	public List<Map<String,Object>> queryDPUData(Map<String, Object> conditionMap);
+	
 	public List<Map<String, Object>> showFactoryOutputReportData(Map<String, Object> queryMap);
 	/**
 	 * 获取工厂月计划达成数据
@@ -33,7 +35,6 @@ public interface IReportService {
 	
 	public int getPlanZzjRealCount(Map<String,Object> conditionMap);
 	
-	public void getFactoryRateRankData(Map<String, Object> conditionMap,
-			List queryMapList,ModelMap model);
+	public void getFactoryRateRankData(Map<String, Object> conditionMap,List queryMapList,ModelMap model);
 	
 }

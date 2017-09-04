@@ -264,10 +264,12 @@ public class SendPlanEmailJob  implements Job {
 				conditionMap1.put("date_start", sdf.format(new Date()));
 				conditionMap1.put("date_end", sdf.format(new Date()));
 				conditionMap1.put("factory_id", String.valueOf(m.get("factory_id")));
+				conditionMap1.put("factory", String.valueOf(m.get("factory_name")));
+				conditionMap1.put("order_id", m1.get("order_id"));
 				conditionMap1.put("order_no", m1.get("order_no"));
 				conditionMap1.put("workshop_name", m1.get("key_name").replaceAll("下线", ""));
 				List<ProductionException> datalist1=new ArrayList<ProductionException>();
-				datalist1=planDao.getExceptionList(conditionMap1);
+				datalist1=planDao.getExceptionPauseList(conditionMap1);
 				if(datalist1.size()>0){
 					String remark = datalist1.get(0).getDetailed_reasons();
 					if(datalist1.size()>1){

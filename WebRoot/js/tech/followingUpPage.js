@@ -259,7 +259,7 @@ function ajaxQueryDetail1(tbody, factory, workshop, order_no, tech_task_id) {
 	$.ajax({
 		url : "getFollowingUpDetailList1",
 		dataType : "json",
-		type : "post",
+		type : "get",
 		data : {
 			"factory" : factory,
 			"workshop" : workshop,
@@ -382,12 +382,9 @@ function ajaxEdit1() {
 			"update_status" : complete_num + follow_num == total_num ? 1 : 0
 		},
 		success : function(response) {
-			if (response.success) {
-				alert(response.message);
-				ajaxQueryDetail1($("#selectBusNumber_table_tbody1"), $('#select_factory1').val(), $('#select_workshop1').val(), $('#select_order_no1').val(), $('#select_tech_task_id1').val());
-			} else {
-				alert(response.message);
-			}
+			alert("维护成功！");
+			$("#selectBusNumberModal1").dialog( "close" );
+			//ajaxQueryDetail1($("#selectBusNumber_table_tbody1"), $('#select_factory1').val(), $('#select_workshop1').val(), $('#select_order_no1').val(), $('#select_tech_task_id1').val());
 		}
 	});
 	

@@ -402,4 +402,10 @@ public class ReportServiceImpl implements IReportService {
 		model.put("series", Arrays.asList(mapArr));
 		model.put("factory_data", detaillist);
 	}
+
+	@Override
+	public List<Map<String, Object>> queryDPUData(Map<String, Object> conditionMap) {
+		return reportDao.queryDPUData(conditionMap);
+	}
+
 }

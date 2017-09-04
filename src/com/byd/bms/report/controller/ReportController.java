@@ -7,9 +7,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -42,6 +45,104 @@ public class ReportController extends BaseController {
 	public ModelAndView factoryOutputReport(){
 		mv.setViewName("report/factoryOutputReport");
 		return mv;
+	}
+
+	@RequestMapping("/dpuReport")
+	public ModelAndView dpuReport(){			//报表 单车缺陷数(DPU)
+		mv.setViewName("report/dpuReport");
+		return mv;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping("/getDPUReportData")
+	@ResponseBody
+	public ModelMap getDPUReportData() throws ParseException{
+		Map<String, Object> result = new HashMap<String, Object>();
+		String conditions = request.getParameter("conditions");
+		Map<String, Object> conditionMap = new HashMap<String, Object>();
+		JSONObject jo = JSONObject.fromObject(conditions);
+		for (Iterator it = jo.keys(); it.hasNext();) {
+			String key = (String) it.next();
+			conditionMap.put(key, jo.get(key));
+		}
+		String sdate=(String) conditionMap.get("startDate");
+		String edate=(String) conditionMap.get("endDate");
+		//查询维度为日,将查询日期范围内的所有日期添加到list中
+		if(conditionMap.get("queryItem").equals("day")){			
+			result.put("itemList", this.getDateList(sdate, edate));
+		}
+		//查询维度为周，获取日期范围内周数
+		if(conditionMap.get("queryItem").equals("week")){			
+			result.put("itemList",this.getWeekList(sdate, edate));
+		}
+		//查询维度为月，获取日期范围内详细月列表
+		if(conditionMap.get("queryItem").equals("month")){
+			result.put("itemList", this.getMonthList(sdate, edate));
+		}		
+		
+		
+		mv.clear();
+		mv.getModelMap().addAllAttributes(result);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	/**
+	 * 获取日期范围内所有日期
+	 * @param sdate
+	 * @param edate
+	 * @return
+	 * @throws ParseException
+	 */
+	private List<String> getDateList(String sdate, String edate) throws ParseException {
+		Calendar startCalendar = Calendar.getInstance();
+		Calendar endCalendar = Calendar.getInstance();
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		Date startDate = df.parse(sdate);
+		startCalendar.setTime(startDate);
+		Date endDate = df.parse(edate);
+		endCalendar.setTime(endDate);
+		List<String> datelist=new ArrayList<String>();
+		while (true) {
+			if (startCalendar.getTimeInMillis() <= endCalendar.getTimeInMillis()) {
+				datelist.add(df.format(startCalendar.getTime()));
+			} else {
+				break;
+			}
+			startCalendar.add(Calendar.DAY_OF_MONTH, 1);
+		}
+		return datelist;
+	}
+	private List getWeekList(String sdate, String edate) throws ParseException{
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		Calendar startCalendar = Calendar.getInstance();
+		Calendar endCalendar = Calendar.getInstance();
+		startCalendar.setTime(df.parse(sdate));
+		endCalendar.setTime(df.parse(edate));
+		int s_week = startCalendar.get(Calendar.WEEK_OF_YEAR);
+		int e_week = endCalendar.get(Calendar.WEEK_OF_YEAR);
+		int weekcount=1;
+		List weeklist=new ArrayList();
+		while(weekcount<=(e_week-s_week+1)){
+			weeklist.add(weekcount);
+			weekcount+=1;
+		}
+		return weeklist; 
+	}
+	private List getMonthList(String sdate, String edate) throws ParseException{
+		List monthlist=new ArrayList();
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		Calendar startCalendar = Calendar.getInstance();
+		Calendar endCalendar = Calendar.getInstance();
+		startCalendar.setTime(df.parse(sdate));
+		endCalendar.setTime(df.parse(edate));
+		int s_month = startCalendar.get(Calendar.MONTH)+1;
+		int e_month = endCalendar.get(Calendar.MONTH)+1;
+		while(s_month<=e_month){
+			monthlist.add(s_month);
+			s_month+=1;
+		}
+		return monthlist;
 	}
 	
 	/**
