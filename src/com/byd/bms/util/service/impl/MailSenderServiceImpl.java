@@ -19,6 +19,7 @@ import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 import org.one2team.highcharts.server.export.ExportType;
 import org.one2team.highcharts.server.export.HighchartsExporter;
 import org.one2team.highcharts.shared.ChartOptions;
@@ -41,7 +42,7 @@ import com.byd.bms.util.service.MailSenderService;
 import examples.SamplesFactory;
 
 public class MailSenderServiceImpl extends EmailSupport implements  MailSenderService {
-	private static final Log log = LogFactory.getLog(MailSenderServiceImpl.class);
+	private static final Logger log = Logger.getLogger(MailSenderServiceImpl.class);
 	private JavaMailSender mailSender;
 	private String defaultFrom;
 	private int autoComminute = 50;
@@ -180,6 +181,7 @@ public class MailSenderServiceImpl extends EmailSupport implements  MailSenderSe
         	
             //throw new RuntimeException("發送郵件失敗!"+invalidAddress,e);
         } catch (MessagingException e) {
+        	log.error(e.getMessage());
         	e.printStackTrace();
         }
 	}

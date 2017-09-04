@@ -3,6 +3,7 @@ package com.byd.bms.report.dao;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 @Repository(value="reportDao")
 public interface IReportDao {
@@ -27,6 +28,7 @@ public interface IReportDao {
 	public int getPlanPartsRealCount(Map<String,Object> conditionMap);
 	public int getPlanZzjRealCount(Map<String,Object> conditionMap);
 	public List<Map<String,Object>> queryFactoryPlanQty(Map<String,Object> conditionMap);
-	public List<Map<String,Object>> getFactoryPlanRealCount(List queryMapList);
+	public List<Map<String,Object>> getFactoryPlanRealCount(@Param(value ="list") List queryMapList,@Param(value = "start_date") String start_date,
+			@Param(value ="end_date") String end_date);
 
 }

@@ -369,7 +369,7 @@
 				AND p.factory_id in (
 				  		select case when LOCATE(p.factory_id,#{factory_id})>0 then p.factory_id else 0 end as factory_id
 							from BMS_BASE_FACTORY f )
-				AND p.plan_date >CONCAT(date_add(#{start_date},interval '-1' DAY),' 17:30:00') AND p.plan_date <= CONCAT(#{end_date},' 17:30:00')
+				AND p.plan_date >=#{start_date} AND p.plan_date <=#{end_date}
 			GROUP BY p.plan_code_value ORDER BY p.plan_code_value
 		]]>
 	</select>
@@ -439,7 +439,7 @@
 		]]>
 	</select>
 	<!-- 获取工厂实际完成数量 -->
-	<select id="getFactoryPlanRealCount" parameterType="List" resultType="map">
+	<select id="getFactoryPlanRealCount" resultType="map">
 		select factory_name,sum(qty) real_qty from (
 		<foreach collection="list" index="index" item="item"
 			separator="UNION ALL">
@@ -454,17 +454,21 @@
 		</foreach>
 		union all
 		    SELECT factory_id,IFNULL(SUM(quantity),0) AS qty FROM BMS_PD_WORKSHOP_SUPPLY 
-			WHERE supply_workshop = '自制件' AND receive_workshop = '部件' 
-			AND supply_date >CONCAT(date_add(#{list[0].start_date},interval '-1' DAY),' 17:30:00') 
-			<![CDATA[ AND supply_date <= CONCAT(#{list[0].end_date},' 17:30:00') ]]>
+			WHERE supply_workshop = '自制件' AND receive_workshop = '部件' and 1=1
+			<if test="start_date !=null and start_date!=''">
+				<![CDATA[ AND supply_date >=#{start_date}  ]]>
+			</if>
+			<if test="end_date !=null and end_date!=''">
+				<![CDATA[ AND supply_date <= #{end_date} ]]>
+			</if>
 		union all
 		    SELECT factory_id,IFNULL(SUM(offline_real_qty),0) AS qty FROM
 			BMS_PD_PARTS_PLAN_FINISH b WHERE b.parts_id = '0'
-			<if test="list[0].start_date !=null and list[0].start_date!=''">
-				<![CDATA[ AND b.prod_date >CONCAT(date_add(#{list[0].start_date},interval '-1' DAY),' 17:30:00')  ]]>
+			<if test="start_date !=null and start_date!=''">
+				<![CDATA[ AND b.prod_date >=#{start_date}  ]]>
 			</if>
-			<if test="list[0].end_date !=null and list[0].end_date!=''">
-				<![CDATA[ AND b.prod_date <= CONCAT(#{list[0].end_date},' 17:30:00') ]]>
+			<if test="end_date !=null and end_date!=''">
+				<![CDATA[ AND b.prod_date <= #{end_date} ]]>
 			</if>
 		) t left join BMS_BASE_FACTORY f on f.id=t.factory_id group by factory_id
 	</select>

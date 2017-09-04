@@ -212,16 +212,12 @@ public class ReportController extends BaseController {
 			
 		}
 		
-		//JSONObject json = Util.dataListToJson(true,"查询成功",datalist,null);
 		Map<String, Object> map = new HashMap<String, Object>();  
         map.put( "success", true);   
         map.put( "data",datalist);
         JSONArray jsonObject = JSONArray.fromObject(datalist);
-//        mv.clear();
 		mv.getModelMap().addAllAttributes(jsonObject);
-//		model = mv.getModelMap();
-//		model=new ModelMap();
-		model.put("data", jsonObject);
+        model.put("data", jsonObject);
 		return model;
 	}
 	@RequestMapping("/showFactoryOutputReportData")
@@ -249,6 +245,7 @@ public class ReportController extends BaseController {
 		mv.setViewName("report/factoryRateRankReport");
 		return mv;
 	}
+	// 工厂计划达成率排名报表数据Data
 	@RequestMapping("/getfactoryRateRankData")
 	@ResponseBody
 	public ModelMap getfactoryRateRankData(){

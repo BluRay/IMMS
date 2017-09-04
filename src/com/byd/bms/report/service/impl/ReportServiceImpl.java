@@ -339,26 +339,26 @@ public class ReportServiceImpl implements IReportService {
 		List<Map<String,Object>> detaillist=new ArrayList<Map<String,Object>>();
 		
 		List<Map<String,Object>> plan_datalist=reportDao.queryFactoryPlanQty(conditionMap);
-		List<Map<String,Object>> real_datalist=reportDao.getFactoryPlanRealCount(queryMapList);
+		List<Map<String,Object>> real_datalist=reportDao.getFactoryPlanRealCount(queryMapList,(String)conditionMap.get("start_date"),(String)conditionMap.get("end_date"));
 		for(Map<String,Object> planmap : plan_datalist){
 			Map<String,Object> resultMap=new HashMap<String,Object>();
 			Map<String,Object> resultdetailMap=new HashMap<String,Object>();
 		     String plan_factory_name=(String)planmap.get("factory_name"); 
 	
-		     Integer plan_qty=Integer.parseInt(planmap.get("plan_qty").toString());
+		     double plan_qty=Double.parseDouble(planmap.get("plan_qty").toString());
 		     resultMap.put("factory_name", plan_factory_name);
 			 resultMap.put("rate", 0);
 		     resultdetailMap.putAll(resultMap);
-		     resultdetailMap.put("detail_info", "计划数:"+plan_qty+";完成数:0");
+		     resultdetailMap.put("detail_info", "计划数:"+(int)plan_qty+";完成数:0");
 		     for(Map<String,Object> realmap : real_datalist){
 				 String real_factroy_name=(String)realmap.get("factory_name");
-				 Integer real_qty=Integer.parseInt(realmap.get("real_qty").toString());
+				 double real_qty=Double.parseDouble(realmap.get("real_qty").toString());
 				 if(plan_factory_name.equals(real_factroy_name)){
-					 double rate = Double.parseDouble(df.format(real_qty/(plan_qty!=0 ? plan_qty : 1)*100));
-					 resultMap.put("factory_name", plan_factory_name);
+					 double rate=Double.parseDouble(df.format(real_qty/(plan_qty!=0 ? plan_qty : 1)*100).toString());
+                     resultMap.put("factory_name", plan_factory_name);
 					 resultMap.put("rate", rate);
 					 resultdetailMap.putAll(resultMap);
-				     resultdetailMap.put("detail_info", "计划数:"+plan_qty+";完成数:"+real_qty);
+				     resultdetailMap.put("detail_info", "计划数:"+(int)plan_qty+";完成数:"+(int)real_qty);
 				 }
 			 }
 		     ratelist.add(resultMap);
