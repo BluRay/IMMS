@@ -364,20 +364,24 @@
 	</select>
 	
 	<select id="queryPartsFinishCount" parameterType="Map" resultType="Map">
-		select ifnull(sum(f.online_real_qty),0) online_total,ifnull(sum(f.offline_real_qty),0) offline_total,
+		<!-- select ifnull(sum(f.online_real_qty),0) online_total,ifnull(sum(f.offline_real_qty),0) offline_total,
 		(select sum(fo.production_qty) from BMS_OR_FACTORY_ORDER fo where fo.order_id=f.order_id and fo.factory_id=f.factory_id) production_qty
 		from BMS_PD_PARTS_PLAN_FINISH f
 		left join BMS_OR_ORDER o on f.order_id=o.id
 		where o.order_no=#{order_no} and f.factory_id=#{factory_id} and f.parts_id=#{parts_id}
-		group by f.order_id,f.factory_id
+		group by f.order_id,f.factory_id -->
 		
-		<!-- select ifnull(sum(f.online_real_qty),0) online_total,ifnull(sum(f.offline_real_qty),0) offline_total,fo.production_qty
-		from BMS_OR_FACTORY_ORDER fo
+		select ifnull(sum(f.online_real_qty),0) online_total,ifnull(sum(f.offline_real_qty),0) offline_total,fo.production_qty
+		from ( select fo.factory_id,fo.order_id,sum(fo.production_qty) production_qty
+			from BMS_OR_FACTORY_ORDER fo 
+			left join BMS_OR_ORDER o on o.id=fo.order_id 
+			where fo.factory_id=#{factory_id} and o.order_no=#{order_no}
+	 	)  fo
 		left join BMS_PD_PARTS_PLAN_FINISH f on f.order_id=fo.order_id and
 		f.factory_id=fo.factory_id and f.parts_id=#{parts_id}
 		left join BMS_OR_ORDER o on fo.order_id=o.id
 		where o.order_no=#{order_no} and fo.factory_id=#{factory_id}
-		group by fo.order_id,fo.factory_id -->
+		group by fo.order_id,fo.factory_id
 	</select>
 	
 		<insert id="savePartsOnOffRecord" parameterType="Map" useGeneratedKeys="true" keyProperty="id">

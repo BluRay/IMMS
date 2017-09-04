@@ -478,13 +478,13 @@
 		<![CDATA[
 		select
 		a.*,b.target_val from(
-		select count(distinct h.bus_number) bus_num, count( t.result_judge)
-		bug_num,substring(h.edit_date,1,10) item,h.workshop_id,h.factory_id
-		from BMS_QM_TEST_CARD_HEADER h left join BMS_QM_TEST_CARD_DETAIL t on
-		h.id=t.test_card_id
-		where h.workshop_id=#{workshopId} and t.result_judge ='不合格' and substring(h.edit_date,1,10)
-		>=#{startDate} and substring(h.edit_date,1,10) <=#{endDate} and h.factory_id=#{factoryId}
-		group by substring(h.edit_date,1,10) ) a
+		SELECT COUNT(DISTINCT h.bus_number) bus_num, COUNT( h.result_judge) bug_num,
+		substring(h.edit_date,1,10) item,h.test_node_id,h.test_node,h.factory_id
+		FROM BMS_QM_TEST_CARD h 
+		WHERE h.factory_id=#{factoryId} AND h.test_node_id='72' AND h.result_judge ='不合格' 
+		AND substring(h.edit_date,1,10) >= #{startDate} AND substring(h.edit_date,1,10) <= #{endDate}
+		GROUP BY substring(h.edit_date,1,10)
+		) a
 		left join (
 		select max(p.target_value) target_val,p.eend_date,p.factory_id,p.workshop_id
 		from BMS_QM_QUALITY_TARGET_PARAMETER  p

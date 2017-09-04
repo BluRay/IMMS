@@ -78,7 +78,9 @@ public class ReportController extends BaseController {
 		//查询维度为月，获取日期范围内详细月列表
 		if(conditionMap.get("queryItem").equals("month")){
 			result.put("itemList", this.getMonthList(sdate, edate));
-		}		
+		}
+		
+		result.put("chartList", reportService.queryDPUData(conditionMap));
 		
 		
 		mv.clear();
