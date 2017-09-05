@@ -1,6 +1,6 @@
 var pageSize=1;
 var table;
-var table_height = $(window).height()-240;
+var table_height = $(window).height()-500;
 $(document).ready(function(){
 	initPage();
 	
@@ -224,16 +224,13 @@ function ajaxQuery(conditions){
             });
 		},
 		columns: [
-		            {"title":"工号","class":"center","data":"staff_number","defaultContent": ""},
-		            {"title":"姓名","class":"center","data":"display_name","defaultContent": ""},
-		            {"title":"电子邮件","class":"center","data":"email","defaultContent": ""},
-		            {"title":"手机号码","class":"center","data": "cellphone","defaultContent": ""},
-		            {"title":"办公电话","class":"center","data":"telephone","defaultContent": ""},		            
-		            {"title":"所属工厂","class":"center","data":"factory_name","defaultContent": ""},		    
-		            {"title":"是否管理员","class":"center","data": "admin","defaultContent": "","render":function(data,type,row){
-		            	return data=="0"?"否":"是"}}, 
-		            {"title":"访问次数","class":"center","data": "login_count","defaultContent": ""}, 
-		            {"title":"最后登录","class":"center","data": "last_login_time","defaultContent": ""}
+		            {"title":"车号",width:'150',"class":"center","data":"bus_number","defaultContent": ""},
+		            {"title":"工厂","class":"center","data":"factory_name","defaultContent": ""},
+		            {"title":"检验节点","class":"center","data":"test_node","defaultContent": ""},
+		            {"title":"故障","class":"center","data": "test_result","defaultContent": "-"},
+		            {"title":"备注","class":"center","data":"memo","defaultContent": "-"},		            
+		            {"title":"检验员","class":"center","data":"tester","defaultContent": "-"},
+		            {"title":"检验时间","class":"center","data": "test_date","defaultContent": "-"}
 		          ],
 	});
 }

@@ -109,7 +109,9 @@ public class ReportController extends BaseController {
 		conditionMap.put("length", length);
 		
 		result = reportService.queryDPUDetail(conditionMap);
-		model.addAllAttributes(result);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(result);
+		model = mv.getModelMap();
 		return model;
 	}
 	
