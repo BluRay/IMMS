@@ -221,7 +221,7 @@ $(document).ready(function() {
 
 function initPage() {
 	getBusNumberSelect('#nav-search-input');
-	getOrgAuthTree($("#workGroupTree"),'production/pieceWorkhourMtn',"1,2,3,4",'1',3);
+	getOrgAuthTree($("#workGroupTree"),'production/pieceWorkhourUpdate',"1,2,3,4",'1',3);
 	$('#workGroupTree').height($(window).height()-110)
 	$('#workGroupTree').ace_scroll({
 		size:$(this).attr('data-size')|| $(window).height()-110,

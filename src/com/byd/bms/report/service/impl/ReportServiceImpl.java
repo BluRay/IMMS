@@ -408,4 +408,9 @@ public class ReportServiceImpl implements IReportService {
 		return reportDao.queryDPUData(conditionMap);
 	}
 
+	@Override
+	public List<Map<String, Object>> queryDPUDetail(Map<String, Object> conditionMap) {
+		return reportDao.queryDPUDetail(conditionMap);
+	}
+
 }

@@ -622,6 +622,7 @@ function getOrderConfigSelect(order_id,selectval,selectId,selectType,valName) {
  */
 function getBusNumberSelect(elementId, submitId, fn_backcall) {
 	var busNumberlist;
+	var bus={};
 	$(elementId).typeahead({
 		source : function(input, process) {
 			$.get("/BMS/common/getBusNumberFuzzySelect", {
@@ -642,20 +643,34 @@ function getBusNumberSelect(elementId, submitId, fn_backcall) {
 			return true;
 		},
 		updater : function(item) {
-			$.each(busNumberlist, function(index, value) {
+			/*$.each(busNumberlist, function(index, value) {
 				if (value.bus_number == item) {
+					bus=item;
 					orderId = value.order_id;
 					orderConfigId=value.order_config_id;
 					$(elementId).attr("order_id", orderId);
-					$(elementId).attr("order_config_id", orderConfigId);
-					if (typeof (fn_backcall) == "function") {
-						fn_backcall(value);
-					}
+					$(elementId).attr("order_config_id", orderConfigId);					
+				}
+			})*/
+			
+			return item;
+		},
+		afterSelect:function(item){
+			$.each(busNumberlist, function(index, value) {
+				if (value.bus_number == item) {
+					bus=value;
+					orderId = value.order_id;
+					orderConfigId=value.order_config_id;
+					$(elementId).attr("order_id", orderId);
+					$(elementId).attr("order_config_id", orderConfigId);					
 				}
 			})
-			return item;
+			if (typeof (fn_backcall) == "function") {
+				fn_backcall(bus);
+			}
 		}
 	});
+	
 }
 
 function getUserInfoByCard(cardId){

@@ -73,7 +73,9 @@ $(document).ready(function() {
 	})
 	
 	function initPage(){
-	getFactorySelect("","","#search_factory",null,"id");
+	var factory_id_default=$("#factory_id_default").val();
+	//alert(factory_id_default)
+	getFactorySelect("index",factory_id_default,"#search_factory",null,"id");
 	ajaxGetOrderChartData();	
 	drawFactoryOrderChart();
 	drawOutputChart();
@@ -484,7 +486,10 @@ function drawOutputChart(){
 			},
 			success:function(response){
 				$.each(response.data,function(i,value){
-					$("<li style='color:red'>").html(value.message).appendTo($("#exception"))
+					if(value){
+						$("<li style='color:red'>").html(value.message).appendTo($("#exception"))
+					}
+					
 				})
 			}
 			})

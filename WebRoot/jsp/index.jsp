@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+String staff_number = (String)session.getAttribute("staff_number");
+Integer factory_id=(Integer)session.getAttribute("factory_id");
+String factory=(String)session.getAttribute("factory");
+%>
 <html lang="zh-CN">
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -40,6 +45,7 @@
 						<li class="active">
 						<select name="" id="search_factory" class="myselect">
 						</select>
+						<input id="factory_id_default" type="hidden" value='<%=factory_id%>'>
 					</ul><!-- /.breadcrumb -->
 
 					<!-- #section:basics/content.searchbox -->
