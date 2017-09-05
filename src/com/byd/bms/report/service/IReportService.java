@@ -17,7 +17,7 @@ public interface IReportService {
 	void getOnlineAndOfflineData(Map<String,Object> condMap,ModelMap model);
 	
 	public List<Map<String,Object>> queryDPUData(Map<String, Object> conditionMap);
-	public List<Map<String,Object>> queryDPUDetail(Map<String, Object> conditionMap);
+	public Map<String,Object> queryDPUDetail(Map<String, Object> conditionMap);
 	
 	public List<Map<String, Object>> showFactoryOutputReportData(Map<String, Object> queryMap);
 	/**

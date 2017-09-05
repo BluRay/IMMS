@@ -409,8 +409,16 @@ public class ReportServiceImpl implements IReportService {
 	}
 
 	@Override
-	public List<Map<String, Object>> queryDPUDetail(Map<String, Object> conditionMap) {
-		return reportDao.queryDPUDetail(conditionMap);
+	public Map<String, Object> queryDPUDetail(Map<String, Object> conditionMap) {
+		int totalCount=0;
+		List<Map<String, Object>> datalist = reportDao.queryDPUDetail(conditionMap);
+		totalCount = reportDao.queryDPUDetailCount(conditionMap);
+		Map<String, Object> result = new HashMap<String,Object>();
+		result.put("draw", conditionMap.get("draw"));
+		result.put("recordsTotal", totalCount);
+		result.put("recordsFiltered", totalCount);
+		result.put("data", datalist);
+		return result;
 	}
 
 }

@@ -68,6 +68,8 @@
 					</div>
 					
 					<div id="chartsContainer" style="min-width: 1200px; max-width: 500px; margin: auto;"></div>
+					<table id="tableData" class="table table-striped table-bordered table-hover" style="font-size: 12px;">
+					</table>
 					
 					</div>
 			</div><!-- /.main-content -->
@@ -83,6 +85,8 @@
 	<script type="text/javascript" src="../js/highcharts.js"></script>
 	<script type="text/javascript" src="../js/exporting.js"></script>
 	<script type="text/javascript" src="../js/datePicker/WdatePicker.js"></script>
+	<script type="text/javascript" src="../assets/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" src="../assets/js/jquery.dataTables.bootstrap.js"></script>
 	<script type="text/javascript" src="../js/common.js"></script>
 	<script type="text/javascript" src="../js/report/dpuReport.js"></script>
 </html>

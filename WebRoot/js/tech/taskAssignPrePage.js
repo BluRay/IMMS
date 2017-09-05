@@ -250,7 +250,7 @@ function addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factor
 				var tech_num=data.split(":")[1];
 				tech_obj[workshop]=tech_num;
 			})
-			var checked="";
+			var checked="checked";
 			if(tech_info.trim().length>0){
 				checked="checked";
 			}
@@ -361,8 +361,8 @@ function initTable() {
                 cellStyle:function cellStyle(value, row, index, field) {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};},
     	        formatter:function(value, row, index){
-    	        	console.log('---->assess_date = ' + row['assess_date'])
-    	        	if(row['assess_date']==undefined||row['assess_date']==''||row['assess_date'].trim().length==0){
+    	        	console.log('---->assign_date = ' + row['assign_date'])
+    	        	if(row['assign_date'].trim().length>0){
     	        		//task_id,task_detail_id,task_content,tech_order_no,switch_mode,switch_node,tech_date
     	        		return "<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"分配\" onclick='ajaxEdit(\"" + 
     	        		row['id'] + "\",\"" + row['task_detail_id'] + "\",\"" + row['task_content'].replace(/\r/ig, "").replace(/\n/ig,"") + "\",\"" + row['tech_order_no'] + "\",\"" + 

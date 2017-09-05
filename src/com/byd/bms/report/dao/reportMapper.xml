@@ -569,5 +569,31 @@
 		]]>
 		</if>
 	</select>
+	<select id="queryDPUDetail" parameterType="Map" resultType="Map">
+	<![CDATA[
+	SELECT h.bus_number,f.factory_name,k.key_name AS test_node,l.bug,h.test_result,h.memo,h.tester,h.test_date FROM BMS_QM_TEST_CARD h
+	LEFT JOIN BMS_BASE_FACTORY f ON f.id=h.factory_id
+	LEFT JOIN BMS_BASE_KEY k ON k.id = h.test_node_id
+	LEFT JOIN BMS_QM_STANDARD_FAULT_LIBRARY l ON h.fault_id = l.id
+	WHERE h.result_judge = '不合格'
+	AND h.test_node_id=#{test_node_id} AND h.factory_id=#{factoryId} AND substring(h.edit_date,1,10) >=#{startDate} 
+	AND substring(h.edit_date,1,10) <=#{endDate}
+	ORDER BY h.edit_date DESC
+	]]>
+	<if test="start !=null">
+		LIMIT #{start} , #{length} 
+	</if>
+	</select>
+	<select id="queryDPUDetailCount" parameterType="Map" resultType="int">
+	<![CDATA[
+	SELECT COUNT(h.id) FROM BMS_QM_TEST_CARD h
+	LEFT JOIN BMS_BASE_FACTORY f ON f.id=h.factory_id
+	LEFT JOIN BMS_BASE_KEY k ON k.id = h.test_node_id
+	LEFT JOIN BMS_QM_STANDARD_FAULT_LIBRARY l ON h.fault_id = l.id
+	WHERE h.result_judge = '不合格'
+	AND h.test_node_id=#{test_node_id} AND h.factory_id=#{factoryId} AND substring(h.edit_date,1,10) >=#{startDate} 
+	AND substring(h.edit_date,1,10) <=#{endDate}
+	]]>
+	</select>
 	
 </mapper>

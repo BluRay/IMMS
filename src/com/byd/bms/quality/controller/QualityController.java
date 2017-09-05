@@ -469,6 +469,8 @@ public class QualityController extends BaseController {
 		Map<String,Object> condMap=new HashMap<String,Object>();
 		condMap.put("bus_number", bus_number);
 		condMap.put("test_node", test_node);
+		condMap.put("order_id", request.getParameter("order_id"));
+		condMap.put("order_config_id", request.getParameter("order_config_id"));
 		qualityService.getPrdRcdOrderTpl(condMap,model);
 		return model;
 	}

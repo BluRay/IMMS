@@ -231,7 +231,17 @@
      	left join BMS_PLAN_BUS b on h.order_id=b.order_id and h.order_config_id=b.order_config_id 
      	left join BMS_BASE_BUS_TYPE t on t.id=h.bus_type_id
      	left join BMS_OR_ORDER o on o.id=h.order_id
-     	where h.tplType='1' and b.bus_number=#{bus_number} and h.test_node=#{test_node}
+     	where h.tplType='1' 
+     	<if test="bus_number !=null and bus_number !=''">
+     		and b.bus_number=#{bus_number} 
+     	</if>
+     	<if test="order_id !=null and order_id !=''">
+     		and h.order_id=#{order_id} 
+     	</if>
+     	<if test="order_config_id !=null and order_config_id !=''">
+     		and h.order_config_id=#{order_config_id} 
+     	</if>
+     	and h.test_node=#{test_node}
      	order by version desc
      	limit 1
      </select>
