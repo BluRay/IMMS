@@ -15,17 +15,31 @@ $(document).ready(function(){
 	//新增记录
 	$("#btnAdd").click(function(){
 		//$("#tableDetail").html("");
-	/*	if($("#tableDetail").hasClass("dataTable")){
-			$("#tableDetail").dataTable().fnClearTable();
-		}*/
+		if($.fn.dataTable.isDataTable("#tableDetail")){
+			$('#tableDetail').DataTable().destroy();
+			$('#tableDetail').empty();
+		}
+		getFactorySelect("quality/prdRcdIn","","#factory","","id");
+		getOrderNoSelect("#order", "#orderId", function(order){
+			getOrderConfigSelect(order.id||"","","#order_config",null,"id") ;
+		}, "","#factory",null)
+		
 		$("#btnShowTpl").show();
 		
-		drawTplDetailTable("#tableDetail",null,true);
+		//drawTplDetailTable("#tableDetail",null,true);
 		
 		$("#testResult").val("");
-		$("#bus_number").val("").attr("disabled",false);
-		$("#bus_number").attr("order_id","");
-		$("#bus_number").attr("order_config_id","");
+		$("#order").val("").attr("order_id","");
+		$("#order_config").val("");
+		$("#td_bus_lable").show();
+		$("#td_bus").show();
+		$("#td_customer_lable").hide();
+		$("#td_customer").hide();
+		$("#factory").attr("disabled",true);
+		$("#order").attr("disabled",true);
+		$("#order_config").css("display","none");
+		$("#order_config_span").css("display","");
+
 		$("#factory").val("");
 		$("#check_node").val("").attr("disabled",false);;
 		$("#order").html("");
@@ -55,7 +69,7 @@ $(document).ready(function(){
 				}
 			]
 		});
-		$("#btnShowTpl").attr("disabled",true);
+		$("#btnShowTpl").attr("disabled",false);
 	});
 	/**
 	 * 点击“确定”查询成品记录表订单模板
@@ -105,17 +119,75 @@ $(document).ready(function(){
 		getSelects(workgroup_list[workshop], "", element,"","id");
 	});
 	
-	$(document).on("change","#check_node,#bus_number",function(e){
+	$(document).on("change","#bus_number",function(e){
+		if($(this).val()==""){
+			$("#order_config_span").html("");
+			$("#order").val("").attr("order_id","");
+		}
 		drawTplDetailTable("#tableDetail",null,true);
+		
+	})
+	
+	$(document).on("change","#check_node",function(e){
+		drawTplDetailTable("#tableDetail",null,true);		
+		
+		//alert($("#check_node :selected").text());
+		if($("#check_node :selected").text()=="车架"||$("#check_node :selected").text()=="车身"||
+				$("#check_node :selected").text()=="五大片"){
+			$("#bus_number").val("");
+			$("#order_config_span").html("");
+			$("#td_bus_lable").hide();
+			$("#td_bus").hide();
+			$("#td_customer_lable").show();
+			$("#td_customer").show();
+			$("#factory").attr("disabled",false);
+			$("#order").attr("disabled",false);
+			$("#order_config").css("display","");
+			$("#order_config_span").css("display","none");
+		}else{
+			$("#order").val("").attr("order_id","");
+			$("#order_config").val("");
+			$("#td_bus_lable").show();
+			$("#td_bus").show();
+			$("#td_customer_lable").hide();
+			$("#td_customer").hide();
+			$("#factory").attr("disabled",true);
+			$("#order").attr("disabled",true);
+			$("#order_config").css("display","none");
+			$("#order_config_span").css("display","");
+		}
 	})
 	
 	$("#btnQuery").click(function(){
 		ajaxQuery();
 	})
 	
+	$(document).on("input","#order",function(){
+		//alert("change");
+		$("order_no").attr("order_id","");
+	})
+	$("#order").change(function(){
+		getOrderConfigSelect($(this).attr("order_id")||"","","#order_config",null,"id") ;
+	})
+	
+	$(document).on("change","#factory",function(e){
+		$("#order").val("").attr("order_id","");
+		$("#order_config").html("");
+		getWorkshopSelect('',$("#factory :selected").text(),"","#workshop_tmpl","","id");
+		/*alert($("#workshop_tmpl").html());*/
+		var workshop_all=getAllWorkshops("#workshop_tmpl","name");
+		//alert(workshop_all)
+		getWorkgroupSelectAll(workshop_all);
+	})
 });
 
 function initPage(){
+	$("#order").val("").attr("order_id","");
+	$("#factory").attr("disabled",true);
+	$("#order").attr("disabled",true);
+	$("#order_config").css("display","none");
+	$("#order_config_span").css("display","");
+	
 	getBusNumberSelect('#nav-search-input');
 	getBusNumberSelect('#search_bus_number');
 	getKeysSelect("CHECK_NODE", "", "#search_node","全部","id");
@@ -129,29 +201,37 @@ function initPage(){
 		//alert(factory_id)
 		var all_factory_ids=getAllFromOptions("#search_factory","id");
 		//alert(all_factory_ids.indexOf(factory_id))
-		if(all_factory_ids.indexOf(factory_id)<0){
+		if(all_factory_ids.indexOf(factory_id)<0){			
+			alert('抱歉，您没有该车辆的操作权限！');	
 			$("#bus_number").val("");
-			alert('抱歉，您没有该车辆的操作权限！');		
+			return false;
 		}else{
-			$("#btnShowTpl").attr("disabled",false);
-			getFactorySelect("quality/prdRcdIn",factory_id,"#factory","","id");
+			//$("#btnShowTpl").attr("disabled",false);
+			$("#factory").val(factory_id);
 			getWorkshopSelect('',$("#factory :selected").text(),"","#workshop_tmpl","","id");
 			/*alert($("#workshop_tmpl").html());*/
 			var workshop_all=getAllWorkshops("#workshop_tmpl","name");
 			//alert(workshop_all)
 			getWorkgroupSelectAll(workshop_all);
 		}
-			
+		
+		$("#order").val(obj.order_no);
+		$("#order").attr("order_id",obj.order_id);
+		$("#order_config_span").html(obj.order_config_name);
 	});
 }
 
 function drawTplDetailTable(tableId,data,editable){
+	if(data==null||data==undefined){
+		data={};
+	}
 	//alert(JSON.stringify(data))
 	editable=editable||false;
 	tb_detail=$(tableId).dataTable({
 		paiging:false,
 		 keys: true,
 		ordering:false,
+		deferRender: true,
 		searching: false,
 		autoWidth:false,
 		destroy: true,
@@ -159,6 +239,7 @@ function drawTplDetailTable(tableId,data,editable){
 		rowsGroup:[0],
 		fixedColumns:   {
             leftColumns: 2,
+            rightColumns:1
         },
 		sScrollY: 310,
 		scrollX: true,
@@ -282,7 +363,7 @@ function drawTplDetailTable(tableId,data,editable){
 	        	return el;
 	            }
         }],
-		data:data||{},
+		data:data,
 		columns: [
 		            {"title":"检验项目","class":"center","width":"8%","data":"test_item","defaultContent": ""},
 		            {"title":"检验标准","class":"center","width":"25%","data":"test_standard","defaultContent": ""},
@@ -369,7 +450,9 @@ function ajaxGetTplDetail(){
 		type:"post",
 		dataType:"json",
 		data:{
-			"bus_number":$("#bus_number").val(),
+			"bus_number":$("#bus_number").val(),		
+			"order_id":$("#order").attr("order_id"),
+			"order_config_id":$("#order_config").val(),
 			"test_node":$("#check_node :selected").text()
 		},
 		success:function(response){
@@ -585,6 +668,20 @@ function ajaxSave(){
 	var test_date=$("#test_date").val();
 	var result=$("input[name='testResult']:checked").val();
 	var save_flag=true;
+	var test_node=$("#check_node :selected").text();
+	var bus_number="";
+	var order_id="";
+	var order_config_id="";
+	if(test_node=='车架'||test_node=='车身'||test_node=='五大片'){
+		bus_number=$("#customer_number").val();
+		order_id=$("#order").attr("order_id");
+		order_config_id=$("#order_config").val();
+	}else{
+		bus_number=$("#bus_number").val();
+		order_id=$("#bus_number").attr("order_id");
+		order_config_id=$("#bus_number").attr("order_config_id");
+	}
+	
 	if(result==null||result.trim().length==0){
 		alert("请选择检验结论!");
 		save_flag=false;
@@ -635,12 +732,12 @@ function ajaxSave(){
 			obj.test_card_template_detail_id=test_card_template_detail_id;
 			obj.test_card_template_head_id=test_card_template_head_id;
 			obj.test_date=test_date;
-			obj.bus_number=$("#bus_number").val();
+			obj.bus_number=bus_number;
+			obj.order_id=order_id;
+			obj.order_config_id=order_config_id;
 			obj.factory_id=$("#factory").val();
-			obj.order_id=$("#bus_number").attr("order_id");
-			obj.order_config_id=$("#bus_number").attr("order_config_id");
 			obj.test_node_id=$("#check_node").val();
-			obj.test_node=$("#check_node :selected").text();
+			obj.test_node=test_node;
 			obj.result=result;
 			obj.fault_id=fault_id;
 			obj.test_result=test_result;
@@ -658,10 +755,10 @@ function ajaxSave(){
 		var obj={};
 		obj.test_card_template_head_id=test_card_template_head_id;
 		obj.test_date=test_date;
-		obj.bus_number=$("#bus_number").val();
+		obj.bus_number=bus_number;
+		obj.order_id=order_id;
+		obj.order_config_id=order_config_id;		
 		obj.factory_id=$("#factory").val();
-		obj.order_id=$("#bus_number").attr("order_id");
-		obj.order_config_id=$("#bus_number").attr("order_config_id");
 		obj.test_node_id=$("#check_node").val();
 		obj.test_node=$("#check_node :selected").text();
 		obj.result=result;
@@ -677,7 +774,7 @@ function ajaxSave(){
 			type:"post",
 			dataType:"json",
 			data:{
-				"bus_number":$("#bus_number").val(),
+				"bus_number":bus_number,
 				"test_node":$("#check_node :selected").text(),
 				"record_detail":JSON.stringify(detail_list_submit)
 			},
@@ -799,16 +896,39 @@ function showInfoPage(row){
 	if(row.result=='让步放行'){
 		result=2;
 	}
+	if(row.test_node=='车架'||row.test_node=='车身'||row.test_node=='五大片'){
+		$("#td_bus_lable").hide();
+		$("#td_bus").hide();
+		$("#td_customer_lable").show();
+		$("#td_customer").show();
+		$("#factory").attr("disabled",true);
+		$("#order").val(row.order_no).attr("disabled",true);
+		getOrderConfigSelect(row.order_id||"",row.order_config_id,"#order_config",null,"id") ;
+		$("#order_config").val(row.order_config_id).css("display","").attr("disabled",true);
+		
+		$("#order_config_span").hide();
+		$("#customer_number").val(row.bus_number).attr("disabled",true);		
+		
+	}else{		
+		$("#td_bus_lable").show();
+		$("#td_bus").show();
+		$("#td_customer_lable").hide();
+		$("#td_customer").hide();
+		$("#factory").attr("disabled",true);
+		$("#order").val(row.order_no).attr("disabled",true);
+		$("#order_config").hide();
+		$("#order_config_span").html(row.order_config_name).show();
+		$("#bus_number").val(row.bus_number).attr("disabled",true);
+		$("#bus_number").attr("order_id",row.order_id);
+		$("#bus_number").attr("order_config_id",row.order_config_id);
+	}
 	
-	$("#bus_number").val(row.bus_number).attr("disabled",true);
-	$("#bus_number").attr("order_id",row.order_id);
-	$("#bus_number").attr("order_config_id",row.order_config_id);
 	getFactorySelect("quality/prdRcdIn",row.factory_id,"#factory","","id");
 	//$("#factory").val(row.factory_id);
 	$("#check_node").val(row.test_node_id).attr("disabled",true);
 	$("input[name='testResult'][value='"+result+"']").prop("checked",true); 
 	$("input[name='testResult']").attr("disabled",true);
-	$("#order").html(row.order_desc);
+	//$("#order").html(row.order_desc);
 	$("#test_date").val(row.test_date).attr("disabled",true);
 	
 	$("#btnShowTpl").hide();
@@ -843,16 +963,46 @@ function showEditPage(row){
 	if(row.result=='让步放行'){
 		result=2;
 	}
+	
+	if(row.test_node=='车架'||row.test_node=='车身'||row.test_node=='五大片'){
+		$("#td_bus_lable").hide();
+		$("#td_bus").hide();
+		$("#td_customer_lable").show();
+		$("#td_customer").show();
+		$("#factory").attr("disabled",true);
+		$("#order").val(row.order_no).attr("disabled",true);
+		$("#order").attr("order_id",row.order_id);
+		getOrderConfigSelect(row.order_id||"",row.order_config_id,"#order_config",null,"id") ;
+		$("#order_config").val(row.order_config_id).css("display","").attr("disabled",true);
+		
+		$("#order_config_span").hide();
+		$("#customer_number").val(row.bus_number).attr("disabled",true);		
+		
+	}else{		
+		$("#td_bus_lable").show();
+		$("#td_bus").show();
+		$("#td_customer_lable").hide();
+		$("#td_customer").hide();
+		$("#factory").attr("disabled",true);
+		$("#order").val(row.order_no).attr("disabled",true);
+		$("#order_config").hide();
+		$("#order_config_span").html(row.order_config_name).show();
+		$("#bus_number").val(row.bus_number).attr("disabled",true);
+		$("#bus_number").attr("order_id",row.order_id);
+		$("#bus_number").attr("order_config_id",row.order_config_id);
+	}
+	
 	$("#btnShowTpl").hide();
-	$("#bus_number").val(row.bus_number).attr("disabled",true);
-	$("#bus_number").attr("order_id",row.order_id);
-	$("#bus_number").attr("order_config_id",row.order_config_id);
+	
 	getFactorySelect("quality/prdRcdIn",row.factory_id,"#factory","","id");
 	//$("#factory").val(row.factory_id);
 	$("#check_node").val(row.test_node_id).attr("disabled",true);
 	$("input[name='testResult'][value='"+result+"']").prop("checked",true); 
 	$("input[name='testResult']").attr("disabled",false);
-	$("#order").html(row.order_desc);
+	//$("#order").html(row.order_desc);
+	
+	
+	
 	$("#test_date").val(row.test_date).attr("disabled",false);
 	
 	getWorkshopSelect('',$("#factory :selected").text(),"","#workshop_tmpl","","id");

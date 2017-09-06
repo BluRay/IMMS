@@ -333,11 +333,12 @@
      
      <select id="queryProductRecordList" parameterType="Map"  resultType="Map">
      	select c.bus_number,c.test_node,f.factory_name,c.factory_id,concat(o.order_no,o.order_name,t.bus_type_code,' ',o.order_qty,'台') order_desc,
-     	c.test_date,c.test_node_id, c.order_id,c.order_config_id, c.tester,c.test_card_template_head_id,
+     	c.test_date,c.test_node_id, c.order_id,c.order_config_id, c.tester,c.test_card_template_head_id,o.order_no,g.order_config_name,
      	case c.result when '0' then '一次交检合格' when '1' then '返工/返修合格' else '让步放行' end as result,u.username editor,c.edit_date
 		from BMS_QM_TEST_CARD c
 		left join BMS_BASE_FACTORY f on c.factory_id=f.id
 		left join BMS_OR_ORDER o on c.order_id=o.id
+		left join BMS_OR_ORDER_CONFIG g on g.id=c.order_config_id
 		left join BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id
 		left join BMS_BASE_USER u on u.id=c.editor_id
 		where 1=1

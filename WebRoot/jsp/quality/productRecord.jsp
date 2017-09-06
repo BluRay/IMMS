@@ -91,19 +91,26 @@
 				<div id="create_form"  style="padding-left:20px;">
 					<table style="line-height:35px;">
 						<tr>
-							<td width="80px" style="text-align:right">车号： </td>
-							<td width="150px"><input id="bus_number" style="width: 150px;height:30px;" type="text"></td>
-							<td width="80px" style="text-align:right">工厂： </td>
-							<td width="150px"><select id="factory"  class="input-medium" style="width:150px;" disabled></select></td>			
-							<td width="100px" style="text-align:right">检验节点： </td>				
+							<td width="80px" style="text-align:right">检验节点： </td>				
 							<td width="100px"><select id="check_node"  class="input-medium" style="width:100px;"></select></td>
-							<td width="80px" style="text-align:right">订单： </td>
-							<td ><span id="order" ></span></td>
-							<td></td>
+							<td width="80px" id='td_bus_lable' style="text-align:right">车号： </td>
+							<td width="150px" id='td_bus'><input id="bus_number" style="width: 150px;height:30px;" type="text"></td>
+							<td width="80px" id='td_customer_lable' style="text-align:right;display:none">自编号： </td>
+							<td width="150px" id='td_customer' style='display:none'><input id="customer_number" style="width: 150px;height:30px;" type="text"></td>							
+							<td width="60px" style="text-align:right">工厂： </td>
+							<td width="120px"><select id="factory"  class="input-medium" style="width:120px;" disabled></select></td>										
+							<td width="60px" style="text-align:right">订单： </td>
+							<td ><input id="order" style="width: 100px;height:30px;" type="text" disabled></td>
+							<td width="60px" style="text-align:right">配置：</td>
+							<td >
+								<select id="order_config" style="width: 120px;height:30px;"></select>
+								<span id="order_config_span" style="display:none" ></span>
+							</td>
+							
 						</tr>
 						<tr>
 							<td width="80px" style="text-align:right">检验日期： </td>
-							<td width="150px"><input id="test_date" style="width: 150px;height:30px;" type="text" onclick="WdatePicker({el:'test_date',dateFmt:'yyyy-MM-dd'});"></td>
+							<td width="100px"><input id="test_date" style="width: 100px;height:30px;" type="text" onclick="WdatePicker({el:'test_date',dateFmt:'yyyy-MM-dd'});"></td>
 							<td width="80px" style="text-align:right">检验结论： </td>
 							<td colspan=3><label style="padding-left:10px;"><input name="testResult" value="0" type="radio">一次交检合格 </label>
 							<label style="padding-left:10px;"><input name="testResult" value="1" type="radio">返工/返修合格 </label>
