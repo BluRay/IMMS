@@ -5,10 +5,10 @@
 		SELECT
          id,CONCAT(parent_id,'') parent_id,name_en as name,name as display_name,org_code as short_name,
          manager,org_type,org_kind,responsibilities,salary_model,customer_no_flag,
-         (SELECT COUNT(1) FROM BMS_BASE_ORG f2 WHERE f2.parent_id = t.id) AS sub_count,
-         (SELECT name FROM BMS_BASE_ORG f2 WHERE f2.id = t.parent_id) AS parent_name
+         (SELECT COUNT(1) FROM BMS_BASE_ORG f2 WHERE f2.parent_id = t.id and f2.deleted = '0') AS sub_count,
+         (SELECT name FROM BMS_BASE_ORG f2 WHERE f2.id = t.parent_id and f2.deleted = '0') AS parent_name
         FROM BMS_BASE_ORG t  <!--    t left join BMS_BASE_KEY k on t.org_type=k.org_type -->
-           WHERE t.deleted = 0
+           WHERE t.deleted = '0'
          <if test="id!=null">
              AND t.id=#{id} 
          </if>
@@ -23,7 +23,7 @@
 	<select id="getOrgDataByParentId" parameterType="Map" resultType="Map">
 		SELECT t.id,CONCAT(t.parent_id,'') parent_id,t.name_en as name,t.name as display_name,
 		   t.org_code as short_name,t.manager,t.org_type,t.org_kind,t.responsibilities,t.foreign_id,
-		   (SELECT name FROM BMS_BASE_ORG f2 WHERE f2.id = t.parent_id) AS parent_name,
+		   (SELECT name FROM BMS_BASE_ORG f2 WHERE f2.id = t.parent_id  and f2.deleted = '0') AS parent_name,
 		   k.key_name as salary_model,customer_no_flag
           from BMS_BASE_ORG t
           left join BMS_BASE_KEY k on t.salary_model = k.value and k.key_code='SALARY_MODEL'

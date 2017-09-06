@@ -642,13 +642,13 @@
 	select f.id factory_id,f.factory_name,t.workshop,t.bus_number,o.order_no,
 		o.order_name,c.order_config_name,u.username,t.edit_date,td.key_components_template_id 
 		    from BMS_QM_KEY_PARTS t
-				LEFT JOIN BMS_QM_KEY_PARTS_TEMPLATE_DETAILS td on td.id = t.key_parts_template_details_id
+				RIGHT JOIN BMS_QM_KEY_PARTS_TEMPLATE_DETAILS td on td.id = t.key_parts_template_details_id
 				LEFT JOIN BMS_QM_KEY_PARTS_TEMPLATE_HEADER th on th.id = td.key_components_template_id 
 				LEFT JOIN BMS_OR_ORDER_CONFIG c on c.id=th.order_config_id and c.order_id = th.order_id
 				LEFT JOIN BMS_OR_ORDER o ON o.id = c.order_id
 		    LEFT JOIN BMS_BASE_FACTORY f on f.id=t.factory_id
 		    LEFT JOIN BMS_BASE_USER u on u.id=t.editor_id 
-        	where 1=1
+        	where t.key_parts_template_details_id>0 AND 1=1 
 		<if test="busNumber!=null and busNumber!=''">
 			and t.bus_number=#{busNumber}
 		</if>
@@ -715,13 +715,8 @@
 		    from BMS_QM_KEY_PARTS_TEMPLATE_DETAILS  t 
 		    LEFT JOIN BMS_QM_KEY_PARTS_TEMPLATE_HEADER h on h.id=t.key_components_template_id
 		    LEFT JOIN BMS_QM_KEY_PARTS b on b.key_parts_template_details_id=t.id AND b.bus_number = #{bus_number}
-			 where 1=1  
-		<if test="key_components_template_id!=null and key_components_template_id!=''">
-			and t.key_components_template_id=#{key_components_template_id}
-		</if>
-		<if test="workshop!=null and workshop!=''">
+			 where 1=1 and t.key_components_template_id=#{key_components_template_id}
 			and t.workshop=#{workshop}
-		</if>
 	</select>
 	
 	<select id="getMaterialExceptionLogsList" parameterType="Map" resultType="Map">

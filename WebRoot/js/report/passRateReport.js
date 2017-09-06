@@ -39,7 +39,7 @@ $(document).ready(function(){
 		console.log("-->conditions = " + conditions);
 		
 		$.ajax({
-			url : "getDPUReportData",
+			url : "getPassRateReportData",
 			type : "post",
 			dataType : "json",
 			data : {
@@ -49,22 +49,23 @@ $(document).ready(function(){
 				generateChart(response.chartList,response.itemList,queryItem);
 			}
 		});
-		ajaxQuery(conditions);
+		//ajaxQuery(conditions);
 	})
 	
 });
 
 function generateChart(chartList,itemList,queryItem){
-	var bug_avg = new Array();
+	var pass_rate = new Array();
 	var categories=new Array();
 	var targetVal=0;
+	var maxVal=100;
 	var linedata=new Array();
 	if(itemList==undefined){
 		itemList=new Array();
 	}
 	if(itemList.length>0){
 		$.each(itemList,function(index,item){
-			bug_avg[item]=0;
+			pass_rate[item]=null;
 			if(queryItem=='week'){
 				categories[index]="第"+item+"周";
 			}
@@ -76,20 +77,21 @@ function generateChart(chartList,itemList,queryItem){
 			}
 		});
 	}
-	$.each(chartList,function(index,data){
-		targetVal=data.target_val==undefined?0:data.target_val;
-		var busNum=isNaN(parseInt(data.bus_num))?0:parseInt(data.bus_num);
-		var bugNum=isNaN(parseInt(data.bug_num))?0:parseInt(data.bug_num);		
+	targetVal=chartList[0].target_val==undefined?'0':chartList[0].target_val;
+	targetVal=Number(targetVal.replace("%",""));
+	$.each(chartList,function(index,data){		
+		var busTotal=isNaN(parseInt(data.bus_total))?0:parseInt(data.bus_total);
+		var bugOkNum=isNaN(parseInt(data.bus_ok_num))?0:parseInt(data.bus_ok_num);		
 		if(queryItem=='order'){
 			categories[index]=data.item;
-			bug_avg[data.item]=Number((bugNum/busNum).toFixed(2));
-		}/*else if(queryItem=='day'){
-			bug_avg[data.item]=Number((bugNum/busNum).toFixed(2));
-		}*/else{
-			bug_avg[data.item]=Number((bugNum/busNum).toFixed(2));
+			pass_rate[data.item]=Number((bugOkNum/busTotal*100).toFixed(2));
+		}else{
+			pass_rate[data.item]=Number((bugOkNum/busTotal*100).toFixed(2));
 		}
+
 	});
-	var title_line = "单车缺陷数(DPU)趋势图";	
+	
+	var title_line = "一次校检合格率趋势图";	
 	var xAxis_line = {
 			categories : categories,
 			labels: {
@@ -98,14 +100,17 @@ function generateChart(chartList,itemList,queryItem){
 		};
 	var fn_formatter_line = function(obj) {
 		var s = "";
-		s = obj.x + ": " + obj.y ;
+		s = obj.x + ": " + obj.y +"%";
 		return s;
 	}
 	var yAxis_line = {
 			title : {
 				text : ''
 			},
-			//max:Number(targetVal)+3,
+			labels:{
+				format: '{value} %'
+			},
+			max:maxVal,
 			plotLines : [ { //一条延伸到整个绘图区的线，标志着轴中一个特定值。
 				color : 'red',
 				dashStyle : 'Dash', //Dash,Dot,Solid,默认Solid
@@ -113,7 +118,7 @@ function generateChart(chartList,itemList,queryItem){
 				value : targetVal, //y轴显示位置
 				zIndex : 0,
 				label : {
-					text : '目标值：'+targetVal, //标签的内容
+					text : '目标值：'+targetVal+"%", //标签的内容
 					align : 'left', //标签的水平位置，水平居左,默认是水平居中center
 					x : 10
 				//标签相对于被定位的位置水平偏移的像素，重新定位，水平居左10px
@@ -121,14 +126,14 @@ function generateChart(chartList,itemList,queryItem){
 			} ]
 		};
 
-	for (value in bug_avg)
+	for (value in pass_rate)
 	{
-		linedata.push(bug_avg[value]);
+		linedata.push(pass_rate[value]);
 	}
 	var series_line = [];
 	var l_obj = {
 			type : 'line',
-			name : 'DPU',
+			name : '一次校检合格率',
 			data : linedata,
 			marker : {
 				lineWidth : 2,
@@ -138,7 +143,7 @@ function generateChart(chartList,itemList,queryItem){
 			dataLabels : {
 				enabled : true,
 				formatter : function(obj) {
-					return this.y ;
+					return this.y +"%";
 				},
 				color : '#606060',
 				style : {

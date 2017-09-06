@@ -596,4 +596,94 @@
 	]]>
 	</select>
 	
+	<!-- 一次校检合格率报表 数据查询 -->
+	<select id="queryPassRateData" parameterType="Map" resultType="Map">
+		<if test="queryItem=='day'">
+		<![CDATA[
+		select a.*,b.target_val from(		
+		select count(h.bus_number) bus_total, h.factory_id,h.test_node_id,count(h1.bus_number) bus_ok_num,substring(h.edit_date,1,10) item
+		from BMS_QM_TEST_CARD h left join BMS_QM_TEST_CARD h1 on h.id=h1.id and h1.result_judge='合格'
+		where  h.factory_id=#{factoryId} and h.test_node_id=#{test_node_id}
+		and substring(h.edit_date,1,10) >=#{startDate}  and substring(h.edit_date,1,10) <=#{endDate}
+		group by substring(h.edit_date,1,10)		
+		) a
+		left join 
+		(
+		select max(p.target_value) target_val,p.eend_date,p.factory_id,p.test_node_id
+		from BMS_QM_QUALITY_TARGET_PARAMETER  p
+		left join BMS_BASE_KEY k on p.target_type=k.value
+		where k.key_name='一次交检合格率' and p.factory_id=#{factoryId} and p.test_node_id=#{test_node_id} and p.eend_date=(
+		select max(p1.eend_date) from  BMS_QM_QUALITY_TARGET_PARAMETER  p1
+		left join BMS_BASE_KEY k on p1.target_type=k.value 
+		where k.key_name='一次交检合格率' and p1.factory_id=#{factoryId} and p1.test_node_id=#{test_node_id}
+		)) b on a.factory_id=b.factory_id and a.test_node_id=b.test_node_id
+		]]>
+		</if>
+		<if test="queryItem=='week'">
+		<![CDATA[
+		select a.*,b.target_val from(
+		select count(h.bus_number) bus_total, h.factory_id,h.test_node_id,count(h1.bus_number) bus_ok_num,week(h.edit_date) -week(#{startDate})+1 item
+		from BMS_QM_TEST_CARD h left join BMS_QM_TEST_CARD h1 on h.id=h1.id and h1.result_judge='合格'
+		where  h.factory_id=#{factoryId} and h.test_node_id=#{test_node_id}
+		and substring(h.edit_date,1,10) >=#{startDate}  and substring(h.edit_date,1,10) <=#{endDate}
+		group by week(h.edit_date) 
+		) a
+		left join 
+		(
+		select max(p.target_value) target_val,p.eend_date,p.factory_id,p.test_node_id
+		from BMS_QM_QUALITY_TARGET_PARAMETER  p
+		left join BMS_BASE_KEY k on p.target_type=k.value 
+		where k.key_name='一次交检合格率' and p.factory_id=#{factoryId} and p.test_node_id=#{test_node_id} and p.eend_date=(
+		select max(p1.eend_date) from  BMS_QM_QUALITY_TARGET_PARAMETER  p1
+		left join BMS_BASE_KEY k on p1.target_type=k.value 
+		where k.key_name='一次交检合格率' and p1.factory_id=#{factoryId} and p1.test_node_id=#{test_node_id}
+		)) b on a.factory_id=b.factory_id and a.test_node_id=b.test_node_id
+		]]>
+
+		</if>
+		<if test="queryItem=='month'">
+		<![CDATA[
+		select a.*,b.target_val from(
+		select count(h.bus_number) bus_total, h.factory_id,h.test_node_id,count(h1.bus_number) bus_ok_num,month(h.edit_date) item
+		from BMS_QM_TEST_CARD h left join BMS_QM_TEST_CARD h1 on h.id=h1.id and h1.result_judge='合格'
+		where  h.factory_id=#{factoryId} and h.test_node_id=#{test_node_id}
+		and substring(h.edit_date,1,10) >=#{startDate}  and substring(h.edit_date,1,10) <=#{endDate}
+		group by month(h.edit_date) 
+		) a
+		left join 
+		(
+		select max(p.target_value) target_val,p.eend_date,p.factory_id,p.test_node_id
+		from BMS_QM_QUALITY_TARGET_PARAMETER  p
+		left join BMS_BASE_KEY k on p.target_type=k.value 
+		where k.key_name='一次交检合格率' and p.factory_id=#{factoryId} and p.test_node_id=#{test_node_id} and p.eend_date=(
+		select max(p1.eend_date) from  BMS_QM_QUALITY_TARGET_PARAMETER  p1
+		left join BMS_BASE_KEY k on p1.target_type=k.value 
+		where k.key_name='一次交检合格率' and p1.factory_id=#{factoryId} and p1.test_node_id=#{test_node_id}
+		)) b on a.factory_id=b.factory_id and a.test_node_id=b.test_node_id
+		]]>
+		</if>
+		<if test="queryItem=='order'">
+		<![CDATA[
+		select a.*,b.target_val from(
+		select count(h.bus_number) bus_total, h.factory_id,h.test_node_id,count(h1.bus_number) bus_ok_num,o.order_no item
+		from BMS_QM_TEST_CARD h left join BMS_QM_TEST_CARD h1 on h.id=h1.id and h1.result_judge='合格'
+		left join BMS_OR_ORDER o on h.order_id=o.id 
+		where  h.factory_id=#{factoryId} and h.test_node_id=#{test_node_id}
+		and substring(h.edit_date,1,10) >=#{startDate}  and substring(h.edit_date,1,10) <=#{endDate}
+		group by o.order_no
+		) a
+		left join 
+		(
+		select max(p.target_value) target_val,p.eend_date,p.factory_id,p.test_node_id
+		from BMS_QM_QUALITY_TARGET_PARAMETER  p
+		left join BMS_BASE_KEY k on p.target_type=k.value 
+		where k.key_name='一次交检合格率' and p.factory_id=#{factoryId} and p.test_node_id=#{test_node_id} and p.eend_date=(
+		select max(p1.eend_date) from  BMS_QM_QUALITY_TARGET_PARAMETER  p1
+		left join BMS_BASE_KEY k on p1.target_type=k.value 
+		where k.key_name='一次交检合格率' and p1.factory_id=#{factoryId} and p1.test_node_id=#{test_node_id}
+		)) b on a.factory_id=b.factory_id and a.test_node_id=b.test_node_id
+		]]>
+		</if>
+	</select>
+	
 </mapper>

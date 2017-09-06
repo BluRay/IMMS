@@ -53,6 +53,12 @@ public class ReportController extends BaseController {
 		return mv;
 	}
 	
+	@RequestMapping("/passRateReport")
+	public ModelAndView passRateReport(){		//报表 一次交检合格率
+		mv.setViewName("report/passRateReport");
+		return mv;
+	}
+	
 	@SuppressWarnings("rawtypes")
 	@RequestMapping("/getDPUReportData")
 	@ResponseBody
@@ -81,8 +87,7 @@ public class ReportController extends BaseController {
 		}
 		
 		result.put("chartList", reportService.queryDPUData(conditionMap));
-		
-		
+				
 		mv.clear();
 		mv.getModelMap().addAllAttributes(result);
 		model = mv.getModelMap();
@@ -114,6 +119,41 @@ public class ReportController extends BaseController {
 		model = mv.getModelMap();
 		return model;
 	}
+	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping("/getPassRateReportData")
+	@ResponseBody
+	public ModelMap getPassRateReportData() throws ParseException{
+		Map<String, Object> result = new HashMap<String, Object>();
+		String conditions = request.getParameter("conditions");
+		Map<String, Object> conditionMap = new HashMap<String, Object>();
+		JSONObject jo = JSONObject.fromObject(conditions);
+		for (Iterator it = jo.keys(); it.hasNext();) {
+			String key = (String) it.next();
+			conditionMap.put(key, jo.get(key));
+		}
+		String sdate=(String) conditionMap.get("startDate");
+		String edate=(String) conditionMap.get("endDate");
+		//查询维度为日,将查询日期范围内的所有日期添加到list中
+		if(conditionMap.get("queryItem").equals("day")){			
+			result.put("itemList", this.getDateList(sdate, edate));
+		}
+		//查询维度为周，获取日期范围内周数
+		if(conditionMap.get("queryItem").equals("week")){			
+			result.put("itemList",this.getWeekList(sdate, edate));
+		}
+		//查询维度为月，获取日期范围内详细月列表
+		if(conditionMap.get("queryItem").equals("month")){
+			result.put("itemList", this.getMonthList(sdate, edate));
+		}
+		result.put("chartList", reportService.queryPassRateData(conditionMap));
+
+		mv.clear();
+		mv.getModelMap().addAllAttributes(result);
+		model = mv.getModelMap();
+		return model;
+	}
+	
 	
 	/**
 	 * 获取日期范围内所有日期

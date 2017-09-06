@@ -18,6 +18,7 @@ public interface IReportService {
 	
 	public List<Map<String,Object>> queryDPUData(Map<String, Object> conditionMap);
 	public Map<String,Object> queryDPUDetail(Map<String, Object> conditionMap);
+	public List<Map<String,Object>> queryPassRateData(Map<String, Object> conditionMap);
 	
 	public List<Map<String, Object>> showFactoryOutputReportData(Map<String, Object> queryMap);
 	/**

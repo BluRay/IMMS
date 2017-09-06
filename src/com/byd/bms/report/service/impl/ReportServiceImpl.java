@@ -421,4 +421,9 @@ public class ReportServiceImpl implements IReportService {
 		return result;
 	}
 
+	@Override
+	public List<Map<String, Object>> queryPassRateData(Map<String, Object> conditionMap) {
+		return reportDao.queryPassRateData(conditionMap);
+	}
+
 }
