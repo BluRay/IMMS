@@ -1049,7 +1049,7 @@ public class HrBaseDataController extends BaseController {
 		dataType.put("1", ExcelModel.CELL_TYPE_STRING);
 		dataType.put("2", ExcelModel.CELL_TYPE_STRING);
 		dataType.put("3", ExcelModel.CELL_TYPE_STRING);
-		dataType.put("4", ExcelModel.CELL_TYPE_NUMERIC);
+		dataType.put("4", ExcelModel.CELL_TYPE_STRING);
 		dataType.put("5", ExcelModel.CELL_TYPE_STRING);
 		dataType.put("6", ExcelModel.CELL_TYPE_NUMERIC);
 		excelModel.setDataType(dataType);
@@ -1165,6 +1165,7 @@ public class HrBaseDataController extends BaseController {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
+			message=e.getMessage();
 			initModel(false,message,null);
 			model = mv.getModelMap();
 			return model;

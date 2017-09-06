@@ -17,6 +17,8 @@ public interface IReportDao {
 	public List<Map<String,Object>> queryDPUDetail(Map<String, Object> conditionMap);			//DPU报表明细
 	public int queryDPUDetailCount(Map<String, Object> conditionMap);
 	public List<Map<String,Object>> queryPassRateData(Map<String, Object> conditionMap);		//一次校检合格率报表
+	public List<Map<String,Object>> queryPassRateDetail(Map<String, Object> conditionMap);		//一次校检合格率报表明细
+	public int queryPassRateDetailCount(Map<String, Object> conditionMap);
 
 	List<Map<String, Object>> queryOnlineAndOfflineData(Map<String, Object> condMap);
 

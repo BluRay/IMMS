@@ -426,4 +426,17 @@ public class ReportServiceImpl implements IReportService {
 		return reportDao.queryPassRateData(conditionMap);
 	}
 
+	@Override
+	public Map<String, Object> queryPassRateDetail(Map<String, Object> conditionMap) {
+		int totalCount=0;
+		List<Map<String, Object>> datalist = reportDao.queryPassRateDetail(conditionMap);
+		totalCount = reportDao.queryPassRateDetailCount(conditionMap);
+		Map<String, Object> result = new HashMap<String,Object>();
+		result.put("draw", conditionMap.get("draw"));
+		result.put("recordsTotal", totalCount);
+		result.put("recordsFiltered", totalCount);
+		result.put("data", datalist);
+		return result;
+	}
+
 }

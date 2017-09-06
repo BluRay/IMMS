@@ -153,6 +153,31 @@ public class ReportController extends BaseController {
 		model = mv.getModelMap();
 		return model;
 	}
+	@SuppressWarnings("rawtypes")
+	@RequestMapping("/getPassRateDetail")
+	@ResponseBody
+	public ModelMap getPassRateDetail(){
+		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
+		int start=(request.getParameter("start")!=null)?Integer.parseInt(request.getParameter("start")):0;		//分页数据起始数
+		int length=(request.getParameter("length")!=null)?Integer.parseInt(request.getParameter("length")):500;	//每一页数据条数
+		Map<String, Object> result = new HashMap<String, Object>();
+		String conditions = request.getParameter("conditions");
+		Map<String, Object> conditionMap = new HashMap<String, Object>();
+		JSONObject jo = JSONObject.fromObject(conditions);
+		for (Iterator it = jo.keys(); it.hasNext();) {
+			String key = (String) it.next();
+			conditionMap.put(key, jo.get(key));
+		}
+		conditionMap.put("draw", draw);
+		conditionMap.put("start", start);
+		conditionMap.put("length", length);
+		
+		result = reportService.queryPassRateDetail(conditionMap);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(result);
+		model = mv.getModelMap();
+		return model;
+	}
 	
 	
 	/**

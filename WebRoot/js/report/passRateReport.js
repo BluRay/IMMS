@@ -49,7 +49,7 @@ $(document).ready(function(){
 				generateChart(response.chartList,response.itemList,queryItem);
 			}
 		});
-		//ajaxQuery(conditions);
+		ajaxQuery(conditions);
 	})
 	
 });
@@ -208,7 +208,7 @@ function ajaxQuery(conditions){
 
             $.ajax({
                 type: "post",
-                url: "getDPUReportDetail",
+                url: "getPassRateDetail",
                 cache: false,  //禁用缓存
                 data: param,  //传入组装的参数
                 dataType: "json",
@@ -231,10 +231,9 @@ function ajaxQuery(conditions){
 		            {"title":"车号",width:'150',"class":"center","data":"bus_number","defaultContent": ""},
 		            {"title":"工厂","class":"center","data":"factory_name","defaultContent": ""},
 		            {"title":"检验节点","class":"center","data":"test_node","defaultContent": ""},
-		            {"title":"故障","class":"center","data": "test_result","defaultContent": "-"},
-		            {"title":"备注","class":"center","data":"memo","defaultContent": "-"},		            
-		            {"title":"检验员","class":"center","data":"tester","defaultContent": "-"},
-		            {"title":"检验时间","class":"center","data": "test_date","defaultContent": "-"}
+		            {"title":"检验员","class":"center","data": "tester","defaultContent": "-"},
+		            {"title":"QE","class":"center","data":"qe","defaultContent": "-"},
+		            {"title":"判定时间","class":"center","data": "test_date","defaultContent": "-"}
 		          ],
 	});
 }

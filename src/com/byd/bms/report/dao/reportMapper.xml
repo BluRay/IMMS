@@ -685,5 +685,36 @@
 		]]>
 		</if>
 	</select>
+	<select id="queryPassRateDetail" parameterType="Map" resultType="Map">
+	<![CDATA[
+	select h.bus_number,h.tester,h.qe,h.edit_date,u.username,f.factory_name,k.key_name AS test_node,o.order_no
+	from BMS_QM_TEST_CARD h 
+	left join BMS_OR_ORDER o on h.order_id=o.id
+	left join BMS_BASE_USER u on h.editor_id=u.id
+	left join BMS_BASE_FACTORY f on f.id=h.factory_id
+	LEFT JOIN BMS_BASE_KEY k ON k.id = h.test_node_id
+	where h.test_node_id=#{test_node_id} and h.factory_id=#{factoryId} and h.result_judge='合格'
+	and substring(h.edit_date,1,10) >=#{startDate}  and substring(h.edit_date,1,10) <=#{endDate}  
+	group by h.bus_number
+	order by h.edit_date desc
+	]]>
+	<if test="start !=null">
+		LIMIT #{start} , #{length} 
+	</if>
+	</select>
+	<select id="queryPassRateDetailCount" parameterType="Map" resultType="int">
+	<![CDATA[
+	select count(a.bus_number) from (
+	select h.bus_number,h.tester,h.qe,h.test_date,u.username,f.factory_name,k.key_name AS test_node,o.order_no
+	from BMS_QM_TEST_CARD h 
+	left join BMS_OR_ORDER o on h.order_id=o.id
+	left join BMS_BASE_USER u on h.editor_id=u.id
+	left join BMS_BASE_FACTORY f on f.id=h.factory_id
+	LEFT JOIN BMS_BASE_KEY k ON k.id = h.test_node_id
+	where h.test_node_id=#{test_node_id} and h.factory_id=#{factoryId} and h.result_judge='合格'
+	and substring(h.edit_date,1,10) >=#{startDate}  and substring(h.edit_date,1,10) <=#{endDate}  
+	group by h.bus_number) a
+	]]>
+	</select>
 	
 </mapper>
