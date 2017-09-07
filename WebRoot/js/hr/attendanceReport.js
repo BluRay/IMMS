@@ -22,7 +22,7 @@ function initPage(){
 	getBusNumberSelect('#nav-search-input');
 	$("#hr_pecie").addClass("in");
 	var d = new Date(); 
-    var s = d.getFullYear().toString() + '-'+addzero(d.getMonth() + 1)+"-"+d.getDate();
+    var s = d.getFullYear().toString() + '-'+addzero(d.getMonth() + 1)+"-"+addzero(d.getDate());
     $("#record_date").val(s);
     $("#reportType").val("计件");
     getFactorySelect("hrReport/attendanceUpload","","#factory",null,"id")	
@@ -100,6 +100,9 @@ function ajaxQuery(){
 					$("<td />").html(value.out_aid_sw_num).appendTo(tr)
 					$("<td />").html(value.out_aid_ty_num).appendTo(tr)
 					$("<td />").html(value.out_aid_sz_num).appendTo(tr)
+					$("<td />").html(value.out_aid_xa_num).appendTo(tr)
+					$("<td />").html(value.out_aid_nb_num).appendTo(tr)
+					$("<td />").html(value.out_aid_yc_num).appendTo(tr)
 					$("<td />").html(value.out_aid_tj_num).appendTo(tr)
 					$("<td />").html(value.out_aid_oth_num).appendTo(tr)
 					$("<td />").html(value.out_aid_note).appendTo(tr)
@@ -113,6 +116,9 @@ function ajaxQuery(){
 					$("<td />").html(value.in_aid_sw_num).appendTo(tr)
 					$("<td />").html(value.in_aid_ty_num).appendTo(tr)
 					$("<td />").html(value.in_aid_sz_num).appendTo(tr)
+					$("<td />").html(value.in_aid_xa_num).appendTo(tr)
+					$("<td />").html(value.in_aid_nb_num).appendTo(tr)
+					$("<td />").html(value.in_aid_yc_num).appendTo(tr)
 					$("<td />").html(value.in_aid_tj_num).appendTo(tr)
 					$("<td />").html(value.in_aid_oth_num).appendTo(tr)
 					$("<td />").html(value.in_aid_note).appendTo(tr)
@@ -143,6 +149,9 @@ function ajaxQuery(){
 					$("<td />").html(value.out_aid_sw_num).appendTo(tr)
 					$("<td />").html(value.out_aid_ty_num).appendTo(tr)
 					$("<td />").html(value.out_aid_sz_num).appendTo(tr)
+					$("<td />").html(value.out_aid_xa_num).appendTo(tr)
+					$("<td />").html(value.out_aid_nb_num).appendTo(tr)
+					$("<td />").html(value.out_aid_yc_num).appendTo(tr)
 					$("<td />").html(value.out_aid_tj_num).appendTo(tr)
 					$("<td />").html(value.out_aid_oth_num).appendTo(tr)
 					$("<td />").html(value.out_aid_note).appendTo(tr)
@@ -156,6 +165,9 @@ function ajaxQuery(){
 					$("<td />").html(value.in_aid_sw_num).appendTo(tr)
 					$("<td />").html(value.in_aid_ty_num).appendTo(tr)
 					$("<td />").html(value.in_aid_sz_num).appendTo(tr)
+					$("<td />").html(value.in_aid_xa_num).appendTo(tr)
+					$("<td />").html(value.in_aid_nb_num).appendTo(tr)
+					$("<td />").html(value.in_aid_yc_num).appendTo(tr)
 					$("<td />").html(value.in_aid_tj_num).appendTo(tr)
 					$("<td />").html(value.in_aid_oth_num).appendTo(tr)
 					$("<td />").html(value.in_aid_note).appendTo(tr)

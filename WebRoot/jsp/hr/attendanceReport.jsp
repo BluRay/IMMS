@@ -92,8 +92,8 @@
 										<th style="text-align:center;"colspan=2>短期工</th>
 										<th style="text-align:center;" colspan=5>人数差异原因分类</th>
 										<th style="text-align:center;" rowspan=2>总计<br/>（实际在岗人数）</th>
-										<th style="text-align:center;" colspan=13>外出支援人数</th>
-										<th style="text-align:center;" colspan=13>被支援人数</th>										
+										<th style="text-align:center;" colspan=16>外出支援人数</th>
+										<th style="text-align:center;" colspan=16>被支援人数</th>										
 									</tr>
 									<tr>
 										<th style="text-align:center;">应到人数</th>
@@ -116,6 +116,9 @@
 										<th style="text-align:center;">汕尾</th>
 										<th style="text-align:center;">太原</th>
 										<th style="text-align:center;">深圳</th>
+										<th style="text-align:center;">西安</th>
+										<th style="text-align:center;">宁波</th>
+										<th style="text-align:center;">银川</th>
 										<th style="text-align:center;">天津</th>
 										<th style="text-align:center;">其他</th>
 										<th style="text-align:center;">备注</th>
@@ -129,6 +132,9 @@
 										<th style="text-align:center;">汕尾</th>
 										<th style="text-align:center;">太原</th>
 										<th style="text-align:center;">深圳</th>
+										<th style="text-align:center;">西安</th>
+										<th style="text-align:center;">宁波</th>
+										<th style="text-align:center;">银川</th>
 										<th style="text-align:center;">天津</th>
 										<th style="text-align:center;">其他</th>
 										<th style="text-align:center;">备注</th>
@@ -148,8 +154,8 @@
 										<!-- <th style="text-align:center;"colspan=2>短期工</th> -->
 										<th style="text-align:center;" colspan=6>人数差异原因分类</th>
 										<th style="text-align:center;" rowspan=2>总计<br/>（实际在岗人数）</th>
-										<th style="text-align:center;" colspan=13>外出支援人数</th>
-										<th style="text-align:center;" colspan=13>被支援人数</th>										
+										<th style="text-align:center;" colspan=16>外出支援人数</th>
+										<th style="text-align:center;" colspan=16>被支援人数</th>										
 									</tr>
 									<tr>
 										<th style="text-align:center;">应到人数</th>
@@ -173,6 +179,9 @@
 										<th style="text-align:center;">汕尾</th>
 										<th style="text-align:center;">太原</th>
 										<th style="text-align:center;">深圳</th>
+										<th style="text-align:center;">西安</th>
+										<th style="text-align:center;">宁波</th>
+										<th style="text-align:center;">银川</th>
 										<th style="text-align:center;">天津</th>
 										<th style="text-align:center;">其他</th>
 										<th style="text-align:center;">备注</th>
@@ -186,6 +195,9 @@
 										<th style="text-align:center;">汕尾</th>
 										<th style="text-align:center;">太原</th>
 										<th style="text-align:center;">深圳</th>
+										<th style="text-align:center;">西安</th>
+										<th style="text-align:center;">宁波</th>
+										<th style="text-align:center;">银川</th>
 										<th style="text-align:center;">天津</th>
 										<th style="text-align:center;">其他</th>
 										<th style="text-align:center;">备注</th>

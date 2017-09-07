@@ -59,6 +59,12 @@ public class ReportController extends BaseController {
 		return mv;
 	}
 	
+	@RequestMapping("/processProblemReport")	//报表 制程问题严重等级分布报表
+	public ModelAndView processProblemReport(){
+		mv.setViewName("report/processProblemReport");
+		return mv;
+	}
+	
 	@SuppressWarnings("rawtypes")
 	@RequestMapping("/getDPUReportData")
 	@ResponseBody

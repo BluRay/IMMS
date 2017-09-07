@@ -152,8 +152,16 @@ public class HrReportServiceImpl implements IHrReportService {
 		Map<String,Object> orgInfo=hrReportDao.queryOrgInfo(condMap);
 		if(orgInfo==null){
 			model.put("success",false);
-			model.put("message", condMap.get("factory").toString()+"-"+
-					condMap.get("workshop").toString()+"-"+condMap.get("team").toString()+"组织结构不存在！");
+			StringBuilder sb=new StringBuilder();
+			sb.append(condMap.get("factory").toString());
+			sb.append("-");
+			sb.append(condMap.get("workshop").toString());
+			if(condMap.get("team")!=null){
+				sb.append("-");
+				sb.append(condMap.get("team").toString());
+			}
+			sb.append("组织结构不存在！");
+			model.put("message",sb.toString());
 			return;
 		}
 		try{

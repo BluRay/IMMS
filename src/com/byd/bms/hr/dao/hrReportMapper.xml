@@ -781,9 +781,15 @@
 	<select id="queryOrgInfo" parameterType="Map" resultType="Map">
 		select o.id org_id
 		from BMS_BASE_ORG o
-		left join BMS_BASE_ORG o1 on o.parent_id=o1.id
-		left join BMS_BASE_ORG o2 on o1.parent_id=o2.id
-		where o.name=#{team} and o1.name=#{workshop} and o2.name=#{factory} 
+		left join BMS_BASE_ORG o1 on o1.parent_id=o.id
+		<if test="team !=null and team !=''">
+		left join BMS_BASE_ORG o2 on o2.parent_id=o1.id
+		</if>		
+		where 1=1 and o1.name=#{workshop} and o.name=#{factory} 
+		<if test="team !=null and team !=''">
+			and o2.name=#{team}
+		</if>
+		limit 1
 	</select>
 	
 	<select id="queryAttendanceReportData" parameterType="Map" resultType="Map">
@@ -792,10 +798,12 @@
 		sum(ifnull(absence_num,0)) absence_num,sum(ifnull(trip_num,0)) trip_num,sum(ifnull(out_aid_num,0)) out_aid_num,sum(ifnull(work_num,0)) work_num,
 		sum(ifnull(out_aid_cs_num,0)) out_aid_cs_num,sum(ifnull(out_aid_nj_num,0)) out_aid_nj_num,sum(ifnull(out_aid_hz_num,0)) out_aid_hz_num,sum(ifnull(out_aid_dl_num,0)) out_aid_dl_num,
 		sum(ifnull(out_aid_qd_num,0)) out_aid_qd_num,sum(ifnull(out_aid_cd_num,0)) out_aid_cd_num,sum(ifnull(out_aid_wh_num,0)) out_aid_wh_num,sum(ifnull(out_aid_dl_num,0)) out_aid_sw_num,
-		sum(ifnull(out_aid_ty_num,0)) out_aid_ty_num,sum(ifnull(out_aid_sz_num,0)) out_aid_sz_num,sum(ifnull(out_aid_tj_num,0)) out_aid_tj_num,sum(ifnull(out_aid_oth_num,0)) out_aid_oth_num,
+		sum(ifnull(out_aid_ty_num,0)) out_aid_ty_num,sum(ifnull(out_aid_sz_num,0)) out_aid_sz_num,sum(ifnull(out_aid_xa_num,0)) out_aid_xa_num,sum(ifnull(out_aid_nb_num,0)) out_aid_nb_num,
+		sum(ifnull(out_aid_yc_num,0)) out_aid_yc_num,sum(ifnull(out_aid_tj_num,0)) out_aid_tj_num,sum(ifnull(out_aid_oth_num,0)) out_aid_oth_num,
 		sum(ifnull(out_aid_note,0)) out_aid_note,sum(ifnull(in_aid_cs_num,0)) in_aid_cs_num,sum(ifnull(in_aid_nj_num,0)) in_aid_nj_num,sum(ifnull(in_aid_hz_num,0)) in_aid_hz_num,
 		sum(ifnull(in_aid_dl_num,0)) in_aid_dl_num,sum(ifnull(in_aid_qd_num,0)) in_aid_qd_num,sum(ifnull(in_aid_cd_num,0)) in_aid_cd_num,sum(ifnull(in_aid_wh_num,0)) in_aid_wh_num,
-		sum(ifnull(in_aid_sw_num,0)) in_aid_sw_num,sum(ifnull(in_aid_ty_num,0)) in_aid_ty_num,sum(ifnull(in_aid_sz_num,0)) in_aid_sz_num,sum(ifnull(in_aid_tj_num,0)) in_aid_tj_num,
+		sum(ifnull(in_aid_sw_num,0)) in_aid_sw_num,sum(ifnull(in_aid_ty_num,0)) in_aid_ty_num,sum(ifnull(in_aid_sz_num,0)) in_aid_sz_num,sum(ifnull(in_aid_xa_num,0)) in_aid_xa_num,
+		sum(ifnull(in_aid_nb_num,0)) in_aid_nb_num,sum(ifnull(in_aid_yc_num,0)) in_aid_yc_num,sum(ifnull(in_aid_tj_num,0)) in_aid_tj_num,
 		sum(ifnull(in_aid_oth_num,0)) in_aid_oth_num,sum(ifnull(in_aid_note,0)) in_aid_note
 		FROM BMS_HR_ATTENDENCE_REPORT
 		WHERE report_type='计件'

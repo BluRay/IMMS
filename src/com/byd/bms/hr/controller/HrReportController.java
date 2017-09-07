@@ -562,6 +562,12 @@ public class HrReportController extends BaseController {
 		dataType.put("36", ExcelModel.CELL_TYPE_CANNULL);
 		dataType.put("37", ExcelModel.CELL_TYPE_CANNULL);
 		dataType.put("38", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("39", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("40", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("41", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("42", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("43", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("44", ExcelModel.CELL_TYPE_CANNULL);
 		
 		excelModel.setDataType(dataType);
 		excelModel.setPath(fileFileName);
@@ -608,23 +614,29 @@ public class HrReportController extends BaseController {
 					info.put("out_aid_wh_num", data[19] == null?null:data[19].toString().trim());
 					info.put("out_aid_sw_num", data[20] == null?null:data[20].toString().trim());
 					info.put("out_aid_ty_num", data[21] == null?null:data[21].toString().trim());
-					info.put("out_aid_sz_num", data[22] == null?null:data[22].toString().trim());
-					info.put("out_aid_tj_num", data[23] == null?null:data[23].toString().trim());
-					info.put("out_aid_oth_num", data[24] == null?null:data[24].toString().trim());
-					info.put("out_aid_note", data[25] == null?null:data[25].toString().trim());
-					info.put("in_aid_cs_num", data[26] == null?null:data[26].toString().trim());
-					info.put("in_aid_nj_num", data[27] == null?null:data[27].toString().trim());
-					info.put("in_aid_hz_num", data[28] == null?null:data[28].toString().trim());
-					info.put("in_aid_dl_num", data[29] == null?null:data[29].toString().trim());
-					info.put("in_aid_qd_num", data[30] == null?null:data[30].toString().trim());
-					info.put("in_aid_cd_num", data[31] == null?null:data[31].toString().trim());
-					info.put("in_aid_wh_num", data[32] == null?null:data[32].toString().trim());
-					info.put("in_aid_sw_num", data[33] == null?null:data[33].toString().trim());
-					info.put("in_aid_ty_num", data[34] == null?null:data[34].toString().trim());
-					info.put("in_aid_sz_num", data[35] == null?null:data[35].toString().trim());
-					info.put("in_aid_tj_num", data[36] == null?null:data[36].toString().trim());
-					info.put("in_aid_oth_num", data[37] == null?null:data[37].toString().trim());
-					info.put("in_aid_note", data[38] == null?null:data[38].toString().trim());
+					info.put("out_aid_sz_num", data[22] == null?null:data[22].toString().trim());					
+					info.put("out_aid_xa_num", data[23] == null?null:data[23].toString().trim());
+					info.put("out_aid_nb_num", data[24] == null?null:data[24].toString().trim());
+					info.put("out_aid_yc_num", data[25] == null?null:data[25].toString().trim());					
+					info.put("out_aid_tj_num", data[26] == null?null:data[26].toString().trim());
+					info.put("out_aid_oth_num", data[27] == null?null:data[27].toString().trim());
+					info.put("out_aid_note", data[28] == null?null:data[28].toString().trim());
+					info.put("in_aid_cs_num", data[29] == null?null:data[29].toString().trim());
+					info.put("in_aid_nj_num", data[30] == null?null:data[30].toString().trim());
+					info.put("in_aid_hz_num", data[31] == null?null:data[31].toString().trim());
+					info.put("in_aid_dl_num", data[32] == null?null:data[32].toString().trim());
+					info.put("in_aid_qd_num", data[33] == null?null:data[33].toString().trim());
+					info.put("in_aid_cd_num", data[34] == null?null:data[34].toString().trim());
+					info.put("in_aid_wh_num", data[35] == null?null:data[35].toString().trim());
+					info.put("in_aid_sw_num", data[36] == null?null:data[36].toString().trim());
+					info.put("in_aid_ty_num", data[37] == null?null:data[37].toString().trim());
+					info.put("in_aid_sz_num", data[38] == null?null:data[38].toString().trim());					
+					info.put("in_aid_xa_num", data[39] == null?null:data[39].toString().trim());
+					info.put("in_aid_nb_num", data[40] == null?null:data[40].toString().trim());
+					info.put("in_aid_yc_num", data[41] == null?null:data[41].toString().trim());					
+					info.put("in_aid_tj_num", data[42] == null?null:data[42].toString().trim());
+					info.put("in_aid_oth_num", data[43] == null?null:data[43].toString().trim());
+					info.put("in_aid_note", data[44] == null?null:data[44].toString().trim());
 
 					info.put("record_date", record_date);
 					info.put("report_type", "计件");
@@ -711,6 +723,13 @@ public class HrReportController extends BaseController {
 		dataType.put("34", ExcelModel.CELL_TYPE_CANNULL);
 		dataType.put("35", ExcelModel.CELL_TYPE_CANNULL);
 		dataType.put("36", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("37", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("38", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("39", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("40", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("41", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("42", ExcelModel.CELL_TYPE_CANNULL);
+	
 		
 		excelModel.setDataType(dataType);
 		excelModel.setPath(fileFileName);
@@ -733,7 +752,7 @@ public class HrReportController extends BaseController {
 				Map<String, Object> info = new HashMap<String, Object>();
 				String factory=data[0].toString().trim();
 				String workshop=data[1].toString().trim();
-				String team=data[2].toString().trim();
+				//String team=data[2].toString().trim();
 				if(factory !=""&&workshop!=""){
 					info.put("factory", factory);
 					info.put("workshop", workshop);
@@ -756,22 +775,28 @@ public class HrReportController extends BaseController {
 					info.put("out_aid_sw_num", data[18] == null?null:data[18].toString().trim());
 					info.put("out_aid_ty_num", data[19] == null?null:data[19].toString().trim());
 					info.put("out_aid_sz_num", data[20] == null?null:data[20].toString().trim());
-					info.put("out_aid_tj_num", data[21] == null?null:data[21].toString().trim());
-					info.put("out_aid_oth_num", data[22] == null?null:data[22].toString().trim());
-					info.put("out_aid_note", data[23] == null?null:data[23].toString().trim());
-					info.put("in_aid_cs_num", data[24] == null?null:data[24].toString().trim());
-					info.put("in_aid_nj_num", data[25] == null?null:data[25].toString().trim());
-					info.put("in_aid_hz_num", data[26] == null?null:data[26].toString().trim());
-					info.put("in_aid_dl_num", data[27] == null?null:data[27].toString().trim());
-					info.put("in_aid_qd_num", data[28] == null?null:data[28].toString().trim());
-					info.put("in_aid_cd_num", data[29] == null?null:data[29].toString().trim());
-					info.put("in_aid_wh_num", data[30] == null?null:data[30].toString().trim());
-					info.put("in_aid_sw_num", data[31] == null?null:data[31].toString().trim());
-					info.put("in_aid_ty_num", data[32] == null?null:data[32].toString().trim());
-					info.put("in_aid_sz_num", data[33] == null?null:data[33].toString().trim());
-					info.put("in_aid_tj_num", data[34] == null?null:data[34].toString().trim());
-					info.put("in_aid_oth_num", data[35] == null?null:data[35].toString().trim());
-					info.put("in_aid_note", data[36] == null?null:data[36].toString().trim());
+					info.put("out_aid_xa_num", data[21] == null?null:data[21].toString().trim());
+					info.put("out_aid_nb_num", data[22] == null?null:data[22].toString().trim());
+					info.put("out_aid_yc_num", data[23] == null?null:data[23].toString().trim());
+					info.put("out_aid_tj_num", data[24] == null?null:data[24].toString().trim());
+					info.put("out_aid_oth_num", data[25] == null?null:data[25].toString().trim());
+					info.put("out_aid_note", data[26] == null?null:data[26].toString().trim());
+					info.put("in_aid_cs_num", data[27] == null?null:data[27].toString().trim());
+					info.put("in_aid_nj_num", data[28] == null?null:data[28].toString().trim());
+					info.put("in_aid_hz_num", data[29] == null?null:data[29].toString().trim());
+					info.put("in_aid_dl_num", data[30] == null?null:data[30].toString().trim());
+					info.put("in_aid_qd_num", data[31] == null?null:data[31].toString().trim());
+					info.put("in_aid_cd_num", data[32] == null?null:data[32].toString().trim());
+					info.put("in_aid_wh_num", data[33] == null?null:data[33].toString().trim());
+					info.put("in_aid_sw_num", data[34] == null?null:data[34].toString().trim());
+					info.put("in_aid_ty_num", data[35] == null?null:data[35].toString().trim());
+					info.put("in_aid_sz_num", data[36] == null?null:data[36].toString().trim());
+					info.put("in_aid_xa_num", data[37] == null?null:data[37].toString().trim());
+					info.put("in_aid_nb_num", data[38] == null?null:data[38].toString().trim());
+					info.put("in_aid_yc_num", data[39] == null?null:data[39].toString().trim());
+					info.put("in_aid_tj_num", data[40] == null?null:data[40].toString().trim());
+					info.put("in_aid_oth_num", data[41] == null?null:data[41].toString().trim());
+					info.put("in_aid_note", data[42] == null?null:data[42].toString().trim());
 
 					info.put("record_date", record_date);
 					info.put("report_type", "计时");
@@ -783,7 +808,7 @@ public class HrReportController extends BaseController {
 			
 			condMap.put("factory", excelModel.getData().get(0)[0].toString());
 			condMap.put("workshop", excelModel.getData().get(0)[1].toString());
-			condMap.put("team", excelModel.getData().get(0)[2].toString());
+			//condMap.put("team", excelModel.getData().get(0)[2].toString());
 			condMap.put("record_date", record_date);
 			condMap.put("report_type", "计时");
 			condMap.put("dataList", addList);
