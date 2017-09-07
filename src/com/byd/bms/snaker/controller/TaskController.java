@@ -109,7 +109,9 @@ public class TaskController {
                 String[] actors = facets.getEngine().query().getTaskActorsByTaskId(task.getId());
                 for(String actor : actors) {
                 	BmsBaseUser user=settingService.getUserByid(actor);
-                    builder.append(user.getUsername()).append(",");
+                	if(user!=null){
+                		builder.append(user.getUsername()).append(",");
+                	}
                 }
                 createTime = task.getCreateTime();
             }

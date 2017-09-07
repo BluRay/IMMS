@@ -655,7 +655,7 @@
 		<if test="factoryId!=null and factoryId!=''">
 			and t.factory_id=#{factoryId}
 		</if>
-		<if test="workshop!=null and workshop!=''">
+		<if test="workshop!=null and workshop!='全部'">
 			and t.workshop=#{workshop}
 		</if>
 		<if test="orderNo!=null and orderNo!=''">

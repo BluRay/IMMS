@@ -20,6 +20,7 @@ public interface IReportService {
 	public Map<String,Object> queryDPUDetail(Map<String, Object> conditionMap);
 	public List<Map<String,Object>> queryPassRateData(Map<String, Object> conditionMap);
 	public Map<String,Object> queryPassRateDetail(Map<String, Object> conditionMap);
+	public List<Map<String,Object>> queryProcessProblemData(Map<String, Object> conditionMap);
 	
 	public List<Map<String, Object>> showFactoryOutputReportData(Map<String, Object> queryMap);
 	/**
@@ -39,5 +40,7 @@ public interface IReportService {
 	public int getPlanZzjRealCount(Map<String,Object> conditionMap);
 	
 	public void getFactoryRateRankData(Map<String, Object> conditionMap,List queryMapList,ModelMap model);
+	
+	public void getStandardHumanReportData(Map<String, Object> conditionMap,ModelMap model);
 	
 }

@@ -11,7 +11,7 @@ $(document).ready(function(){
 		getBusNumberSelect('#search_busNumber');
 		getFactorySelect("quality/keyPartsTrace",'',"#search_factory","全部",'id');
 		getBusTypeSelect("","#search_bus_type","全部","id");
-		getWorkshopSelect("",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
+		getWorkshopSelect("",$("#search_factory :selected").text(),"","#search_workshop","全部","id");
 		getOrderNoSelect("#search_order","#orderId");
 		ajaxQuery();
 	}
@@ -28,7 +28,7 @@ $(document).ready(function(){
 	});
 	
 	$('#search_factory').change(function(){ 
-		getWorkshopSelect("quality/keyPartsTrace",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
+		getWorkshopSelect("quality/keyPartsTrace",$("#search_factory :selected").text(),"","#search_workshop","全部","id");
 	});
 	$('#search_order').change(function(){ 
 		$("#search_config").html("");

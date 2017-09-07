@@ -185,6 +185,26 @@ public class ReportController extends BaseController {
 		return model;
 	}
 	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping("/getProcessProblemReportData")
+	@ResponseBody
+	public ModelMap getProcessProblemReportData(){
+		Map<String, Object> result = new HashMap<String, Object>();
+		String conditions = request.getParameter("conditions");
+		Map<String, Object> conditionMap = new HashMap<String, Object>();
+		JSONObject jo = JSONObject.fromObject(conditions);
+		for (Iterator it = jo.keys(); it.hasNext();) {
+			String key = (String) it.next();
+			conditionMap.put(key, jo.get(key));
+		}
+		result.put("chartList", reportService.queryProcessProblemData(conditionMap));
+
+		mv.clear();
+		mv.getModelMap().addAllAttributes(result);
+		model = mv.getModelMap();
+		return model;
+	}
+	
 	
 	/**
 	 * 获取日期范围内所有日期
@@ -468,6 +488,27 @@ public class ReportController extends BaseController {
 			plan_code.add(conditionMap2);
 		}
 		reportService.getFactoryRateRankData(conditionMap, plan_code, model);
+		return model;
+	}
+	/**
+	 * 标准人力报表
+	 * @return
+	 */
+	@RequestMapping("/standardHumansReport")
+	public ModelAndView standardHumansReport(){
+		mv.setViewName("report/standardHumansReport");
+		return mv;
+	}
+	// 标准人力报表Data
+	@RequestMapping("/getStandardHumansReportData")
+	@ResponseBody
+	public ModelMap getStandardHumansReportData(){
+		Map<String,Object> conditionMap=new HashMap<String,Object>();
+		String date = request.getParameter("date");
+		String factory = request.getParameter("factory");
+		conditionMap.put("date", date);
+		conditionMap.put("factory", factory);
+		reportService.getStandardHumanReportData(conditionMap, model);
 		return model;
 	}
 }

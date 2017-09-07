@@ -409,6 +409,34 @@ public class ReportServiceImpl implements IReportService {
 	}
 
 	@Override
+	public void getStandardHumanReportData(Map<String, Object> conditionMap, ModelMap model) {
+		List<Map<String,Object>> rowlist=new ArrayList<Map<String,Object>>();
+		List<Map<String,Object>> headerlist=reportDao.getHumanReportHeaderData(conditionMap);
+		List<Map<String,Object>> datalist=reportDao.getStandardHumanReportData(conditionMap);
+		for(Map<String,Object> datamap : datalist){
+			Map<String,Object> resultMap=new HashMap<String,Object>();
+			resultMap.putAll(datamap);
+		    String desc_str=(String)datamap.get("desc_str"); 
+		    String [] array=desc_str.split(";");
+		    for(Map<String,Object> headermap : headerlist){
+		    	 String header=(String)headermap.get("headerStr"); 
+		    	 for(String str : array){
+		    		 String [] strArray=str.split(":");
+	    			 if(str.indexOf(header)>=0){
+		    			 resultMap.put(strArray[0], strArray[1]);
+		    			 break;
+		    		 }else{
+		    			 resultMap.put(header,"0");
+		    		 }
+		    	 }
+		    }
+		    rowlist.add(resultMap);
+		}
+		model.put("headerlist",headerlist);
+		model.put("rowlist", rowlist);
+	}
+	
+	@Override
 	public Map<String, Object> queryDPUDetail(Map<String, Object> conditionMap) {
 		int totalCount=0;
 		List<Map<String, Object>> datalist = reportDao.queryDPUDetail(conditionMap);
@@ -437,6 +465,11 @@ public class ReportServiceImpl implements IReportService {
 		result.put("recordsFiltered", totalCount);
 		result.put("data", datalist);
 		return result;
+	}
+
+	@Override
+	public List<Map<String, Object>> queryProcessProblemData(Map<String, Object> conditionMap) {
+		return reportDao.queryProcessProblemData(conditionMap);
 	}
 
 }

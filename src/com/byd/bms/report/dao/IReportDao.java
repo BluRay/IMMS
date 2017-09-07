@@ -19,6 +19,7 @@ public interface IReportDao {
 	public List<Map<String,Object>> queryPassRateData(Map<String, Object> conditionMap);		//一次校检合格率报表
 	public List<Map<String,Object>> queryPassRateDetail(Map<String, Object> conditionMap);		//一次校检合格率报表明细
 	public int queryPassRateDetailCount(Map<String, Object> conditionMap);
+	public List<Map<String,Object>> queryProcessProblemData(Map<String, Object> conditionMap);	//制程问题严重等级分布报表
 
 	List<Map<String, Object>> queryOnlineAndOfflineData(Map<String, Object> condMap);
 
@@ -36,5 +37,6 @@ public interface IReportDao {
 	public List<Map<String,Object>> queryFactoryPlanQty(Map<String,Object> conditionMap);
 	public List<Map<String,Object>> getFactoryPlanRealCount(@Param(value ="list") List queryMapList,@Param(value = "start_date") String start_date,
 			@Param(value ="end_date") String end_date);
-
+	public List<Map<String,Object>> getHumanReportHeaderData(Map<String,Object> conditionMap);
+	public List<Map<String,Object>> getStandardHumanReportData(Map<String,Object> conditionMap);
 }

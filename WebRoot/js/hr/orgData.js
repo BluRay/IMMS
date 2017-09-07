@@ -372,8 +372,8 @@ jQuery(function($) {
 								    success:function(response){
                                         if(response.success){
                                         	$("#dialog-confirm").dialog("close");
-    								    	showtree2();  
     								    	getWorkgroupListById($("#parent_id").val(),$("#org_kind").val(),$("#org_type").val());
+    								    	showtree2(); 
                                         }else{
                                         	$.gritter.add({
             									title: '系统提示：',
@@ -589,8 +589,8 @@ jQuery(function($) {
 						text: '<h5>删除成功！</h5>',
 						class_name: 'gritter-info'
 					});
-			    	showtree2();
 			    	getWorkgroupListById($("#parent_id").val(),$("#org_kind").val(),$("#org_type").val());
+			    	showtree2();
 		    	}else{
 		    		$.gritter.add({
 						title: '系统提示：',
@@ -638,7 +638,6 @@ function getWorkgroupListById(id,org_kind,org_type){
             $.ajax({
                 type: "post",
                 url: "getOrgDataByParentId",
-                cache: false,  //禁用缓存
                 data: param,  //传入组装的参数
                 dataType: "json",
                 success: function (result) {

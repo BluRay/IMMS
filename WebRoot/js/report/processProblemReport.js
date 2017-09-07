@@ -29,16 +29,14 @@ $(document).ready(function(){
 		}
 		
 		var factory=$("#search_factory").val();
-		var test_node_id=$("#search_test_node_id").val();
 		var startDate=$("#start_date").val();
 		var endDate=$("#end_date").val();
 		var queryItem=$("#search_index").val();
-		var conditions = "{factoryId:'" + factory + "',test_node_id:'" + test_node_id+"',queryItem:'"+
-		queryItem+ "',startDate:'" + startDate + "',endDate:'"+endDate+ "'}";
+		var conditions = "{factoryId:'" + factory + "',startDate:'" + startDate + "',endDate:'"+endDate+ "'}";
 		console.log("-->conditions = " + conditions);
 		
 		$.ajax({
-			url : "getPassRateReportData",
+			url : "getProcessProblemReportData",
 			type : "post",
 			dataType : "json",
 			data : {
@@ -48,111 +46,138 @@ $(document).ready(function(){
 				generateChart(response.chartList,response.itemList,queryItem);
 			}
 		});
-		ajaxQuery(conditions);
+		//ajaxQuery(conditions);
 	})
 	
 });
 
 function generateChart(chartList,itemList,queryItem){
-	var pass_rate = new Array();
-	var categories=new Array();
-	var targetVal=0;
-	var maxVal=100;
-	var linedata=new Array();
-	if(itemList==undefined){
-		itemList=new Array();
-	}
-	if(itemList.length>0){
-		$.each(itemList,function(index,item){
-			pass_rate[item]=null;
-			if(queryItem=='week'){
-				categories[index]="第"+item+"周";
-			}
-			if(queryItem=='month'){
-				categories[index]=item+"月";
-			}
-			if(queryItem=='day'){
-				categories[index]=item;
-			}
-		});
-	}
-	targetVal=chartList[0].target_val==undefined?'0':chartList[0].target_val;
-	targetVal=Number(targetVal.replace("%",""));
-	$.each(chartList,function(index,data){		
-		var busTotal=isNaN(parseInt(data.bus_total))?0:parseInt(data.bus_total);
-		var bugOkNum=isNaN(parseInt(data.bus_ok_num))?0:parseInt(data.bus_ok_num);		
-		if(queryItem=='order'){
-			categories[index]=data.item;
-			pass_rate[data.item]=Number((bugOkNum/busTotal*100).toFixed(2));
-		}else{
-			pass_rate[data.item]=Number((bugOkNum/busTotal*100).toFixed(2));
-		}
-
-	});
-	
-	var title_line = "一次校检合格率趋势图";	
-	var xAxis_line = {
-			categories : categories,
+	var title_column  = "制程问题严重等级分布图";	
+	var fn_formatter_column = function(obj) {
+		var s = "";
+		s = obj.series.name + obj.x + ": " + obj.y;
+		return s;
+	};
+	var xAxis_column = {
+			categories : [ '部件', '焊装', '玻璃钢', '涂装','底盘','总装' ],
 			labels: {
-                autoRotationLimit: 80
+                autoRotationLimit: 40
             }
 		};
-	var fn_formatter_line = function(obj) {
-		var s = "";
-		s = obj.x + ": " + obj.y +"%";
-		return s;
-	}
-	var yAxis_line = {
-			title : {
-				text : ''
-			},
-			labels:{
-				format: '{value} %'
-			},
-			max:maxVal,
-			plotLines : [ { //一条延伸到整个绘图区的线，标志着轴中一个特定值。
-				color : 'red',
-				dashStyle : 'Dash', //Dash,Dot,Solid,默认Solid
-				width : 1.5,
-				value : targetVal, //y轴显示位置
-				zIndex : 0,
-				label : {
-					text : '目标值：'+targetVal+"%", //标签的内容
-					align : 'left', //标签的水平位置，水平居左,默认是水平居中center
-					x : 10
-				//标签相对于被定位的位置水平偏移的像素，重新定位，水平居左10px
-				}
-			} ]
-		};
-
-	for (value in pass_rate)
-	{
-		linedata.push(pass_rate[value]);
-	}
-	var series_line = [];
-	var l_obj = {
-			type : 'line',
-			name : '一次校检合格率',
-			data : linedata,
-			marker : {
-				lineWidth : 2,
-				lineColor : Highcharts.getOptions().colors[3],
-				fillColor : 'white'
-			},
+	var series_column = new Array();
+	series_column[0] = {
+		type : 'column',
+		name : 'S',
+		data : [0,0,0,0,0,0],
+		dataLabels : {
+			enabled : true,
+			rotation : 0,
+			color : '#606060',
+			style : {
+				fontSize : '10px'
+			}
+		}
+	};
+	series_column[1] = {
+			type : 'column',
+			name : 'A',
+			data : [0,0,0,0,0,0],
 			dataLabels : {
 				enabled : true,
-				formatter : function(obj) {
-					return this.y +"%";
-				},
+				rotation : 0,
 				color : '#606060',
 				style : {
 					fontSize : '10px'
 				}
 			}
 		};
-	series_line.push(l_obj);
-	
-	drowCharts("#chartsContainer", title_line, xAxis_line,fn_formatter_line, series_line, yAxis_line);
+	series_column[2] = {
+			type : 'column',
+			name : 'B',
+			data : [0,0,0,0,0,0],
+			dataLabels : {
+				enabled : true,
+				rotation : 0,
+				color : '#606060',
+				style : {
+					fontSize : '10px'
+				}
+			}
+		};
+	series_column[3] = {
+			type : 'column',
+			name : 'C',
+			data : [0,0,0,0,0,0],
+			dataLabels : {
+				enabled : true,
+				rotation : 0,
+				color : '#606060',
+				style : {
+					fontSize : '10px'
+				}
+			}
+		};
+	var yAxis_column = {
+			title : {
+				text : '问题数量'
+			},
+			labels : {
+				format : '{value} 个'
+			}
+		};
+	$.each(chartList,function(index,data){
+		var count_parts=0;
+		var count_welding=0;
+		var count_glass=0;
+		var count_painting=0;
+		var count_bottom=0;
+		var count_assembly=0;
+		var bug_detail=data.bug_desc;
+		$.each(bug_detail.split(","),function(i,b){
+			var workshop=b.split(":")[0];
+			var count=isNaN(parseInt(b.split(":")[1]))?0:parseInt(b.split(":")[1]);
+			if(workshop=='部件'){
+				count_parts=count;
+			}
+			if(workshop=='焊装'){
+				count_welding=count;
+			}
+			if(workshop=='玻璃钢'){
+				count_glass=count;
+			}
+			if(workshop=='涂装'){
+				count_painting=count;
+			}
+			if(workshop=='底盘'){
+				count_bottom=count;
+			}
+			if(workshop=='总装'){
+				count_assembly=count;
+			}
+		});
+		var series_data=[count_parts,count_welding,count_glass,count_painting,count_bottom,count_assembly];
+		if (data.serious_level == 'S') {
+			series_column[0].data = series_data;
+		}
+		if (data.serious_level == 'A') {
+			series_column[1].data = series_data;
+		}
+		if (data.serious_level == 'B') {
+			series_column[2].data = series_data;
+		}
+		if (data.serious_level == 'C') {
+			series_column[3].data = series_data;
+		}
+	});
+	 var tooltip = {
+             headerFormat: '<span style="font-size:12px;padding-bottom: 10px;">{point.key}</span><table>',
+             pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: &nbsp;&nbsp;</td>' +
+                 '<td style="padding:0"><b>{point.y} 个</b></td></tr>',
+             footerFormat: '</table>',
+             shared: true,
+             useHTML: true
+         }; 
+	drowCharts("#chartsContainer", title_column, xAxis_column,fn_formatter_column, series_column, yAxis_column,tooltip);
 }
 
 function drowCharts(container, title, xAxis, fn_formatter, series, yAxis,tooltip,plotOptions) {

@@ -716,5 +716,37 @@
 	group by h.bus_number) a
 	]]>
 	</select>
+	<!-- 制程问题严重等级分布报表 数据查询 -->
+	<select id="queryProcessProblemData" parameterType="Map" resultType="Map">
+	<![CDATA[
+	SELECT GROUP_CONCAT(tmp.workshop_name,':',bug_count+'') bug_desc,tmp.serious_level
+	FROM (
+	SELECT COUNT(l.serious_level) bug_count,l.serious_level,tmp.workshop_name FROM (
+	SELECT h.test_result,k.key_name AS workshop_name,h.test_node_id,h.fault_id FROM BMS_QM_TEST_CARD h
+	LEFT JOIN BMS_BASE_KEY k ON k.id = h.test_node_id
+	WHERE h.factory_id=#{factoryId} AND h.result_judge = '不合格' and substring(h.edit_date,1,10) >=#{startDate} 
+	and substring(h.edit_date,1,10) <=#{endDate}) tmp
+	LEFT JOIN BMS_QM_STANDARD_FAULT_LIBRARY l on tmp.fault_id = l.id
+	WHERE l.serious_level is not null GROUP BY tmp.test_node_id,l.serious_level
+	)tmp GROUP BY tmp.serious_level
+	]]>
+	</select>
+	<!-- 标准人力报表动态表头数据 -->
+	<select id="getHumanReportHeaderData" parameterType="Map" resultType="Map">
+		<![CDATA[
+         select DISTINCT CONCAT(bus_type,'-',capacity) as headerStr from BMS_HR_BASE_STANDARD_HUMAN
+           where workshop!='' and bus_type!='' and bus_type is not null and factory=#{factory} order by headerStr
+		]]>
+	</select>
+	<!-- 标准人力报表DATA -->
+	<select id="getStandardHumanReportData" parameterType="Map" resultType="Map">
+		<![CDATA[
+         select workshop,GROUP_CONCAT( concat_ws(':',bus_type,count) ORDER BY bus_type SEPARATOR ';') desc_str from (
+			select DISTINCT CONCAT(bus_type,'-',capacity) as bus_type,workshop,sum(standard_humans) count from BMS_HR_BASE_STANDARD_HUMAN h
+			  where h.factory=#{factory} and h.workshop!='' and bus_type!=''
+			  and bus_type is not null GROUP BY workshop,bus_type
+        ) t1  GROUP BY workshop;
+		]]>
+	</select>
 	
 </mapper>

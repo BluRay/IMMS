@@ -180,7 +180,7 @@
 		        from BMS_BASE_USER u 
 		   LEFT JOIN BMS_BASE_USER_ROLE ur on u.staff_number=ur.staff_number
 		   LEFT JOIN BMS_BASE_ROLE r  on r.id=ur.role_id
-		where 1=1 
+		where ur.permission_key='1' and u.isdelete=0 and 1=1 
 		<if test="userId !=null and userId !=''"> 
 			and u.id=#{userId}
         </if>
