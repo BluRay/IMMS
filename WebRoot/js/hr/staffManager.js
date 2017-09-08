@@ -299,8 +299,11 @@ function initTable() {
             	field: 'identity_card',title: '身份证',align: 'center',valign: 'middle',align: 'center',
                 sortable: false,visible: true,footerFormatter: totalTextFormatter,
                 cellStyle:function cellStyle(value, row, index, field) {
-    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
-    	        	}
+    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px","vnd.ms-excel.numberformat":"@"}};
+    	        	},
+	        	formatter:function(value, row, index){
+            		return String(value);
+            	},
             },{
             	field: 'factory_incoming_date',title: '入厂时间',align: 'center',valign: 'middle',align: 'center',
                 sortable: false,visible: true,footerFormatter: totalTextFormatter,

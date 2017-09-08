@@ -20,6 +20,8 @@ public interface IReportDao {
 	public List<Map<String,Object>> queryPassRateDetail(Map<String, Object> conditionMap);		//一次校检合格率报表明细
 	public int queryPassRateDetailCount(Map<String, Object> conditionMap);
 	public List<Map<String,Object>> queryProcessProblemData(Map<String, Object> conditionMap);	//制程问题严重等级分布报表
+	public List<Map<String,Object>> queryProcessProblemDetail(Map<String, Object> conditionMap);
+	public int queryProcessProblemCount(Map<String, Object> conditionMap);
 
 	List<Map<String, Object>> queryOnlineAndOfflineData(Map<String, Object> condMap);
 

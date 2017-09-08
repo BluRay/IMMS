@@ -472,4 +472,17 @@ public class ReportServiceImpl implements IReportService {
 		return reportDao.queryProcessProblemData(conditionMap);
 	}
 
+	@Override
+	public Map<String, Object> queryProcessProblemDetail(Map<String, Object> conditionMap) {
+		int totalCount=0;
+		List<Map<String, Object>> datalist = reportDao.queryProcessProblemDetail(conditionMap);
+		totalCount = reportDao.queryProcessProblemCount(conditionMap);
+		Map<String, Object> result = new HashMap<String,Object>();
+		result.put("draw", conditionMap.get("draw"));
+		result.put("recordsTotal", totalCount);
+		result.put("recordsFiltered", totalCount);
+		result.put("data", datalist);
+		return result;
+	}
+
 }

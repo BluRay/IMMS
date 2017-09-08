@@ -21,6 +21,7 @@ public interface IReportService {
 	public List<Map<String,Object>> queryPassRateData(Map<String, Object> conditionMap);
 	public Map<String,Object> queryPassRateDetail(Map<String, Object> conditionMap);
 	public List<Map<String,Object>> queryProcessProblemData(Map<String, Object> conditionMap);
+	public Map<String,Object> queryProcessProblemDetail(Map<String, Object> conditionMap);
 	
 	public List<Map<String, Object>> showFactoryOutputReportData(Map<String, Object> queryMap);
 	/**

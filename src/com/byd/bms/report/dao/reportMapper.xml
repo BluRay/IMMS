@@ -731,6 +731,38 @@
 	)tmp GROUP BY tmp.serious_level
 	]]>
 	</select>
+	<select id="queryProcessProblemDetail" parameterType="Map" resultType="Map">
+		<![CDATA[
+        SELECT COUNT(l.serious_level) bug_count,tmp.workgroup_name,l.serious_level,tmp.workshop_name,tmp.test_result FROM (
+		SELECT h.test_result,k.key_name AS workshop_name,h.test_node_id,h.fault_id,
+		w.workgroup_name FROM  BMS_QM_TEST_CARD h
+		LEFT JOIN BMS_BASE_KEY k ON k.id = h.test_node_id
+		LEFT JOIN BMS_BASE_STANDARD_WORKGROUP w ON h.workgroup_id = w.id
+		WHERE 
+		h.factory_id=#{factoryId} AND h.result_judge = '不合格' and substring(h.edit_date,1,10) >=#{startDate} 
+		and substring(h.edit_date,1,10) <=#{endDate}
+		) tmp
+		LEFT JOIN BMS_QM_STANDARD_FAULT_LIBRARY l ON tmp.fault_id = l.id
+		WHERE l.serious_level IS NOT NULL
+		GROUP BY tmp.test_node_id,l.serious_level
+		]]>
+	</select>
+	<select id="queryProcessProblemCount" parameterType="Map" resultType="int">
+		<![CDATA[
+		SELECT COUNT(t.bug_count) AS count FROM (
+		SELECT COUNT(l.serious_level) bug_count,tmp.workgroup_name,l.serious_level,tmp.workshop_name,tmp.test_result FROM (
+		SELECT h.test_result,k.key_name AS workshop_name,h.test_node_id,h.fault_id,
+		w.workgroup_name FROM  BMS_QM_TEST_CARD h
+		LEFT JOIN BMS_BASE_KEY k ON k.id = h.test_node_id
+		LEFT JOIN BMS_BASE_STANDARD_WORKGROUP w ON h.workgroup_id = w.id
+		WHERE h.result_judge = '不合格') tmp
+		LEFT JOIN BMS_QM_STANDARD_FAULT_LIBRARY l ON tmp.fault_id = l.id
+		WHERE l.serious_level IS NOT NULL
+		GROUP BY tmp.test_node_id,l.serious_level
+		) t
+		]]>
+	</select>
+	
 	<!-- 标准人力报表动态表头数据 -->
 	<select id="getHumanReportHeaderData" parameterType="Map" resultType="Map">
 		<![CDATA[

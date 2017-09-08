@@ -71,7 +71,7 @@
 						<select name="" id="new_bus_type" class="input-medium busType">
 							</select>
 							<script id="tmplBusTypeSelect" type="text/x-jsrander">
-                            	<option value='{{:id}}'>{{:code}}</option>
+                            	<option value='{{:id}}'>{{:name}}</option>
                             </script>
 						</td>
 						<td align="right" style="width:100px">*故障反馈日期：</td><td style="width:150px"><input type="text" class="input-medium" id="new_fault_date" name="new_fault_date" onClick="WdatePicker({el:'new_fault_date',dateFmt:'yyyy-MM-dd'});" style="width:150px"/></td>
@@ -128,7 +128,7 @@
 							<select name="" id="edit_bus_type" class="input-medium busType">
 							</select>
 							<script id="tmplBusTypeSelect" type="text/x-jsrander">
-                            	<option value='{{:id}}'>{{:code}}</option>
+                            	<option value='{{:id}}'>{{:name}}</option>
                             </script>
 						</td>
 						<td align="right" style="width:100px">*故障反馈日期：</td><td style="width:150px"><input type="text" class="input-medium" id="edit_fault_date" name="new_fault_date" onClick="WdatePicker({el:'new_fault_date',dateFmt:'yyyy-MM-dd'});" style="width:150px"/></td>

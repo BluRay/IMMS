@@ -46,7 +46,7 @@ $(document).ready(function(){
 				generateChart(response.chartList,response.itemList,queryItem);
 			}
 		});
-		//ajaxQuery(conditions);
+		ajaxQuery(conditions);
 	})
 	
 });
@@ -59,7 +59,7 @@ function generateChart(chartList,itemList,queryItem){
 		return s;
 	};
 	var xAxis_column = {
-			categories : [ '部件', '焊装', '玻璃钢', '涂装','底盘','总装' ],
+			categories : [ '涂装', '底盘', '总装', '检测线','车架','车身' ],
 			labels: {
                 autoRotationLimit: 40
             }
@@ -126,25 +126,17 @@ function generateChart(chartList,itemList,queryItem){
 			}
 		};
 	$.each(chartList,function(index,data){
-		var count_parts=0;
-		var count_welding=0;
-		var count_glass=0;
+		//'涂装', '底盘', '总装', '检测线','车架','车身'
 		var count_painting=0;
 		var count_bottom=0;
 		var count_assembly=0;
+		var count_test=0;
+		var count_frame=0;
+		var count_body=0;
 		var bug_detail=data.bug_desc;
 		$.each(bug_detail.split(","),function(i,b){
 			var workshop=b.split(":")[0];
 			var count=isNaN(parseInt(b.split(":")[1]))?0:parseInt(b.split(":")[1]);
-			if(workshop=='部件'){
-				count_parts=count;
-			}
-			if(workshop=='焊装'){
-				count_welding=count;
-			}
-			if(workshop=='玻璃钢'){
-				count_glass=count;
-			}
 			if(workshop=='涂装'){
 				count_painting=count;
 			}
@@ -154,8 +146,17 @@ function generateChart(chartList,itemList,queryItem){
 			if(workshop=='总装'){
 				count_assembly=count;
 			}
+			if(workshop=='检测线'){
+				count_test=count;
+			}
+			if(workshop=='车架'){
+				count_frame=count;
+			}
+			if(workshop=='车身'){
+				count_body=count;
+			}
 		});
-		var series_data=[count_parts,count_welding,count_glass,count_painting,count_bottom,count_assembly];
+		var series_data=[count_painting,count_bottom,count_assembly,count_test,count_frame,count_body];
 		if (data.serious_level == 'S') {
 			series_column[0].data = series_data;
 		}
@@ -232,7 +233,7 @@ function ajaxQuery(conditions){
 
             $.ajax({
                 type: "post",
-                url: "getPassRateDetail",
+                url: "getProcessProblemReportDetail",
                 cache: false,  //禁用缓存
                 data: param,  //传入组装的参数
                 dataType: "json",
@@ -252,12 +253,11 @@ function ajaxQuery(conditions){
             });
 		},
 		columns: [
-		            {"title":"车号",width:'150',"class":"center","data":"bus_number","defaultContent": ""},
-		            {"title":"工厂","class":"center","data":"factory_name","defaultContent": ""},
-		            {"title":"检验节点","class":"center","data":"test_node","defaultContent": ""},
-		            {"title":"检验员","class":"center","data": "tester","defaultContent": "-"},
-		            {"title":"QE","class":"center","data":"qe","defaultContent": "-"},
-		            {"title":"判定时间","class":"center","data": "test_date","defaultContent": "-"}
+		            {"title":"检测节点",width:'150',"class":"center","data":"workshop_name","defaultContent": ""},
+		            {"title":"责任班组","class":"center","data":"workgroup_name","defaultContent": ""},
+		            {"title":"故障","class":"center","data":"test_result","defaultContent": ""},
+		            {"title":"故障级别","class":"center","data": "serious_level","defaultContent": "-"},
+		            {"title":"故障数量","class":"center","data":"bug_count","defaultContent": "-"}
 		          ],
 	});
 }

@@ -399,6 +399,8 @@
 
                   if (typeof tdcss == 'undefined' && typeof defaults.onMsoNumberFormat === 'function')
                     tdcss = defaults.onMsoNumberFormat(cell, row, col);
+                  
+                  else tdcss = '\\@';	//解决导出身份证号是使用科学记数法显示（http://blog.csdn.net/fan510988896/article/details/54410230）
 
                   if (typeof tdcss != 'undefined' && tdcss !== '')
                     tdstyle = 'style="mso-number-format:\'' + tdcss + '\'';
