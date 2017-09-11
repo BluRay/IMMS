@@ -25,6 +25,18 @@ $(document).ready(function() {
 		}
 	})
 	
+	$(document).on("keydown",".work_hour",function(event){
+			if (event.keyCode == "13") {								
+				$(this).parent().parent().next().find(".work_hour").focus().select();
+			}
+	})
+	
+	$(document).on("keydown",".distribution",function(event){
+		if (event.keyCode == "13") {								
+			$(this).parent().parent().next().find(".distribution").focus().select();
+		}
+	})
+	
 	$(document).on("click","#dstcopy",function(){
 		//$(".distribution :eq(0)").focus();
 		var work_hourlist=$(".work_hour");
@@ -42,7 +54,10 @@ $(document).ready(function() {
 			 var copy_text=$(e.target).val();
 			 $(e.target).val("");
 			 var dist_list=copy_text.split(" ");
-			 var work_hourlist=$(".work_hour")||$(".distribution");
+			 var work_hourlist=$(".work_hour");
+			if(work_hourlist.length==0){
+				work_hourlist=$(".distribution");
+			}
 			 $(work_hourlist).eq(0).css("display","");
 				$("#copy_paste").css("display","none");
 			 $.each(dist_list,function(i,value){

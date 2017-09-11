@@ -91,15 +91,21 @@ function zTreeBeforeClick(treeId, treeNode, clickFlag) {
 function zTreeOnClick(event, treeId, treeNode) {
 	if(treeNode.org_type=='1'){
 		factory=treeNode.displayName;
+		workshop='';
+		workgroup = '';
+		team='';
 	}	
 	if(treeNode.org_type == '2'){
 		factory=treeNode.getParentNode().displayName;
 		workshop=treeNode.displayName;
+		workgroup = '';
+		team='';
 	}
 	if(treeNode.org_type == '3'){
 		factory=treeNode.getParentNode().getParentNode().displayName;
 		workshop=treeNode.getParentNode().displayName;
 		workgroup=treeNode.displayName;
+		team='';
 	}
 	if(treeNode.org_type == '4'){
 		factory=treeNode.getParentNode().getParentNode().getParentNode().displayName;
@@ -108,7 +114,7 @@ function zTreeOnClick(event, treeId, treeNode) {
 		team=treeNode.displayName;
 	}
 	
-	console.log("-->" + factory + "|" + workshop + "|" + team);
+	//console.log("-->" + factory + "|" + workshop + "|" + team);
 	eachSeries(scripts, getScript, initTable);
 	ajaxQuery();
 };

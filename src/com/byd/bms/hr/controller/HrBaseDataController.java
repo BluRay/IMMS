@@ -1006,17 +1006,17 @@ public class HrBaseDataController extends BaseController {
 					if(dataFlag>0){
 						result = result+"行数据输入的工厂、车间、班组或小班组信息有误，请确认组织结构是否存在！\n";
 					}
-					if(success && addList.size()>0){
-						//批量新增标准工时/单价
-						hrBaseDataService.addWorkgroupPrice(addList);
-						result =  "导入成功！";
-					}
-					if(success && upDateList.size()>0){
-						//批量修改标准工时/单价
-						hrBaseDataService.updateWorkgroupPrice(upDateList);
-						result =  "导入成功！";
-					}
 				}
+			}
+			if(success && addList.size()>0){
+				//批量新增标准工时/单价
+				hrBaseDataService.addWorkgroupPrice(addList);
+				result =  "导入成功！";
+			}
+			if(success && upDateList.size()>0){
+				//批量修改标准工时/单价
+				hrBaseDataService.updateWorkgroupPrice(upDateList);
+				result =  "导入成功！";
 			}
 		
 		} catch (Exception e) {
