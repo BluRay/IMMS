@@ -86,7 +86,8 @@ function showProcessFault(id){
 		async: false,
 		error: function () {alertError();},
 		success: function (response) {
-			$("#edit_bus_type").find("option:contains('"+response.data.bus_type+"')").attr("selected",true);
+			//$("#edit_bus_type").find("option:contains('"+response.data.bus_type+"')").attr("selected",true);
+			$("#edit_bus_type").val(response.data.bus_type);
 			$("#edit_fault_date").val(response.data.fault_date);
 			$("#edit_fault_mils").val(response.data.fault_mils);
 			$("#edit_customer_name").val(response.data.customer_name);
@@ -147,7 +148,8 @@ function editProcessFault(id){
 		async: false,
 		error: function () {alertError();},
 		success: function (response) {
-			$("#edit_bus_type").find("option:contains('"+response.data.bus_type+"')").attr("selected",true);
+			//$("#edit_bus_type").find("option:contains('"+response.data.bus_type+"')").attr("selected",true);
+			$("#edit_bus_type").val(response.data.bus_type);
 			$("#edit_fault_date").val(response.data.fault_date);
 			$("#edit_fault_mils").val(response.data.fault_mils);
 			$("#edit_customer_name").val(response.data.customer_name);
@@ -240,14 +242,14 @@ function btnEditConfirm(id){
 		$("#edit_fault_reason").focus();
 		return false;
 	}
-	console.log("-->id = "+ id);
+	//console.log("-->id = "+ id);
 	$('#form_edit').ajaxSubmit({
 		url: "editProcessFault",
 		dataType : "json",
 		type : "post",
 	    data: {
 	    	"id":id,
-	    	"bus_type" : $("#edit_bus_type").find("option:selected").text(),
+	    	"bus_type" : $("#edit_bus_type").val(),
 			"fault_date":$("#edit_fault_date").val(),
 			"fault_mils" : $("#edit_fault_mils").val(),
 			"customer_name" : $("#edit_customer_name").val(),
@@ -338,7 +340,7 @@ function btnNewConfirm(){
 		dataType : "json",
 		type : "post",
 	    data: {
-	    	"bus_type" : $("#new_bus_type").find("option:selected").text(),
+	    	"bus_type" : $("#new_bus_type").val(),			//改成存车型ID 170911
 			"fault_date":$("#new_fault_date").val(),
 			"fault_mils" : $("#new_fault_mils").val(),
 			"customer_name" : $("#new_customer_name").val(),
@@ -443,7 +445,7 @@ function ajaxQuery(){
             });
 		},
 		columns: [
-		            {"title":"车型",width:'60',"class":"center","data":"bus_type","defaultContent": ""},
+		            {"title":"车型",width:'60',"class":"center","data":"bus_type_code","defaultContent": ""},
 		            {"title":"反馈日期",width:'95',"class":"center","data":"fault_date","defaultContent": ""},
 		            {"title":"故障里程",width:'80',"class":"center","data":"fault_mils","defaultContent": ""},
 		            {"title":"客户",width:'80',"class":"center","data":"customer_name","defaultContent": ""},
