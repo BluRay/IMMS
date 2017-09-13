@@ -165,6 +165,7 @@ function ajaxSearch(id){
 			$('#drawingexportDate').text(data.drawingexport_date);
 			$('#sopdemandNode').text(data.sopdemand_node);
 			$("#sipdemandNode").text(data.sipdemand_node);
+			$("#applyInfo").text(data.apply_info);
 			$('#configTable').text(data.config_table);
 			$('#proximatematter').text(data.proximatematter);
 			$('#modeljudging').text(data.modeljudging);

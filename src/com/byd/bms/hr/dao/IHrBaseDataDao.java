@@ -31,9 +31,9 @@ public interface IHrBaseDataDao {
 	
 	public void deletePositionData(String id);
 	
-    public int addStandardHumanData(Map<String,Object> map);
+    public int addStandardHumanData(List<Map<String, Object>> list);
 	
-	public int editStandardHumanData(Map<String,Object> map);
+	public int editStandardHumanData(List<Map<String, Object>> list);
 	
 	public int deleteStandardHumanData(String id);
 	

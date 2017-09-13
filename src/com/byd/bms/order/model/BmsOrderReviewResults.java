@@ -23,6 +23,7 @@ public class BmsOrderReviewResults {
 	private String sopdemandNode; // sop需求节点输出时间
 	private String bomdemandNode; // bom需求节点
 	private String sipdemandNode; // sip需求节点
+	private String applyInfo; // sip需求节点
 	private String configTable;  // 技术协议、配置表
 	private String proximatematter;  // 型材清单
 	private String modeljudging;  // 数模评审 OK NG
@@ -58,7 +59,7 @@ public class BmsOrderReviewResults {
 	private String orderNo;
 	private String factoryName;
 	private String factoryCode;
-	
+	private String capacity;
 	public int getId() {
 		return id;
 	}
@@ -154,6 +155,13 @@ public class BmsOrderReviewResults {
 	}
 	public void setBomdemandNode(String bomdemandNode) {
 		this.bomdemandNode = bomdemandNode;
+	}
+	
+	public String getApplyInfo() {
+		return applyInfo;
+	}
+	public void setApplyInfo(String applyInfo) {
+		this.applyInfo = applyInfo;
 	}
 	public String getSipdemandNode() {
 		return sipdemandNode;
@@ -372,5 +380,11 @@ public class BmsOrderReviewResults {
 	}
 	public void setFactoryCode(String factoryCode) {
 		this.factoryCode = factoryCode;
+	}
+	public String getCapacity() {
+		return capacity;
+	}
+	public void setCapacity(String capacity) {
+		this.capacity = capacity;
 	}
 }

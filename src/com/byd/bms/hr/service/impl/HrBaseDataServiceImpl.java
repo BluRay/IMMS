@@ -1,5 +1,6 @@
 package com.byd.bms.hr.service.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -76,6 +77,8 @@ public class HrBaseDataServiceImpl implements IHrBaseDataService {
 	public Map<String,Object> addStandardHumanData(List<Map<String, Object>> list) {
 		int result=0;
 		Map<String,Object> resultMap=new HashMap<String,Object>();
+		List<Map<String, Object>> addList = new ArrayList<Map<String,Object>>();
+		List<Map<String, Object>> upDateList = new ArrayList<Map<String,Object>>();
 		for(Map<String,Object> map : list){
 			Map<String,Object> conMap=new HashMap<String,Object>();
 			if(map.get("org_id")==null){
@@ -92,14 +95,21 @@ public class HrBaseDataServiceImpl implements IHrBaseDataService {
 			conMap.put("workshop", map.get("workshop"));
 			conMap.put("workgroup", map.get("workgroup"));
 			conMap.put("bus_type", map.get("bus_type"));
+			conMap.put("capacity", map.get("capacity"));
 			List<Map<String,Object>> plist=hrBaseDataDao.getStandardHumanData(conMap);
 			if(plist.size()>0){
 				Map pMap=plist.get(0);
 				map.put("id", pMap.get("id"));
-				result=hrBaseDataDao.editStandardHumanData(map);
+				upDateList.add(map);
 			}else{
-				result=hrBaseDataDao.addStandardHumanData(map);
+			    addList.add(map);
 			}
+		}
+		if(addList.size()>0){
+			result=hrBaseDataDao.addStandardHumanData(addList);
+		}
+		if(upDateList.size()>0){
+			result=hrBaseDataDao.editStandardHumanData(upDateList);
 		}
 		return resultMap;
 	}
@@ -157,8 +167,8 @@ public class HrBaseDataServiceImpl implements IHrBaseDataService {
 		return humanMap;
 	}
 	@Override
-	public int editStandardHumanData(Map<String, Object> conditionMap) {
-		return hrBaseDataDao.editStandardHumanData(conditionMap);
+	public int editStandardHumanData(List<Map<String, Object>> list) {
+		return hrBaseDataDao.editStandardHumanData(list);
 	}
 	@Override
 	public void deleteStandardHumanData(String id) {

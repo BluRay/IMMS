@@ -6,6 +6,7 @@ var salary_model="技能系数";
 var staff_list=[];
 var org_id="";
 var is_customer="0";
+var order_id="0";
 $(document).ready(function() {
 	initPage();
 	
@@ -124,14 +125,14 @@ $(document).ready(function() {
 		$("#tableResult tbody").prepend(tr);
 	});
 	
-	$(document).on("change","#customer_number",function(){
+/*	$(document).on("change","#customer_number",function(){
 		ajaxQueryTeamStaffDetail();
 		if($.fn.dataTable.isDataTable("#tableResult")){
 			$('#tableResult').DataTable().destroy();
 			$('#tableResult').empty();
 		}
 		showStaffList(staff_list)
-	})
+	})*/
 	
 	$(document).on("change",".staff_number",function(){
 		 var staff=ajaxGetStaffDetail($(this).val());
@@ -150,7 +151,8 @@ $(document).ready(function() {
 				 $(tds[9]).html(staff.plant_org);
 			}
 			if(salary_model=='承包制'){
-				$(tds[1]).html(staff.name);
+				$(this).attr("skill_parameter",staff.skill_parameter);
+				 $(tds[1]).html(staff.name);
 				 $(tds[2]).html(staff.job);
 				 $(tds[4]).find(".distribution").eq(0).val(staff.distribution)
 				 $(tds[5]).html(staff.team_org);
@@ -296,10 +298,10 @@ $(document).ready(function() {
 					return false;
 				}
 				var staff_number = $(tds).eq(1).html();
-				var input_staff_number=$(tds).eq(1).find("input");
+				var input_staff_number=$(tds).eq(1).find(".staff_number");
 				//alert($(input_staff_number).html())
-				if(input_staff_number.html()){
-					staff_number=$(tds).eq(1).find(".staff_number").val()||"";
+				if(input_staff_number!=undefined&&input_staff_number.length>0){
+					staff_number=$(input_staff_number).val()||"";
 				}
 				var staff_name=$(tds).eq(2).html();
 				var job=$(tds).eq(3).html();
@@ -416,10 +418,10 @@ $(document).ready(function() {
 					return false;
 				}
 				var staff_number = $(tds).eq(1).html();
-				var input_staff_number=$(tds).eq(1).find("input");
+				var input_staff_number=$(tds).eq(1).find(".staff_number");
 				//alert($(input_staff_number).html())
-				if(input_staff_number.html()){
-					staff_number=$(tds).eq(1).find(".staff_number").val()||"";
+				if(input_staff_number!=undefined&&input_staff_number.length>0){
+					staff_number=$(input_staff_number).val()||"";
 				}
 				var staff_name=$(tds).eq(2).html();
 				var job=$(tds).eq(3).html();
@@ -439,7 +441,7 @@ $(document).ready(function() {
 					staff.bus_count=bus_count;
 					staff.bonus=bonus;
 					staff.work_date=work_date;
-					staff.skill_parameter=tr_obj.skill_parameter;
+					staff.skill_parameter=$(input_staff_number).attr("skill_parameter");
 					staff.distribution=distribution;
 					staff.status='1';
 					staff.order_id=order_id;
@@ -492,10 +494,10 @@ $(document).ready(function() {
 					return false;
 				}
 				var staff_number = $(tds).eq(1).html();
-				var input_staff_number=$(tds).eq(1).find("input");
+				var input_staff_number=$(tds).eq(1).find(".staff_number");
 				//alert($(input_staff_number).html())
-				if(input_staff_number.html()){
-					staff_number=$(tds).eq(1).find(".staff_number").val()||"";
+				if(input_staff_number!=undefined&&input_staff_number.length>0){
+					staff_number=$(input_staff_number).val()||"";
 				}
 				var staff_name=$(tds).eq(2).html();
 				var job=$(tds).eq(3).html();
@@ -576,7 +578,7 @@ function zTreeOnClick(event, treeId, treeNode) {
 		alert("请选择小班组！");
 		return false;
 	}
-	
+	order_id="0";
 	ajaxQueryTeamStaffDetail();
 	//先destroy datatable，隐藏form
 	if($.fn.dataTable.isDataTable("#tableResult")){
@@ -623,7 +625,6 @@ function zTreeOnClick(event, treeId, treeNode) {
 		$("#form").html(table).css("display","");
 	}	
 	getOrderNoSelect("#order_no", "", function(obj){
-		var order_id=obj.order_id;
 		ajaxQueryTeamStaffDetail();
 		/*if($.fn.dataTable.isDataTable("#tableResult")){
 			$('#tableResult').DataTable().destroy();
@@ -631,12 +632,11 @@ function zTreeOnClick(event, treeId, treeNode) {
 		}*/
 		//showStaffList(staff_list)	
 		updateStaffInfo(staff_list);
-		
+		order_id=obj.order_id;
 		
 	}, null,null,null);
 	
 	getBusNumberSelect("#bus_number", "", function(obj){		
-		var order_id=obj.order_id;
 		ajaxQueryTeamStaffDetail();
 		/*if($.fn.dataTable.isDataTable("#tableResult")){
 			$('#tableResult').DataTable().destroy();
@@ -644,6 +644,7 @@ function zTreeOnClick(event, treeId, treeNode) {
 		}*/
 		//showStaffList(staff_list)
 		updateStaffInfo(staff_list);
+		order_id=obj.order_id;
 	});
 	
 	//显示选择的小班组人员列表
@@ -782,12 +783,13 @@ function showStaffList(staff_list){
 function changeWorkDate(){
 	//alert($("#work_date").val());
 		ajaxQueryTeamStaffDetail();
-		/*if($.fn.dataTable.isDataTable("#tableResult")){
+		if($.fn.dataTable.isDataTable("#tableResult")){
 			$('#tableResult').DataTable().destroy();
 			$('#tableResult').empty();
 		}
-		//showStaffList(staff_list)
-*/		updateStaffInfo(staff_list);
+		showStaffList(staff_list)
+				
+		//updateStaffInfo(staff_list);
 	
 }
 
@@ -903,9 +905,11 @@ function ajaxSave(staffHourList,salary_model,is_customer){
 }
 
 function updateStaffInfo(staff_list){
+	var order_id_update=$("#bus_number").attr("order_id")||$("#order_no").attr("order_id");
+	//alert(order_id)
 	var trs=$("#tableResult tbody").find("tr");
 	$.each(trs,function(i,tr){
-		$(tr).find(".staff_number").val("");
+		//$(tr).find(".staff_number").val("");
 		
 		
 		var staff_number_v=$(tr).children("td").eq(1).html();
@@ -931,7 +935,10 @@ function updateStaffInfo(staff_list){
 					
 					if(staff_number_v==staff_number){
 						$(tr).children("td").eq(4).html(standard_price);
-						$(tr).children("td").eq(5).find(".distribution").val(distribution);
+						if(order_id_update !=order_id){							
+							$(tr).children("td").eq(5).find(".distribution").val(distribution);
+						}
+						
 						return false;
 					}
 				})			

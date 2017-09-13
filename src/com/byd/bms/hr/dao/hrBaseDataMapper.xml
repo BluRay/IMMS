@@ -127,21 +127,27 @@
         </if>
 	</select>
 	<!-- 添加标准人力 -->
-	<insert id="addStandardHumanData" useGeneratedKeys="true" keyProperty="id">
-		<![CDATA[
-
+	<insert id="addStandardHumanData"  parameterType="List">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		<foreach collection="list" index="index" item="item"
+			separator=";">
 			insert into BMS_HR_BASE_STANDARD_HUMAN(bus_type,capacity,type,org_id,factory,workshop,workgroup,
 			job_id,job_no,job_name,standard_humans,deleted,editor_id,edit_date) 
-			values(#{bus_type},#{capacity},#{type},#{org_id},#{factory},#{workshop},#{workgroup},
-			#{job_id},#{job_no},#{job_name},#{standard_humans},#{deleted},#{editor_id},#{edit_date})
-
-		]]>
+			values(#{item.bus_type},#{item.capacity},#{item.type},#{item.org_id},#{item.factory},
+			#{item.workshop},#{item.workgroup},#{item.job_id},#{item.job_no},#{item.job_name},
+			#{item.standard_humans},'0',#{item.editor_id},#{item.edit_date})
+		</foreach>
 	</insert>
 	<!-- 编辑标准人力-->
-	<update id="editStandardHumanData">
+	<update id="editStandardHumanData" parameterType="List">
+	    <foreach collection="list" index="index" item="item"
+			separator=";">
 			update BMS_HR_BASE_STANDARD_HUMAN set 
-			standard_humans = #{standard_humans}
-			where id=#{id}
+			standard_humans = #{item.standard_humans}
+			where id=#{item.id}
+		 </foreach>
 	</update>
 	<!-- 删除标准人力-->
 	<update id="deleteStandardHumanData">
@@ -163,9 +169,9 @@
             FROM BMS_HR_BASE_STANDARD_HUMAN h
 
             WHERE h.deleted='0'
-<!--               <if test="org_id!=null and org_id!=''"> -->
-<!--               and h.org_id=#{org_id} -->
-<!-- 			</if> -->
+              <if test="org_id!=null and org_id!=''">
+              and h.org_id=#{org_id}
+			</if>
               <if test="factory!=null and factory!=''" >
               and h.factory=#{factory}
               </if>
@@ -178,9 +184,9 @@
               <if test="bus_type!=null and bus_type!='全部'">
               and h.bus_type=#{bus_type}
               </if>
-<!--               <if test="capacity!=null and capacity!=''"> -->
-<!--               and h.capacity=#{capacity} and ifnull(s.workgroup_org,'')='' -->
-<!--               </if> -->
+              <if test="capacity!=null and capacity!=''">
+              and h.capacity=#{capacity}
+              </if>
                <if test="job_id!=null and job_id!=''">
 
               and h.job_id=#{job_id}

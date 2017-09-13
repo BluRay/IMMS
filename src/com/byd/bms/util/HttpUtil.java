@@ -16,8 +16,8 @@ public class HttpUtil {
             connection.setDoInput(true);
             connection.setUseCaches(false);
             connection.setInstanceFollowRedirects(true);
-            connection.setConnectTimeout(10000);
-            connection.setReadTimeout(3000);
+            connection.setConnectTimeout(20000);
+            connection.setReadTimeout(10000);
             connection.setRequestMethod("POST"); // 设置请求方式
             connection.setRequestProperty("Accept", "application/json"); // 设置接收数据的格式
             connection.setRequestProperty("Content-Type", "application/json"); // 设置发送数据的格式

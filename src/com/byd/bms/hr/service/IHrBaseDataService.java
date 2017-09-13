@@ -29,7 +29,7 @@ public interface IHrBaseDataService {
 	
 	public List<Map<String,Object>> getStandardHumanData(Map<String,Object> conditionMap);
 	
-	public int editStandardHumanData(Map<String,Object> conditionMap);
+	public int editStandardHumanData(List<Map<String, Object>> list);
 	
 	public void deleteStandardHumanData(String id);
 	

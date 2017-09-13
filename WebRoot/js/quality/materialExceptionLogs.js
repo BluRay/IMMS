@@ -165,7 +165,7 @@ function editExceptionLogs(id){
 		dataType: "json",
 		data: {"id":id},
 		async: false,
-		error: function () {alertError();},
+		error: function () {alert("查询异常");},
 		success: function (response) {
 			$("#edit_factory option[value='"+response.data.factroy_id+"']").attr("selected",true);
 			$("#edit_bus_type option[value='"+response.data.bus_type_id+"']").attr("selected",true);
@@ -288,7 +288,7 @@ function btnEditConfirm(id){
 				});
 	    	}
 	    },
-	    error:function(){alertError();}
+	    error:function(){alert("编辑异常");}
 	});
 	
 }
@@ -357,7 +357,7 @@ function btnNewConfirm(){
 				});
 	    	}
 	    },
-	    error:function(){alertError();}
+	    error:function(){alert("新增异常");}
 	});
 	
 }

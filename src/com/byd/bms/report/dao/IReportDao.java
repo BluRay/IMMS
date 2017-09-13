@@ -41,4 +41,6 @@ public interface IReportDao {
 			@Param(value ="end_date") String end_date);
 	public List<Map<String,Object>> getHumanReportHeaderData(Map<String,Object> conditionMap);
 	public List<Map<String,Object>> getStandardHumanReportData(Map<String,Object> conditionMap);
+
+	List<Map<String, Object>> queryStaffUseList(Map<String, Object> cdMap);
 }

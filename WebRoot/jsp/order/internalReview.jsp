@@ -143,7 +143,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<td id="warehousingDate" class="center english"></td>
 						</tr>
 					    <tr>
-					        <td class="sorting_disabled center" rowspan="2" style="width: 96px;font-weight:bold;">资料需求节点</td>
+					        <td class="sorting_disabled center" rowspan="3" style="width: 96px;font-weight:bold;">资料需求节点</td>
 						    <td class="sorting_disabled center" style="width: 96px;font-size:13px">&nbsp;数模输出时间</td>
 							<td class="sorting_disabled center" style="width: 96px;">下料明细</td>
 							<td class="sorting_disabled center english" style="width: 96px;">BOM</td>
@@ -158,6 +158,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				            <td id="drawingexportDate" class="center english"></td>
 							<td id="sopdemandNode" class="center english"></td>
 							<td id="sipdemandNode" class="center english"></td>
+						</tr>
+						<tr>
+						    <td class="sorting_disabled center" style="width: 96px;">其他</td>
+							<td colspan=5 id="applyInfo" class="Chinese"></td>
 						</tr>
 						<tr>
 						    <td class="sorting_disabled center" rowspan="4" style="width: 96px;font-weight:bold;">技术部</td>

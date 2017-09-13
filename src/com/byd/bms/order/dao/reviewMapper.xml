@@ -59,11 +59,12 @@
 		insert into BMS_OR_ORDER_REVIEW_RESULTS
 		(order_id,factory_id,partsonline_date,weldingonline_date,paintonline_date,chassisonline_date,
 		assemblyonline_date,warehousing_date,modelexport_date,drawingexport_date,detaildemand_node,
-		sopdemand_node,bomdemand_node,sipdemand_node,review_Status,wf_order_id,wf_process_id,editor_Id,edit_Date)
+		sopdemand_node,bomdemand_node,sipdemand_node,apply_info,review_Status,
+		wf_order_id,wf_process_id,editor_Id,edit_Date)
 		values
 		(#{orderId},#{factoryId},#{partsonlineDate},#{weldingonlineDate},#{paintonlineDate},
 		#{chassisonlineDate},#{assemblyonlineDate},#{warehousingDate},#{modelexportDate},#{drawingexportDate},
-		#{detaildemandNode},#{sopdemandNode},#{bomdemandNode},#{sipdemandNode},
+		#{detaildemandNode},#{sopdemandNode},#{bomdemandNode},#{sipdemandNode},#{applyInfo},
 		'1',#{wfOrderId},#{wfProcessId},#{editorId},#{editDate})
 	</insert>
 	<update id='updateBmsOrderReviewResults' parameterType="Map">
@@ -107,7 +108,7 @@
 		drawingexport_date drawingexportDate,detaildemand_node detaildemandNode,
 		sopdemand_node sopdemandNode,bomdemand_node bomdemandNode,sipdemand_node sipdemandNode,
 		wf_order_id wfOrderId,wf_process_id wfProcessId,o.order_no as orderNo,
-		f.factory_name factoryName,f.factory_code factoryCode
+		f.factory_name factoryName,f.factory_code factoryCode,apply_info applyInfo
 		from BMS_OR_ORDER_REVIEW_RESULTS r
 		left join BMS_OR_ORDER o on r.order_id=o.id
 		left join BMS_BASE_FACTORY f on r.factory_id=f.id
@@ -128,14 +129,14 @@
 	<select id='getOrderReviewById' parameterType="String" resultType="Map">
 		select partsonline_date,weldingonline_date,paintonline_date,
 		chassisonline_date,assemblyonline_date,warehousing_date,modelexport_date ,
-		drawingexport_date,detaildemand_node,sopdemand_node,bomdemand_node,sipdemand_node,
+		drawingexport_date,detaildemand_node,sopdemand_node,bomdemand_node,sipdemand_node,apply_info,
 		config_table,proximatematter,modeljudging,purchasedetail,drawingearlierjudging,technicaldatanode,
 		mintech_info,technics_node,technics_info,quality_node,quality_info,factory_node,factory_info,
 		materialcontrol_node,materialcontrol_info,plandep_node,plandep_info,revisiondetail_node,
 		revisionsop_node,revisionbom_node,revisionsip_node,revisionpartsonline_date,revisionweldingonline_date,
 		revisionpaintonline_date,revisionchassisonline_date,revisionassemblyonline_date,revisionwarehousing_date,
 		f.production_qty production_qty,o.order_type order_type,o.delivery_date delivery_date,
-		a.factory_name factory_name,a.capacity,o.customer,t.bus_type_code,
+		a.factory_name factory_name,r.capacity,o.customer,t.bus_type_code,
 		(select u.username from wf_hist_task t1,BMS_BASE_USER u where t1.operator=u.id and t1.order_id=r.wf_order_id and t1.task_name='apply') apply_operator,
 	    (select create_time from wf_hist_task t1 where t1.order_id=r.wf_order_id and t1.task_name='apply') apply_create_time,
 	    (select u.username from wf_hist_task t1,BMS_BASE_USER u where t1.operator=u.id and t1.order_id=r.wf_order_id and t1.task_name='technical') technical_operator,
@@ -167,11 +168,12 @@
 	<select id="getOrderDetailList" parameterType="Map" resultType="Map">
 		select  d.production_qty,d.factory_id factory_id,o.order_no order_no,o.order_name order_name,
 	    o.order_type order_type,o.order_qty order_qty,t.bus_type_code bus_type_code,o.customer,
-		d.order_id order_id,o.delivery_date delivery_date,f.factory_name,f.capacity
+		d.order_id order_id,o.delivery_date delivery_date,f.factory_name,r.id,r.capacity
 		from BMS_OR_FACTORY_ORDER d
 		left join BMS_BASE_FACTORY f on f.id=d.factory_id
 		left join BMS_OR_ORDER o on o.id=d.order_id
 		left join BMS_BASE_BUS_TYPE t on o.bus_type_id = t.id
+		left join BMS_OR_ORDER_REVIEW_RESULTS r on r.factory_id = d.factory_id and r.order_id=d.order_id
 		where 1=1
 		<if test="search_order_no!=null">
 			and o.order_no like CONCAT('%',#{search_order_no},'%')   

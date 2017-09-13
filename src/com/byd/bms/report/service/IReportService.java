@@ -43,5 +43,12 @@ public interface IReportService {
 	public void getFactoryRateRankData(Map<String, Object> conditionMap,List queryMapList,ModelMap model);
 	
 	public void getStandardHumanReportData(Map<String, Object> conditionMap,ModelMap model);
+	/**
+	 * @author xiong.jianwu
+	 * 获取工厂人员利用率报表数据
+	 * @param cdMap
+	 * @param model
+	 */
+	void getStaffUseRateData(Map<String, Object> cdMap, ModelMap model);
 	
 }

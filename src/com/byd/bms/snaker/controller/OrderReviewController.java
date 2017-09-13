@@ -408,6 +408,7 @@ public class OrderReviewController extends BaseController{
 		condMap.put("type", type);
 		if(type.equals("start")){
 			condMap.put("roleName", applyRoleName);
+			result.put("applyRoleName", applyRoleName);
 		}
 		if(type.equals("check")){
 			condMap.put("roleName", roleName);

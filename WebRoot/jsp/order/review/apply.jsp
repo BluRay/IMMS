@@ -76,9 +76,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<td>&nbsp;SIP：</td>
 							<td><input id="sipdemandNode" name="S_sipdemandNode" onClick="WdatePicker({el:'sipdemandNode',dateFmt:'yyyy-MM-dd'});" placeholder="SIP时间..." style="width:120px" class="col-sm-10" type="text"></td>
 						</tr>
-						
-                        <tr>
-						    <td colspan=6 align="right">
+						<tr role="row" class="even">
+							<td>&nbsp;其他：</td>
+							<td colspan=4>
+							<textarea id="applyInfo" name="S_applyInfo" style="width: 720px;" placeholder="..." rows="2"></textarea>
+							</td>
+<!-- 						</tr> -->
+<!--                         <tr> -->
+						    <td colspan=1 align="left">
 						        <input type="hidden"  id="apply_operator" name="S_apply.operator" value="${operator }" />
 				                <input type="hidden" id="technical_operator" name="S_technical.operator" value="${nextOperator }" />
 						        <input type="button" class="btn btn-sm btn-info" id="btnSave" value="提交" style="margin-left: 2px;"></input>&nbsp;
@@ -123,10 +128,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             				"drawingexportDate" : $("#drawingexportDate").val(),
             				"sopdemandNode" : $("#sopdemandNode").val(),
             				"sipdemandNode" : $("#sipdemandNode").val(),
+            				"applyInfo" : $("#applyInfo").val(),
+            				"capacity" : $("#capacity").val(),
             				"apply.operator" : $("#apply_operator").val(),
             				"technical.operator" : $("#technical_operator").val(),
-            				"technology.operator" : $("#technology_operator").val(),
-            				"quality.operator" : $("#quality_operator").val(),
             				"processId" : $("#processId").val(),
             				"orderId" : $("#orderId").val(),
             				"taskId" : $("#taskId").val(),

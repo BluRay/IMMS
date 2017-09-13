@@ -204,10 +204,9 @@ public class FlowController extends BaseController{
         	String sopdemandNode= request.getParameter("sopdemandNode");
         	String sipdemandNode= request.getParameter("sipdemandNode");
         	String bomdemandNode= request.getParameter("bomdemandNode");
+        	String applyInfo= request.getParameter("applyInfo");
         	String apply_operator= request.getParameter("apply.operator");
         	String technical_operator= request.getParameter("technical.operator");
-        	String quality_operator= request.getParameter("quality.operator");
-        	String technology_operator= request.getParameter("technology.operator");
         	params.put("partsonlineDate", partsonlineDate);
         	params.put("weldingonlineDate", weldingonlineDate);
         	params.put("chassisonlineDate", chassisonlineDate);
@@ -222,7 +221,7 @@ public class FlowController extends BaseController{
         	params.put("bomdemandNode", bomdemandNode);
         	params.put("apply.operator", apply_operator);
         	params.put("technical.operator", technical_operator);
-//        	params.put("technology.operator", technology_operator);
+        	params.put("applyInfo", applyInfo);
 //        	params.put("quality.operator", quality_operator);
     	}
     	if(type.equals("technical")){
@@ -344,6 +343,7 @@ public class FlowController extends BaseController{
     	String detaildemandNode= request.getParameter("detaildemandNode");
     	String sopdemandNode= request.getParameter("sopdemandNode");
     	String sipdemandNode= request.getParameter("sipdemandNode");
+    	String applyInfo= request.getParameter("applyInfo");
     	String bomdemandNode= request.getParameter("bomdemandNode");
     	String configTable= request.getParameter("configTable");
     	String proximatematter= request.getParameter("proximatematter");
@@ -351,6 +351,7 @@ public class FlowController extends BaseController{
     	String drawingearlierjudging= request.getParameter("drawingearlierjudging");
     	String purchasedetail= request.getParameter("purchasedetail");
     	String technicaldatanode= request.getParameter("technicaldatanode");
+    	String capacity= request.getParameter("capacity");
     	bmsOrderReviewResults.setPaintonlineDate(paintonlineDate);
     	bmsOrderReviewResults.setWeldingonlineDate(weldingonlineDate);
     	bmsOrderReviewResults.setPartsonlineDate(partsonlineDate);
@@ -369,6 +370,8 @@ public class FlowController extends BaseController{
     	bmsOrderReviewResults.setDrawingearlierjudging(drawingearlierjudging);
     	bmsOrderReviewResults.setPurchasedetail(purchasedetail);
     	bmsOrderReviewResults.setTechnicaldatanode(technicaldatanode);
+    	bmsOrderReviewResults.setApplyInfo(applyInfo);
+    	bmsOrderReviewResults.setCapacity(capacity);
     	return bmsOrderReviewResults;
     }
     @RequestMapping({"processtest"})

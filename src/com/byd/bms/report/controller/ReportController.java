@@ -537,4 +537,39 @@ public class ReportController extends BaseController {
 		reportService.getStandardHumanReportData(conditionMap, model);
 		return model;
 	}
+	
+	/**
+	 * @author xiong.jianwu
+	 * 人员利用率报表
+	 */
+	@RequestMapping("/staffUseRate")
+	public ModelAndView staffUseRate(){
+		mv.setViewName("report/staffUseRate");
+		return mv;
+	}
+	
+	/**
+	 * @author xiong.jianwu
+	 * 获取人员利用率报表数据
+	 * @return
+	 */
+	@RequestMapping("/getStaffUseRateData")
+	@ResponseBody
+	public ModelMap getStaffUseRateData(){
+		model.clear();
+		String factory=request.getParameter("factory");
+		String factory_id=request.getParameter("factory_id");
+		String start_date=request.getParameter("start_date");
+		String end_date=request.getParameter("end_date");
+		
+		Map<String,Object> cdMap=new HashMap<String,Object>();
+		cdMap.put("factory", factory);
+		cdMap.put("factory_id", factory_id);
+		cdMap.put("start_date", start_date);
+		cdMap.put("end_date", end_date);		
+		
+		reportService.getStaffUseRateData(cdMap,model);
+		
+		return model;
+	}
 }

@@ -767,7 +767,7 @@
 	<select id="getHumanReportHeaderData" parameterType="Map" resultType="Map">
 		<![CDATA[
          select DISTINCT CONCAT(bus_type,'-',capacity) as headerStr from BMS_HR_BASE_STANDARD_HUMAN
-           where workshop!='' and bus_type!='' and bus_type is not null and factory=#{factory} order by headerStr
+           where deleted='0' and workshop!='' and bus_type!='' and bus_type is not null and factory=#{factory} order by headerStr
 		]]>
 	</select>
 	<!-- 标准人力报表DATA -->
@@ -775,10 +775,13 @@
 		<![CDATA[
          select workshop,GROUP_CONCAT( concat_ws(':',bus_type,count) ORDER BY bus_type SEPARATOR ';') desc_str from (
 			select DISTINCT CONCAT(bus_type,'-',capacity) as bus_type,workshop,sum(standard_humans) count from BMS_HR_BASE_STANDARD_HUMAN h
-			  where h.factory=#{factory} and h.workshop!='' and bus_type!=''
-			  and bus_type is not null GROUP BY workshop,bus_type
+			  where h.factory=#{factory} and h.deleted='0' and h.workshop!='' and bus_type!=''
+			  and bus_type is not null GROUP BY workshop,bus_type,capacity
         ) t1  GROUP BY workshop;
 		]]>
 	</select>
 	
+	<select id="queryStaffUseList" parameterType="Map" resultType="Map" statementType="CALLABLE">
+		call P_StaffUseRate(#{factory},#{factory_id},#{start_date},#{end_date})
+	</select>
 </mapper>

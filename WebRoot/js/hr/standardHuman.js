@@ -64,8 +64,8 @@ $(document).ready(function() {
 			dataType:"json",
 			success:function(response){
 				
-				//ajaxQuery();
-				if(response.success){					
+				if(response.success){	
+					ajaxQuery();
 					alert(response.message);
 				}else{
 					alert(response.message);
@@ -115,6 +115,10 @@ function zTreeOnClick(event, treeId, treeNode) {
 	
 };
 function ajaxQuery(id){
+	if($.fn.dataTable.isDataTable("#tableData")){
+		$('#tableData').DataTable().destroy();
+		$('#tableData').empty();
+	}
 	$("#tableData").dataTable({
 		serverSide: true,
 		fixedColumns:   {
@@ -126,7 +130,7 @@ function ajaxQuery(id){
 		searching: false,
 		bAutoWidth:false,
 		destroy: true,
-		sScrollY: document.documentElement.clientHeight-250 + 'px',
+		sScrollY: document.documentElement.clientHeight-290 + 'px',
 		scrollX: "100%",
 		lengthChange:false,
 		orderMulti:false,
@@ -143,7 +147,7 @@ function ajaxQuery(id){
 		ajax:function (data, callback, settings) {
 			var param ={
 //				"draw":1,
-				"id":id,
+				//"id":id,
 				"factory":factory,
 				"workshop":workshop,
 				"workgroup":workgroup,

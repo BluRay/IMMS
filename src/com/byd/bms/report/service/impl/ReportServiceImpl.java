@@ -472,6 +472,52 @@ public class ReportServiceImpl implements IReportService {
 		return reportDao.queryProcessProblemData(conditionMap);
 	}
 
+	/**
+	 * @author xiong.jianwu
+	 * 获取工厂人员利用率报表数据
+	 * @param cdMap
+	 * @param model
+	 */
+	@Override
+	public void getStaffUseRateData(Map<String, Object> cdMap, ModelMap model) {
+		List<Map<String, Object>> datalist =reportDao.queryStaffUseList(cdMap);
+		Map<String,Object> sum=new HashMap<String,Object>();
+		double direct_num_yd_total=0;
+		double short_num_yd_total=0;
+		double output_total=0;
+		double capacity_total=0;
+		for(Map<String,Object> m:datalist){
+			/*sum.put("factory", "长沙工厂");
+			sum.put("workshop", "合计");
+			sum.put("direct_num_yd",Integer.parseInt(sum.get("")) m.get("direct_num_yd"));*/
+			if(m.get("direct_num_yd")!=null && String.valueOf(m.get("direct_num_yd")).length()>0){
+				direct_num_yd_total=Double.sum(direct_num_yd_total, Double.valueOf(String.valueOf(m.get("direct_num_yd"))));
+			}
+			if(m.get("short_num_yd")!=null && String.valueOf(m.get("short_num_yd")).length()>0){
+				short_num_yd_total=Double.sum(short_num_yd_total, Double.valueOf(String.valueOf(m.get("short_num_yd"))));
+			}
+			if(m.get("output")!=null && String.valueOf(m.get("output")).length()>0){
+				output_total=Double.sum(output_total, Double.valueOf(String.valueOf(m.get("output"))));
+			}
+			if(m.get("capacity")!=null && String.valueOf(m.get("capacity")).length()>0){
+				capacity_total=Double.sum(capacity_total, Double.valueOf(String.valueOf(m.get("capacity"))));
+			}
+		}
+		
+		if(datalist.size()>0){
+			sum.put("factory", cdMap.get("factory").toString());
+			sum.put("workshop", "合计");
+			sum.put("direct_num_yd", String.valueOf(new Double(direct_num_yd_total).intValue()));
+			sum.put("short_num_yd", String.valueOf(new Double(short_num_yd_total).intValue()));
+			sum.put("output", String.valueOf(new Double(output_total).intValue()));
+			sum.put("capacity", String.valueOf(new Double(capacity_total).intValue()));
+			datalist.add(sum);
+		}
+		
+		
+		model.put("data", datalist);
+	}
+
 	@Override
 	public Map<String, Object> queryProcessProblemDetail(Map<String, Object> conditionMap) {
 		int totalCount=0;

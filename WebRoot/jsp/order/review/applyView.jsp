@@ -66,6 +66,10 @@
 							<td>${item['sipdemandNode'] }</td>
 						</tr>
 						<tr>
+							<td>其他：</td>
+							<td colspan='5'>${item['applyInfo'] }</td>
+						</tr>
+						<tr>
 							<td colspan=6 align="right">
                                <input type="button" class="btn btn-sm btn-info" id="btnBack" value="返回" style="margin-left: 2px;"></input>&nbsp;&nbsp;&nbsp;
                             </td>
