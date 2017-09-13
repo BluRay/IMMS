@@ -140,4 +140,12 @@ public interface ICommonService {
 	 * @param model
 	 */
 	void getRoleListAuth(String staff_number, ModelMap model);
+
+	/**
+	 * @author xiong.jianwu
+	 * 查询班组承包单价
+	 * @param conditionMap
+	 * @param model
+	 */
+	void getWorkgroupPrice(Map<String, Object> conditionMap, ModelMap model);
 }

@@ -35,12 +35,12 @@ public class HrReportServiceImpl implements IHrReportService {
 	@Override
 	public void getStaffPieceHours(Map<String, Object> conditionMap,
 			ModelMap model) {
-		int totalCount=hrReportDao.queryStaffPieceHoursCount(conditionMap);
+		//int totalCount=hrReportDao.queryStaffPieceHoursCount(conditionMap);
 		List<Map<String,Object>> datalist =hrReportDao.queryStaffPieceHours(conditionMap);	
 		
-		model.put("recordsTotal", totalCount);
+		//model.put("recordsTotal", totalCount);
 		model.put("draw", conditionMap.get("draw"));
-		model.put("recordsFiltered", totalCount);
+		//model.put("recordsFiltered", totalCount);
 		model.put("data", datalist);		
 		
 	}

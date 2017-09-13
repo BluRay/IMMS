@@ -105,7 +105,7 @@ function getOrderNoSelect(elementId, submitId, fn_backcall, bustype,factoryEleme
 	if (!bustype) {
 		bustype = "";
 	}
-
+	var order={};
 	var orderlist;
 	//alert($(elementId).next().html())
 	$(elementId).typeahead({		
@@ -155,7 +155,7 @@ function getOrderNoSelect(elementId, submitId, fn_backcall, bustype,factoryEleme
 			return item + "  " + order_name + " " + bus_type + order_qty;
 		},
 		matcher : function(item) {
-			if(areaflg!="copy"){//复制粘贴，非选择默认列表第一个项
+			/*if(areaflg!="copy"){//复制粘贴，非选择默认列表第一个项
 				return true;
 			}
 			 //alert(this.query);
@@ -170,11 +170,11 @@ function getOrderNoSelect(elementId, submitId, fn_backcall, bustype,factoryEleme
 					}
 					return;
 				}
-			})
+			})*/
 			return true;
 		},
 		updater : function(item) {
-			$.each(orderlist, function(index, value) {
+			/*$.each(orderlist, function(index, value) {
 				if (value.orderNo == item) {
 					selectId = value.id;
 					$(elementId).attr("order_id", selectId);
@@ -183,8 +183,21 @@ function getOrderNoSelect(elementId, submitId, fn_backcall, bustype,factoryEleme
 						fn_backcall(value);
 					}
 				}
-			})
+			})*/
 			return item;
+		},
+		afterSelect:function(item){
+			$.each(orderlist, function(index, value) {
+				if (value.orderNo == item) {
+					order=value;
+					selectId = value.id;
+					$(elementId).attr("order_id", selectId);
+					$(submitId).val(selectId);				
+				}
+			})
+			if (typeof (fn_backcall) == "function") {
+				fn_backcall(order);
+			}
 		}
 	});
 }

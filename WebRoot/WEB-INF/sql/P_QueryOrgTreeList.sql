@@ -1,4 +1,4 @@
-CREATE DEFINER=`root`@`%` PROCEDURE `P_QueryOrgTreeList`(in staff_number varchar(10),in url varchar(100),in orgtype varchar(50),in orgKind varchar(10))
+CREATE DEFINER=`bmsadmin`@`%` PROCEDURE `P_QueryOrgTreeList`(in staff_number varchar(10),in url varchar(100),in orgtype varchar(50),in orgKind varchar(10))
 BEGIN
 	declare var_stemp text(200000);	#车间维度org tree id列表
 	declare var_stempChd text(200000); #车间维度子节点org tree  id列表
@@ -63,7 +63,7 @@ where r.staff_number=staff_number and r.permission_key='1' and f.function_url=ur
 
 	#查询工厂下管理型及其子节点的org id 
 	set var_stemp1='';
-	if orgKind='0' or orgKind='0,1' then
+	if orgKind='1' or orgKind='0,1' then
 		select group_concat(id) into var_stemp1Chd from BMS_BASE_ORG where FIND_IN_SET(parent_id,parentid)>0 and org_kind='0';
 		while var_stemp1Chd is not null do
 			set var_stemp1=concat(var_stemp1Chd,',',var_stemp1);
@@ -80,6 +80,6 @@ where r.staff_number=staff_number and r.permission_key='1' and f.function_url=ur
 	#select group_concat(id) into level2id from BMS_BASE_ORG where FIND_IN_SET(parent_id,parentid)>0 and org_kind=1 and org_type=3;
 
 	#获取org tree 数据
-	SELECT s.*  FROM BMS_BASE_ORG s  WHERE s.deleted='0'  AND  (FIND_IN_SET(s.id,  var_stemp)>0  OR  FIND_IN_SET(s.id,parentid)>0) ORDER BY s.id, s.sort_number ASC;
+	SELECT s.*  FROM BMS_BASE_ORG s  WHERE s.deleted='0' AND FIND_IN_SET(org_kind,orgKind)>0 AND  (FIND_IN_SET(s.id,  var_stemp)>0  OR  FIND_IN_SET(s.id,parentid)>0) ORDER BY s.id, s.sort_number ASC;
 
 END

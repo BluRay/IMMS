@@ -840,4 +840,16 @@
 		LEFT JOIN BMS_BASE_ROLE r on ur.role_id=r.id
 		WHERE ur.staff_number=#{staff_number}
 	</select>
+	
+	<select id="queryWorkgroupPrice" parameterType="Map" resultType="Map">
+		select * from BMS_HR_WORKGROUP_PRICE
+		where factory=#{factory} and workshop=#{workshop}
+		and workgroup=#{workgroup} and team=#{team} 
+		and order_id=#{order_id} 		
+		and effective_date=
+		(select max(effective_date) from BMS_HR_WORKGROUP_PRICE 
+		where factory=#{factory} and workshop=#{workshop}
+		and workgroup=#{workgroup} and team=#{team}
+		and order_id=#{order_id} and effective_date&lt;=#{workDate})
+	</select>
 </mapper>

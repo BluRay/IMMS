@@ -79,7 +79,7 @@
 							</tr>
 						</table>
 					</div>
-
+					
 					<div class="row">
 						<div class="col-xs-12" style="width: calc(100vw + 20px)">
 							
@@ -152,6 +152,7 @@
 		<script src="../assets/js/ace/ace.onpage-help.js"></script>
 		<script src="../assets/js/bootstrap3-typeahead.js"></script>
 		<script src="../js/jquery.form.js"></script>
+		<script src="../js/exportTable2Excel.js"></script>
 		<script src="../assets/js/jszip.min.js"></script>
 		<script src="../assets/js/dataTables.buttons.js"></script>
 		<script src="../assets/js/buttons.colVis.js"></script>

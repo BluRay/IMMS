@@ -1,4 +1,4 @@
-CREATE DEFINER=`root`@`%` PROCEDURE `P_CACULATE_PIECE_SALLARY_1`(in q_factory varchar(100),in q_workshop varchar(100),in q_workgroup varchar(100),in q_team varchar(100),in q_bus_number varchar(5000),in q_start_date varchar(10), in q_end_date varchar(10))
+CREATE DEFINER=`bmsadmin`@`%` PROCEDURE `P_CACULATE_PIECE_SALLARY_1`(in q_factory varchar(100),in q_workshop varchar(100),in q_workgroup varchar(100),in q_team varchar(100),in q_bus_number varchar(5000),in q_start_date varchar(10), in q_end_date varchar(10))
 BEGIN		
 	declare v_sql varchar(20000);
 	declare cal_status varchar(1);
@@ -39,10 +39,6 @@ BEGIN
    	deallocate prepare stmt;
 
 	#删除之前的工资
-
-
-
-
 
 	delete from BMS_HR_PIECE_SALARY where factory=q_factory and workshop=q_workshop and workgroup=q_workgroup and team=q_team 
 	and find_in_set(bus_number,q_bus_number)>0  and salary_model='承包制';

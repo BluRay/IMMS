@@ -49,6 +49,8 @@
 								<td><select id="search_factory" class="input-small" style="height: 30px;width:100px"></select></td>
 								<td>&nbsp;订单：</td>
 								<td><input id="search_order_no" placeholder="请输入订单编号..." style="height: 30px;width:110px" type="text"></td>
+								<td>&nbsp;状态：</td>
+								<td><select id="search_status" class="input-small" style="height: 30px;width:100px"><option value="0">已计划</option><option value="1">发车中</option><option value="2">已完成</option></select></td>
 								<td>&nbsp;计划发车时间：</td>
 								<td><input id="start_date" placeholder="开始时间..." style="height: 30px;width:125px" type="text" onClick="WdatePicker({el:'start_date',dateFmt:'yyyy-MM-dd'});"> - <input id="end_date" placeholder="结束时间..." style="height: 30px;width:125px" type="text" onClick="WdatePicker({el:'end_date',dateFmt:'yyyy-MM-dd'});"></td>
 								<td>

@@ -1,4 +1,4 @@
-CREATE DEFINER=`root`@`%` PROCEDURE `P_CACULATE_PIECE_SALLARY_2`(in q_factory varchar(100),in q_workshop varchar(100),in q_workgroup varchar(100),in q_team varchar(100),in q_month varchar(10))
+CREATE DEFINER=`bmsadmin`@`%` PROCEDURE `P_CACULATE_PIECE_SALLARY_2`(in q_factory varchar(100),in q_workshop varchar(100),in q_workgroup varchar(100),in q_team varchar(100),in q_month varchar(10))
 BEGIN		
 	declare v_sql varchar(20000);
 	declare cal_status varchar(1);

@@ -7,6 +7,7 @@ var staff_list=[];
 var org_id="";
 var is_customer="0";
 var order_id="0";
+var standard_price=0;
 $(document).ready(function() {
 	initPage();
 	
@@ -199,13 +200,12 @@ $(document).ready(function() {
 	//保存工时信息
 	$(document).on("click","#btnSave",function(){
 		var bus_number=$("#bus_number").val();
-		var order_id=$("#bus_number").attr("order_id")||$("#order_no").attr("order_id");
+		order_id=$("#bus_number").attr("order_id")||$("#order_no").attr("order_id");
 		var work_date=$("#work_date").val();
 		var cutomer_number=$("#customer_number").val()
 		var staffHourList=[];
 		var trs=$("#tableResult tbody").find("tr");
 		var total_distribution=0;
-		var standard_price=0;
 		var save_flag=true;
 		var bus_count=1;
 		var bonus=$("#bonus").val();
@@ -225,7 +225,7 @@ $(document).ready(function() {
 		 *技能系数 判断逻辑
 		 */
 		if(salary_model=='技能系数'){
-			standard_price=Number($(trs[0]).children("td").eq(4).html());
+			//standard_price=Number($(trs[0]).children("td").eq(4).html());
 			if(standard_price==0){
 				saveFlag = false;
 				alert("该班组未维护班组承包单价！");
@@ -342,7 +342,7 @@ $(document).ready(function() {
 		 *承包制 判断逻辑
 		 */
 		if(salary_model=='承包制'){
-			standard_price=Number($(trs[0]).children("td").eq(4).html());
+			//standard_price=Number($(trs[0]).children("td").eq(4).html());
 			if(standard_price==0){
 				saveFlag = false;
 				alert("该班组未维护班组承包单价！");
@@ -409,7 +409,7 @@ $(document).ready(function() {
 			$.each(trs,function(i,tr){
 				var tds=$(tr).children("td");
 				var tr_obj=$("#tableResult").dataTable().fnGetData($(tr));
-				standard_price=Number($(tr).children("td").eq(4).html());
+				//standard_price=Number($(tr).children("td").eq(4).html());
 				var distribution=$(tr).children("td").eq(5).find(".distribution").val();
 				total_distribution=numAdd(total_distribution,Number(distribution));
 				if(distribution.trim().length==0){
@@ -625,26 +625,28 @@ function zTreeOnClick(event, treeId, treeNode) {
 		$("#form").html(table).css("display","");
 	}	
 	getOrderNoSelect("#order_no", "", function(obj){
+		order_id=obj.id;
 		ajaxQueryTeamStaffDetail();
+		standard_price=ajaxGetWorkgroupPrice();
 		/*if($.fn.dataTable.isDataTable("#tableResult")){
 			$('#tableResult').DataTable().destroy();
 			$('#tableResult').empty();
 		}*/
 		//showStaffList(staff_list)	
 		updateStaffInfo(staff_list);
-		order_id=obj.order_id;
 		
 	}, null,null,null);
 	
-	getBusNumberSelect("#bus_number", "", function(obj){		
+	getBusNumberSelect("#bus_number", "", function(obj){
+		order_id=obj.order_id;
 		ajaxQueryTeamStaffDetail();
+		standard_price=ajaxGetWorkgroupPrice();
 		/*if($.fn.dataTable.isDataTable("#tableResult")){
 			$('#tableResult').DataTable().destroy();
 			$('#tableResult').empty();
 		}*/
 		//showStaffList(staff_list)
-		updateStaffInfo(staff_list);
-		order_id=obj.order_id;
+		updateStaffInfo(staff_list);		
 	});
 	
 	//显示选择的小班组人员列表
@@ -687,7 +689,7 @@ function ajaxQueryTeamStaffDetail(){
 function showStaffList(staff_list){
 	if(staff_list.length==0){
 		alert("未维护班组成员！");
-		return false;
+		//return false;
 	}
 	var columns=[];
 	if(salary_model=='技能系数'){
@@ -766,12 +768,13 @@ function showStaffList(staff_list){
 			processing: "正在查询，请稍后...",
 			emptyTable:"",					     
 			infoEmpty:"",
-			zeroRecords:"未查询到人员数据！"
+			/*zeroRecords:"未查询到人员数据！"*/
 		},
 		data:staff_list,
 		columns:columns
 	});
 	
+	$(".dataTables_empty").parent("tr").remove();
 	
 /*	$('#tableReusltDiv').ace_scroll({
 		size:$(this).attr('data-size')|| $(window).height()-210,
@@ -783,6 +786,7 @@ function showStaffList(staff_list){
 function changeWorkDate(){
 	//alert($("#work_date").val());
 		ajaxQueryTeamStaffDetail();
+		standard_price=ajaxGetWorkgroupPrice();
 		if($.fn.dataTable.isDataTable("#tableResult")){
 			$('#tableResult').DataTable().destroy();
 			$('#tableResult').empty();
@@ -915,26 +919,28 @@ function updateStaffInfo(staff_list){
 		var staff_number_v=$(tr).children("td").eq(1).html();
 		
 			if(salary_model=='技能系数'){
+				$(tr).children("td").eq(4).html(standard_price);
+				
 				$.each(staff_list,function(j,staff){
 					var staff_number=staff.staff_number;
 					var skill_parameter=staff.skill_parameter;
-					var standard_price=staff.standard_price;
+					//standard_price=staff.standard_price;
 					
 					if(staff_number_v==staff_number){
-						$(tr).children("td").eq(4).html(standard_price);
 						$(tr).children("td").eq(5).html(skill_parameter);
 						return false;
 					}			
 				})	
 			}
 			if(salary_model=='承包制'){
+				$(tr).children("td").eq(4).html(standard_price);
+				
 				$.each(staff_list,function(j,staff){
 					var staff_number=staff.staff_number;
 					var distribution=staff.distribution;
-					var standard_price=staff.standard_price;
+					//var standard_price=staff.standard_price;
 					
 					if(staff_number_v==staff_number){
-						$(tr).children("td").eq(4).html(standard_price);
 						if(order_id_update !=order_id){							
 							$(tr).children("td").eq(5).find(".distribution").val(distribution);
 						}
@@ -967,4 +973,30 @@ function updateStaffInfo(staff_list){
 				})
 			}
 	})
+}
+
+function ajaxGetWorkgroupPrice(){
+	var price=0;
+	var stafflist;
+	var workDate=$("#work_date").val();
+
+	$.ajax({
+		type : "get",// 使用get方法访问后台
+		dataType : "json",// 返回json格式的数据
+		url : "/BMS/common/getWorkgroupPrice",
+		async :false,
+		data : {
+			"factory" : factory,
+			"workshop" : workshop,
+			"workgroup" : workgroup,
+			"team" : team,
+			"workDate":workDate,
+			"order_id":order_id
+		},
+		success : function(response) {
+			
+			price = response.data.length==0?0:parseFloat((response.data)[0].standard_price);
+		}
+	})
+	return price;
 }

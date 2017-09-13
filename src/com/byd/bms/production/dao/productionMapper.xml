@@ -2659,6 +2659,9 @@
 				<if test="detail.status!=null">
 					status=#{detail.status},
 				</if>
+				<if test="detail.tech_single_price!=null">
+					hour_price=#{detail.tech_single_price},
+				</if>
 				<if test="detail.participation!=null">
 					participation=#{detail.participation},
 				</if>

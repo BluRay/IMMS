@@ -1,4 +1,4 @@
-CREATE DEFINER=`root`@`%` PROCEDURE `P_CACULATE_ECN_SALLARY`(in q_factory varchar(100),in q_workshop varchar(100),in q_workgroup varchar(100),in q_team varchar(100),in q_month varchar(10))
+CREATE DEFINER=`bmsadmin`@`%` PROCEDURE `P_CACULATE_ECN_SALLARY`(in q_factory varchar(100),in q_workshop varchar(100),in q_workgroup varchar(100),in q_team varchar(100),in q_month varchar(10))
 BEGIN		
 	declare query_condition varchar(200);
 	declare query_condition_2 varchar(200);
@@ -58,7 +58,7 @@ BEGIN
 	end if;
 
 	#select query_bus_numbers;
-	#select query_org_ids;
+	#select query_ecn_task_ids;
 
     set v_sql=concat('create TEMPORARY  TABLE staff_hours_count select h1.* from BMS_HR_STAFF_TECH_HOURS h1 left join BMS_HR_STAFF s on h1.staff_number=s.staff_number
 		where h1.ecn_task_id in (''',query_ecn_task_ids,''')  and h1.factory=''',q_factory,''' and h1.workshop=''',q_workshop,''' and substr(h1.work_date,1,7)=''',q_month,''' and h1.status in (''1'',''3'') ');
@@ -97,14 +97,14 @@ BEGIN
 	select d.id ecn_task_id,d.factory,d.order_no,q_workshop workshop,
 	replace(left(substring(d.time_list,instr(d.time_list,q_workshop)),instr(substring(concat(d.time_list,','),instr(d.time_list,q_workshop)),',')-1),concat(q_workshop,':'),'') unit_time
 	from BMS_TECH_TASK_DETAIL d
-	where d.id in (query_ecn_task_ids);
+	where find_in_set(d.id,query_ecn_task_ids)>0;
 
 	drop TEMPORARY TABLE IF EXISTS ECN_BUS_NUMBER;
 	create TEMPORARY TABLE  ECN_BUS_NUMBER as
 	select d.id ecn_task_id,d.factory,d.order_no,q_workshop workshop,
 	replace(left(substring(d.tech_list,instr(d.tech_list,q_workshop)),instr(substring(concat(d.tech_list,','),instr(d.tech_list,q_workshop)),',')-1),concat(q_workshop,':'),'') ecn_number
 	from BMS_TECH_TASK_DETAIL d
-	where d.id in (query_ecn_task_ids) ;
+	where find_in_set(d.id,query_ecn_task_ids)>0;
 	
 	#删除计件工资计算表中对应工厂车间月份下的记录
 	delete from BMS_HR_TECH_SALARY  where factory=q_factory and workshop=q_workshop and work_date like concat(q_month,'%');	

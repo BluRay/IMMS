@@ -719,4 +719,24 @@ public class CommonController extends BaseController {
 				
 		return model;
 	}
+	
+	/**
+	 * @author xiong.jianwu
+	 * 获取班组承包单价
+	 * @return
+	 */
+	@RequestMapping("/getWorkgroupPrice")
+	@ResponseBody
+	public ModelMap getWorkgroupPrice(){
+		Map<String,Object> conditionMap = new HashMap<String, Object>();
+		conditionMap.put("workDate", request.getParameter("workDate"));
+		conditionMap.put("order_id", request.getParameter("order_id"));
+		conditionMap.put("factory", request.getParameter("factory"));
+		conditionMap.put("workshop", request.getParameter("workshop"));
+		conditionMap.put("workgroup", request.getParameter("workgroup"));
+		conditionMap.put("team", request.getParameter("team"));
+		
+		commonService.getWorkgroupPrice(conditionMap,model);
+		return model;
+	}
 }

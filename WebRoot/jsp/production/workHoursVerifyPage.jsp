@@ -72,7 +72,7 @@
 						</table>
 					</div>
 					
-					<table id="tableData" class="table table-striped table-bordered table-hover" style="width:1350px;overflow-x:auto;font-size: 12px;">
+					<table id="tableData" class="table table-striped table-bordered table-hover" style="width:1700px;overflow-x:auto;font-size: 12px;">
 					</table>
 					
 					</div>
@@ -86,17 +86,19 @@
 					</tr>
 					<tr>
 						<td width="140px" style="text-align: right">作业原因/内容：</td>
-						<td id="edit_reason" colspan="7"></td>
+						<td id="edit_reason" colspan="9"></td>
 					</tr>
 					<tr>
-						<td width="140px" style="text-align: right">总数量：</td>
-						<td id="edit_totalQty" width="50px">30</td>
-						<td width="80px" style="text-align: right">单工时：</td>
-						<td id="edit_singleHour" width="50px">1.5</td>
+						<td width="60px" style="text-align: right">总数量：</td>
+						<td id="edit_totalQty" width="30px">30</td>
+						<td width="60px" style="text-align: right">单工时：</td>
+						<td id="edit_singleHour" width="30px">1.5</td>
 						<td width="80px" style="text-align: right">所需人力：</td>
-						<td id="edit_labors" width="50px">10</td>
-						<td width="80px" style="text-align: right">总工时：</td>
-						<td id="edit_totalHour">20</td>
+						<td id="edit_labors" width="30px">10</td>
+						<td width="60px" style="text-align: right">总工时：</td>
+						<td width="80px"  id="edit_totalHour">20</td>
+						<td width="80px" style="text-align:right">工时单价：</td>								
+						<td><input type="text" id="edit_singlePrice" value="0" class="input-medium" style="margin-bottom: 0px;width:80px;height:30px"></td>
 					</tr>
 				</table>
 				

@@ -105,13 +105,27 @@ function ajaxQuery(){
                     //调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
                     //此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
                     callback(returnData);
+                    var head_width=$(".dataTables_scroll").width();
+                	$(".dataTables_scrollBody").scrollTop(10);
+                	if($(".dataTables_scrollBody").scrollTop()>0){
+                		$(".dataTables_scrollHead").css("width",head_width-20);
+                		$(".dataTables_scrollBody").scrollTop(0);
+                	}
                 }
             });
 		},
 		columns: [
 		            {"title":"临时派工单号",width:'150',"class":"center","data":"tmp_order_no","defaultContent": ""},
 		            {"title":"工单号",width:'100',"class":"center","data":"sap_order","defaultContent": ""},
-		            {"title":"作业原因/内容",width:'200',"class":"center","data":"reason_content","defaultContent": ""},
+		            {"title":"作业原因/内容",width:'400',"class":"center","data":"reason_content","defaultContent": "",
+		            	"render": function ( data, type, row ) {
+		            		if(data.length >30){
+		            			return "<span title="+data+" >" + data.substring(0,30) + "...</span>";
+		            		}else{
+		        				return data;
+		        			}
+		            	},
+		            },
 		            {"title":"总数量",width:'100',"class":"center","data":"total_qty","defaultContent": ""},
 		            {"title":"已完成数量",width:'100',"class":"center","data":"finished_qty","defaultContent": "0"},
 		            {"title":"工时",width:'50',"class":"center","data":"single_hour","defaultContent": ""},
@@ -129,13 +143,13 @@ function ajaxQuery(){
 		            	},
 		            },
 		            {"title":"申请人",width:'100',"class":"center","data":"applier_name","defaultContent": ""},
-		            {"title":"申请时间",width:'100',"class":"center","data":"apply_date","defaultContent": ""},
+		            {"title":"申请时间",width:'150',"class":"center","data":"apply_date","defaultContent": ""},
 		            {"title":"工单状态",width:'100',"class":"center","data":"status","defaultContent": "",
 		            	"render": function ( data, type, row ) {
 		            		return status_arr[data];
 		            	},
 		            },
-		            {"title":"操作",width:'100',"class":"center","data":null,"defaultContent": "",
+		            {"title":"操作",width:'60',"class":"center","data":null,"defaultContent": "",
 		            	"render": function ( data, type, row ) {
 		            		return "<i class=\"glyphicon glyphicon-check bigger-130 showbus\" title=\"审核\" onclick='verifyWorkTime(\"" + row['id'] + "\",\"" + row['tmp_order_no'] + "\",\"" + row['labors'] + "\",\""+ row['reason_content'] +"\",\""+ row['single_hour'] +"\",\""+ row['total_qty'] +"\",\""+ row['finished_qty'] +"\",\""+ row['workhour_total'] +"\",\""+ row['factory'] +"\",\""+ row['workshop'] +"\",\""+ row['tech_list'] +"\")' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;";
 		            	},
@@ -203,6 +217,12 @@ function btnVerifyConfirm(id,factory,workshop){
 	var edit_list=getSelectList();
 	var orderStaus="verify";
 	var workDate=$("#edit_workDate").val();
+	var tech_single_price = $("#edit_singlePrice").val();
+	if(!const_float_validate.test(tech_single_price)){
+		alert("请输入有效工时单价！");
+		$("#edit_singlePrice").focus();
+		return false;
+	}
 	var conditions={};
 	conditions.factory=factory;
 	conditions.workshop=workshop;
@@ -221,7 +241,7 @@ function btnVerifyConfirm(id,factory,workshop){
 		return false;
 	}
 	if(edit_list.length>0){
-		ajaxUpdate(JSON.stringify(edit_list),JSON.stringify(conditions),"verify",id,orderStaus);
+		ajaxUpdate(JSON.stringify(edit_list),JSON.stringify(conditions),"verify",id,orderStaus,tech_single_price);
 	}else{
 		alert("请选择工时信息！");
 	}	
@@ -248,7 +268,7 @@ function btnRejectConfirm(id,factory,workshop){
 	}
 }
 
-function ajaxUpdate(swhlist,conditions,whflag,tempOrderId,orderStatus) {
+function ajaxUpdate(swhlist,conditions,whflag,tempOrderId,orderStatus,tech_single_price) {
 	$.ajax({
 		url : "updateStaffTmpHourInfo",
 		dataType : "json",
@@ -258,7 +278,8 @@ function ajaxUpdate(swhlist,conditions,whflag,tempOrderId,orderStatus) {
 			"conditions" : swhlist,
 			"whflag":whflag,
 			"tempOrderId":tempOrderId,
-			"tempOrderStaus":orderStatus
+			"tempOrderStaus":orderStatus,
+			"tech_single_price":tech_single_price
 		},
 		success : function(response) {
 			ajaxCaculateSalary(conditions);

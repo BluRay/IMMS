@@ -1,7 +1,7 @@
 var pageSize=1;
 var table;
 var toolList;
-var table_height = $(window).height()-340;
+var table_height = $(window).height()-240;
 var busNoArray = new Array();
 var planLeft;
 $(document).ready(function () {	
@@ -487,6 +487,7 @@ function ajaxQuery(){
 			var param ={
 				"draw":1,
 				"factory":$("#search_factory").val(),
+				"status":$("#search_status").val(),
 				"bustype":'',
 				"order_no":$("#search_order_no").val(),
 				"start_date":$("#start_date").val(),

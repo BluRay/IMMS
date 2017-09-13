@@ -1,4 +1,4 @@
-CREATE DEFINER=`root`@`%` PROCEDURE `P_CACULATE_PIECE_SALLARY_3`(in q_factory varchar(100),in q_workshop varchar(100),in q_workgroup varchar(100),in q_team varchar(100),in q_month varchar(10))
+CREATE DEFINER=`bmsadmin`@`%` PROCEDURE `P_CACULATE_PIECE_SALLARY_3`(in q_factory varchar(100),in q_workshop varchar(100),in q_workgroup varchar(100),in q_team varchar(100),in q_month varchar(10))
 BEGIN		
 	declare v_sql varchar(20000);
 	declare cal_status varchar(1);
@@ -35,16 +35,6 @@ BEGIN
 	#select * from staff_hours_count;
 
 	#班组计件工资总额：班组承包单价*车间产量  本车间产量：以计划科发出的产量数量为准
-
-
-
-
-
-
-
-
-
-
 
 	drop TEMPORARY TABLE IF EXISTS TEAM_PRICE_SUM;
 	create TEMPORARY TABLE TEAM_PRICE_SUM ENGINE = MEMORY as
@@ -109,9 +99,9 @@ BEGIN
 	from staff_hours_count h 
 	left join BMS_HR_STAFF_ATTENDANCE a on h.staff_number=a.staff_number and locate(a.month,h.work_date)>0)tmp ;
 
-	select * from TEAM_PRICE_SUM;
-	select total_basic_salary;
-	select * from WORK_HOUR_SUM;
+	#select * from TEAM_PRICE_SUM;
+	#select total_basic_salary;
+	#select * from WORK_HOUR_SUM;
 	set cal_status=1;
 	#删除小班组下计算月份下的工资
 	delete from BMS_HR_PIECE_SALARY where factory=q_factory and workshop=q_workshop and workgroup=q_workgroup and team=q_team and work_date=q_month and salary_model='底薪模式';

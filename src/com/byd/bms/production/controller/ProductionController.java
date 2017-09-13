@@ -2670,6 +2670,7 @@ public class ProductionController extends BaseController {
 		String whflag = request.getParameter("whflag");
 		String tempOrderStaus = request.getParameter("tempOrderStaus");
 		String tempOrderId = request.getParameter("tempOrderId");
+		String tech_single_price = request.getParameter("tech_single_price");
 		
 		JSONArray jsonArray=JSONArray.fromObject(conditions);
 		List<Map<String,Object>> swh_list=new ArrayList<Map<String,Object>>();
@@ -2679,6 +2680,7 @@ public class ProductionController extends BaseController {
 			 if("verify".equals(whflag)){
 				 object.put("approver_id", editorId);
 				 object.put("approve_date", createTime);
+				 object.put("tech_single_price", tech_single_price);
 				 object.put("status", "1");
 				 object.put("actionType", "verify");
 			 }else if("reject".equals(whflag)){

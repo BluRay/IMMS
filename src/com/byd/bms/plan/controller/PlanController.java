@@ -801,6 +801,7 @@ public class PlanController extends BaseController{
 		condMap.put("start", start);
 		condMap.put("length", length);
 		condMap.put("factory", request.getParameter("factory"));
+		condMap.put("status", request.getParameter("status"));
 		condMap.put("id", request.getParameter("id"));
 		condMap.put("bustype", request.getParameter("bustype"));
 		condMap.put("order_no", request.getParameter("order_no"));

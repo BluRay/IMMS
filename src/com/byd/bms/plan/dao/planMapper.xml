@@ -1175,7 +1175,7 @@
 		LEFT OUTER JOIN BMS_BASE_FACTORY F ON P.factory_id = F.id
 		LEFT OUTER JOIN BMS_OR_ORDER O ON P.order_id = O.id
 		LEFT OUTER JOIN BMS_BASE_BUS_TYPE T ON O.bus_type_id = T.id
-		WHERE 1=1 
+		WHERE P.status = #{status}
 		<if test="id !=null and id !=''">
 			AND P.id = #{id}
 		</if>
@@ -1204,7 +1204,7 @@
 		LEFT OUTER JOIN BMS_BASE_FACTORY F ON P.factory_id = F.id
 		LEFT OUTER JOIN BMS_OR_ORDER O ON P.order_id = O.id
 		LEFT OUTER JOIN BMS_BASE_BUS_TYPE T ON O.bus_type_id = T.id
-		WHERE 1=1 
+		WHERE P.status = #{status}
 		<if test="id !=null and id !=''">
 			AND P.id = #{id}
 		</if>
