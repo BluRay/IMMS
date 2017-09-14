@@ -3,7 +3,7 @@ $(document).ready(function () {
 	
 	function initPage(){
 		getBusNumberSelect('#nav-search-input');
-		getFactorySelect("plan/exceptionManager",'',"#search_factory",null,'id');
+		getFactorySelect("plan/exceptionManager",'',"#search_factory","全部",'id');
 		getWorkshopSelect("plan/exceptionManager",$("#search_factory :selected").text(),"","#search_workshop","全部","id");
 		setSelects();
 	};
@@ -288,8 +288,8 @@ function initTable() {
         	$("#workshop option").each(function(){
         		workshopAll+=$(this).text()+",";
         	});
-        	params["factory"] = $("#search_factory :selected").text(); 
-        	params["workshop"] = $("#search_workshop :selected").text(); 
+        	params["factory"] = ($("#search_factory :selected").text()=="全部")?"":$("#search_factory :selected").text(); ; 
+        	params["workshop"] = ($("#search_workshop :selected").text()=="全部")?"":$("#search_workshop :selected").text(); 
         	params["line"] = $("#search_line").val(); 
         	params["bus_number"] = $("#search_busnumber").val(); 
         	params["severity_level_id"] = $("#search_severity_level").val(); 

@@ -1194,7 +1194,7 @@
 		<if test="end_date !=null and end_date !=''">
 			AND P.dispatch_date &lt;= #{end_date}
 		</if>
-		GROUP BY P.id
+		GROUP BY P.id ORDER BY P.dispatch_date DESC
 		<if test="start !=null">
 			LIMIT #{start} ,#{length} 
 		</if>	

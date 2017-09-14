@@ -543,7 +543,7 @@
 	<select id="getTmpReportData" parameterType="Map" resultType="Map">
 		select distinct O.tmp_order_no,S.total_hours as totalhours,S.total_hours*S.hour_price as totalprice,
 		S.work_date,S.staff_number,S.staff_name,S.job,S.workshop_org,S.workgroup_org,S.team_org,S.reason_content,
-		round(S.work_hour,2) as work_hour,round(S.hour_price*S.work_hour,2) as salary,
+		round(S.work_hour,2) as work_hour,round(S.hour_price*S.real_work_hour,2) as salary,
 		S.plant_org,round(S.real_work_hour,2) as real_work_hour
 		from BMS_HR_TMP_SALARY S
 		LEFT OUTER JOIN BMS_PD_TMP_ORDER O ON S.order_id = O.id
@@ -592,7 +592,7 @@
 		select distinct O.tmp_order_no tmp_order_num,S.total_hours as totalhours,S.total_hours*S.hour_price as totalprice,
 		S.work_date,S.staff_number,S.staff_name,S.job,S.workshop_org,S.workgroup_org,S.team_org,S.skill_parameter,
 		round(S.work_hour,2) as work_hour,
-		round(S.hour_price*S.work_hour,2) as salary,S.plant_org,round(S.real_work_hour,2) as real_work_hour
+		round(S.hour_price*S.real_work_hour,2) as salary,S.plant_org,round(S.real_work_hour,2) as real_work_hour
 		from BMS_HR_TMP_SALARY S
 		LEFT OUTER JOIN BMS_PD_TMP_ORDER O ON S.order_id = O.id
 		where 1=1
