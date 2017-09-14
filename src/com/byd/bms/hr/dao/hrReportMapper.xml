@@ -549,6 +549,9 @@
 		LEFT OUTER JOIN BMS_PD_TMP_ORDER O ON S.order_id = O.id
 		where
 		1=1
+		<if test="task !=null and task !=''">
+			and O.tmp_order_no LIKE CONCAT('%',#{task},'%') 
+		</if>
 		<if test="factory !=null and factory !=''">
 			and S.factory=#{factory}
 		</if>

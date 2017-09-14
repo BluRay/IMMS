@@ -82,12 +82,13 @@ $(document).ready(function() {
 		
 		var tr=$("<tr />");
 		if(salary_model=='技能系数'){
-			var price=$(tr1).children("td").eq(4).html();
+			//var price=$(tr1).children("td").eq(4).html();
+			
 			$("<td class='center'/>").html("<i class=\"fa fa-times bigger-110\" style=\"cursor: pointer;color: red;\"></i>").appendTo(tr);
 			$("<td class='center'/>").html("<input type='text' class='staff_number' style='width:100%;height:28px;margin: 0;font-size:12px;text-align:center;' />").appendTo(tr);
 			$("<td class='center'/>").html("").appendTo(tr);
 			$("<td class='center'/>").html("").appendTo(tr);
-			$("<td class='center'/>").html(price).appendTo(tr);
+			$("<td class='center'/>").html(standard_price).appendTo(tr);
 			$("<td class='center'/>").html("").appendTo(tr);
 			$("<td class='center'/>").html("<input class='input-medium work_hour' style='width:60px;height:28px;text-align:center' type='text'>"+
 					"<input id='copy_paste' class='input-small' style='width:60px;height:28px;text-align:center;display:none' type='text'>").appendTo(tr);
@@ -97,12 +98,12 @@ $(document).ready(function() {
 			$("<td class='center'/>").html("").appendTo(tr);
 		}
 		if(salary_model=='承包制'){
-			var price=$(tr1).children("td").eq(4).html();
+			//var price=$(tr1).children("td").eq(4).html();
 			$("<td class='center'/>").html("<i class=\"fa fa-times bigger-110\" style=\"cursor: pointer;color: red;\"></i>").appendTo(tr);
 			$("<td class='center'/>").html("<input type='text' class='staff_number' style='width:100%;height:28px;margin: 0;font-size:12px;text-align:center;' />").appendTo(tr);
 			$("<td class='center'/>").html("").appendTo(tr);
 			$("<td class='center'/>").html("").appendTo(tr);
-			$("<td class='center'/>").html(price).appendTo(tr);
+			$("<td class='center'/>").html(standard_price).appendTo(tr);
 			$("<td class='center'/>").html("<input class='input-medium distribution' style='width:60px;height:28px;text-align:center' type='text'>"+
 					"<input id='copy_paste' class='input-small' style='width:60px;height:28px;text-align:center;display:none' type='text'>").appendTo(tr);
 			$("<td class='center'/>").html("").appendTo(tr);

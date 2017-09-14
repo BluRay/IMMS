@@ -102,7 +102,7 @@ function ajaxQuery(){
 	var fixedColumns={};
 	var rowsGroup=[];
 	columns= [
-        {"title":"技改单","class":"center","width":"160","data":"tmp_order_no","defaultContent": ""},
+        {"title":"派工流水号/作业内容","class":"center","width":"160","data":"tmp_order_no","defaultContent": ""},
         {"title":"总工时","class":"center","data":"totalhours","defaultContent": ""},
         {"title":"总费用","class":"center","data":"totalprice","defaultContent": ""},
         {"title":"操作日期","class":"center","data":"work_date","defaultContent": ""},

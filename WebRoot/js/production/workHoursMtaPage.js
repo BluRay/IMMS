@@ -775,13 +775,13 @@ function generateWorkhourTb(swhlist, caculate) {
 }
 
 function nextEditWorkHours(e,obj){
-	console.log("-->nextEditWorkHours");	
+	//console.log("-->nextEditWorkHours");	
 	e = e ? e : window.event;
     var keyCode = e.which ? e.which : e.keyCode;
 	
 	if(keyCode==13){
 	//if (event.keyCode == "13") {
-		$(obj).parent().parent().next().find("input").focus();
+		$(obj).parent().parent().next().find("input").focus().select();
 	}
 }
 
