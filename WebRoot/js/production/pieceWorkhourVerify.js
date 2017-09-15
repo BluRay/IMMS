@@ -232,6 +232,36 @@ function showStaffList(staff_hour_list){
 		          ]	;
 	}
 	
+	if(salary_model=='自制件承包'){
+		fixedColumns={
+	            leftColumns: 5,
+	            rightColumns:0
+	        };
+		rowsGroup=[0,1,2,3,4];
+		columns= [
+		            {"title":"<input id=\"checkall\" type=\"checkbox\" />","width":"30","class":"center","data":"bus_number","defaultContent": "","render":function(data,type,row){
+		            	return "<input  type=\"checkbox\" bus='"+row.bus_number+"'/>";
+		            }},
+		            {"title":"车号","class":"center","data":"bus_number","defaultContent": ""},
+		            {"title":"操作日期","class":"center","data":"work_date","defaultContent": ""},
+		            {"title":"单价","width":"60","class":"center","data":"standard_price","defaultContent": ""},
+		            {"title":"补贴车","width":"60","class":"center","data":"bonus","defaultContent": ""/*,"render":function(data,type,row){
+		            	return "<input type='text' class='input-medium bonus' style='width:60px;height:28px;text-align:center' value='"+data+"' />";
+		            }*/},
+		            {"title":"工号","class":"center","data":"staff_number","defaultContent": ""},
+		            {"title":"姓名","class":"center","data":"staff_name","defaultContent": ""},
+		            {"title":"岗位","class":"center","data": "job","defaultContent": ""},   
+		            {"title":"参与度<br/>/工时","class":"center","data": "work_hour","defaultContent": ""},
+		            {"title":"分配金额","width":"70","class":"center","data": "distribution","defaultContent": ""/*,"render":function(data,type,row){
+		            	return "<input type='text' class='input-medium distribution' style='width:60px;height:28px;text-align:center'  value='"+data+"'/>"
+		            }*/},
+		            {"title":"计件工资","width":"70","class":"center","data": "ppay","defaultContent": ""},
+		            {"title":"车间","class":"center","data":"workshop_org","defaultContent":""},
+		            {"title":"工厂","class":"center","data":"plant_org","defaultContent": ""},
+		         
+		          ]	;
+	}
+	
 	$("#tableResult").DataTable({
 		paiging:false,
 		ordering:false,

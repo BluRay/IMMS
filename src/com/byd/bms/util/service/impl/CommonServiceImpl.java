@@ -24,10 +24,15 @@ import com.byd.bms.order.model.BmsOrderReviewResults;
 import com.byd.bms.setting.dao.IBaseDataDao;
 import com.byd.bms.snaker.engine.SnakerEngineFacets;
 import com.byd.bms.util.DataSource;
+import com.byd.bms.util.SAPConn;
 import com.byd.bms.util.dao.ICommonDao;
 import com.byd.bms.util.model.BmsBaseProcess;
 import com.byd.bms.util.model.BmsBaseTask;
 import com.byd.bms.util.service.ICommonService;
+import com.sap.conn.jco.JCoDestination;
+import com.sap.conn.jco.JCoFunction;
+import com.sap.conn.jco.JCoParameterList;
+import com.sap.conn.jco.JCoTable;
 @Service
 @DataSource("dataSourceMaster")
 public class CommonServiceImpl implements ICommonService {
@@ -542,6 +547,82 @@ public class CommonServiceImpl implements ICommonService {
 		datalist=commonDao.queryRoleListAuth(staff_number);
 		model.put("data", datalist);
 		
+	}
+	@Override
+	public List<Map<String,Object>>  getOrderBOM(Map<String, Object> condMap){
+		List<Map<String,Object>> datalist=new ArrayList<Map<String,Object>>();
+		// 首先查询BMS_OR_ORDER_BOM表是否已存在订单BOM信息
+		datalist = commonDao.queryOrderBOM(condMap);
+		
+		if(null == datalist || datalist.size()<=0){
+			//获取订单编号、配置行项目号
+			Map<String,Object> orderInfoMap = commonDao.queryOrderConfigLineNo(condMap);
+			if(null == orderInfoMap.get("line_no")){
+				//订单未导入配置，无法获取BOM信息
+				return datalist;
+			}
+			System.out.println("订单编号--->"+orderInfoMap.get("order_no")+";配置行项目号--->"+orderInfoMap.get("line_no"));  
+			//调用SAP接口实时从SAP获取
+		    JCoFunction function = null;  
+		    JCoDestination destination = SAPConn.connect();  
+		    String result="";//调用接口返回状态  
+		    String message="";//调用接口返回信息  
+	        try {  
+	            //调用ZMMWK_D19_001函数  
+	            function = destination.getRepository().getFunction("ZMMWK_D19_001");  
+	            JCoParameterList input = function.getImportParameterList();  
+	            //传入订单编号参数  
+	            input.setValue("IHREZ_E", "D2017095");  
+	            //传入订单配置行项目号
+	            input.setValue("POSEX_E", "000010");  
+	              
+	            function.execute(destination);  
+/*	            result= function.getExportParameterList().getString("RESULT");//调用接口返回状态  
+	            message= function.getExportParameterList().getString("MESSAGE");//调用接口返回信息  
+	            System.out.println("调用返回状态--->"+result+";调用返回信息--->"+message);  
+	            
+	            if(result.equals("E")){  
+	                System.out.println("调用返回状态--->"+result+";调用返回信息--->"+message);  
+	                return datalist;  
+	            }else{  
+	                System.out.println("调用返回状态--->"+result+";调用返回信息--->"+message);  */
+	                //JCoParameterList tblexport = function.getTableParameterList();  
+                JCoParameterList outputParam = function.getTableParameterList();  
+                JCoTable bt = outputParam.getTable("IT_ZSDD143");  
+                for (int i = 0; i < bt.getNumRows(); i++) {  
+                    bt.setRow(i);  
+                    Map<String,Object> map = new HashMap<String,Object>();  
+                    if(!"X".equals(bt.getString("DELETION_INDICATOR"))){
+                        map.put("material",bt.getString("MATERIAL"));  
+                        map.put("material_des", bt.getString("MAKTX"));
+                        map.put("product_factory",bt.getString("PROD_PLANT"));  
+                        map.put("req_qty",bt.getString("REQ_QUAN"));  
+                        map.put("unit",bt.getString("BASE_UOM")); 
+                        map.put("pp_order",bt.getString("ORDER_NUMBER")); 
+                        map.put("req_date",bt.getString("REQ_DATE")); 
+                        map.put("sales_order",bt.getString("SALES_ORDER")); 
+                        map.put("sales_order_no",bt.getString("SALES_ORDER_ITEM")); 
+                        map.put("reservation",bt.getString("RESERVATION_NUMBER")); 
+                        map.put("reservation_no",bt.getString("RESERVATION_ITEM")); 
+                        map.put("back_flush",bt.getString("BACKFLUSH")); 
+                        map.put("order_no", orderInfoMap.get("order_no"));
+                        map.put("line_no", orderInfoMap.get("line_no"));
+                        map.put("order_id", condMap.get("order_id"));
+                        
+                        datalist.add(map);  
+                    }
+                } 
+	            input.clear();//清空本次条件，如果要继续传入值去或者还要循环，那得将之前的条件清空  
+	            if(datalist.size()>0){
+	            	//读取的BOM数据写入BMS系统BMS_OR_ORDER_BOM
+	            	commonDao.insertOrderBOM(datalist);
+	            }
+	        }catch (Exception e) {  
+	            e.printStackTrace();  
+	        }
+		}
+		
+		return datalist;
 	}
 	
 	@Override

@@ -140,6 +140,8 @@ public interface ICommonService {
 	 * @param model
 	 */
 	void getRoleListAuth(String staff_number, ModelMap model);
+	
+	public List<Map<String,Object>> getOrderBOM(Map<String, Object> condMap);
 
 	/**
 	 * @author xiong.jianwu

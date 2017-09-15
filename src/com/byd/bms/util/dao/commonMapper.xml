@@ -841,6 +841,30 @@
 		WHERE ur.staff_number=#{staff_number}
 	</select>
 	
+	<select id="queryOrderBOM" parameterType="Map" resultType="Map">
+		SELECT * FROM BMS_OR_ORDER_BOM b
+		LEFT JOIN BMS_OR_ORDER_CONFIG c ON b.order_id = c.order_id AND b.line_no = c.line_no AND c.id = #{order_config_id} 
+		WHERE b.order_id = #{order_id}
+	</select>
+	<select id="queryOrderConfigLineNo" parameterType="Map" resultType="Map">
+		SELECT o.order_no,c.line_no FROM BMS_OR_ORDER o
+		LEFT JOIN BMS_OR_ORDER_CONFIG c ON c.order_id = o.id AND c.id = #{order_config_id} 
+		WHERE o.id = #{order_id}
+	</select>
+	
+	<insert id="insertOrderBOM"  parameterType="Map"  useGeneratedKeys="true"  keyProperty="id" >
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into BMS_OR_ORDER_BOM 
+		(order_id,order_no,line_no,product_factory,sales_order,sales_order_no,pp_order,reservation,reservation_no,material,material_des,req_qty,req_date,unit,back_flush)
+		values
+		<foreach collection="list" item="detail" index="index" separator=",">
+			(#{detail.order_id},#{detail.order_no},#{detail.line_no},#{detail.product_factory},#{detail.sales_order},#{detail.sales_order_no},#{detail.pp_order},#{detail.reservation},#{detail.reservation_no},#{detail.material},#{detail.material_des},#{detail.req_qty},#{detail.req_date},#{detail.unit},#{detail.back_flush})
+		</foreach>		
+	</insert>
+	
 	<select id="queryWorkgroupPrice" parameterType="Map" resultType="Map">
 		select * from BMS_HR_WORKGROUP_PRICE
 		where factory=#{factory} and workshop=#{workshop}

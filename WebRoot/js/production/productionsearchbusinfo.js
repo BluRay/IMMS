@@ -53,6 +53,9 @@ $(document).ready(function () {
 		}else if(this.id == "div10"){
 			cur_tab = "10";
 			ajaxQueryTab10();
+		}else if(this.id == "div12"){
+			cur_tab = "12";
+			ajaxQueryTab12();
 		}
 	});
 	
@@ -71,6 +74,7 @@ $(document).ready(function () {
 		if(cur_tab == "08")ajaxQueryTab08();
 		if(cur_tab == "09")ajaxQueryTab09();
 		if(cur_tab == "10")ajaxQueryTab10();
+		if(cur_tab == "12")ajaxQueryTab12();
 	});
 	
 });
@@ -87,6 +91,8 @@ function ajaxQuery(){
 		    },
 		    success:function(response){
 		    	$.each(response.data,function (index,value) {
+		    		$('#order_id').val(value.order_id);
+		    		$('#order_config_id').val(value.order_config_id);
 		    		$("#tab01_order_no").html(value.order_no + " " + value.order_name + value.bus_type_code + value.order_qty + "辆");
 		    		$("#tab01_bus_number").html(value.bus_number);
 		    		$("#tab01_vin").html(value.vin);
@@ -369,6 +375,31 @@ function ajaxQueryTab10(){
     			$("<td style=\"text-align:center;padding:3px\" />").html(value.confirmor_date).appendTo(tr);
     			$("#table10 tbody").append(tr);
     		});	
+	    }
+	});
+	
+}
+
+function ajaxQueryTab12(){
+	var order_id = $('#order_id').val();
+	var order_config_id = $('#order_config_id').val();
+	$.ajax({
+		url:"/BMS/common/getOrderBOM",
+		dataType: "json",
+		data: {"order_id" : order_id,"order_config_id":order_config_id},
+		type: "get",
+	    success:function(response){
+	    	$("#table12 tbody").html("");
+	    	$.each(response.data,function (index,value) {
+	    		var tr = $("<tr height='30px' id= '"+value.id+"'/>");
+    			$("<td style=\"text-align:center;padding:3px\" />").html(index + 1).appendTo(tr);
+    			$("<td style=\"text-align:center;padding:3px\" />").html(value.material).appendTo(tr);
+    			$("<td style=\"text-align:center;padding:3px\" />").html(value.material_des).appendTo(tr);
+    			$("<td style=\"text-align:center;padding:3px\" />").html(value.req_qty).appendTo(tr);
+    			$("<td style=\"text-align:center;padding:3px\" />").html(value.unit).appendTo(tr);
+    			$("<td style=\"text-align:center;padding:3px\" />").html(value.pp_order).appendTo(tr);
+    			$("#table12 tbody").append(tr);
+	    	});
 	    }
 	});
 	

@@ -62,10 +62,10 @@
 								   <input id="search_date_end" placeholder="结束时间..." style="width:90px" type="text" onClick="WdatePicker({el:'search_date_end',dateFmt:'yyyy-MM-dd'});">&nbsp;</td>
 								<td>
 								<td>
-								    S：<input type="checkbox" name="search_bugLevel" value="S" />&nbsp;&nbsp;
-									A：<input type="checkbox" name="search_bugLevel" value="A" />&nbsp;&nbsp;
-									B：<input type="checkbox" name="search_bugLevel" value="B" />&nbsp;&nbsp;
-									C：<input type="checkbox" name="search_bugLevel" value="C" />
+								    <input type="checkbox" name="search_bugLevel" value="S" />&nbsp;S&nbsp;
+									<input type="checkbox" name="search_bugLevel" value="A" />&nbsp;A&nbsp;
+									<input type="checkbox" name="search_bugLevel" value="B" />&nbsp;B&nbsp;
+									<input type="checkbox" name="search_bugLevel" value="C" />&nbsp;C
 								
 								<td>
 								   <input id="btnQuery" type="button" class="btn btn-sm btn-primary" value="查询" style="margin-left: 10px;"></input>

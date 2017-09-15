@@ -27,6 +27,7 @@ public interface IOrderDao {
 	public int getConfigTotalCount(Map<String, Object> condMap);
 	public List queryConfigDetailList(String configId);
 	public int saveOrderConfig(Map<String, Object> configDetail);
+	public String getMaxOrderLineNo(Map<String, Object> configDetail);
 	public void saveConfigDetails(Map<String, Object> smap);
 	public void updateOrderConfig(Map<String, Object> configDetail);
 	public void deleteConfigDetailById(int config_id);

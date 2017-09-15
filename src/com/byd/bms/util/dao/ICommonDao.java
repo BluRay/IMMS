@@ -113,6 +113,11 @@ public interface ICommonDao {
 	public List<Map<String,String>> queryStaffInfo(Map<String, Object> conditionMap);//查询员工信息
 
 	List<Map<String, Object>> queryRoleListAuth(@Param("staff_number")String staff_number);
+	
+	public List<Map<String,Object>>  queryOrderBOM(Map<String, Object> condMap);
+	public Map<String,Object>  queryOrderConfigLineNo(Map<String, Object> condMap);
 
 	List<Map<String, Object>> queryWorkgroupPrice(Map<String, Object> conditionMap);
+	
+	int insertOrderBOM(List<Map<String,Object>> datalist);
 }

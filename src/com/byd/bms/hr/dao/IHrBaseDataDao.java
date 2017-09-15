@@ -17,6 +17,8 @@ public interface IHrBaseDataDao {
 	
 	public int editOrgData(Map<String,Object> queryMap);
 	
+	public int updateOrgDataName(Map<String,Object> queryMap);
+	
 	public int deleteOrgData(Map<String,Object> conditionMap);
 	
 	public int addPositionData(Map<String,Object> conditionMap);

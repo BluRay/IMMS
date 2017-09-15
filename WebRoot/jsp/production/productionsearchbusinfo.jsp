@@ -43,7 +43,10 @@
 						<table>
 							<tr>
 								<td>车号/VIN号：</td>
-								<td><input id="search_busnumber" placeholder="请输入车号/VIN号..." style="height: 30px;width:200px" type="text"></td>
+								<td><input id="search_busnumber" placeholder="请输入车号/VIN号..." style="height: 30px;width:200px" type="text">
+								<input id="order_id"   type="hidden">
+								<input id="order_config_id"   type="hidden">
+								</td>
 								<td><input id="btnQuery" type="button" class="btn btn-sm btn-success" value="查询" style="margin-left: 2px;"></td>
 								<td></td>
 							</tr>
@@ -63,6 +66,7 @@
 							<li id="div9"><a data-toggle="tab" href="#div_9">异常信息</a></li>
 							<li id="div10"><a data-toggle="tab" href="#div_10">技改信息</a></li>
 							<li id="div11"><a data-toggle="tab" href="#div_11">车辆监控信息</a></li>
+							<li id="div12"><a data-toggle="tab" href="#div_12">整车BOM信息</a></li>
 						</ul>
 						
 						<div class="tab-content" id="tab-content">
@@ -338,6 +342,23 @@
 										<td style="text-align: right;">刹车灯：</td><td id=""></td>
 										<td style="text-align: right;">前雾灯：</td><td id=""></td>
 									</tr>
+								</table>
+							</div>
+							
+							<div id="div_12" style="overflow:auto" class="tab-pane fade">
+								<table id="table12" class="table table-bordered" style="font-size: 12px;">
+									<thead>
+										<tr>
+											<th style="text-align:center;">序号</th>
+											<th style="text-align:center;">料号</th>
+											<th style="text-align:center;">物料描述</th>
+											<th style="text-align:center;">用量</th>
+											<th style="text-align:center;">单位</th>
+											<th style="text-align:center;">生产订单</th>
+										</tr>
+									</thead>
+									<tbody>
+									</tbody>
 								</table>
 							</div>
 							

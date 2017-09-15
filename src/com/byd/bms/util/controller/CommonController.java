@@ -24,8 +24,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.byd.bms.util.EmailSender;
 import com.byd.bms.util.EmailSender.TableTable;
 import com.byd.bms.util.EmailSender.TableTable.TdTd;
+import com.byd.bms.util.SAPConn;
 import com.byd.bms.util.service.ICommonService;
 import com.byd.bms.util.service.impl.MailSenderServiceImpl;
+import com.sap.conn.jco.JCoDestination;
+import com.sap.conn.jco.JCoFunction;
+import com.sap.conn.jco.JCoParameterList;
+import com.sap.conn.jco.JCoTable;
 @Controller
 @RequestMapping("/common")
 @Scope("prototype") 
@@ -717,6 +722,22 @@ public class CommonController extends BaseController {
 		String staff_number = request.getSession().getAttribute("staff_number").toString();
 		commonService.getRoleListAuth(staff_number,model);
 				
+		return model;
+	}
+	
+	@RequestMapping("/getOrderBOM")
+	@ResponseBody
+	public ModelMap getOrderBOM(){ 
+		model.clear();
+		Map<String, Object> condMap = new HashMap<String, Object>();
+		condMap.put("order_id", request.getParameter("order_id"));
+		condMap.put("order_config_id", request.getParameter("order_config_id"));
+		List<Map<String,Object>> datalist = commonService.getOrderBOM(condMap);
+		Map<String, Object> result = new HashMap<String,Object>();
+		result.put("data", datalist);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(result);
+		model = mv.getModelMap();
 		return model;
 	}
 	

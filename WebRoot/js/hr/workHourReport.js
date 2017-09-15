@@ -173,6 +173,23 @@ function ajaxQuery(){
 	             }   
             }
         ],
+        "fnDrawCallback":function(){
+        	var trs=$("#tableResult tbody").find("tr");
+        	$.each(trs,function(i,tr){
+        		var r=i%5;
+        		if(r==4){
+        			for(var i=4;i<35;i++){
+        				var td=$(tr).children().eq(i).text();
+                	    var pretd=$(tr).prev().prev().prev().prev().children().eq(i).text();
+                	    if(pretd!=''){
+                	    	if(parseFloat(pretd)>parseFloat(td!='' ? td : 0)){
+                	    		$(tr).children().eq(i).css('background-color', 'red');
+                	    	}
+                	    }
+        			}
+            	}
+        	});
+        },
 		ajax:function (data, callback, settings) {
 			
 			var param ={
@@ -216,6 +233,7 @@ function ajaxQuery(){
 		columns: columns,
 	});
 	$(".dt-buttons").css("margin-top","-50px").find("a").css("border","0px");
+	
 }
 /**
  * 获取上一个月

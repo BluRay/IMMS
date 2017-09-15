@@ -41,7 +41,6 @@ String display_name = (String)session.getAttribute("display_name");
 					<a href="#" class="navbar-brand">
 						<small>
 							<img style="width: 110px;height:35px;margin-top:-10px" alt="" src="<%=basePath%>/images/bydlogo.png">
-							
 						</small>
 					</a>
 

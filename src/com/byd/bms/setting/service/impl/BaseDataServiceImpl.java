@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 
+import com.byd.bms.hr.dao.IHrBaseDataDao;
 import com.byd.bms.order.model.BmsOrder;
 import com.byd.bms.setting.dao.IBaseDataDao;
 import com.byd.bms.setting.model.BmsBaseBusType;
@@ -26,6 +27,8 @@ import com.byd.bms.util.DataSource;
 public class BaseDataServiceImpl implements IBaseDataService {
 	@Resource(name="baseDataDao")
 	private IBaseDataDao baseDataDao;
+	@Resource(name="hrBaseDataDao")
+	private IHrBaseDataDao hrBaseDataDao;
 	
 	//工厂
 	@Override
@@ -274,7 +277,14 @@ public class BaseDataServiceImpl implements IBaseDataService {
 	}
 	@Override
 	public int updateWorkgroup(BmsBaseStandardWorkgroup workgroup) {
-		return baseDataDao.updateWorkgroup(workgroup);
+		int result=baseDataDao.updateWorkgroup(workgroup);
+		if(result>0){
+			Map<String,Object> map=new HashMap<String,Object>();
+			map.put("id", workgroup.getId());
+			map.put("name", workgroup.getGroupName());
+			hrBaseDataDao.updateOrgDataName(map);
+		}
+		return result;
 	}
 	@Override
 	public void deleteWorkgroup(List ids) {

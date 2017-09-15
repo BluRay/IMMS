@@ -884,6 +884,9 @@ public class ProductionController extends BaseController {
 		if("底薪模式".equals(salary_model)){
 			productionService.saveStaffHours_cal3(str_staffHours,edit_date,editor_id,model);
 		}
+		if("自制件承包".equals(salary_model)){
+			productionService.saveStaffHours_cal4(str_staffHours,edit_date,editor_id,model);
+		}
 
 		return model;
 	}
@@ -968,6 +971,9 @@ public class ProductionController extends BaseController {
 		}
 		if("底薪模式".equals(salary_model)){
 			productionService.updateStaffHours_cal3(str_staffHours,edit_date,editor_id,model);
+		}
+		if("自制件承包".equals(salary_model)){
+			productionService.updateStaffHours_cal4(str_staffHours,is_customer,edit_date,editor_id,model);
 		}
 		return model;
 	}
@@ -2725,6 +2731,8 @@ public class ProductionController extends BaseController {
 			String key=(String) it.next();
 			conditionMap.put(key, jo.get(key));
 		}
+		conditionMap.put("workgroup", "");
+		conditionMap.put("team", "");
 		productionService.caculateTmpSalary(conditionMap);
 		return model;
 	}

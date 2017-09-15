@@ -186,11 +186,9 @@ jQuery(function($) {
 		.on('closed', function(e) {
 		});
 	}
-	$(".a").on('mousedown', function(e) {
-		alert("a");
-	});
+	
 	$.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
-		_title: function(title) {
+		_title: function(title){
 			var $title = this.options.title || '&nbsp;'
 			if( ("title_html" in this.options) && this.options.title_html == true )
 				title.html($title);
@@ -269,9 +267,8 @@ jQuery(function($) {
 								text: '<h5>编辑成功！</h5>',
 								class_name: 'gritter-info'
 							});
-					    	//showtree2();
 					    	getWorkgroupListById($("#new_parentId").val(),$("#new_workshopId").val());
-
+					    	showtree2();
 					    	}else{
 					    		$.gritter.add({
 									title: '系统提示：',
@@ -316,8 +313,8 @@ jQuery(function($) {
 		    success:function(response){
 
 		    	$("#dialog-confirm").dialog("close");
-		    	showtree2();  
 		    	getWorkgroupListById($("#new_parentId").val(),$("#new_workshopId").val());
+		    	showtree2(); 
 		    }
 		});
 	});
@@ -356,8 +353,8 @@ jQuery(function($) {
 						text: '<h5>删除成功！</h5>',
 						class_name: 'gritter-info'
 					});
-			    	showtree2();
 			    	getWorkgroupListById($("#new_parentId").val(),$("#new_workshopId").val());
+			    	showtree2();
 		    	}else{
 		    		$.gritter.add({
 						title: '系统提示：',

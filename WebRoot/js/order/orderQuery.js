@@ -44,7 +44,7 @@ function ajaxQuery(){
 		serverSide: true,
 		fixedColumns:   {
             leftColumns: 0,
-            rightColumns:2
+            rightColumns:3
         },
 		dom: 'Bfrtip',
 		lengthMenu: [
@@ -149,11 +149,13 @@ function ajaxQuery(){
 		            {"title":"总装下线","class":"center","data":"assembly_offline_count","defaultContent": ""},		            
 		            {"title":"入库","class":"center","data":"warehousing_count","defaultContent": ""},		            
 		            {"title":"发车","class":"center","data": "dispatch_count","defaultContent": ""},
-		            {"title":"车辆详情","class":"center","data":"","defaultContent":"","render":function(data,type,row){
+		            {"title":"车辆详情","width":'70',"class":"center","data":"","defaultContent":"","render":function(data,type,row){
 		            	return "<i class=\"ace-icon fa fa-search bigger-130 editorder\" onclick = 'ajaxShowBusNumber(" + row.id+ ","+row.factory_id+","+row.order_config_id+");' style='color:blue;cursor: pointer;'></i>";
+		            }},{"title":"BOM","width":'50',"class":"center","data":"","defaultContent":"","render":function(data,type,row){
+		            	return "<i class=\"ace-icon fa fa-search bigger-130 editorder\" onclick = 'ajaxShowOrderBOM(" + row.id+ ","+row.factory_id+","+row.order_config_id+");' style='color:blue;cursor: pointer;'></i>";
 		            }},
 		            
-		            {"title":"评审结果",width:'80',"class":"center","data":"review_result","render":function(data,type,row){
+		            {"title":"评审结果","width":'70',"class":"center","data":"review_result","render":function(data,type,row){
 		            	return data=="2"?"已评审":(data=="1"?"评审中":"未评审")},"defaultContent":""
 		            },
 		            ],
@@ -312,6 +314,15 @@ function initTable() {
 		    	        		return "<i class=\"ace-icon fa fa-search bigger-130 editorder\" onclick = 'ajaxShowBusNumber(" + row.id+ ","+row.factory_id+","+row.order_config_id+");' style='color:blue;cursor: pointer;'></i>";
 		    	        }
 		            },{
+		            	field: '',title: 'BOM',align: 'center',width:'80',valign: 'middle',align: 'center',
+		                sortable: false,visible: true,footerFormatter: totalTextFormatter,
+		                cellStyle:function cellStyle(value, row, index, field) {
+		    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
+		    	        },
+		    	        formatter:function(value,row,index){
+		    	        		return "<i class=\"ace-icon fa fa-search bigger-130 editorder\" onclick = 'ajaxShowOrderBOM(" + row.id+ ","+row.factory_id+","+row.order_config_id+");' style='color:blue;cursor: pointer;'></i>";
+		    	        }
+		            },{
 		            	field: '',title: '评审<br/>结果',align: 'center',width:'80',valign: 'middle',align: 'center',
 		                sortable: false,visible: true,footerFormatter: totalTextFormatter,
 		                cellStyle:function cellStyle(value, row, index, field) {
@@ -402,6 +413,84 @@ function ajaxShowBusNumber(order_id,factory_id,order_config_id){
 			}
 		}
 	})
+}
+
+function ajaxShowOrderBOM(order_id,factory_id,order_config_id){
+	$.ajax({
+		url:"/BMS/common/getOrderBOM",
+		dataType: "json",
+		data: {"order_id" : order_id,"factory_id":factory_id,"order_config_id":order_config_id},
+		async: false,
+		error: function () {alertError();},
+		success: function (response) {
+			var dialog = $( "#dialog-message2" ).removeClass('hide').dialog({
+				width:800,
+				height:500,
+				modal: true,
+				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i> BOM明细</h4></div>",
+				title_html: true,
+				buttons: [ 
+					{
+						text: "取消",
+						"class" : "btn btn-minier",
+						click: function() {
+							$( this ).dialog( "close" ); 
+						} 
+					},
+					{
+						text: "确定",
+						"class" : "btn btn-primary btn-minier",
+						click: function() {
+							$( this ).dialog( "close" ); 
+						} 
+					}
+				]
+			});
+			drawOrderBOMTable(response.data);
+		}
+	})
+}
+
+function drawOrderBOMTable(data){
+
+	var t=$("#tableBusNumber2").dataTable({
+		paiging:false,
+		showRowNumber:true,
+		ordering:false,
+		searching: false,
+		autoWidth:false,
+		destroy: true,
+		paginate:false,
+		fixedColumns: {
+            leftColumns:1,
+            rightColumns:1
+        },
+/*		sScrollY: $("#dialog-message").height()-30,
+		scrollX: true,*/
+/*		createdRow: function ( row, data, index ) {
+			//alert(index)
+			 $('td', row).	eq(1).find("input").data("allot_config_id",data.allot_config_id||0);
+			 $('td', row).	eq(1).find("input").data("order_config_id",data.order_config_id);
+        },*/
+		scrollCollapse: true,
+		lengthChange:false,
+		orderMulti:false,
+		info:false,
+		language: {
+			emptyTable:"",					     
+			infoEmpty:"",
+			zeroRecords:"未查询到订单BOM信息！"
+		},
+		data:data,
+		columns: [
+		            {"title":"料号","width":"90","class":"center","data":"material","defaultContent": ""},
+		            {"title":"物料描述","class":"center","data":"material_des","defaultContent": ""},
+		            {"title":"生产工厂","width":"80","class":"center","data":"product_factory","defaultContent": ""},
+		            {"title":"用量","width":"60","class":"center","data":"req_qty","defaultContent": ""},
+		            {"title":"单位","width":"60","class":"center","data":"unit","defaultContent": ""},
+		            {"title":"生产订单","width":"120","class":"center","data":"pp_order","defaultContent": ""}
+		          ]	      
+	});
 }
 
 function drawBusInfoTable(data){

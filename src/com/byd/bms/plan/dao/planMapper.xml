@@ -466,7 +466,7 @@
 		AND E.workshop=#{workshop}
 		</if>
 		<if test="line !='' and line !=null">
-		AND E.line=#{line}
+		AND E.line LIKE CONCAT('%',#{line},'%')
 		</if>
 		<if test="bus_number !='' and bus_number !=null">
 		AND E.bus_number=#{bus_number}

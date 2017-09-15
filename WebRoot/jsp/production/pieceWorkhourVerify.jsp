@@ -88,7 +88,7 @@
 							</div>
 							<div class="row" >
 								<div class="col-xs-12"  id="tableReusltDiv" style="padding-right:0px;">
-									<table id="tableResult" class="table table-striped table-bordered table-hover" style="table-layout:fixed;font-size: 12px; width:933px;overflow:auto;">
+									<table id="tableResult" class="table table-striped table-bordered table-hover" style="table-layout:fixed;word-wrap: break-word;font-size: 12px; width:933px;overflow:auto;">
 									</table>
 								</div>
 							</div>

@@ -299,15 +299,15 @@ function showStaffList(staff_hour_list){
 		            }},
 		            {"title":"车号","class":"center","data":"bus_number","defaultContent": ""},
 		            {"title":"操作日期","class":"center","data":"work_date","defaultContent": ""},
-		            {"title":"单价","class":"center","data":"standard_price","defaultContent": ""},
-		            {"title":"补贴车","class":"center","data":"bonus","defaultContent": "","render":function(data,type,row){
-		            	return "<input type='text' class='input-medium bonus' style='width:60px;height:28px;text-align:center' value='"+data+"' />";
+		            {"title":"单价","width":"50","class":"center","data":"standard_price","defaultContent": ""},
+		            {"title":"补贴车","width":"60","class":"center","data":"bonus","defaultContent": "","render":function(data,type,row){
+		            	return "<input type='text' class='input-medium bonus' style='width:100%;height:28px;text-align:center' value='"+data+"' />";
 		            }},
 		            {"title":"工号","class":"center","data":"staff_number","defaultContent": ""},
 		            {"title":"姓名","class":"center","data":"staff_name","defaultContent": ""},
 		            {"title":"岗位","class":"center","data": "job","defaultContent": ""},		            
-		            {"title":"技能系数","width":"80","class":"center","data":"skill_parameter","defaultContent": ""},		            
-		            {"title":"参与度/工时","width":"100","class":"center","data": "work_hour","defaultContent": "","render":function(data,type,row){
+		            {"title":"技能系数","width":"70","class":"center","data":"skill_parameter","defaultContent": ""},		            
+		            {"title":"参与度/工时","width":"70","class":"center","data": "work_hour","defaultContent": "","render":function(data,type,row){
 		            	return "<input type='text' class='input-medium work_hour' style='width:60px;height:28px;text-align:center' value='"+data+"' />";
 		            }},
 		            {"title":"车间","class":"center","data":"workshop_org","defaultContent":""},
@@ -372,6 +372,39 @@ function showStaffList(staff_hour_list){
 		          ]	;
 	}
 	
+	if(salary_model=='自制件承包'){
+		fixedColumns={
+	            leftColumns: 5,
+	            rightColumns:0
+	        };
+		rowsGroup=[0,1,2,3,4];
+		columns= [
+		            {"title":"","width":"30","class":"center","data":"bus_number","defaultContent": "","render":function(data,type,row){
+		            	return "<i class=\"fa fa-times bigger-110\" del_flag='del_all' style=\"cursor: pointer;color: red;\"></i>";
+		            }},
+		            {"title":"车号","class":"center","data":"bus_number","defaultContent": ""},
+		            {"title":"操作日期","width":"90","class":"center","data":"work_date","defaultContent": ""},
+		            {"title":"单价","width":"50","class":"center","data":"standard_price","defaultContent": ""},
+		            {"title":"补贴车","width":"60","class":"center","data":"bonus","defaultContent": "","render":function(data,type,row){
+		            	return "<input type='text' class='input-medium bonus' style='width:50px;height:28px;text-align:center;margin:0px' value='"+data+"' />";
+		            }},
+		            {"title":"工号","class":"center","data":"staff_number","defaultContent": ""},
+		            {"title":"姓名","class":"center","data":"staff_name","defaultContent": ""},
+		            {"title":"岗位","class":"center","data": "job","defaultContent": ""}, 
+		            {"title":"参与度<br/>/工时","width":"70","class":"center","data": "work_hour","defaultContent": "","render":function(data,type,row){
+		            	return "<input type='text' class='input-medium work_hour' style='width:100%;height:28px;text-align:center;margin:0px'  value='"+(data||0)+"'/>"
+		            }},
+		            {"title":"分配金额","width":"70","class":"center","data": "distribution","defaultContent": "","render":function(data,type,row){
+		            	return "<input type='text' class='input-medium distribution' style='width:100%;height:28px;text-align:center;margin:0px'  value='"+data+"'/>"
+		            }},
+		            {"title":"车间","class":"center","data":"workshop_org","defaultContent":""},
+		            {"title":"工厂","class":"center","data":"plant_org","defaultContent": ""},
+		            {"title":"","width":"30","class":"center","data":"","defaultContent": "","render":function(data,type,row){
+		            	return "<i class=\"fa fa-times bigger-110\" del_flag='del_single' style=\"cursor: pointer;color: red;\" row='"+JSON.stringify(row)+"' swh_id='"+row.id+"'></i>";
+		            }}
+		          ]	;
+	}
+	
 	$("#tableResult").DataTable({
 		paiging:false,
 		ordering:false,
@@ -380,7 +413,7 @@ function showStaffList(staff_hour_list){
 		/*fixedColumns:fixedColumns,*/
 		rowsGroup:rowsGroup,
 		paginate:false,
-		sScrollY: $(window).height()-210,
+		sScrollY: $(window).height()-220,
 		scrollX: true,
 		scrollCollapse: true,
 		lengthChange:false,

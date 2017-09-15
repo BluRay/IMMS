@@ -39,27 +39,46 @@ $(document).ready(function() {
 		}
 	})
 	
-	$(document).on("click","#dstcopy",function(){
+	$(document).on("click",".dstcopy",function(e){
 		//$(".distribution :eq(0)").focus();
-		var work_hourlist=$(".work_hour");
-		if(work_hourlist.length==0){
+		var flag=$(e.target).attr("cp_flag");
+		var cp_list=$("."+flag);
+	/*	if(work_hourlist.length==0){
 			work_hourlist=$(".distribution");
-		}
+		}*/
 		//alert(work_hourlist.length);
-		$(work_hourlist).eq(0).css("display","none");
-		$("#copy_paste").val($(work_hourlist).eq(0).val()).css("display","").css("background-color","rgb(191, 237, 245)").select();
-		$(work_hourlist).css("background-color","rgb(191, 237, 245)");
+		$(cp_list).eq(0).css("display","none");
+		$("#copy_paste_"+flag).val($(cp_list).eq(0).val()).css("display","").css("background-color","rgb(191, 237, 245)").select();
+		$(cp_list).css("background-color","rgb(191, 237, 245)");
 	});
 	
-	$(document).on("paste","#copy_paste",function(e){
+	$(document).on("paste","#copy_paste_work_hour",function(e){
 		 setTimeout(function(){
 			 var copy_text=$(e.target).val();
 			 $(e.target).val("");
 			 var dist_list=copy_text.split(" ");
 			 var work_hourlist=$(".work_hour");
-			if(work_hourlist.length==0){
+			/*if(work_hourlist.length==0){
 				work_hourlist=$(".distribution");
-			}
+			}*/
+			 $(work_hourlist).eq(0).css("display","");
+				$("#copy_paste").css("display","none");
+			 $.each(dist_list,function(i,value){
+				 $(work_hourlist).eq(i).val(value);								 
+			 });
+			 $(work_hourlist).css("background-color","white");
+			 //alert(dist_list.length);
+			 //alert(copy_text);
+		 },1);
+	});
+	
+	$(document).on("paste","#copy_paste_distribution",function(e){
+		 setTimeout(function(){
+			 var copy_text=$(e.target).val();
+			 $(e.target).val("");
+			 var dist_list=copy_text.split(" ");
+			 var work_hourlist=$(".distribution");
+	
 			 $(work_hourlist).eq(0).css("display","");
 				$("#copy_paste").css("display","none");
 			 $.each(dist_list,function(i,value){
@@ -91,7 +110,7 @@ $(document).ready(function() {
 			$("<td class='center'/>").html(standard_price).appendTo(tr);
 			$("<td class='center'/>").html("").appendTo(tr);
 			$("<td class='center'/>").html("<input class='input-medium work_hour' style='width:60px;height:28px;text-align:center' type='text'>"+
-					"<input id='copy_paste' class='input-small' style='width:60px;height:28px;text-align:center;display:none' type='text'>").appendTo(tr);
+					"<input id='copy_paste_work_hour' class='input-small' style='width:60px;height:28px;text-align:center;display:none' type='text'>").appendTo(tr);
 			$("<td class='center'/>").html("").appendTo(tr);
 			$("<td class='center'/>").html("").appendTo(tr);
 			$("<td class='center'/>").html("").appendTo(tr);
@@ -105,7 +124,7 @@ $(document).ready(function() {
 			$("<td class='center'/>").html("").appendTo(tr);
 			$("<td class='center'/>").html(standard_price).appendTo(tr);
 			$("<td class='center'/>").html("<input class='input-medium distribution' style='width:60px;height:28px;text-align:center' type='text'>"+
-					"<input id='copy_paste' class='input-small' style='width:60px;height:28px;text-align:center;display:none' type='text'>").appendTo(tr);
+					"<input id='copy_paste_distribution' class='input-small' style='width:60px;height:28px;text-align:center;display:none' type='text'>").appendTo(tr);
 			$("<td class='center'/>").html("").appendTo(tr);
 			$("<td class='center'/>").html("").appendTo(tr);
 			$("<td class='center'/>").html("").appendTo(tr);
@@ -118,12 +137,28 @@ $(document).ready(function() {
 			$("<td class='center'/>").html("").appendTo(tr);
 			$("<td class='center'/>").html("").appendTo(tr);
 			$("<td class='center'/>").html("<input class='input-medium work_hour' style='width:60px;height:28px;text-align:center' type='text'>"+
-					"<input id='copy_paste' class='input-small' style='width:60px;height:28px;text-align:center;display:none' type='text'>").appendTo(tr);
+					"<input id='copy_paste_work_hour' class='input-small' style='width:60px;height:28px;text-align:center;display:none' type='text'>").appendTo(tr);
 			$("<td class='center'/>").html("").appendTo(tr);
 			$("<td class='center'/>").html("").appendTo(tr);
 			$("<td class='center'/>").html("").appendTo(tr);
 			$("<td class='center'/>").html("").appendTo(tr);
 		}
+		if(salary_model=='自制件承包'){
+			$("<td class='center'/>").html("<i class=\"fa fa-times bigger-110\" style=\"cursor: pointer;color: red;\"></i>").appendTo(tr);
+			$("<td class='center'/>").html("<input type='text' class='staff_number' style='width:100%;height:28px;font-size:12px;text-align:center;' />").appendTo(tr);
+			$("<td class='center'/>").html("").appendTo(tr);
+			$("<td class='center'/>").html("").appendTo(tr);
+			$("<td class='center'/>").html("").appendTo(tr);
+			$("<td class='center'/>").html("<input class='input-medium work_hour' style='width:60px;height:28px;text-align:center' type='text'>"+
+					"<input id='copy_paste_work_hour' class='input-small' style='width:60px;height:28px;text-align:center;display:none' type='text'>").appendTo(tr);
+			$("<td class='center'/>").html("<input class='input-medium distribution' style='width:60px;height:28px;text-align:center' type='text'>"+
+			"<input id='copy_paste_distribution' class='input-small' style='width:60px;height:28px;text-align:center;display:none' type='text'>").appendTo(tr);
+			$("<td class='center'/>").html("").appendTo(tr);
+			$("<td class='center'/>").html("").appendTo(tr);
+			$("<td class='center'/>").html("").appendTo(tr);
+			$("<td class='center'/>").html("").appendTo(tr);
+		}
+		
 		$("#tableResult tbody").prepend(tr);
 	});
 	
@@ -170,6 +205,17 @@ $(document).ready(function() {
 				 $(tds[6]).html(staff.workgroup_org);
 				 $(tds[7]).html(staff.workshop_org);
 				 $(tds[8]).html(staff.plant_org);
+			}
+			if(salary_model=='自制件承包'){
+				$(this).attr("skill_parameter",staff.skill_parameter);
+				 $(tds[1]).html(staff.name);
+				 $(tds[2]).html(staff.job);
+				 $(tds[4]).find(".workhour").eq(0).val(staff.workhour)
+				 $(tds[5]).find(".distribution").eq(0).val(staff.distribution)
+				 $(tds[6]).html(staff.team_org);
+				 $(tds[7]).html(staff.workgroup_org);
+				 $(tds[8]).html(staff.workshop_org);
+				 $(tds[9]).html(staff.plant_org);		
 			}
 		 }
 	});
@@ -530,6 +576,146 @@ $(document).ready(function() {
 			})
 		}
 		
+		/**
+		 *自制件承包制 判断逻辑
+		 */
+		if(salary_model=='自制件承包'){
+			//standard_price=Number($(trs[0]).children("td").eq(4).html());
+			if(standard_price==0){
+				saveFlag = false;
+				alert("该班组未维护班组承包单价！");
+				return false;
+			}
+			//判断车号、操作日期是否有效填写（自编号模式判断订单、自编号、操作日期是否有效填写）
+			if(is_customer=='1'){
+				if(cutomer_number.trim().length==0){
+					alert("请填写自编号！");
+					save_flag=false;
+					return false;
+				}
+				if(!order_id||order_id.trim().length==0){
+					alert("请填写有效订单！")
+					save_flag=false;
+					return false;
+				}			
+				var area=cutomer_number.split("_");
+				if(area.length<=1){
+					alert("输入格式不正确，自编号格式为：车型-订单_起始号-结束号！");
+					save_flag=false;
+					return false;
+				}
+				if(area[1].split("-").length>1){
+					bus_start=area[1].split("-")[0];
+					bus_end=area[1].split("-")[1];
+					if(isNaN(parseInt(bus_start))||isNaN(parseInt(bus_end))){
+						alert("起始号和结束号必须为数字！");
+						save_flag=false;
+						return false;
+					}else{
+						bus_count=parseInt(bus_end,0)-parseInt(bus_start,0)+1;
+					}					
+				}
+				if(bus_count<0){
+					alert("结束号必须大于起始号");
+					save_flag=false;
+					return false;
+				}
+			}else{
+				if(!order_id||order_id.trim().length==0){
+					alert("请填写有效车号！")
+					save_flag=false;
+					return false;
+				}		
+			}
+			if(work_date.trim().length==0){
+				alert("请填写操作日期！")
+				save_flag=false;
+				return false;
+			}
+			/**判断车辆是否在车间上线
+			*判断车号、操作日期是否已经录入过记录（自编号模式下判断自编号、操作日期是否已经录入过记录）
+			**/
+			if(is_customer=='0'){
+				save_flag=validateBus(bus_number,is_customer,work_date);
+			}else{
+				save_flag=validateBus(cutomer_number,is_customer);
+			}
+			if(!save_flag){
+				return false;
+			}
+			//判断分配金额有无为空，参与度/工时有无为空
+			$.each(trs,function(i,tr){
+				var tds=$(tr).children("td");
+				var tr_obj=$("#tableResult").dataTable().fnGetData($(tr));
+				//standard_price=Number($(tr).children("td").eq(4).html());
+				var workhour=$(tr).children("td").eq(5).find(".work_hour").val()||"";
+				var distribution=$(tr).children("td").eq(6).find(".distribution").val()||"";
+				total_distribution=numAdd(total_distribution,Number(distribution));
+				if(workhour.trim().length==0){
+					alert("参与度/工时不能为空！");
+					save_flag=false;
+					return false;
+				}
+				if(distribution.trim().length==0){
+					alert("分配金额不能为空！");
+					save_flag=false;
+					return false;
+				}
+				
+				var staff_number = $(tds).eq(1).html();
+				var input_staff_number=$(tds).eq(1).find(".staff_number");
+				//alert($(input_staff_number).html())
+				if(input_staff_number!=undefined&&input_staff_number.length>0){
+					staff_number=$(input_staff_number).val()||"";
+				}
+				var staff_name=$(tds).eq(2).html();
+				var job=$(tds).eq(3).html();
+				if (staff_number.trim().length > 0) {
+					var staff={};
+					staff.staff_number=staff_number;
+					staff.staff_name=staff_name;
+					staff.job=job;
+					staff.standard_price=standard_price;
+					staff.factory=factory;
+					staff.workshop = workshop;
+					staff.workgroup=workgroup;
+					staff.team=team;
+					staff.org_id=org_id;
+					staff.salary_model=salary_model;
+					staff.bus_number=bus_number||cutomer_number;
+					staff.bus_count=bus_count;
+					staff.bonus=bonus;
+					staff.work_date=work_date;
+					staff.skill_parameter=$(input_staff_number).attr("skill_parameter");
+					staff.work_hour=workhour;
+					staff.distribution=distribution;
+					staff.status='1';
+					staff.order_id=order_id;
+			
+					if(!isContain(staff,staffHourList)){
+						staffHourList.push(staff);
+					}else{
+						saveFlag=false;
+						alert(staff.staff_name+"不能重复维护工时！");
+						return false;
+						
+					}
+				}
+			})
+			if(!save_flag){
+				return false;
+			}
+			//判断分配金额之和是否等于班组承包单价
+			if(total_distribution!=standard_price){
+				save_flag = false;
+				alert("分配金额之和必须等于班组承包单价"+standard_price);
+				return false;				
+			}	
+			if(!save_flag){
+				return false;
+			}
+		}
+		
 		//所有条件检验合格后保存计件工时信息
 		if(save_flag&&staffHourList.length>0){
 			ajaxSave(staffHourList,salary_model,is_customer);
@@ -594,7 +780,7 @@ function zTreeOnClick(event, treeId, treeNode) {
 	}	
 
 	var table=$("<table />");
-	if(salary_model=='技能系数'||salary_model=='承包制'){
+	if(salary_model=='技能系数'||salary_model=='承包制'||salary_model=='自制件承包'){
 		var tr=$("<tr />");
 		if(is_customer=="1"){
 			$("<td />").html("订单：").appendTo(tr);
@@ -626,28 +812,35 @@ function zTreeOnClick(event, treeId, treeNode) {
 		$("#form").html(table).css("display","");
 	}	
 	getOrderNoSelect("#order_no", "", function(obj){
-		order_id=obj.id;
 		ajaxQueryTeamStaffDetail();
 		standard_price=ajaxGetWorkgroupPrice();
 		/*if($.fn.dataTable.isDataTable("#tableResult")){
 			$('#tableResult').DataTable().destroy();
 			$('#tableResult').empty();
 		}*/
-		//showStaffList(staff_list)	
-		updateStaffInfo(staff_list);
+		if(obj.id!=order_id){
+			showStaffList(staff_list)	
+		}else{
+			updateStaffInfo(staff_list);
+		}
+
+		order_id=obj.id;
 		
 	}, null,null,null);
 	
 	getBusNumberSelect("#bus_number", "", function(obj){
-		order_id=obj.order_id;
 		ajaxQueryTeamStaffDetail();
 		standard_price=ajaxGetWorkgroupPrice();
 		/*if($.fn.dataTable.isDataTable("#tableResult")){
 			$('#tableResult').DataTable().destroy();
 			$('#tableResult').empty();
 		}*/
-		//showStaffList(staff_list)
-		updateStaffInfo(staff_list);		
+		if(obj.order_id!=order_id){
+			showStaffList(staff_list)	
+		}else{
+			updateStaffInfo(staff_list);
+		}	
+		order_id=obj.order_id;
 	});
 	
 	//显示选择的小班组人员列表
@@ -656,7 +849,7 @@ function zTreeOnClick(event, treeId, treeNode) {
 
 function ajaxQueryTeamStaffDetail(){
 	//var bus_type="";
-	var order_id=$("#bus_number").attr("order_id")||$("#order_no").attr("order_id");
+	var order_id_update=$("#bus_number").attr("order_id")||$("#order_no").attr("order_id");
 /*	if($("#customer_number").val()!=null&&$("#customer_number").val().length>0){
 		bus_type=$("#customer_number").val().split("-")[0];
 	}*/
@@ -673,7 +866,7 @@ function ajaxQueryTeamStaffDetail(){
 			workgroup:workgroup,
 			team:team,
 			org_id:org_id,
-			order_id:order_id,
+			order_id:order_id_update,
 			work_date:$("#work_date").val()
 		},
 		success:function(response){
@@ -688,6 +881,11 @@ function ajaxQueryTeamStaffDetail(){
 }
 
 function showStaffList(staff_list){
+	if($.fn.dataTable.isDataTable("#tableResult")){
+		$('#tableResult').DataTable().destroy();
+		$('#tableResult').empty();
+	}
+	
 	if(staff_list.length==0){
 		alert("未维护班组成员！");
 		//return false;
@@ -703,9 +901,9 @@ function showStaffList(staff_list){
 		            {"title":"岗位","class":"center","data": "job","defaultContent": ""},
 		            {"title":"单价","class":"center","data":"standard_price","defaultContent": ""},		            
 		            {"title":"技能系数","width":"80","class":"center","data":"skill_parameter","defaultContent": ""},		            
-		            {"title":"参与度/工时"+"&nbsp;<i id='dstcopy' title='粘贴整列' name='edit' rel='tooltip'  class='fa fa-clipboard' style='cursor: pointer;color:blue'></i>","width":"100","class":"center","data": "","defaultContent": "","render":function(data,type,row){
+		            {"title":"参与度/工时"+"&nbsp;<i  title='粘贴整列' name='edit' rel='tooltip'  class='fa fa-clipboard dstcopy' cp_flag='work_hour' style='cursor: pointer;color:blue'></i>","width":"100","class":"center","data": "","defaultContent": "","render":function(data,type,row){
 		            	return "<input type='text' class='input-medium work_hour' style='width:60px;height:28px;text-align:center'  />"+
-		            	"<input type='text' id='copy_paste' class='input-small' style='width:60px;height:28px;text-align:center;display:none'>";
+		            	"<input type='text' id='copy_paste_work_hour' class='input-small' style='width:60px;height:28px;text-align:center;display:none'>";
 		            }},
 		            {"title":"小班组","class":"center","data":"team_org","defaultContent":""},
 		            {"title":"班组","class":"center","data":"workgroup_org","defaultContent": ""},	
@@ -722,7 +920,7 @@ function showStaffList(staff_list){
 		            {"title":"姓名","class":"center","data":"name","defaultContent": ""},
 		            {"title":"岗位","class":"center","data": "job","defaultContent": ""},
 		            {"title":"单价","class":"center","data":"standard_price","defaultContent": ""},		            	            
-		            {"title":"分配金额"+"&nbsp;<i id='dstcopy' title='粘贴整列' name='edit' rel='tooltip'  class='fa fa-clipboard' style='cursor: pointer;color:blue'></i>","width":"100","class":"center","data": "distribution","defaultContent": "","render":function(data,type,row){
+		            {"title":"分配金额"+"&nbsp;<i title='粘贴整列' name='edit' rel='tooltip'  class='fa fa-clipboard dstcopy' cp_flag='distribution' style='cursor: pointer;color:blue'></i>","width":"100","class":"center","data": "distribution","defaultContent": "","render":function(data,type,row){
 		            	return "<input type='text' class='input-medium distribution' style='width:60px;height:28px;text-align:center'  value='"+data+"'/>"+
 		            	"<input type='text' id='copy_paste' class='input-small' style='width:60px;height:28px;text-align:center;display:none'>";
 		            }},
@@ -741,9 +939,32 @@ function showStaffList(staff_list){
 		            {"title":"姓名","class":"center","data":"name","defaultContent": ""},
 		            {"title":"岗位","class":"center","data": "job","defaultContent": ""},	  
 		            {"title":"技能系数","width":"80","class":"center","data":"skill_parameter","defaultContent": ""},		
-		            {"title":"参与度/工时"+"&nbsp;<i id='dstcopy' title='粘贴整列' name='edit' rel='tooltip'  class='fa fa-clipboard' style='cursor: pointer;color:blue'></i>","width":"100","class":"center","data": "","defaultContent": "","render":function(data,type,row){
+		            {"title":"参与度/工时"+"&nbsp;<i title='粘贴整列' name='edit' rel='tooltip'  class='fa fa-clipboard dstcopy' cp_flag='work_hour'  style='cursor: pointer;color:blue'></i>","width":"100","class":"center","data": "","defaultContent": "","render":function(data,type,row){
 		            	return "<input type='text' class='input-medium work_hour' style='width:60px;height:28px;text-align:center'  />"+
-		            	"<input type='text' id='copy_paste' class='input-small' style='width:60px;height:28px;text-align:center;display:none'>";
+		            	"<input type='text' id='copy_paste_work_hour' class='input-small' style='width:60px;height:28px;text-align:center;display:none'>";
+		            }},
+		            {"title":"小班组","class":"center","data":"team_org","defaultContent":""},
+		            {"title":"班组","class":"center","data":"workgroup_org","defaultContent": ""},	
+		            {"title":"车间","class":"center","data":"workshop_org","defaultContent":""},
+		            {"title":"工厂","class":"center","data":"plant_org","defaultContent": ""},
+		          ]	;
+	}
+	if(salary_model=='自制件承包'){
+		columns= [
+		            {"title":"<i id=\"addStaff\" class=\"fa fa-plus bigger-110\" style=\"cursor: pointer;color: blue;\"></i>","width":"30","class":"center","data":"","defaultContent": "","render":function(data,type,row){
+		            	return "<i class=\"fa fa-times bigger-110\" style=\"cursor: pointer;color: red;\"></i>";
+		            }},
+		            {"title":"工号","class":"center","data":"staff_number","defaultContent": ""},
+		            {"title":"姓名","class":"center","data":"name","defaultContent": ""},
+		            {"title":"岗位","class":"center","data": "job","defaultContent": ""},
+		            {"title":"单价","class":"center","data":"standard_price","defaultContent": ""},		            	            
+		            {"title":"参与度/工时"+"&nbsp;<i title='粘贴整列' name='edit' rel='tooltip'  class='fa fa-clipboard dstcopy' cp_flag='work_hour' style='cursor: pointer;color:blue'></i>","width":"100","class":"center","data": "","defaultContent": "","render":function(data,type,row){
+		            	return "<input type='text' class='input-medium work_hour' style='width:60px;height:28px;text-align:center' />"+
+		            	"<input type='text' id='copy_paste_work_hour' class='input-small' style='width:60px;height:28px;text-align:center;display:none'>";
+		            }},
+		            {"title":"分配金额"+"&nbsp;<i title='粘贴整列' name='edit' rel='tooltip'  class='fa fa-clipboard dstcopy' cp_flag='distribution' style='cursor: pointer;color:blue'></i>","width":"100","class":"center","data": "distribution","defaultContent": "","render":function(data,type,row){
+		            	return "<input type='text' class='input-medium distribution' style='width:60px;height:28px;text-align:center'  value='"+data+"'/>"+
+		            	"<input type='text' id='copy_paste_distribution' class='input-small' style='width:60px;height:28px;text-align:center;display:none'>";
 		            }},
 		            {"title":"小班组","class":"center","data":"team_org","defaultContent":""},
 		            {"title":"班组","class":"center","data":"workgroup_org","defaultContent": ""},	
@@ -941,13 +1162,13 @@ function updateStaffInfo(staff_list){
 					var distribution=staff.distribution;
 					//var standard_price=staff.standard_price;
 					
-					if(staff_number_v==staff_number){
+				/*	if(staff_number_v==staff_number){
 						if(order_id_update !=order_id){							
 							$(tr).children("td").eq(5).find(".distribution").val(distribution);
 						}
 						
 						return false;
-					}
+					}*/
 				})			
 			}
 			if(salary_model=='辅助人力'){
@@ -973,6 +1194,26 @@ function updateStaffInfo(staff_list){
 					}
 				})
 			}
+			if(salary_model=='自制件承包'){
+				$(tr).children("td").eq(4).html(standard_price);
+				
+				$.each(staff_list,function(j,staff){
+					var staff_number=staff.staff_number;
+					var work_hour=staff.work_hour;
+					var distribution=staff.distribution;
+					//var standard_price=staff.standard_price;
+					
+					/*if(staff_number_v==staff_number){
+						if(order_id_update !=order_id){							
+							$(tr).children("td").eq(5).find(".work_hour").val(work_hour);
+							$(tr).children("td").eq(6).find(".distribution").val(distribution);
+						}
+						
+						return false;
+					}*/
+				})			
+			}
+			
 	})
 }
 

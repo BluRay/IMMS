@@ -133,7 +133,10 @@ $(document).ready(function(){
 		
 		//alert($("#check_node :selected").text());
 		if($("#check_node :selected").text()=="车架"||$("#check_node :selected").text()=="车身"||
-				$("#check_node :selected").text()=="五大片"){
+				$("#check_node :selected").text()=="五大片"||$("#check_node :selected").text()=="前围"||
+				$("#check_node :selected").text()=="后围"||$("#check_node :selected").text()=="左围"||
+				$("#check_node :selected").text()=="右围"||$("#check_node :selected").text()=="顶围"||
+				$("#check_node :selected").text()=="后舱"||$("#check_node :selected").text()=="顶电池包"){
 			$("#bus_number").val("");
 			$("#order_config_span").html("");
 			$("#td_bus_lable").hide();
@@ -672,7 +675,9 @@ function ajaxSave(){
 	var bus_number="";
 	var order_id="";
 	var order_config_id="";
-	if(test_node=='车架'||test_node=='车身'||test_node=='五大片'){
+	if(test_node=="车架"||test_node=="车身"|| test_node=="五大片"||
+	  test_node=="前围"||test_node=="后围"||test_node=="左围"||
+	  test_node=="右围"||test_node=="顶围"||test_node=="后舱"||test_node=="顶电池包"){
 		bus_number=$("#customer_number").val();
 		order_id=$("#order").attr("order_id");
 		order_config_id=$("#order_config").val();
@@ -896,7 +901,9 @@ function showInfoPage(row){
 	if(row.result=='让步放行'){
 		result=2;
 	}
-	if(row.test_node=='车架'||row.test_node=='车身'||row.test_node=='五大片'){
+	if(row.test_node=="车架"||row.test_node=="车身"||row.test_node=="五大片"||
+	   row.test_node=="前围"||row.test_node=="后围"||row.test_node=="左围"||
+	   row.test_node=="右围"||row.test_node=="顶围"||row.test_node=="后舱"||row.test_node=="顶电池包"){
 		$("#td_bus_lable").hide();
 		$("#td_bus").hide();
 		$("#td_customer_lable").show();
@@ -964,7 +971,9 @@ function showEditPage(row){
 		result=2;
 	}
 	
-	if(row.test_node=='车架'||row.test_node=='车身'||row.test_node=='五大片'){
+	if(row.test_node=="车架"||row.test_node=="车身"||row.test_node=="五大片"||
+			   row.test_node=="前围"||row.test_node=="后围"||row.test_node=="左围"||
+			   row.test_node=="右围"||row.test_node=="顶围"||row.test_node=="后舱"||row.test_node=="顶电池包"){
 		$("#td_bus_lable").hide();
 		$("#td_bus").hide();
 		$("#td_customer_lable").show();

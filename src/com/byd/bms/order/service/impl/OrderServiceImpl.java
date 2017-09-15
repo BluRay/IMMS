@@ -251,6 +251,10 @@ public class OrderServiceImpl implements IOrderService {
 		
 		Map<String,Object> smap=null;
 		if(config_id==0){
+			//查询订单最大行项目号,查找不到设置初始值000010
+			String lineNo = null;
+			lineNo = orderDao.getMaxOrderLineNo(configDetail);
+			configDetail.put("line_no", lineNo);
 			orderDao.saveOrderConfig(configDetail);
 			int config_id_new=(int) configDetail.get("id");	
 			smap=new HashMap<String,Object>();

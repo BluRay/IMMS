@@ -56,6 +56,11 @@
 			org_type=#{org_type},org_kind=#{org_kind},name=#{name},name_en=#{name_en},org_code=#{org_code}<!-- ,sort_number=#{sort_number} -->,manager=#{manager},responsibilities=#{responsibilities},deleted=#{deleted},editor_id=#{editor_id},edit_date=#{edit_date},salary_model=#{salary_model},customer_no_flag=#{customer_no_flag}  
 			where id=#{id}
 	</update>
+	<!-- 基础数据班组名称修改，更细组织架构班组的名称 -->
+	<update id="updateOrgDataName" parameterType="Map">
+		update BMS_BASE_ORG set name=#{name} where
+		 foreign_id=#{id} and org_type in ('3','4') and deleted='0'
+	</update>
 	<!--删除组织结构 -->
 	<update id="deleteOrgData">
 		<![CDATA[
@@ -228,8 +233,10 @@
 			AND salary_type = #{salary_type}
 		</if>
 		<if test="staff_number!=null and staff_number!=''">
-			AND( LOCATE(s.staff_number,#{staff_number})>0 OR
-			LOCATE(s.name,#{staff_number})>0 )
+			AND (
+			s.staff_number = #{staff_number} OR
+			s.name LIKE CONCAT('%',#{staff_number},'%')
+			)
 		</if>
 		<if test="salary_type!=null and salary_type!=''">
 			AND s.salary_type = #{salary_type}

@@ -24,9 +24,9 @@ $(document).ready(function(){
 		//alert("change");
 		$("#order").attr("order_id","");
 	})
-	$("#order").change(function(){
+/*	$("#order").change(function(){
 		getOrderConfigSelect($(this).attr("order_id")||"","","#order_config","请选择","id") ;
-	})
+	})*/
 	/**
 	 * 匹配车型模板
 	 */
@@ -51,6 +51,7 @@ $(document).ready(function(){
 		getOrderNoSelect("#order","#orderId",function(obj){
 			//alert(obj.busType);
 			$("#bus_type").val(obj.busType).attr("bus_type_id",obj.bus_type_id);
+			getOrderConfigSelect(obj.id,"","#order_config","请选择","id") ;
 		});
 		//$("#bus_type").prop("disabled",true);
 		getKeysSelect("CHECK_NODE", "", "#node","请选择","id")

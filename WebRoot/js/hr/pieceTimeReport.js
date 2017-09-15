@@ -266,6 +266,49 @@ function ajaxQuery(){
 			          ]	;
 		}
 	}
+	if(salary_model=="自制件承包"){
+		if(count_flag=='车辆维度'){
+			rowsGroup=[0,1,2,3,4,5,6,7,8,15]
+			columns= [
+			            {"title":"车号","class":"center","width":"160","data":"bus_number","defaultContent": ""},
+			            {"title":"订单","class":"center","width":"180","data":"order_desc","defaultContent": ""},
+			            {"title":"操作日期","class":"center","data":"work_date","defaultContent": ""},
+			            {"title":"单价","class":"center","data":"standard_price","defaultContent": ""},
+			            {"title":"补贴车","class":"center","data":"bonus","defaultContent": ""},
+			            {"title":"工厂","class":"center","data":"factory","defaultContent": ""},
+			            {"title":"车间","class":"center","data":"workshop","defaultContent":""},
+			            {"title":"班组","class":"center","data":"workgroup","defaultContent":""},
+			            {"title":"小班组","class":"center","data":"team","defaultContent":""},
+			            {"title":"工号","class":"center","data":"staff_number","defaultContent": ""},
+			            {"title":"姓名","class":"center","data":"staff_name","defaultContent": ""},
+			            {"title":"岗位","class":"center","data": "job","defaultContent": ""},		            
+			            {"title":"分配金额","width":"80","class":"center","data":"distribution","defaultContent": ""},		            
+			            {"title":"参与度/工时","width":"100","class":"center","data": "work_hour","defaultContent": ""},
+			            {"title":"计件工资","class":"center","data": "ppay","defaultContent": ""},
+			            {"title":"合计工资","class":"center","data": "total_ppay","defaultContent": ""}	
+			          ]	;
+		}else{
+			rowsGroup=[0,1,2,3,4,5,6,15]
+			columns= [
+			          	{"title":"工号","class":"center","data":"staff_number","defaultContent": ""},
+			          	{"title":"姓名","class":"center","data":"staff_name","defaultContent": ""},
+			          	{"title":"工厂","class":"center","data":"factory","defaultContent": ""},
+			            {"title":"车间","class":"center","data":"workshop","defaultContent":""},
+			            {"title":"班组","class":"center","data":"workgroup","defaultContent":""},
+			            {"title":"小班组","class":"center","data":"team","defaultContent":""},
+			          	{"title":"岗位","class":"center","data": "job","defaultContent": ""},	
+			          	{"title":"车号","class":"center","width":"160","data":"bus_number","defaultContent": ""},
+			            {"title":"订单","class":"center","width":"180","data":"order_desc","defaultContent": ""},
+			            {"title":"操作日期","class":"center","data":"work_date","defaultContent": ""},			            
+			            {"title":"单价","class":"center","data":"standard_price","defaultContent": ""},
+			            {"title":"补贴车","class":"center","data":"bonus","defaultContent": ""},
+			            {"title":"分配金额","width":"80","class":"center","data":"distribution","defaultContent": ""},  		            
+			            {"title":"参与度/工时","width":"100","class":"center","data": "work_hour","defaultContent": ""},
+			            {"title":"计件工资","class":"center","data": "ppay","defaultContent": ""},
+			            {"title":"合计工资","class":"center","data": "total_ppay","defaultContent": ""}	
+			          ]	;
+		}
+	}
 	
 	var tb=$("#tableResult").DataTable({
 		serverSide: true,

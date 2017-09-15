@@ -182,6 +182,11 @@
 		order by cast(reverse(substr(reverse(bus_number),1,instr(reverse(bus_number),'-')-1)) as signed)
 	</select>
 	
+	<select id="getMaxOrderLineNo" parameterType="Map" resultType="String">
+		SELECT LPAD(CASE WHEN ISNULL(MAX(c.line_no)) THEN 10 ELSE (MAX(c.line_no)+10) END,6,0) line_no FROM BMS_OR_ORDER_CONFIG c 
+		WHERE c.order_id = #{order_id} 
+	</select>
+	
 	<select id="getOrderConfigList" parameterType="Map" resultType="Map">
 		select o.id,c.id config_id,o.order_no,CONCAT(o.order_name,t.bus_type_code,'  ',o.order_qty,'台') AS order_name_str,
 		o.productive_year,o.delivery_date,c.battery_capacity,c.rated_voltage,c.spring_num,c.tire_type,c.passenger_num,
@@ -234,9 +239,9 @@
 			SELECT
 			LAST_INSERT_ID()
 		</selectKey>
-		insert into BMS_OR_ORDER_CONFIG (order_id,sap_materialNo,material,order_config_name,customer,config_qty,
+		insert into BMS_OR_ORDER_CONFIG (order_id,line_no,sap_materialNo,material,order_config_name,customer,config_qty,
 		editor_id,edit_date,battery_capacity,rated_voltage,spring_num,tire_type,passenger_num,bus_seats)
-		values(#{order_id},#{materialNo},#{material},#{config_name},#{customer},#{config_qty},#{editor_id},
+		values(#{order_id},#{line_no},#{materialNo},#{material},#{config_name},#{customer},#{config_qty},#{editor_id},
 		#{edit_date},#{battery_capacity},#{rated_voltage},#{spring_num},#{tire_type},#{passenger_num},#{bus_seats})
 	</insert>
 	

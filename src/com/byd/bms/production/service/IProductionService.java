@@ -83,6 +83,8 @@ public interface IProductionService {
 	public void saveStaffHours_cal2(String str_staffHours, String edit_date, String editor_id,ModelMap model);
 
 	public void saveStaffHours_cal3(String str_staffHours, String edit_date, String editor_id,ModelMap model);
+	public void saveStaffHours_cal4(String str_staffHours, String edit_date,
+			String editor_id, ModelMap model);
 
 	public void getStaffHoursDetail(String org_id, String bus_number, String wdate_start, String wdate_end,String status, ModelMap model);
 
@@ -102,6 +104,9 @@ public interface IProductionService {
 	public void updateStaffHours_cal3(String str_staffHours, String edit_date,
 			String editor_id, ModelMap model);
 
+	public void updateStaffHours_cal4(String str_staffHours,
+			String is_customer, String edit_date, String editor_id,
+			ModelMap model);
 	public void verifyStaffHours(Map<String, String> condMap,ModelMap model);
 	
 	/*****************************xiong jianwu end  *****************************/
@@ -183,4 +188,5 @@ public interface IProductionService {
 	public int saveTmpOrderProcedure(Map<String, Object> cmap);
 	public int updateTmpOrder(Map<String, Object> cmap);
 	public String caculateTmpSalary(Map<String, Object> conditionMap);
+
 }

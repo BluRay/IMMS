@@ -133,6 +133,16 @@
 					</table>
 				</div>
 				
+				<div id="dialog-message" class="hide">
+					<table id="tableBusNumber" style="font-size: 12px;width:2100px;overflow-x:auto" class="table table-bordered table-striped">
+					</table>
+				</div>
+				
+				<div id="dialog-message2" class="hide">
+					<table id="tableBusNumber2" style="font-size: 12px;" class="table table-bordered table-striped">
+					</table>
+				</div>				
+				
 				</div>
 			</div>
 			<!-- /.main-container -->

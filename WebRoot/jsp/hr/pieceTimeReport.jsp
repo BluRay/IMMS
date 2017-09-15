@@ -101,6 +101,7 @@
 								<option value="承包制">承包制</option>
 								<option value="辅助人力">辅助人力</option>
 								<option value="底薪模式">底薪模式</option>
+								<option value="自制件承包">自制件承包</option>
 							</select>
 						</td>
 						<td>统计维度：</td>

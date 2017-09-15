@@ -140,7 +140,7 @@ function getOrderNoSelect(elementId, submitId, fn_backcall, bustype,factoryEleme
 				}
 			});
 		},
-		items : 15,
+		items : 20,
 		highlighter : function(item) {
 			var order_name = "";
 			var bus_type = "";

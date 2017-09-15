@@ -108,6 +108,8 @@ public interface IProductionDao {
 	
 	void caculatePieceSalary_3(Map<String, Object> condMap);// 底薪模式工资计算
 
+	void caculatePieceSalary_4(Map<String, Object> condMap);// 自制件承包工资计算
+	
 	void deleteStaffHours(Map<String, Object> condMap);
 	
 	List<Map<String, Object>> queryStaffHoursDetail(Map<String, Object> condMap);	
@@ -219,4 +221,5 @@ public interface IProductionDao {
 	public int saveTmpOrderProcedure(Map<String, Object> cmap);
 	public int updateTmpOrder(Map<String, Object> cmap);
 	public String caculateTmpSalary(Map<String, Object> conditionMap);
+
 }

@@ -76,7 +76,7 @@
 	</select>
 	
 	<select id="queryStaffPieceHours" parameterType="Map" resultType="Map">
-		<if test="salary_model=='技能系数' or salary_model=='承包制'">
+		<if test="salary_model=='技能系数' or salary_model=='承包制' or salary_model=='自制件承包'">
 		select ps.*,concat(o.order_no,o.order_name,t.bus_type_code,' ',o.order_qty,'台') order_desc,
 		(select round(sum(p.ppay),2) from BMS_HR_PIECE_SALARY p where p.factory=ps.factory and p.workshop=p.workshop
 		and p.workgroup=ps.workgroup and p.team=ps.team
@@ -171,7 +171,7 @@
 	</select>
 	
 	<select id="queryStaffPieceHoursCount" parameterType="Map" resultType="int">
-		<if test="salary_model=='技能系数' or salary_model=='承包制'">
+		<if test="salary_model=='技能系数' or salary_model=='承包制' or salary_model=='自制件承包">
 		select count(ps.id)
 		from BMS_HR_PIECE_SALARY ps
 		where ps.factory=#{factory} and ps.workshop=#{workshop} and ps.salary_model=#{salary_model}
@@ -914,7 +914,7 @@
 		LEFT JOIN BMS_HR_STAFF_ATTENDANCE a ON tmp.staff_number = a.staff_number and a.month=#{work_date}
 		group by tmp.staff_number
 		ORDER BY tmp.staff_number,tmp.workHoursType 
-		<if test="start!=null">
+		<if test="start!=null and length!=-1">
 			LIMIT #{start} ,#{length}
 		</if>	
 	</select>
