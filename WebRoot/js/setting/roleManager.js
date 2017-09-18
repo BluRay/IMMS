@@ -170,7 +170,24 @@ jQuery(function($) {
 				    if($(this).parent().css("display")=="block"){   
 				        $(this).trigger("click");  
 				    }
+				    
 				}); 
+		    	//$(".tree-folder-header").trigger("click");  
+		    	$(".tree-folder-header").each(function(){
+		    		console.log("----->" , this);
+		    	});
+		    	/**
+		    	$("#tree2").find(".tree-folder").each(function(){  
+			    	 console.log("-----" + $(this).attr("class"));
+			    	 $(this).find(".tree-folder-content").each(function(){  
+			    		 console.log("----->" , this);
+			    		 console.log("----->" , $(this).children());
+			    		 //$(this).children().trigger("click");  
+			    		 $(this).children().find(".tree-folder").each(function(i,v){  
+			    			 console.log("===" + i);
+			    		 });
+			    	 });
+			    });**/
 		    }
 		});
 		

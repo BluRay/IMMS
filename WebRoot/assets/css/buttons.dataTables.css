@@ -89,21 +89,21 @@ a.dt-button {
 button.dt-button.disabled,
 div.dt-button.disabled,
 a.dt-button.disabled {
-  color: #999;
+  /* color: #999; */
   border: 1px solid #d0d0d0;
   cursor: default;
-  background-color: #f9f9f9;
+  background-color: #e0e0e0;
   /* Fallback */
-  background-image: -webkit-linear-gradient(top, #ffffff 0%, #f9f9f9 100%);
+  background-image: -webkit-linear-gradient(top, #ffffff 0%, #e9e9e9 100%);
   /* Chrome 10+, Saf5.1+, iOS 5+ */
-  background-image: -moz-linear-gradient(top, #ffffff 0%, #f9f9f9 100%);
+  background-image: -moz-linear-gradient(top, #ffffff 0%, #e9e9e9 100%);
   /* FF3.6 */
-  background-image: -ms-linear-gradient(top, #ffffff 0%, #f9f9f9 100%);
+  background-image: -ms-linear-gradient(top, #ffffff 0%, #e9e9e9 100%);
   /* IE10 */
-  background-image: -o-linear-gradient(top, #ffffff 0%, #f9f9f9 100%);
+  background-image: -o-linear-gradient(top, #ffffff 0%, #e9e9e9 100%);
   /* Opera 11.10+ */
-  background-image: linear-gradient(to bottom, #ffffff 0%, #f9f9f9 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr='#ffffff', EndColorStr='#f9f9f9');
+  background-image: linear-gradient(to bottom, #ffffff 0%, #e9e9e9 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr='#ffffff', EndColorStr='#e9e9e9');
 }
 button.dt-button:active:not(.disabled), button.dt-button.active:not(.disabled),
 div.dt-button:active:not(.disabled),

@@ -731,7 +731,7 @@
 	</select>
 	
 		<select id="queryBusWorkshopOnline" parameterType="Map" resultType="int">
-		select count(id)
+		select count(b.id)
 		from BMS_PLAN_BUS b
 		left join BMS_BASE_FACTORY f on b.factory_id=f.id
 		where b.bus_number=#{bus_number} and f.factory_name=#{factory}

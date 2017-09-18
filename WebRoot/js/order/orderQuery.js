@@ -20,7 +20,8 @@ $(document).ready(function(){
 	//导出功能
 	$(".buttons-excel").click(function(){
 		//ajaxQuery(0,'all');
-		htmlToExcel("tableOrder", "", "","工时统计报表","工时统计报表");
+		$("#tableOrder tbody").children("tr").children("td:hidden").remove();
+		htmlToExcel("tableOrder", "", "","订单明细","订单明细");
 		return false;
 	});
 });

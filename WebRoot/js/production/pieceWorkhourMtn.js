@@ -390,11 +390,7 @@ $(document).ready(function() {
 		 */
 		if(salary_model=='承包制'){
 			//standard_price=Number($(trs[0]).children("td").eq(4).html());
-			if(standard_price==0){
-				saveFlag = false;
-				alert("该班组未维护班组承包单价！");
-				return false;
-			}
+		
 			//判断车号、操作日期是否有效填写（自编号模式判断订单、自编号、操作日期是否有效填写）
 			if(is_customer=='1'){
 				if(cutomer_number.trim().length==0){
@@ -439,6 +435,11 @@ $(document).ready(function() {
 			if(work_date.trim().length==0){
 				alert("请填写操作日期！")
 				save_flag=false;
+				return false;
+			}
+			if(standard_price==0){
+				saveFlag = false;
+				alert("该班组未维护班组承包单价！");
 				return false;
 			}
 			/**判断车辆是否在车间上线
@@ -581,11 +582,7 @@ $(document).ready(function() {
 		 */
 		if(salary_model=='自制件承包'){
 			//standard_price=Number($(trs[0]).children("td").eq(4).html());
-			if(standard_price==0){
-				saveFlag = false;
-				alert("该班组未维护班组承包单价！");
-				return false;
-			}
+			
 			//判断车号、操作日期是否有效填写（自编号模式判断订单、自编号、操作日期是否有效填写）
 			if(is_customer=='1'){
 				if(cutomer_number.trim().length==0){
@@ -597,7 +594,8 @@ $(document).ready(function() {
 					alert("请填写有效订单！")
 					save_flag=false;
 					return false;
-				}			
+				}		
+				
 				var area=cutomer_number.split("_");
 				if(area.length<=1){
 					alert("输入格式不正确，自编号格式为：车型-订单_起始号-结束号！");
@@ -630,6 +628,11 @@ $(document).ready(function() {
 			if(work_date.trim().length==0){
 				alert("请填写操作日期！")
 				save_flag=false;
+				return false;
+			}
+			if(standard_price==0){
+				saveFlag = false;
+				alert("该班组未维护班组承包单价！");
 				return false;
 			}
 			/**判断车辆是否在车间上线
