@@ -33,6 +33,13 @@ $(document).ready(function(){
 		var workgroup=$("#search_workgroup :selected").text();
 		getTeamSelect(factory,workshop,workgroup,"","#search_team","全部","id");
 	});
+	//导出功能
+	$(document).on("click",".buttons-excel",function(){
+		//ajaxQuery(0,'all');
+		$("#tableResult tbody").children("tr").children("td:hidden").remove();
+		htmlToExcel("tableResult", "", "","等待工时统计","等待工时统计");
+		return false;
+	});
 });
 
 
@@ -90,7 +97,7 @@ function ajaxQuery(){
 		             [ '显示20行', '显示50行', '显示100行', '全部' ]
 		         ],*/
 	    buttons: [
-	        {extend:'excelHtml5',title:'data_export',className:'black',text:'<i class=\"fa fa-file-excel-o bigger-130\" tooltip=\"导出excel\"></i>'},
+	        {extend:'excelHtml5',enabled:false,title:'data_export',className:'black',text:'<i class=\"fa fa-file-excel-o bigger-130\" tooltip=\"导出excel\"></i>'},
 	        {extend:'colvis',text:'<i class=\"fa fa-list bigger-130\" tooltip=\"选择展示列\"></i>'},
 	       /* {extend:'pageLength',text:'显示行'}*/
 	       

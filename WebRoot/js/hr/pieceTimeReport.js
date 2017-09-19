@@ -430,6 +430,21 @@ function ajaxQuery(){
                 		$(".dataTables_scrollHead").css("width",head_width-20);
                 		$(".dataTables_scrollBody").scrollTop(0);
                 	}
+                	
+                	$("#count_info").html("");
+                	if(result.data.length>0){
+                		var info=result.data[0];
+                		if(count_flag=='车辆维度'){              			
+                    		$("#count_info").html("共计"+info.bus_total+"台车辆");
+                    	}
+                	if(count_flag=='人员维度'){
+                    		$("#count_info").html("共计"+info.staff_total+"个人员");
+                    	}
+                	}
+                	
+                	
+                	
+                	
                 }
             });
 		

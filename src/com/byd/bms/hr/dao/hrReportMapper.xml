@@ -87,6 +87,56 @@
 			and p.staff_number=ps.staff_number 
 		</if>	
 		and locate(substring(#{wdate_start},1,7),p.work_date)>0 and p.salary_model=#{salary_model}) as total_ppay
+		<if test="count_flag=='车辆维度'">
+			,(select count(distinct ps1.bus_number) from BMS_HR_PIECE_SALARY ps1 
+			where  ps1.factory=#{factory} and ps1.workshop=#{workshop} and ps1.salary_model=#{salary_model}
+			<if test="workgroup !=null and workgroup !='全部'">
+				and ps1.workgroup=#{workgroup}
+			</if>
+			<if test="team !=null and team !='全部'">
+				and ps1.team=#{team}
+			</if>
+			<if test="staff !=null and staff !=''">
+				and (ps1.staff_number like concat('%',#{staff},'%') or ps1.staff_name like concat('%',#{staff},'%') ) 
+			</if>
+			<if test="bus_number !=null and bus_number !=''">
+				and ps1.bus_number like concat('%',#{bus_number},'%')
+			</if>
+			<if test="order_id !=null and order_id !=''">
+				and ps1.order_id=#{order_id}
+			</if>
+			<if test="wdate_start !=null and wdate_start !=''">
+				and ps1.work_date>=#{wdate_start}
+			</if>
+			<if test="wdate_end !=null and wdate_end !=''">
+				and ps1.work_date&lt;=#{wdate_end}
+			</if> ) bus_total			
+		</if>	
+		<if test="count_flag=='人员维度'">
+			,(select count(distinct ps1.staff_number) from BMS_HR_PIECE_SALARY ps1 
+			where  ps1.factory=#{factory} and ps1.workshop=#{workshop} and ps1.salary_model=#{salary_model}
+			<if test="workgroup !=null and workgroup !='全部'">
+				and ps1.workgroup=#{workgroup}
+			</if>
+			<if test="team !=null and team !='全部'">
+				and ps1.team=#{team}
+			</if>
+			<if test="staff !=null and staff !=''">
+				and (ps1.staff_number like concat('%',#{staff},'%') or ps1.staff_name like concat('%',#{staff},'%') ) 
+			</if>
+			<if test="bus_number !=null and bus_number !=''">
+				and ps1.bus_number like concat('%',#{bus_number},'%')
+			</if>
+			<if test="order_id !=null and order_id !=''">
+				and ps1.order_id=#{order_id}
+			</if>
+			<if test="wdate_start !=null and wdate_start !=''">
+				and ps1.work_date>=#{wdate_start}
+			</if>
+			<if test="wdate_end !=null and wdate_end !=''">
+				and ps1.work_date&lt;=#{wdate_end}
+			</if> ) staff_total			
+		</if>
 		from BMS_HR_PIECE_SALARY ps
 		left join BMS_OR_ORDER o on ps.order_id=o.id
 		left join BMS_BASE_BUS_TYPE t on t.id=o.bus_type_id	

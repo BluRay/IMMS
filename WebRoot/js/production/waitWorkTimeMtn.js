@@ -3,6 +3,7 @@ var workshop="";
 var workgroup="";
 var team="";
 var org = "";
+var org_id="";
 var staff_list=[];
 $(document).ready(function() {
     initPage();
@@ -441,6 +442,7 @@ function zTreeOnClick(event, treeId, treeNode) {
 		workshop=treeNode.getParentNode().getParentNode().displayName;
 		workgroup=treeNode.getParentNode().displayName;
 		team=treeNode.displayName;
+		org_id=treeNode.id;
 	}
 	if(treeNode.org_type != '4'){
 		alert("请选择小班组！");
@@ -480,13 +482,13 @@ function ajaxQueryTeamStaffDetail(){
 				workshop:workshop,
 				workgroup:workgroup,
 				team:team,
-//				org_id:org_id,
+				org_id:org_id,
 //				work_date:$("#work_date").val()
 			};
 
             $.ajax({
                 type: "post",
-                url: "getTeamStaffDetail",
+                url: "getStaffInfo",
                 cache: true,  //禁用缓存
                 data: param,  //传入组装的参数
                 dataType: "json",
@@ -625,7 +627,7 @@ function ajaxGetStaffWorkHours(conditions) {
 function ajaxGetStaffDetail(staff_number){
 	var staff={};
 	$.ajax({
-		url:'getTeamStaffDetail',
+		url:'getStaffInfo',
 		type:'post',
 		dataType:'json',
 		async:false,

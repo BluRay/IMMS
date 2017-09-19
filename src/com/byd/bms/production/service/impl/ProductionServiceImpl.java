@@ -1076,6 +1076,13 @@ public class ProductionServiceImpl implements IProductionService {
 		}
 		
 	}
+
+	@Override
+	public void getStaffInfo(Map<String, Object> condMap, ModelMap model) {
+		List<Map<String,Object>> datalist=new ArrayList<Map<String,Object>>();
+		datalist=productionDao.queryStaffInfo(condMap);
+		model.put("staff_list", datalist);
+	}
 	/*****************************xiong jianwu end  *****************************/
 
 

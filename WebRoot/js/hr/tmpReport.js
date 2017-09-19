@@ -48,6 +48,13 @@ $(document).ready(function() {
 		}
 	})
 	
+	//导出功能
+	$(document).on("click",".buttons-excel",function(){
+		//ajaxQuery(0,'all');
+		$("#tableResult tbody").children("tr").children("td:hidden").remove();
+		htmlToExcel("tableResult", "", "","额外工时统计","额外工时统计");
+		return false;
+	});
 });
 
 //限制开始和结束时间为同一个月
@@ -121,7 +128,7 @@ function ajaxQuery(){
 		serverSide: true,
 		dom: 'Bfrtip',
 		buttons: [
-			        {extend:'excelHtml5',title:'data_export',className:'black',text:'<i class=\"fa fa-file-excel-o bigger-130\" tooltip=\"导出excel\"></i>'},
+			        {extend:'excelHtml5',enabled:false,title:'data_export',className:'black',text:'<i class=\"fa fa-file-excel-o bigger-130\" tooltip=\"导出excel\"></i>'},
 			        {extend:'colvis',text:'<i class=\"fa fa-list bigger-130\" tooltip=\"选择展示列\"></i>'},],
         paginate:false,
         rowsGroup:rowsGroup,

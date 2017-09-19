@@ -5,5 +5,5 @@ import java.util.List;
 import com.byd.bms.util.model.BmsBaseMenu;
 
 public interface IMenuService {
-	public List<BmsBaseMenu> getMenu();
+	public List<BmsBaseMenu> getMenu(String staff_number);
 }

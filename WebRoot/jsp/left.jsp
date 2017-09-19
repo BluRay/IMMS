@@ -84,6 +84,7 @@ function queryTreeNode(id,s) {
 			//do nothing
 		}else if(value.parent===id){
 			list.push(value);
+			num++;
 		}
 	});
 	return list;

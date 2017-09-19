@@ -1016,6 +1016,37 @@ public class ProductionController extends BaseController {
 		productionService.verifyStaffHours(condMap,model);
 		return model;
 	}
+	
+	/**
+	 * 根据工号获取员工信息
+	 * @author xiong.jianwu
+	 * @return
+	 */
+	@RequestMapping("/getStaffInfo")
+	@ResponseBody
+	public ModelMap getStaffInfo(){
+		model.clear();
+		String factory=request.getParameter("factory");
+		String workshop=request.getParameter("workshop");
+		String workgroup=request.getParameter("workgroup");
+		String team=request.getParameter("team");
+		String order_id=request.getParameter("order_id");
+		String work_date=request.getParameter("work_date");
+		String org_id=request.getParameter("org_id");
+		String staff_number=request.getParameter("staff_number");
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("factory", factory);
+		condMap.put("workshop", workshop);
+		condMap.put("workgroup", workgroup);
+		condMap.put("team", team);
+		condMap.put("order_id", order_id);
+		condMap.put("org_id", org_id);
+		condMap.put("work_date", work_date);
+		condMap.put("staff_number", staff_number);
+		
+		productionService.getStaffInfo(condMap,model);
+		return model;
+	}
 	/****************************  xiongjianwu ***************************/
 	
 	@RequestMapping("/productionsearchbusinfo")
@@ -2514,7 +2545,7 @@ public class ProductionController extends BaseController {
 						 */
 						Map<String, Object> conditionMap = new HashMap<String, Object>();
 						conditionMap.put("month", month);
-						conditionMap.put("staff_number", staff_numbers.toString().trim());
+						conditionMap.put("staff_number", staff_numbers.toString().trim().substring(0,staff_numbers.toString().trim().length()-1));
 						conditionMap.put("status", "在职");
 						String[] staffArray=staff_numbers.toString().split(",");
 						for(int i=0;i<staffArray.length-1;i++){

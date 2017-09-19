@@ -16,9 +16,9 @@ public class MenuServiceImpl implements IMenuService {
 	@Resource(name="menuDao")
 	private IMenuDao menuDao;
 	@Override
-	public List<BmsBaseMenu> getMenu() {
+	public List<BmsBaseMenu> getMenu(String staff_number) {
 		// TODO Auto-generated method stub
-		List<BmsBaseMenu> list= menuDao.getMenu();
+		List<BmsBaseMenu> list= menuDao.getMenu(staff_number);
 		return list;
 	}
 }

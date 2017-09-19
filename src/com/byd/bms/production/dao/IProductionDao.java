@@ -123,7 +123,8 @@ public interface IProductionDao {
 	Map<String, Object> queryWarehouseInfo(Map<String, Object> condMap);
 	
 	void updateFactoryOrder(Map<String, Object> m);
-	
+
+	List<Map<String, Object>> queryStaffInfo(Map<String, Object> condMap);
 	/*****************************xiong jianwu end  *****************************/
 
 	/******************* tangjin start**************************/

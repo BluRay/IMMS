@@ -22,7 +22,8 @@ public class MenuController extends BaseController {
 	@ResponseBody
 	public ModelMap getMenu() {
 		List<BmsBaseMenu> list = new ArrayList<BmsBaseMenu>();
-		list = menuService.getMenu();
+		String staff_number = request.getSession().getAttribute("staff_number") + "";
+		list = menuService.getMenu(staff_number);
 		Gson gson = new Gson();
 		String jsonstr = gson.toJson(list).toString();
 		model.put("result", jsonstr);

@@ -72,14 +72,13 @@
 								</select>
 							</td>							
 							<td style="text-align:right" >统计日期：</td>
-							<td colspan=3>
+							<td colspan=4>
 								<input id="wdate_start" style="width:90px;height: 30px;" class="input-small" 
 											onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{limitMonthDate(1);}',maxDate:'#F{$dp.$D(\'wdate_end\',{d:0})}'})" type="text">
 								<span>-</span>
 								<input id="wdate_end" style="width:90px;height: 30px;" class="input-small" 
 											onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'wdate_start\',{d:0})}',maxDate:'#F{limitMonthDate(2);}'})" type="text">
 							</td>
-							<td></td>
 						</tr>
 						<tr>
 						<td style="text-align:right">车号：</td>
@@ -114,6 +113,7 @@
 						<td>
 							<input class="btn btn-sm btn-primary" id="btnQuery" value="查询" style="margin-left: 10px;top:1px;" type="button">							
 						</td>
+						<td id="count_info" style='color:blue;padding-left: 20px;text-align:center'></td>
 						</tr>
 						</table>
 					</form>

@@ -97,6 +97,20 @@ $(document).ready(function() {
 	
 	// 新增额外工时
 	$(document).on("click", "#addStaff",function() {
+		
+		if(order_id=='0'&&is_customer=='0'){
+			alert("请输入有效车号!");
+			return false;
+		}
+		if(order_id=='0'&&is_customer=='1'){
+			alert("请输入有效订单号!");
+			return false;
+		}
+		if($("#work_date").val().trim().length==0){
+			alert("请输入操作日期!");
+			return false;
+		}
+		
 		var tr1=$("#tableResult tbody").find("tr").eq(0);
 		
 		var tr=$("<tr />");
@@ -118,6 +132,7 @@ $(document).ready(function() {
 		}
 		if(salary_model=='承包制'){
 			//var price=$(tr1).children("td").eq(4).html();
+
 			$("<td class='center'/>").html("<i class=\"fa fa-times bigger-110\" style=\"cursor: pointer;color: red;\"></i>").appendTo(tr);
 			$("<td class='center'/>").html("<input type='text' class='staff_number' style='width:100%;height:28px;margin: 0;font-size:12px;text-align:center;' />").appendTo(tr);
 			$("<td class='center'/>").html("").appendTo(tr);
@@ -172,6 +187,7 @@ $(document).ready(function() {
 	})*/
 	
 	$(document).on("change",".staff_number",function(){
+		//alert($(this).val());
 		 var staff=ajaxGetStaffDetail($(this).val());
 		 if(!staff){
 			 $(this).val("");
@@ -1026,7 +1042,7 @@ function ajaxGetStaffDetail(staff_number){
 	var order_id=$("#bus_number").attr("order_id")||$("#order_no").attr("order_id");
 	var staff={};
 		$.ajax({
-			url:'getTeamStaffDetail',
+			url:'getStaffInfo',
 			type:'post',
 			dataType:'json',
 			async:false,

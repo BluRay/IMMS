@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 import com.byd.bms.util.model.BmsBaseMenu;
 @Repository(value="menuDao")
 public interface IMenuDao {
-	public List<BmsBaseMenu> getMenu();
+	public List<BmsBaseMenu> getMenu(String staff_number);
 }
