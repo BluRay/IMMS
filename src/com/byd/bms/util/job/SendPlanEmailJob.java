@@ -88,8 +88,8 @@ public class SendPlanEmailJob  implements Job {
 		conditionMap.put("workshop", workshop);
 		conditionMap.put("start_date", sdf.format(new Date()));
 		conditionMap.put("end_date", sdf.format(new Date()));
-		/*conditionMap.put("start_date", "2017-08-29");
-		conditionMap.put("end_date", "2017-08-29");*/
+		/*conditionMap.put("start_date", "2017-09-19");
+		conditionMap.put("end_date", "2017-09-19");*/
 		List<Map<String,String>> datalist=new ArrayList();
 		datalist = planDao.getPlanSerach(conditionMap);
 		
@@ -364,7 +364,7 @@ public class SendPlanEmailJob  implements Job {
 		
 		String rate_tzon="-";
 		if(Integer.parseInt(m_tzon.get("plan").toString())>0){
-			rate_tzon=Integer.parseInt(m_hzon.get("real").toString())*100/Integer.parseInt(m_hzon.get("plan").toString())+"%";
+			rate_tzon=Integer.parseInt(m_tzon.get("real").toString())*100/Integer.parseInt(m_tzon.get("plan").toString())+"%";
 		}
 		tr_rate.add(tableW.new TdTd(rate_tzon));
 		

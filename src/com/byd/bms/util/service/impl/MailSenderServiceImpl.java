@@ -154,8 +154,8 @@ public class MailSenderServiceImpl extends EmailSupport implements  MailSenderSe
         }catch (MailSendException e) {
     	   Exception[] exceptionArray = e.getMessageExceptions();
            e.getFailedMessages();
- 
-           SendFailedException x=null;
+           log.error("发送邮件异常："+e.getMessage());
+           SendFailedException x=new SendFailedException();
            for(Exception e1 : exceptionArray){
                if(e1 instanceof SendFailedException){     
             	   x=(SendFailedException)e1;
@@ -165,20 +165,25 @@ public class MailSenderServiceImpl extends EmailSupport implements  MailSenderSe
  	   
     	   	Address[] ad_invalid=x.getInvalidAddresses();
         	 String invalidAddress = "";  
-             for(int i=0;i<ad_invalid.length;i++){  
-            	 invalidAddress += ad_invalid[i] + ";";  
-             } 
-             log.info("无效邮箱地址："+invalidAddress);
+        	 if(ad_invalid !=null){
+        		 for(int i=0;i<ad_invalid.length;i++){  
+                	 invalidAddress += ad_invalid[i] + ";";  
+                 } 
+                 log.info("无效邮箱地址："+invalidAddress);
+        	 }         
              
         	Address[] ad_unset=x.getValidUnsentAddresses();
         	String unsetAddress = "";  
-            for(int i=0;i<ad_unset.length;i++){  
-            	unsetAddress += ad_unset[i] + ";";  
-            } 
-            InternetAddress[] resendAddress = parseAddress(unsetAddress);
-            
-            this.sendWithEmailSender(emailSender, resendAddress);
         	
+        	if(ad_unset!=null){
+        		 for(int i=0;i<ad_unset.length;i++){  
+                 	unsetAddress += ad_unset[i] + ";";  
+                 } 
+        		 InternetAddress[] resendAddress = parseAddress(unsetAddress);
+                 
+                 this.sendWithEmailSender(emailSender, resendAddress);
+        	}
+	
             //throw new RuntimeException("發送郵件失敗!"+invalidAddress,e);
         } catch (MessagingException e) {
         	log.error(e.getMessage());

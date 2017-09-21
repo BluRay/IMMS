@@ -1245,6 +1245,7 @@ public class ProductionServiceImpl implements IProductionService {
 	}
 
 	@Override
+	@Transactional
 	public int insertExtraWorkHourManager(List<Map<String, Object>> list) {
 		int result=0;
 		for(Map<String,Object> map : list){

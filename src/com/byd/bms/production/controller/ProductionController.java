@@ -1750,6 +1750,7 @@ public class ProductionController extends BaseController {
 	@ResponseBody
 	public ModelMap uploadExtraWorkHourManager(@RequestParam(value="file",required=false) MultipartFile file){
 		logger.info("uploading.....");
+		String result="";
 		String fileName="extraWorkHourManager.xls";
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String curTime = df.format(new Date());
@@ -1788,7 +1789,7 @@ public class ProductionController extends BaseController {
 
 		List<Map<String, Object>> addList = new ArrayList<Map<String, Object>>();
 		boolean saveFlag=true;
-		String result="";
+		
 		for (Object[] data : excelModel.getData()) {
 			Map<String, Object> infomap = new HashMap<String, Object>();
 
@@ -1815,7 +1816,7 @@ public class ProductionController extends BaseController {
 			}
 			infomap.put("no", data[1] == null ? null : data[1].toString().trim());
 			infomap.put("order_no", data[2] == null ? null : data[2].toString().trim());
-			if(data[2] != null){
+			if(data[2] != null && !data[2].toString().equals("")){
 				Map<String, Object> querymap = new HashMap<String, Object>();
 				querymap.put("orderNo",data[2].toString().trim());
 				Map<String,Object> orderMap=orderService.getOrderByNo(querymap);
@@ -1825,7 +1826,7 @@ public class ProductionController extends BaseController {
 					break;
 				}
 			}
-			if(data[3] != null){
+			if(data[3] != null && !data[3].toString().equals("")){
 				Map<String, Object> querymap = new HashMap<String, Object>();
 				querymap.put("busTypeCode",data[3].toString().trim());
 				Map<String,Object> bustypeMap=baseDataService.getBusTypeList(querymap);
@@ -1851,10 +1852,10 @@ public class ProductionController extends BaseController {
 		}
 		if(saveFlag){
 			int returnVal=productionService.insertExtraWorkHourManager(addList);
-		    if(returnVal==1){
+		    if(returnVal>0){
 		    	initModel(true,"导入成功！",addList);
 		    }else{
-		    	initModel(false,"导入失败！",null);
+		    	initModel(false,result,result);
 		    }
 		}else{
 			initModel(false,result,null);
@@ -1862,7 +1863,7 @@ public class ProductionController extends BaseController {
 		
 		
 		}catch(Exception e){
-			initModel(false,"导入失败！",null);
+			initModel(false,result,null);
 		}
 		return mv.getModelMap();
 	}

@@ -112,7 +112,7 @@ function addWorkHourItem(staffId,cardNo, staffName, staffPost, workHour, subgrou
 					+ cardNo + "' staffId='"+staffId+"' " + cardNoDisabled + ">").appendTo(tr);
 	$("<td class='staff_name' />").html(staffName).appendTo(tr);
 	$("<td class='staff_post' />").html(staffPost).appendTo(tr);
-	$("<td />").html("<input class='input-small work_hour' onchange=\"checkWorkHours(this)\" style='text-align:center;margin-bottom: 0px;' type='text' value="+ workHour + " >").appendTo(tr);
+	$("<td />").html("<input class='input-small work_hour' onchange=\"checkWorkHours(this)\" onkeydown=\"nextEditWorkHours(event,this)\" style='text-align:center;margin-bottom: 0px;' type='text' value="+ workHour + " >").appendTo(tr);
 	$("<td class='staff_subgroup' />").html(subgroup).appendTo(tr);
 	$("<td class='staff_group' />").html(group).appendTo(tr);
 	$("<td class='staff_workshop' />").html(workshop).appendTo(tr);
@@ -593,6 +593,17 @@ function btnConfirm(){
 	}
 	if(saveFlag&&stafflist.length>0){
 		ajaxSave(JSON.stringify(stafflist));
+	}
+}
+
+function nextEditWorkHours(e,obj){
+	//console.log("-->nextEditWorkHours");	
+	e = e ? e : window.event;
+    var keyCode = e.which ? e.which : e.keyCode;
+	
+	if(keyCode==13){
+	//if (event.keyCode == "13") {
+		$(obj).parent().parent().next().find("input").focus().select();
 	}
 }
 
