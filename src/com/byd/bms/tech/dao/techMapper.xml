@@ -724,7 +724,8 @@
 		insert into BMS_TECH_TASK_FOLLOW (tech_task_id,bus_number,order_no,factory,workshop,task_detail_id)
 		values
 		<foreach collection="list" item="item" index="index" separator="," >  
-        (#{item.tech_task_id},#{item.bus_number},#{item.order_no},#{item.factory},#{item.workshop},#{item.task_detail_id})  
+        (#{item.tech_task_id},#{item.bus_number},#{item.order_no},#{item.factory},#{item.workshop},
+        (SELECT d.id FROM BMS_TECH_TASK_DETAIL d WHERE d.tech_task_id = #{item.tech_task_id} AND d.order_no = #{item.order_no} AND d.factory = #{item.factory}))  
     	</foreach> 
 	</insert>
 	

@@ -12,6 +12,14 @@ $(document).ready(function(){
 	$("#btnQuery").click(function(){
 		ajaxQuery();
 	})
+	
+	//导出功能
+	$(document).on("click",".buttons-excel",function(){
+		//ajaxQuery(0,'all');
+		$("#tableResult tbody").children("tr").children("td:hidden").remove();
+		htmlToExcel("tableResult", "", "","工厂月计划达成","工厂月计划达成");
+		return false;
+	});
 })
 
 function initPage(){
@@ -129,7 +137,7 @@ function showTable(data,th_order_list){
 	var tb=$("#tableResult").dataTable({
 		  dom: 'Bfrtip',
 		  buttons: [
-			        {extend:'excelHtml5',title:'data_export',className:'black',text:'<i class=\"fa fa-file-excel-o bigger-130\" tooltip=\"导出excel\"></i>'},
+			        {extend:'excelHtml5',enabled:false,title:'data_export',className:'black',text:'<i class=\"fa fa-file-excel-o bigger-130\" tooltip=\"导出excel\"></i>'},
 			        {extend:'colvis',text:'<i class=\"fa fa-list bigger-130\" tooltip=\"选择展示列\"></i>'},	       
 			        ],
 		  paginate:false,	 

@@ -269,6 +269,7 @@ function assignTechTask(){
 			});		
 			var obj={};
 			obj.tech_task_id=tech_task_id;
+			obj.task_detail_id = (task_detail_id==undefined)?"":task_detail_id;
 			obj.factory_list=factory;
 			obj.factory_id=factory_id;
 			obj.order_no=order_no;

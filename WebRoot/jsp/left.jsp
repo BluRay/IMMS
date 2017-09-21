@@ -12,22 +12,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<link rel="stylesheet" href="/BMS/assets/css/bootstrap.min.css" />
-<link rel="stylesheet" href="/BMS/assets/css/font-awesome.min.css" />
+<link rel="stylesheet" href="<%=basePath%>/assets/css/bootstrap.min.css" />
+<link rel="stylesheet" href="<%=basePath%>/assets/css/font-awesome.min.css" />
 <!-- text fonts -->
-<link rel="stylesheet" href="/BMS/assets/css/ace-fonts.css" />
+<link rel="stylesheet" href="<%=basePath%>/assets/css/ace-fonts.css" />
 <!-- ace styles -->
-<link rel="stylesheet" href="/BMS/assets/css/ace.min.css" id="main-ace-style" />
-<link rel="stylesheet" href="/BMS/assets/css/ace-skins.min.css" />
-<link rel="stylesheet" href="/BMS/assets/css/ace-rtl.min.css" />
-<script src="/BMS/assets/js/jquery.min.js"></script>
-<script src="/BMS/assets/js/jquery.mobile.custom.min.js"></script>
-<script src="/BMS/assets/js/ace-extra.min.js"></script>
-<script src="/BMS/assets/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="<%=basePath%>/assets/css/ace.min.css" id="main-ace-style" />
+<link rel="stylesheet" href="<%=basePath%>/assets/css/ace-skins.min.css" />
+<link rel="stylesheet" href="<%=basePath%>/assets/css/ace-rtl.min.css" />
+<script src="<%=basePath%>/assets/js/jquery.min.js"></script>
+<script src="<%=basePath%>/assets/js/jquery.mobile.custom.min.js"></script>
+<script src="<%=basePath%>/assets/js/ace-extra.min.js"></script>
+<script src="<%=basePath%>/assets/js/bootstrap.min.js"></script>
 		<!-- page specific plugin scripts -->
 		<!-- ace scripts -->
-		<script src="/BMS/assets/js/ace-elements.min.js"></script>
-		<script src="/BMS/assets/js/ace.min.js"></script>
+		<script src="<%=basePath%>/assets/js/ace-elements.min.js"></script>
+		<script src="<%=basePath%>/assets/js/ace.min.js"></script>
 		<!-- inline scripts related to this page -->
 		<script type="text/javascript">
 			jQuery(function($) {
@@ -49,7 +49,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 var s = [];
 function ajaxQueryMenu(){
 	$.ajax({
-	    url: "/BMS/getMenu",
+	    url: "<%=basePath%>/getMenu",
 	    async: false,
 	    dataType: "json",
 		type: "get",
@@ -66,7 +66,6 @@ function ajaxQueryMenu(){
 	    }
 	});
 }
-
 function recursiveTree(id,s) {
 	var node = getTreeNode(id,s);
 	var childTreeNodes = queryTreeNode(id,s);
@@ -76,7 +75,6 @@ function recursiveTree(id,s) {
     });
 	return node;
 }
-
 function queryTreeNode(id,s) {
 	var list = [];
 	$.each(s, function (index, value) {
@@ -84,12 +82,10 @@ function queryTreeNode(id,s) {
 			//do nothing
 		}else if(value.parent===id){
 			list.push(value);
-			num++;
 		}
 	});
 	return list;
 }
-
 function getTreeNode(id,s) {
 	var tn;
 	$.each(s, function (index, value) {
@@ -99,7 +95,6 @@ function getTreeNode(id,s) {
 	});
 	return tn;
 }
-
 var menuTree = [];
 $(document).ready(function () {
 	//收起侧边菜单
@@ -121,7 +116,7 @@ $(document).ready(function () {
 	ajaxQueryMenu();
 	$.ajax({
 		type:'GET',
-		url:"/BMS/common/getTaskList",
+		url:"<%=basePath%>/common/getTaskList",
 		data:{},
 		async: false,
 		globle:false,
@@ -135,7 +130,7 @@ $(document).ready(function () {
  			$("#task").html("需处理任务数 "+data.count+" 个");
 			var str="";
 			$.each(data.datalist,function(index,item){
-				var url="/BMS/"+item.url;
+				var url="<%=basePath%>/"+item.url;
 				if(item.params!=null && item.params!=undefined){
 					url+=item.params;
 				}
@@ -160,8 +155,7 @@ $(document).ready(function () {
 			var root = $('.nav-list');
 			
 			var li = $('<li  class="" />');
-
-			var a = $('<a href=\"/BMS/'+value.path+'\" ></a>');
+			var a = $('<a href=\"<%=basePath%>/'+value.path+'\" ></a>');
 			if (value.path.substring(0,4) =="http"){
 				a = $('<a href=\"'+value.path+'<%=staff_number%>\" ></a>');
 			}
@@ -225,7 +219,6 @@ $(document).ready(function () {
 		}
 	});
 });
-
 function getRealPath(url){
 	var str = url;
 	var index2 = str.lastIndexOf("<%= path %>");
@@ -247,13 +240,12 @@ function getRealPath(url){
 	str = str.substring(0,index1);
 	return str;
 }
-
 //遍历树生成菜单元素
 function traverseTree(node,parentli,two){
 	var ul = $('<ul class="submenu" />');
 	$.each(node.list, function (index, value) {
 		var li = $('<li  class="" />');
-		var a = $('<a href=\"/BMS/'+value.path+'\" ></a>');
+		var a = $('<a href=\"<%=basePath%>/'+value.path+'\" ></a>');
 		if(value.list.length>0){
 			a.addClass('dropdown-toggle');
 			if(two){
