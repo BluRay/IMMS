@@ -74,7 +74,7 @@
 						</table>
 					</div>
 					
-					<table id="tableData" class="table table-striped table-bordered table-hover" style="width:2000px;overflow-x:auto;font-size: 12px;">
+					<table id="tableData" class="table table-striped table-bordered table-hover" style="width:2800px;overflow-x:auto;font-size: 12px;">
 					</table>
 					
 					</div>

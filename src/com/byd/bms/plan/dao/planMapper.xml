@@ -382,6 +382,12 @@
 	<if test="workshop_id!='' and workshop_id!=null">
 		AND P.workshop_id = #{workshop_id}
 	</if>
+	<if test="factory_name!='' and factory_name!=null">
+		AND O1.factory_name = #{factory_name}
+	</if>
+	<if test="workshop_name!='' and workshop_name!=null">
+		AND O2.workshop_name = #{workshop_name}
+	</if>
 	<if test="line!='' and line!=null">
 		AND P.line = #{line}
 	</if>

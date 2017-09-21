@@ -144,7 +144,24 @@ $(document).ready(function () {
 		$.each(s, function (index, value) {
 			if(value.parent===0){
 				var node = recursiveTree(value.id,s);
-				menuTree.push(node);
+				
+				var node_count = 0;
+				//console.log(value.name);
+				if(value.name === "仓库管理")menuTree.push(node);
+				//console.log("node",node);
+				node_count = node.list.length;
+				if(node_count >0 ){
+					
+					$.each(node.list, function (i, v) {
+						//console.log("icon = ",v.icon);
+						if (v.icon === "+"){
+							if (v.list.length === 0)node_count--;
+						}
+					})
+						
+					}
+					if(node_count >0 )menuTree.push(node);
+				//menuTree.push(node);
 			}
 		});
 	}
@@ -153,21 +170,21 @@ $(document).ready(function () {
 	if(menuTree.length>0){
 		$.each(menuTree, function (index, value) {
 			var root = $('.nav-list');
-			
 			var li = $('<li  class="" />');
 			var a = $('<a href=\"<%=basePath%>/'+value.path+'\" ></a>');
 			if (value.path.substring(0,4) =="http"){
 				a = $('<a href=\"'+value.path+'<%=staff_number%>\" ></a>');
 			}
-			
 			if(value.icon==='' || value.icon==undefined){
-				var i = $('<i class="menu-icon fa fa-desktop"></i>');
+				var i = $('<i class="menu-icon fa fa-desktop green"></i>');
 			}else{
 				var i = $('<i class="'+value.icon+'"></i>');
 			}
 			i.appendTo(a);
 			var span = $('<span class="menu-text">'+value.name+' </span>');
 			span.appendTo(a);
+			//console.log("name:" + value.name);
+			//console.log("list:" , value.list);
 			if(value.list.length>0){
 				a.addClass('dropdown-toggle');
 				var b = $('<b class="arrow fa fa-angle-down"></b>');
@@ -220,7 +237,8 @@ $(document).ready(function () {
 	});
 });
 function getRealPath(url){
-	var str = url;
+	var str = '';
+	if (typeof(url) !== "undefined")str = url;
 	var index2 = str.lastIndexOf("<%= path %>");
 	if(index2===-1){
 		//do nothing
@@ -246,6 +264,7 @@ function traverseTree(node,parentli,two){
 	$.each(node.list, function (index, value) {
 		var li = $('<li  class="" />');
 		var a = $('<a href=\"<%=basePath%>/'+value.path+'\" ></a>');
+		//console.log("value:" , value);
 		if(value.list.length>0){
 			a.addClass('dropdown-toggle');
 			if(two){
@@ -258,22 +277,39 @@ function traverseTree(node,parentli,two){
 			var b = $('<b class="arrow fa fa-angle-down"></b>');
 			b.appendTo(a);
 		}else{
-			if(two){
-				var i1 = $('<i class="menu-icon fa fa-caret-right"></i>');
-				i1.appendTo(a);
-			}else{
-				var i1 = $('<i class="'+value.icon+'"></i>');
-				i1.appendTo(a);
+			//console.log("value.icon:" , value.icon);
+			if(value.icon !== '+'){
+				if(two){
+					var i1 = $('<i class="menu-icon fa fa-caret-right"></i>');
+					i1.appendTo(a);
+				}else{
+					var i1 = $('<i class="'+value.icon+'"></i>');
+					i1.appendTo(a);
+				}
 			}
+			
 		} 
 		if(two){
-			a.append('<span><i class="'+value.icon+'" style="margin-right:3px;"></i>'+value.name+'</span>');
+			//console.log("--two value.icon:" , value.icon);
+			if(value.icon == '+'){
+				if(value.list.length>0){
+					a.append('<span><i class="'+value.icon+'" style="margin-right:3px;"></i>'+value.name+'</span>');
+					a.appendTo(li);
+				}
+			}else{
+				a.append('<span><i class="'+value.icon+'" style="margin-right:3px;"></i>'+value.name+'</span>');
+				a.appendTo(li);
+			}
+			
 		}else{
+			//console.log("--value.icon:" , value.icon);
 			a.append('&nbsp;&nbsp;&nbsp;'+value.name);
+			a.appendTo(li);
 		}
-		a.appendTo(li);
+		//a.appendTo(li);
 		var b1 = $('<b class="arrow"></b>');
 		b1.appendTo(li);
+		//console.log("--li",li);
 		li.appendTo(ul);
 		traverseTree(value,li);//递归
 		ul.appendTo(parentli);

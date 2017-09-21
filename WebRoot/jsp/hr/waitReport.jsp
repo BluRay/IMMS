@@ -51,11 +51,11 @@
 						<tr>
 							<td style="text-align:right">工厂：</td>
 							<td>
-								<select name="" id="search_factory" class="input-medium" style="width:100px;"></select>
+								<select name="" id="search_factory" class="input-medium" style="width:90px;"></select>
 							</td>
 							<td style="text-align:right">车间：</td>
 							<td>
-								<select name="" id="search_workshop" class="input-medium" style="width:100px;"></select>
+								<select name="" id="search_workshop" class="input-medium" style="width:90px;"></select>
 							</td>
 							<td style="text-align:right">班组：</td>
 							<td>
@@ -79,7 +79,7 @@
 							</td>
 						<td style="text-align:right" >统计月份：</td>
 						<td>
-							<input type="text" id="waitmanhourdate" class="input-medium"style="width:100px;height: 30px;" onclick="WdatePicker({dateFmt:'yyyy-MM'})"/>
+							<input type="text" id="waitmanhourdate" class="input-medium"style="width:90px;height: 30px;" onclick="WdatePicker({dateFmt:'yyyy-MM'})"/>
 						</td>
 						<td>
 							<input class="btn btn-sm btn-primary" id="btnQuery" value="查询" style="margin-left: 10px;top:1px;" type="button">							
@@ -89,7 +89,7 @@
 					</form>
 					<div class="row">
 						<div class="col-xs-12" style="width: calc(100vw + 20px)">
-							<table id="tableResult" class="table table-striped table-bordered table-hover" style="font-size: 12px;overflow-x:auto;width:1150px;table-layout:fixed">
+							<table id="tableResult" class="table table-striped table-bordered table-hover" style="font-size: 12px;">
 							</table>
 						</div>
 					</div>

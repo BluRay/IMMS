@@ -59,10 +59,10 @@ $(document).ready(function() {
 			alert("等待工时只能保留一位小数！");
 			$(this).val(old_value);
 			return false;
-		}else if(workHour<0||workHour>8){
-			alert("等待工时只能位于0到8之间！");
-			$(this).val(old_value);
-			return false;
+//		}else if(workHour<0||workHour>8){
+//			alert("等待工时只能位于0到8之间！");
+//			$(this).val(old_value);
+//			return false;
 		}else if(workHour*10%5!=0){
 			alert("等待工时录入以半小时为单位，例如：1.0,1.5,2.0！");
 			$(this).val(old_value);

@@ -39,9 +39,10 @@ $(document).ready(function() {
 			alert("等待工时只能保留一位小数！");
 			$(this).val("");
 			return false;
-		}else if(workHour<0||workHour>8){
-			alert("等待工时只能位于0到8之间！");
-			$(this).val("");return false;
+//}
+//		else if(workHour<0||workHour>8){
+//			alert("等待工时只能位于0到8之间！");
+//			$(this).val("");return false;
 		}else if(workHour*10%5!=0){
 			alert("等待工时录入以半小时为单位，例如：1.0,1.5,2.0！");
 			$(this).val("");
@@ -97,7 +98,7 @@ $(document).ready(function() {
 				resizable: false,
 				title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 选择停线原因</h4></div>',
 				title_html: true,
-				width:800,
+				width:900,
 				height:600,
 				modal: true,
 				buttons: [{
@@ -185,6 +186,10 @@ $(document).ready(function() {
 		}
 	});
 	$("#btnQueryReason").click(function(){
+		if(workshop==''){
+			alert("请选择小班组");
+			return false;
+		}
 		$("#tableDataDetail").dataTable({
 			serverSide: true,
 			fixedColumns:   {
@@ -196,7 +201,7 @@ $(document).ready(function() {
 			searching: false,
 			bAutoWidth:false,
 			destroy: true,
-			sScrollY: document.documentElement.clientHeight-300 + 'px',
+			sScrollY: document.documentElement.clientHeight-320 + 'px',
 			scrollX: "100%",
 			lengthChange:false,
 			orderMulti:false,
@@ -465,13 +470,13 @@ function ajaxQueryTeamStaffDetail(){
 		autoWidth:false,
 		paginate:false,
 		sScrollY: document.documentElement.clientHeight-250 + 'px',
-		scrollX: true,
-		scrollCollapse: true,
+		scrollX: "100%",
+		scrollCollapse: false,
 		lengthChange:false,
 		orderMulti:false,
 		info:false,
 		language: {
-			processing: "正在查询，请稍后...",
+//			processing: "正在查询，请稍后...",
 			emptyTable:"",					     
 			infoEmpty:"",
 			zeroRecords:"未查询到人员数据！"
@@ -493,6 +498,7 @@ function ajaxQueryTeamStaffDetail(){
                 data: param,  //传入组装的参数
                 dataType: "json",
                 success: function (result) {
+                	$("#tableResult_processing").remove();
                 	$("#tableResult_info").remove();
                 	//封装返回数据
                     var returnData = {};

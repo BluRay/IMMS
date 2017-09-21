@@ -92,42 +92,41 @@ function ajaxQuery(){
             rightColumns:1
         },
 		dom: 'Bfrtip',
-		/*lengthMenu: [
+		lengthMenu: [
 		             [ 20, 50, 100, -1 ],
 		             [ '显示20行', '显示50行', '显示100行', '全部' ]
-		         ],*/
+		         ],
 	    buttons: [
 	        {extend:'excelHtml5',enabled:false,title:'data_export',className:'black',text:'<i class=\"fa fa-file-excel-o bigger-130\" tooltip=\"导出excel\"></i>'},
 	        {extend:'colvis',text:'<i class=\"fa fa-list bigger-130\" tooltip=\"选择展示列\"></i>'},
-	       /* {extend:'pageLength',text:'显示行'}*/
+	        {extend:'pageLength',text:'显示行'}
 	       
 	    ],
-	    paginate:false,
+	    paginate:true,
         rowsGroup:rowsGroup,
-		paiging:false,
+		paiging:true,
 		ordering:false,
 		searching: false,
 		bAutoWidth:false,
 		destroy: true,
-		sScrollY: $(window).height()-210,
-		scrollX: true,
-		/*scrollCollapse: true,*/
+		sScrollY: $(window).height()-250,
+		scrollX: "100%",
+		scrollCollapse: false,
 		pageLength: 20,
 		pagingType:"full_numbers",
-		lengthChange:true,
-		info:false,
+		lengthChange:false,
 		orderMulti:false,
 		language: {
 			emptyTable:"抱歉，未查询到数据！",
-			loadingRecords:"正在查询，请稍后..." ,
-			infoEmpty:"抱歉，未查询到数据！",
-		/*	paginate: {
+			info:"共计 _TOTAL_ 条，当前第 _PAGE_ 页 共 _PAGES_ 页",
+			infoEmpty:"",
+			paginate: {
 			  first:"首页",
 		      previous: "上一页",
 		      next:"下一页",
 		      last:"尾页",
 		      loadingRecords: "请稍等,加载中...",		     
-			}*/
+			}
 		},
 		ajax:function (data, callback, settings) {
 			
@@ -140,10 +139,10 @@ function ajaxQuery(){
 				"staff":$("#staff_number").val(),
 				"waitdate":$("#waitmanhourdate").val(),
 			};
-            /*param.length = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
+            param.length = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
             param.start = data.start;//开始的记录序号
             param.page = (data.start / data.length)+1;//当前页码
-*/
+
             $.ajax({
                 type: "post",
                 url: "getStaffWaitHours",
@@ -156,9 +155,9 @@ function ajaxQuery(){
                 	//封装返回数据
                     var returnData = {};
                     returnData.draw = data.draw;//这里直接自行返回了draw计数器,应该由后台返回
-                   /* returnData.recordsTotal = result.recordsTotal;//返回数据全部记录
+                    returnData.recordsTotal = result.recordsTotal;//返回数据全部记录
                     returnData.recordsFiltered = result.recordsTotal;//后台不实现过滤功能，每次查询均视作全部结果
-*/                    returnData.data = result.data;//返回的数据列表
+                    returnData.data = result.data;//返回的数据列表
                     //console.log(returnData);
                     //调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
                     //此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕

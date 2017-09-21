@@ -867,11 +867,12 @@ public class HrReportController extends BaseController {
 		String waitdate=request.getParameter("waitdate");
 		String staff=request.getParameter("staff");//员工姓名或员工姓名
 		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
-		
+		int start=Integer.parseInt(request.getParameter("start"));//分页数据起始数
+		int length=Integer.parseInt(request.getParameter("length"));//每一页数据条数
 		Map<String, Object> conditionMap = new HashMap<String, Object>();
 		conditionMap.put("draw", draw);
-		/*conditionMap.put("start", start);
-		conditionMap.put("length", length);*/
+		conditionMap.put("start", start);
+		conditionMap.put("length", length);
 		conditionMap.put("factory", factory);
 		conditionMap.put("workshop", workshop);
 		conditionMap.put("workgroup", workgroup);
