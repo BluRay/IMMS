@@ -1757,9 +1757,16 @@
 			from BMS_HR_STAFF_DISTRIBUTION d
 			left join BMS_HR_STAFF s on s.staff_number=d.staff_number
 			where d.factory=#{factory} and d.workshop=#{workshop} and d.workgroup=#{workgroup} and d.team=#{team}
+			and d.effective_date=(select max(d1.effective_date) from BMS_HR_STAFF_DISTRIBUTION d1
+			where d1.factory=#{factory} and d1.workshop=#{workshop} and d1.workgroup=#{workgroup} 
+			and d1.team=#{team} 
 			<if test="work_date !=null and work_date !=''">
-				and d.effective_date&lt;=#{work_date}
+				and d1.effective_date&lt;=#{work_date}
 			</if>	
+			<if test="order_id !=null and order_id !=''">
+				and d1.order_id=#{order_id}
+			</if>
+			)
 			<if test="order_id !=null and order_id !=''">
 				and d.order_id=#{order_id}
 			</if>

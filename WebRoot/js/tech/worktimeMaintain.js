@@ -229,9 +229,18 @@ function ajaxQuery(){
             });
 		},
 		columns: [
-		            {"title":"技改任务",width:'250',"class":"center","data":"task_content","defaultContent": ""},
+		            {"title":"技改任务",width:'250',"class":"center","data":"task_content","defaultContent": "","render":function(data,type,row){
+		            	var html="";
+		            	if(data.length>30){
+		            		html="<i title='"+data+"' style='font-style: normal'>"+data.substring(1,30)+"...</i>"
+		            	}else{
+		            		html=data;
+		            	}
+		            	return html;
+		            	}
+		            },
 		            {"title":"变更单类型",width:'100',"class":"center","data":"tech_order_type","defaultContent": ""},
-		            {"title":"技改单号",width:'300',"class":"center","data":"tech_order_no","defaultContent": ""},
+		            {"title":"技改单号",width:'200',"class":"center","data":"tech_order_no","defaultContent": ""},
 		            {"title":"变更单附件",width:'100',"class":"center","data":"tech_order_file","defaultContent": "",
 		            	"render": function ( data, type, row ) {
 		            		if(data!=''&& data!=null){
@@ -241,17 +250,6 @@ function ajaxQuery(){
 		            },
 		            {"title":"技改单日期",width:'100',"class":"center","data":"tech_date","defaultContent": ""},
 		            {"title":"责任单位",width:'100',"class":"center","data":"duty_unit","defaultContent": ""},
-		            {"title":"重大变更",width:'100',"class":"center","data":"major_change","defaultContent": ""},
-		            {"title":"顾客变更",width:'100',"class":"center","data":"custom_change","defaultContent": ""},
-		            {"title":"顾客变更单附件",width:'100',"class":"center","data":"reason_type","defaultContent": "",
-		            	"render": function ( data, type, row ) {
-		            		if(data!=''&&data!=null){
-				    			return "<a href=\""+data+"\" target='_blank'>"+"查看"+"</a>";
-				    		}	
-		            	},
-		            },
-		            {"title":"重复变更",width:'100',"class":"center","data":"repeat_change","defaultContent": ""},
-		            {"title":"技改类型",width:'100',"class":"center","data":"tech_type","defaultContent": ""},
 		            {"title":"切换方式",width:'100',"class":"center","data":"switch_mode","defaultContent": ""},
 		            {"title":"切换节点",width:'100',"class":"center","data":"switch_node","defaultContent": ""},
 		            {"title":"订单",width:'200',"class":"center","data":"order_desc","defaultContent": ""},

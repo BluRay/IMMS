@@ -16,7 +16,8 @@ public class BmsBaseUser {
 	private String cellphone;
 	private String display_name;
 	private int department_id;
-	private String admin;//0:非admin用户；1:admin用户
+	private String admin;		//0:非admin用户；1:admin用户
+	private String user_type;	//0:普通用户；1:高层领导
 	private String isdelete;
 	private int factory_id;
 	private String factory;
@@ -189,6 +190,12 @@ public class BmsBaseUser {
 	}
 	public void setTeam_org(String team_org) {
 		this.team_org = team_org;
+	}
+	public String getUser_type() {
+		return user_type;
+	}
+	public void setUser_type(String user_type) {
+		this.user_type = user_type;
 	}
 	
 }

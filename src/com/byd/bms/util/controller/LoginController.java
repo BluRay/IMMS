@@ -51,6 +51,7 @@ public class LoginController extends BaseController{
 			session.setAttribute("user_name", user.getUsername());
 			session.setAttribute("display_name", user.getDisplay_name());
 			session.setAttribute("user_id", user.getId());
+			session.setAttribute("user_type", user.getUser_type());
 			session.setAttribute("staff_number", user.getStaff_number());
 			session.setAttribute("factory", user.getFactory());
 			session.setAttribute("factory_id", user.getFactory_id());
@@ -86,9 +87,16 @@ public class LoginController extends BaseController{
 	
 	@RequestMapping("/index")  
     public ModelAndView index1(){ 
-		mv.setViewName("index");
+		String user_type = session.getAttribute("user_type").toString();
+		if(user_type.equals("1")){
+			mv.setViewName("index");
+		}else{
+			mv.setViewName("index2");
+		}
+		
         return mv;  
     } 
+
 
 	@RequestMapping("/tables")  
     public ModelAndView tables(){ 

@@ -13,6 +13,7 @@
 		<result property="cellphone" column="cellphone" />
 		<result property="display_name" column="display_name" />
 		<result property="admin" column="admin" />
+		<result property="user_type" column="user_type" />
 		<result property="factory" column="factory_name" />
 		<result property="factory_id" column="factory_id" />
 		<result property="department" column="department" />

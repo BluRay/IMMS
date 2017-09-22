@@ -72,7 +72,16 @@ function ajaxQuery(){
             });
 		},
 		columns: [
-		            {"title":"技改任务","class":"center","data":"task_content","defaultContent": ""},
+		            {"title":"技改任务","class":"center","data":"task_content","defaultContent": "","render":function(data,type,row){
+		            	var html="";
+		            	if(data.length>30){
+		            		html="<i title='"+data+"' style='font-style: normal'>"+data.substring(1,30)+"...</i>"
+		            	}else{
+		            		html=data;
+		            	}
+		            	return html;
+		            	}
+		            },
 		            {"title":"变更单类型","class":"center","data":"tech_order_type_name","defaultContent": ""},
 		            {"title":"技改单号","class":"center","data":"tech_order_no","defaultContent": ""},
 		            {"title":"技改单日期","class":"center","data":"tech_date","defaultContent": ""},

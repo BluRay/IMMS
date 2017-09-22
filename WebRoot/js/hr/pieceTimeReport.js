@@ -98,16 +98,12 @@ function ajaxQuery(){
 		alert("请输入日期范围！");
 		return false;
 	}
-	
-	
-	$(".divLoading").addClass("fade in").show();
 	//先destroy datatable，隐藏form
-	if($.fn.dataTable.isDataTable("#tableResult")){
+	/*if($.fn.dataTable.isDataTable("#tableResult")){
 		$('#tableResult').DataTable().destroy();
 		$('#tableResult').empty();
 	}
-	
-	
+	*/
 	var columns=[];
 	var fixedColumns={};
 	var rowsGroup=[];
@@ -320,70 +316,47 @@ function ajaxQuery(){
 	
 	var tb=$("#tableResult").DataTable({
 		serverSide: true,
-	/*	fixedColumns:   {
-            leftColumns: 2,
-            rightColumns:2
-        },*/
 		dom: 'Bfrtip',
-		/*lengthMenu: [
+		lengthMenu: [
 		             [ 20, 50, 100, -1 ],
 		             [ '显示20行', '显示50行', '显示100行', '全部' ]
-		         ],*/
+		         ],
 	    buttons: [
 	        {extend:'excelHtml5',enabled:false,title:'data_export',className:'black',text:'<i class=\"fa fa-file-excel-o bigger-130\" tooltip=\"导出excel\"></i>'},
 	        {extend:'colvis',text:'<i class=\"fa fa-list bigger-130\" tooltip=\"选择展示列\"></i>'},
-	       /* {extend:'pageLength',text:'显示行'}*/
+	        {extend:'pageLength',text:'显示20行'}
 	       
 	    ],
-	    paginate:false,
+/*	    paginate:true,*/
         rowsGroup:rowsGroup,
-	/*    drawCallback: function ( settings ) {
-            var api = this.api();
-            var rows = api.rows( {page:'next'} ).nodes();
-            var last=null;
- 
-            alert(rows.length);
-            api.column(0, {page:'next'} ).data().each( function ( group, i ) {
-                if ( last !== group) {               	
-                	if(last !=null){
-                		$(rows).eq( i ).before(
-                                '<tr class="group"><td colspan="13" style="font-weight: bold;" >合计：'+'</td></tr>'
-                            );
-                	}
-                    last = group;
-                }else{
-                	
-                }
-            } );
-        },*/
-		paiging:false,
+		paiging:true,
 		ordering:false,
 		searching: false,
 		bAutoWidth:false,
 		destroy: true,
-		sScrollY: $(window).height()-250,
+		sScrollY: $(window).height()-270,
 		scrollX: true,
 		/*scrollCollapse: true,*/
 		pageLength: 20,
 		pagingType:"full_numbers",
 		lengthChange:true,
-		info:false,
+		info:true,
 		orderMulti:false,
 		language: {
 			emptyTable:"抱歉，未查询到数据！",
-			loadingRecords:"正在查询，请稍后..." ,
-			infoEmpty:"抱歉，未查询到数据！",
-			zeroRecords:"抱歉，未查询到数据！",
-		/*	paginate: {
+			info:"共计 _TOTAL_ 条，当前第 _PAGE_ 页 共 _PAGES_ 页",
+			lengthMenu:"显示 _MENU_ 行",
+			infoEmpty:"",
+			paginate: {
 			  first:"首页",
 		      previous: "上一页",
 		      next:"下一页",
 		      last:"尾页",
 		      loadingRecords: "请稍等,加载中...",		     
-			}*/
+			}
 		},
 		ajax:function (data, callback, settings) {
-			
+			$(".divLoading").addClass("fade in").show();
 			var param ={
 				"draw":1,
 				"order_no":$("#search_order_no").val(),
@@ -399,10 +372,10 @@ function ajaxQuery(){
 				"salary_model":salary_model,
 				"count_flag":count_flag
 			};
-            /*param.length = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
+            param.length = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
             param.start = data.start;//开始的记录序号
             param.page = (data.start / data.length)+1;//当前页码
-*/
+
             $.ajax({
                 type: "post",
                 url: "getStaffPieceHours",
@@ -415,14 +388,16 @@ function ajaxQuery(){
                 	//封装返回数据
                     var returnData = {};
                     returnData.draw = result.draw;//这里直接自行返回了draw计数器,应该由后台返回
-                   /* returnData.recordsTotal = result.recordsTotal;//返回数据全部记录
+                    returnData.recordsTotal = result.recordsTotal;//返回数据全部记录
                     returnData.recordsFiltered = result.recordsTotal;//后台不实现过滤功能，每次查询均视作全部结果
-*/                    returnData.data = result.data;//返回的数据列表
+                    returnData.data = result.data;//返回的数据列表
                     //console.log(returnData);
                     //调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
                     //此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
+                    
                     callback(returnData);
-                	var head_width=$(".dataTables_scroll").width();
+                	
+                    /*var head_width=$(".dataTables_scroll").width();
                 	$(".dataTables_scrollBody").scrollTop(10);
                 	//alert($(".dataTables_scrollBody").scrollTop());
 
@@ -440,11 +415,8 @@ function ajaxQuery(){
                 	if(count_flag=='人员维度'){
                     		$("#count_info").html("共计"+info.staff_total+"个人员");
                     	}
-                	}
-                	
-                	
-                	
-                	
+                	}*/
+            	
                 }
             });
 		

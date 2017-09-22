@@ -76,21 +76,14 @@
 	</select>
 	
 	<select id="queryStaffPieceHours" parameterType="Map" resultType="Map">
-		<if test="salary_model=='技能系数' or salary_model=='承包制'">
-		select ps.*,concat(o.order_no,o.order_name,t.bus_type_code,' ',o.order_qty,'台') order_desc,
-		(select round(sum(p.ppay),2) from BMS_HR_PIECE_SALARY p where p.factory=ps.factory and p.workshop=p.workshop
-		and p.workgroup=ps.workgroup and p.team=ps.team
-		<if test="count_flag=='车辆维度'">
-			and p.bus_number=ps.bus_number 
-		</if>	
-		<if test="count_flag=='人员维度'">
-			and p.staff_number=ps.staff_number 
-		</if>	
-		and locate(substring(#{wdate_start},1,7),p.work_date)>0 and p.salary_model=#{salary_model}) as total_ppay
-		from BMS_HR_PIECE_SALARY ps
-		left join BMS_OR_ORDER o on ps.order_id=o.id
-		left join BMS_BASE_BUS_TYPE t on t.id=o.bus_type_id	
-		where ps.factory=#{factory} and ps.workshop=#{workshop} and ps.salary_model=#{salary_model}
+		<if test="salary_model=='技能系数' or salary_model=='承包制' or salary_model=='自制件承包'">
+		select a.*,c.total_ppay,b.bus_total
+		from(
+			select ps.*,concat(o.order_no,o.order_name,t.bus_type_code,' ',o.order_qty,'台') order_desc
+			from BMS_HR_PIECE_SALARY ps
+			left join BMS_OR_ORDER o on ps.order_id=o.id
+			left join BMS_BASE_BUS_TYPE t on t.id=o.bus_type_id
+			where ps.factory=#{factory} and ps.workshop=#{workshop} and ps.salary_model=#{salary_model} 
 			<if test="workgroup !=null and workgroup !='全部'">
 				and ps.workgroup=#{workgroup}
 			</if>
@@ -114,15 +107,75 @@
 			</if>
 			<if test="wdate_end !=null and wdate_end !=''">
 				and ps.work_date&lt;=#{wdate_end}
-			</if>
+			</if>) a
+		join
+			(select 
 			<if test="count_flag=='车辆维度'">
-				order by ps.bus_number,ps.work_date,ps.team
+			count(distinct ps1.bus_number) bus_total 
+			</if>
+			<if test="count_flag=='人员维度'">
+			count(distinct ps1.staff_number) staff_total 
+			</if>
+			from BMS_HR_PIECE_SALARY ps1 
+			where ps1.factory=#{factory} and ps1.workshop=#{workshop} and ps1.salary_model=#{salary_model} 
+			<if test="workgroup !=null and workgroup !='全部'">
+				and ps1.workgroup=#{workgroup}
+			</if>
+			<if test="team !=null and team !='全部'">
+				and ps1.team=#{team}
+			</if>
+			<if test="staff !=null and staff !=''">
+				and (ps1.staff_number like concat('%',#{staff},'%') or ps1.staff_name like concat('%',#{staff},'%') ) 
+			</if>
+			<if test="bus_number !=null and bus_number !=''">
+				and ps1.bus_number like concat('%',#{bus_number},'%')
+			</if>
+			<if test="order_id !=null and order_id !=''">
+				and ps1.order_id=#{order_id}
+			</if>
+			<if test="wdate_start !=null and wdate_start !=''">
+				and ps1.work_date>=#{wdate_start}
+			</if>
+			<if test="wdate_end !=null and wdate_end !=''">
+				and ps1.work_date&lt;=#{wdate_end}
+			</if>) b
+		left join
+			(select round(sum(p.ppay),2) total_ppay,p.factory,p.workshop,p.workgroup,p.team,p.bus_number 
+			from BMS_HR_PIECE_SALARY p 
+			where p.factory=#{factory} and p.workshop=#{workshop} and p.salary_model=#{salary_model} 
+			<if test="workgroup !=null and workgroup !='全部'">
+				and p.workgroup=#{workgroup}
+			</if>
+			<if test="team !=null and team !='全部'">
+				and p.team=#{team}
+			</if>
+			<if test="staff !=null and staff !=''">
+				and (p.staff_number like concat('%',#{staff},'%') or p.staff_name like concat('%',#{staff},'%') ) 
+			</if>
+			<if test="bus_number !=null and bus_number !=''">
+				and p.bus_number like concat('%',#{bus_number},'%')
+			</if>
+			<if test="order_id !=null and order_id !=''">
+				and p.order_id=#{order_id}
+			</if>
+			<if test="wdate_start !=null and wdate_start !=''">
+				and p.work_date>=#{wdate_start}
+			</if>
+			<if test="wdate_end !=null and wdate_end !=''">
+				and p.work_date&lt;=#{wdate_end}
+			</if> 
+			group by p.bus_number,p.factory,p.workshop,p.workgroup,p.team) c 
+		on a.factory=c.factory and a.workshop=c.workshop and a.workgroup=c.workgroup and a.team=c.team and a.bus_number=c.bus_number
+		
+			<if test="count_flag=='车辆维度'">
+				order by a.bus_number,a.work_date,a.team
 			</if>	
 			<if test="count_flag=='人员维度'">
-				order by ps.staff_number
+				order by a.staff_number
 			</if>
+		
 			<if test="start !=null and length !='-1' ">
-				LIMIT #{start} ,#{length} 
+			LIMIT #{start} ,#{length} 
 			</if>	
 		</if>
 		
@@ -171,7 +224,7 @@
 	</select>
 	
 	<select id="queryStaffPieceHoursCount" parameterType="Map" resultType="int">
-		<if test="salary_model=='技能系数' or salary_model=='承包制'">
+		<if test="salary_model=='技能系数' or salary_model=='承包制' or salary_model=='自制件承包'">
 		select count(ps.id)
 		from BMS_HR_PIECE_SALARY ps
 		where ps.factory=#{factory} and ps.workshop=#{workshop} and ps.salary_model=#{salary_model}

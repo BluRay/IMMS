@@ -20,6 +20,7 @@ $(document).ready(function(){
 	//导出功能
 	$(".buttons-excel").click(function(){
 		//ajaxQuery(0,'all');
+		$("#tableOrder thead").remove();
 		$("#tableOrder tbody").children("tr").children("td:hidden").remove();
 		htmlToExcel("tableOrder", "", "","订单明细","订单明细");
 		return false;

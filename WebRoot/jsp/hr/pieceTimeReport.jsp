@@ -132,17 +132,16 @@
 			</div>
 			<!-- /.main-container -->
 		</div>
-		
-		<script>
+		</div>
+	    <script>
 			var $table = $('#table'),$remove = $('#remove'),selections = [];
 		</script>
-		<script src="../js/datePicker/WdatePicker.js"></script>
+	    <script src="../js/datePicker/WdatePicker.js"></script>
 		<script src="../assets/js/jquery-ui.min.js"></script>
 		<script src="../assets/js/jquery.dataTables.min.js"></script>
 		<script src="../assets/js/jquery.dataTables.bootstrap.js"></script>
 		<script src="../assets/js/dataTables.fixedColumns.min.js"></script>
 		<script src="../assets/js/dataTables.rowGroup.js"></script>
-		<script src="../assets/js/dataTables.rowGroup.min.js"></script>
 		<script src="../assets/js/ace/elements.onpage-help.js"></script>
 		<script src="../assets/js/ace/ace.onpage-help.js"></script>
 		<script src="../assets/js/bootstrap3-typeahead.js"></script>
