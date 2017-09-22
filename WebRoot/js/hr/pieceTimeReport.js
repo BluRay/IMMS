@@ -99,11 +99,11 @@ function ajaxQuery(){
 		return false;
 	}
 	//先destroy datatable，隐藏form
-	/*if($.fn.dataTable.isDataTable("#tableResult")){
+	if($.fn.dataTable.isDataTable("#tableResult")){
 		$('#tableResult').DataTable().destroy();
 		$('#tableResult').empty();
 	}
-	*/
+	
 	var columns=[];
 	var fixedColumns={};
 	var rowsGroup=[];
@@ -317,17 +317,17 @@ function ajaxQuery(){
 	var tb=$("#tableResult").DataTable({
 		serverSide: true,
 		dom: 'Bfrtip',
-		lengthMenu: [
+/*		lengthMenu: [
 		             [ 20, 50, 100, -1 ],
 		             [ '显示20行', '显示50行', '显示100行', '全部' ]
-		         ],
+		         ],*/
 	    buttons: [
 	        {extend:'excelHtml5',enabled:false,title:'data_export',className:'black',text:'<i class=\"fa fa-file-excel-o bigger-130\" tooltip=\"导出excel\"></i>'},
 	        {extend:'colvis',text:'<i class=\"fa fa-list bigger-130\" tooltip=\"选择展示列\"></i>'},
-	        {extend:'pageLength',text:'显示20行'}
+	        /*{extend:'pageLength',text:'显示20行'}*/
 	       
 	    ],
-/*	    paginate:true,*/
+	    paginate:true,
         rowsGroup:rowsGroup,
 		paiging:true,
 		ordering:false,
@@ -387,17 +387,18 @@ function ajaxQuery(){
                     //console.log(result);
                 	//封装返回数据
                     var returnData = {};
-                    returnData.draw = result.draw;//这里直接自行返回了draw计数器,应该由后台返回
+                    returnData.draw = data.draw;//这里直接自行返回了draw计数器,应该由后台返回
                     returnData.recordsTotal = result.recordsTotal;//返回数据全部记录
                     returnData.recordsFiltered = result.recordsTotal;//后台不实现过滤功能，每次查询均视作全部结果
                     returnData.data = result.data;//返回的数据列表
                     //console.log(returnData);
                     //调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
                     //此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
-                    
                     callback(returnData);
+                   /* var head_width=$(".dataTables_scrollHead").width();
+                    $(".dataTables_scrollHead").css("width",head_width-20);*/
                 	
-                    /*var head_width=$(".dataTables_scroll").width();
+                    var head_width=$(".dataTables_scroll").width();
                 	$(".dataTables_scrollBody").scrollTop(10);
                 	//alert($(".dataTables_scrollBody").scrollTop());
 
@@ -415,7 +416,7 @@ function ajaxQuery(){
                 	if(count_flag=='人员维度'){
                     		$("#count_info").html("共计"+info.staff_total+"个人员");
                     	}
-                	}*/
+                	}
             	
                 }
             });

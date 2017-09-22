@@ -183,7 +183,7 @@ function ajaxQuery(){
 		                    ")' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;" + 
 		                    "<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"修改\" onclick='editUser(\"" + 
 		                    row['staff_number'] + "\",\"" + row['display_name'] + "\",\"" + row['email'] + "\",\"" + row['cellphone'] +
-		                    "\",\"" + row['telephone'] + "\",\"" + row['factory_id'] + "\",\"" + row['department_id'] + "\",\"" + row['admin'] +
+		                    "\",\"" + row['telephone'] + "\",\"" + row['factory_id'] + "\",\"" + row['department_id'] + "\",\"" + row['user_type'] +
 		                    "\")' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;" + 
 		                    "<i class=\"glyphicon glyphicon-refresh bigger-130 showbus\" title=\"重置密码\" onclick='resetUserPass(" + row['staff_number'] + 
 		                    ")' style='color:blue;cursor: pointer;'></i>";
@@ -238,14 +238,14 @@ function delUser(staff_number){
 	}
 }
 
-function editUser(staff_name,display_name,email,cellphone,telephone,factory_id,dep_id,admin){
+function editUser(staff_name,display_name,email,cellphone,telephone,factory_id,dep_id,user_type){
 	$("#edit_staff_number").val(staff_name);
 	$("#edit_username").val(display_name);
 	$("#edit_email").val(email);
 	$("#edit_cellphone").val(cellphone);
 	$("#edit_telephone").val(telephone);
 	$("#edit_factory_id").val(factory_id);
-	$("#edit_admin").val(admin);
+	$("#edit_user_type").val(user_type);
 	$("#dialog-edit").removeClass('hide').dialog({
 		resizable: false,
 		title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 编辑用户信息</h4></div>',
@@ -280,7 +280,7 @@ function editUser(staff_name,display_name,email,cellphone,telephone,factory_id,d
 						    	"cellphone" : $("#edit_cellphone").val(),
 						    	"display_name" : $("#edit_username").val(),
 						    	"factory_id" : $("#edit_factory_id").val(),
-						    	"admin" : $("#edit_admin").val()
+						    	"user_type" : $("#edit_user_type").val()
 						    },
 						    success:function(response){
 						    	ajaxQuery();

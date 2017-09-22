@@ -154,9 +154,9 @@
 						<div class="form-group form-horizontal">
 							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 用户类型： </label>
 							<div class="col-sm-9">
-								<select id="edit_admin" class="col-sm-9" id="form-field-select-1">
+								<select id="edit_user_type" class="col-sm-9" id="form-field-select-1">
 									<option value="0">普通用户</option>
-									<option value="1">系统管理员</option>
+									<option value="1">高层领导</option>
 								</select>
 							</div>
 						</div>

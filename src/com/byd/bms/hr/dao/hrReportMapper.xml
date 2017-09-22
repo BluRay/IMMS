@@ -77,7 +77,13 @@
 	
 	<select id="queryStaffPieceHours" parameterType="Map" resultType="Map">
 		<if test="salary_model=='技能系数' or salary_model=='承包制' or salary_model=='自制件承包'">
-		select a.*,c.total_ppay,b.bus_total
+		select a.*,c.total_ppay,
+		<if test="count_flag=='车辆维度'">
+		b.bus_total
+		</if>
+		<if test="count_flag=='人员维度'">
+		b.staff_total
+		</if>
 		from(
 			select ps.*,concat(o.order_no,o.order_name,t.bus_type_code,' ',o.order_qty,'台') order_desc
 			from BMS_HR_PIECE_SALARY ps
@@ -801,16 +807,18 @@
 		</selectKey>
 		insert into BMS_HR_ATTENDENCE_REPORT (factory,workshop,team,direct_num_yd,direct_num_sd,short_num_yd,short_num_sd,assist_num_yd,
 		assist_num_sd,leave_num,holiday_num,absence_num,trip_num,callout_num,out_aid_num,work_num,out_aid_cs_num,out_aid_nj_num,
-		out_aid_hz_num,out_aid_dl_num,out_aid_qd_num,out_aid_cd_num,out_aid_wh_num,out_aid_sw_num,out_aid_ty_num,out_aid_sz_num,
+		out_aid_hz_num,out_aid_dl_num,out_aid_qd_num,out_aid_cd_num,out_aid_wh_num,out_aid_sw_num,out_aid_ty_num,out_aid_sz_num,out_aid_xa_num,out_aid_nb_num,out_aid_yc_num,		
 		out_aid_tj_num,out_aid_oth_num,out_aid_note,in_aid_cs_num,in_aid_nj_num,in_aid_hz_num,in_aid_dl_num,in_aid_qd_num,in_aid_cd_num,
-		in_aid_wh_num,in_aid_sw_num,in_aid_ty_num,in_aid_sz_num,in_aid_tj_num,in_aid_oth_num,in_aid_note,record_date,report_type,editor_id,edit_date)
+		in_aid_wh_num,in_aid_sw_num,in_aid_ty_num,in_aid_sz_num,in_aid_xa_num,in_aid_nb_num,in_aid_yc_num,in_aid_tj_num,in_aid_oth_num,in_aid_note,record_date,report_type,editor_id,edit_date)
 		values
 		<foreach collection="list" item="detail" index="index" separator=",">
 			(#{detail.factory},#{detail.workshop},#{detail.team},#{detail.direct_num_yd},#{detail.direct_num_sd},#{detail.short_num_yd},#{detail.short_num_sd},#{detail.assist_num_yd},#{detail.assist_num_sd},
 			#{detail.leave_num},#{detail.holiday_num},#{detail.absence_num},#{detail.trip_num},#{detail.callout_num},#{detail.out_aid_num},#{detail.work_num},#{detail.out_aid_cs_num},#{detail.out_aid_nj_num},
 			#{detail.out_aid_hz_num},#{detail.out_aid_dl_num},#{detail.out_aid_qd_num},#{detail.out_aid_cd_num},#{detail.out_aid_wh_num},#{detail.out_aid_sw_num},#{detail.out_aid_ty_num},#{detail.out_aid_sz_num},
+			#{detail.out_aid_xa_num},#{detail.out_aid_nb_num},#{detail.out_aid_yc_num},
 			#{detail.out_aid_tj_num},#{detail.out_aid_oth_num},#{detail.out_aid_note},#{detail.in_aid_cs_num},#{detail.in_aid_nj_num},#{detail.in_aid_hz_num},#{detail.in_aid_dl_num},#{detail.in_aid_qd_num},
-			#{detail.in_aid_cd_num},#{detail.in_aid_wh_num},#{detail.in_aid_sw_num},#{detail.in_aid_ty_num},#{detail.in_aid_sz_num},#{detail.in_aid_tj_num},#{detail.in_aid_oth_num},#{detail.in_aid_note},
+			#{detail.in_aid_cd_num},#{detail.in_aid_wh_num},#{detail.in_aid_sw_num},#{detail.in_aid_ty_num},#{detail.in_aid_sz_num},
+			#{detail.in_aid_xa_num},#{detail.in_aid_nb_num},#{detail.in_aid_yc_num},#{detail.in_aid_tj_num},#{detail.in_aid_oth_num},#{detail.in_aid_note},
 			#{detail.record_date},#{detail.report_type},#{detail.editor_id},#{detail.edit_date})
 		</foreach>
 	</insert>

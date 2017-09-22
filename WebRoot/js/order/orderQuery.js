@@ -41,7 +41,43 @@ function initPage(){
 function ajaxQuery(){
 	/*$table.bootstrapTable('refresh', {url: 'getOrderDetailList'});
 	$("#btnQuery").removeAttr("disabled");*/
-
+	var columns=[];
+	columns=[
+	            {"title":"订单","width":"230","class":"center","data":"order_desc","defaultContent": ""},
+	            {"title":"订单类型","class":"center","data":"order_type","defaultContent": ""},
+	            {"title":"订单区域","class":"center","data":"order_area","defaultContent": ""},
+	            {"title":"订单交期","class":"center","data":"delivery_date","defaultContent": ""},
+	            {"title":"客户","class":"center","data":"customer","defaultContent":""},
+	            {"title":"生产工厂","class":"center","data": "factory_name","defaultContent": ""},
+	            {"title":"生产数量","class":"center","data":"production_qty","defaultContent": ""},		            
+	            {"title":"配置","class":"center","data":"order_config_name","defaultContent": ""},		            
+	            {"title":"配置数量","class":"center","data": "config_qty","defaultContent": ""},		            
+	            {"title":"生产顺序","class":"center","data":"sequence","defaultContent": ""},
+	            
+	            {"title":"自制件下线","class":"center","data":"zzj_offline_count","defaultContent": ""},
+	            {"title":"部件上线","class":"center","data":"parts_online_count","defaultContent": ""},
+	            {"title":"部件下线","class":"center","data":"parts_offline_count","defaultContent": ""},
+	            {"title":"焊装上线","class":"center","data": "welding_online_count","defaultContent": ""},
+	            {"title":"焊装下线","class":"center","data":"welding_offline_count","defaultContent": ""},		            
+	            {"title":"涂装上线","class":"center","data":"painting_online_count","defaultContent": ""},		            
+	            {"title":"涂装下线","class":"center","data": "painting_offline_count","defaultContent": ""},
+	            {"title":"底盘上线","class":"center","data":"chassis_online_count","defaultContent":""},
+	            {"title":"底盘下线","class":"center","data":"chassis_offline_count","defaultContent": ""},
+	            
+	            {"title":"总装上线","class":"center","data": "assembly_online_count","defaultContent": ""},
+	            {"title":"总装下线","class":"center","data":"assembly_offline_count","defaultContent": ""},		            
+	            {"title":"入库","class":"center","data":"warehousing_count","defaultContent": ""},		            
+	            {"title":"发车","class":"center","data": "dispatch_count","defaultContent": ""},
+	            {"title":"车辆详情","width":'70',"class":"center","data":"","defaultContent":"","render":function(data,type,row){
+	            	return "<i class=\"ace-icon fa fa-search bigger-130 editorder\" onclick = 'ajaxShowBusNumber(" + row.id+ ","+row.factory_id+","+row.order_config_id+");' style='color:blue;cursor: pointer;'></i>";
+	            }},{"title":"BOM","width":'50',"class":"center","data":"","defaultContent":"","render":function(data,type,row){
+	            	return "<i class=\"ace-icon fa fa-search bigger-130 editorder\" onclick = 'ajaxShowOrderBOM(" + row.id+ ","+row.factory_id+","+row.order_config_id+");' style='color:blue;cursor: pointer;'></i>";
+	            }},
+	            
+	            {"title":"评审结果","width":'70',"class":"center","data":"review_result","render":function(data,type,row){
+	            	return data=="2"?"已评审":(data=="1"?"评审中":"未评审")},"defaultContent":""
+	            },
+	            ];
 	var tb=$("#tableOrder").DataTable({
 		serverSide: true,
 		fixedColumns:   {
@@ -125,258 +161,13 @@ function ajaxQuery(){
             });
 		
 		},
-		columns: [
-		            {"title":"订单","width":"230","class":"center","data":"order_desc","defaultContent": ""},
-		            {"title":"订单类型","class":"center","data":"order_type","defaultContent": ""},
-		            {"title":"订单区域","class":"center","data":"order_area","defaultContent": ""},
-		            {"title":"订单交期","class":"center","data":"delivery_date","defaultContent": ""},
-		            {"title":"客户","class":"center","data":"customer","defaultContent":""},
-		            {"title":"生产工厂","class":"center","data": "factory_name","defaultContent": ""},
-		            {"title":"生产数量","class":"center","data":"production_qty","defaultContent": ""},		            
-		            {"title":"配置","class":"center","data":"order_config_name","defaultContent": ""},		            
-		            {"title":"配置数量","class":"center","data": "config_qty","defaultContent": ""},		            
-		            {"title":"生产顺序","class":"center","data":"sequence","defaultContent": ""},
-		            
-		            {"title":"自制件下线","class":"center","data":"zzj_offline_count","defaultContent": ""},
-		            {"title":"部件上线","class":"center","data":"parts_online_count","defaultContent": ""},
-		            {"title":"部件下线","class":"center","data":"parts_offline_count","defaultContent": ""},
-		            {"title":"焊装上线","class":"center","data": "welding_online_count","defaultContent": ""},
-		            {"title":"焊装下线","class":"center","data":"welding_offline_count","defaultContent": ""},		            
-		            {"title":"涂装上线","class":"center","data":"painting_online_count","defaultContent": ""},		            
-		            {"title":"涂装下线","class":"center","data": "painting_offline_count","defaultContent": ""},
-		            {"title":"底盘上线","class":"center","data":"chassis_online_count","defaultContent":""},
-		            {"title":"底盘下线","class":"center","data":"chassis_offline_count","defaultContent": ""},
-		            
-		            {"title":"总装上线","class":"center","data": "assembly_online_count","defaultContent": ""},
-		            {"title":"总装下线","class":"center","data":"assembly_offline_count","defaultContent": ""},		            
-		            {"title":"入库","class":"center","data":"warehousing_count","defaultContent": ""},		            
-		            {"title":"发车","class":"center","data": "dispatch_count","defaultContent": ""},
-		            {"title":"车辆详情","width":'70',"class":"center","data":"","defaultContent":"","render":function(data,type,row){
-		            	return "<i class=\"ace-icon fa fa-search bigger-130 editorder\" onclick = 'ajaxShowBusNumber(" + row.id+ ","+row.factory_id+","+row.order_config_id+");' style='color:blue;cursor: pointer;'></i>";
-		            }},{"title":"BOM","width":'50',"class":"center","data":"","defaultContent":"","render":function(data,type,row){
-		            	return "<i class=\"ace-icon fa fa-search bigger-130 editorder\" onclick = 'ajaxShowOrderBOM(" + row.id+ ","+row.factory_id+","+row.order_config_id+");' style='color:blue;cursor: pointer;'></i>";
-		            }},
-		            
-		            {"title":"评审结果","width":'70',"class":"center","data":"review_result","render":function(data,type,row){
-		            	return data=="2"?"已评审":(data=="1"?"评审中":"未评审")},"defaultContent":""
-		            },
-		            ],
+		columns: columns,
 	});
 	$("#tableOrder_info").addClass('col-xs-6');
 	$("#tableOrder_paginate").addClass('col-xs-6');
 	$(".dt-buttons").css("margin-top","-50px").find("a").css("border","0px");
 }
 
-
-
-//----------START bootstrap initTable ----------
-function initTable() {
-	var columns=[
-		         [
-		            {
-		            	field: 'order_desc',title: '订单',align: 'center',width:'250',valign: 'middle',align: 'center',
-		                sortable: false,visible: true,footerFormatter: totalTextFormatter,
-		                cellStyle:function cellStyle(value, row, index, field) {
-			        	return {css: {"padding-left": "3px", "padding-right": "2px","font-size":"12px"}};
-			        	}
-		            },{
-		            	field: 'order_type',title: '订单类型',align: 'center',width:'90',valign: 'middle',align: 'center',
-		                sortable: false,visible: true,footerFormatter: totalTextFormatter,
-		                cellStyle:function cellStyle(value, row, index, field) {
-		    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
-		    	        	}
-		            },{
-		            	field: 'delivery_date',title: '订单交期',align: 'center',width:'100',valign: 'middle',align: 'center',
-		                sortable: false,visible: true,footerFormatter: totalTextFormatter,
-		                cellStyle:function cellStyle(value, row, index, field) {
-		    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
-		    	        	}
-		            },{
-		            	field: 'factory_name',title: '生产工厂',align: 'center',width:'150',valign: 'middle',align: 'center',
-		                sortable: false,visible: true,footerFormatter: totalTextFormatter,
-		                cellStyle:function cellStyle(value, row, index, field) {
-		    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
-		    	        	},
-		    	      
-		            },{
-		            	field: 'production_qty',title: '生产<br/>数量',align: 'center',width:'60',valign: 'middle',align: 'center',
-		                sortable: false,visible: true,footerFormatter: totalTextFormatter,
-		                cellStyle:function cellStyle(value, row, index, field) {
-		    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
-		    	        	}
-		            },{
-		            	field: 'order_config_name',title: '配置',align: 'center',width:'150',valign: 'middle',align: 'center',
-		                sortable: false,visible: true,footerFormatter: totalTextFormatter,
-		                cellStyle:function cellStyle(value, row, index, field) {
-		    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
-		    	        	}
-		            },{
-		            	field: 'config_qty',title: '配置<br/>数量',align: 'center',width:'60',valign: 'middle',align: 'center',
-		                sortable: false,visible: true,footerFormatter: totalTextFormatter,
-		                cellStyle:function cellStyle(value, row, index, field) {
-		    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
-		    	        	}
-		            },{
-		            	field: 'customer',title: '客户',align: 'center',width:'150',valign: 'middle',align: 'center',
-		                sortable: false,visible: true,footerFormatter: totalTextFormatter,
-		                cellStyle:function cellStyle(value, row, index, field) {
-		    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
-		    	        	}
-		            },{
-		            	field: 'sequence',title: '生产<br/>顺序',align: 'center',width:'60',valign: 'middle',align: 'center',
-		                sortable: false,visible: true,footerFormatter: totalTextFormatter,
-		                cellStyle:function cellStyle(value, row, index, field) {
-		    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
-		    	        	}
-		            },{
-		            	field: 'zzj_offline_count',title: '自制件<br/>下线',align: 'center',width:'80',valign: 'middle',align: 'center',
-		                sortable: false,visible: true,footerFormatter: totalTextFormatter,
-		                cellStyle:function cellStyle(value, row, index, field) {
-		    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
-		    	        	}
-		            },{
-		            	field: 'parts_online_count',title: '部件<br/>上线',align: 'center',width:'80',valign: 'middle',align: 'center',
-		                sortable: false,visible: true,footerFormatter: totalTextFormatter,
-		                cellStyle:function cellStyle(value, row, index, field) {
-		    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
-		    	        	}
-		            },{
-		            	field: 'parts_offline_count',title: '部件<br/>下线',align: 'center',width:'80',valign: 'middle',align: 'center',
-		                sortable: false,visible: true,footerFormatter: totalTextFormatter,
-		                cellStyle:function cellStyle(value, row, index, field) {
-		    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
-		    	        	}
-		            },{
-		            	field: 'welding_online_count',title: '焊装<br/>上线',align: 'center',width:'80',valign: 'middle',align: 'center',
-		                sortable: false,visible: true,footerFormatter: totalTextFormatter,
-		                cellStyle:function cellStyle(value, row, index, field) {
-		    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
-		    	        	}
-		            },{
-		            	field: 'welding_offline_count',title: '焊装<br/>下线',align: 'center',width:'80',valign: 'middle',align: 'center',
-		                sortable: false,visible: true,footerFormatter: totalTextFormatter,
-		                cellStyle:function cellStyle(value, row, index, field) {
-		    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
-		    	        	}
-		            },{
-		            	field: 'painting_online_count',title: '涂装<br/>上线',align: 'center',width:'80',valign: 'middle',align: 'center',
-		                sortable: false,visible: true,footerFormatter: totalTextFormatter,
-		                cellStyle:function cellStyle(value, row, index, field) {
-		    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
-		    	        	}
-		            },{
-		            	field: 'painting_offline_count',title: '涂装<br/>下线',align: 'center',width:'80',valign: 'middle',align: 'center',
-		                sortable: false,visible: true,footerFormatter: totalTextFormatter,
-		                cellStyle:function cellStyle(value, row, index, field) {
-		    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
-		    	        	}
-		            },{
-		            	field: 'chassis_online_count',title: '底盘<br/>上线',align: 'center',width:'80',valign: 'middle',align: 'center',
-		                sortable: false,visible: true,footerFormatter: totalTextFormatter,
-		                cellStyle:function cellStyle(value, row, index, field) {
-		    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
-		    	        	}
-		            },{
-		            	field: 'chassis_offline_count',title: '底盘<br/>下线',align: 'center',width:'80',valign: 'middle',align: 'center',
-		                sortable: false,visible: true,footerFormatter: totalTextFormatter,
-		                cellStyle:function cellStyle(value, row, index, field) {
-		    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
-		    	        	}
-		            },{
-		            	field: 'assembly_online_count',title: '总装<br/>上线',align: 'center',width:'80',valign: 'middle',align: 'center',
-		                sortable: false,visible: true,footerFormatter: totalTextFormatter,
-		                cellStyle:function cellStyle(value, row, index, field) {
-		    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
-		    	        	}
-		            },{
-		            	field: 'assembly_offline_count',title: '总装<br/>下线',align: 'center',width:'80',valign: 'middle',align: 'center',
-		                sortable: false,visible: true,footerFormatter: totalTextFormatter,
-		                cellStyle:function cellStyle(value, row, index, field) {
-		    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
-		    	        	}
-		            },{
-		            	field: 'warehousing_count',title: '入库',align: 'center',width:'80',valign: 'middle',align: 'center',
-		                sortable: false,visible: true,footerFormatter: totalTextFormatter,
-		                cellStyle:function cellStyle(value, row, index, field) {
-		    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
-		    	        	}
-		            },{
-		            	field: 'dispatch_count',title: '发车',align: 'center',width:'80',valign: 'middle',align: 'center',
-		                sortable: false,visible: true,footerFormatter: totalTextFormatter,
-		                cellStyle:function cellStyle(value, row, index, field) {
-		    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
-		    	        	}
-		            },{
-		            	field: '',title: '车辆<br/>详情',align: 'center',width:'80',valign: 'middle',align: 'center',
-		                sortable: false,visible: true,footerFormatter: totalTextFormatter,
-		                cellStyle:function cellStyle(value, row, index, field) {
-		    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
-		    	        },
-		    	        formatter:function(value,row,index){
-		    	        		return "<i class=\"ace-icon fa fa-search bigger-130 editorder\" onclick = 'ajaxShowBusNumber(" + row.id+ ","+row.factory_id+","+row.order_config_id+");' style='color:blue;cursor: pointer;'></i>";
-		    	        }
-		            },{
-		            	field: '',title: 'BOM',align: 'center',width:'80',valign: 'middle',align: 'center',
-		                sortable: false,visible: true,footerFormatter: totalTextFormatter,
-		                cellStyle:function cellStyle(value, row, index, field) {
-		    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
-		    	        },
-		    	        formatter:function(value,row,index){
-		    	        		return "<i class=\"ace-icon fa fa-search bigger-130 editorder\" onclick = 'ajaxShowOrderBOM(" + row.id+ ","+row.factory_id+","+row.order_config_id+");' style='color:blue;cursor: pointer;'></i>";
-		    	        }
-		            },{
-		            	field: '',title: '评审<br/>结果',align: 'center',width:'80',valign: 'middle',align: 'center',
-		                sortable: false,visible: true,footerFormatter: totalTextFormatter,
-		                cellStyle:function cellStyle(value, row, index, field) {
-		    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
-		    	        	}
-		            }
-		        ]
-		    ];
-	
-    $table.bootstrapTable({
-        height: getHeight(),
-        width:'1500px',
-        url:"getOrderDetailList",
-        striped:true,
-        paginationVAlign:'bottom',
-        searchOnEnterKey:true,
-        fixedColumns: false,			//冻结列
-        fixedNumber: 0,				//冻结列数
-        sidePagination : "client",
-        responseHandler: function(res){
-             return res.rows;
-        },
-        queryParams:function() {
-        	
-        	var conditions={};
-        	conditions.order_no=$("#search_order_no").val();
-        	conditions.factory=/*$("#search_factory").val();*/getAllFromOptions("#search_factory","val")
-        	conditions.actYear=$("#search_productive_year").val();
-        	conditions.status=$("#search_status").val();        
-/*        	params["conditions"] = JSON.stringify(conditions); */
-        	return conditions;
-        },
-        columns: columns
-    });
-    
-    
-/*    $(window).resize(function () {
-        $table.bootstrapTable('resetView', {height:getHeight()});
-    });*/
-    
-    
-    $table.on('load-success.bs.table',function(){
-    	$("#btnQuery").removeAttr("disabled");
-    });
-    $table.on('page-change.bs.table',function(){
-    	//$("#btnQuery").attr("disabled","disabled");
-    });
-/*    $(window).resize(function () {
-        $table.bootstrapTable('resetView', {height: getHeight()});
-    });*/
-}
-//----------END bootstrap initTable ----------
 function ajaxShowBusNumber(order_id,factory_id,order_config_id){
 	$.ajax({
 		url: "/BMS/order/showBusNumber",

@@ -104,8 +104,8 @@ public class AccountController extends BaseController{
 		String cellphone=request.getParameter("cellphone");
 		String display_name=request.getParameter("display_name");
 		String factory_id=request.getParameter("factory_id");
-		String department_id=request.getParameter("department_id");
-		String admin=request.getParameter("admin");
+		//String department_id=request.getParameter("department_id");
+		String user_type=request.getParameter("user_type");
 		String edit_user = request.getSession().getAttribute("user_name") + "";
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String edit_time = df.format(new Date());
@@ -119,7 +119,8 @@ public class AccountController extends BaseController{
 		user.setDisplay_name(display_name);
 		user.setFactory_id(Integer.valueOf(factory_id));
 		//user.setDepartment_id(Integer.valueOf((department_id.equals(""))?"0":department_id));
-		user.setAdmin(admin);
+		//user.setAdmin(admin);
+		user.setUser_type(user_type);
 		user.setCreate_user(edit_user);
 		user.setCreate_time(edit_time);
 		int reuslt = settingService.editUser(user);
