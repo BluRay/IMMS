@@ -14,6 +14,7 @@ import java.util.Map;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.byd.bms.hr.service.IHrBaseDataService;
 import com.byd.bms.hr.service.IHrReportService;
 import com.byd.bms.production.service.IProductionService;
 import com.byd.bms.util.ExcelModel;
@@ -43,7 +45,8 @@ public class HrReportController extends BaseController {
 	protected IHrReportService hrReportService;
 	@Autowired
 	protected IProductionService productionService;
-
+	@Autowired
+	protected IHrBaseDataService hrBaseDataService;
 	//奖惩汇总
 	@RequestMapping("/rewardsCollect")
 	public ModelAndView rewardsCollect() {
@@ -917,5 +920,211 @@ public class HrReportController extends BaseController {
 		hrReportService.queryStaffWorkHoursList(conditionMap,model);
 		return model;
 	}
+	// 特殊工资维护
+	@RequestMapping("/specicalSalaryMtn")
+	public ModelAndView specicalSalaryMtn(){
+		mv.setViewName("hr/specicalSalaryMtn");
+		return mv;
+	}
+	@RequestMapping("/querySpecialSalaryList")
+	@ResponseBody
+	public ModelMap querySpecialSalaryList(){
+		model.clear();
+		String factory=request.getParameter("factory");
+		String workshop=request.getParameter("workshop");
+		String work_month=request.getParameter("work_month");
+		String staff=request.getParameter("staff_number");//员工姓名或员工姓名
+		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
+		int start=(request.getParameter("start")!=null)?Integer.parseInt(request.getParameter("start")):0;		//分页数据起始数
+		int length=(request.getParameter("length")!=null)?Integer.parseInt(request.getParameter("length")):10;	//每一页数据条数
+		Map<String, Object> conditionMap = new HashMap<String, Object>();
+		conditionMap.put("draw", draw);
+		conditionMap.put("start", start);
+		conditionMap.put("length", length);
+		conditionMap.put("factory", factory);
+		conditionMap.put("workshop", workshop);
+		conditionMap.put("work_month", work_month);
+		conditionMap.put("staff", staff);
+
+		hrReportService.getSpecialSalaryData(conditionMap,model);
+		return model;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value="/uploadSpecicalSalary",method=RequestMethod.POST)
+	@ResponseBody
+	public ModelMap uploadSpecicalSalary(@RequestParam(value="file",required=false) MultipartFile file){
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String username=String.valueOf(session.getAttribute("user_name"));
+		String month=request.getParameter("month");
+		int insert = 0;
+		String result = "";
+		
+		String fileFileName = "specialSalary.xls";
+		//int result = 0;
+		ExcelModel excelModel =new ExcelModel();
+		excelModel.setReadSheets(1);
+		excelModel.setStart(1);
+		Map<String,Integer> dataType = new HashMap<String,Integer>();
+		dataType.put("0", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("1", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("2", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("3", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("4", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("5", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("6", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("7", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("8", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("9", ExcelModel.CELL_TYPE_STRING);
+//		dataType.put("10", ExcelModel.CELL_TYPE_CANNULL);
+		excelModel.setDataType(dataType);
+		excelModel.setPath(fileFileName);
+		
+		try {
+			File staffFile = new File(fileFileName);
+			file.transferTo(staffFile);
+			InputStream is = new FileInputStream(staffFile);
+			ExcelTool excelTool = new ExcelTool();
+			excelTool.readExcel(is, excelModel);
+			
+			if(excelModel.getData().size()>1000){
+				initModel(false,"不能同时导入1000条以上数据！",null);
+				model = mv.getModelMap();
+				return model;
+			}else{
+				List<Map<String, Object>> addList = new ArrayList<Map<String,Object>>();
+				StringBuffer staff_numbers = new StringBuffer();
+				boolean success = true;
+				int i = 1;
+				List<Map<String, Object>> queryOrgList = new ArrayList<Map<String,Object>>();
+				for(Object[] data : excelModel.getData()){
+					++i;
+					if(null == data[0] || StringUtils.isBlank(data[0].toString().trim())){
+						success = false;
+						result = result+"第"+i+"行工号信息为必填项！\n";
+					}else{
+						staff_numbers.append(data[0].toString().trim());
+						staff_numbers.append(",");
+					}
+					if(null == data[2] || StringUtils.isBlank(data[2].toString().trim())){
+						success = false;
+						result = result+"第"+i+"行姓名为必填项！\n";
+					}
+					Map queryOrgMap = new HashMap<String, Object>();
+					if(null!=data[8] && !"".equals(data[8].toString().trim())){
+						queryOrgMap.put("plant", data[8]==null?null:data[8].toString());
+					}
+					if(null!=data[9] && !"".equals(data[9].toString().trim())){
+						queryOrgMap.put("workshop", data[9]==null?null:data[9].toString());
+					}
+					
+					queryOrgList.add(queryOrgMap);
+					
+					Map<String, Object> rewardsInfo = new HashMap<String, Object>();
+					rewardsInfo.put("staff_number", data[0] == null?null:data[0].toString().trim());
+					rewardsInfo.put("staff_name", data[1] == null?null:data[1].toString().trim());
+					rewardsInfo.put("pre_sale_salary", data[2] == null?null:data[2].toString().trim());
+					rewardsInfo.put("after_sale_salary", data[3] == null?null:data[3].toString().trim());
+					rewardsInfo.put("support_salary", data[4] == null?null:data[4].toString().trim());
+					rewardsInfo.put("hourly_salary", data[5] == null?null:data[5].toString().trim());
+					rewardsInfo.put("holiday_salary", data[6] == null?null:data[6].toString().trim());
+					rewardsInfo.put("paid_leave_salary", data[7] == null?null:data[7].toString().trim());
+					rewardsInfo.put("submit_factory", data[8] == null?null:data[8].toString().trim());
+					rewardsInfo.put("submit_workshop", data[9] == null?null:data[9].toString().trim());
+					rewardsInfo.put("editor", username);
+					rewardsInfo.put("edit_date", curTime);
+					rewardsInfo.put("month", month);
+					addList.add(rewardsInfo);
+				}
+				//校验员工信息
+				Map<String, Object> conditionMap = new HashMap<String, Object>();
+				String staff=staff_numbers.toString().trim();
+				conditionMap.put("staff_number", staff.substring(0, staff.length()-1));
+				conditionMap.put("status", "在职");
+				Map<String,Object> staff_info =hrBaseDataService.getStaffList(conditionMap);
+				List<Map<String,Object>> staff_list = (List<Map<String,Object>>)staff_info.get("rows");
+				String[] staffArray=staff_numbers.toString().split(",");
+				for(int ii=0;ii<addList.size();ii++){
+					boolean flag=true;
+					Map<String,Object> staffMap=addList.get(ii);
+					String staff_number=staffMap.get("staff_number")!=null ? staffMap.get("staff_number").toString() : "";
+					for(int j=0;j<staff_list.size();j++){
+						if(staff_number.equals(staff_list.get(j).get("staff_number"))){
+							staffMap.put("plant_org", staff_list.get(j).get("plant_org"));
+							staffMap.put("workshop_org", staff_list.get(j).get("workshop_org"));
+							staffMap.put("workgroup_org", staff_list.get(j).get("workgroup_org"));
+							staffMap.put("team_org", staff_list.get(j).get("team_org"));
+							flag=false;
+							break;
+						}
+					}
+					if(flag){
+						success = false;
+						result = result+"工号为："+staffArray[ii]+"的员工不存在！！\n";
+					}
+				}
+				
+				//根据用户填写的组织结构信息查询bms_base_org表
+				List<Map<String, Object>> orgResultList = productionService.getOrg(queryOrgList);
+				int j=1;
+				String factoryStr="";
+				String workshopStr="";
+				for(Object[] data : excelModel.getData()){
+					++j;
+					String rewards_factory = data[8].toString().trim();
+					String rewards_workshop = data[9].toString().trim();
+					Map <String, Object> orgMap = new HashMap<String, Object>();
+					orgMap.put("plant", rewards_factory);
+					orgMap.put("workshop", rewards_workshop);
+					if(orgResultList.indexOf(orgMap)<0){
+						success = false;
+						result = result+"第"+j+"行填写的工厂、车间信息与组织结构不符！\n";
+					}
+					if(factoryStr.indexOf(rewards_factory)<0){
+						factoryStr+=rewards_factory+",";
+					}
+					if(workshopStr.indexOf(rewards_workshop)<0){
+						workshopStr+=rewards_workshop+",";
+					}
+				}
+				if(success){
+					Map <String, Object> delConditionMap = new HashMap<String, Object>();
+					delConditionMap.put("month", month);
+					delConditionMap.put("factoryStr", factoryStr.substring(0, factoryStr.length()-1));
+					delConditionMap.put("workshopStr", workshopStr.substring(0, workshopStr.length()-1));
+					insert=hrReportService.insertSpecialSalary(addList,delConditionMap);
+				}
+			}
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+			initModel(false,"导入文件的格式有误！",null);
+			model = mv.getModelMap();
+			return model;
+		}
+		if(insert>0){
+			result ="导入成功！";
+		}
+		initModel(true,result,null);
+		model = mv.getModelMap();
+		return model;
+	}
+	@RequestMapping("/deleteSpecialSalary")
+	@ResponseBody
+	public ModelMap deleteSpecialSalary() {
+		try {
+			String ids = request.getParameter("ids");
+			Map map = new HashMap();
+			map.put("ids", ids);
+			hrReportService.deleteSpecialSalary(map);
+			initModel(true, "success", "");
+		} catch (Exception e) {
+			initModel(false, e.getMessage(), e.toString());
+		}
+		model = mv.getModelMap();
+		return model;
+	}
+	
 	/******************** tangjin end **********************/
 }

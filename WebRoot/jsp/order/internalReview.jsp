@@ -103,7 +103,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</div>
 				<div id="dialog-edit" class="hide">
 					<table id="tableData" class="table table-striped table-bordered table-hover dataTable no-footer"
-					            style="font-size: 13px;width:900px" role="grid" aria-describedby="tableData_info">
+					       border='1' style="font-size: 13px;width:900px" role="grid" aria-describedby="tableData_info">
 						 <tr role="row" class="odd">
 				            <td class="sorting_disabled center" rowspan="1" colspan=7 style="width: 96px;font-size:18px;font-weight:bold;">十九事业部订单评审评估表</td>
 						 </tr>
@@ -180,10 +180,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<td id="purchasedetail" class="center english"></td>
 						</tr>
 						<tr>
-						    <td class="sorting_disabled center" style="width: 96px;">资料需求节点</td>
-						    <td id="technicaldatanode" class="english"></td>
+<!-- 						    <td class="sorting_disabled center" style="width: 96px;">资料需求节点</td> -->
+<!-- 						    <td id="technicaldatanode" class="english"></td> -->
 				            <td class="sorting_disabled center" style="width: 96px;">其他</td>
-							<td colspan=2 id="mintechInfo" class="Chinese"></td>
+							<td colspan=4 id="mintechInfo" class="Chinese"></td>
 						</tr>
 						<tr>
 						    <td class="sorting_disabled center" style="width: 96px;">签字</td>
@@ -316,11 +316,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script src="<%=basePath%>/js/jsrender.min.js"></script>
 	<script src="<%=basePath%>/js/common.js"></script>
 	<script src="<%=basePath%>/js/tableExport.js"></script>
-<%-- 	<script src="<%=basePath%>/js/jquery.base64.js"></script> --%>
-<%-- 	<script src="<%=basePath%>/js/jspdf.js"></script> --%>
-<%-- 	<script src="<%=basePath%>/js/Base64.js"></script> --%>
-<%-- 	<script src="<%=basePath%>/js/sprintf.js"></script> --%>
-<%-- 	<script src="<%=basePath%>/js/autotable.js"></script> --%>
+	<script src="<%=basePath%>/js/jquery.base64.js"></script>
+	<script src="<%=basePath%>/js/jspdf.js"></script>
+	<script src="<%=basePath%>/js/Base64.js"></script>
+	<script src="<%=basePath%>/js/sprintf.js"></script>
+	<script src="<%=basePath%>/js/autoTable.js"></script>
+	<script src="<%=basePath%>/js/pdfmake.min.js"></script>
+	<script src="<%=basePath%>/js/vfs_fonts.js"></script>
 	<script src="<%=basePath%>/js/order/internalReview.js"></script>
 </body>
 

@@ -298,16 +298,16 @@ public class OrderReviewController extends BaseController{
     	model=new ModelMap();
 		Map<String,Object> condMap=new HashMap<String,Object>();
 		
-		String orderNo=request.getParameter("orderId");//订单编号
-        String factory=request.getParameter("factoryId");//工厂
+		String factoryOrderId=request.getParameter("factoryOrderId");//工厂订单编号【BMS_OR_FACTORY_ORDER】
+        String factory=request.getParameter("factoryId");
         String id=request.getParameter("id");
-        condMap.put("orderId", orderNo);
+        condMap.put("factoryOrderId", factoryOrderId);
 		condMap.put("factoryId", factory);
 		condMap.put("id", id);
 		Map<String,Object> result=new HashMap<String,Object>();
 		BmsOrderReviewResults bmsOrderReviewResults=reviewService.getOrderReview(condMap);
 		result.put("bmsOrderReviewResults", bmsOrderReviewResults);
-		result.put("orderNo", orderNo);
+		//result.put("orderNo", orderNo);
 		model.addAllAttributes(result);
 		return model;
     }
@@ -330,7 +330,7 @@ public class OrderReviewController extends BaseController{
 	public ModelMap showOrderDetailList(){
 		model=new ModelMap();
 		Map<String,Object> conditionMap=new HashMap<String,Object>();
-		if (request.getParameter("search_order_no") != null) conditionMap.put("search_order_no", request.getParameter("search_order_no"));
+		if (request.getParameter("factory_order_id") != null) conditionMap.put("factory_order_id", request.getParameter("factory_order_id"));
 		if ((request.getParameter("search_factory") != "")&&(request.getParameter("search_factory") != null)) conditionMap.put("search_factory", Integer.valueOf(request.getParameter("search_factory")));
 		if (request.getParameter("order_id") != null){
 			conditionMap.put("order_id", request.getParameter("order_id"));
@@ -406,11 +406,10 @@ public class OrderReviewController extends BaseController{
 		condMap.put("userId", userId);
 		condMap.put("factoryId", factoryId);
 		condMap.put("type", type);
-		if(type.equals("start")){
+		if(type!=null && type.equals("start")){
 			condMap.put("roleName", applyRoleName);
-			result.put("applyRoleName", applyRoleName);
-		}
-		if(type.equals("check")){
+			//result.put("applyRoleName", applyRoleName);
+		}else{ 
 			condMap.put("roleName", roleName);
 		}
     	boolean isPermission = reviewService.isPermission(condMap);

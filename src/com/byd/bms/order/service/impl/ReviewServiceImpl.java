@@ -47,21 +47,19 @@ public class ReviewServiceImpl implements IReviewService {
 		int totalCount=0;
 		List<Map<String, Object>> datalist=reviewDao.getOrderReviewList(condMap);
 		// 查询是否有权限，有permission：true
+		Map<String, Object> queryMap=new HashMap<String, Object>();
+		queryMap.put("userId", condMap.get("userId"));
+		queryMap.put("roleName", "评审");
+		List<Map<String, Object>> list=settingDao.getPermissionByMap(queryMap);
+		String permissionValue="";
+		for(Map<String,Object> m : list){
+			permissionValue+=(String) m.get("permission_value")+",";
+		}
 		for(Map<String, Object> map : datalist){
-			Map<String, Object> queryMap=new HashMap<String, Object>();
-			queryMap.put("userId", condMap.get("userId"));
-			queryMap.put("roleName", "评审");
-			List<Map<String, Object>> list=settingDao.getPermissionByMap(queryMap);
-			String permissionValue="";
 			boolean isResult=false;
-			for(Map<String,Object> m : list){
-				permissionValue+=(String) m.get("permission_value")+",";
-			}
-			String [] array=permissionValue.split(",");
-			for(String arr : array){
-				if(arr.trim().equals((String)map.get("factory_code"))){
-					isResult=true;
-				}
+			String factory_code=(String)map.get("factory_code");
+			if(permissionValue.indexOf(factory_code)>=0){
+				isResult=true;
 			}
 			map.put("permission", isResult); // 判断该用户是否有该订单的评审权限 【Y: true;N: false】
 		}
@@ -108,12 +106,9 @@ public class ReviewServiceImpl implements IReviewService {
 				permissionValue+=str+",";
 			}
 			
-			String [] array=permissionValue.split(",");
 			BmsBaseFactory factory=baseDataDao.getFactoryById((String)condMap.get("factoryId"));
-			for(String arr : array){
-				if(arr.trim().equals(factory.getFactoryCode())){
-					isResult=true;
-				}
+			if(permissionValue.indexOf(factory.getFactoryCode())>=0){
+				isResult=true;
 			}
 		}
 		

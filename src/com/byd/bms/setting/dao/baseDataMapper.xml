@@ -548,9 +548,9 @@
 			SELECT LAST_INSERT_ID() AS id
 		</selectKey>
 		insert into BMS_BASE_STANDARD_WORKGROUP (workshop_id,parent_id,workgroup_no,workgroup_name,
-		  responsibility,memo,editor_id,edit_date)
+		  responsibility,type,memo,editor_id,edit_date)
 		values
-			(#{workshopId},#{parentId},#{workgroupId},#{groupName},#{responsibility},#{memo},
+			(#{workshopId},#{parentId},#{workgroupId},#{groupName},#{responsibility},#{type},#{memo},
 			#{editorId},#{editDate})
 	</insert>
 	<update id="updateWorkgroup" parameterType="com.byd.bms.setting.model.BmsBaseStandardWorkgroup">
@@ -560,10 +560,12 @@
 		where id=#{id}
 	</update>
 	<!--删除标准班组 -->
-	<update id="deleteWorkgroup" parameterType="String">
-		<![CDATA[
-			delete from BMS_BASE_STANDARD_WORKGROUP where id= #{id}
-		]]>
-	</update>
+	<update id="deleteWorkgroup" parameterType="java.util.List">
+        delete from BMS_BASE_STANDARD_WORKGROUP where id in 
+        <foreach collection="list" item="ids" index="index" open="("
+			close=")" separator=",">
+			#{ids}
+		</foreach>
+    </update>
 	
 </mapper>

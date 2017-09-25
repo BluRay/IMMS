@@ -37,4 +37,8 @@ public interface IHrReportDao {
 	public List<Map<String,String>> queryAttendanceDetailData(Map<String, Object> conditionMap);
 	public List<Map<String,String>> queryAttendanceReportData(Map<String, Object> conditionMap);
 
+	public List<Map<String,Object>> getSpecicalSalaryData(Map<String, Object> conditionMap);
+	public int getSpecicalSalaryDataCount(Map<String, Object> conditionMap);
+	public int insertSpecialSalary(List<Map<String,Object>> datalist);
+	public void deleteSpecialSalary(Map map);
 }

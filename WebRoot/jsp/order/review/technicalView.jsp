@@ -45,8 +45,8 @@
 					<tr role="row" class="odd">
 						<td>&nbsp;采购明细：</td>
 						<td>&nbsp;${item['purchasedetail'] }</td>
-						<td>&nbsp;资料需求节点：</td>
-						<td>&nbsp;${item['technicaldatanode'] }</td>
+						<td><!-- &nbsp;资料需求节点： --></td>
+						<td><!--&nbsp;${item['technicaldatanode'] } --></td>
 					</tr>
 					<tr role="row" class="even">
 						<td>&nbsp;其他：</td>

@@ -1,5 +1,6 @@
 package com.byd.bms.setting.service.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -279,6 +280,7 @@ public class BaseDataServiceImpl implements IBaseDataService {
 	public int updateWorkgroup(BmsBaseStandardWorkgroup workgroup) {
 		int result=baseDataDao.updateWorkgroup(workgroup);
 		if(result>0){
+			// 更新组织架构对应的班组名称
 			Map<String,Object> map=new HashMap<String,Object>();
 			map.put("id", workgroup.getId());
 			map.put("name", workgroup.getGroupName());
@@ -287,21 +289,34 @@ public class BaseDataServiceImpl implements IBaseDataService {
 		return result;
 	}
 	@Override
-	public void deleteWorkgroup(List ids) {
-		for(Object id : ids){
+	public Map deleteWorkgroup(List idlist) {
+		Map<String,Object> resultMap=new HashMap<String,Object>();
+		List<Object> list=new ArrayList<Object>();
+		list.addAll(idlist);
+		for(Object id : idlist){
+			Map<String,Object> queryMap=new HashMap<String,Object>();
+			queryMap.put("foreign_id", id);
+			List<Map<String,Object>> orgList=hrBaseDataDao.getOrgDataTreeList(queryMap);
+			if(orgList.size()>0){
+				Map<String,Object> orgMap=orgList.get(0);
+				resultMap.put("error", orgMap.get("display_name").toString()+"在组织架构存在记录,不能删除");
+			    return resultMap;
+			}
 			if(id!=null){
-				baseDataDao.deleteWorkgroup((String)id);
 				Map<String,Object>condMap=new HashMap<String,Object>();
 				// 删除子节点记录
 				condMap.put("parentId", (String)id);
-				List<BmsBaseStandardWorkgroup> list=baseDataDao.getWorkgroupList(condMap);
-				if(list.size()>0){
-					for(BmsBaseStandardWorkgroup bean : list){
-						baseDataDao.deleteWorkgroup(bean.getId()+"");
+				List<BmsBaseStandardWorkgroup> workgroupList=baseDataDao.getWorkgroupList(condMap);
+				if(workgroupList.size()>0){
+					for(BmsBaseStandardWorkgroup bean : workgroupList){
+						list.add(bean.getId()+"");
 					}
 				}
 			}
 		}
+		int result=baseDataDao.deleteWorkgroup(list);
+		resultMap.put("result", result);
+		return resultMap;
 	}
 	
 	//车型

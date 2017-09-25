@@ -94,7 +94,7 @@
 	//$(document).ready(function(){
 		var tabs;
 	    var taskName = "${task.taskName}";
-	    var orderNo="${orderNo}";
+	    var factory_order_id="${reviewOrderId}";
 	    var factoryId="${factoryId}";
 	    // 加载订单明细
 	    $.ajax({
@@ -112,7 +112,7 @@
 				display(data.process, data.active);
 			}
 		});
-	    queryOrderInfo(orderNo,factoryId);
+	    queryOrderInfo(factory_order_id,factoryId);
 	    $.ajax({
 			type:'GET',
 			url:"/BMS/snaker/flow/node",
@@ -173,15 +173,14 @@
 				$('#default-buttons .btn').toggleClass('no-border');
 		});
 	//});
-	function queryOrderInfo(orderNo,factoryId){
+	function queryOrderInfo(factory_order_id,factoryId){
 		$.ajax({
 			type:'GET',
 			url:"/BMS/order/review/showOrderDetailList",
 			data:{
-				"search_order_no":orderNo,
+				"factory_order_id":factory_order_id,
 				"search_factory":factoryId
 				},
-			async: false,
 			dataType: "json",
 			error: function(){
 				alert('数据处理错误！');
@@ -192,12 +191,12 @@
 				$.each(response.data,function(index,value){
 		
 					if(index==0){
-						$("#orderNo").text(value.order_no+" "+value.order_name);
+						$("#orderNo").text(value.order_name_str);
 						$("#factoryName").text(value.factory_name);
 						$("#productionQty").text(value.production_qty);
 						$("#deliveryDate").text(value.delivery_date);
 						if(value.id=='' || value.id==null){ // 评审未发起,capacity字段未保存
-							$("#capacity").html("<input type='text' style='width:60px'/>");
+							$("#capacity").html("<input type='text' id='capacityInput' style='width:60px'/>");
 						}else{
 							$("#capacity").text(value.capacity);
 						}

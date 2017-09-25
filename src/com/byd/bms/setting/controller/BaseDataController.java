@@ -968,6 +968,7 @@ public class BaseDataController extends BaseController {
 			workgroup.setResponsibility(request.getParameter("responsibility"));
 			workgroup.setMemo(request.getParameter("memo"));
 			workgroup.setParentId(request.getParameter("parentId"));
+			workgroup.setType(request.getParameter("type"));
             workgroup.setEditDate(edit_date);
             workgroup.setEditorId(editor_id);
 			int reuslt = baseDataService.addWorkgroup(workgroup);
@@ -995,7 +996,7 @@ public class BaseDataController extends BaseController {
             workgroup.setEditDate(edit_date);
             workgroup.setEditorId(editor_id);
 			int result=baseDataService.updateWorkgroup(workgroup);
-			if(result==1){
+			if(result>0){
 				initModel(true, "更新成功", result);
 			}else{
 				initModel(false, "更新失败", result);
@@ -1012,8 +1013,14 @@ public class BaseDataController extends BaseController {
 	public ModelMap deleteWorkgroup(){
 		String ids=request.getParameter("ids");
 		List idlist=Arrays.asList(ids.split(","));
-		baseDataService.deleteWorkgroup(idlist);
-		initModel(true, "删除成功！", null);
+		Map<String,Object> result=baseDataService.deleteWorkgroup(idlist);
+		if(result.get("error")!=null){
+			initModel(false, result.get("error").toString(), null);
+		}
+		if(result.get("result")!=null && Integer.parseInt(result.get("result").toString())>0){
+			initModel(true, "删除成功！", null);
+		}
+		
 		return mv.getModelMap();
 	}
 

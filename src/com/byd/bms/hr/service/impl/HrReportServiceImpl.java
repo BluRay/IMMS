@@ -294,4 +294,28 @@ public class HrReportServiceImpl implements IHrReportService {
 	public List<Map<String, Object>> getTmpReportData1(Map<String, Object> conditionMap) {
 		return hrReportDao.getTmpReportData1(conditionMap);
 	}
+
+	@Override
+	public void getSpecialSalaryData(Map<String, Object> conditionMap,
+			ModelMap model) {
+		int totalCount=hrReportDao.getSpecicalSalaryDataCount(conditionMap);
+		List<Map<String,Object>> datalist =hrReportDao.getSpecicalSalaryData(conditionMap);	
+		
+		model.put("recordsTotal", totalCount);
+		model.put("draw", conditionMap.get("draw"));
+		model.put("recordsFiltered", totalCount);
+		model.put("data", datalist);
+	}
+
+	@Override
+	@Transactional
+	public int insertSpecialSalary(List<Map<String, Object>> datalist,Map delConditionMap) {
+		// 先删除之前导入的数据根据 month submit_factory submit_workshop 3个字段条件
+		hrReportDao.deleteSpecialSalary(delConditionMap);
+		return hrReportDao.insertSpecialSalary(datalist);
+	}
+	@Override
+	public void deleteSpecialSalary(Map map) {
+		hrReportDao.deleteSpecialSalary(map);
+	}
 }

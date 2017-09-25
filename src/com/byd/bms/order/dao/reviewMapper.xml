@@ -2,16 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.byd.bms.order.dao.IReviewDao">
 	<select id="getOrderReviewList" parameterType="Map" resultType="Map">
-		SELECT f.production_qty,a.area,a.id AS 'factory_id',a.factory_code AS 'factory_code',
-		a.factory_name,f.edit_date,u.display_name as 'user_name',
-		t.bus_type_code,o.*,CONCAT(o.order_name,t.bus_type_code,o.order_qty,'台') AS 'order_name_str',f.status,
+		SELECT f.production_qty,a.id AS 'factory_id',a.factory_code,
+		a.factory_name,f.id as factory_order_id,o.order_no,o.productive_year,o.delivery_date,
+		CONCAT(o.order_name,t.bus_type_code,o.order_qty,'台') AS 'order_name_str',f.status,
 		IFNULL(r.review_status,'0') as review_status,IFNULL(r.id,'') as reviewId
 		FROM BMS_OR_ORDER o			
 		LEFT JOIN BMS_OR_FACTORY_ORDER f ON f.order_id = o.id
 		LEFT JOIN BMS_BASE_FACTORY a ON f.factory_id = a.id 
 		LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id = t.id 
-		left join BMS_BASE_USER u on f.editor_id = u.id
-		left join BMS_OR_ORDER_REVIEW_RESULTS r on r.order_id = o.id and r.factory_id=f.factory_id 
+		left join BMS_OR_ORDER_REVIEW_RESULTS r on r.order_id = f.id 
 		where 1=1
 		<if test="orderNo !=null and orderNo !=''">
 			and o.order_no like CONCAT('%',#{orderNo},'%')   
@@ -36,7 +35,7 @@
 	<select id="getOrderReviewTotalCount" parameterType="Map" resultType="int">
 		SELECT count(o.id) FROM BMS_OR_ORDER o
 		LEFT JOIN BMS_OR_FACTORY_ORDER f on o.id=f.order_id
-		left join BMS_OR_ORDER_REVIEW_RESULTS r on r.order_id = o.id and r.factory_id=f.factory_id 
+		left join BMS_OR_ORDER_REVIEW_RESULTS r on r.order_id = f.id
 		where 1=1
 		<if test="orderNo !=null and orderNo !=''">
 			and o.order_no like CONCAT('%',#{orderNo},'%')   
@@ -57,12 +56,12 @@
 			LAST_INSERT_ID()
 		</selectKey>
 		insert into BMS_OR_ORDER_REVIEW_RESULTS
-		(order_id,factory_id,partsonline_date,weldingonline_date,paintonline_date,chassisonline_date,
+		(order_id,factory_id,capacity,partsonline_date,weldingonline_date,paintonline_date,chassisonline_date,
 		assemblyonline_date,warehousing_date,modelexport_date,drawingexport_date,detaildemand_node,
 		sopdemand_node,bomdemand_node,sipdemand_node,apply_info,review_Status,
 		wf_order_id,wf_process_id,editor_Id,edit_Date)
 		values
-		(#{orderId},#{factoryId},#{partsonlineDate},#{weldingonlineDate},#{paintonlineDate},
+		(#{orderId},#{factoryId},#{capacity},#{partsonlineDate},#{weldingonlineDate},#{paintonlineDate},
 		#{chassisonlineDate},#{assemblyonlineDate},#{warehousingDate},#{modelexportDate},#{drawingexportDate},
 		#{detaildemandNode},#{sopdemandNode},#{bomdemandNode},#{sipdemandNode},#{applyInfo},
 		'1',#{wfOrderId},#{wfProcessId},#{editorId},#{editDate})
@@ -101,7 +100,7 @@
 		where id=#{id}
 	</update>
 	<select id='getOrderReview' parameterType="Map" resultType="com.byd.bms.order.model.BmsOrderReviewResults">
-		select r.id,order_id orderId,factory_id factoryId,partsonline_date partsonlineDate,
+		select r.id,r.order_id orderId,r.factory_id factoryId,partsonline_date partsonlineDate,
 		weldingonline_date weldingonlineDate,paintonline_date paintonlineDate,
 		chassisonline_date chassisonlineDate,assemblyonline_date assemblyonlineDate,
 		warehousing_date warehousingDate,modelexport_date modelexportDate,
@@ -110,14 +109,15 @@
 		wf_order_id wfOrderId,wf_process_id wfProcessId,o.order_no as orderNo,
 		f.factory_name factoryName,f.factory_code factoryCode,apply_info applyInfo
 		from BMS_OR_ORDER_REVIEW_RESULTS r
-		left join BMS_OR_ORDER o on r.order_id=o.id
+		left join BMS_OR_FACTORY_ORDER f1 on r.order_id=f1.id
+		left join BMS_OR_ORDER o on f1.order_id=o.id
 		left join BMS_BASE_FACTORY f on r.factory_id=f.id
 		where 1=1
-		<if test="orderId !=null and orderId !=''"> 
-			and order_id=#{orderId}
+		<if test="factoryOrderId !=null and factoryOrderId !=''"> 
+			and r.order_id=#{factoryOrderId}
 		</if>
 		<if test="factoryId !=null and factoryId !=''"> 
-			and factory_id=#{factoryId}
+			and r.factory_id=#{factoryId}
 		</if>
 		<if test="wfOrderId !=null and wfOrderId !=''"> 
 			and wf_order_id=#{wfOrderId}
@@ -154,9 +154,9 @@
 	    (select u.username from wf_hist_task t1,BMS_BASE_USER u where t1.operator=u.id and t1.order_id=r.wf_order_id and t1.task_name='result') result_operator,
 	    (select create_time from wf_hist_task t1 where t1.order_id=r.wf_order_id and t1.task_name='result') result_create_time
 		from BMS_OR_ORDER_REVIEW_RESULTS r
-		LEFT JOIN BMS_OR_ORDER o on o.id=r.order_id			
-		LEFT JOIN BMS_OR_FACTORY_ORDER f ON f.order_id = o.id and f.order_id=r.order_id and f.factory_id=r.factory_id
-		LEFT JOIN BMS_BASE_FACTORY a ON f.factory_id = a.id and r.factory_id=a.id
+		LEFT JOIN BMS_OR_FACTORY_ORDER f ON r.order_id=f.id<!--  f.order_id=r.order_id and f.factory_id=r.factory_id-->
+		LEFT JOIN BMS_OR_ORDER o on o.id=f.order_id	
+		LEFT JOIN BMS_BASE_FACTORY a ON f.factory_id = a.id
 		LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id = t.id
 		where 1=1
 		
@@ -167,16 +167,17 @@
 	</select>
 	<select id="getOrderDetailList" parameterType="Map" resultType="Map">
 		select  d.production_qty,d.factory_id factory_id,o.order_no order_no,o.order_name order_name,
+		CONCAT(o.order_name,t.bus_type_code,' ',o.order_qty,'台') order_name_str,
 	    o.order_type order_type,o.order_qty order_qty,t.bus_type_code bus_type_code,o.customer,
 		d.order_id order_id,o.delivery_date delivery_date,f.factory_name,r.id,r.capacity
 		from BMS_OR_FACTORY_ORDER d
 		left join BMS_BASE_FACTORY f on f.id=d.factory_id
 		left join BMS_OR_ORDER o on o.id=d.order_id
 		left join BMS_BASE_BUS_TYPE t on o.bus_type_id = t.id
-		left join BMS_OR_ORDER_REVIEW_RESULTS r on r.factory_id = d.factory_id and r.order_id=d.order_id
+		left join BMS_OR_ORDER_REVIEW_RESULTS r on r.order_id=d.id
 		where 1=1
-		<if test="search_order_no!=null">
-			and o.order_no like CONCAT('%',#{search_order_no},'%')   
+		<if test="factory_order_id!=null">
+			and d.id like CONCAT('%',#{factory_order_id},'%')   
 		</if>
 		
 		<if test="search_factory!=null">

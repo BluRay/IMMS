@@ -1062,5 +1062,71 @@
 		</if>
 		GROUP BY wp.staff_number,wp.work_date )  tmp 
 	</select>
-
+    <select id="getSpecicalSalaryData" parameterType="Map" resultType="Map">
+		select * from BMS_HR_SPECIAL_SALARY WHERE 1=1
+		<if test="factory!=null and factory!=''">
+			AND submit_factory = #{factory}
+		</if>
+		<if test="workshop!=null and workshop!=''">
+			AND FIND_IN_SET(submit_workshop,#{workshop}) >0
+		</if>
+		<if test="work_month!=null and work_month!=''">
+			AND month = #{work_month}
+		</if>
+        <if test="staff!=null and staff!=''">
+			AND (staff_number = #{staff} OR staff_name = #{staff})
+		</if>
+		<if test="start!=null and length!=-1">
+			LIMIT #{start} ,#{length}
+		</if>	
+	</select>
+    <select id="getSpecicalSalaryDataCount" resultType="int" parameterType='Map'>
+		select COUNT(1) from BMS_HR_SPECIAL_SALARY WHERE 1=1
+		<if test="factory!=''">
+			AND submit_factory = #{factory}
+		</if>
+		<if test="workshop!=''">
+			AND FIND_IN_SET(submit_workshop,#{workshop}) >0
+		</if>
+		<if test="staff!=null and staff!=''">
+			AND (staff_number = #{staff} OR staff_name = #{staff})
+		</if>
+		<if test="work_month!=null and work_month!=''">
+			AND month = #{work_month}
+		</if>
+	</select>
+	<insert id="insertSpecialSalary" parameterType="List">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		<foreach collection="list" index="index" item="item"
+			separator=";">
+			INSERT INTO BMS_HR_SPECIAL_SALARY(month,staff_number,staff_name,
+			plant_org,workshop_org,workgroup_org,team_org,pre_sale_salary,
+			after_sale_salary,support_salary,hourly_salary,holiday_salary,
+			paid_leave_salary,submit_factory,submit_workshop,status,editor,edit_date
+			)
+			VALUES(#{item.month},#{item.staff_number},#{item.staff_name},#{item.plant_org}
+			,#{item.workshop_org},#{item.workgroup_org},#{item.team_org},#{item.pre_sale_salary}
+			,#{item.after_sale_salary},#{item.support_salary},#{item.hourly_salary},#{item.holiday_salary}
+			,#{item.paid_leave_salary},#{item.submit_factory},#{item.submit_workshop},'0',#{item.editor},#{item.edit_date}
+			)
+		</foreach>
+	</insert>
+	<update id="deleteSpecialSalary" parameterType='Map'>
+		DELETE FROM BMS_HR_SPECIAL_SALARY WHERE 1=1
+		<if test="ids!=null and ids!=''">
+		   and FIND_IN_SET(id,#{ids})>0
+		</if>
+		<if test="factoryStr!=null">
+		   and FIND_IN_SET(submit_factory,#{factoryStr})>0
+		</if>
+		<if test="workshopStr">
+		   and FIND_IN_SET(submit_workshop,#{workshopStr})>0
+		</if>
+		<if test="month!=null">
+		   and month=#{month}
+		</if>
+	</update>
 </mapper>

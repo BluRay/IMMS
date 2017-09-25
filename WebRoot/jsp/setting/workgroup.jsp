@@ -59,8 +59,9 @@
 									<div id="div_tree2" class="widget-box widget-color-green2" style="height:800px;OVERFLOW-X:auto;OVERFLOW-Y:auto;OVERFLOW:auto">
 										<div class="widget-header">
 											<h4 class="widget-title lighter smaller" id="nodeName">标准班组:&nbsp;</h4>
-											<button id="btn_delete" style="float:right;margin-top:2px" class="btn btn-sm btn-purple">删除</button>&nbsp;&nbsp;
-											<button id="btn_add" style="float:right;margin-top:2px" class="btn btn-sm btn-success">新增</button>
+											<button id="btn_add" style="float:right;margin-top:2px" class="btn btn-sm btn-success">新增</button>&nbsp;&nbsp;
+											<button id="btn_delete" style="float:right;margin-top:2px" class="btn btn-sm btn-purple">删除</button>
+											
 										</div>
 
 										<div class="widget-body">

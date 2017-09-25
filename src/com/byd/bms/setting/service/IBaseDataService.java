@@ -55,7 +55,7 @@ public interface IBaseDataService {
 		public List<Map<String, Object>> getWorkshopTreeList(Map<String,Object> queryMap);
 		public int addWorkgroup(BmsBaseStandardWorkgroup workgroup);
 		public int updateWorkgroup(BmsBaseStandardWorkgroup workgroup);
-		public void deleteWorkgroup(List ids);
+		public Map deleteWorkgroup(List ids);
 		//车型
 		public Map<String, Object> getBusTypeList(Map<String,Object> queryMap);
 		//public int getBusTypeTotalCount(Map<String,Object> queryMap);

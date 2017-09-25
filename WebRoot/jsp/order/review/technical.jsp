@@ -64,10 +64,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							    <input type="radio" value="OK" name="S_purchasedetail"/>&nbsp;OK&nbsp;&nbsp;
 							    <input type="radio" value="NG" name="S_purchasedetail"/>&nbsp;NG
 							</td>
-							<td>&nbsp;资料需求节点：</td>
+							<td><!-- &nbsp;资料需求节点： --></td>
 							<td>
-							    <input type="radio" value="OK" name="S_technicaldatanode"/>&nbsp;OK&nbsp;&nbsp;
-							    <input type="radio" value="NG" name="S_technicaldatanode"/>&nbsp;NG
+							   <!-- <input type="radio" value="OK" name="S_technicaldatanode"/>&nbsp;OK&nbsp;&nbsp;
+							    <input type="radio" value="NG" name="S_technicaldatanode"/>&nbsp;NG -->
 							</td>
 						</tr>
 						<tr role="row" class="even">

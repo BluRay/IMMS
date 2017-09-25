@@ -18,6 +18,9 @@
          <if test="name!=null and name!=''">
              AND t.name=#{name} 
          </if>
+         <if test="foreign_id!=null and foreign_id!=''">
+             AND t.foreign_id=#{foreign_id} and org_type in ('3','4') 
+         </if>
          ORDER BY org_type ASC	
 	</select>
 	<select id="getOrgDataByParentId" parameterType="Map" resultType="Map">

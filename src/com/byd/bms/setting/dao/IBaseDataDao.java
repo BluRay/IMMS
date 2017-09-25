@@ -62,7 +62,7 @@ public interface IBaseDataDao {
 	public int getWorkgroupTotalCount(Map<String,Object> queryMap);
 	public int addWorkgroup(BmsBaseStandardWorkgroup workgroup);
 	public int updateWorkgroup(BmsBaseStandardWorkgroup workgroup);
-	public void deleteWorkgroup(String id);
+	public int deleteWorkgroup(List ids);
 	
 	//车型
 	public List<BmsBaseBusType> getBusTypeList(Map<String,Object> queryMap);

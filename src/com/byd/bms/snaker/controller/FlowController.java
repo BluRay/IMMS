@@ -145,14 +145,13 @@ public class FlowController extends BaseController{
      */
     @RequestMapping(value = "all")
     public ModelAndView all(Model model, String processId, String orderId, String taskId,
-    		String reviewOrderId,String factoryId,String reviewResultId,String orderNo) {
+    		String reviewOrderId,String factoryId,String reviewResultId) {
 		model.addAttribute("processId", processId);
 		model.addAttribute("orderId", orderId); // 评审流程ID 【wf_order】
 		model.addAttribute("taskId", taskId);
-		model.addAttribute("reviewOrderId", reviewOrderId); //订单ID 【bms_or_order】
+		model.addAttribute("reviewOrderId", reviewOrderId); //工厂订单ID 【bms_or_factory_order】
 		model.addAttribute("reviewResultId", reviewResultId); // 评审结果表ID 【bms_order_review_result】
 		model.addAttribute("factoryId", factoryId);
-		model.addAttribute("orderNo", orderNo); // 订单编号 【bms_or_order】
         if(StringUtils.isNotEmpty(processId)) {
             model.addAttribute("process", facets.getEngine().process().getProcessById(processId));
         }
@@ -162,7 +161,6 @@ public class FlowController extends BaseController{
         if(StringUtils.isNotEmpty(taskId)) {
             model.addAttribute("task", facets.getEngine().query().getTask(taskId));
         }
-        //return "snaker/all";
         model.addAttribute("processId", processId);
         model.addAttribute("orderId", orderId);
         mv.setViewName("snaker/review");

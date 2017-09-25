@@ -298,6 +298,12 @@ jQuery(function($) {
 			$("#new_groupName").focus();
 			return false
 		}
+		var type=1; // 小班组
+		var parentId=$("#new_parentId").val();
+		alert(parentId+"--"+parentId.indexOf("t"));
+		if(parentId.indexOf("t")>=0){
+			type=0; // 标准班组
+		}
 		$.ajax({
 		    url: "addWorkgroup",
 		    dataType: "json",
@@ -306,8 +312,9 @@ jQuery(function($) {
 		    	"workgroupId" : $("#new_workgroupId").val(),
 		    	"groupName" : $("#new_groupName").val(),
 		    	"responsibility" : $("#new_responsibility").val(),
-		    	"parentId":$("#new_parentId").val(),
+		    	"parentId":parentId,
 		    	"workshopId":$("#new_workshopId").val(),
+		    	"type":type,
 		    	"memo" : $("#new_memo").val()
 		    },
 		    success:function(response){
@@ -337,6 +344,9 @@ jQuery(function($) {
 				text: '<h5>请至少勾选一条记录！</h5>',
 				class_name: 'gritter-info'
 			});
+			return false;
+		}
+		if(!confirm("确定要删除吗？")){
 			return false;
 		}
 		$.ajax({

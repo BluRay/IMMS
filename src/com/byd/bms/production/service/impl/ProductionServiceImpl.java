@@ -142,13 +142,7 @@ public class ProductionServiceImpl implements IProductionService {
 					m.put("status", "2");
 					productionDao.updateFactoryOrder(m);
 				}
-			}
-			
-			
-			
-			
-			
-			
+			}	
 			
 		}else{  // 当前节点已扫描
 			if(partsList.size()>0){

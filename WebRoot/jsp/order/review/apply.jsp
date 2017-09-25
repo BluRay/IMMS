@@ -112,6 +112,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             			alert("暂未给用户分配【技术部评审】角色,无法发起评审");
             			return false;
             		}
+            		var capacity=window.parent.document.getElementById('capacityInput').value;
+            		
+            		if(capacity==''){
+            			alert("请输入产能!");
+            			return false;
+            		}
             		$.ajax({
             			url: "/BMS/snaker/flow/process",
             			dataType: "json",
@@ -129,7 +135,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             				"sopdemandNode" : $("#sopdemandNode").val(),
             				"sipdemandNode" : $("#sipdemandNode").val(),
             				"applyInfo" : $("#applyInfo").val(),
-            				"capacity" : $("#capacity").val(),
+            				"capacity" : capacity,
             				"apply.operator" : $("#apply_operator").val(),
             				"technical.operator" : $("#technical_operator").val(),
             				"processId" : $("#processId").val(),

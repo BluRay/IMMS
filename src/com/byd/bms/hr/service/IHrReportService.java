@@ -39,4 +39,10 @@ public interface IHrReportService {
 
 	public void getAttendenceReport(Map<String, Object> conditionMap,
 			ModelMap model);
+	
+	public void getSpecialSalaryData(Map<String, Object> conditionMap, ModelMap model);
+	
+	public int insertSpecialSalary(List<Map<String, Object>> list,Map delConditionMap);
+	
+	public void deleteSpecialSalary(Map map);
 }
