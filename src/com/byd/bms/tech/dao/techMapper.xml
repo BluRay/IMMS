@@ -1505,15 +1505,10 @@ LEFT JOIN BMS_TECH_TASK AS t ON d.tech_task_id = t.id
 LEFT JOIN BMS_TECH_TASK_FOLLOW_PRE f ON d.id = f.task_detail_id and substring_index(substring_index(substring_index(d.tech_list,',', b.help_topic_id + 1), ',', -1),':',1) = f.workshop
 LEFT JOIN BMS_TECH_TASK_FOLLOW f1 ON d.id = f1.task_detail_id and substring_index(substring_index(substring_index(d.tech_list,',', b.help_topic_id + 1), ',', -1),':',1) = f1.workshop
 LEFT JOIN BMS_BASE_KEY k ON t.tech_order_type = k.id
+WHERE d.factory = #{factory} AND substring_index(substring_index(substring_index(d.tech_list,',', b.help_topic_id + 1), ',', -1),':',1) = #{workshop}
 GROUP BY d.tech_task_id,d.order_no,d.factory,ws
 ) AS tmp 
 where 1=1
-		<if test="factory !=null and factory !=''">
-			and tmp.factory = #{factory}
-		</if>
-		<if test="workshop !=null and workshop !=''">
-			and tmp.ws = #{workshop}
-		</if>
 		<if test="order_no !=null and order_no !=''">
 			and tmp.order_no = #{order_no}
 		</if>
@@ -1569,15 +1564,10 @@ join mysql.help_topic b ON b.help_topic_id &lt;  (LENGTH(d.tech_list) - LENGTH(R
 LEFT JOIN BMS_TECH_TASK AS t ON d.tech_task_id = t.id
 LEFT JOIN BMS_TECH_TASK_FOLLOW_PRE f ON d.id = f.task_detail_id and substring_index(substring_index(substring_index(d.tech_list,',', b.help_topic_id + 1), ',', -1),':',1) = f.workshop
 LEFT JOIN BMS_TECH_TASK_FOLLOW f1 ON d.id = f1.task_detail_id and substring_index(substring_index(substring_index(d.tech_list,',', b.help_topic_id + 1), ',', -1),':',1) = f1.workshop
+WHERE d.factory = #{factory} AND substring_index(substring_index(substring_index(d.tech_list,',', b.help_topic_id + 1), ',', -1),':',1) = #{workshop}
 GROUP BY d.tech_task_id,d.order_no,d.factory,ws
 ) AS tmp 
 where 1=1
-		<if test="factory !=null and factory !=''">
-			and tmp.factory = #{factory}
-		</if>
-		<if test="workshop !=null and workshop !=''">
-			and tmp.ws = #{workshop}
-		</if>
 		<if test="order_no !=null and order_no !=''">
 			and tmp.order_no = #{order_no}
 		</if>

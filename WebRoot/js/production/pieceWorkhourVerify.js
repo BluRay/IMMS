@@ -159,7 +159,7 @@ function showStaffList(staff_hour_list){
 		rowsGroup=[0,1,2,3,4];
 		columns= [
 		            {"title":"<input id=\"checkall\" type=\"checkbox\" />","width":"30","class":"center","data":"","defaultContent": "","render":function(data,type,row){
-		            	return "<input  type=\"checkbox\" bus='"+row.bus_number+"'/>";
+		            	return "<input type=\"checkbox\" bus='"+row.bus_number+"'/>";
 		            }},
 		            {"title":"车号","class":"center","data":"bus_number","defaultContent": ""},
 		            {"title":"操作日期","class":"center","data":"work_date","defaultContent": ""},
@@ -216,7 +216,7 @@ function showStaffList(staff_hour_list){
 		rowsGroup=[0,1];
 		columns= [
 		            {"title":"<input id=\"checkall\" type=\"checkbox\" />","width":"30","class":"center","data":"work_date","defaultContent": "","render":function(data,type,row){
-		            	return "<input  type=\"checkbox\" />";
+		            	return "<input id='cbx_"+row.work_date+"' type=\"checkbox\"  />";
 		            }},
 		            {"title":"操作日期","class":"center","data":"work_date","defaultContent": ""},
 		            {"title":"工号","class":"center","data":"staff_number","defaultContent": ""},
