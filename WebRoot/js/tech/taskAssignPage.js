@@ -50,9 +50,11 @@ $(document).ready(function (){
 		
 		if($(this).val()=='全部切换'){
 			$("#switch_node").val("");
+			$("#tr_switch_node").css("display","none");
 			$("#switch_node").prop("disabled",true);
 		}else{
 			$("#switch_node").prop("disabled",false);
+			$("#tr_switch_node").css("display","");
 		}
 	});
 	
@@ -193,7 +195,7 @@ function ajaxEdit(task_id,task_detail_id,task_content,tech_order_no,switch_mode,
 		$("#tr_switch_node").css("display","");
 		$("#switch_node").val(switch_node);
 	}
-	console.log("switch_mode = " + switch_mode + " mode_index = " + mode_index);
+	//console.log("switch_mode = " + switch_mode + " mode_index = " + mode_index);
 	$("[name=switch_mode]").eq(mode_index).prop("checked",true);
 	if(is_follow){
 		$("[name=switch_mode]").prop("disabled",true);
@@ -250,7 +252,7 @@ function assignTechTask(){
 	$.each(factory_cboxs,function(i,cbox){
 		var factory=$(cbox).parent("div").find("span").html();
 		var factory_id=$(cbox).parent("div").find("span").prop("factory_id");
-		console.log('---->conditions factory= ' + factory + " ,factory_id = " + factory_id);
+		//console.log('---->conditions factory= ' + factory + " ,factory_id = " + factory_id);
 		var tech_factory=$(cbox).parent("div").find(".tech_factory :selected").text();
 		var tech_factory_id=$(cbox).parent("div").find(".tech_factory").val();
 		var order_no=$(cbox).parent("div").parent("div").parent("div").find(".assess_order_no").val();
@@ -626,13 +628,13 @@ function initTable() {
                 cellStyle:function cellStyle(value, row, index, field) {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};},
     	        formatter:function(value, row, index){
-    	        	console.log('---->assess_date = ' + row['assess_date'])
-    	        	if(row['assess_date']==undefined||row['assess_date']==''||row['assess_date'].trim().length==0){
-    	        		//task_id,task_detail_id,task_content,tech_order_no,switch_mode,switch_node,tech_date
-    	        		return "<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"分配\" onclick='ajaxEdit(\"" + 
-    	        		row['id'] + "\",\"" + row['task_detail_id'] + "\",\"" + row['task_content'].replace(/\r/ig, "").replace(/\n/ig,"") + "\",\"" + row['tech_order_no'] + "\",\"" + 
-    	        		row['switch_mode'] + "\",\"" + row['switch_node'] + "\",\"" + row['tech_date'] + "\")' style='color:blue;cursor: pointer;'></i>";
-    	        	}
+    	        	//console.log('---->assess_date = ' + row['assess_date'])
+    	        	//if(row['assess_date']==undefined||row['assess_date']==''||row['assess_date'].trim().length==0){
+	        		//task_id,task_detail_id,task_content,tech_order_no,switch_mode,switch_node,tech_date
+	        		return "<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"分配\" onclick='ajaxEdit(\"" + 
+	        		row['id'] + "\",\"" + row['task_detail_id'] + "\",\"" + row['task_content'].replace(/\r/ig, "").replace(/\n/ig,"") + "\",\"" + row['tech_order_no'] + "\",\"" + 
+	        		row['switch_mode'] + "\",\"" + row['switch_node'] + "\",\"" + row['tech_date'] + "\")' style='color:blue;cursor: pointer;'></i>";
+    	        	//}
     	        }
             }
         ]

@@ -92,7 +92,7 @@
 					</tr>
 					<tr style="height:40px">
 						<td align="right" style="width:100px">切换方式：</td>
-						<td>
+						<td style="width:280px">
 							<input checked name="switch_mode" value="全部切换" type="radio"><span>全部切换&nbsp;&nbsp;</span>
 							<input name="switch_mode" value="节点前切换" type="radio"><span>节点前切换&nbsp;&nbsp;</span>
 							<input name="switch_mode" value="节点后切换" type="radio"><span>节点后切换&nbsp;&nbsp;</span>

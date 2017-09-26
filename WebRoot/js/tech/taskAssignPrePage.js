@@ -37,7 +37,7 @@ $(document).ready(function () {
 function ajaxQuery(){
 	$table.bootstrapTable('refresh', {url: 'taskAssignPage/getTaskList'});
 }
-function ajaxEdit(task_id,task_detail_id,task_content,tech_order_no,switch_mode,switch_node,tech_date){
+function ajaxEdit(task_id,task_detail_id,task_content,tech_order_no,switch_mode,switch_node,tech_date,time_list,status_list,single_time_total,time_total){
 	$("#task_assess").clearForm();
 	$("#switch_node").prop("disabled",true);
 	//$("[name=switch_mode]").removeAttr("disabled");
@@ -94,7 +94,7 @@ function ajaxEdit(task_id,task_detail_id,task_content,tech_order_no,switch_mode,
 					id:"btn_ok",
 					"class" : "btn btn-success btn-minier",
 					click: function() {
-						asessTechTask();
+						asessTechTask(time_list,status_list,single_time_total,time_total);
 					} 
 				}
 			]
@@ -102,7 +102,7 @@ function ajaxEdit(task_id,task_detail_id,task_content,tech_order_no,switch_mode,
 	
 }
 
-function asessTechTask(){
+function asessTechTask(time_list,status_list,single_time_total,time_total){
 	var factory_cboxs=$("input[name='new_tecn_flag']");
 	var tech_task_id=$("#dialog-assessModal").data("tech_task_id");
 	var switch_mode=$("input[name='switch_mode']:checked").val();
@@ -149,10 +149,15 @@ function asessTechTask(){
 			obj.node_list=node_list;
 			obj.tech_factory_id=tech_factory_id;
 			obj.tech_factory=tech_factory;
+
+			obj.time_list=time_list;
+			obj.status_list=status_list;
+			obj.single_time_total=single_time_total;
+			obj.time_total=time_total;
 			conditions.push(obj);
 		}
 	});
-	console.log('---->conditions',conditions);
+	//console.log('---->conditions',conditions);
 	$.ajax({
 		url:"assignTechTask",
 		dataType:"json",
@@ -366,7 +371,7 @@ function initTable() {
     	        		//task_id,task_detail_id,task_content,tech_order_no,switch_mode,switch_node,tech_date
     	        		return "<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"分配\" onclick='ajaxEdit(\"" + 
     	        		row['id'] + "\",\"" + row['task_detail_id'] + "\",\"" + row['task_content'].replace(/\r/ig, "").replace(/\n/ig,"") + "\",\"" + row['tech_order_no'] + "\",\"" + 
-    	        		row['switch_mode'] + "\",\"" + row['switch_node'] + "\",\"" + row['tech_date'] + "\")' style='color:blue;cursor: pointer;'></i>";
+    	        		row['switch_mode'] + "\",\"" + row['switch_node'] + "\",\"" + row['tech_date'] + "\",\"" + row['time_list'] + "\",\"" + row['status_list'] + "\",\"" + row['single_time_total'] + "\",\"" + row['time_total'] + "\")' style='color:blue;cursor: pointer;'></i>";
     	        	}
     	        }
             }
