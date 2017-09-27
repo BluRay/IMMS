@@ -284,7 +284,7 @@
 	</select>
 	
 	<select id="queryStaffPieceSalary" parameterType="Map" resultType="Map">
-		select st.*,round(sum(ps.ppay),2) piece_pay_total,sum(ps.bus_count) piece_total,sum(ps.bonus) bonus_total,
+		select st.*,s.job,s.plant_org,s.workshop_org,s.workgroup_org,s.team_org,round(sum(ps.ppay),2) piece_pay_total,sum(ps.bus_count) piece_total,sum(ps.bonus) bonus_total,
 		ps.salary_model,round(sum(ws.wpay),2) wait_pay_total,sum(ws.work_hour) wwh_total,
 		round(sum(ts.real_work_hour*ts.hour_price),2) tmp_pay_total,sum(ts.work_hour) tmpwh_total,
 		round(sum(es.real_work_hour*es.hour_price),2) ecn_pay_total,sum(es.work_hour) ecnwh_total,
@@ -332,7 +332,7 @@
 		<otherwise>'' as output</otherwise>
 		</choose>
 		from(
-		select distinct ps.staff_number,ps.staff_name,ps.job,ps.plant_org,ps.workshop_org,ps.workgroup_org,ps.team_org
+		select distinct ps.staff_number,ps.staff_name
 		from BMS_HR_PIECE_SALARY ps
 		where ps.factory=#{factory} and ps.workshop=#{workshop} and ps.work_date like concat(#{month},'%')
 		<if test="workgroup !=null and workgroup !='全部'">
@@ -345,7 +345,7 @@
 			and (ps.staff_number like concat('%',#{staff},'%') or ps.staff_name like concat('%',#{staff},'%') )
 		</if>
 		union
-		select distinct ws.staff_number,ws.staff_name,ws.job,ws.plant_org,ws.workshop_org,ws.workgroup_org,ws.team_org
+		select distinct ws.staff_number,ws.staff_name
 		from BMS_HR_WAIT_SALARY ws
 		where ws.factory=#{factory} and ws.workshop=#{workshop}  and ws.work_date like concat(#{month},'%')
 		<if test="workgroup !=null and workgroup !='全部'">
@@ -358,7 +358,7 @@
 			and (ws.staff_number like concat('%',#{staff},'%') or ws.staff_name like concat('%',#{staff},'%') )
 		</if>
 		union
-		select distinct ts.staff_number,ts.staff_name,ts.job,ts.plant_org,ts.workshop_org,ts.workgroup_org,ts.team_org
+		select distinct ts.staff_number,ts.staff_name
 		from BMS_HR_TMP_SALARY ts
 		where ts.factory=#{factory} and ts.workshop=#{workshop} and ts.work_date like concat(#{month},'%')
 		<if test="workgroup !=null and workgroup !='全部'">
@@ -371,7 +371,7 @@
 			and (ts.staff_number like concat('%',#{staff},'%') or ts.staff_name like concat('%',#{staff},'%') )
 		</if>
 		union
-		select distinct es.staff_number,es.staff_name,es.job,es.plant_org,es.workshop_org,es.workgroup_org,es.team_org
+		select distinct es.staff_number,es.staff_name
 		from BMS_HR_TECH_SALARY es
 		where es.factory=#{factory} and es.workshop=#{workshop} and es.work_date like concat(#{month},'%')
 		<if test="workgroup !=null and workgroup !='全部'">
@@ -861,7 +861,7 @@
 		sum(ifnull(short_num_yd,0)) short_num_yd,sum(ifnull(short_num_sd,0)) short_num_sd,sum(ifnull(leave_num,0)) leave_num,sum(ifnull(holiday_num,0)) holiday_num,
 		sum(ifnull(absence_num,0)) absence_num,sum(ifnull(trip_num,0)) trip_num,sum(ifnull(out_aid_num,0)) out_aid_num,sum(ifnull(work_num,0)) work_num,
 		sum(ifnull(out_aid_cs_num,0)) out_aid_cs_num,sum(ifnull(out_aid_nj_num,0)) out_aid_nj_num,sum(ifnull(out_aid_hz_num,0)) out_aid_hz_num,sum(ifnull(out_aid_dl_num,0)) out_aid_dl_num,
-		sum(ifnull(out_aid_qd_num,0)) out_aid_qd_num,sum(ifnull(out_aid_cd_num,0)) out_aid_cd_num,sum(ifnull(out_aid_wh_num,0)) out_aid_wh_num,sum(ifnull(out_aid_dl_num,0)) out_aid_sw_num,
+		sum(ifnull(out_aid_qd_num,0)) out_aid_qd_num,sum(ifnull(out_aid_cd_num,0)) out_aid_cd_num,sum(ifnull(out_aid_wh_num,0)) out_aid_wh_num,sum(ifnull(out_aid_sw_num,0)) out_aid_sw_num,
 		sum(ifnull(out_aid_ty_num,0)) out_aid_ty_num,sum(ifnull(out_aid_sz_num,0)) out_aid_sz_num,sum(ifnull(out_aid_xa_num,0)) out_aid_xa_num,sum(ifnull(out_aid_nb_num,0)) out_aid_nb_num,
 		sum(ifnull(out_aid_yc_num,0)) out_aid_yc_num,sum(ifnull(out_aid_tj_num,0)) out_aid_tj_num,sum(ifnull(out_aid_oth_num,0)) out_aid_oth_num,
 		sum(ifnull(out_aid_note,0)) out_aid_note,sum(ifnull(in_aid_cs_num,0)) in_aid_cs_num,sum(ifnull(in_aid_nj_num,0)) in_aid_nj_num,sum(ifnull(in_aid_hz_num,0)) in_aid_hz_num,

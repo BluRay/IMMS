@@ -57,7 +57,7 @@
 						<ul class="nav nav-tabs" id="myTab">
 							<li id="div1" class="active"><a data-toggle="tab" href="#div_1">基本信息</a></li>
 							<li id="div2"><a data-toggle="tab" href="#div_2">生产信息</a></li>
-							<li id="div3"><a data-toggle="tab" href="#div_3">成品纪录表</a></li>
+							<li id="div3"><a data-toggle="tab" href="#div_3">成品记录表</a></li>
 							<li id="div4"><a data-toggle="tab" href="#div_4">关键零部件</a></li>
 							<!-- <li id="div5"><a data-toggle="tab" href="#div_5">订单配置一致性</a></li>-->
 							<li id="div6"><a data-toggle="tab" href="#div_6">底盘铭牌</a></li>

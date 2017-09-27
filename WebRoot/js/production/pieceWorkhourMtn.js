@@ -264,8 +264,9 @@ $(document).ready(function() {
 	$(document).on("click","#btnSave",function(){
 		var bus_number=$("#bus_number").val();
 		order_id=$("#bus_number").attr("order_id")||$("#order_no").attr("order_id");
+		var order_no=$("#order_no").val();
 		var work_date=$("#work_date").val();
-		var cutomer_number=$("#customer_number").val()
+		var cutomer_number="("+order_no+")"+$("#customer_number").val()
 		var staffHourList=[];
 		var trs=$("#tableResult tbody").find("tr");
 		var total_distribution=0;
