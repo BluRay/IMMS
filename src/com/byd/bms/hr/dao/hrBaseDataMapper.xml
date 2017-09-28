@@ -236,8 +236,8 @@
 			AND salary_type = #{salary_type}
 		</if>
 		<if test="staff_number!=null and staff_number!=''">
-			AND (
-			s.staff_number in ( ${staff_number} )OR
+			AND ( 
+			FIND_IN_SET(s.staff_number,#{staff_number})>0  OR
 			s.name LIKE CONCAT('%',#{staff_number},'%')
 			)
 		</if>
@@ -284,8 +284,10 @@
 		</if>
 
 		<if test="staff_number!=null and staff_number!=''">
-			AND( s.staff_number in ( ${staff_number} )OR
-			LOCATE(s.name,#{staff_number})>0 )
+			AND ( 
+			FIND_IN_SET(s.staff_number,#{staff_number})>0  OR
+			s.name LIKE CONCAT('%',#{staff_number},'%')
+			)
 		</if>
 		<if test="salary_type!=null and salary_type!=''">
 			AND s.salary_type = #{salary_type}

@@ -887,7 +887,7 @@
 	
 	<select id="queryWarehouseInfo" parameterType="Map" resultType="Map">
 		select count(b.id) warehouse_count, 
-		(select fo.production_qty from BMS_OR_FACTORY_ORDER fo 
+		(select sum(fo.production_qty) from BMS_OR_FACTORY_ORDER fo 
 		where fo.order_id=#{order_id} and fo.factory_id=#{factory_id}) production_qty
 		from BMS_PLAN_BUS b 
 		where b.factory_id=#{factory_id} and b.order_id=#{order_id} and b.warehousing_date>0

@@ -300,7 +300,7 @@
 		SELECT concat(d.order_no,'<br>',o.order_name,bt.bus_type_code,' ',o.order_qty,'台') order_desc,d.prod_factory_id,
 		group_concat(d.prod_factory,'_',f.id) AS prod_factory,
 		group_concat(d.factory_id,'_',d.factory,'||',d.tech_list separator ';') tech_detail_list,
-		group_concat(d.factory_id,'_',d.factory,'||',(select count(f.bus_number) from BMS_TECH_TASK_FOLLOW f where f.confirmor_date is not null and f.confirmor_date !='' and f.factory=d.factory and f.order_no=d.order_no)  separator ';') follow_detail
+		group_concat(d.factory_id,'_',d.factory,'||',(select count(f.bus_number) from BMS_TECH_TASK_FOLLOW f where f.confirmor_date is not null and f.confirmor_date !='' and f.factory=d.factory and f.order_no=d.order_no and f.tech_task_id = #{task_id})  separator ';') follow_detail
 		FROM BMS_TECH_TASK_DETAIL d 
 		LEFT JOIN BMS_OR_ORDER o ON o.order_no=d.order_no
 		LEFT JOIN BMS_BASE_BUS_TYPE bt on bt.id=o.bus_type_id

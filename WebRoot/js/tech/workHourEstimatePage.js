@@ -90,7 +90,7 @@ function ajaxQuery(){
 		            {"title":"单车总工时","class":"center","data":"single_time_total","defaultContent": ""},
 		            {"title":"操作","class":"center","data": null,"id":"staff_number",
 		            	"render": function ( data, type, row ) {
-		                    return "<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"修改\" onclick='showConfigModal("+row.id+","+row.tech_task_id+",\""+row.factory+"\",\""+(typeof(row.time_list) == "undefined")?'':row.time_list+"\",\""+row.tech_list+"\")' style='color:blue;cursor: pointer;'></i>&nbsp;";
+		                    return "<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"修改\" onclick='showConfigModal("+row.id+","+row.tech_task_id+",\""+row.factory+"\",\""+((typeof(row.time_list) == "undefined")?'':row.time_list)+"\",\""+row.tech_list+"\")' style='color:blue;cursor: pointer;'></i>&nbsp;";
 		                },
 		            }
 		          ],
