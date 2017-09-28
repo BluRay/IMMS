@@ -231,7 +231,7 @@ function generateTb(swhlist){
 		var disabled=swh.status!='0' ? 'disabled' : "";
 		var tr=$("<tr />");	
 		//操作日期合并单元格
-		if(swh.work_date==last_workdate){
+		if(swh.work_date==last_workdate&&swh.wait_type==last_wait_type){
 			var rowspan=parseInt($(workdateId).attr("rowspan"));
 			$(workdateId).attr("rowspan",rowspan+1);
 			$(checkboxId).attr("rowspan",rowspan+1);

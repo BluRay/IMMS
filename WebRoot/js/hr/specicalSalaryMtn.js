@@ -100,6 +100,9 @@ function initPage() {
 	});
 	
 	$("#btnDelete").on('click', function(e) {
+		if(!confirm("您确定要删除选中的数据吗")){
+			return false;
+		}
 		var ids = '';
 		$(":checkbox").each(function(){
 			if($(this).prop("checked")){

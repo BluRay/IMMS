@@ -99,7 +99,7 @@
 							<label class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right">*&nbsp;临时派工类型</label>
 							<div class="col-sm-8">
 							    <input type="hidden" id="editId" />
-								<input type="text" class="input-medium" id="edit_tmp_order_type" />
+								<input type="text" class="input-medium" id="edit_tmp_order_type" readonly="readonly"/>
 							</div>
 						</div>
 					</div>
@@ -107,7 +107,7 @@
 					    <div>
 							<label  class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right">*&nbsp;编号</label>
 							<div class="col-sm-8">
-								<input type="text" class="input-medium" id="edit_no" />
+								<input type="text" class="input-medium" id="edit_no" readonly="readonly"/>
 							</div>
 						</div>
 					</div>

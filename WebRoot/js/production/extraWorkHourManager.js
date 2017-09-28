@@ -55,12 +55,12 @@ $(document).ready(function(){
 		ajaxDelete();
 	});
 	$("#btn_upload").click (function () {
+		$(".divLoading").addClass("fade in").show();
 		$("#uploadMasterPlanForm").ajaxSubmit({
 			url:"uploadExtraWorkHourManager",
 			type: "post",
 			dataType:"json",
 			success:function(response){
-				
 				if(response.success){
 					ajaxQuery();
 					$.gritter.add({
@@ -75,7 +75,10 @@ $(document).ready(function(){
 						class_name: 'gritter-info'
 					});
 				}
-			}			
+			},
+			complete:function(){
+				$(".divLoading").hide();
+			}
 		});
 	});
 	$(document).on("click",".edit",function(){
@@ -90,10 +93,10 @@ $(document).ready(function(){
 		$("#edit_reason_content").val($(this).closest('tr').find('td').eq(7).html());
 		$("#edit_description").val($(this).closest('tr').find('td').eq(8).html());
 		$("#edit_single_hour").val($(this).closest('tr').find('td').eq(9).html());
-		$("#edit_order_type").val($(this).closest('tr').find('td').eq(10).html());
-		$("#edit_assesor").val($(this).closest('tr').find('td').eq(11).html());
-		$("#edit_assess_verifier").val($(this).closest('tr').find('td').eq(12).html());
-		$("#edit_duty_unit").val($(this).closest('tr').find('td').eq(13).html());
+		$("#edit_assesor").val($(this).closest('tr').find('td').eq(10).html());
+		$("#edit_assess_verifier").val($(this).closest('tr').find('td').eq(11).html());
+		$("#edit_duty_unit").val($(this).closest('tr').find('td').eq(12).html());
+		$("#edit_order_type").val($(this).closest('tr').find('td').eq(13).html());
 		$("#edit_memo").val($(this).closest('tr').find('td').eq(14).html());
 		var dialog = $( "#dialog-edit" ).removeClass('hide').dialog({
 			width:600,
@@ -280,6 +283,9 @@ function ajaxAdd (argument) {
 	
 }
 function ajaxDelete(){
+	if(!confirm("确认要删除吗?")){
+		return false;
+	}
 	var ids = '';
 	$(":checkbox").each(function(){
 		if($(this).prop("checked")){

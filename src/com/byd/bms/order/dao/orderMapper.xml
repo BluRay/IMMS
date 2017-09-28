@@ -432,8 +432,8 @@
 		left join BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id
 		left join BMS_OR_FACTORY_ORDER fo on fo.order_id=o.id
 		left join BMS_BASE_FACTORY f on fo.factory_id=f.id
-		left join BMS_OR_FACTORY_ORDER_CONFIG fc on fc.order_id=o.id and fc.factory_id=fo.factory_id
-		left join BMS_OR_ORDER_CONFIG c on fc.order_config_id=c.id
+		left join BMS_OR_ORDER_CONFIG c on c.order_id=o.id
+		left join BMS_OR_FACTORY_ORDER_CONFIG fc on fc.order_id=o.id and fc.factory_id=fo.factory_id and fc.order_config_id=c.id
 		where 1=1
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no=#{order_no}

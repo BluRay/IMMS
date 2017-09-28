@@ -131,9 +131,15 @@ function ajaxQuery(){
 	var tb=$("#tableResult").DataTable({
 		serverSide: true,
 		dom: 'Bfrtip',
+		lengthMenu: [
+		             [ 200, 500, 1000, -1 ],
+		             [ '显示200行', '显示500行', '显示1000行', '全部' ]
+		         ],
 		buttons: [
 			        {extend:'excelHtml5',enabled:false,title:'data_export',className:'black',text:'<i class=\"fa fa-file-excel-o bigger-130\" tooltip=\"导出excel\"></i>'},
-			        {extend:'colvis',text:'<i class=\"fa fa-list bigger-130\" tooltip=\"选择展示列\"></i>'},],
+			        /*{extend:'colvis',text:'<i class=\"fa fa-list bigger-130\" tooltip=\"选择展示列\"></i>'},*/
+			        {extend:'pageLength',text:'显示200行'}
+			        ],
         paginate:false,
         rowsGroup:rowsGroup,
         paiging:false,
@@ -143,7 +149,7 @@ function ajaxQuery(){
 		destroy: true,
 		sScrollY: $(window).height()-250,
 		scrollX: true,
-		pageLength: 20,
+		pageLength: 200,
 		pagingType:"full_numbers",
 		lengthChange:true,
 		info:false,

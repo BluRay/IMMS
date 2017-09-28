@@ -99,7 +99,7 @@
 							</div>
 							<div class="row" >
 								<div class="col-xs-12"  id="tableReusltDiv" style="padding-right:0px;">
-									<table id="tableResult" class="table table-striped table-bordered table-hover" style="table-layout:fixed;font-size: 12px; width:936px;overflow:auto;">
+									<table id="tableResult" class="table table-striped table-bordered table-hover" style="font-size: 12px;">
 									</table>
 								</div>
 							</div>

@@ -1789,15 +1789,16 @@ public class ProductionController extends BaseController {
 
 		List<Map<String, Object>> addList = new ArrayList<Map<String, Object>>();
 		boolean saveFlag=true;
-		
+		int line=1;
 		for (Object[] data : excelModel.getData()) {
+			
 			Map<String, Object> infomap = new HashMap<String, Object>();
 
 			infomap.put("tmp_order_type", data[0] == null ? null : data[0].toString().trim());
 			if(data[0] != null){
 				if(data[0].toString().trim().length()==0){
 					saveFlag=false;
-					result =" 额外工时类型不能为空";
+					result =line+"行 额外工时类型不能为空";
 					break;
 				}
 				Map<String, Object> querymap = new HashMap<String, Object>();
@@ -1805,16 +1806,36 @@ public class ProductionController extends BaseController {
 				Map<String,Object> tmpOrderTypeMap=productionService.getTmpOrderTypeList(querymap);
 				if((int)tmpOrderTypeMap.get("recordsTotal")==0){
 					saveFlag=false;
-					result ="额外工时类型"+ data[0].toString().trim()+"没有维护";
+					result =line+"行 额外工时类型"+ data[0].toString().trim()+"没有维护";
 					break;
 				}
 				
 			}else{
 				saveFlag=false;
-				result ="额外工时类型不能为空";
+				result =line+"行 额外工时类型不能为空";
 				break;
 			}
 			infomap.put("no", data[1] == null ? null : data[1].toString().trim());
+			if(data[1] != null){
+				if(data[1].toString().trim().length()==0){
+					saveFlag=false;
+					result =line+"行 编号不能为空";
+					break;
+				}else{
+					Map<String, Object> querymap = new HashMap<String, Object>();
+					querymap.put("no",data[1].toString().trim());
+					Map<String,Object> tmpMap=productionService.getExtraWorkHourManagerList(querymap);
+					if((int)tmpMap.get("recordsTotal")>0){
+						saveFlag=false;
+						result =line+"行 编号 "+ data[1].toString().trim()+" 已存在，不能导入";
+						break;
+					}
+				}
+			}else{
+				saveFlag=false;
+				result =line+"行 编号不能为空";
+				break;
+			}
 			infomap.put("order_no", data[2] == null ? null : data[2].toString().trim());
 			if(data[2] != null && !data[2].toString().equals("")){
 				Map<String, Object> querymap = new HashMap<String, Object>();
@@ -1822,7 +1843,7 @@ public class ProductionController extends BaseController {
 				Map<String,Object> orderMap=orderService.getOrderByNo(querymap);
 				if(orderMap==null){
 					saveFlag=false;
-					result = data[2].toString().trim()+" 订单号不存在";
+					result =line+"行 "+ data[2].toString().trim()+" 订单号不存在";
 					break;
 				}
 			}
@@ -1832,12 +1853,11 @@ public class ProductionController extends BaseController {
 				Map<String,Object> bustypeMap=baseDataService.getBusTypeList(querymap);
 				if((int)bustypeMap.get("recordsTotal")==0){
 					saveFlag=false;
-					result = data[3].toString().trim()+" 车型不存在";
+					result = line+"行 "+data[3].toString().trim()+" 车型不存在";
 					break;
 				}
 			}
 			infomap.put("bus_type", data[3] == null ? null : data[3].toString().trim());
-			
 			infomap.put("time", data[4] == null ? null : data[4].toString().trim());
 			infomap.put("tmp_name", data[5] == null ? null : data[5].toString().trim());
 			infomap.put("reason_content", data[6] == null ? null : data[6].toString().trim());
@@ -1848,14 +1868,17 @@ public class ProductionController extends BaseController {
 			infomap.put("duty_unit", data[11] == null ? null : data[11].toString().trim());
 			infomap.put("order_type", data[12] == null ? null : data[12].toString().trim());
 			infomap.put("memo", data[13] == null ? null : data[13].toString().trim());
+			infomap.put("editor_id",editor_id );
+			infomap.put("edit_date", curTime);
 			addList.add(infomap);
+			line++;
 		}
 		if(saveFlag){
 			int returnVal=productionService.insertExtraWorkHourManager(addList);
 		    if(returnVal>0){
 		    	initModel(true,"导入成功！",addList);
 		    }else{
-		    	initModel(false,result,result);
+		    	initModel(false,"导入失败！",result);
 		    }
 		}else{
 			initModel(false,result,null);
@@ -1863,7 +1886,7 @@ public class ProductionController extends BaseController {
 		
 		
 		}catch(Exception e){
-			initModel(false,result,null);
+			initModel(false,e.getMessage(),null);
 		}
 		return mv.getModelMap();
 	}
@@ -1872,7 +1895,7 @@ public class ProductionController extends BaseController {
 	public ModelMap editExtraWorkHourManager() {
 		try {
 			int id = Integer.parseInt(request.getParameter("id"));
-			
+			String editor_id = request.getSession().getAttribute("user_id") + "";
 			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String edit_date = df.format(new Date());
 			Map<String,Object> map=new HashMap<String,Object>();
@@ -1891,8 +1914,18 @@ public class ProductionController extends BaseController {
 			map.put("duty_unit",request.getParameter("duty_unit"));
 			map.put("order_type",request.getParameter("order_type"));
 			map.put("memo",request.getParameter("memo"));
+			map.put("editor_id",editor_id);
+			map.put("edit_date",edit_date);
+//			Map<String,Object> queryMap=new HashMap<String,Object>();
+//			queryMap.put("no", request.getParameter("no"));
+//			Map<String,Object> entityMap=productionService.getExtraWorkHourManagerList(queryMap);
+//			if((int)entityMap.get("recordsTotal")>0){
+//				initModel(false, "编号已经存在,", "");
+//			}else{
 			productionService.editExtraWorkHourManager(map);
 			initModel(true, "success", "");
+			//}
+			
 		} catch (Exception e) {
 			initModel(false, e.getMessage(), e.toString());
 		}
@@ -1909,8 +1942,10 @@ public class ProductionController extends BaseController {
 			for(String id : ids.split(",")){
 				idlist.add(id);
 			}
-			productionService.delExtraWorkHourManager(idlist);
-			initModel(true, "success", "");
+			int result=productionService.delExtraWorkHourManager(idlist);
+			if(result>0){
+			    initModel(true, "success", "");
+			}
 		} catch (Exception e) {
 			initModel(false, e.getMessage(), e.toString());
 		}

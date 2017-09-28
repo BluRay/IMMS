@@ -2314,6 +2314,9 @@
 		<if test="order_no !=null and order_no !=''">
 			and s.order_no=#{order_no}
 		</if>
+		<if test="tmp_name !=null and tmp_name !=''">
+			and s.tmp_name=#{tmp_name}
+		</if>
 		<if test="order_type !=null and order_type !=''">
 			and s.order_type LIKE CONCAT('%',#{order_type},'%')
 		</if>
@@ -2557,66 +2560,72 @@
 		</if>
 	</select>
 	
-	<update id="editExtraWorkHourManager" parameterType='Map'>
-		update 
-		BMS_PD_TMP_HOURS set 
-		<if test="tmp_order_type!=null and tmp_order_type !=''">
-			tmp_order_type=#{tmp_order_type},
+	<update id="editExtraWorkHourManager" parameterType='List'>
+	   <foreach collection="list" item="detail" index="index" separator=";">
+		update BMS_PD_TMP_HOURS set 
+		<if test="detail.tmp_order_type!=null and detail.tmp_order_type !=''">
+			tmp_order_type=#{detail.tmp_order_type},
 		</if>
-		<if test="no!=null and no !=''">
-			no=#{no},
+<!-- 		<if test="detail.no!=null and detail.no !=''"> -->
+<!-- 			no=#{detail.no}, -->
+<!-- 		</if> -->
+		<if test="detail.bus_type!=null">
+			bus_type=#{detail.bus_type},
 		</if>
-		<if test="bus_type!=null and bus_type !=''">
-			bus_type=#{bus_type},
+		<if test="detail.order_no!=null">
+			order_no=#{detail.order_no},
 		</if>
-		<if test="order_no!=null and order_no !=''">
-			order_no=#{order_no},
+		<if test="detail.time!=null">
+			time=#{detail.time},
 		</if>
-		<if test="time!=null and time !=''">
-			time=#{time},
+		<if test="detail.tmp_name!=null">
+			tmp_name=#{detail.tmp_name},
 		</if>
-		<if test="tmp_name!=null and tmp_name !=''">
-			tmp_name=#{tmp_name},
+		<if test="detail.reason_content!=null">
+			reason_content=#{detail.reason_content},
 		</if>
-		<if test="reason_content!=null and reason_content !=''">
-			reason_content=#{reason_content},
+		<if test="detail.description!=null">
+			description=#{detail.description},
 		</if>
-		<if test="description!=null and description !=''">
-			description=#{description},
+		<if test="detail.single_hour!=null">
+			single_hour=#{detail.single_hour},
 		</if>
-		<if test="single_hour!=null and single_hour !=''">
-			single_hour=#{single_hour},
+		<if test="detail.order_type!=null">
+			order_type=#{detail.order_type},
 		</if>
-		<if test="order_type!=null and order_type !=''">
-			order_type=#{order_type},
+		<if test="detail.assesor!=null">
+			assesor=#{detail.assesor},
 		</if>
-		<if test="assesor!=null and assesor !=''">
-			assesor=#{assesor},
+		<if test="detail.assess_verifier!=null">
+			assess_verifier=#{detail.assess_verifier},
 		</if>
-		<if test="assess_verifier!=null and assess_verifier !=''">
-			assess_verifier=#{assess_verifier},
+		<if test="detail.duty_unit!=null">
+			duty_unit=#{detail.duty_unit},
 		</if>
-		<if test="duty_unit!=null and duty_unit !=''">
-			duty_unit=#{duty_unit},
-		</if>
-		memo=#{memo} WHERE id= #{id}
+		memo=#{detail.memo},editor_id=#{detail.editor_id},edit_date=#{detail.edit_date} WHERE id= #{detail.id}
+		</foreach>
 	</update>
-	<insert id="insertExtraWorkHourManager" parameterType="Map">
-		<selectKey resultType="int" keyProperty="id" order="AFTER">
+	<insert id="insertExtraWorkHourManager" parameterType="list">
+	    <selectKey resultType="int" keyProperty="id" order="AFTER">
 			SELECT
 			LAST_INSERT_ID()
 		</selectKey>
+		<foreach collection="list" item="detail" index="index"
+			separator=";">
 			INSERT INTO
 			BMS_PD_TMP_HOURS(tmp_order_type,no,bus_type,order_no,time,tmp_name,
 			reason_content,description,single_hour,order_type,assesor,assess_verifier,
-			duty_unit,deleted,memo)
-			VALUES(#{tmp_order_type},#{no},#{bus_type},#{order_no},#{time},#{tmp_name},
-			#{reason_content},#{description},#{single_hour},#{order_type},#{assesor},
-			#{assess_verifier},#{duty_unit},'0',#{memo})
+			duty_unit,deleted,memo,editor_id,edit_date)
+			VALUES(#{detail.tmp_order_type},#{detail.no},#{detail.bus_type},#{detail.order_no},#{detail.time},#{detail.tmp_name},
+			#{detail.reason_content},#{detail.description},#{detail.single_hour},#{detail.order_type},#{detail.assesor},
+			#{detail.assess_verifier},#{detail.duty_unit},'0',#{detail.memo},#{detail.editor_id},#{detail.edit_date})
+		</foreach>
 	</insert>
 	<update id="delExtraWorkHourManager" parameterType='String'>
-		delete from
-		BMS_PD_TMP_HOURS WHERE id= #{id}
+		delete from BMS_PD_TMP_HOURS WHERE id in
+		<foreach collection="list" item="detail" index="index" separator="," open=" (" close=")">
+			#{detail}
+		</foreach>
 	</update>
 	
 	<insert id="saveWorkHourInfo" parameterType="list">

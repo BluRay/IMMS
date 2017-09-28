@@ -1226,15 +1226,15 @@ public class ProductionServiceImpl implements IProductionService {
 
 	@Override
 	public int editExtraWorkHourManager(Map<String, Object> map) {
-		return productionDao.editExtraWorkHourManager(map);
+		List<Map<String, Object>> list=new ArrayList<Map<String,Object>>();
+		list.add(map);
+		return productionDao.editExtraWorkHourManager(list);
 	}
 
 	@Override
 	public int delExtraWorkHourManager(List<String> ids) {
 		int result=0;
-		for(String id : ids){
-			result=productionDao.delExtraWorkHourManager(id);
-		}
+		result=productionDao.delExtraWorkHourManager(ids);
 		return result;
 	}
 
@@ -1242,23 +1242,32 @@ public class ProductionServiceImpl implements IProductionService {
 	@Transactional
 	public int insertExtraWorkHourManager(List<Map<String, Object>> list) {
 		int result=0;
-		for(Map<String,Object> map : list){
-			Map<String,Object> conMap=new HashMap<String,Object>();
-			conMap.put("tmp_order_type", (String)map.get("tmp_order_type"));
-			conMap.put("no", (String)map.get("no"));
-			conMap.put("bus_type", (String)map.get("bus_type"));
-			conMap.put("order_no", (String)map.get("order_no"));
-			conMap.put("order_type", (String)map.get("order_type"));
-			
-			List<Map<String,Object>> plist=productionDao.getExtraWorkHourManagerList(conMap);
-			if(plist.size()>0){
-				Map pMap=plist.get(0);
-				map.put("id", pMap.get("id"));
-				result=productionDao.editExtraWorkHourManager(map);
-			}else{
-				result=productionDao.insertExtraWorkHourManager(map);
-			}
+//		List<Map<String, Object>> addlist=new ArrayList<Map<String, Object>>();
+//		List<Map<String, Object>> updatelist=new ArrayList<Map<String, Object>>();
+//		for(Map<String,Object> map : list){
+//			Map<String,Object> conMap=new HashMap<String,Object>();
+//			conMap.put("tmp_order_type", (String)map.get("tmp_order_type"));
+//			conMap.put("no", (String)map.get("no"));
+//			conMap.put("bus_type", (String)map.get("bus_type"));
+//			conMap.put("order_no", (String)map.get("order_no"));
+//			conMap.put("order_type", (String)map.get("order_type"));
+//			conMap.put("tmp_name", (String)map.get("tmp_name"));
+//			List<Map<String,Object>> plist=productionDao.getExtraWorkHourManagerList(conMap);
+//			if(plist.size()>0){
+//				Map pMap=plist.get(0);
+//				map.put("id", pMap.get("id"));
+//				updatelist.add(map);
+//				
+//			}else{
+//				addlist.add(map);
+//			}
+//		}
+		if(list.size()>0){
+			result=productionDao.insertExtraWorkHourManager(list);
 		}
+//		if(updatelist.size()>0){
+//			result=productionDao.editExtraWorkHourManager(updatelist);
+//		}
 		return result;
 	}		
 	@Override

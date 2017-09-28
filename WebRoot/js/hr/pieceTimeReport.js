@@ -316,15 +316,16 @@ function ajaxQuery(){
 	
 	var tb=$("#tableResult").DataTable({
 		serverSide: true,
+		/*deferRender: true,*/
 		dom: 'Bfrtip',
-/*		lengthMenu: [
-		             [ 20, 50, 100, -1 ],
-		             [ '显示20行', '显示50行', '显示100行', '全部' ]
-		         ],*/
+		lengthMenu: [
+		             [ 200, 500, 1000, -1 ],
+		             [ '显示200行', '显示500行', '显示1000行', '全部' ]
+		         ],
 	    buttons: [
 	        {extend:'excelHtml5',enabled:false,title:'data_export',className:'black',text:'<i class=\"fa fa-file-excel-o bigger-130\" tooltip=\"导出excel\"></i>'},
-	        {extend:'colvis',text:'<i class=\"fa fa-list bigger-130\" tooltip=\"选择展示列\"></i>'},
-	        /*{extend:'pageLength',text:'显示20行'}*/
+	        /*{extend:'colvis',text:'<i class=\"fa fa-list bigger-130\" tooltip=\"选择展示列\"></i>'},*/
+	        {extend:'pageLength',text:'显示200行'}
 	       
 	    ],
 	    paginate:true,
@@ -337,7 +338,7 @@ function ajaxQuery(){
 		sScrollY: $(window).height()-270,
 		scrollX: true,
 		/*scrollCollapse: true,*/
-		pageLength: 20,
+		pageLength: 200,
 		pagingType:"full_numbers",
 		lengthChange:true,
 		info:true,

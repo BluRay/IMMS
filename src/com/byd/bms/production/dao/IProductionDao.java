@@ -176,9 +176,9 @@ public interface IProductionDao {
 	// 额外工时库
 	public List<Map<String,Object>> getExtraWorkHourManagerList(Map<String,Object> queryMap);
 	public int getExtraWorkHourManagerCount(Map<String,Object> queryMap);
-	public int editExtraWorkHourManager(Map<String,Object> map);
-	public int delExtraWorkHourManager(@Param("id") String id);
-	public int insertExtraWorkHourManager(Map<String,Object> map);
+	public int editExtraWorkHourManager(List<Map<String,Object>> list);
+	public int delExtraWorkHourManager(List<String> list);
+	public int insertExtraWorkHourManager(List<Map<String,Object>> list);
 	// 创建临时派工单查询
 	public List<Map<String,Object>> getCreateTmpOrderList(Map<String,Object> queryMap);
 	public int getCreateTmpOrderCount(Map<String,Object> queryMap);
