@@ -3,6 +3,7 @@
  */
 package com.byd.bms.production.service.impl;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -137,7 +138,7 @@ public class ProductionServiceImpl implements IProductionService {
 			if("车辆入库".equals(condMap.get("plan_node_name"))){
 				Map<String,Object> info=productionDao.queryWarehouseInfo(condMap);
 				int warehouse_count=Integer.parseInt(info.get("warehouse_count").toString());
-				int factory_order_qty=Integer.parseInt(info.get("production_qty").toString());
+				int factory_order_qty=new Double(info.get("production_qty").toString()).intValue();
 				if(warehouse_count==factory_order_qty){//最后一台车入库，更新BMS_OR_FACTORY_ORDER status为2：“已完成”
 					m.put("status", "2");
 					productionDao.updateFactoryOrder(m);

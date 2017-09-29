@@ -149,14 +149,14 @@ $(document).ready(function() {
 		var tr=$("<tr />");
 		$("<td class='center'/>").html("<i class=\"fa fa-times bigger-110\" style=\"cursor: pointer;color: red;\"></i>").appendTo(tr);
 		$("<td class='center'/>").html("<input type='text' class='staff_number' style='width:100%;height:28px;margin: 0;font-size:12px;text-align:center;' />").appendTo(tr);
-		$("<td class='center'/>").html("").appendTo(tr);
-		$("<td class='center'/>").html("").appendTo(tr);
+		$("<td class='center staff_name'/>").html("").appendTo(tr);
+		$("<td class='center job'/>").html("").appendTo(tr);
 		$("<td class='center'/>").html("<input class='input-small workhour' style='width:60px;height:28px;' type='text'>").appendTo(tr);
 		$("<td class='center'/>").html("<input class='input-small whereabouts' style='width:60px;height:28px;' type='text'>").appendTo(tr);
-		$("<td class='center'/>").html("").appendTo(tr);
-		$("<td class='center'/>").html("").appendTo(tr);
-		$("<td class='center'/>").html("").appendTo(tr);
-		$("<td class='center'/>").html("").appendTo(tr);
+		$("<td class='center team_org'/>").html("").appendTo(tr);
+		$("<td class='center workgroup_org'/>").html("").appendTo(tr);
+		$("<td class='center workshop_org'/>").html("").appendTo(tr);
+		$("<td class='center plant_org'/>").html("").appendTo(tr);
 		$("#tableResult tbody").prepend(tr);
 	});
 	// 工时删除
@@ -330,7 +330,7 @@ $(document).ready(function() {
 						var tr = $(this);
 						
 						var staff_number="";
-						if(tr.find(".staff_number").val()==''){
+						if(tr.find(".staff_number").val()=='' || tr.find(".staff_number").val()==undefined){
 							staff_number=tr.find(".staff_number").html();
 						}else{
 							staff_number=tr.find(".staff_number").val();

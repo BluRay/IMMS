@@ -48,17 +48,24 @@
 					<table>
 						<tr>
 							<td>车型：</td>
-							<td><select name="" id="search_bus_type" class="input-small"></select></td>
+							<td><select name="" id="search_bus_type" class="input-small" style="width:80px;"></select></td>
+							<td>额外类型：</td>
+							<td><select name="" id="search_tmp_order_type" class="input-small" style="width:80px;"></select></td>
+							<td>编号：</td>
+							<td><input type="text" style="width:100px;"
+								class="input-medium revise" placeholder="编号..." value=""
+								id="search_no" />
+							</td>
 							<td>订单编号：</td>
-							<td><input type="text" style="height: 30px;"
+							<td><input type="text" style="height: 30px;width:80px"
 								class="input-medium revise" placeholder="订单编号..." value=""
 								id="search_order_no" /></td>
 							<td>派工类型：</td>
-							<td><input type="text" style="height: 30px;"
+							<td><input type="text" style="height: 30px;width:80px"
 								class="input-medium revise" placeholder="派工类型..." value=""
 								id="search_order_type" /></td>
 							<td>作业内容/原因：</td>
-							<td><input type="text" style="height: 30px;"
+							<td><input type="text" style="height: 30px;width:100px"
 								class="input-medium revise" placeholder="作业内容/原因..." value=""
 								id="search_reason_content" /></td>
 							<td><input type="button"
@@ -107,7 +114,7 @@
 					    <div>
 							<label  class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right">*&nbsp;编号</label>
 							<div class="col-sm-8">
-								<input type="text" class="input-medium" id="edit_no" readonly="readonly"/>
+								<input type="text" class="input-medium" id="edit_no"/>
 							</div>
 						</div>
 					</div>

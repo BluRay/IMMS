@@ -150,10 +150,11 @@ function asessTechTask(time_list,status_list,single_time_total,time_total){
 			obj.tech_factory_id=tech_factory_id;
 			obj.tech_factory=tech_factory;
 
-			obj.time_list=time_list;
-			obj.status_list=status_list;
-			obj.single_time_total=single_time_total;
-			obj.time_total=time_total;
+			obj.time_list=(time_list == "undefined")?'':time_list;
+			obj.status_list=(status_list == "undefined")?'':status_list;
+			obj.single_time_total=(single_time_total == "undefined")?'':single_time_total;
+			obj.time_total=(time_total == "undefined")?'':time_total;
+			
 			conditions.push(obj);
 		}
 	});

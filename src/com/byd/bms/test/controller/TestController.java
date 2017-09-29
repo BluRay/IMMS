@@ -7,10 +7,12 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,6 +26,7 @@ import com.byd.bms.util.controller.BaseController;
 import com.byd.bms.util.model.BmsBaseUser;
 import com.byd.bms.util.service.ILoginService;
 import com.google.gson.Gson;
+import com.swetake.util.Qrcode;
 
 @Controller
 public class TestController extends BaseController{
@@ -134,4 +137,26 @@ public class TestController extends BaseController{
         return "error";
      }
 
+    
+    public static void main(String[] args){
+
+        Qrcode x=new Qrcode();
+        x.setQrcodeErrorCorrect('M');   //エラ〖柠赖レベルM
+        x.setQrcodeEncodeMode('B');     //8bit byte モ〖ド
+        boolean[][] matrix = x.calQrcode("美女".getBytes());
+
+       
+        for (int i=0;i<matrix.length;i++){
+    	for (int j=0;j<matrix.length;j++){
+    	    if (matrix[j][i]) {
+    		System.out.print("@");
+    	    } else {
+    		System.out.print(" ");
+    	    }
+    	}
+    	System.out.print("\n");
+        }
+
+    }
+    
 }

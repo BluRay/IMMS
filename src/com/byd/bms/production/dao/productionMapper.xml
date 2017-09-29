@@ -2287,7 +2287,7 @@
 		<if test="cost_transfer !=null and cost_transfer !=''">
 			and s.cost_transfer=#{cost_transfer}
 		</if>
-		<if test="start !=null">
+		<if test="start !=null and length!=-1">
 			LIMIT #{start} ,#{length} 
 		</if>		
 	</select>
@@ -2308,7 +2308,7 @@
 		<if test="no !=null and no !=''">
 			and s.no=#{no}
 		</if>
-		<if test="bus_type !=null and bus_type !=''">
+		<if test="bus_type !=null and bus_type !='全部'">
 			and s.bus_type=#{bus_type}
 		</if>
 		<if test="order_no !=null and order_no !=''">
@@ -2336,7 +2336,7 @@
 		<if test="no !=null and no !=''">
 			and s.no=#{no}
 		</if>
-		<if test="bus_type !=null and bus_type !=''">
+		<if test="bus_type !=null and bus_type !='全部'">
 			and s.bus_type=#{bus_type}
 		</if>
 		<if test="order_no !=null and order_no !=''">

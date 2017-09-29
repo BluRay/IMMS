@@ -252,10 +252,8 @@
 							<td><input type="text" style="height: 30px;width:120px"
 								class="input-medium revise" placeholder="订单编号..." value=""
 								id="search_order_no" /></td>
-							<td>派工类型：</td>
-							<td><input type="text" style="height: 30px;"
-								class="input-medium revise" placeholder="派工类型..." value=""
-								id="search_order_type" /></td>
+							<td>额外类型：</td>
+							<td><select style="height: 30px;" id="search_tmp_order_type" ></select></td>
 							<td>作业内容/原因：</td>
 							<td><input type="text" style="height: 30px;"
 								class="input-medium revise" placeholder="作业内容/原因..." value=""

@@ -328,7 +328,9 @@
 	</select>
 	
 	<select id="queryIndexFactoryDailyData" parameterType="Map" resultType="Map">
-		select a.*,ifnull(b.finished_qty,0) finished_qty from 
+		select a.plan_qty,ifnull(b.finished_qty,0) finished_qty,
+		case when a.key_name is null then b.key_name else a.key_name end as key_name 
+		from 
 		(select sum(p.plan_qty) plan_qty,k.key_name
 		from BMS_PLAN_PRODUCTION_PLAN p
 		left join BMS_BASE_KEY k on p.plan_code_value=k.value and k.key_code='PLAN_CODE'

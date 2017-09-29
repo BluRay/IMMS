@@ -8,6 +8,7 @@ $(document).ready(function(){
 		getBusNumberSelect('#nav-search-input');
 		getBusTypeSelect("","#search_bus_type","全部","id");
 		getOrderNoSelect("#search_order_no","#orderId");
+		getTmpOrderTypeList();
 		ajaxQuery();
 	}
 	$(".btnQuery").on("click",function(){
@@ -202,10 +203,13 @@ function ajaxQuery(){
 			}
 		},
 		ajax:function (data, callback, settings) {
+			var bus_type=$("#search_bus_type").find("option:selected").text();
 			var param ={
 				"draw":1,
+				"no":$("#search_no").val(),
+				"tmp_order_type":$("#search_tmp_order_type").val(),
 				"order_no":$("#search_order_no").val(),
-				"bus_type":$("#search_bus_type").val(),
+				"bus_type":bus_type,
 				"order_type":$("#search_order_type").val(),
 				"reason_content":$("#search_reason_content").val()
 			};
@@ -337,4 +341,18 @@ function selectAll() {
     } else {
         $(":checkbox").prop("checked", false);
     }
+}
+function getTmpOrderTypeList(){
+	$.ajax({
+	    url: "getTmpOrderTypeList",
+	    dataType: "json",
+		type: "post",
+	    success:function(response){
+	    	var str="<option value=''>全部</option>"
+	    	$.each(response.data,function(index,val){
+	    		str+="<option value='"+val.name+"'>"+val.name+"</option>"
+	    	});
+	    	$("#search_tmp_order_type").html(str);
+	    }	
+	});
 }

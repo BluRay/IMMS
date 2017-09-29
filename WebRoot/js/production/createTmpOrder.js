@@ -73,10 +73,11 @@ $(document).ready(function(){
 function initPage(){
 	getBusNumberSelect('#nav-search-input');
 	getFactorySelect("production/createTmpOrder",'',"#new_factory","--请选择--",'id');
-	getWorkshopSelect("",$("#new_factory :selected").text(),"","#new_workshop",null,"id");
+	getWorkshopSelect("production/createTmpOrder",$("#new_factory :selected").text(),"","#new_workshop",null,"id");
 	getFactorySelect("production/createTmpOrder",'',"#edit_factory","--请选择--",'id');
 	getFactorySelect("production/createTmpOrder","","#search_factory",null,"id")	
 	getWorkshopSelect("production/createTmpOrder",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
+	getTmpOrderTypeList();
 	ajaxQuery();
 }
 
@@ -550,8 +551,8 @@ function queryExtraWorkHourManager(flag){
 			var param ={
 				"draw":1,
 				"order_no":$("#search_order_no").val(),
-				"bus_type":$("#search_bus_type").val(),
-				"order_type":$("#search_order_type").val(),
+				"bus_type":$("#search_bus_type").find("option:selected").text(),
+				"tmp_order_type":$("#search_tmp_order_type").val(),
 				"reason_content":$("#search_reason_content").val()
 			};
 			param.length = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
@@ -969,4 +970,18 @@ function validateOrderSerialNo(tmp_order_no){
 	}
 	return flag;
 	
+}
+function getTmpOrderTypeList(){
+	$.ajax({
+	    url: "getTmpOrderTypeList",
+	    dataType: "json",
+		type: "post",
+	    success:function(response){
+	    	var str="<option value=''>全部</option>"
+	    	$.each(response.data,function(index,val){
+	    		str+="<option value='"+val.name+"'>"+val.name+"</option>"
+	    	});
+	    	$("#search_tmp_order_type").html(str);
+	    }	
+	});
 }
