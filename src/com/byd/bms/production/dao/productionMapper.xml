@@ -2301,7 +2301,8 @@
 		</if>
 	</select>
 	<select id="getExtraWorkHourManagerList" parameterType="Map" resultType="Map">
-		SELECT s.* FROM BMS_PD_TMP_HOURS s WHERE 1=1
+		SELECT s.*,u.username FROM BMS_PD_TMP_HOURS s left join BMS_BASE_USER u on u.id=s.editor_id
+		 WHERE 1=1
 		<if test="tmp_order_type !=null and tmp_order_type !=''">
 			and s.tmp_order_type=#{tmp_order_type}
 		</if>
@@ -2804,7 +2805,7 @@
 			and s.apply_date <![CDATA[<= #{apply_date_end}  ]]>
 		</if>
 		order by s.apply_date desc
-		<if test="start !=null">
+		<if test="start !=null and length!=-1">
 			LIMIT #{start} ,#{length} 
 		</if>		
 	</select>
@@ -2971,7 +2972,7 @@
 		group by o.id,h.factory,h.workshop
 		)h1 on h1.temp_order_id=o.id and
 		h1.factory=o.factory and h1.workshop=o.workshop
-		where 1=1
+		where 1=1 and o.deleted='0'
 		<!--<if test="actionType =='assign'">
 			and u2.id=#{userId}
 		</if>
@@ -3040,7 +3041,7 @@
 		group by o.id,h.factory,h.workshop
 		)h on h.temp_order_id=o.id and
 		h.factory=o.factory and h.workshop=o.workshop
-		where 1=1
+		where 1=1 and o.deleted='0'
 		<if test="tmp_order_no !=null and tmp_order_no !=''">
 			and o.tmp_order_no like concat('%',#{tmp_order_no},'%')
 		</if>

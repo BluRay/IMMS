@@ -248,10 +248,10 @@
 						<tr>
 							<td>车型：</td>
 							<td><select style="height: 30px;width:80px" id="search_bus_type" class="input-small" ></select></td>
-							<td>订单编号：</td>
+							<td>编号：</td>
 							<td><input type="text" style="height: 30px;width:120px"
-								class="input-medium revise" placeholder="订单编号..." value=""
-								id="search_order_no" /></td>
+								class="input-medium revise" placeholder="编号..." value=""
+								id="search_no" /></td>
 							<td>额外类型：</td>
 							<td><select style="height: 30px;" id="search_tmp_order_type" ></select></td>
 							<td>作业内容/原因：</td>

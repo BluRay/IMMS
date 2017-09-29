@@ -1,3 +1,4 @@
+var flag=""; // 用于记录是“添加”或“编辑”操作是选择员工库
 $(document).ready(function(){
 	initPage();
 	$('#search_factory').change(function(){ 
@@ -186,31 +187,31 @@ function ajaxQuery(){
 function showEditPage(row){
 	clear();
 	getOrderType($("#edit_order_type"));
-	$("#edit_order_launcher").val(row.order_launcher);
+	$("#edit_order_launcher").val(row.order_launcher!=undefined ?row.order_launcher:"");
 	$("#edit_factory option:contains('"+row.factory+"')").attr("selected", true);
 	getWorkshopSelect("",$("#edit_factory :selected").text(),"","#edit_workshop",null,"id");
 	$("#edit_workshop option:contains('"+row.workshop+"')").attr("selected", true);
-	$("#edit_head_launch_unit").val(row.head_launch_unit);
-	$("#edit_acceptor").val(row.acceptor);
-	$("#edit_reason_content").val(row.reason_content);
-	$("#edit_total_qty").val(row.total_qty),
+	$("#edit_head_launch_unit").val(row.head_launch_unit!=undefined ?row.head_launch_unit:"");
+	$("#edit_acceptor").val(row.acceptor!=undefined ?row.acceptor:"");
+	$("#edit_reason_content").val(row.reason_content!=undefined ?row.reason_content:"");
+	$("#edit_total_qty").val(row.total_qty!=undefined ?row.total_qty : ""),
 	$("#edit_order_type option[value='"+row.order_type+"']").prop("selected",true);
-	$("#edit_duty_unit").val(row.duty_unit);
-	$("#edit_labors").val(row.labors);
-	$("#edit_single_hour").val(row.single_hour);
-	$("#edit_assesor").val(row.assesor);
-	$("#edit_assess_verifier").val(row.assess_verifier);
-	$("#edit_acceptor_sign").val(row.acceptor);
+	$("#edit_duty_unit").val(row.duty_unit!=undefined ?row.duty_unit:"");
+	$("#edit_labors").val(row.labors!=undefined ?row.labors:"");
+	$("#edit_single_hour").val(row.single_hour!=undefined ?row.single_hour:"");
+	$("#edit_assesor").val(row.assesor!=undefined ?row.assesor:"");
+	$("#edit_assess_verifier").val(row.assess_verifier!=undefined ?row.assess_verifier:"");
+	$("#edit_acceptor_sign").val(row.acceptor!=undefined ?row.acceptor:"");
 	var ops=document.getElementById("edit_is_cost_transfer");
     for(var i=0;i<ops.options.length;i++){
         ops.options[i].removeAttribute("selected");
     }
     
 	$("#edit_is_cost_transfer option[value='"+row.is_cost_transfer+"']").prop("selected",true),
-	$("#edit_cost_unit_signer").val(row.cost_unit_signer),
-	$("#edit_order_serial_no").val(row.order_serial_no),
+	$("#edit_cost_unit_signer").val(row.cost_unit_signer!=undefined ? row.cost_unit_signer:""),
+	$("#edit_order_serial_no").val(row.order_serial_no!=undefined ? row.order_serial_no:""),
 	$("#edit_tmp_order_no").val(row.tmp_order_no),
-	$("#edit_sap_order").val(row.sap_order);
+	$("#edit_sap_order").val(row.sap_order!=undefined ?row.sap_order:"");
 	var dialog = $( "#dialog-edit" ).removeClass('hide').dialog({
 		width:800,
 		height:580,
@@ -234,7 +235,7 @@ function showEditPage(row){
 				} 
 			}
 		]
-	}).dialog({ zIndex: 1999 });
+	});
 }
 
 function ajaxAdd(){
@@ -340,13 +341,10 @@ function ajaxAdd(){
 		url:"getCreateTmpOrderList",
 		dataType:"json",
 		data:{
-			tmp_order_no:$("#tmp_order_no").val(),
-			"draw":'1',
-			"start":0,
-			"length":1000,
+			tmp_order_no:$("#tmp_order_no").val()
 		},
 		success:function(response){
-			if(response.data.length>0){
+			if(response.recordsTotal>0){
 				alert("该派工流水号已经存在");
 				return false;
 			}else{
@@ -516,14 +514,15 @@ function ajaxEdit(id){
 	})
 }
 
-function getExtraWorkHourManager(flag){
+function getExtraWorkHourManager(param){
+	flag=param;
 	$("#order_type").removeAttr("disabled");
 	$("#is_cost_transfer").removeAttr("disabled");
 	getBusTypeSelect("","#search_bus_type","全部","id");
 	getOrderNoSelect("#search_order_no","#orderId");
-	queryExtraWorkHourManager(flag);
+	queryExtraWorkHourManager();
 }
-function queryExtraWorkHourManager(flag){
+function queryExtraWorkHourManager(){
 	$("#tableDataDetail").dataTable({
 		serverSide: true,
 		fixedColumns:   {
@@ -550,7 +549,7 @@ function queryExtraWorkHourManager(flag){
 		ajax:function (data, callback, settings) {
 			var param ={
 				"draw":1,
-				"order_no":$("#search_order_no").val(),
+				"no":$("#search_no").val(),
 				"bus_type":$("#search_bus_type").find("option:selected").text(),
 				"tmp_order_type":$("#search_tmp_order_type").val(),
 				"reason_content":$("#search_reason_content").val()
@@ -598,11 +597,14 @@ function queryExtraWorkHourManager(flag){
 		width:900,
 		height:600,
 		modal: true,
-		zIndex: 2, 
+		zIndex: 4, 
 		buttons: [{
 					text: "关闭",
 					"class" : "btn btn-minier",
-					click: function() {$( this ).dialog( 'destroy' );} 
+					click: function() {
+						$("#div-dialog").addClass('hide');
+						$( this ).dialog( "close" );
+					} 
 				},
 		        {
 			text: "确认",
@@ -657,11 +659,12 @@ function queryExtraWorkHourManager(flag){
 					$("#edit_order_type").attr("disabled","disabled");
 					$("#edit_is_cost_transfer").attr("disabled","disabled");
 				}
-				$( this ).dialog('destroy');
+				$("#div-dialog").addClass('hide');
+				$( this ).dialog( "close" );
 				}
 			} 
         ]
-    }).dialog({ zIndex: 3999 });
+    });
 }
 function getOrderType(elment){
 	

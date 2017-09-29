@@ -515,7 +515,7 @@
 	<select id="getEcnReportData" parameterType="Map" resultType="Map">
 		SELECT tech_order_no,task_content,workshop,total_hours AS totalhours,total_hours*hour_price AS totalprice,
 		work_date,staff_number,staff_name,job,workshop_org,workgroup_org,team_org,round(work_hour,4) AS work_hour,
-		round(hour_price*work_hour,4) AS salary,plant_org,round(real_work_hour,4) AS real_work_hour
+		round(hour_price*real_work_hour,4) AS salary,plant_org,round(real_work_hour,4) AS real_work_hour
 		FROM BMS_HR_TECH_SALARY
 		WHERE
 		1=1

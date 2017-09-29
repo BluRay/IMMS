@@ -1965,17 +1965,17 @@ public class ProductionController extends BaseController {
 	@RequestMapping("/getCreateTmpOrderList")
 	@ResponseBody
 	public ModelMap getCreateTmpOrderList(){
-		String tmp_order_no=request.getParameter("tmp_order_no");
+		String tmp_order_no=request.getParameter("tmp_order_no")!=null ? request.getParameter("tmp_order_no") : "";
 		String status=request.getParameter("status");
 		String apply_date_start=request.getParameter("apply_date_start");
 		String apply_date_end=request.getParameter("apply_date_end");
-		int draw=Integer.parseInt(request.getParameter("draw")); 
-		int start=Integer.parseInt(request.getParameter("start"));
-		int length=Integer.parseInt(request.getParameter("length"));
+		int draw=request.getParameter("draw")!=null ? Integer.parseInt(request.getParameter("draw")):1; 
+		int start=request.getParameter("start")!=null ? Integer.parseInt(request.getParameter("start")) :0;
+		int length=request.getParameter("length")!=null ? Integer.parseInt(request.getParameter("length")):-1;
 		String factory=request.getParameter("factory");
 		String workshop=request.getParameter("workshop");
 		Map<String,Object> conditionMap=new HashMap<String,Object>();
-		conditionMap.put("tmp_order_no",tmp_order_no);
+		conditionMap.put("tmp_order_no",tmp_order_no.trim());
 		conditionMap.put("status",status);
 		conditionMap.put("factory",factory);
 		conditionMap.put("workshop",workshop);

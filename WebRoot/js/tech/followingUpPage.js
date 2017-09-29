@@ -13,7 +13,7 @@ $(document).ready(function(){
 		getBusNumberSelect('#nav-search-input');
 		getFactorySelect("tech/followingUpPage",'',"#search_factory",null,'id');
 		getOrderNoSelect("#search_order_no","#orderId");
-		getWorkshopSelect("tech/followingUpPage",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
+		getWorkshopSelect("tech/followingUpPage",$("#search_factory :selected").text(),"","#search_workshop","全部","id");
 	}
 
 	$('#nav-search-input').bind('keydown', function(event) {
@@ -24,7 +24,7 @@ $(document).ready(function(){
 	})
 	
 	$('#search_factory').change(function(){ 
-		getWorkshopSelect("tech/followingUpPage",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
+		getWorkshopSelect("tech/followingUpPage",$("#search_factory :selected").text(),"","#search_workshop","全部","id");
 	})
 	
 	// 技改信息查询
@@ -79,7 +79,7 @@ function ajaxQuery() {
 			var param ={
 				"draw":1,
 				"factory" : $('#search_factory').find("option:selected").text(),
-				"workshop" : $('#search_workshop').find("option:selected").text(),
+				"workshop" : ($('#search_workshop').find("option:selected").text()=="全部")?'':$('#search_workshop').find("option:selected").text(),
 				"order_no" : $('#search_order_no').val(),
 				"task_content" : $('#search_tech_task_content').val(),
 				"tech_order_no" : $('#search_tech_order_no').val(),

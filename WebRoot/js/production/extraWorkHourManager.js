@@ -182,10 +182,14 @@ function ajaxQuery(){
 		ordering:false,
 		searching: false,
 		bAutoWidth:false,
+		fixedColumns:   {
+			leftColumns:0,
+            rightColumns:0
+        },
 		destroy: true,
-		sScrollY: document.documentElement.clientHeight-250 + 'px',
-		scrollX: "100%",
-		/*scrollCollapse: true,*/
+		sScrollY: $(window).height()-260,
+		scrollX: true,
+		scrollCollapse: true,
 		pageLength: 10,
 		pagingType:"full_numbers",
 		lengthChange:false,
@@ -237,30 +241,32 @@ function ajaxQuery(){
 		
 		},
 		columns: [
-			{"title":"<input type='checkbox' id='selectAll' onclick='selectAll()'/>","class":"center","data":"id","render": function ( data, type, row ) {
+			{"title":"<input type='checkbox' id='selectAll' onclick='selectAll()'/>","class":"center","data":"id","width":"30px","render": function ( data, type, row ) {
 			    return "<input id='id' value='"+data+"' type='hidden' /><input type='checkbox' fid='cb_"+data+"'>";
 			},"defaultContent": ""},
             {"title":"额外类型","class":"center","data":"tmp_order_type","defaultContent": ""},
             {"title":"编号","class":"center","data":"no","defaultContent": ""},
             {"title":"订单","class":"center","data":"order_no","defaultContent": ""},
-            {"title":"车型","class":"center","data":"bus_type","defaultContent": ""},
+            {"title":"车型","class":"center","data":"bus_type","width":"45px","defaultContent": ""},
             {"title":"时间","class":"center","data":"time","defaultContent": ""},
             {"title":"名称","class":"center","data":"tmp_name","defaultContent": ""},
-            {"title":"作业内容","class":"center","data":"reason_content","defaultContent": ""},
+            {"title":"作业内容","class":"center","data":"reason_content","width":"120px","defaultContent": ""},
             {"title":"说明","class":"center","data":"description","defaultContent": ""},
-            {"title":"单工时","class":"center","data":"single_hour","defaultContent": ""},
-            {"title":"评估人","class":"center","data":"assesor","defaultContent": ""},
+            {"title":"单工时","class":"center","data":"single_hour","width":"50px","defaultContent": ""},
+            {"title":"评估人","class":"center","data":"assesor","width":"50px","defaultContent": ""},
             {"title":"评估审核人","class":"center","data":"assess_verifier","defaultContent": ""},
-            {"title":"责任部门","class":"center","data":"duty_unit","defaultContent": ""},
-            	            		            
+            {"title":"责任部门","class":"center","data":"duty_unit","width":"60px","defaultContent": ""},
             {"title":"派工类型","class":"center","data": "order_type","defaultContent": ""},
-            {"title":"备注","class":"center","data":"memo","defaultContent": ""},
-            {"title":"编辑","class":"center","data":null,"render":function(data,type,row){
+            //{"title":"备注","class":"center","data":"memo","defaultContent": ""},
+            {"title":"编辑人","class":"center","data": "username","width":"50px","defaultContent": ""},
+            {"title":"编辑时间","class":"center","data":"edit_date","defaultContent": ""},
+            {"title":"编辑","class":"center","data":null,"width":"35px","render":function(data,type,row){
             	return "<i class=\"ace-icon fa fa-pencil bigger-130 edit\" style='color:green;cursor: pointer;'></i>"},
             	"defaultContent": "<i class=\"ace-icon fa fa-pencil bigger-130\" style='color:green;cursor: pointer;'></i>"}
           ],
 	});
-
+	var head_width=$(".dataTables_scrollHead").width();
+    $(".dataTables_scrollHead").css("width",head_width-20);
 }
 
 function ajaxAdd (argument) {
