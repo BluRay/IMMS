@@ -344,7 +344,7 @@ function ajaxAdd(){
 			tmp_order_no:$("#tmp_order_no").val()
 		},
 		success:function(response){
-			if(response.recordsTotal>0){
+			if(parseInt(response.recordsTotal)>0){
 				alert("该派工流水号已经存在");
 				return false;
 			}else{
@@ -364,7 +364,7 @@ function ajaxAdd(){
 						duty_unit:$("#duty_unit").val(),
 						labors:$("#labors").val(),
 						single_hour:$("#single_hour").val(),
-						total_hours:parseFloat($("#single_hour").val())*parseFloat($("#total_qty").val()),
+						total_hours:(parseFloat($("#single_hour").val())*parseFloat($("#total_qty").val())).toFixed(2),
 						assesor:$("#assesor").val(),
 						assess_verifier:$("#assess_verifier").val(),
 						is_cost_transfer:$("#is_cost_transfer").val(),
@@ -485,7 +485,7 @@ function ajaxEdit(id){
 			duty_unit:$("#edit_duty_unit").val(),
 			labors:$("#edit_labors").val(),
 			single_hour:$("#edit_single_hour").val(),
-			total_hours:parseFloat($("#edit_single_hour").val())*parseFloat($("#edit_total_qty").val()),
+			total_hours:(parseFloat($("#edit_single_hour").val())*parseFloat($("#edit_total_qty").val())).toFixed(2),
 			assesor:$("#edit_assesor").val(),
 			assess_verifier:$("#edit_assess_verifier").val(),
 			is_cost_transfer:$("#edit_is_cost_transfer").val(),
@@ -673,9 +673,6 @@ function getOrderType(elment){
         url: "getTmpOrderTypeList",
         cache: false,  //禁用缓存
         data: {
-        	draw: 1,
-		    start:0,
-		    length:100
         },  //传入组装的参数
         dataType: "json",
         success: function (result) {
@@ -933,8 +930,8 @@ function show(tmp_order_no,id){
  	 			$("<td class='center'/>").html("").appendTo(tr);
  	 			$("<td class='center'/>").html("").appendTo(tr);
  	 			$("<td class='center'/>").html("合计").appendTo(tr);
- 	 			$("<td class='center'/>").html(workhourtotal).appendTo(tr);
- 	 			$("<td class='center'/>").html(workhourallottotal).appendTo(tr);
+ 	 			$("<td class='center'/>").html(workhourtotal.toFixed(2)).appendTo(tr);
+ 	 			$("<td class='center'/>").html(workhourallottotal.toFixed(2)).appendTo(tr);
  	 			$("#workhourallotResult tbody").append(tr);
  		     }
         }

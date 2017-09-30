@@ -93,11 +93,15 @@ BEGIN
 
 
 	drop TEMPORARY TABLE IF EXISTS ECN_UNIT_TIME;
-	create TEMPORARY TABLE  ECN_UNIT_TIME as
-	select d.id ecn_task_id,d.factory,d.order_no,q_workshop workshop,
-	replace(left(substring(d.time_list,instr(d.time_list,q_workshop)),instr(substring(concat(d.time_list,','),instr(d.time_list,q_workshop)),',')-1),concat(q_workshop,':'),'') unit_time
-	from BMS_TECH_TASK_DETAIL d
-	where find_in_set(d.id,query_ecn_task_ids)>0;
+
+	set v_sql=concat('create TEMPORARY TABLE  ECN_UNIT_TIME as select d.id ecn_task_id,d.factory,d.order_no,''',q_workshop,''' workshop,',
+	'replace(left(substring(d.time_list,instr(d.time_list,''',q_workshop,''')),instr(substring(concat(d.time_list,'',''),instr(d.time_list,''',q_workshop,''')),'','')-1),concat(''',
+	q_workshop,''','':''),'''') unit_time',' from BMS_TECH_TASK_DETAIL d where d.id in (''',query_ecn_task_ids,''')');
+	set @vsql=v_sql;
+	#select @vsql;
+	prepare  stmt from @vsql;
+    EXECUTE stmt; 	
+   	deallocate prepare stmt;
 
 	drop TEMPORARY TABLE IF EXISTS ECN_BUS_NUMBER;
 	create TEMPORARY TABLE  ECN_BUS_NUMBER as

@@ -1,4 +1,5 @@
 var switch_node_arr="焊装,涂装,底盘,总装,检测线,仓库";
+var is_assign = 0;	//已跟进不能重新分配
 $(document).ready(function (){
 	initPage();
 	
@@ -138,7 +139,7 @@ function getTechBusNum(order_no,factory,tech_date,switch_mode,switch_node,node_l
 }
 
 function ajaxEdit(task_id,task_detail_id,task_content,tech_order_no,switch_mode,switch_node,tech_date){
-	
+	is_assign = 0;
 	$("#new_accordion").html("");// 清空之前的div
 	
 	//$("#tr_switch_node").css("display","");
@@ -233,6 +234,12 @@ function ajaxEdit(task_id,task_detail_id,task_content,tech_order_no,switch_mode,
 }
 
 function assignTechTask(){
+	console.log("-- assignTechTask is_assign = " + is_assign);
+	if(is_assign > 0 ){
+		alert("已跟进的技改任务不能重新分配！");
+		return false;
+	}
+	
 	var factory_cboxs=$("input[name='new_tecn_flag']");
 	var tech_task_id=$("#dialog-assessModal").data("tech_task_id");
 	var task_detail_id=$("#dialog-assessModal").data("task_detail_id");
@@ -385,10 +392,11 @@ function addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factor
 		var factory_id=follow.split("||")[0].split("_")[0];
 		var factory=follow.split("||")[0].split("_")[1];
 		var follow_num=Number(follow.split("||")[1]);
-		//alert(follow_num);
+		console.log("---->follow_num = " + follow_num);
 		factory_disable_obj[factory]="";
 		if(follow_num>0){
 			factory_disable_obj[factory]="disabled";
+			is_assign += follow_num;
 			return false;
 		}
 	})

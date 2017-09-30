@@ -154,6 +154,7 @@ function asessTechTask(time_list,status_list,single_time_total,time_total){
 			obj.status_list=(status_list == "undefined")?'':status_list;
 			obj.single_time_total=(single_time_total == "undefined")?'':single_time_total;
 			obj.time_total=(time_total == "undefined")?'':time_total;
+			obj.task_page = "taskAssignPrePage";
 			
 			conditions.push(obj);
 		}
