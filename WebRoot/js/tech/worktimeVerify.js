@@ -160,7 +160,7 @@ function ajaxQuery(){
 		            },
 		            {"title":"操作",width:'60',"class":"center","data":null,"defaultContent": "",
 		            	"render": function ( data, type, row ) {
-		            		return "<i class=\"glyphicon glyphicon-ok bigger-130 showbus\" title=\"审核\" onclick='verifyWorkTime(\"" + row['order_no'] + "\",\""+ row['tech_order_no'] +"\",\""+ row['task_content'] +"\",\""+ row['task_detail_id'] +"\",\""+ row['factory'] +"\",\""+ row['workshop'] +"\",\""+ row['tech_list'] +"\",\""+ row['time_list'] +"\",\""+ row['follow_list'] +"\",\""+ row['follow_list'] +"\",\""+ row['tech_single_price'] +"\")' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;";
+		            		return "<i class=\"glyphicon glyphicon-ok bigger-130 showbus\" title=\"审核\" onclick='verifyWorkTime(\"" + row['order_no'] + "\",\""+ row['tech_order_no'] +"\",\""+ row['task_content'].replace(/\r/ig, "").replace(/\n/ig, "") +"\",\""+ row['task_detail_id'] +"\",\""+ row['factory'] +"\",\""+ row['workshop'] +"\",\""+ row['tech_list'] +"\",\""+ row['time_list'] +"\",\""+ row['follow_list'] +"\",\""+ row['follow_list'] +"\",\""+ row['tech_single_price'] +"\")' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;";
 		            	},
 		            }
 		          ],

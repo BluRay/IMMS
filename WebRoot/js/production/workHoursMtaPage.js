@@ -214,8 +214,10 @@ function ajaxQuery(){
 		            },
 		            {"title":"操作",width:'80',"class":"center","data":null,"defaultContent": "",
 		            	"render": function ( data, type, row ) {
-		            		return "<i class=\"glyphicon glyphicon-plus bigger-130 showbus\" title=\"维护\" onclick='addWorkTime(\"" + row['id'] + "\",\"" + row['tmp_order_no'] + "\",\""+ row['reason_content'] +"\",\""+ row['total_qty'] +"\",\""+ row['finished_qty'] +"\",\""+ row['workhour_total'] +"\",\""+ row['factory'] +"\",\""+ row['workshop'] +"\",\""+ row['tech_list'] +"\")' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;" + 
-		            		"<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"编辑\" onclick='editWorkTime(\"" + row['id'] + "\",\"" + row['tmp_order_no'] + "\",\""+ row['reason_content'] +"\",\""+ row['total_qty'] +"\",\""+ row['finished_qty'] +"\",\""+ row['workhour_total'] +"\",\""+ row['factory'] +"\",\""+ row['workshop'] +"\",\""+ row['tech_list'] +"\")' style='color:blue;cursor: pointer;'></i>";
+		            		var workhour_total = row.workhour_total==undefined?0:row.workhour_total;
+		            		var tech_list = row.tech_list==undefined?0:row.tech_list;
+		            		return "<i class=\"glyphicon glyphicon-plus bigger-130 showbus\" title=\"维护\" onclick='addWorkTime(\"" + row['id'] + "\",\"" + row['tmp_order_no'] + "\",\""+ row['reason_content'].replace(/\r/ig, "").replace(/\n/ig, "") +"\",\""+ row['total_qty'] +"\",\""+ row['finished_qty'] +"\",\""+ workhour_total +"\",\""+ row['factory'] +"\",\""+ row['workshop'] +"\",\""+ tech_list +"\")' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;" + 
+		            		"<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"编辑\" onclick='editWorkTime(\"" + row['id'] + "\",\"" + row['tmp_order_no'] + "\",\""+ row['reason_content'].replace(/\r/ig, "").replace(/\n/ig, "") +"\",\""+ row['total_qty'] +"\",\""+ row['finished_qty'] +"\",\""+ workhour_total +"\",\""+ row['factory'] +"\",\""+ row['workshop'] +"\",\""+ tech_list +"\")' style='color:blue;cursor: pointer;'></i>";
 		            	},
 		            }
 		          ],
