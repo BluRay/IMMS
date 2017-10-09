@@ -66,7 +66,7 @@ $(document).ready(function() {
 		$.each(cboxlist,function(i,cbox){
 			var td=$(cbox).parent("td");
 			if(td.css("display")!='none'){
-				if(salary_model=='技能系数' ||salary_model=='承包制' ){
+				if(salary_model=='技能系数' ||salary_model=='承包制'||salary_model=='自制件承包' ){
 					var bus_number=$(td).next().html();
 					bus_list.push(bus_number)
 				}

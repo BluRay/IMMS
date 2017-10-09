@@ -116,7 +116,7 @@ public interface IProductionDao {
 
 	int updateStaffHours(@Param(value = "staff_hour_list")List<Map<String, Object>> staff_hour_list);
 	
-	void updateStaffHoursStatus(Map<String, String> condMap);
+	void updateStaffHoursStatus(Map<String, Object> condMap);
 	
 	int queryWeldingOnlineCount(Map<String, Object> condMap);
 

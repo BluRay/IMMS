@@ -1059,9 +1059,26 @@ public class ProductionServiceImpl implements IProductionService {
 		}	
 	}
 	@Override
-	public void verifyStaffHours(Map<String, String> condMap, ModelMap model) {
+	public void verifyStaffHours(Map<String, Object> condMap, ModelMap model) {
 		try{
 			productionDao.updateStaffHoursStatus(condMap);
+			String salary_model=condMap.get("salary_model").toString();
+			if("技能系数".equals(salary_model)){
+				productionDao.caculatePieceSalary_0(condMap);
+			}
+			if("承包制".equals(salary_model)){
+				productionDao.caculatePieceSalary_1(condMap);
+			}
+			if("辅助人力".equals(salary_model)){
+				productionDao.caculatePieceSalary_2(condMap);
+			}
+			if("底薪模式".equals(salary_model)){
+				productionDao.caculatePieceSalary_3(condMap);
+			}
+			if("自制件承包".equals(salary_model)){
+				productionDao.caculatePieceSalary_4(condMap);
+			}
+			
 			model.put("success", true);
 			model.put("message", "保存成功！");
 		}catch(Exception e){

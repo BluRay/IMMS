@@ -107,7 +107,7 @@ public interface IProductionService {
 	public void updateStaffHours_cal4(String str_staffHours,
 			String is_customer, String edit_date, String editor_id,
 			ModelMap model);
-	public void verifyStaffHours(Map<String, String> condMap,ModelMap model);
+	public void verifyStaffHours(Map<String, Object> condMap,ModelMap model);
 
 	public void getStaffInfo(Map<String, Object> condMap, ModelMap model);
 	/*****************************xiong jianwu end  *****************************/

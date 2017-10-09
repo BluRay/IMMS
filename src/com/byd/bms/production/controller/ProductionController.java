@@ -1003,14 +1003,22 @@ public class ProductionController extends BaseController {
 		String salary_model=request.getParameter("salary_model");
 		String bus_number_list=request.getParameter("bus_number_list");
 		String work_date_list=request.getParameter("work_date_list");
-		Map<String,String> condMap=new HashMap<String,String>();
+		Map<String,Object> condMap=new HashMap<String,Object>();
 		condMap.put("factory", factory);
 		condMap.put("workshop", workshop);
 		condMap.put("workgroup", workgroup);
 		condMap.put("team", team);
 		condMap.put("salary_model", salary_model);
 		condMap.put("bus_number_list", bus_number_list);
+		condMap.put("bus_number", bus_number_list);
 		condMap.put("work_date_list", work_date_list);
+		String work_month="";
+		if(work_date_list.contains(",")){
+			String work_date=work_date_list.split(",")[0];
+			work_month=work_date.substring(0, 7);
+			condMap.put("work_month", work_month);
+		}
+		
 		condMap.put("status", "2");
 		
 		productionService.verifyStaffHours(condMap,model);
