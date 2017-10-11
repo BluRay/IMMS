@@ -130,6 +130,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter{
 				session.setAttribute("factory", user.getFactory());
 				session.setAttribute("factory_id", user.getFactory_id());
 				session.setAttribute("bmsuser", user);
+				session.setAttribute("user_type", user.getUser_type());
 				return true;
 			}
 		}

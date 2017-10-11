@@ -12,14 +12,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<link rel="stylesheet" href="<%=basePath%>/assets/css/bootstrap.min.css" />
-<link rel="stylesheet" href="<%=basePath%>/assets/css/font-awesome.min.css" />
+<link rel="stylesheet" href="/BMS/assets/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/BMS/assets/css/font-awesome.min.css" />
 <!-- text fonts -->
-<link rel="stylesheet" href="<%=basePath%>/assets/css/ace-fonts.css" />
+<link rel="stylesheet" href="/BMS/assets/css/ace-fonts.css" />
 <!-- ace styles -->
-<link rel="stylesheet" href="<%=basePath%>/assets/css/ace.min.css" id="main-ace-style" />
-<link rel="stylesheet" href="<%=basePath%>/assets/css/ace-skins.min.css" />
-<link rel="stylesheet" href="<%=basePath%>/assets/css/ace-rtl.min.css" />
+<link rel="stylesheet" href="/BMS/assets/css/ace.min.css" id="main-ace-style" />
+<link rel="stylesheet" href="/BMS/assets/css/ace-skins.min.css" />
+<link rel="stylesheet" href="/BMS/assets/css/ace-rtl.min.css" />
 <script src="<%=basePath%>/assets/js/jquery.min.js"></script>
 <script src="<%=basePath%>/assets/js/jquery.mobile.custom.min.js"></script>
 <script src="<%=basePath%>/assets/js/ace-extra.min.js"></script>
@@ -49,7 +49,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 var s = [];
 function ajaxQueryMenu(){
 	$.ajax({
-	    url: "<%=basePath%>/getMenu",
+	    url: "/BMS/getMenu",
 	    async: false,
 	    dataType: "json",
 		type: "get",
@@ -116,7 +116,7 @@ $(document).ready(function () {
 	ajaxQueryMenu();
 	$.ajax({
 		type:'GET',
-		url:"<%=basePath%>/common/getTaskList",
+		url:"/BMS/common/getTaskList",
 		data:{},
 		async: false,
 		globle:false,
@@ -130,7 +130,7 @@ $(document).ready(function () {
  			$("#task").html("需处理任务数 "+data.count+" 个");
 			var str="";
 			$.each(data.datalist,function(index,item){
-				var url="<%=basePath%>/"+item.url;
+				var url="/BMS/"+item.url;
 				if(item.params!=null && item.params!=undefined){
 					url+=item.params;
 				}
@@ -171,7 +171,7 @@ $(document).ready(function () {
 		$.each(menuTree, function (index, value) {
 			var root = $('.nav-list');
 			var li = $('<li  class="" />');
-			var a = $('<a href=\"<%=basePath%>/'+value.path+'\" ></a>');
+			var a = $('<a href=\"/BMS/'+value.path+'\" ></a>');
 			if (value.path.substring(0,4) =="http"){
 				a = $('<a href=\"'+value.path+'<%=staff_number%>\" ></a>');
 			}
@@ -263,7 +263,7 @@ function traverseTree(node,parentli,two){
 	var ul = $('<ul class="submenu" />');
 	$.each(node.list, function (index, value) {
 		var li = $('<li  class="" />');
-		var a = $('<a href=\"<%=basePath%>/'+value.path+'\" ></a>');
+		var a = $('<a href=\"/BMS/'+value.path+'\" ></a>');
 		//console.log("value:" , value);
 		if(value.list.length>0){
 			a.addClass('dropdown-toggle');

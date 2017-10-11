@@ -318,7 +318,7 @@
 										<div class="col-sm-9">
 											<!-- #section:plugins/input.tag-input -->
 											<div class="inline">
-												<input type="text" name="tags" id="form-field-tags" value="Tag Input Control" placeholder="Enter tags ..." />
+												<input type="text" name="tags" style="width:500px" id="form-field-tags" value="Tag Input Control" placeholder="Enter tags ..." />
 											</div>
 
 											<!-- /section:plugins/input.tag-input -->
@@ -342,7 +342,7 @@
 
 									<div class="clearfix form-actions">
 										<div class="col-md-offset-3 col-md-9">
-											<button class="btn btn-info" type="button">
+											<button id="testbtn" class="btn btn-info" type="button">
 												<i class="ace-icon fa fa-check bigger-110"></i>
 												Submit
 											</button>
@@ -1595,6 +1595,12 @@
 		<!-- inline scripts related to this page -->
 		<script type="text/javascript">
 			jQuery(function($) {
+				$('#testbtn').on('click', function() {
+					alert($('#form-field-tags').val());
+					var $tag_obj = $('#form-field-tags').data('tag');
+					$tag_obj.add('1234 Added');
+				});
+				
 				$('#id-disable-check').on('click', function() {
 					var inp = $('#form-input-readonly').get(0);
 					if(inp.hasAttribute('disabled')) {
@@ -1902,7 +1908,7 @@
 					  {
 						placeholder:tag_input.attr('placeholder'),
 						//enable typeahead by specifying the source array
-						source: ace.vars['US_STATES'],//defined in ace.js >> ace.enable_search_ahead
+						source: '',//ace.vars['US_STATES'],//defined in ace.js >> ace.enable_search_ahead
 						/**
 						//or fetch data from database, fetch those that match "query"
 						source: function(query, process) {
