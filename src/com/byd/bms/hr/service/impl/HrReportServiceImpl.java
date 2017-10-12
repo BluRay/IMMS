@@ -225,16 +225,19 @@ public class HrReportServiceImpl implements IHrReportService {
 		//"计件=01:11.2;02:14;|额外=01:4;02:44;|技改=01:8;02:88;|等待=30:8;31:8;"; //
 		String[] typeArr={"计件","额外","技改","等待","出勤"};
 		List<Map<String,String>> resultList=new ArrayList<Map<String,String>>();
-		int count=1;
+		int start=Integer.parseInt(conditionMap.get("start").toString())+1;
 		for(Map<String,String> map : datalist){
 			String workHours=(String)map.get("workhours");
 			String staffNumber=(String)map.get("staff_number");
 			String staffName=(String)map.get("staff_name");
+			if(workHours==null){
+				continue;
+			}
 			String [] hoursArr = workHours.split("\\|");
 			for(String type : typeArr){
 				Map<String,String> newMap=new HashMap<String,String>();
 				newMap.putAll(createMap(type,map));
-				newMap.put("count", count+"");
+				newMap.put("count", start+"");
 				newMap.put("staff_number", staffNumber);
 				newMap.put("staff_name", staffName);
 				newMap.put("type", type);
@@ -256,7 +259,7 @@ public class HrReportServiceImpl implements IHrReportService {
 				}
 				resultList.add(newMap);
 			}
-			count++;
+			start++;
 		}
 		model.put("recordsTotal", totalCount);
 		model.put("draw", conditionMap.get("draw"));

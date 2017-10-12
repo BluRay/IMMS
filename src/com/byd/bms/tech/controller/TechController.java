@@ -788,10 +788,15 @@ public class TechController extends BaseController{
 			map.put("bus_num_end", bus_num_end);
 		}
 		if (request.getParameter("task_detail_status") != null && request.getParameter("task_detail_status").trim() != "") {
-			map.put("task_detail_status",
-			request.getParameter("task_detail_status"));
+			map.put("task_detail_status",request.getParameter("task_detail_status"));
 		}
-		List<Map<String,Object>> datalist = techService.queryTaskBusNumber(map);
+		List<Map<String,Object>> datalist = new ArrayList<Map<String,Object>>();
+		if(workshop.equals("自制件") || workshop.equals("部件")){
+			datalist = techService.queryTaskPreInfo(map);
+		}else{
+			datalist = techService.queryTaskBusNumber(map);
+		}
+		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("data", datalist);
 		mv.clear();

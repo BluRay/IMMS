@@ -154,6 +154,7 @@ function ajaxQuery(){
 		info:false,
 		orderMulti:false,
 		language: {
+			//info:"共计 _TOTAL_ 条，当前第 _PAGE_ 页 共 _PAGES_ 页",
 			emptyTable:"抱歉，未查询到数据！",
 			loadingRecords:"正在查询，请稍后..." ,
 			infoEmpty:"抱歉，未查询到数据！",

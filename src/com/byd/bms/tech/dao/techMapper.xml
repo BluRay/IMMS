@@ -788,6 +788,13 @@
 		where tech_task_id=#{tech_task_id} and order_no=#{order_no} and factory=#{factory}
 	</select>
 	
+	<select id="queryTaskPreInfo" parameterType="Map" resultType="Map">
+	SELECT p.*,u.username confirmor FROM BMS_TECH_TASK_FOLLOW_PRE p
+	LEFT JOIN BMS_BASE_USER u ON p.confirmor_id = u.id 
+	WHERE p.tech_task_id = #{tech_task_id} AND p.order_no = #{order_no} 
+	AND p.factory = #{factory} AND p.workshop = #{workshop}
+	
+	</select>
 	<select id="queryTaskBusNumber" parameterType="Map" resultType="Map">
 		SELECT b.bus_number,b.latest_process_id,p.process_name,f.factory_name,u.username confirmor,d.confirmor_date,d.workshop 
 		FROM BMS_TECH_TASK_FOLLOW d 

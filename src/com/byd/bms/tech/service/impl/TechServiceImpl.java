@@ -458,6 +458,11 @@ public class TechServiceImpl implements ITechService {
 	public List<Map<String, Object>> queryTaskBusNumber(Map<String, Object> map) {
 		return techDao.queryTaskBusNumber(map);
 	}
+	
+	@Override
+	public List<Map<String, Object>> queryTaskPreInfo(Map<String, Object> map) {
+		return techDao.queryTaskPreInfo(map);
+	}
 
 	@Override
 	@DataSource("dataSourceSlave")

@@ -56,17 +56,36 @@ function ajaxShowBusNumber(order_no,tech_task_id,bus_num_s,bus_num_e,factory,wor
 		async: false,
 		error: function () {alert(response.message);},
 		success: function (response) {
-			$("#selectBusNumber_table_view tbody").html("");
-    		$.each(response.data,function (index,value) {
-    			var tr = $("<tr />");
-    			$("<td style=\"text-align:center;\" />").html(index+1).appendTo(tr);
-    			$("<td style=\"text-align:center;\" />").html(value.bus_number).appendTo(tr);
-    			$("<td style=\"text-align:center;\" />").html(value.factory_name).appendTo(tr);
-    			$("<td style=\"text-align:center;\" />").html(value.process_name).appendTo(tr);
-       			$("<td style=\"text-align:center;\" />").html(value.confirmor).appendTo(tr);
-    			$("<td style=\"text-align:center;\" />").html(value.confirmor_date).appendTo(tr);
-    			$("#selectBusNumber_table_view tbody").append(tr);
-    		});
+			if((workshop == "自制件")||(workshop == "自制件")){
+				$("#selectBusNumber_table_view").hide();
+				$("#selectBusNumber_table_view2").show();
+				$("#selectBusNumber_table_view2 tbody").html("");
+				$.each(response.data,function (index,value) {
+	    			var tr = $("<tr />");
+	    			$("<td style=\"text-align:center;\" />").html(index+1).appendTo(tr);
+	    			$("<td style=\"text-align:center;\" />").html(value.factory).appendTo(tr);
+	    			$("<td style=\"text-align:center;\" />").html(value.workshop).appendTo(tr);
+	    			$("<td style=\"text-align:center;\" />").html(value.follow_num).appendTo(tr);
+	       			$("<td style=\"text-align:center;\" />").html(value.confirmor).appendTo(tr);
+	    			$("<td style=\"text-align:center;\" />").html(value.confirmor_date).appendTo(tr);
+	    			$("#selectBusNumber_table_view2 tbody").append(tr);
+	    		});
+			}else{
+				$("#selectBusNumber_table_view2").hide();
+				$("#selectBusNumber_table_view").show();
+				$("#selectBusNumber_table_view tbody").html("");
+	    		$.each(response.data,function (index,value) {
+	    			var tr = $("<tr />");
+	    			$("<td style=\"text-align:center;\" />").html(index+1).appendTo(tr);
+	    			$("<td style=\"text-align:center;\" />").html(value.bus_number).appendTo(tr);
+	    			$("<td style=\"text-align:center;\" />").html(value.factory_name).appendTo(tr);
+	    			$("<td style=\"text-align:center;\" />").html(value.process_name).appendTo(tr);
+	       			$("<td style=\"text-align:center;\" />").html(value.confirmor).appendTo(tr);
+	    			$("<td style=\"text-align:center;\" />").html(value.confirmor_date).appendTo(tr);
+	    			$("#selectBusNumber_table_view tbody").append(tr);
+	    		});
+			}
+			
 		}
 	});
 	

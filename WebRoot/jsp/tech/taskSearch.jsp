@@ -101,6 +101,21 @@
 			                
 			            </tbody>
 			        </table>
+			        <table id="selectBusNumber_table_view2" style="table-layout:fixed;font-size:12px;border-collapse: collapse;" class="table table-bordered table-striped">
+						<thead>
+			                <tr>
+			                	<th style="text-align:center;" width="60px">序号</th>
+			                    <th style="text-align:center;">生产工厂</th>
+			                    <th style="text-align:center;">生产车间</th>
+			                    <th style="text-align:center;">跟进数量</th>
+			                    <th style="text-align:center;">确认人</th>
+			                    <th style="text-align:center;">确认时间</th>
+			                </tr>
+			            </thead>
+			            <tbody id="selectBusNumber_table_tbody_view">
+			                
+			            </tbody>
+			        </table>
 			    	<input type="hidden" id="selectBusNumber_factoryId_view" /> 
 			    	<input type="hidden" id="selectBusNumber_workshop_view" />
 			    	<input type="hidden" id="selectBusNumber_taskId_view" />
