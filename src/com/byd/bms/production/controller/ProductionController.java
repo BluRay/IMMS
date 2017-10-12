@@ -3,6 +3,7 @@ package com.byd.bms.production.controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,8 +12,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+
 import com.byd.bms.hr.service.IHrBaseDataService;
 import com.byd.bms.order.service.IOrderService;
 import com.byd.bms.production.model.ProductionException;
@@ -2582,6 +2586,8 @@ public class ProductionController extends BaseController {
 									attendance_hours+=Float.valueOf(data[i].toString().trim());
 								}
 							}
+							BigDecimal b_hours = new BigDecimal(attendance_hours);
+							attendance_hours = b_hours.setScale(1,BigDecimal.ROUND_HALF_UP).floatValue();
 							attendanceInfo.put("attendance_days", attendance_days);
 							attendanceInfo.put("attendance_hours", attendance_hours);
 							attendanceInfo.put("editor_id",userid);

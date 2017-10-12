@@ -33,7 +33,13 @@ function initPage() {
 		var treeNode = nodes[0];
 		if(treeNode.org_type=='1'){
 			factory=treeNode.displayName;
-			workshop="";
+			workshop = "";
+			var mynodes = treeNode.children;
+			for(var x in mynodes){
+				if(mynodes[x].org_type == '2'){
+					workshop +=mynodes[x].displayName+",";
+				}
+			}
 		}	
 		if(treeNode.org_type == '2'){
 			factory=treeNode.getParentNode().displayName;
@@ -55,6 +61,13 @@ function zTreeOnClick(event, treeId, treeNode) {
 	
 	if(treeNode.org_type=='1'){
 		factory=treeNode.displayName;
+		workshop = "";
+		var mynodes = treeNode.children;
+		for(var x in mynodes){
+			if(mynodes[x].org_type == '2'){
+				workshop +=mynodes[x].displayName+",";
+			}
+		}
 	}	
 	if(treeNode.org_type == '2'){
 		factory=treeNode.getParentNode().displayName;

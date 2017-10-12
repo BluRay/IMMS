@@ -1943,7 +1943,7 @@
 			AND r.rewards_factory = #{rewards_factory}
 		</if>
 		<if test="rewards_workshop!=null and rewards_workshop!=''">
-			AND r.rewards_workshop = #{rewards_workshop}
+			AND FIND_IN_SET(r.rewards_workshop,#{rewards_workshop})  >0 
 		</if>
 		order by staff_number,rewards_date
         <if test="start !=null  and length!=-1">
@@ -1966,7 +1966,7 @@
 			AND r.rewards_factory = #{rewards_factory}
 		</if>
 		<if test="rewards_workshop!=null and rewards_workshop!=''">
-			AND r.rewards_workshop = #{rewards_workshop}
+			AND FIND_IN_SET(r.rewards_workshop,#{rewards_workshop})  >0 
 		</if>
 	</select>
 	

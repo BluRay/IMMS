@@ -1569,6 +1569,8 @@ public class ProductionServiceImpl implements IProductionService {
 					attendance_days++;
 					attendance_hours+=Float.valueOf(attendanceInfo.get("D31").toString().trim());
 				}
+				BigDecimal b_hours = new BigDecimal(attendance_hours);
+				attendance_hours = b_hours.setScale(1,BigDecimal.ROUND_HALF_UP).floatValue();
 				attendanceInfo.put("attendance_days", attendance_days);
 				attendanceInfo.put("attendance_hours", attendance_hours);
 			}

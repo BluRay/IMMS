@@ -24,7 +24,7 @@
 								AND r1.rewards_factory = #{rewards_factory}
 							</if>
 							<if test="rewards_workshop!=null and rewards_workshop!=''">
-								AND r1.rewards_workshop = #{rewards_workshop}
+								AND FIND_IN_SET(r1.rewards_workshop,#{rewards_workshop})  >0 
 							</if>
 							<if test="staff_number!=null">
 								AND r1.staff_number LIKE CONCAT('%',#{staff_number},'%') 
@@ -46,7 +46,7 @@
 					AND r.rewards_factory = #{rewards_factory}
 				</if>
 				<if test="rewards_workshop!=null and rewards_workshop!=''">
-					AND r.rewards_workshop = #{rewards_workshop}
+					AND FIND_IN_SET(r.rewards_workshop,#{rewards_workshop})  >0 
 				</if>
 				<if test="staff_number!=null">
 					AND r.staff_number LIKE CONCAT('%',#{staff_number},'%') 
@@ -65,7 +65,7 @@
 					AND r.rewards_factory = #{rewards_factory}
 				</if>
 				<if test="rewards_workshop!=null and rewards_workshop!=''">
-					AND r.rewards_workshop = #{rewards_workshop}
+					AND FIND_IN_SET(r.rewards_workshop,#{rewards_workshop})  >0 
 				</if>
 				<if test="staff_number!=null">
 					AND r.staff_number LIKE CONCAT('%',#{staff_number},'%') 
@@ -399,6 +399,19 @@
 		</if>
 		<if test="staff !=null and staff !=''">
 			and (es.staff_number like concat('%',#{staff},'%') or es.staff_name like concat('%',#{staff},'%') )
+		</if>
+		union
+		select distinct s1.staff_number,s1.name staff_name
+		from BMS_HR_STAFF s1
+		where s1.plant_org=#{factory} and s1.workshop_org=#{workshop} and s1.salary_type='计件' and s1.status='在职'
+		<if test="workgroup !=null and workgroup !='全部'">
+			and s1.workgroup_org=#{workgroup}
+		</if>
+		<if test="team !=null and team !='全部'">
+			and s1.team_org=#{team}
+		</if>
+		<if test="staff !=null and staff !=''">
+			and (s1.staff_number like concat('%',#{staff},'%') or s1.name like concat('%',#{staff},'%') )
 		</if>
 		) st
 		left join BMS_HR_STAFF s on s.staff_number=st.staff_number
