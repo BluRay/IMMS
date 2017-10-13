@@ -56,7 +56,7 @@ function ajaxShowBusNumber(order_no,tech_task_id,bus_num_s,bus_num_e,factory,wor
 		async: false,
 		error: function () {alert(response.message);},
 		success: function (response) {
-			if((workshop == "自制件")||(workshop == "自制件")){
+			if((workshop == "自制件")||(workshop == "部件")){
 				$("#selectBusNumber_table_view").hide();
 				$("#selectBusNumber_table_view2").show();
 				$("#selectBusNumber_table_view2 tbody").html("");

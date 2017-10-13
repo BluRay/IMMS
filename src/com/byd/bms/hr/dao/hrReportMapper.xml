@@ -936,7 +936,7 @@
 		</if>
 		GROUP BY pp.staff_number,pp.work_date 
 		union all
-		select '额外' workhour_type,tp.staff_number,s.name staff_name,sum(tp.real_work_hour) sum_participation,tp.work_date
+		select '额外' workhour_type,tp.staff_number,s.name staff_name,sum(tp.work_hour) sum_participation,tp.work_date
 		from BMS_HR_STAFF_TMP_HOURS tp left join BMS_HR_STAFF s on tp.staff_number=s.staff_number
 		where tp.status='1' and tp.work_date like CONCAT(#{work_date},'%')  
 		<if test="factory!='全部'">
@@ -956,7 +956,7 @@
 		</if>
 		GROUP BY tp.staff_number,tp.work_date 
 		union all
-		select '技改' workhour_type,ep.staff_number,s.name staff_name,sum(ep.real_work_hour) sum_participation,ep.work_date
+		select '技改' workhour_type,ep.staff_number,s.name staff_name,sum(ep.work_hour) sum_participation,ep.work_date
 		from BMS_HR_STAFF_TECH_HOURS ep left join BMS_HR_STAFF s on ep.staff_number=s.staff_number
 		where ep.status='1'and ep.work_date like CONCAT(#{work_date},'%')  
 		<if test="factory!='全部'">
@@ -1033,7 +1033,7 @@
 		</if>
 		GROUP BY pp.staff_number,pp.work_date 
 		union all
-		select '额外' workhour_type,tp.staff_number,s.name staff_name,sum(tp.real_work_hour) sum_participation,tp.work_date
+		select '额外' workhour_type,tp.staff_number,s.name staff_name,sum(tp.work_hour) sum_participation,tp.work_date
 		from BMS_HR_STAFF_TMP_HOURS tp left join BMS_HR_STAFF s on tp.staff_number=s.staff_number
 		where tp.status='1' and tp.work_date like CONCAT(#{work_date},'%')  
 		<if test="factory!='全部'">
@@ -1053,7 +1053,7 @@
 		</if>
 		GROUP BY tp.staff_number,tp.work_date 
 		union all
-		select '技改' workhour_type,ep.staff_number,s.name staff_name,sum(ep.real_work_hour) sum_participation,ep.work_date
+		select '技改' workhour_type,ep.staff_number,s.name staff_name,sum(ep.work_hour) sum_participation,ep.work_date
 		from BMS_HR_STAFF_TECH_HOURS ep left join BMS_HR_STAFF s on ep.staff_number=s.staff_number
 		where ep.status='1'and ep.work_date like CONCAT(#{work_date},'%')  
 		<if test="factory!='全部'">
