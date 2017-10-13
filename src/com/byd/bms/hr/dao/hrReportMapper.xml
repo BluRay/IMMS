@@ -480,7 +480,7 @@
 		</if>
 		) st on st.staff_number=sh.staff_number
 		left join BMS_HR_STAFF s on s.staff_number=sh.staff_number
-		where sh.month=#{month} and sh.submit_factory=#{factory} and sh.submit_workshop=#{workshop}
+		where sh.month=#{month} and sh.submit_factory=#{factory} and sh.submit_workshop=#{workshop} and s.status='在职'
 		<if test="staff !=null and staff !=''">
 		and (st.staff_number like concat('%',#{staff},'%') or st.staff_name like concat('%',#{staff},'%') )
 		</if>
@@ -491,7 +491,7 @@
 		select s.status staff_status,sh.*
 		from BMS_HR_PIECE_SALARY_HISTORY sh
 		left join BMS_HR_STAFF s on s.staff_number=sh.staff_number
-		where sh.month=#{month} and s.plant_org=#{factory} and s.workshop_org=#{workshop}
+		where sh.month=#{month} and s.plant_org=#{factory} and s.workshop_org=#{workshop} and s.status='在职'
 		<if test="workgroup !=null and workgroup !='全部'">
 		 and s.workgroup_org=#{workgroup}
 		</if>
@@ -520,7 +520,7 @@
 		(#{month},#{detail.staff_number},#{detail.staff_name},#{detail.job},#{detail.plant_org},#{detail.workshop_org},#{detail.workgroup_org},#{detail.team_org},#{detail.attendance_days},
 		#{detail.piece_total},#{detail.bonus_total},#{detail.piece_pay_total},#{detail.ecnwh_total},#{detail.ecn_pay_total},#{detail.wwh_total},#{detail.wait_pay_total},#{detail.tmpwh_total},#{detail.tmp_pay_total},
 		#{detail.dscore_total},#{detail.deduct_pay_total},#{detail.pre_sale_salary},#{detail.after_sale_salary},#{detail.paid_leave_salary},#{detail.holiday_salary},#{detail.hourly_salary},#{detail.support_salary},
-		#{saver},#{save_date},#{factory},#{workshop},'已提交',#{detail.production_qty}
+		#{saver},#{save_date},#{factory},#{workshop},'已提交',#{detail.output}
 		)
 		</foreach>
 	</insert>
