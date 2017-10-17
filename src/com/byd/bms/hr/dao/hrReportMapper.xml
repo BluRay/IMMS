@@ -284,7 +284,8 @@
 	</select>
 	
 	<select id="queryStaffPieceSalary" parameterType="Map" resultType="Map">
-		select st.*,s.job,s.plant_org,s.workshop_org,s.workgroup_org,s.team_org,round(sum(ps.ppay),2) piece_pay_total,sum(ps.bus_count) piece_total,
+		select st.*,s.job,s.plant_org,s.workshop_org,s.workgroup_org,s.team_org,round(sum(ps.ppay),2) piece_pay_total,
+		sum(case when ps.distribution >0 then ps.bus_count else 0 end) piece_total,
 		sum(ps.bonus) bonus_total,ps.salary_model,
 		(select round(sum(ws.wpay),2) from BMS_HR_WAIT_SALARY ws 
 		where ws.staff_number=st.staff_number and ws.factory=#{factory}  and ws.workshop=#{workshop} 
@@ -295,17 +296,17 @@
 		(select round(sum(ts.real_work_hour*ts.hour_price),2) from BMS_HR_TMP_SALARY ts 
 		where ts.factory=#{factory} and ts.workshop=#{workshop} 
 		and ts.staff_number=st.staff_number and ts.work_date like concat(#{month},'%')) tmp_pay_total,
-		(select sum(ts.work_hour) from BMS_HR_TMP_SALARY ts 
+		(select sum(ts.real_work_hour) from BMS_HR_TMP_SALARY ts 
 		where ts.factory=#{factory} and ts.workshop=#{workshop} 
 		and ts.staff_number=st.staff_number and ts.work_date like concat(#{month},'%')) tmpwh_total,
 		(select round(sum(es.real_work_hour*es.hour_price),2) from BMS_HR_TECH_SALARY es 
 		where es.factory=#{factory} and es.workshop=#{workshop} 
 		and es.staff_number=st.staff_number and es.work_date like concat(#{month},'%')) ecn_pay_total,
-		(select sum(es.work_hour) from BMS_HR_TECH_SALARY es 
+		(select sum(es.real_work_hour) from BMS_HR_TECH_SALARY es 
 		where es.factory=#{factory} and es.workshop=#{workshop} 
 		and es.staff_number=st.staff_number and es.work_date like concat(#{month},'%')) ecnwh_total,
-		(select sum(r.add-r.deduct) from BMS_HR_REWARDS r where r.staff_number=st.staff_number) dscore_total,
-		(select sum(r.add-r.deduct)*5 from BMS_HR_REWARDS r where r.staff_number=st.staff_number) deduct_pay_total,
+		(select sum(r.add-r.deduct) from BMS_HR_REWARDS r where r.staff_number=st.staff_number and r.rewards_date like concat(#{month},'%') ) dscore_total,
+		(select sum(r.add-r.deduct)*5 from BMS_HR_REWARDS r where r.staff_number=st.staff_number and r.rewards_date like concat(#{month},'%') ) deduct_pay_total,
 		s.status,a.attendance_days, ss.pre_sale_salary,ss.after_sale_salary,ss.support_salary,ss.hourly_salary,ss.holiday_salary,ss.paid_leave_salary,		
 		<choose>	
 		<when test="workshop=='自制件'">
@@ -418,7 +419,7 @@
 		left join BMS_HR_PIECE_SALARY ps on ps.factory=#{factory} and ps.workshop=#{workshop} 
 		and st.staff_number=ps.staff_number and ps.work_date like concat(#{month},'%')		
 		left join BMS_HR_STAFF_ATTENDANCE a on a.staff_number=st.staff_number and a.month=#{month}
-		left join BMS_HR_SPECIAL_SALARY ss on ss.staff_number=st.staff_number and ss.submit_factory=#{factory} and ss.submit_workshop=#{workshop}
+		left join BMS_HR_SPECIAL_SALARY ss on ss.staff_number=st.staff_number and ss.submit_factory=#{factory} and ss.submit_workshop=#{workshop} and ss.month = #{month} 
 		group by staff_number
 		order by workgroup_org,team_org,salary_model
 	</select>
