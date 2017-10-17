@@ -45,9 +45,9 @@
 						<table>
 							<tr>
 								<td>责任工厂：</td>
-								<td><select id="search_factory" class="form-control" style="width:100px"></select></td>
+								<td><select id="search_factory" class="form-control" style="width:90px"></select></td>
 								<td>&nbsp;客户：</td>
-								<td><input id="search_customer_name" placeholder="客户..." style="width:100px" type="text"></td>
+								<td><input id="search_customer_name" placeholder="客户..." style="width:80px" type="text"></td>
 								<td>&nbsp;处理结果：</td>
 								<td><select id="search_resolve_result" class="input-small" style="width:70px"><option value="">全部</option><option value="0">已关闭</option><option value="1">处理中</option></select></td>
 								<td>&nbsp;故障现象：</td>
@@ -55,9 +55,24 @@
 								<td>&nbsp;反馈日期：</td>
 								<td colspan=3><input id="search_date_start" placeholder="开始时间..." style="width:90px" type="text" onClick="WdatePicker({el:'search_date_start',dateFmt:'yyyy-MM-dd'});"> - <input id="search_date_end" placeholder="结束时间..." style="width:90px" type="text" onClick="WdatePicker({el:'search_date_end',dateFmt:'yyyy-MM-dd'});"></td>
 								<td><input id="btnQuery" type="button" class="btn btn-sm btn-primary" value="查询" style="margin-left: 2px;"></input><input id="btnAdd" type="button" class="btn btn-sm btn-success" value="新增" style="margin-left: 2px;"></input></td>
+								<td><input id="btnBulkAdd" style="margin-left: 2px;" class="btn btn-sm btn-info" value="批导" type="button"></td>
 							</tr>
 						</table>	
 					</div>
+					
+					<div id="divBulkAdd" class="well" style="display:none;">
+					<button id="btnBulkHide" type="button" class="close"><i class="ace-icon fa fa-times"></i></button>
+						<form id="uploadProcessFaultForm" action="#" enctype="multipart/form-data" method="post">
+						<table>
+							<tr>
+								<td><input id="file" type="file" name="file" accept="*.xlsx"/></td>
+								<td><input id="btn_upload" type="button" class="btn btn-sm btn-primary" value="上传并导入" onclick="javascript:return LimitAttach(this.form, this.form.file.value)"/></td>
+								<td></td><td><a href="../docs/processFault.xls">下载批导模板</a></td>
+							</tr>
+						</table>
+						</form>
+					</div>
+					
 					<table id="tableData" class="table table-striped table-bordered table-hover" style="overflow-x:auto;font-size: 12px;">
 					</table>
 					</div>

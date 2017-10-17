@@ -74,8 +74,9 @@ function ajaxQuery(){
 		columns: [
 		            {"title":"技改任务","class":"center","data":"task_content","defaultContent": "","render":function(data,type,row){
 		            	var html="";
-		            	if(data.length>30){
-		            		html="<i title='"+data+"' style='font-style: normal'>"+data.substring(1,30)+"...</i>"
+		            	var task_content = row.task_content;
+		            	if(row.task_content.length>30){
+		            		html="<i title='"+row.task_content+"' style='font-style: normal'>"+row.task_content.substring(1,30)+"...</i>"
 		            	}else{
 		            		html=data;
 		            	}
@@ -110,7 +111,7 @@ function showConfigModal(id,tech_task_id,factory,time_list,tech_list){
 	$.each(getWorkshopOrg(), function(index, value){
 		var tr=$("<tr />");
 		$("<td />").html(value).appendTo(tr);
-		var unitTimeInput=$("<input type=\"text\" class=\"unit_time\" style=\"text-align: center;ime-mode: disabled;\" onkeyup=\"gaga(this);\" onpaste=\"return false;\" >");
+		var unitTimeInput=$("<input type=\"text\" class=\"unit_time\" value=\"0\" style=\"text-align: center;ime-mode: disabled;\" onkeyup=\"gaga(this);\" onpaste=\"return false;\" >");
 		if(jsonobj){
 			for (key in jsonobj) {
 				if(key==value){

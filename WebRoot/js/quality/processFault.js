@@ -12,7 +12,16 @@ $(document).ready(function(){
 			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
 			return false;
 		}
-	})
+	});
+	
+	$("#btnBulkAdd").click (function () {
+		$("#divBulkAdd").show();
+	});
+	
+	$("#btnBulkHide").click (function () {
+		$("#divBulkAdd").hide();
+	});
+	
 	function initPage(){
 		getBusNumberSelect('#nav-search-input');
 		getFactorySelect("quality/processFault",'',"#search_factory",null,'id');
@@ -41,6 +50,23 @@ $(document).ready(function(){
 	});
 	$('#edit_factory').change(function(){ 
 		getWorkshopSelect("quality/processFault",$("#edit_factory :selected").text(),"","#edit_workshop",null,"id");
+	});
+	
+	$("#btn_upload").click (function () {
+		$("#uploadProcessFaultForm").ajaxSubmit({
+			url:"uploadProcessFault",
+			type: "post",
+			dataType:"json",
+			success:function(response){
+				alert(response.message);
+				ajaxQuery();
+				if(response.success){					
+					//window.open("materialAbnormal!index.action","_self");
+				}else{
+					
+				}
+			}			
+		});
 	});
 	
 	$("#btnAdd").on('click', function(e) {

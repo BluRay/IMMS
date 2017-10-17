@@ -572,6 +572,20 @@
 		#{response_workshop},#{is_batch},#{fault_reason},#{resolve_method},#{resolve_date},#{resolve_result},
 		#{memo},#{report_file_path},#{punish},#{compensation},#{status},#{editor_id},#{edit_date})
 	</insert>
+	<insert id="addProcessFault2" parameterType="com.byd.bms.quality.model.ProcessFaultBean" useGeneratedKeys="true">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		INSERT INTO BMS_QM_PROCESS_PROBLEM 
+		(factory_id, customer_name, vin, order_id, order_describe, customer_bus_number, license_number, 
+		fault_phenomenon, fault_components, fault_date, bus_type, fault_mils, fault_level_id, 
+		response_workshop, is_batch, fault_reason, resolve_method, resolve_date, resolve_result, 
+		memo, report_file_path, punish, compensation, status, editor_id, edit_date)	
+		VALUES((SELECT id FROM BMS_BASE_FACTORY WHERE factory_name = #{factory_name}),#{customer_name},#{vin},#{order_id},#{order_describe},#{customer_bus_number},#{license_number},
+		#{fault_phenomenon},#{fault_components},#{fault_date},(SELECT id FROM BMS_BASE_BUS_TYPE WHERE bus_type_code = #{bus_type}),#{fault_mils},#{fault_level_id},
+		#{response_workshop},#{is_batch},#{fault_reason},#{resolve_method},#{resolve_date},#{resolve_result},
+		#{memo},#{report_file_path},#{punish},#{compensation},#{status},#{editor_id},#{edit_date})
+	</insert>
 	<update id="editProcessFault" parameterType="com.byd.bms.quality.model.ProcessFaultBean">
 		UPDATE BMS_QM_PROCESS_PROBLEM
 		SET factory_id=#{factory_id}, customer_name=#{customer_name}, vin=#{vin}, license_number=#{license_number},

@@ -480,6 +480,10 @@ public class QualityServiceImpl implements IQualityService {
 		return qualityDao.addProcessFault(pocessFault);
 	}
 	@Override
+	public int addProcessFault2(ProcessFaultBean pocessFault) {
+		return qualityDao.addProcessFault2(pocessFault);
+	}
+	@Override
 	public ProcessFaultBean showProcessFaultInfo(int id) {
 		return qualityDao.showProcessFaultInfo(id);
 	}

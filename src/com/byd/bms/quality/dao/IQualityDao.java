@@ -91,6 +91,7 @@ public interface IQualityDao {
 	public List<Map<String,String>> getProcessFaultList(Map<String, Object> conditionMap);
 	public int getProcessFaultCount(Map<String, Object> conditionMap);
 	public int addProcessFault(ProcessFaultBean pocessFault);
+	public int addProcessFault2(ProcessFaultBean pocessFault);
 	public int editProcessFault(ProcessFaultBean pocessFault);
 	public ProcessFaultBean showProcessFaultInfo(int id);
 	

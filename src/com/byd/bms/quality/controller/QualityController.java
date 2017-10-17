@@ -899,6 +899,97 @@ public class QualityController extends BaseController {
 		return model;
 	}
 	
+
+	@RequestMapping(value="/uploadProcessFault",method=RequestMethod.POST)
+	@ResponseBody
+	public ModelMap uploadProcessFault(@RequestParam(value="file",required=false) MultipartFile file){
+		int userid=(int) session.getAttribute("user_id");
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		
+		String fileFileName = "masterPlan.xls";
+		int result = 0;
+		ExcelModel excelModel =new ExcelModel();
+		excelModel.setReadSheets(1);
+		excelModel.setStart(1);
+		Map<String,Integer> dataType = new HashMap<String,Integer>();
+		dataType.put("0", ExcelModel.CELL_TYPE_STRING);dataType.put("1", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("2", ExcelModel.CELL_TYPE_STRING);dataType.put("3", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("4", ExcelModel.CELL_TYPE_STRING);dataType.put("5", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("6", ExcelModel.CELL_TYPE_STRING);dataType.put("7", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("8", ExcelModel.CELL_TYPE_STRING);dataType.put("9", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("10", ExcelModel.CELL_TYPE_STRING);dataType.put("11", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("12", ExcelModel.CELL_TYPE_STRING);dataType.put("13", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("14", ExcelModel.CELL_TYPE_STRING);dataType.put("15", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("16", ExcelModel.CELL_TYPE_STRING);dataType.put("17", ExcelModel.CELL_TYPE_STRING);
+		
+		excelModel.setDataType(dataType);
+		excelModel.setPath(fileFileName);
+
+        File planFile = new File(fileFileName);
+        
+        try {
+        	file.transferTo(planFile);
+			InputStream is = new FileInputStream(planFile);
+			ExcelTool excelTool = new ExcelTool();
+			excelTool.readExcel(is, excelModel);
+			int lineCount = excelModel.getData().size();
+			String fault_date = "";
+			for(int i=0;i<lineCount;i++){
+				fault_date = excelModel.getData().get(i)[1].toString().trim();
+				if(fault_date.length()!= 10){
+					initModel(false,"日期格式有误，正确日期格式为YYYY-MM-DD ！",null);
+					model = mv.getModelMap();
+					return model;
+				}
+			}
+			
+			for(int i=0;i<lineCount;i++){
+				ProcessFaultBean pocessFault = new ProcessFaultBean();
+				pocessFault.setBus_type(excelModel.getData().get(i)[0].toString().trim());
+				pocessFault.setFault_date(excelModel.getData().get(i)[1].toString().trim());
+				pocessFault.setFault_mils(excelModel.getData().get(i)[2].toString().trim());
+				pocessFault.setCustomer_name(excelModel.getData().get(i)[3].toString().trim());
+				pocessFault.setLicense_number(excelModel.getData().get(i)[4].toString().trim());
+				pocessFault.setVin(excelModel.getData().get(i)[5].toString().trim());
+				pocessFault.setFault_level_id(excelModel.getData().get(i)[6].toString().trim());
+				String is_batch = "";
+				if(excelModel.getData().get(i)[7].toString().trim().equals("批量"))is_batch="1";
+				if(excelModel.getData().get(i)[7].toString().trim().equals("非批量"))is_batch="0";
+				pocessFault.setIs_batch(is_batch);
+				
+				pocessFault.setFault_phenomenon(excelModel.getData().get(i)[8].toString().trim());
+				pocessFault.setFault_reason(excelModel.getData().get(i)[9].toString().trim());
+				pocessFault.setFactory_name(excelModel.getData().get(i)[10].toString().trim());
+				pocessFault.setResponse_workshop(excelModel.getData().get(i)[11].toString().trim());
+				pocessFault.setResolve_method(excelModel.getData().get(i)[12].toString().trim());
+				pocessFault.setResolve_date(excelModel.getData().get(i)[13].toString().trim());
+				String resolve_result = "";
+				if(excelModel.getData().get(i)[14].toString().trim().equals("关闭"))resolve_result="0";
+				if(excelModel.getData().get(i)[14].toString().trim().equals("受理"))resolve_result="1";			
+				pocessFault.setResolve_result(resolve_result);
+				
+				pocessFault.setPunish(excelModel.getData().get(i)[15].toString().trim());
+				pocessFault.setCompensation(excelModel.getData().get(i)[16].toString().trim());
+				pocessFault.setMemo(excelModel.getData().get(i)[17].toString().trim());
+				pocessFault.setEditor_id(userid);
+				pocessFault.setEdit_date(curTime);
+				qualityService.addProcessFault2(pocessFault);
+			}
+        	
+        }catch (Exception e) {
+			e.printStackTrace();
+			initModel(false,"导入文件的格式有误！",null);
+			model = mv.getModelMap();
+			return model;
+		}
+		
+		initModel(true,"导入成功！",result);
+		model = mv.getModelMap();
+		
+		return model;
+	}
+	
 	@RequestMapping(value="editProcessFault",method=RequestMethod.POST)
 	@ResponseBody
 	public ModelMap editProcessFault(@RequestParam(value="edit_report_file",required=false) MultipartFile file){	
