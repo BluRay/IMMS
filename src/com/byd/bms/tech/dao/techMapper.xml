@@ -141,8 +141,7 @@
 			and h.workshop=#{workshop}
 			</if>
 			and h.work_hour>0 and d.id=h.ecn_task_id) 
-		</if>
-		
+		</if>		
 		order by t.tech_date desc
 		<if test="start!=null">
 			LIMIT #{start} ,#{length} 

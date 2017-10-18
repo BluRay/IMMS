@@ -183,6 +183,7 @@ function ajaxQuery(){
         		workshopAll+=$(this).text()+",";
         	});
         	var workshop=$("#search_workshop :selected").text()=="全部"?workshopAll:$("#search_workshop :selected").text();
+        	console.log("-->workshop = " + workshop);
         	var conditions={};
         	conditions.task_content=$("#search_tech_task_content").val();
         	conditions.tech_order_no=$("#search_tech_order_no").val();

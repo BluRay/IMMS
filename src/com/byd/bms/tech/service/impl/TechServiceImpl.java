@@ -544,6 +544,7 @@ public class TechServiceImpl implements ITechService {
 		int totalCount=techDao.queryTechTaskListCount(conditionMap);
 		//int totalCount=0;
 		List<Map<String,Object>> data_list=techDao.queryTechTaskList(conditionMap);	
+		
 		List<Map<String,Object>> rows=new ArrayList<Map<String,Object>>();
 		
 		for(Map<String,Object> data:data_list){			
@@ -607,7 +608,7 @@ public class TechServiceImpl implements ITechService {
 		}			
 		Map<String, Object> result=new HashMap<String,Object>();
 		totalCount -= (data_list.size()-rows.size());
-		
+		//Map<String, Object> result=new HashMap<String,Object>();
 		result.put("recordsTotal", totalCount);
 		result.put("recordsFiltered", totalCount);
 		result.put("data", rows);
