@@ -2060,7 +2060,7 @@
 			and h.org_id=#{org_id}
 		</if>
 		<if test="bus_number !=null and bus_number !=''">
-			and h.bus_number=#{bus_number} 
+			and h.bus_number like concat('%',#{bus_number},'%')
 		</if>
 		<if test="wdate_start !=null and wdate_start !=''">
 			and h.work_date>=#{wdate_start}
