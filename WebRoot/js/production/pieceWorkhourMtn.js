@@ -62,7 +62,7 @@ $(document).ready(function() {
 				work_hourlist=$(".distribution");
 			}*/
 			 $(work_hourlist).eq(0).css("display","");
-				$("#copy_paste").css("display","none");
+				$("#copy_paste_work_hour").css("display","none");
 			 $.each(dist_list,function(i,value){
 				 $(work_hourlist).eq(i).val(value);								 
 			 });
@@ -80,7 +80,7 @@ $(document).ready(function() {
 			 var work_hourlist=$(".distribution");
 	
 			 $(work_hourlist).eq(0).css("display","");
-				$("#copy_paste").css("display","none");
+				$("#copy_paste_distribution").css("display","none");
 			 $.each(dist_list,function(i,value){
 				 $(work_hourlist).eq(i).val(value);								 
 			 });
@@ -98,8 +98,8 @@ $(document).ready(function() {
 	// 新增额外工时
 	$(document).on("click", "#addStaff",function() {
 		
-		if(order_id=='0'&&is_customer=='0'){
-			alert("请输入有效车号!");
+		if(order_id=='0'&&is_customer=='0'&&(salary_model=='技能系数'||salary_model=='承包制'||salary_model=='自制件承包')){
+			alert("请输入有效车号/订单号!");
 			return false;
 		}
 		if(order_id=='0'&&is_customer=='1'){
@@ -174,7 +174,7 @@ $(document).ready(function() {
 			$("<td class='center'/>").html("").appendTo(tr);
 		}
 		
-		$("#tableResult tbody").prepend(tr);
+		$("#tableResult tbody").append(tr);
 	});
 	
 /*	$(document).on("change","#customer_number",function(){
@@ -752,7 +752,7 @@ function initPage() {
 		size:$(this).attr('data-size')|| $(window).height()-110,
 		mouseWheelLock: true,
 		alwaysVisible : true
-	});
+	});	
 	
 }	
 
@@ -760,7 +760,9 @@ function zTreeBeforeClick(treeId, treeNode, clickFlag) {
 }
 
 function zTreeOnClick(event, treeId, treeNode) {
-	
+	salary_model=treeNode.salary_model;
+	is_customer=treeNode.is_customer;
+	//alert(is_customer)
 	if(treeNode.org_type=='1'){
 		factory=treeNode.displayName;
 	}	
@@ -785,8 +787,6 @@ function zTreeOnClick(event, treeId, treeNode) {
 		alert("请选择小班组！");
 		return false;
 	}
-	order_id="0";
-	ajaxQueryTeamStaffDetail();
 	//先destroy datatable，隐藏form
 	if($.fn.dataTable.isDataTable("#tableResult")){
 		$('#tableResult').DataTable().destroy();
@@ -831,6 +831,7 @@ function zTreeOnClick(event, treeId, treeNode) {
 		$(table).append(tr);
 		$("#form").html(table).css("display","");
 	}	
+	
 	getOrderNoSelect("#order_no", "", function(obj){
 		ajaxQueryTeamStaffDetail();
 		standard_price=ajaxGetWorkgroupPrice();
@@ -862,6 +863,16 @@ function zTreeOnClick(event, treeId, treeNode) {
 		}	
 		order_id=obj.order_id;
 	});
+	
+	if(order_id ==undefined || order_id=='' ||order_id =='0'){
+		return false;
+	}
+	if($("#work_date").val().trim().length ==0){
+		return false;
+	}
+	ajaxQueryTeamStaffDetail();
+	
+	
 	
 	//显示选择的小班组人员列表
 	showStaffList(staff_list)

@@ -808,7 +808,7 @@ public class HrBaseDataController extends BaseController {
 		int length=(request.getParameter("limit")!=null)?Integer.parseInt(request.getParameter("limit")):20;	//每一页数据条数
 		Map<String,Object> condMap=new HashMap<String,Object>();
 		condMap.put("draw", draw);
-		condMap.put("start", start);
+		if(request.getParameter("offset")!=null)condMap.put("start", start);
 		condMap.put("length", length);
 		condMap.put("org_id", request.getParameter("org_id"));
 		condMap.put("orgType", (request.getParameter("orgType").equals(""))?0:request.getParameter("orgType"));

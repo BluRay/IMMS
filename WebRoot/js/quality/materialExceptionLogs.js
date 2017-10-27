@@ -105,7 +105,7 @@ function showExceptionLogs(id){
 			$("#edit_description").val(response.data.description);
 			$("#edit_tmpMeasures").val(response.data.tmp_measures);
 			$("#edit_faultReason").val(response.data.fault_reason);
-			$("#edit_impMeasures").val(response.data.imp_measures);
+			$("#edit_impMeasures").val(response.data.imp_measure);
 			$("#edit_expcFinishDate").val(response.data.expc_finish_date);
 			$("#edit_respUnit").val(response.data.resp_unit);
 			$("#edit_respPerson").val(response.data.resp_person);
@@ -175,7 +175,7 @@ function editExceptionLogs(id){
 			$("#edit_description").val(response.data.description);
 			$("#edit_tmpMeasures").val(response.data.tmp_measures);
 			$("#edit_faultReason").val(response.data.fault_reason);
-			$("#edit_impMeasures").val(response.data.imp_measures);
+			$("#edit_impMeasures").val(response.data.imp_measure);
 			$("#edit_expcFinishDate").val(response.data.expc_finish_date);
 			$("#edit_respUnit").val(response.data.resp_unit);
 			$("#edit_respPerson").val(response.data.resp_person);

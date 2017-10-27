@@ -374,18 +374,30 @@ function drawOutputChart(){
 				$.each(response.data,function(i,data){
 					if(data.key_name=='焊装上线'){
 						welding_plan_done=((data.finished_qty||"0")+"/"+(data.plan_qty||"0"));
-						welding_percent=data.finished_qty/data.plan_qty||0
+						if(data.plan_qty==0||data.plan_qty==undefined){
+							welding_percent=1
+						}else
+						 welding_percent=data.finished_qty/data.plan_qty||0
 					}
 					if(data.key_name=='涂装上线'){
 						painting_plan_done=((data.finished_qty||"0")+"/"+(data.plan_qty||"0"));
+						if(data.plan_qty==0||data.plan_qty==undefined){
+							painting_percent=1
+						}else
 						painting_percent=data.finished_qty/data.plan_qty||0
 					}
 					if(data.key_name=='底盘上线'){
 						chassis_plan_done=((data.finished_qty||"0")+"/"+(data.plan_qty||"0"));
+						if(data.plan_qty==0||data.plan_qty==undefined){
+							chassis_percent=1
+						}else
 						chassis_percent=data.finished_qty/data.plan_qty||0
 					}
-					if(data.key_name=='总装下线'){
+					if(data.key_name=='总装下线'){						
 						assembly_plan_done=((data.finished_qty||"0")+"/"+(data.plan_qty||"0"));
+						if(data.plan_qty==0||data.plan_qty==undefined){
+							assembly_percent=1
+						}else
 						assembly_percent=data.finished_qty/data.plan_qty||0
 					}
 				})

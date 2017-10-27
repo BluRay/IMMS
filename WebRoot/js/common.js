@@ -805,7 +805,8 @@ function getOrgAuthTree(treeId,url,orgType,orgKind,level,nodeName_default){
 	    		if(response.data.length>0){
 	    		    $.each(response.data, function (index, dept) {
 	                    zNodes.push(
-	                    		{id:dept.id,pId:dept.parent_id,name:dept.name,is_customer:dept.is_customer,org_type:dept.org_type,org_kind:dept.org_kind,displayName:dept.name}
+	                    		{id:dept.id,pId:dept.parent_id,name:dept.name,is_customer:dept.customer_no_flag,salary_model:dept.key_name,
+	                    			org_type:dept.org_type,org_kind:dept.org_kind,displayName:dept.name}
 	                    );
 	                });
 	                zTreeObj = $.fn.zTree.init(treeId, setting, zNodes);
