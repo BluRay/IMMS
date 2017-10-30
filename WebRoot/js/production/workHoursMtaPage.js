@@ -129,13 +129,21 @@ function ajaxQuery(){
 			+ applyDateStart + "',applyDateEnd:'" + applyDateEnd + "',status:'"
 			+ status + "',factory:'" + factory + "',workshop:'" + workshop
 			+ "'}";
-			console.log('-->conditions = ' + conditions);
+			//console.log('-->conditions = ' + conditions);
+			
+			var param ={
+					"draw":1,
+					"conditions":conditions
+				};
+	            param.length = data.length;					//页面显示记录条数，在页面显示每页显示多少项的时候
+	            param.start = data.start;					//开始的记录序号
+	            param.page = (data.start / data.length)+1;	//当前页码
 			
 			$.ajax({
                 type: "post",
                 url: "getTmpOrderList",
                 cache: false,  //禁用缓存
-                data: {"conditions":conditions},  //传入组装的参数
+                data: param,  //传入组装的参数
                 dataType: "json",
                 success: function (result) {
                     //console.log(result);
@@ -167,6 +175,7 @@ function ajaxQuery(){
 		            {"title":"工单号",width:'150',"class":"center","data":"sap_order","defaultContent": ""},
 		            {"title":"工厂",width:'100',"class":"center","data":"factory","defaultContent": ""},
 		            {"title":"车间",width:'100',"class":"center","data":"workshop","defaultContent": ""},
+		            {"title":"额外工时编号",width:'100',"class":"center","data":"NO","defaultContent": ""},
 		            {"title":"作业原因/内容",width:'500',"class":"center","data":"reason_content","defaultContent": "","render":function(data,type,row){
 		            	var html="";
 		            	if(data.length>45){

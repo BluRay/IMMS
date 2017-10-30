@@ -56,6 +56,8 @@ $(document).ready(function () {
 
 
 function ajaxQuery(){
+	$("#btnQuery").attr("disabled","disabled");
+	$("#btnQuery").val("查询中...");
 	$("#tableData").dataTable({
 		serverSide: true,paiging:true,ordering:false,searching: false,bAutoWidth:false,
 		destroy: true,sScrollY: table_height,sScrollX:true,orderMulti:false,
@@ -85,7 +87,7 @@ function ajaxQuery(){
 			+ applyDateStart + "',applyDateEnd:'" + applyDateEnd + "',hourstatus:'"
 			+ status + "',factory:'" + factory + "',workshop:'" + workshop
 			+ "'}";
-			console.log('-->conditions = ' + conditions);
+			//console.log('-->conditions = ' + conditions);
 			
 			$.ajax({
                 type: "post",
@@ -94,6 +96,8 @@ function ajaxQuery(){
                 data: {"conditions":conditions},  //传入组装的参数
                 dataType: "json",
                 success: function (result) {
+                	$("#btnQuery").removeAttr("disabled");
+                	$("#btnQuery").val("查询");
                     //console.log(result);
                 	//封装返回数据
                     var returnData = {};
@@ -117,6 +121,7 @@ function ajaxQuery(){
 		columns: [
 		            {"title":"临时派工单号",width:'150',"class":"center","data":"tmp_order_no","defaultContent": ""},
 		            {"title":"工单号",width:'100',"class":"center","data":"sap_order","defaultContent": ""},
+		            {"title":"额外工时编号",width:'100',"class":"center","data":"NO","defaultContent": ""},
 		            {"title":"作业原因/内容",width:'400',"class":"center","data":"reason_content","defaultContent": "",
 		            	"render": function ( data, type, row ) {
 		            		if(data.length >30){

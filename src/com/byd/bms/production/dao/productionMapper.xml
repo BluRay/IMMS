@@ -2357,7 +2357,8 @@
 	O.finished_qty,O.single_hour,O.applier,O.apply_date,SUM(H.work_hour) AS workhour_total,
 	GROUP_CONCAT(H.status),
 	IF((LOCATE('2', GROUP_CONCAT(H.status))>0),'已驳回','未驳回') AS '驳回状态',
-	IF((REPLACE(REPLACE(GROUP_CONCAT(H.status),',',''),'1','')=''),'已审批','未审批') AS '审批状态'
+	IF((REPLACE(REPLACE(GROUP_CONCAT(H.status),',',''),'1','')=''),'已审批','未审批') AS '审批状态',
+	(SELECT R.no FROM BMS_PD_TMP_HOURS R WHERE R.reason_content = O.reason_content LIMIT 1) AS NO
 	FROM BMS_PD_TMP_ORDER O
 	LEFT OUTER JOIN BMS_HR_STAFF_TMP_HOURS H ON H.temp_order_id = O.id 
 	GROUP BY O.id) T 
@@ -2415,7 +2416,8 @@
 	<select id="getTmpOrderList" parameterType="Map" resultType="Map">
 		SELECT (select sum(ifnull(output,0)) from BMS_PD_TMP_ORDER_SCHEDULE s
 		where o.id=s.temp_order_id group by s.temp_order_id) finished_qty,
-		o.*,h.hour_total,h1.hour_total workhour_total,U.display_name applier_name
+		o.*,h.hour_total,h1.hour_total workhour_total,U.display_name applier_name,
+		(SELECT R.no FROM BMS_PD_TMP_HOURS R WHERE R.reason_content = o.reason_content LIMIT 1) AS NO
 		FROM BMS_PD_TMP_ORDER o
 		LEFT OUTER JOIN BMS_BASE_USER U ON o.applier = U.id
 		left join (
@@ -2785,7 +2787,8 @@
 		</foreach>
 	</update>
 	<select id="getCreateTmpOrderList" parameterType="Map" resultType="Map">
-		SELECT s.* FROM BMS_PD_TMP_ORDER s WHERE 1=1 and deleted='0'
+		SELECT s.*,(SELECT R.no FROM BMS_PD_TMP_HOURS R WHERE R.reason_content = s.reason_content LIMIT 1) AS NO
+		 FROM BMS_PD_TMP_ORDER s WHERE 1=1 and deleted='0'
 		<if test="tmp_order_no !=null and tmp_order_no !=''">
 			and s.tmp_order_no=#{tmp_order_no}
 		</if>
@@ -2931,7 +2934,8 @@
 	<select id="queryTmpOrderList" parameterType="Map" resultType="Map">
 		SELECT (select sum(ifnull(output,0)) from BMS_PD_TMP_ORDER_SCHEDULE s
 		where o.id=s.temp_order_id group by s.temp_order_id) finished_qty,
-		o.*,h.hour_total,h1.hour_total workhour_total
+		o.*,h.hour_total,h1.hour_total workhour_total,
+		(SELECT R.no FROM BMS_PD_TMP_HOURS R WHERE R.reason_content = o.reason_content LIMIT 1) AS NO
 		FROM
 		BMS_PD_TMP_ORDER o
 		left join (

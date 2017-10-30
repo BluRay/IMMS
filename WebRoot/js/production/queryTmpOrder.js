@@ -101,6 +101,7 @@ function ajaxQuery(){
 		            {"title":"派工流水号","class":"center","data":"tmp_order_no","defaultContent": "","render":function(data,type,row){
 		            	return "<a style=\"cursor:pointer\" onclick=show(\'"+data+"\',\'"+row.id+"\')>"+data+"</a>";
 		            }},
+		            {"title":"额外工时编号","class":"center","data": "NO","defaultContent": ""},
 		            {"title":"作业原因/内容","class":"center","width":"500px","data": "reason_content","defaultContent": ""},
 		            {"title":"工单号","class":"center","data": "sap_order","defaultContent": ""},
 		            {"title":"总数量","class":"center","data":"total_qty","defaultContent": ""},		 
