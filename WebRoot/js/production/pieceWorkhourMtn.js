@@ -782,6 +782,7 @@ function zTreeOnClick(event, treeId, treeNode) {
 		team=treeNode.displayName;
 		org_id=treeNode.id;
 	}
+	$("#factory").val(factory)
 	
 	if(treeNode.org_type != '4'){
 		alert("请选择小班组！");
@@ -806,7 +807,7 @@ function zTreeOnClick(event, treeId, treeNode) {
 			$("<td />").html("订单：").appendTo(tr);
 			$("<td />").html("<input type=\"text\" id=\"order_no\" class=\"input-medium carType\" style=\"height: 30px; width: 100px;\"></input>").appendTo(tr);
 			$("<td />").html("自编号：").appendTo(tr);
-			$("<td />").html("<input type=\"text\" id=\"customer_number\" class=\"input-medium carType\" style=\"height: 30px; width: 150px;\"></input>").appendTo(tr);
+			$("<td />").html("<input type=\"text\" id=\"customer_number\" placeholder=\"车型-订单_起始号-结束号\" class=\"input-medium carType\" style=\"height: 30px; width: 150px;\"></input>").appendTo(tr);
 		}else{
 			$("<td />").html("车号：").appendTo(tr);
 			$("<td />").html("<input type=\"text\" id=\"bus_number\" class=\"input-medium carType\" style=\"height: 30px; width: 150px;\"></input>").appendTo(tr);
@@ -847,7 +848,7 @@ function zTreeOnClick(event, treeId, treeNode) {
 
 		order_id=obj.id;
 		
-	}, null,null,null);
+	}, null,"#factory",null);
 	
 	getBusNumberSelect("#bus_number", "", function(obj){
 		ajaxQueryTeamStaffDetail();

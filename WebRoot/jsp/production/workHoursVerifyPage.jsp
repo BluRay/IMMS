@@ -97,8 +97,8 @@
 						<td id="edit_labors" width="30px">10</td>
 						<td width="60px" style="text-align: right">总工时：</td>
 						<td width="80px"  id="edit_totalHour">20</td>
-						<td width="80px" style="text-align:right">工时单价：</td>								
-						<td><input type="text" id="edit_singlePrice" value="0" class="input-medium" style="margin-bottom: 0px;width:80px;height:30px"></td>
+						<td width="80px" style="text-align:right">工时单价：</td>
+						<td><input type="text" id="edit_singlePrice" value="25" class="input-medium" style="margin-bottom: 0px;width:80px;height:30px"></td>
 					</tr>
 				</table>
 				

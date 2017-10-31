@@ -156,7 +156,7 @@ function ajaxQuery(){
 		            },
 		            {"title":"操作",width:'60',"class":"center","data":null,"defaultContent": "",
 		            	"render": function ( data, type, row ) {
-		            		return "<i class=\"glyphicon glyphicon-check bigger-130 showbus\" title=\"审核\" onclick='verifyWorkTime(\"" + row['id'] + "\",\"" + row['tmp_order_no'] + "\",\"" + row['labors'] + "\",\""+ row['reason_content'] +"\",\""+ row['single_hour'] +"\",\""+ row['total_qty'] +"\",\""+ row['finished_qty'] +"\",\""+ row['workhour_total'] +"\",\""+ row['factory'] +"\",\""+ row['workshop'] +"\",\""+ row['tech_list'] +"\")' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;";
+		            		return "<i class=\"glyphicon glyphicon-check bigger-130 showbus\" title=\"审核\" onclick='verifyWorkTime(\"" + row['id'] + "\",\"" + row['tmp_order_no'] + "\",\"" + row['labors'] + "\",\""+ row['reason_content'].replace(/\r/ig, "").replace(/\n/ig, "") +"\",\""+ row['single_hour'] +"\",\""+ row['total_qty'] +"\",\""+ row['finished_qty'] +"\",\""+ row['workhour_total'] +"\",\""+ row['factory'] +"\",\""+ row['workshop'] +"\",\""+ row['tech_list'] +"\")' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;";
 		            	},
 		            }
 		          ],
@@ -175,7 +175,7 @@ function verifyWorkTime(id,tmp_order_no,labors,reason_content,single_hour,total_
 	$("#edit_reason").html(reason_content);
 	
 	var conditions = "{temp_order_id:'" + id +"',workMonth:'"+workMonth+ "'}";
-	console.log("-->conditions = " + conditions);
+	//console.log("-->conditions = " + conditions);
 	workhour_list = ajaxGetStaffWorkHours(conditions);
 	generateWorkhourTb(workhour_list,true);
 

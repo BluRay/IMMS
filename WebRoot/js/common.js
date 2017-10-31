@@ -112,10 +112,11 @@ function getOrderNoSelect(elementId, submitId, fn_backcall, bustype,factoryEleme
 		source : function(input, process) {
 			var factory="";
 			if(factoryElement){
-				if($(factoryElement).find("option:selected").text()=="全部"||$(factoryElement).find("option:selected").text()=="请选择"){
+				if($(factoryElement).find("option:selected").text()=="全部"
+					||$(factoryElement).find("option:selected").text()=="请选择"){
 					factory="";
 				}else
-					factory=$(factoryElement).find("option:selected").text();			
+					factory=$(factoryElement).find("option:selected").text()||$(factoryElement).val();			
 			}
 			//alert(factory);
 			var data={

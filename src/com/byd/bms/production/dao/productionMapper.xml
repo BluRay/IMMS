@@ -864,7 +864,7 @@
 		<foreach item="detail" index="index" collection="staff_hour_list" open="" separator=";" close="">
 			update BMS_HR_STAFF_PIECE_HOURS
 			set status=#{detail.status},work_hour=#{detail.work_hour},distribution=#{detail.distribution},
-			bonus=#{detail.bonus},editor_id=#{detail.editor_id},edit_date=#{detail.edit_date}
+			bonus=#{detail.bonus},editor_id=#{detail.editor_id},edit_date=#{detail.edit_date},skill_parameter=#{detail.skill_parameter}
 			where id=#{detail.id}
 		</foreach>
 	</update>
@@ -2451,7 +2451,7 @@
 			and o.tmp_order_no like concat('%',#{orderNo},'%')
 		</if>
 		group by o.id,h.factory,h.workshop )h1 on h1.temp_order_id=o.id and
-		h1.factory=o.factory and h1.workshop=o.workshop where 1=1
+		h1.factory=o.factory and h1.workshop=o.workshop where deleted = 0 
 		 <if test="actionType =='create'">
 			and o.applier=#{applier}
 		</if>
