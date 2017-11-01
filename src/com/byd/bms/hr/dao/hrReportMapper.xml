@@ -578,7 +578,7 @@
 	<select id="getEcnReportData1" parameterType="Map" resultType="Map">
 		select distinct tech_order_no,CONCAT(task_id,'.',task_content) as task,total_hours AS totalhours,
 		total_hours*hour_price as totalprice,work_date,staff_number,staff_name,job,workshop_org,workgroup_org,team_org,
-		round(work_hour,4) as work_hour,round(hour_price*work_hour,4) AS salary,plant_org,round(real_work_hour,4) as real_work_hour
+		round(work_hour,4) as work_hour,round(hour_price*real_work_hour,4) AS salary,plant_org,round(real_work_hour,4) as real_work_hour
 		from BMS_HR_TECH_SALARY
 		where 1=1
 		<if test="factory !=null and factory !=''">

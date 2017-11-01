@@ -95,7 +95,7 @@ function ajaxQuery() {
                 type: "post",
                 url: "getFollowingUpList",
                 cache: false,  //禁用缓存
-                data: param,  //传入组装的参数
+                data: param,   //传入组装的参数
                 dataType: "json",
                 success: function (result) {
                     //console.log(result);
@@ -115,8 +115,16 @@ function ajaxQuery() {
             });
 		},
 		columns: [
-		            {"title":"技改任务","class":"center","data":"task_content","defaultContent": ""},
-		            {"title":"变更单类型","class":"center","data":"tech_order_type_name","defaultContent": ""},
+		            {"title":"技改任务","class":"center","data":"task_content","defaultContent": "",
+		            	"render": function ( data, type, row ) {
+		            		if(data.length > 10){
+		            			return "<p title="+data.replace(/\r/ig, "").replace(/\n/ig, "")+">" + data.substring(0,10) + "...</p>";
+		            		}else{
+		            			return "<p>" + data + "</p>";
+		            		}
+		            	}
+		            },
+		            {"title":"类型","class":"center","data":"tech_order_type_name","defaultContent": ""},
 		            {"title":"技改单号","class":"center","data":"tech_order_no","defaultContent": ""},
 		            {"title":"技改单日期","class":"center","data":"tech_date","defaultContent": ""},
 		            {"title":"切换方式","class":"center","data":"switch_mode","defaultContent": ""},
@@ -125,6 +133,7 @@ function ajaxQuery() {
 		            {"title":"工厂","class":"center","data":"factory","defaultContent": ""},
 		            {"title":"车间","class":"center","data":"ws","defaultContent": ""},
 		            {"title":"技改台数","class":"center","data":"total","defaultContent": ""},
+		            {"title":"单价","class":"center","data":"tech_single_price","defaultContent": ""},
 		            {"title":"完成台数","class":"center","data":"complete","defaultContent": ""},
 		            {"title":"技改跟进","class":"center","data":"single_time_total","defaultContent": "",
 		            	"render": function ( data, type, row ) {
