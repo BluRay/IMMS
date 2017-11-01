@@ -88,7 +88,7 @@ BEGIN
 	create TEMPORARY TABLE WORK_HOUR_SUM ENGINE = MEMORY as
 	select round(sum(ifnull(h.work_hour*h.skill_parameter,0)) /( select sum(h1.work_hour*h1.skill_parameter) from BMS_HR_STAFF_PIECE_HOURS h1
 	where h1.factory=q_factory and h1.workshop=q_workshop and h1.workgroup=q_workgroup and h1.team=q_team and substring(h1.work_date,1,7)=q_month and h1.status='1'		
-	),8) as work_hour_real,h.staff_number,sum(h.work_hour) work_hour,h.factory,h.workshop,h.workgroup,h.team,h.editor_id,h.edit_date,h.standard_price
+	),8) as work_hour_real,h.staff_number,sum(h.work_hour) work_hour,h.factory,h.workshop,h.workgroup,h.team,h.editor_id,h.edit_date,h.standard_price,h.skill_parameter
 	from staff_hours_count h
 	where h.salary_model='辅助人力' and substring(h.work_date,1,7)=q_month
 	group by h.staff_number
@@ -103,7 +103,7 @@ BEGIN
 
 	#向计件工资计算表中插入工资记录	公式  班组计件工资总额* SUM（员工日操作工时）*岗位系数）/SUM （SUM（员工日操作工时）*岗位系数)
 	insert into BMS_HR_PIECE_SALARY 
-	select null,whs.staff_number,s.name staff_name,s.job,s.plant_org,s.workshop_org,s.workgroup_org,s.team_org,s.skill_parameter,whs.work_hour,whs.work_hour_real,
+	select null,whs.staff_number,s.name staff_name,s.job,s.plant_org,s.workshop_org,s.workgroup_org,s.team_org,whs.skill_parameter,whs.work_hour,whs.work_hour_real,
 	whs.standard_price,'',q_month ,round(tps.total_price*whs.work_hour_real,2),'',whs.factory,whs.workshop,whs.workgroup,whs.team,'','','辅助人力','1',whs.editor_id,whs.edit_date,0,'',0
 	from WORK_HOUR_SUM whs
 	left join BMS_HR_STAFF s  on whs.staff_number=s.staff_number

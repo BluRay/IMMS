@@ -134,6 +134,17 @@ $(document).ready(function() {
 		}
 	})
 	
+	$(document).on("input",".skill_parameter",function(){
+		var swh_index=Number($(this).attr("swh_index"));
+		if(isNaN(Number($(this).val()))){
+			alert("技能系数只能为数字！");
+			$(this).val("");
+			return false;
+		}
+		//alert($(this).val())
+		staff_hour_list[swh_index].skill_parameter=$(this).val();
+	})
+	
 	//保存工时信息
 	$(document).on("click","#btnSave",function(){
 		var bus_number=$("#bus_number").val();
@@ -209,6 +220,16 @@ $(document).ready(function() {
 					return false;
 				}
 			})
+			if(salary_model=='辅助人力'){
+				$.each(trs,function(i,tr){
+					var work_hour=$(tr).find(".skill_parameter").val();
+					if(work_hour.trim().length==0){
+						alert("技能系数不能为空！");
+						save_flag=false;
+						return false;
+					}
+				})
+			}
 		}
 		
 		//所有条件检验合格后保存计件工时信息
@@ -360,7 +381,13 @@ function showStaffList(staff_hour_list){
 		            {"title":"工号","class":"center","data":"staff_number","defaultContent": ""},
 		            {"title":"姓名","class":"center","data":"staff_name","defaultContent": ""},
 		            {"title":"岗位","class":"center","data": "job","defaultContent": ""},	  
-		            {"title":"技能系数","width":"80","class":"center","data":"skill_parameter","defaultContent": ""},		
+		            {"title":"技能系数","width":"80","class":"center","data":"skill_parameter","defaultContent": "","render":function(data,type,row){
+		            	var html="";
+		            	if(salary_model=='辅助人力'){
+		            		html="<input type='text' class='input-medium skill_parameter' style='width:60px;height:28px;text-align:center' value='"+data+"'  />";
+		            	}
+		            	return html;
+		            }},		
 		            {"title":"参与度/工时","width":"100","class":"center","data": "work_hour","defaultContent": "","render":function(data,type,row){
 		            	return "<input type='text' class='input-medium work_hour' style='width:60px;height:28px;text-align:center'  value='"+data+"'/>";
 		            }},	

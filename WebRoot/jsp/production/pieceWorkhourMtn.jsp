@@ -71,6 +71,7 @@
 				</div>
 
 			</div>
+			<input type="hidden" id="factory" /> 
 			<!-- /.main-container -->
 		</div>
 

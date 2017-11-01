@@ -89,6 +89,23 @@ $(document).ready(function() {
 			 //alert(copy_text);
 		 },1);
 	});
+	$(document).on("paste","#copy_paste_skill_parameter",function(e){
+		 setTimeout(function(){
+			 var copy_text=$(e.target).val();
+			 $(e.target).val("");
+			 var dist_list=copy_text.split(" ");
+			 var skill_parameter_list=$(".skill_parameter");
+	
+			 $(skill_parameter_list).eq(0).css("display","");
+			 $("#copy_paste_skill_parameter").css("display","none");
+			 $.each(dist_list,function(i,value){
+				 $(skill_parameter_list).eq(i).val(value);								 
+			 });
+			 $(skill_parameter_list).css("background-color","white");
+			 //alert(dist_list.length);
+			 //alert(copy_text);
+		 },1);
+	});
 	
 	// 工时删除
 	$(document).on("click",".fa-times", function(e) {
@@ -150,7 +167,13 @@ $(document).ready(function() {
 			$("<td class='center'/>").html("<input type='text' class='staff_number' style='width:100%;height:28px;font-size:12px;text-align:center;' />").appendTo(tr);
 			$("<td class='center'/>").html("").appendTo(tr);
 			$("<td class='center'/>").html("").appendTo(tr);
-			$("<td class='center'/>").html("").appendTo(tr);
+			if(salary_model=='辅助人力'){
+				$("<td class='center'/>").html("<input class='input-medium skill_parameter' style='width:60px;height:28px;text-align:center' type='text'>"+
+						"<input id='copy_paste_skill_parameter' class='input-small' style='width:60px;height:28px;text-align:center;display:none' type='text'>").appendTo(tr);
+			}else{
+				$("<td class='center'/>").html("").appendTo(tr);
+			}
+			
 			$("<td class='center'/>").html("<input class='input-medium work_hour' style='width:60px;height:28px;text-align:center' type='text'>"+
 					"<input id='copy_paste_work_hour' class='input-small' style='width:60px;height:28px;text-align:center;display:none' type='text'>").appendTo(tr);
 			$("<td class='center'/>").html("").appendTo(tr);
@@ -216,7 +239,12 @@ $(document).ready(function() {
 			if(salary_model=='辅助人力'||salary_model=='底薪模式'){
 				 $(tds[1]).html(staff.name);
 				 $(tds[2]).html(staff.job);
-				 $(tds[3]).html(staff.skill_parameter);
+				 if(salary_model=='辅助人力'){
+					 $(tds[3]).find(".skill_parameter").eq(0).val(staff.skill_parameter); 
+				 }else{
+					 $(tds[3]).html(staff.skill_parameter);
+				 }
+				 
 				 $(tds[5]).html(staff.team_org);
 				 $(tds[6]).html(staff.workgroup_org);
 				 $(tds[7]).html(staff.workshop_org);
@@ -255,6 +283,13 @@ $(document).ready(function() {
 	$(document).on("input","#bonus",function(){
 		if(isNaN(Number($(this).val()))){
 			alert("补贴车只能为数字！");
+			$(this).val("");
+			return false;
+		}
+	})
+	$(document).on("input",".skill_parameter",function(){
+		if(isNaN(Number($(this).val()))){
+			alert("技能系数只能为数字！");
 			$(this).val("");
 			return false;
 		}
@@ -566,6 +601,10 @@ $(document).ready(function() {
 				}
 				var staff_name=$(tds).eq(2).html();
 				var job=$(tds).eq(3).html();
+				var skill_parameter=$(tds).eq(4).html();
+				if(salary_model=='辅助人力'){
+					skill_parameter=$(tds).eq(4).find(".skill_parameter").val();
+				}
 				if (staff_number.trim().length > 0) {
 					var staff={};
 					staff.staff_number=staff_number;
@@ -577,8 +616,8 @@ $(document).ready(function() {
 					staff.team=team;
 					staff.org_id=org_id;
 					staff.salary_model=salary_model;
-					staff.work_date=work_date;
-					staff.skill_parameter=$(tds).eq(4).html();
+					staff.work_date=work_date;	
+					staff.skill_parameter=skill_parameter;
 					staff.work_hour=work_hour;
 					staff.status='1';
 			
@@ -970,7 +1009,14 @@ function showStaffList(staff_list){
 		            {"title":"工号","class":"center","data":"staff_number","defaultContent": ""},
 		            {"title":"姓名","class":"center","data":"name","defaultContent": ""},
 		            {"title":"岗位","class":"center","data": "job","defaultContent": ""},	  
-		            {"title":"技能系数","width":"80","class":"center","data":"skill_parameter","defaultContent": ""},		
+		            {"title":"技能系数","width":"80","class":"center","data":"skill_parameter","defaultContent": "","render":function(data,type,row){
+		            	var html="";
+		            	if(salary_model=='辅助人力'){
+		            		html="<input type='text' class='input-medium skill_parameter' style='width:60px;height:28px;text-align:center' value='"+data+"'  />"+
+			            	"<input type='text' id='copy_paste_skill_parameter' class='input-small' style='width:60px;height:28px;text-align:center;display:none'>";
+		            	}
+		            	return html;
+		            }},		
 		            {"title":"参与度/工时"+"&nbsp;<i title='粘贴整列' name='edit' rel='tooltip'  class='fa fa-clipboard dstcopy' cp_flag='work_hour'  style='cursor: pointer;color:blue'></i>","width":"100","class":"center","data": "","defaultContent": "","render":function(data,type,row){
 		            	return "<input type='text' class='input-medium work_hour' style='width:60px;height:28px;text-align:center'  />"+
 		            	"<input type='text' id='copy_paste_work_hour' class='input-small' style='width:60px;height:28px;text-align:center;display:none'>";
