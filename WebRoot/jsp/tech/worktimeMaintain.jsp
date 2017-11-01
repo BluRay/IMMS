@@ -123,12 +123,12 @@
 						<tr>
 						<td style="width: 30px;"><i id="addWorkhour" class="fa fa-plus addWorkhour" style="cursor: pointer;color: blue;"></i></td>
 						<td >工号</td>
-						<td >姓名</td>
+						<td >&nbsp;姓名&nbsp;</td>
 						<td >岗位</td>
 						<td >技改工时</td>
 						<td >小班组</td>
 						<td >班组</td>
-						<td >车间</td>
+						<td >&nbsp;车间&nbsp;</td>
 						<td >工厂</td>
 						</tr>
 					</thead>
@@ -152,16 +152,18 @@
 				<table class="form-search">
 					<tr>
 					<td width="60px" style="text-align:right">工号：</td>
-					<td width="160px">
-						<input type="text" class="input-medium" id="edit_cardNumber"/>
+					<td width="100px">
+						<input type="text" style="width:100px" class="input-medium" id="edit_cardNumber"/>
 						<input type="text" style="display:none" class="input-medium" id="edit_ecnTaskId"/>
 						<input type="text" style="display:none" class="input-medium" id="edit_factory"/>
 						<input type="text" style="display:none" class="input-medium" id="edit_workshop"/>
 					</td>
 					<td width="80px" style="text-align:right">操作日期：</td>
-					<td width="160px">
-						<input type="text" class="input-medium" id="edit_workDate" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:new Date()})"/>
+					<td width="100px">
+						<input type="text" style="width:100px" class="input-medium" id="edit_workDate" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:new Date()})"/>
 					</td>
+					<td width="60px" style="text-align:right">车间：</td>
+					<td width="80px" style="text-align:right"><select id="edit_workshop_search"></select></td>
 					<td><input type="button" class="btn btn-primary" id="btnSwhQuery" value="查询" style="margin-left: 2px;line-height:0; height:32px"></input></td>
 					<td></td>
 					</tr>								
@@ -173,14 +175,14 @@
 						<tr>
 						<td ><input type="checkbox" id="checkall"></td>
 						<td >工号</td>
-						<td >姓名</td>
+						<td >&nbsp;姓名&nbsp;</td>
 						<td >岗位</td>
 						<td >技改工时</td>
 						<td >小班组</td>
 						<td >班组</td>
-						<td >车间</td>
+						<td >&nbsp;车间&nbsp;</td>
 						<td >工厂</td>
-						<td>状态</td>
+						<td>&nbsp;状态&nbsp;</td>
 						<td >操作日期</td>
 						</tr>
 						</thead>

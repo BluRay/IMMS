@@ -82,7 +82,7 @@ $(document).ready(function(){
 		var workDate=$("#edit_workDate").val();
 		var ecnTaskId=$("#edit_ecnTaskId").val();
 		var factory=$("#edit_factory").val();
-		var workshop=$("#edit_workshop").val();
+		var workshop=$("#edit_workshop_search").val();
 		var conditions="{staffNum:'"+staffNum+"',workDate:'"+workDate+"',ecnTaskId:'"+ecnTaskId+"',factory:'"+factory+"',workshop:'"+workshop+"'}";
 		console.log("-->conditions = " + conditions);
 		var swhlist=ajaxGetStaffWorkHours(conditions);
@@ -337,12 +337,13 @@ function editWorkTime(order_no,tech_order_no,task_content,task_detail_id,factory
 	var swhlist=ajaxGetStaffWorkHours(conditions);
 	generateWorkhourTb(swhlist,true);
 	
+	queryWorkshopList();
 	
 	$("#dialog-edit").removeClass('hide').dialog({
 		resizable: false,
 		title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-flag green"></i> 技改工时修改</h4></div>',
 		title_html: true,
-		width:'750px',
+		width:'800px',
 		modal: true,
 		buttons: [{
 					text: "取消",
@@ -433,7 +434,7 @@ function addWorkTime(order_no,tech_order_no,task_content,task_detail_id,factory,
 		resizable: false,
 		title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-flag green"></i> 技改工时维护</h4></div>',
 		title_html: true,
-		width:'750px',
+		width:'800px',
 		modal: true,
 		buttons: [{
 					text: "取消",
@@ -672,5 +673,23 @@ function ajaxGetStaffWorkHours(conditions) {
 		}
 	});
 	return swhlist;
+}
+
+function queryWorkshopList(){
+	$("#edit_workshop_search").empty();
+	$.ajax({
+		url:"/BMS/common/getWorkshopSelect",
+		dataType : "json",
+		data : {},
+		async : false,
+		error : function(response) {alert(response.message)},
+		success : function(response) {
+			var strs ="";
+			$.each(response.data, function(index, value) {
+				strs += "<option value=" + value.name + ">" + value.name + "</option>";
+			});
+			$("#edit_workshop_search").append(strs);
+		}
+	});
 }
 

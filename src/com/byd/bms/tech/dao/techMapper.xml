@@ -858,7 +858,7 @@
 			and h.factory=#{factory}
 		</if>
 		<if test="workshop !=null and workshop !=''">
-			and h.workshop=#{workshop}
+			and s.workshop_org=#{workshop}
 		</if>
 		order by h.status
 		<if test="offset!=null">
