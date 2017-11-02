@@ -558,15 +558,16 @@ public class TechServiceImpl implements ITechService {
 			JSONObject follow_jso=new JSONObject();
 			JSONObject readyHour_jso=new JSONObject();
 			
-			if(StringUtils.isNotEmpty(time_list)){
-				time_list="{\""+time_list+"\"}";
-				Matcher m=p.matcher(time_list);
-				time_list=m.replaceAll("\":\"");
-				Matcher m1=p1.matcher(time_list);
-				time_list=m1.replaceAll("\",\"");
-				time_jso=JSONObject.fromObject(time_list);
+			if(!time_list.equals("undefined")){
+				if(StringUtils.isNotEmpty(time_list)){
+					time_list="{\""+time_list+"\"}";
+					Matcher m=p.matcher(time_list);
+					time_list=m.replaceAll("\":\"");
+					Matcher m1=p1.matcher(time_list);
+					time_list=m1.replaceAll("\",\"");
+					time_jso=JSONObject.fromObject(time_list);
+				}
 			}
-			
 			
 			if(StringUtils.isNotEmpty(follow_list)){
 				follow_list="{\""+follow_list+"\"}";

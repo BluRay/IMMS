@@ -33,8 +33,17 @@ function ajaxQuery(){
 		bAutoWidth:false,
 		fixedColumns:   {
 			leftColumns:1,
-            rightColumns:0
+            rightColumns:2
         },
+        dom: 'Bfrtip',
+		lengthMenu: [
+		             [ 20, 50, 100, -1 ],
+		             [ '显示20行', '显示50行', '显示100行', '全部' ]
+		         ],
+	    buttons: [
+	        {extend:'excelHtml5',title:'临时派工单',className:'black',text:'<i class=\"fa fa-file-excel-o bigger-130\" tooltip=\"导出excel\"></i>'},
+	        {extend:'pageLength',text:'显示行'}   
+	    ],
 		destroy: true,
 		sScrollY: $(window).height()-250,
 		scrollX: true,
@@ -98,27 +107,38 @@ function ajaxQuery(){
 		
 		},
 		columns: [
-		            {"title":"派工流水号","class":"center","data":"tmp_order_no","defaultContent": "","render":function(data,type,row){
-		            	return "<a style=\"cursor:pointer\" onclick=show(\'"+data+"\',\'"+row.id+"\')>"+data+"</a>";
-		            }},
-		            {"title":"额外工时编号","class":"center","data": "NO","defaultContent": ""},
-		            {"title":"作业原因/内容","class":"center","width":"500px","data": "reason_content","defaultContent": ""},
-		            {"title":"工单号","class":"center","data": "sap_order","defaultContent": ""},
-		            {"title":"总数量","class":"center","data":"total_qty","defaultContent": ""},		 
-		            {"title":"已完成","class":"center","data": "finished_qty","defaultContent": ""},		  
-		            {"title":"工时","class":"center","data": "single_hour","defaultContent": ""},		  
-		            {"title":"所需人力","class":"center","data": "labors","defaultContent": ""},		
-		            {"title":"总工时","class":"center","data": "total_hours","defaultContent": ""},	
-		            {"title":"制作工厂","class":"center","data":"factory","defaultContent": ""},
-		            {"title":"制作车间","class":"center","data":"workshop","defaultContent": ""},
-		            {"title":"责任单位","class":"center","data":"duty_unit","defaultContent": ""},
-		            {"title":"状态","class":"center","data":"workshop","defaultContent": "","render":function(data,type,row){
-		            	var status_arr={"0":"已评估","1":"已审核","2":"已驳回"};
-		        		var stauts=row.status==undefined?"":status_arr[row.status];
-		        		return stauts;
-		            }},
-		          ]
+            {"title":"派工流水号","class":"center","data":"tmp_order_no","defaultContent": "","render":function(data,type,row){
+            	return "<a style=\"cursor:pointer\" onclick=show(\'"+data+"\',\'"+row.id+"\')>"+data+"</a>";
+            }},
+            {"title":"接收车间","class":"center","data":"workshop","defaultContent": ""},
+            {"title":"发起人","class":"center","data":"order_launcher","defaultContent": ""},
+            {"title":"申请日期","class":"center","data":"apply_date","defaultContent": ""},
+            {"title":"工单号","class":"center","data": "sap_order","defaultContent": ""},
+            {"title":"额外工时编号","class":"center","data": "NO","defaultContent": ""},
+            {"title":"作业原因/内容","class":"center","width":"500px","data": "reason_content","defaultContent": ""},
+            {"title":"总数量","class":"center","data":"total_qty","defaultContent": ""},		 
+            {"title":"已完成","class":"center","data": "finished_qty","defaultContent": ""},		  
+            {"title":"工时","class":"center","data": "single_hour","defaultContent": ""},		  
+            {"title":"所需人力","class":"center","data": "labors","defaultContent": ""},		
+            {"title":"总工时","class":"center","data": "total_hours","defaultContent": ""},	
+            {"title":"制作工厂","class":"center","data":"factory","defaultContent": ""},
+            {"title":"制作车间","class":"center","data":"workshop","defaultContent": ""},
+            {"title":"责任单位","class":"center","data":"duty_unit","defaultContent": ""},
+            {"title":"状态","class":"center","data":"workshop","defaultContent": "","render":function(data,type,row){
+            	var status_arr={"0":"已评估","1":"已审核","2":"已驳回"};
+        		var stauts=row.status==undefined?"":status_arr[row.status];
+        		return stauts;
+            }},
+            {"title":"成本是否可转移","class":"center","data":"is_cost_transfer","defaultContent": "","render":function(data,type,row){
+            	var arr={"0":"否","1":"是","":""};
+        		var str=(data==undefined?"":arr[data]);
+        		return str;
+            }},
+        ]
 	});
+	$(".dt-buttons").css("margin-top","-50px").css("margin-right","10px").find("a").css("border","0px");
+	$("#tableResult_info").addClass('col-xs-5');
+	$("#tableResult_paginate").addClass('col-xs-7');
 }
 function getExtraWorkHourManager(flag){
 	$("#order_type").removeAttr("disabled");

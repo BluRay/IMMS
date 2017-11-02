@@ -266,24 +266,24 @@ $(document).ready(function() {
 	
 	$(document).on("input",".work_hour",function(){
 		if(isNaN(Number($(this).val()))){
-			alert("参与度/工时只能为数字！");
 			$(this).val("");
+			alert("参与度/工时只能为数字！");
 			return false;
 		}
 	})
 	
 	$(document).on("input",".distribution",function(){
 		if(isNaN(Number($(this).val()))){
-			alert("分配金额只能为数字！");
 			$(this).val("");
+			alert("分配金额只能为数字！");
 			return false;
 		}
 	})
 	
 	$(document).on("input","#bonus",function(){
-		if(isNaN(Number($(this).val()))){
-			alert("补贴车只能为数字！");
+		if(isNaN(Number($(this).val()))){			
 			$(this).val("");
+			alert("补贴车只能为数字！");
 			return false;
 		}
 	})
@@ -307,7 +307,7 @@ $(document).ready(function() {
 		var total_distribution=0;
 		var save_flag=true;
 		var bus_count=1;
-		var bonus=$("#bonus").val();
+		var bonus=$("#bonus").val()||0;
 		if(trs.length==0){
 			save_flag=false;
 			return false;
@@ -619,6 +619,7 @@ $(document).ready(function() {
 					staff.work_date=work_date;	
 					staff.skill_parameter=skill_parameter;
 					staff.work_hour=work_hour;
+					staff.bonus=bonus;
 					staff.status='1';
 			
 					if(!isContain(staff,staffHourList)){
@@ -861,7 +862,18 @@ function zTreeOnClick(event, treeId, treeNode) {
 		$("<td />").html("<input type=\"button\" class=\"btn btn-sm btn-info\" id=\"btnSave\" value=\"保存\" style=\"margin-left: 10px;\"></input>").appendTo(tr);
 		$(table).append(tr);
 		$("#form").html(table).css("display","");
-	}else{
+	}/*else if(salary_model=='辅助人力'){
+		var tr=$("<tr />");
+		$("<td />").html("操作日期：").appendTo(tr);
+		$("<td />").html("<input id=\"work_date\" class=\"input-medium\" style=\"height: 30px;width: 90px\" onclick=\"WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:new Date(),onpicked:function(){changeWorkDate()}})\" type=\"text\">").appendTo(tr);
+		$("<td />").html("补贴车：").appendTo(tr);
+		$("<td />").html("<input style=\"height: 30px; width: 50px;\" type=\"text\" class=\"input-medium revise\" id=\"bonus\" />").appendTo(tr);	
+		$("<td style='padding-left:10px'/>").html("计资模式：").appendTo(tr);
+		$("<td />").html(salary_model).appendTo(tr);
+		$("<td />").html("<input type=\"button\" class=\"btn btn-sm btn-info\" id=\"btnSave\" value=\"保存\" style=\"margin-left: 10px;\"></input>").appendTo(tr);
+		$(table).append(tr);
+		$("#form").html(table).css("display","");
+	}*/else{
 		var tr=$("<tr />");
 		$("<td />").html("操作日期：").appendTo(tr);
 		$("<td />").html("<input id=\"work_date\" class=\"input-medium\" style=\"width: 90px\" onclick=\"WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:new Date(),onpicked:function(){changeWorkDate()}})\" type=\"text\">").appendTo(tr);

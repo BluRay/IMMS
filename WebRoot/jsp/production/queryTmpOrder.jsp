@@ -13,6 +13,7 @@
 <link rel="stylesheet" href="../assets/css/fixedColumns.dataTables.min.css" />
 <link rel="stylesheet" href="../assets/css/jquery-ui.min.css" /> 
 <link rel="stylesheet" href="../assets/css/jquery.gritter.css" />
+<link rel="stylesheet" href="../assets/css/buttons.dataTables.css" /> 
 </head>
 <body class="no-skin" style="font-family: 'Microsoft YaHei';">
 	<!-- 头 -->
@@ -48,17 +49,17 @@
 					<form id="form" class="well form-search">
 						<table>
 							<tr>
-								<td>派工流水号：</td>
+								<td>派工流水号:</td>
 								<td>
 									<input style="height: 30px;width:100px;" type="text" class="input-medium revise" placeholder="派工流水号..." id="search_tmp_order_no" />
 								</td>
-								<td>申请日期：</td>
+								<td>申请日期:</td>
 								<td>
 									<input id="search_date_start" class="input-medium" style="width:90px" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text">	
 									-
 									<input id="search_date_end" class="input-medium" style="width:90px" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text">						
 								</td>	
-								<td>状态：</td>
+								<td>状态:</td>
 								<td>
 									<select name="" id="search_status" class="input-medium" style="height: 30px;width:80px;" >
 									    <option value=''>全部</option>
@@ -67,17 +68,17 @@
 									    <option value='2'>已驳回</option>
 									</select>
 								</td>
-								<td style="text-align:right">工厂：</td>
+								<td style="text-align:right">工厂:</td>
 								<td>
-									<select name="" id="search_factory" class="input-medium" style="width:90px;"></select>
+									<select name="" id="search_factory" class="input-medium" style="width:85px;"></select>
 								</td>
-								<td style="text-align:right">车间：</td>
+								<td style="text-align:right">车间:</td>
 								<td>
-									<select name="" id="search_workshop" class="input-medium" style="width:90px;"></select>
+									<select name="" id="search_workshop" class="input-medium" style="width:75px;"></select>
 								</td>	
-								<td>作业原因：</td>
+								<td>作业原因:</td>
 								<td>
-									<input style="height: 30px;width:120px;" type="text" class="input-medium revise" placeholder="作业原因..." id="search_reason_content" />
+									<input style="height: 30px;width:110px;" type="text" class="input-medium revise" placeholder="作业原因..." id="search_reason_content" />
 								</td>					
 								<td><input type="button" class="btn btn-sm btn-primary" id="btnQuery" value="查询" style="margin-left: 2px;"></input>
 								</td>
@@ -211,18 +212,22 @@
 			</div>
 			<!-- /.main-container -->
 		</div>
-	
-	<script src="../js/datePicker/WdatePicker.js"></script>
-	<script src="../assets/js/jquery.dataTables.min.js"></script>
-	<script src="../assets/js/jquery-ui.min.js"></script>
-	<script src="../assets/js/jquery.gritter.min.js"></script>
-	<script src="../assets/js/jquery.dataTables.bootstrap.js"></script>
-	<script src="../assets/js/dataTables.fixedColumns.min.js"></script>
-	<script src="../assets/js/dataTables.rowGroup.js"></script>
-	<script src="../assets/js/bootstrap3-typeahead.js"></script>
-	<script src="../js/jquery.form.js"></script>	
-	<script src="../js/common.js"></script>
-	<script src="../js/production/queryTmpOrder.js"></script>
-</body>
-
+		<script src="../js/datePicker/WdatePicker.js"></script>
+		<script src="../assets/js/jquery-ui.min.js"></script>
+		<script src="../assets/js/jquery.dataTables.min.js"></script>
+		<script src="../assets/js/jquery.dataTables.bootstrap.js"></script>
+		<script src="../assets/js/dataTables.fixedColumns.min.js"></script>
+		<script src="../assets/js/dataTables.rowGroup.js"></script>
+		<script src="../assets/js/dataTables.rowGroup.min.js"></script>
+		<script src="../assets/js/ace/elements.onpage-help.js"></script>
+		<script src="../assets/js/ace/ace.onpage-help.js"></script>
+		<script src="../assets/js/bootstrap3-typeahead.js"></script>
+		<script src="../js/jquery.form.js"></script>
+		<script src="../assets/js/jszip.min.js"></script>
+		<script src="../assets/js/dataTables.buttons.js"></script>
+		<script src="../assets/js/buttons.colVis.js"></script>
+		<script src="../assets/js/buttons.html5.js"></script>
+		<script src="../js/common.js"></script>
+		<script src="../js/production/queryTmpOrder.js"></script>
+	</body>
 </html>

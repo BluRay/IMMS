@@ -1141,12 +1141,12 @@
 			INSERT INTO BMS_HR_SPECIAL_SALARY(month,staff_number,staff_name,
 			plant_org,workshop_org,workgroup_org,team_org,pre_sale_salary,
 			after_sale_salary,support_salary,hourly_salary,holiday_salary,
-			paid_leave_salary,submit_factory,submit_workshop,status,editor,edit_date
+			specical_salary,specical_salary_remark,submit_factory,submit_workshop,status,editor,edit_date
 			)
 			VALUES(#{item.month},#{item.staff_number},#{item.staff_name},#{item.plant_org}
 			,#{item.workshop_org},#{item.workgroup_org},#{item.team_org},#{item.pre_sale_salary}
 			,#{item.after_sale_salary},#{item.support_salary},#{item.hourly_salary},#{item.holiday_salary}
-			,#{item.paid_leave_salary},#{item.submit_factory},#{item.submit_workshop},'0',#{item.editor},#{item.edit_date}
+			,#{item.specical_salary},#{item.specical_salary_remark},#{item.submit_factory},#{item.submit_workshop},'0',#{item.editor},#{item.edit_date}
 			)
 		</foreach>
 	</insert>

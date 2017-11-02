@@ -133,18 +133,51 @@ function ajaxQuery() {
 		            {"title":"工厂","class":"center","data":"factory","defaultContent": ""},
 		            {"title":"车间","class":"center","data":"ws","defaultContent": ""},
 		            {"title":"技改台数","class":"center","data":"total","defaultContent": ""},
-		            {"title":"单价","class":"center","data":"tech_single_price","defaultContent": ""},
+		            {"title":"工时","class":"center","data":"time_list","defaultContent": "",
+		            	"render": function ( data, type, row ) {
+		            		if(typeof(data) != "undefined"){
+			            		if(data.indexOf(row.ws) >= 0){
+			            			var time = "";
+				            		if(data.substring(data.indexOf(row.ws),data.length).indexOf(",") >= 0){
+										time = (data.substring(data.indexOf(row.ws),data.length)).substring(0,data.substring(data.indexOf(row.ws),data.length).indexOf(","));
+									}else{
+										time = data.substring(data.indexOf(row.ws),data.length);
+									}
+				            		return time;
+			            		}else{
+			            			return "-";
+			            		}
+							}else{
+								return "-";
+							}
+		            	},
+		            },
 		            {"title":"完成台数","class":"center","data":"complete","defaultContent": ""},
 		            {"title":"技改跟进","class":"center","data":"single_time_total","defaultContent": "",
 		            	"render": function ( data, type, row ) {
 		            		if (parseInt(row.total) - parseInt(row.complete) <= 0) {
 		            			return "-";
 		            		}else{
-		            			if (row.ws == "自制件" || row.ws == "部件") {
-		            				return "<i name='edit' class=\"fa fa-pencil\" rel=\"tooltip\"  title='修改'style=\"cursor: pointer;text-align: center;\" onclick='showSelectBusNumberModal1(\"" + row.factory + "\",\"" + row.ws + "\",\"" + row.order_no + "\"," + row.tech_task_id + "," + row.total + "," + row.task_detail_id + ");' ></i>";
-		    					} else {
-		    						return "<i name='edit' class=\"fa fa-pencil\" rel=\"tooltip\"  title='修改'style=\"cursor: pointer;text-align: center;\" onclick='showSelectBusNumberModal(\"" + row.factory + "\",\"" + row.ws + "\",\"" + row.order_no + "\"," + row.tech_task_id + "," + row.task_detail_id + ");' ></i>";
-		    					}
+		            			if(typeof(row.time_list) != "undefined"){
+			            			if(row.time_list.indexOf(row.ws) >= 0){
+			            				var time = (row.time_list.substring(row.time_list.indexOf(row.ws),row.time_list.length)).substring(0,row.time_list.substring(row.time_list.indexOf(row.ws),row.time_list.length).indexOf(","));
+				            			var price = time.substring(time.indexOf(":")+1,time.length);
+				            			console.log(price);
+				            			if(price == "0"){
+				            				return "-";
+				            			}else{
+				            				if (row.ws == "自制件" || row.ws == "部件") {
+					            				return "<i name='edit' class=\"fa fa-pencil\" rel=\"tooltip\"  title='修改'style=\"cursor: pointer;text-align: center;\" onclick='showSelectBusNumberModal1(\"" + row.factory + "\",\"" + row.ws + "\",\"" + row.order_no + "\"," + row.tech_task_id + "," + row.total + "," + row.task_detail_id + ");' ></i>";
+					    					} else {
+					    						return "<i name='edit' class=\"fa fa-pencil\" rel=\"tooltip\"  title='修改'style=\"cursor: pointer;text-align: center;\" onclick='showSelectBusNumberModal(\"" + row.factory + "\",\"" + row.ws + "\",\"" + row.order_no + "\"," + row.tech_task_id + "," + row.task_detail_id + ");' ></i>";
+					    					}
+				            			}
+			            			}else{
+			            				return "-";
+			            			}
+		            			}else{
+		            				return "-";
+		            			}
 		            		}
 		            	},
 		            },

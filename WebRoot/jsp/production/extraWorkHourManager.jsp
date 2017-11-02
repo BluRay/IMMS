@@ -93,7 +93,7 @@
 					<div class="col-xs-12" style="width: calc(100vw + 20px)">
 						<table id="tableData" 
 							class="table table-striped table-bordered table-hover"
-							style="font-size: 12px;table-layout:fixed" >
+							style="font-size: 12px;width:1600px;" >
 						</table>
 					</div>
 				</div>

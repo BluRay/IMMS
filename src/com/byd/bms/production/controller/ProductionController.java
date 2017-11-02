@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -1806,7 +1808,8 @@ public class ProductionController extends BaseController {
 		List<Map<String, Object>> addList = new ArrayList<Map<String, Object>>();
 		boolean saveFlag=true;
 		int line=1;
-		for (Object[] data : excelModel.getData()) {
+		Pattern p = Pattern.compile("\\s*|\t|\r|\n"); 
+        for (Object[] data : excelModel.getData()) {
 			
 			Map<String, Object> infomap = new HashMap<String, Object>();
 
@@ -1876,7 +1879,9 @@ public class ProductionController extends BaseController {
 			infomap.put("bus_type", data[3] == null ? null : data[3].toString().trim());
 			infomap.put("time", data[4] == null ? null : data[4].toString().trim());
 			infomap.put("tmp_name", data[5] == null ? null : data[5].toString().trim());
-			infomap.put("reason_content", data[6] == null ? null : data[6].toString().trim());
+			String reason_content=(data[6] == null ? "" : data[6].toString().trim());
+			Matcher m = p.matcher(reason_content);
+			infomap.put("reason_content",m.replaceAll("")); //  m.replaceAll(" ")
 			infomap.put("description", data[7] == null ? null : data[7].toString().trim());
 			infomap.put("single_hour", data[8] == null ? null : data[8].toString().trim());
 			infomap.put("assesor", data[9] == null ? null : data[9].toString().trim());
@@ -2168,9 +2173,9 @@ public class ProductionController extends BaseController {
 		String reason_content=request.getParameter("reason_content");
 		String apply_date_start=request.getParameter("apply_date_start");
 		String apply_date_end=request.getParameter("apply_date_end");
-		int draw=Integer.parseInt(request.getParameter("draw")); 
-		int start=Integer.parseInt(request.getParameter("start"));
-		int length=Integer.parseInt(request.getParameter("length"));
+		int draw=request.getParameter("draw")!=null?Integer.parseInt(request.getParameter("draw")):1; 
+		int start=request.getParameter("start")!=null?Integer.parseInt(request.getParameter("start")):0;
+		int length=request.getParameter("length")!=null?Integer.parseInt(request.getParameter("length")):-1;
 		
 		Map<String,Object> conditionMap=new HashMap<String,Object>();
 		conditionMap.put("tmp_order_no",tmp_order_no);

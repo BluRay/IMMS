@@ -2995,12 +2995,12 @@
 		<if test="reason_content !=null and reason_content !=''">
 			and o.reason_content like concat('%',#{reason_content},'%')
 		</if>
-			<if test="apply_date_start !=null and apply_date_start !=''">
-				<![CDATA[and substr(o.apply_date,1,10)>=#{apply_date_start}]]>
-			</if>
-			<if test="apply_date_end !=null and apply_date_end !=''">
-				<![CDATA[and substr(o.apply_date,1,10)<=#{apply_date_end}]]>
-			</if>
+		<if test="apply_date_start !=null and apply_date_start !=''">
+			<![CDATA[and substr(o.apply_date,1,10)>=#{apply_date_start}]]>
+		</if>
+		<if test="apply_date_end !=null and apply_date_end !=''">
+			<![CDATA[and substr(o.apply_date,1,10)<=#{apply_date_end}]]>
+		</if>
 		<if test="factory !=null and factory !=''">
 			and o.factory = #{factory}
 		</if>
@@ -3017,7 +3017,7 @@
 
 		</if>
 		order by o.apply_date desc
-		<if test="start !=null">
+		<if test="start !=null and length!=-1">
 			LIMIT #{start} ,#{length} 
 		</if>
 

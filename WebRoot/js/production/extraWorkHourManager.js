@@ -82,109 +82,108 @@ $(document).ready(function(){
 			}
 		});
 	});
-	$(document).on("click",".edit",function(){
-		var id=$(this).closest('tr').find('td').eq(0).find('input').eq(0).val();
-		$("#editId").val(id);
-		$("#edit_tmp_order_type").val($(this).closest('tr').find('td').eq(1).html());
-		$("#edit_no").val($(this).closest('tr').find('td').eq(2).html());
-		$("#edit_order_no").val($(this).closest('tr').find('td').eq(3).html());
-		$("#edit_bus_type").val($(this).closest('tr').find('td').eq(4).html());
-		$("#edit_time").val($(this).closest('tr').find('td').eq(5).html());
-		$("#edit_tmp_name").val($(this).closest('tr').find('td').eq(6).html());
-		$("#edit_reason_content").val($(this).closest('tr').find('td').eq(7).html());
-		$("#edit_description").val($(this).closest('tr').find('td').eq(8).html());
-		$("#edit_single_hour").val($(this).closest('tr').find('td').eq(9).html());
-		$("#edit_assesor").val($(this).closest('tr').find('td').eq(10).html());
-		$("#edit_assess_verifier").val($(this).closest('tr').find('td').eq(11).html());
-		$("#edit_duty_unit").val($(this).closest('tr').find('td').eq(12).html());
-		$("#edit_order_type").val($(this).closest('tr').find('td').eq(13).html());
-		$("#edit_memo").val($(this).closest('tr').find('td').eq(14).html());
-		var dialog = $( "#dialog-edit" ).removeClass('hide').dialog({
-			width:600,
-			height:520,
-			modal: true,
-			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i>编辑额外工时库</h4></div>",
-			title_html: true,
-			buttons: [ 
-				{
-					text: "取消",
-					"class" : "btn btn-minier",
-					click: function() {
-						$( this ).dialog( "close" ); 
-					} 
-				},
-				{
-					text: "确定",
-					"class" : "btn btn-primary btn-minier",
-					click: function() {
-						if($("#edit_tmp_order_type").val()===""){
-							alert("额外类型不能为空！");
-							$("#edit_tmp_order_type").focus();
-							return false;
-						}
-						if($("#edit_no").val()===""){
-							alert("编号不能为空！");
-							$("#edit_no").focus();
-							return false;
-						}	
-						$.ajax({
-						    url: "editExtraWorkHourManager",
-						    dataType: "json",
-							type: "post",
-						    data: {
-						    	"id":$("#editId").val(),
-								"tmp_order_type":$("#edit_tmp_order_type").val(),
-								"no":$("#edit_no").val(),
-								"bus_type":$("#edit_bus_type").val(),
-								"order_no":$("#edit_order_no").val(),
-								"time":$("#edit_time").val(),
-								"tmp_name":$("#edit_tmp_name").val(),
-								"reason_content":$("#edit_reason_content").val(),
-								"description":$("#edit_description").val(),
-								"single_hour":$("#edit_single_hour").val(),
-								"order_type":$("#edit_order_type").val(),
-								"assesor":$("#edit_assesor").val(),
-								"assess_verifier":$("#edit_assess_verifier").val(),
-								"duty_unit":$("#edit_duty_unit").val(),
-								"memo":$("#edit_memo").val(),
-						    },
-						    success:function(response){
-						    	if(response.success){
-						    	$.gritter.add({
-									title: '系统提示：',
-									text: '<h5>编辑成功！</h5>',
-									class_name: 'gritter-info'
-								});
-						    	ajaxQuery();
-						    	}else{
-						    		$.gritter.add({
-										title: '系统提示：',
-										text: '<h5>编辑失败！</h5><br>'+response.message,
-										class_name: 'gritter-info'
-									});
-						    	}
-						    }
-						});
-						$( this ).dialog( "close" );
-					} 
-				}
-			]
-		});	
-	//}
-	});
+//	$(document).on("click",".edit",function(){
+//		var id=$(this).closest('tr').find('td').eq(0).find('input').eq(0).val();
+//		$("#editId").val(id);
+//		$("#edit_tmp_order_type").val($(this).closest('tr').find('td').eq(1).html());
+//		$("#edit_no").val($(this).closest('tr').find('td').eq(2).html());
+//		$("#edit_order_no").val($(this).closest('tr').find('td').eq(3).html());
+//		$("#edit_bus_type").val($(this).closest('tr').find('td').eq(4).html());
+//		$("#edit_time").val($(this).closest('tr').find('td').eq(5).html());
+//		$("#edit_tmp_name").val($(this).closest('tr').find('td').eq(6).html());
+//		$("#edit_reason_content").val($(this).closest('tr').find('td').eq(7).html());
+//		$("#edit_description").val($(this).closest('tr').find('td').eq(8).html());
+//		$("#edit_single_hour").val($(this).closest('tr').find('td').eq(9).html());
+//		$("#edit_assesor").val($(this).closest('tr').find('td').eq(10).html());
+//		$("#edit_assess_verifier").val($(this).closest('tr').find('td').eq(11).html());
+//		$("#edit_duty_unit").val($(this).closest('tr').find('td').eq(12).html());
+//		$("#edit_order_type").val($(this).closest('tr').find('td').eq(13).html());
+//		$("#edit_memo").val($(this).closest('tr').find('td').eq(14).html());
+//		var dialog = $( "#dialog-edit" ).removeClass('hide').dialog({
+//			width:600,
+//			height:520,
+//			modal: true,
+//			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i>编辑额外工时库</h4></div>",
+//			title_html: true,
+//			buttons: [ 
+//				{
+//					text: "取消",
+//					"class" : "btn btn-minier",
+//					click: function() {
+//						$( this ).dialog( "close" ); 
+//					} 
+//				},
+//				{
+//					text: "确定",
+//					"class" : "btn btn-primary btn-minier",
+//					click: function() {
+//						if($("#edit_tmp_order_type").val()===""){
+//							alert("额外类型不能为空！");
+//							$("#edit_tmp_order_type").focus();
+//							return false;
+//						}
+//						if($("#edit_no").val()===""){
+//							alert("编号不能为空！");
+//							$("#edit_no").focus();
+//							return false;
+//						}	
+//						$.ajax({
+//						    url: "editExtraWorkHourManager",
+//						    dataType: "json",
+//							type: "post",
+//						    data: {
+//						    	"id":$("#editId").val(),
+//								"tmp_order_type":$("#edit_tmp_order_type").val(),
+//								"no":$("#edit_no").val(),
+//								"bus_type":$("#edit_bus_type").val(),
+//								"order_no":$("#edit_order_no").val(),
+//								"time":$("#edit_time").val(),
+//								"tmp_name":$("#edit_tmp_name").val(),
+//								"reason_content":$("#edit_reason_content").val(),
+//								"description":$("#edit_description").val(),
+//								"single_hour":$("#edit_single_hour").val(),
+//								"order_type":$("#edit_order_type").val(),
+//								"assesor":$("#edit_assesor").val(),
+//								"assess_verifier":$("#edit_assess_verifier").val(),
+//								"duty_unit":$("#edit_duty_unit").val(),
+//								"memo":$("#edit_memo").val(),
+//						    },
+//						    success:function(response){
+//						    	if(response.success){
+//						    	$.gritter.add({
+//									title: '系统提示：',
+//									text: '<h5>编辑成功！</h5>',
+//									class_name: 'gritter-info'
+//								});
+//						    	ajaxQuery();
+//						    	}else{
+//						    		$.gritter.add({
+//										title: '系统提示：',
+//										text: '<h5>编辑失败！</h5><br>'+response.message,
+//										class_name: 'gritter-info'
+//									});
+//						    	}
+//						    }
+//						});
+//						$( this ).dialog( "close" );
+//					} 
+//				}
+//			]
+//		});	
+//	//}
+//	});
 });
 
 function ajaxQuery(){
 	dt=$("#tableData").DataTable({
 		serverSide: true,
-		
-        paging:true,
+		paging:true,
 		ordering:false,
 		searching: false,
 		bAutoWidth:false,
 		fixedColumns:   {
-			leftColumns:0,
-            rightColumns:0
+			leftColumns:3,
+            rightColumns:1
         },
 		destroy: true,
 		sScrollY: $(window).height()-260,
@@ -245,30 +244,128 @@ function ajaxQuery(){
 			    return "<input id='id' value='"+data+"' type='hidden' /><input type='checkbox' fid='cb_"+data+"'>";
 			},"defaultContent": ""},
             {"title":"额外类型","class":"center","data":"tmp_order_type","defaultContent": ""},
-            {"title":"编号","class":"center","data":"no","defaultContent": ""},
+            {"title":"编号","class":"center","data":"no","width":"180px","defaultContent": ""},
             {"title":"订单","class":"center","data":"order_no","defaultContent": ""},
             {"title":"车型","class":"center","data":"bus_type","width":"45px","defaultContent": ""},
             {"title":"时间","class":"center","data":"time","defaultContent": ""},
-            {"title":"名称","class":"center","data":"tmp_name","defaultContent": ""},
-            {"title":"作业内容","class":"center","data":"reason_content","width":"120px","defaultContent": ""},
-            {"title":"说明","class":"center","data":"description","defaultContent": ""},
+            {"title":"名称","class":"center","data":"tmp_name","render": function ( data, type, row ) {
+			    return data.length>8 ? '<div title=\''+data+'\'>'+data.substring(0,8)+'...</div>' : data;
+			},"defaultContent": ""},
+            {"title":"作业内容","class":"center","data":"reason_content","render": function ( data, type, row ) {
+			    return data.length>8 ? '<div title=\''+data+'\'>'+data.substring(0,8)+'...</div>' : data;
+			},"defaultContent": ""},
+            {"title":"说明","class":"center","data":"description","render": function ( data, type, row ) {
+			    return data.length>8 ? '<div title=\''+data+'\'>'+data.substring(0,8)+'...</div>' : data;
+			},"defaultContent": ""},
             {"title":"单工时","class":"center","data":"single_hour","width":"50px","defaultContent": ""},
             {"title":"评估人","class":"center","data":"assesor","width":"50px","defaultContent": ""},
             {"title":"评估审核人","class":"center","data":"assess_verifier","defaultContent": ""},
-            {"title":"责任部门","class":"center","data":"duty_unit","width":"60px","defaultContent": ""},
+            {"title":"责任部门","class":"center","data":"duty_unit","width":"80px","defaultContent": ""},
             {"title":"派工类型","class":"center","data": "order_type","defaultContent": ""},
-            //{"title":"备注","class":"center","data":"memo","defaultContent": ""},
+            {"title":"备注","class":"center","data":"memo","defaultContent": ""},
             {"title":"编辑人","class":"center","data": "username","width":"50px","defaultContent": ""},
             {"title":"编辑时间","class":"center","data":"edit_date","defaultContent": ""},
-            {"title":"编辑","class":"center","data":null,"width":"35px","render":function(data,type,row){
-            	return "<i class=\"ace-icon fa fa-pencil bigger-130 edit\" style='color:green;cursor: pointer;'></i>"},
+            {"title":"编辑","class":"center","data":null,"width":"45px","render":function(data,type,row){
+            	return "<i class=\"ace-icon fa fa-pencil bigger-130 edit\" onclick = 'showEditPage(" + JSON.stringify(row)+ ");' style='color:green;cursor: pointer;'></i>"},
             	"defaultContent": "<i class=\"ace-icon fa fa-pencil bigger-130\" style='color:green;cursor: pointer;'></i>"}
           ],
 	});
-	var head_width=$(".dataTables_scrollHead").width();
-    $(".dataTables_scrollHead").css("width",head_width-20);
+//	var head_width=$(".dataTables_scrollHead").width();
+//    $(".dataTables_scrollHead").css("width",head_width-20);
+	var head_width=$("#tableData_wrapper").width();
+	if(head_width>0){
+		$("#tableData_wrapper .dataTables_scrollHead").css("width",head_width-20);
+	}
 }
-
+function showEditPage(json){
+	var id=json.id;
+	$("#editId").val(id);
+	$("#edit_tmp_order_type").val(json.tmp_order_type!=undefined ? json.tmp_order_type:"");
+	$("#edit_no").val(json.no!=undefined ?json.no:"");
+	$("#edit_order_no").val(json.order_no!=undefined ?json.order_no:"");
+	$("#edit_bus_type").val(json.bus_type!=undefined ?json.bus_type:"");
+	$("#edit_time").val(json.time!=undefined?json.time:"");
+	$("#edit_tmp_name").val(json.tmp_name!=undefined ?json.tmp_name:"");
+	$("#edit_reason_content").val(json.reason_content!=undefined?json.reason_content:"");
+	$("#edit_description").val(json.description!=undefined ?json.description:"");
+	$("#edit_single_hour").val(json.single_hour!=undefined ?json.single_hour:"");
+	$("#edit_assesor").val(json.assesor!=undefined ?json.assesor:"");
+	$("#edit_assess_verifier").val(json.assess_verifier!=undefined ?json.assess_verifier:"");
+	$("#edit_duty_unit").val(json.duty_unit!=undefined ?json.duty_unit:"");
+	$("#edit_order_type").val(json.order_type!=undefined ?json.order_type:"");
+	$("#edit_memo").val(json.memo!=undefined ?json.memo:"");
+	var dialog = $( "#dialog-edit" ).removeClass('hide').dialog({
+		width:600,
+		height:520,
+		modal: true,
+		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i>编辑额外工时库</h4></div>",
+		title_html: true,
+		buttons: [ 
+			{
+				text: "取消",
+				"class" : "btn btn-minier",
+				click: function() {
+					$( this ).dialog( "close" ); 
+				} 
+			},
+			{
+				text: "确定",
+				"class" : "btn btn-primary btn-minier",
+				click: function() {
+					if($("#edit_tmp_order_type").val()===""){
+						alert("额外类型不能为空！");
+						$("#edit_tmp_order_type").focus();
+						return false;
+					}
+					if($("#edit_no").val()===""){
+						alert("编号不能为空！");
+						$("#edit_no").focus();
+						return false;
+					}	
+					$.ajax({
+					    url: "editExtraWorkHourManager",
+					    dataType: "json",
+						type: "post",
+					    data: {
+					    	"id":$("#editId").val(),
+							"tmp_order_type":$("#edit_tmp_order_type").val(),
+							"no":$("#edit_no").val(),
+							"bus_type":$("#edit_bus_type").val(),
+							"order_no":$("#edit_order_no").val(),
+							"time":$("#edit_time").val(),
+							"tmp_name":$("#edit_tmp_name").val(),
+							"reason_content":$("#edit_reason_content").val(),
+							"description":$("#edit_description").val(),
+							"single_hour":$("#edit_single_hour").val(),
+							"order_type":$("#edit_order_type").val(),
+							"assesor":$("#edit_assesor").val(),
+							"assess_verifier":$("#edit_assess_verifier").val(),
+							"duty_unit":$("#edit_duty_unit").val(),
+							"memo":$("#edit_memo").val(),
+					    },
+					    success:function(response){
+					    	if(response.success){
+					    	$.gritter.add({
+								title: '系统提示：',
+								text: '<h5>编辑成功！</h5>',
+								class_name: 'gritter-info'
+							});
+					    	ajaxQuery();
+					    	}else{
+					    		$.gritter.add({
+									title: '系统提示：',
+									text: '<h5>编辑失败！</h5><br>'+response.message,
+									class_name: 'gritter-info'
+								});
+					    	}
+					    }
+					});
+					$( this ).dialog( "close" );
+				} 
+			}
+		]
+	});	
+};
 function ajaxAdd (argument) {
 
     $.ajax({

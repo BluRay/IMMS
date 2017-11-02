@@ -50,17 +50,17 @@
 							<tr>
 								<td>派工流水号：</td>
 								<td>
-									<input style="height: 30px;width:140px;" type="text" class="input-medium revise" placeholder="派工流水号..." id="search_tmp_order_no" />
+									<input style="height: 30px;width:120px;" type="text" class="input-medium revise" placeholder="派工流水号..." id="search_tmp_order_no" />
 								</td>
 								<td>申请日期：</td>
 								<td>
-									<input id="search_date_start" class="input-medium" style="width:100px" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text">	
+									<input id="search_date_start" class="input-medium" style="width:90px" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text">	
 									-
-									<input id="search_date_end" class="input-medium" style="width:100px" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text">						
+									<input id="search_date_end" class="input-medium" style="width:90px" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text">						
 								</td>	
 								<td>状态：</td>
 								<td>
-									<select name="" id="search_status" class="input-medium" style="height: 30px;width:100px;" >
+									<select name="" id="search_status" class="input-medium" style="height: 30px;width:80px;" >
 									    <option value=''>全部</option>
 									    <option value='0'>已评估</option>
 									    <option value='1'>已审批</option>

@@ -977,7 +977,7 @@ public class HrReportController extends BaseController {
 		dataType.put("7", ExcelModel.CELL_TYPE_CANNULL);
 		dataType.put("8", ExcelModel.CELL_TYPE_STRING);
 		dataType.put("9", ExcelModel.CELL_TYPE_STRING);
-//		dataType.put("10", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("10", ExcelModel.CELL_TYPE_STRING);
 		excelModel.setDataType(dataType);
 		excelModel.setPath(fileFileName);
 		
@@ -1007,16 +1007,16 @@ public class HrReportController extends BaseController {
 						staff_numbers.append(data[0].toString().trim());
 						staff_numbers.append(",");
 					}
-					if(null == data[2] || StringUtils.isBlank(data[2].toString().trim())){
+					if(null == data[1] || StringUtils.isBlank(data[1].toString().trim())){
 						success = false;
 						result = result+"第"+i+"行姓名为必填项！\n";
 					}
 					Map queryOrgMap = new HashMap<String, Object>();
-					if(null!=data[8] && !"".equals(data[8].toString().trim())){
-						queryOrgMap.put("plant", data[8]==null?null:data[8].toString());
-					}
 					if(null!=data[9] && !"".equals(data[9].toString().trim())){
-						queryOrgMap.put("workshop", data[9]==null?null:data[9].toString());
+						queryOrgMap.put("plant", data[9]==null?null:data[9].toString());
+					}
+					if(null!=data[10] && !"".equals(data[10].toString().trim())){
+						queryOrgMap.put("workshop", data[10]==null?null:data[10].toString());
 					}
 					
 					queryOrgList.add(queryOrgMap);
@@ -1029,9 +1029,10 @@ public class HrReportController extends BaseController {
 					rewardsInfo.put("support_salary", data[4] == null?null:data[4].toString().trim());
 					rewardsInfo.put("hourly_salary", data[5] == null?null:data[5].toString().trim());
 					rewardsInfo.put("holiday_salary", data[6] == null?null:data[6].toString().trim());
-					rewardsInfo.put("paid_leave_salary", data[7] == null?null:data[7].toString().trim());
-					rewardsInfo.put("submit_factory", data[8] == null?null:data[8].toString().trim());
-					rewardsInfo.put("submit_workshop", data[9] == null?null:data[9].toString().trim());
+					rewardsInfo.put("specical_salary", data[7] == null?null:data[7].toString().trim());
+					rewardsInfo.put("specical_salary_remark", data[8] == null?null:data[8].toString().trim());
+					rewardsInfo.put("submit_factory", data[9] == null?null:data[9].toString().trim());
+					rewardsInfo.put("submit_workshop", data[10] == null?null:data[10].toString().trim());
 					rewardsInfo.put("editor", username);
 					rewardsInfo.put("edit_date", curTime);
 					rewardsInfo.put("month", month);
@@ -1072,8 +1073,8 @@ public class HrReportController extends BaseController {
 				String workshopStr="";
 				for(Object[] data : excelModel.getData()){
 					++j;
-					String rewards_factory = data[8].toString().trim();
-					String rewards_workshop = data[9].toString().trim();
+					String rewards_factory = data[9].toString().trim();
+					String rewards_workshop = data[10].toString().trim();
 					Map <String, Object> orgMap = new HashMap<String, Object>();
 					orgMap.put("plant", rewards_factory);
 					orgMap.put("workshop", rewards_workshop);

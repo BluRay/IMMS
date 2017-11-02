@@ -47,8 +47,9 @@ $(document).ready(function(){
 	$("#btnSwhQuery").click (function () {
 		var staffNum=$("#edit_cardNumber").val();
 		var workDate=$("#edit_workDate").val();
+		var workshop=$("#edit_workshop_search").val();
 		var tempOrderId=cur_tmpOrderId;
-		var conditions="{staffNum:'"+staffNum+"',workMonth:'"+workDate+"',ecnTaskId:"+tempOrderId+"'}";
+		var conditions="{staffNum:'"+staffNum+"',workMonth:'"+workDate+"',ecnTaskId:"+tempOrderId+"',workshop:'"+workshop+"'}";
 		if(workDate==''||workDate==null){
 			alert("请选择操作月份！");
 			return false;
@@ -200,7 +201,7 @@ function verifyWorkTime(order_no,tech_order_no,task_content,task_detail_id,facto
 		ready_hour_list="{\""+ready_hour_list+"}";
 		ready_obj=JSON.parse(ready_hour_list)
 	}   
-	
+	queryWorkshopList();
 	$.each(tech_list.split(","),function(index,tech){
 		
 		var cur_workshop=tech.split(":")[0];
@@ -451,5 +452,21 @@ function generateWorkhourTb(swhlist,caculate) {
 	$("#workhour_list").append(tr);
 }
 
-
+function queryWorkshopList(){
+	$("#edit_workshop_search").empty();
+	$.ajax({
+		url:"/BMS/common/getWorkshopSelect",
+		dataType : "json",
+		data : {},
+		async : false,
+		error : function(response) {alert(response.message)},
+		success : function(response) {
+			var strs ="";
+			$.each(response.data, function(index, value) {
+				strs += "<option value=" + value.name + ">" + value.name + "</option>";
+			});
+			$("#edit_workshop_search").append(strs);
+		}
+	});
+}
 

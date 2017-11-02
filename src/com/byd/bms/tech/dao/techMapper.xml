@@ -50,7 +50,7 @@
 			and h.workshop=#{workshop}
 		</if>
 		group by h.ecn_task_id,h.factory,h.workshop) tmp  WHERE tmp.tech_task_id=d.id and tmp.factory=d.factory ) ready_hour_list,
-		d.factory_id,d.factory,d.tech_list,d.time_list,d.single_time_total,d.time_total,d.prod_factory_id,d.prod_factory,d.status_list
+		d.factory_id,d.factory,d.tech_list,IFNULL(d.time_list,'') AS time_list,d.single_time_total,d.time_total,d.prod_factory_id,d.prod_factory,d.status_list
 		FROM BMS_TECH_TASK t
 		LEFT JOIN BMS_BASE_KEY k on t.tech_type=k.id and k.key_code='ECN_TYPE'
 		LEFT JOIN BMS_BASE_KEY k1 on t.tech_order_type=k1.id and k1.key_code='ECN_CHANGE_TYPE'
@@ -1496,7 +1496,7 @@ t.tech_order_type,
 t.tech_order_no,
 t.tech_date,
 t.switch_mode,
-t.switch_node,t.tech_single_price,
+t.switch_node,d.time_list,
 d.tech_task_id,
 d.factory,
 d.order_no,

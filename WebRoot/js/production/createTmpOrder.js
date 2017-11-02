@@ -91,7 +91,7 @@ function ajaxQuery(){
 		bAutoWidth:false,
 		fixedColumns:   {
 			leftColumns:3,
-            rightColumns:0
+            rightColumns:1
         },
 		destroy: true,
 		sScrollY: $(window).height()-250,
