@@ -214,7 +214,7 @@ String factory=(String)session.getAttribute("factory");
 				<div class="col-xs-12 col-sm-7 widget-container-col ui-sortable" >
 					<div class="widget-box ui-sortable-handle" >
 								<div class="widget-header">
-									<h5 class="widget-title"><a href='#' onclick="reportFoward('report/factoryOutputYear')">产量（事业部）</a></h5>
+									<h5 class="widget-title"><a href='#' onclick="reportFoward('report/factoryOutputYear')">产量（总装下线）</a></h5>
 									<div class="widget-toolbar">
 										<a href="#" data-action="fullscreen" class="orange2" >
 											<i class="ace-icon fa fa-expand"></i>

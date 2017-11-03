@@ -174,10 +174,10 @@
 		on a.factory=c.factory and a.workshop=c.workshop and a.workgroup=c.workgroup and a.team=c.team and a.bus_number=c.bus_number
 		
 			<if test="count_flag=='车辆维度'">
-				order by a.bus_number,a.work_date,a.team
+				order by a.work_date,a.bus_number,a.team
 			</if>	
 			<if test="count_flag=='人员维度'">
-				order by a.staff_number
+				order by a.staff_number,a.work_date
 			</if>
 		
 			<if test="start !=null and length !='-1' ">
@@ -290,24 +290,24 @@
 		(select round(sum(ws.wpay),2) from BMS_HR_WAIT_SALARY ws 
 		where ws.staff_number=st.staff_number and ws.factory=#{factory}  and ws.workshop=#{workshop} 
 		and ws.work_date like concat(#{month},'%')) wait_pay_total,
-		(select sum(ws.work_hour) from BMS_HR_WAIT_SALARY ws 
+		(select round(sum(ws.work_hour),2) from BMS_HR_WAIT_SALARY ws 
 		where ws.staff_number=st.staff_number and ws.factory=#{factory}  and ws.workshop=#{workshop} 
 		and ws.work_date like concat(#{month},'%')) wwh_total,
 		(select round(sum(ts.real_work_hour*ts.hour_price),2) from BMS_HR_TMP_SALARY ts 
 		where ts.factory=#{factory} and ts.workshop=#{workshop} 
 		and ts.staff_number=st.staff_number and ts.work_date like concat(#{month},'%')) tmp_pay_total,
-		(select sum(ts.real_work_hour) from BMS_HR_TMP_SALARY ts 
+		(select round(sum(ts.real_work_hour),4) from BMS_HR_TMP_SALARY ts 
 		where ts.factory=#{factory} and ts.workshop=#{workshop} 
 		and ts.staff_number=st.staff_number and ts.work_date like concat(#{month},'%')) tmpwh_total,
 		(select round(sum(es.real_work_hour*es.hour_price),2) from BMS_HR_TECH_SALARY es 
 		where es.factory=#{factory} and es.workshop=#{workshop} 
 		and es.staff_number=st.staff_number and es.work_date like concat(#{month},'%')) ecn_pay_total,
-		(select sum(es.real_work_hour) from BMS_HR_TECH_SALARY es 
+		(select round(sum(es.real_work_hour),4) from BMS_HR_TECH_SALARY es 
 		where es.factory=#{factory} and es.workshop=#{workshop} 
 		and es.staff_number=st.staff_number and es.work_date like concat(#{month},'%')) ecnwh_total,
-		(select sum(r.add-r.deduct) from BMS_HR_REWARDS r where r.staff_number=st.staff_number and r.rewards_date like concat(#{month},'%') ) dscore_total,
+		(select round(sum(r.add-r.deduct),1) from BMS_HR_REWARDS r where r.staff_number=st.staff_number and r.rewards_date like concat(#{month},'%') ) dscore_total,
 		(select sum(r.add-r.deduct)*5 from BMS_HR_REWARDS r where r.staff_number=st.staff_number and r.rewards_date like concat(#{month},'%') ) deduct_pay_total,
-		s.status,a.attendance_days, ss.pre_sale_salary,ss.after_sale_salary,ss.support_salary,ss.hourly_salary,ss.holiday_salary,ss.paid_leave_salary,		
+		s.status,a.attendance_days,a.attendance_hours,ss.pre_sale_salary,ss.after_sale_salary,ss.support_salary,ss.hourly_salary,ss.holiday_salary,ss.paid_leave_salary,		
 		<choose>	
 		<when test="workshop=='自制件'">
 		(select sum(s.quantity) qty
@@ -512,13 +512,13 @@
 		</selectKey>
 		insert into BMS_HR_PIECE_SALARY_HISTORY 
 		(month,staff_number,staff_name,job,plant_org,workshop_org,workgroup_org,team_org,
-		attendance_days,piece_total,bonus_total,piece_pay_total,ecnwh_total,ecn_pay_total,wwh_total,wait_pay_total,tmpwh_total,tmp_pay_total,
+		attendance_days,attendance_hours,piece_total,bonus_total,piece_pay_total,ecnwh_total,ecn_pay_total,wwh_total,wait_pay_total,tmpwh_total,tmp_pay_total,
 		dscore_total,deduct_pay_total,pre_sale_salary,after_sale_salary,paid_leave_salary,holiday_salary,hourly_salary,support_salary,
 		saver,save_date,submit_factory,submit_workshop,status,production_qty
 		) 
 		values 
 		<foreach collection="staff_salary_list" item="detail" index="index" separator=",">
-		(#{month},#{detail.staff_number},#{detail.staff_name},#{detail.job},#{detail.plant_org},#{detail.workshop_org},#{detail.workgroup_org},#{detail.team_org},#{detail.attendance_days},
+		(#{month},#{detail.staff_number},#{detail.staff_name},#{detail.job},#{detail.plant_org},#{detail.workshop_org},#{detail.workgroup_org},#{detail.team_org},#{detail.attendance_days},#{detail.attendance_hours},
 		#{detail.piece_total},#{detail.bonus_total},#{detail.piece_pay_total},#{detail.ecnwh_total},#{detail.ecn_pay_total},#{detail.wwh_total},#{detail.wait_pay_total},#{detail.tmpwh_total},#{detail.tmp_pay_total},
 		#{detail.dscore_total},#{detail.deduct_pay_total},#{detail.pre_sale_salary},#{detail.after_sale_salary},#{detail.paid_leave_salary},#{detail.holiday_salary},#{detail.hourly_salary},#{detail.support_salary},
 		#{saver},#{save_date},#{factory},#{workshop},'已提交',#{detail.output}

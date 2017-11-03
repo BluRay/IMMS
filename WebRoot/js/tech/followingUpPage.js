@@ -162,7 +162,7 @@ function ajaxQuery() {
 			            			if(row.time_list.indexOf(row.ws) >= 0){
 			            				var time = (row.time_list.substring(row.time_list.indexOf(row.ws),row.time_list.length)).substring(0,row.time_list.substring(row.time_list.indexOf(row.ws),row.time_list.length).indexOf(","));
 				            			var price = time.substring(time.indexOf(":")+1,time.length);
-				            			console.log(price);
+				            			//console.log(price);
 				            			if(price == "0"){
 				            				return "-";
 				            			}else{

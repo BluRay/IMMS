@@ -385,20 +385,20 @@
 	
 	<select id="queryIndexOutputData_Bustype" parameterType="String" resultType="Map">
 		select group_concat(a.month,':',a.finished_qty order by a.month separator ',') month_count,a.bus_type
-		from(select count(b.bus_number) finished_qty,substr(b.bus_number,1,2) bus_type,cast(substr(substring_index(b.warehousing_date,'-',2),-2) as signed) month
+		from(select count(b.bus_number) finished_qty,substr(b.bus_number,1,2) bus_type,cast(substr(substring_index(b.assembly_offline_date_report,'-',2),-2) as signed) month
 		from BMS_PLAN_BUS b
-		where  b.warehousing_date like concat(#{actYear},'%')
-		group by substr(b.bus_number,1,2),substr(substring_index(b.warehousing_date,'-',2),-2)) a
+		where  b.assembly_offline_date_report like concat(#{actYear},'%')
+		group by substr(b.bus_number,1,2),substr(substring_index(b.assembly_offline_date_report,'-',2),-2)) a
 		group by a.bus_type
 	</select>
 	
 	<select id="queryIndexOutputData_Factory" parameterType="String" resultType="Map">
 		select group_concat(a.factory_name,':',a.finished_qty order by a.month separator ',') factory_count,a.month
-		from(select count(b.bus_number) finished_qty,f.factory_name,cast(substr(substring_index(b.warehousing_date,'-',2),-2) as signed) month
+		from(select count(b.bus_number) finished_qty,f.factory_name,cast(substr(substring_index(b.assembly_offline_date_report,'-',2),-2) as signed) month
 		from BMS_PLAN_BUS b
 		left join BMS_BASE_FACTORY f on f.id=b.factory_id
-		where  b.warehousing_date like concat(#{actYear},'%')
-		group by b.factory_id,substr(substring_index(b.warehousing_date,'-',2),-2)) a
+		where  b.assembly_offline_date_report like concat(#{actYear},'%')
+		group by b.factory_id,substr(substring_index(b.assembly_offline_date_report,'-',2),-2)) a
 		group by a.month
 	</select>
 	

@@ -268,8 +268,9 @@ function ajaxQuery(){
             {"title":"售后工资","class":"center","data":"after_sale_salary","defaultContent": ""},
             {"title":"支援工资","class":"center","data":"support_salary","defaultContent": ""},
             {"title":"计时工资","class":"center","data":"hourly_salary","defaultContent": ""},
-            {"title":"放假工资","class":"center","data":"paid_leave_salary","defaultContent": ""},
-            {"title":"调休工资","class":"center","data":"holiday_salary","defaultContent": ""},
+            {"title":"放假工资","class":"center","data":"holiday_salary","defaultContent": ""},
+            {"title":"特殊工资","class":"center","data":"specical_salary","defaultContent": ""},
+            {"title":"特殊工资备注","class":"center","data":"specical_salary_remark","defaultContent": ""},
             {"title":"生产工厂","class":"center","data":"submit_factory","defaultContent": ""},
             {"title":"生产车间","class":"center","data":"submit_workshop","defaultContent": ""}
           ],

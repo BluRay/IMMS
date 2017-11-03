@@ -102,6 +102,7 @@ function ajaxQuery(){
 	//var salary_final=0;
 	/*rowsGroup=[0,1,2,3,4,5,6,15]*/
 	columns= [
+	          	{"title":"序号","class":"center","data":"staff_number","defaultContent": ""},
 	          	{"title":"工号","class":"center","data":"staff_number","defaultContent": ""},
 	          	{"title":"姓名","class":"center","data":"staff_name","defaultContent": ""},
 	          	{"title":"工厂","class":"center","data":"plant_org","defaultContent": ""},
@@ -111,6 +112,7 @@ function ajaxQuery(){
 	          	{"title":"岗位","class":"center","data": "job","defaultContent": ""},	
 	          	{"title":"在职","class":"center","data":"status","defaultContent": ""},
 	            {"title":"出勤天数","class":"center","data":"attendance_days","defaultContent": ""},
+	            {"title":"出勤小时","class":"center","data":"attendance_hours","defaultContent": ""},
 	            {"title":"车间产量","class":"center","data":"output","defaultContent": ""},			            
 	            {"title":"计件产量","class":"center","data":"piece_total","defaultContent": ""},
 	            {"title":"补贴车","class":"center","data":"bonus_total","defaultContent": ""},
@@ -160,8 +162,9 @@ function ajaxQuery(){
 	            	salary_final=numAdd(salary_final,isNaN(Number(row.hourly_salary))?0:Number(row.hourly_salary));
 	            	salary_final=numAdd(salary_final,isNaN(Number(row.support_salary))?0:Number(row.support_salary));
 	            	
-	            	var salary_avg=salary_final/row.attendance_days;
-	            	if(isNaN(salary_avg)){
+	            	var att_days=Number(row.attendance_hours/8).toFixed(2)
+	            	var salary_avg=att_days>0?salary_final/att_days:"";
+	            	if(isNaN(Number(salary_avg))||salary_avg==""){
 	            		salary_avg="";
 	            	}else{
 	            		salary_avg=salary_avg.toFixed(2)
@@ -202,6 +205,10 @@ function ajaxQuery(){
 		lengthChange:true,
 		info:false,
 		orderMulti:false,
+	    fnRowCallback : function(nRow, aData, iDisplayIndex){  //datatable 添加序列号
+            jQuery("td:first", nRow).html(iDisplayIndex +1);  
+              return nRow;  
+        },  
 		language: {
 			emptyTable:"抱歉，未查询到数据！",
 			zeroRecords:"抱歉，未查询到数据！",

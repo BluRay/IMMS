@@ -80,13 +80,13 @@ function ajaxQuery(){
         	$("#search_workshop option").each(function(){
         		workshopAll+=$(this).text()+",";
         	});
-        	var workshop=$("#search_workshop :selected").text()=="全部"?workshopAll:$("#search_workshop :selected").text();
+        	var workshop=$("#search_workshop :selected").text();
         	var conditions={};
         	conditions.task_content=$("#search_tech_task_content").val();
         	conditions.tech_order_no=$("#search_tech_order_no").val();
         	conditions.order_no=$("#search_order_no").val();
         	conditions.factory=$("#search_factory :selected").text();
-        	conditions.workshop_list=workshop;
+        	conditions.workshop=workshop;
         	conditions.tech_date_start=$("#search_date_start").val();
         	conditions.tech_date_end=$("#search_date_end").val();
         	conditions.status=$("#status").val();        	
@@ -121,7 +121,17 @@ function ajaxQuery(){
             });
 		},
 		columns: [
-		            {"title":"技改任务",width:'120',"class":"center","data":"task_content","defaultContent": ""},
+		            {"title":"技改任务",width:'120',"class":"center","data":"task_content","defaultContent": "","render":function(data,type,row){
+		            	var html="";
+		            	//data = data.replace(/\r/ig, "','").replace(/\n/ig, "','");
+		            	if(data.length>20){
+		            		html="<i title='"+data+"' style='font-style: normal'>"+data.substring(0,20)+"...</i>"
+		            	}else{
+		            		html=data;
+		            	}
+		            	return html;
+		            	}
+		            },
 		            {"title":"变更单类型",width:'80',"class":"center","data":"tech_order_type","defaultContent": ""},
 		            {"title":"技改单号",width:'80',"class":"center","data":"tech_order_no","defaultContent": ""},
 		            {"title":"变更单附件",width:'80',"class":"center","data":"tech_order_file","defaultContent": "",
@@ -148,12 +158,75 @@ function ajaxQuery(){
 		            {"title":"切换节点",width:'60',"class":"center","data":"switch_node","defaultContent": ""},
 		            {"title":"订单",width:'80',"class":"center","data":"order_desc","defaultContent": ""},
 		            {"title":"工厂",width:'60',"class":"center","data":"factory","defaultContent": ""},
-		            {"title":"车间",width:'60',"class":"center","data":"workshop","defaultContent": ""},
-		            {"title":"分配工时",width:'60',"class":"center","data":"tech_time","defaultContent": ""},
-		            {"title":"技改台数",width:'60',"class":"center","data":"tech_num","defaultContent": ""},
-		            {"title":"完成台数",width:'60',"class":"center","data":"follow_num","defaultContent": ""},
-		            {"title":"已录入工时",width:'80',"class":"center","data":"ready_hour","defaultContent": ""},
-		            {"title":"车号信息",width:'60',"class":"center","data":"-","defaultContent": ""},
+		            {"title":"车间",width:'60',"class":"center","data":"workshop","defaultContent": "",
+		            	"render": function ( data, type, row ) {
+		            		return $("#search_workshop :selected").text();
+		            	},
+		            },
+		            {"title":"分配工时",width:'60',"class":"center","data":"time_list","defaultContent": "",
+		            	"render": function ( data, type, row ) {
+		            		var ws = $("#search_workshop :selected").text() + ":";
+		            		if(typeof(data) != "undefined"){
+		            			if (data.indexOf(ws)>=0){
+				            		var str =  data.substring(data.indexOf(ws),data.length);
+				            		if(str.indexOf(",")>0){
+				            			return str.substring(0,str.indexOf(","));
+				            		}else{
+				            			return str;
+				            		}
+			            		}else{
+			            			return "-"
+			            		}
+		            		}else{
+		            			return "-"
+		            		}
+		            	},
+		            },
+		            {"title":"技改台数",width:'60',"class":"center","data":"tech_list","defaultContent": "",
+		            	"render": function ( data, type, row ) {
+		            		var ws = $("#search_workshop :selected").text() + ":";
+		            		if(typeof(data) != "undefined"){
+		            			if (data.indexOf(ws)>=0){
+				            		var str =  data.substring(data.indexOf(ws),data.length);
+				            		if(str.indexOf(",")>0){
+				            			return str.substring(0,str.indexOf(","));
+				            		}else{
+				            			return str;
+				            		}
+			            		}else{
+			            			return "-"
+			            		}
+		            		}else{
+		            			return "-"
+		            		}
+		            	},
+		            },
+		            {"title":"完成台数",width:'60',"class":"center","data":"follow_num","defaultContent": "-"},
+		            {"title":"已录入工时",width:'80',"class":"center","data":"ready_hour_list","defaultContent": "",
+		            	"render": function ( data, type, row ) {
+		            		var ws = $("#search_workshop :selected").text() + ":";
+		            		if(typeof(data) != "undefined"){
+		            			if (data.indexOf(ws)>=0){
+				            		var str =  data.substring(data.indexOf(ws),data.length);
+				            		if(str.indexOf(",")>0){
+				            			return str.substring(0,str.indexOf(","));
+				            		}else{
+				            			return str;
+				            		}
+			            		}else{
+			            			return "-"
+			            		}
+		            		}else{
+		            			return "-"
+		            		}
+		            		
+		            	},
+		            },
+		            {"title":"车号信息",width:'60',"class":"center","data":"-","defaultContent": "",
+		            	"render": function ( data, type, row ) {
+		            		return "<i class=\"glyphicon glyphicon-search bigger-130 showbus\" title=\"车号信息\" onclick='getTaskAllSelectedBusNum(\"" + row['order_no'] + "\",\""+ row['factory'] +"\",\""+ row['task_detail_id'] +"\",\""+ row['switch_mode'] +"\",\""+ $("#search_workshop :selected").text() +"\")' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;";
+		            	},
+		            },
 		            {"title":"成本可否转移",width:'80',"class":"center","data":"order_desc","defaultContent": "",
 		            	"render": function ( data, type, row ) {
 		            		return row.tech_order_type=='ECN'?'否':'是';
@@ -168,6 +241,49 @@ function ajaxQuery(){
 	});
 }
 
+function getTaskAllSelectedBusNum(order_no,factory,taskid,switch_mode,workshop){
+	$("#dialog-busnumber").removeClass('hide').dialog({
+		resizable: false,
+		title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-flag green"></i> 车号信息</h4></div>',
+		title_html: true,
+		width:'750px',
+		modal: true,
+		buttons: [{
+					text: "关闭",
+					"class" : "btn btn-minier",
+					click: function() {$( this ).dialog( "close" );} 
+				}
+			]
+	});
+	
+	$.ajax({
+		url: "getEcnTaskBusNumber",
+		dataType: "json",
+		type: "get",
+		data: {
+				"factory":factory,
+				"workshop":workshop,
+				"order_no" : order_no,
+				"task_detail_id" : taskid
+		},
+		async: false,
+		error: function () {alert(response.message);},
+		success: function (response) {
+			$("#busnumber_list").html("");
+			$.each(response.data,function(index,value){
+				var tr = $("<tr style='padding:5px'/>");
+				$("<td />").html(index+1).appendTo(tr);
+				$("<td />").html(value.bus_number).appendTo(tr);
+				$("<td />").html(value.factory).appendTo(tr);
+				$("<td />").html(value.process_name).appendTo(tr);
+				$("<td />").html(value.username).appendTo(tr);
+				$("<td />").html(value.confirmor_date).appendTo(tr);
+				$("#busnumber_list").append(tr);
+			});
+		}
+	});
+}
+
 function verifyWorkTime(order_no,tech_order_no,task_content,task_detail_id,factory,workshop,tech_list,time_list,follow_list,ready_hour_list,tech_single_price){
 	var totalHour = 0;
 	var tech_num = 0;
@@ -178,7 +294,7 @@ function verifyWorkTime(order_no,tech_order_no,task_content,task_detail_id,facto
 	var eMon = d.getMonth() + 1;
 	var workMonth=eYear+"-"+(eMon<10?"0"+eMon:eMon);
 	$("#edit_workDate").val(workMonth);
-	$("#edit_singlePrice").val(tech_single_price);
+	$("#edit_singlePrice").val("25");
 	editModal_factory = factory;
 	editModal_workshop = workshop;
 	console.log("-->time_list = " + time_list);

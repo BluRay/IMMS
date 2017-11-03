@@ -268,14 +268,8 @@ function ajaxQuery(){
             {"title":"编辑","class":"center","data":null,"width":"45px","render":function(data,type,row){
             	return "<i class=\"ace-icon fa fa-pencil bigger-130 edit\" onclick = 'showEditPage(" + JSON.stringify(row)+ ");' style='color:green;cursor: pointer;'></i>"},
             	"defaultContent": "<i class=\"ace-icon fa fa-pencil bigger-130\" style='color:green;cursor: pointer;'></i>"}
-          ],
+        ],
 	});
-//	var head_width=$(".dataTables_scrollHead").width();
-//    $(".dataTables_scrollHead").css("width",head_width-20);
-	var head_width=$("#tableData_wrapper").width();
-	if(head_width>0){
-		$("#tableData_wrapper .dataTables_scrollHead").css("width",head_width-20);
-	}
 }
 function showEditPage(json){
 	var id=json.id;
@@ -390,9 +384,6 @@ function ajaxAdd (argument) {
 	
 }
 function ajaxDelete(){
-	if(!confirm("确认要删除吗?")){
-		return false;
-	}
 	var ids = '';
 	$(":checkbox").each(function(){
 		if($(this).prop("checked")){
@@ -408,6 +399,9 @@ function ajaxDelete(){
 			text: '<h5>请至少勾选一个要删除的记录！</h5>',
 			class_name: 'gritter-info'
 		});
+		return false;
+	}
+	if(!confirm("确认要删除吗?")){
 		return false;
 	}
 	$.ajax({

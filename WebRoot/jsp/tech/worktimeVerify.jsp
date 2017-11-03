@@ -135,6 +135,25 @@
 				</div>
 			</div>
 
+			<div id="dialog-busnumber" class="hide" style="align:center;width:780px;height:500px">
+				<div style="width:100%;height:300px;">
+					<table style="margin-left:0px;width: 100%;text-align:center"class="exp-table table" id="busnumber_tb">
+						<thead style="background-color: rgb(225, 234, 240)">
+						<tr>
+						<td style="text-align:center">序号</td>
+						<td style="text-align:center">车号</td>
+						<td style="text-align:center">生产工厂</td>
+						<td style="text-align:center">当前工序</td>
+						<td style="text-align:center">确认人</td>
+						<td style="text-align:center">确认日期</td>
+						</tr>
+						</thead>
+						<tbody class="exp-table" id="busnumber_list">
+						</tbody>
+					</table>
+				</div>
+			</div>
+			
 			<!-- 脚 -->
 			<%-- <jsp:include page="footer.jsp" flush="true"/> --%>
 			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse"><i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i></a>

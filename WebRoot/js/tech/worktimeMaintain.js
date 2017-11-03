@@ -182,14 +182,14 @@ function ajaxQuery(){
         	$("#search_workshop option").each(function(){
         		workshopAll+=$(this).text()+",";
         	});
-        	var workshop=$("#search_workshop :selected").text()=="全部"?workshopAll:$("#search_workshop :selected").text();
-        	console.log("-->workshop = " + workshop);
+        	var workshop=$("#search_workshop :selected").text();
+        	//console.log("-->workshop = " + workshop);
         	var conditions={};
         	conditions.task_content=$("#search_tech_task_content").val();
         	conditions.tech_order_no=$("#search_tech_order_no").val();
         	conditions.order_no=$("#search_order_no").val();
         	conditions.factory=$("#search_factory :selected").text();
-        	conditions.workshop_list=workshop;
+        	conditions.workshop=workshop;
         	conditions.tech_date_start=$("#search_date_start").val();
         	conditions.tech_date_end=$("#search_date_end").val();
         	conditions.status=$("#status").val();        	
@@ -233,8 +233,8 @@ function ajaxQuery(){
 		            {"title":"技改任务",width:'250',"class":"center","data":"task_content","defaultContent": "","render":function(data,type,row){
 		            	var html="";
 		            	//data = data.replace(/\r/ig, "','").replace(/\n/ig, "','");
-		            	if(data.length>30){
-		            		html="<i title='"+data+"' style='font-style: normal'>"+data.substring(1,30)+"...</i>"
+		            	if(data.length>20){
+		            		html="<i title='"+data+"' style='font-style: normal'>"+data.substring(0,20)+"...</i>"
 		            	}else{
 		            		html=data;
 		            	}
@@ -256,14 +256,73 @@ function ajaxQuery(){
 		            {"title":"切换节点",width:'100',"class":"center","data":"switch_node","defaultContent": ""},
 		            {"title":"订单",width:'200',"class":"center","data":"order_desc","defaultContent": ""},
 		            {"title":"工厂",width:'100',"class":"center","data":"factory","defaultContent": ""},
-		            {"title":"车间",width:'100',"class":"center","data":"workshop","defaultContent": ""},
-		            {"title":"分配工时",width:'100',"class":"center","data":"tech_time","defaultContent": ""},
-		            {"title":"技改台数",width:'100',"class":"center","data":"tech_num","defaultContent": ""},
-		            {"title":"完成台数",width:'100',"class":"center","data":"follow_num","defaultContent": ""},
-		            {"title":"已录入工时",width:'100',"class":"center","data":"ready_hour","defaultContent": ""},
+		            {"title":"车间",width:'100',"class":"center","data":"workshop","defaultContent": "",
+		            	"render": function ( data, type, row ) {
+		            		return $("#search_workshop :selected").text();
+		            	},
+		            },
+		            {"title":"分配工时",width:'100',"class":"center","data":"time_list","defaultContent": "",
+		            	"render": function ( data, type, row ) {
+		            		var ws = $("#search_workshop :selected").text() + ":";
+		            		if(typeof(data) != "undefined"){
+		            			if (data.indexOf(ws)>=0){
+				            		var str =  data.substring(data.indexOf(ws),data.length);
+				            		if(str.indexOf(",")>0){
+				            			return str.substring(0,str.indexOf(","));
+				            		}else{
+				            			return str;
+				            		}
+			            		}else{
+			            			return "-"
+			            		}
+		            		}else{
+		            			return "-"
+		            		}
+		            	},
+		            },
+		            {"title":"技改台数",width:'100',"class":"center","data":"tech_list","defaultContent": "",
+		            	"render": function ( data, type, row ) {
+		            		var ws = $("#search_workshop :selected").text() + ":";
+		            		if(typeof(data) != "undefined"){
+		            			if (data.indexOf(ws)>=0){
+				            		var str =  data.substring(data.indexOf(ws),data.length);
+				            		if(str.indexOf(",")>0){
+				            			return str.substring(0,str.indexOf(","));
+				            		}else{
+				            			return str;
+				            		}
+			            		}else{
+			            			return "-"
+			            		}
+		            		}else{
+		            			return "-"
+		            		}
+		            	},
+		            },
+		            {"title":"完成台数",width:'100',"class":"center","data":"follow_num","defaultContent": "-",},
+		            {"title":"已录入工时",width:'100',"class":"center","data":"ready_hour_list","defaultContent": "",
+		            	"render": function ( data, type, row ) {
+		            		var ws = $("#search_workshop :selected").text() + ":";
+		            		if(typeof(data) != "undefined"){
+		            			if (data.indexOf(ws)>=0){
+				            		var str =  data.substring(data.indexOf(ws),data.length);
+				            		if(str.indexOf(",")>0){
+				            			return str.substring(0,str.indexOf(","));
+				            		}else{
+				            			return str;
+				            		}
+			            		}else{
+			            			return "-"
+			            		}
+		            		}else{
+		            			return "-"
+		            		}
+		            		
+		            	},
+		            },
 		            {"title":"车号信息",width:'100',"class":"center","data":"-","defaultContent": "",
 		            	"render": function ( data, type, row ) {
-		            		return "<i class=\"glyphicon glyphicon-search bigger-130 showbus\" title=\"车号信息\" onclick='getTaskAllSelectedBusNum(\"" + row['order_no'] + "\",\""+ row['factory'] +"\",\""+ row['task_detail_id'] +"\",\""+ row['switch_mode'] +"\",\""+ row['workshop'] +"\")' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;";
+		            		return "<i class=\"glyphicon glyphicon-search bigger-130 showbus\" title=\"车号信息\" onclick='getTaskAllSelectedBusNum(\"" + row['order_no'] + "\",\""+ row['factory'] +"\",\""+ row['task_detail_id'] +"\",\""+ row['switch_mode'] +"\",\""+ $("#search_workshop :selected").text() +"\")' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;";
 		            	},
 		            },
 		            {"title":"成本可否转移",width:'150',"class":"center","data":"order_desc","defaultContent": "",
@@ -273,8 +332,8 @@ function ajaxQuery(){
 		            },
 		            {"title":"操作",width:'100',"class":"center","data":null,"defaultContent": "",
 		            	"render": function ( data, type, row ) {
-		            		return "<i class=\"glyphicon glyphicon-plus bigger-130 showbus\" title=\"维护\" onclick='addWorkTime(\"" + row['order_no'] + "\",\""+ row['tech_order_no'] +"\",\""+ row['task_content'].replace(/\r/ig, "").replace(/\n/ig, "") +"\",\""+ row['task_detail_id'] +"\",\""+ row['factory'] +"\",\""+ row['workshop'] +"\",\""+ row['tech_list'] +"\")' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;" + 
-		            		"<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"编辑\" onclick='editWorkTime(\"" + row['order_no'] + "\",\""+ row['tech_order_no'] +"\",\""+ row['task_content'].replace(/\r/ig, "").replace(/\n/ig, "") +"\",\""+ row['task_detail_id'] +"\",\""+ row['factory'] +"\",\""+ row['workshop'] +"\",\""+ row['tech_list'] +"\")' style='color:blue;cursor: pointer;'></i>";
+		            		return "<i class=\"glyphicon glyphicon-plus bigger-130 showbus\" title=\"维护\" onclick='addWorkTime(\"" + row['order_no'] + "\",\""+ row['tech_order_no'] +"\",\""+ row['task_content'].replace(/\r/ig, "").replace(/\n/ig, "") +"\",\""+ row['task_detail_id'] +"\",\""+ row['factory'] +"\",\""+ $("#search_workshop :selected").text() +"\",\""+ row['tech_list'] +"\")' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;" + 
+		            		"<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"编辑\" onclick='editWorkTime(\"" + row['order_no'] + "\",\""+ row['tech_order_no'] +"\",\""+ row['task_content'].replace(/\r/ig, "").replace(/\n/ig, "") +"\",\""+ row['task_detail_id'] +"\",\""+ row['factory'] +"\",\""+ $("#search_workshop :selected").text() +"\",\""+ row['tech_list'] +"\")' style='color:blue;cursor: pointer;'></i>";
 		            	},
 		            }
 		          ],
