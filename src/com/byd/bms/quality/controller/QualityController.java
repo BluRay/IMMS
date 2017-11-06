@@ -17,6 +17,7 @@ import javax.servlet.ServletContext;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,6 +49,7 @@ import net.sf.json.JSONObject;
  */
 @Controller
 @RequestMapping("/quality")
+@Scope("prototype")
 public class QualityController extends BaseController {
 	static Logger logger = Logger.getLogger("QUALITY");
 	@Autowired

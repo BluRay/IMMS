@@ -16,6 +16,7 @@ import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,6 +42,7 @@ import com.google.gson.JsonParser;
  */ 
 @Controller
 @RequestMapping("/order")
+@Scope("prototype")
 public class OrderController extends BaseController{
 	
 	static Logger logger = Logger.getLogger(OrderController.class.getName());

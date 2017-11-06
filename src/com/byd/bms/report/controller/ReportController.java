@@ -10,21 +10,25 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
 import com.byd.bms.report.service.IReportService;
 import com.byd.bms.util.controller.BaseController;
 
 @Controller
 @RequestMapping("/report")
+@Scope("prototype")
 public class ReportController extends BaseController {
 	static Logger logger = Logger.getLogger(ReportController.class.getName());
 	@Autowired

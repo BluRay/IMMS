@@ -17,6 +17,7 @@ import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +39,7 @@ import com.byd.bms.util.controller.BaseController;
  */ 
 @Controller
 @RequestMapping("/hrReport")
+@Scope("prototype")
 public class HrReportController extends BaseController {
 
 	static Logger logger = Logger.getLogger("HR");
