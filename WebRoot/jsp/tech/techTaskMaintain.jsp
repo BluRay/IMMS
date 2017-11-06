@@ -14,6 +14,10 @@
 <link rel="stylesheet" href="../assets/css/jquery-ui.custom.min.css" />
 <link rel="stylesheet" href="../assets/css/jquery.gritter.css" />
 </head>
+<script type="text/javascript">
+var user_id = 0;
+user_id ="<%= session.getAttribute("user_id")%>";
+</script>
 <body class="no-skin" style="font-family: 'Microsoft YaHei';">
 	<!-- 头 -->
 	<jsp:include page="../top.jsp" flush="true" />

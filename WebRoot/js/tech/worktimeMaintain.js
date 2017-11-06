@@ -332,8 +332,8 @@ function ajaxQuery(){
 		            },
 		            {"title":"操作",width:'100',"class":"center","data":null,"defaultContent": "",
 		            	"render": function ( data, type, row ) {
-		            		return "<i class=\"glyphicon glyphicon-plus bigger-130 showbus\" title=\"维护\" onclick='addWorkTime(\"" + row['order_no'] + "\",\""+ row['tech_order_no'] +"\",\""+ row['task_content'].replace(/\r/ig, "").replace(/\n/ig, "") +"\",\""+ row['task_detail_id'] +"\",\""+ row['factory'] +"\",\""+ $("#search_workshop :selected").text() +"\",\""+ row['tech_list'] +"\")' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;" + 
-		            		"<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"编辑\" onclick='editWorkTime(\"" + row['order_no'] + "\",\""+ row['tech_order_no'] +"\",\""+ row['task_content'].replace(/\r/ig, "").replace(/\n/ig, "") +"\",\""+ row['task_detail_id'] +"\",\""+ row['factory'] +"\",\""+ $("#search_workshop :selected").text() +"\",\""+ row['tech_list'] +"\")' style='color:blue;cursor: pointer;'></i>";
+		            		return "<i class=\"glyphicon glyphicon-plus bigger-130 showbus\" title=\"维护\" onclick='addWorkTime(\"" + row['order_no'] + "\",\""+ row['tech_order_no'] +"\",\""+ row['task_content'].replace(/\r/ig, "").replace(/\n/ig, "") +"\",\""+ row['id'] +"\",\""+ row['factory'] +"\",\""+ $("#search_workshop :selected").text() +"\",\""+ row['tech_list'] +"\")' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;" + 
+		            		"<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"编辑\" onclick='editWorkTime(\"" + row['order_no'] + "\",\""+ row['tech_order_no'] +"\",\""+ row['task_content'].replace(/\r/ig, "").replace(/\n/ig, "") +"\",\""+ row['id'] +"\",\""+ row['factory'] +"\",\""+ $("#search_workshop :selected").text() +"\",\""+ row['tech_list'] +"\")' style='color:blue;cursor: pointer;'></i>";
 		            	},
 		            }
 		          ],
@@ -383,7 +383,7 @@ function getTaskAllSelectedBusNum(order_no,factory,taskid,switch_mode,workshop){
 	});
 }
 
-function editWorkTime(order_no,tech_order_no,task_content,task_detail_id,factory,workshop,tech_list){
+function editWorkTime(order_no,tech_order_no,task_content,task_id,factory,workshop,tech_list){
 	edit_list=[];
 	$("#edit_orderNo").html(tech_order_no);
 	$("#edit_task").html(task_content);

@@ -2657,9 +2657,8 @@
 		left join BMS_BASE_ORG o on h.org_id=o.id
 		left join
 		BMS_HR_STAFF s on h.staff_number=s.staff_number
-		left join BMS_BASE_USER u on
-		u.staff_number=h.editor_id
-		left join BMS_BASE_USER u1 on u1.staff_number=h.approver_id
+		left join BMS_BASE_USER u on u.staff_number=h.editor_id AND u.isdelete = 0
+		left join BMS_BASE_USER u1 on u1.staff_number=h.approver_id AND u1.isdelete = 0
 		where 1=1 
 		<if test="orgId !=null and orgId !=''">
 			and h.org_id=#{orgId}

@@ -1234,11 +1234,12 @@
 	
 	<!--技改任务维护-查询 -->
 	<select id="queryTechTaskMaintainList" parameterType="Map" resultType="Map">
-		SELECT t.*,k.key_name AS tech_order_type_name, k2.key_name AS tech_type_name,k3.key_name AS duty_unit_name
+		SELECT t.*,k.key_name AS tech_order_type_name, k2.key_name AS tech_type_name,k3.key_name AS duty_unit_name,u.display_name
 		FROM BMS_TECH_TASK t
 		LEFT JOIN BMS_BASE_KEY k ON t.tech_order_type = k.id
 		LEFT JOIN BMS_BASE_KEY k2 ON t.tech_type = k2.id
 		LEFT JOIN BMS_BASE_KEY k3 ON t.duty_unit = k3.id
+		LEFT JOIN BMS_BASE_USER u ON t.editor_id = u.id
 		WHERE 1=1
 		<if test="task_content !=null and task_content !=''">
 			and t.task_content like (concat('%',#{task_content},'%'))
