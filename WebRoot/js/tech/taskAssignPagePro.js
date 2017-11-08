@@ -166,7 +166,7 @@ function ajaxEdit(task_id,task_detail_id,task_content,tech_order_no,switch_mode,
 		var follow_detail=tech_detail.follow_detail;
 		var prod_factory_id=tech_detail.prod_factory_id;
 		var prod_factory=tech_detail.prod_factory;
-		addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id,prod_factory,task_id);
+		addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id,prod_factory,task_id,task_detail_id);
 		//console.log("follow_detail = " + follow_detail);
 		$.each(follow_detail.split(";"),function(i,follow){
 			//alert(follow.split("||")[1]);
@@ -337,7 +337,7 @@ function getTechList(task_id){
 	return tech_list;
 }
 
-function addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id,prod_factory,task_id){
+function addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id,prod_factory,task_id,task_detail_id){
 	follow_detail=follow_detail||"";
 	var is_follow=false;
 	$.each(follow_detail.split(";"),function(i,follow){
@@ -379,11 +379,11 @@ function addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id
 	tabContent+="</div></div></div>";
 	
 	$(tabContent).appendTo($("#new_accordion"));
-	addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factory_id,prod_factory,order_no,task_id);
+	addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factory_id,prod_factory,order_no,task_id,task_detail_id);
 	getFuzzyOrder("#order_"+taskNum);
 }
 
-function addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factory_id,prod_factory,order_no,task_id){
+function addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factory_id,prod_factory,order_no,task_id,task_detail_id){
 	var factory_select_options=$("#search_factory").html().replace("全部","请选择");
 	//alert(factory_select_options)	
 	var factory_disable_obj={};
@@ -442,11 +442,11 @@ function addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factor
 			var tech_table=$("<table class=\"table table-bordered table-striped\" style=\"margin-bottom: 0px;\"></table>");
 			var tr_head=$("<tr><td>自制件</td><td>部件</td><td>焊装</td><td>涂装</td><td>底盘</td><td>总装</td><td>检测线</td></tr>");
 			var tr_body=$("<tr height='31px'><td>"+(tech_obj['自制件']||'')+"</td><td>"+(tech_obj['部件']||'')+"</td><td>"+
-					"<a onClick='getBusFollow(this,"+prod_factory_id+","+task_id+",\""+order_no+"\",\""+factory+"\",\"焊装\");'>" + (tech_obj['焊装']||'0')+
-					"</a></td><td><a onClick='getBusFollow(this,"+prod_factory_id+","+task_id+",\""+order_no+"\",\""+factory+"\",\"涂装\");'>"+(tech_obj['涂装']||'0')+"</a></td><td>"+
-					"<a onClick='getBusFollow(this,"+prod_factory_id+","+task_id+",\""+order_no+"\",\""+factory+"\",\"底盘\");'>" + (tech_obj['底盘']||'0')+"</a></td><td>"+
-					"<a onClick='getBusFollow(this,"+prod_factory_id+","+task_id+",\""+order_no+"\",\""+factory+"\",\"总装\");'>" + (tech_obj['总装']||'0')+"</a></td><td>"+
-					"<a onClick='getBusFollow(this,"+prod_factory_id+","+task_id+",\""+order_no+"\",\""+factory+"\",\"检测线\");'>" + (tech_obj['检测线']||'0')+"</a></td></tr>");
+					"<a onClick='getBusFollow(this,"+prod_factory_id+","+task_id+","+task_detail_id+",\""+order_no+"\",\""+factory+"\",\"焊装\");'>" + (tech_obj['焊装']||'0')+
+					"</a></td><td><a onClick='getBusFollow(this,"+prod_factory_id+","+task_id+","+task_detail_id+",\""+order_no+"\",\""+factory+"\",\"涂装\");'>"+(tech_obj['涂装']||'0')+"</a></td><td>"+
+					"<a onClick='getBusFollow(this,"+prod_factory_id+","+task_id+","+task_detail_id+",\""+order_no+"\",\""+factory+"\",\"底盘\");'>" + (tech_obj['底盘']||'0')+"</a></td><td>"+
+					"<a onClick='getBusFollow(this,"+prod_factory_id+","+task_id+","+task_detail_id+",\""+order_no+"\",\""+factory+"\",\"总装\");'>" + (tech_obj['总装']||'0')+"</a></td><td>"+
+					"<a onClick='getBusFollow(this,"+prod_factory_id+","+task_id+","+task_detail_id+",\""+order_no+"\",\""+factory+"\",\"检测线\");'>" + (tech_obj['检测线']||'0')+"</a></td></tr>");
 			$(tech_table).append(tr_head).append(tr_body);	
 			$(facotory_div).append(ckbox);
 			$(facotory_div).append(tech_factory);			
@@ -460,8 +460,8 @@ function addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factor
 	}	
 }
 
-function getBusFollow(e,factory_id,task_id,order_no,factory,workshop){
-	console.log("getBusFollow:" + $(e).text() + ",factory_id=" + factory_id + ",task_id=" + task_id + 
+function getBusFollow(e,factory_id,task_id,task_detail_id,order_no,factory,workshop){
+	console.log("getBusFollow:" + $(e).text() + ",factory_id=" + factory_id + ",task_id=" + task_id + ",task_detail_id=" + task_detail_id + 
 			",order_no=" + order_no + ",factory=" + factory + ",workshop=" + workshop);
 	$.ajax({
 		url: "queryBusNumberFollowList",
@@ -512,14 +512,14 @@ function getBusFollow(e,factory_id,task_id,order_no,factory,workshop){
 					id:"btn_ok",
 					"class" : "btn btn-success btn-minier",
 					click: function() {
-						updateBusFollow(e);
+						updateBusFollow(e,task_id,task_detail_id,order_no,factory,workshop);
 					} 
 				}
 			]
 	});
 }
 
-function updateBusFollow(e){
+function updateBusFollow(e,task_id,task_detail_id,order_no,factory,workshop){
 	var bus_number_list = [];
 	var count = 0;
 	$('.check_bus').each(function(e) {
@@ -529,6 +529,25 @@ function updateBusFollow(e){
 		}
 	});
 	console.log("bus_number_list = " , bus_number_list);
+	
+	$.ajax({
+		url: "updateBusNumberFollow",
+		dataType: "json",
+		type: "get",
+		data: {
+				"task_id" : task_id,
+				"task_detail_id":task_detail_id,
+				"order_no":order_no,
+				"factory":factory,
+				"workshop":workshop,
+				"bus_number":JSON.stringify(bus_number_list),
+		},
+		async: false,
+		error: function () {alert(response.message);},
+		success: function (response) {
+			
+		}
+	});
 	
 	$("#dialog-busModal").dialog( "close" );
 	$(e).text(count);

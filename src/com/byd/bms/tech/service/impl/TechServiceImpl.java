@@ -591,5 +591,31 @@ public class TechServiceImpl implements ITechService {
 		return techDao.updateTechTaskPrice(conditionMap);
 	}
 
+	@Override
+	@Transactional
+	public void updateBusNumberFollow(String task_id, String task_detail_id, String order_no, String factory,String workshop, String bus_number) {
+		Map<String,Object> conditionMap=new HashMap<String,Object>();
+		conditionMap.put("task_id", task_id);
+		conditionMap.put("task_detail_id", task_detail_id);
+		conditionMap.put("order_no", order_no);
+		conditionMap.put("factory", factory);
+		conditionMap.put("workshop", workshop);
+		techDao.deleteBusFollow(conditionMap);
+		
+		List<Map<String, Object>> add_list = new ArrayList<Map<String, Object>>();
+		JSONArray jsonArray = JSONArray.fromObject(bus_number);
+		for (int i = 0; i < jsonArray.size(); i++) {
+			//System.out.println("-->" + i + jsonArray.getString(i).toString());		
+			Map<String, Object> map = new HashMap<String,Object>(); 
+			map.put("task_id", task_id);
+			map.put("task_detail_id", task_detail_id);
+			map.put("order_no", order_no);
+			map.put("factory", factory);
+			map.put("workshop", workshop);
+			map.put("bus_number", jsonArray.getString(i).toString());
+			add_list.add(map);
+		}
+		techDao.addBusFollow(add_list);
+	}
 		
 }

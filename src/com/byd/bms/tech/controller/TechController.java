@@ -896,6 +896,21 @@ public class TechController extends BaseController{
 		return model;
 	}
 	
+	@RequestMapping("/updateBusNumberFollow")
+	@ResponseBody
+	public ModelMap updateBusNumberFollow(){
+		String task_id = request.getParameter("task_id");
+		String task_detail_id = request.getParameter("task_detail_id");
+		String order_no = request.getParameter("order_no");
+		String factory = request.getParameter("factory");
+		String workshop = request.getParameter("workshop");
+		String bus_number = request.getParameter("bus_number");
+		
+		techService.updateBusNumberFollow(task_id, task_detail_id, order_no, factory, workshop, bus_number);
+		initModel(true,"SUCCESS",null);
+		return model;
+	}
+	
 	@SuppressWarnings("rawtypes")
 	@RequestMapping("/getStaffWorkHours")
 	@ResponseBody

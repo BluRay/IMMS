@@ -79,6 +79,9 @@ public interface ITechDao {
 	public int deleteWorkHourInfo(Map<String, String> conditionMap);
 	public int batchUpdateWorkHour(List<Map<String, Object>> swh_list);
 	public int updateTechTaskPrice(Map<String, Object> conditionMap);
+	
+	public int deleteBusFollow(Map<String, Object> conditionMap);
+	public int addBusFollow(List<Map<String, Object>> add_list);
 
 	public void caculateEcnSalary(Map<String, Object> conditionMap);
 	public List<Map<String,String>> getBusNumberByOrder(Map<String, Object> conditionMap);

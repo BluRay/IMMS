@@ -1326,6 +1326,22 @@
 		and t.tech_task_id = #{tech_task_id}
 	</select>
 	
+	<update id="deleteBusFollow" parameterType="Map">
+	DELETE FROM BMS_TECH_TASK_FOLLOW WHERE tech_task_id = #{task_id} AND task_detail_id = #{task_detail_id}
+	AND order_no = #{order_no} AND factory = #{factory} AND workshop = #{workshop} AND confirmor_id IS NULL
+	</update>
+	<insert id="addBusFollow" useGeneratedKeys="true" parameterType="List">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		<foreach collection="list" index="index" item="item" separator=";">
+			INSERT INTO BMS_TECH_TASK_FOLLOW
+			(tech_task_id, task_detail_id, bus_number, order_no, factory, workshop)
+			VALUES(#{item.task_id},#{item.task_detail_id},#{item.bus_number},#{item.order_no},#{item.factory},#{item.workshop})
+		</foreach>
+	</insert>
+	
 	<!--新增变更物料清单 -->
 	<insert id="addChangedMaterialList" useGeneratedKeys="true" parameterType="List">
 		<selectKey resultType="int" keyProperty="id" order="AFTER">
