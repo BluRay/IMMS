@@ -859,6 +859,7 @@ public class ProductionController extends BaseController {
 		condMap.put("workgroup", request.getParameter("workgroup"));
 		condMap.put("team", request.getParameter("team"));
 		condMap.put("work_date", request.getParameter("work_date"));
+		condMap.put("order_id", request.getParameter("order_id"));
 		
 		productionService.workhourValidateRecordIn(condMap,model);
 		return model;
@@ -1011,6 +1012,7 @@ public class ProductionController extends BaseController {
 		String salary_model=request.getParameter("salary_model");
 		String bus_number_list=request.getParameter("bus_number_list");
 		String work_date_list=request.getParameter("work_date_list");
+		String order_id_list=request.getParameter("order_id_list");
 		Map<String,Object> condMap=new HashMap<String,Object>();
 		condMap.put("factory", factory);
 		condMap.put("workshop", workshop);
@@ -1020,6 +1022,7 @@ public class ProductionController extends BaseController {
 		condMap.put("bus_number_list", bus_number_list);
 		condMap.put("bus_number", bus_number_list);
 		condMap.put("work_date_list", work_date_list);
+		condMap.put("order_id", order_id_list);
 		String work_month="";
 		if(work_date_list.contains(",")){
 			String work_date=work_date_list.split(",")[0];
@@ -1061,6 +1064,28 @@ public class ProductionController extends BaseController {
 		condMap.put("staff_number", staff_number);
 		
 		productionService.getStaffInfo(condMap,model);
+		return model;
+	}
+	
+	/**
+	 * 获取订单车间产量
+	 * @return
+	 */
+	@RequestMapping("/getWorkshopPrdQty")
+	@ResponseBody
+	public ModelMap getWorkshopPrdQty(){
+		model.clear();
+		String order_id=request.getParameter("order_id");
+		String factory=request.getParameter("factory");
+		String workshop=request.getParameter("workshop");
+		String work_month=request.getParameter("work_month");
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("factory", factory);
+		condMap.put("workshop", workshop);
+		condMap.put("order_id", order_id);
+		condMap.put("work_month", work_month);
+		
+		productionService.getWorkshopPrdQty(condMap,model);
 		return model;
 	}
 	/****************************  xiongjianwu ***************************/

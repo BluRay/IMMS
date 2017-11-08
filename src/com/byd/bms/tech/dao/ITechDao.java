@@ -39,6 +39,7 @@ public interface ITechDao {
 	public List<Map<String,String>> queryTaskOrderInfo(Map<String, Object> conditionMap);
 	public List<Map<String, String>> queryAssignList(String taskid);
 	public List<Map<String, String>> queryStaffWorkHours(Map<String, Object> conditionMap);
+	public List<Map<String, String>> queryBusNumberFollowList(Map<String, Object> conditionMap);
 	public int checkTaskMaterial(Map<String, Object> conditionMap);
 	public int queryTaskMaterialCheckCount(Map<String, Object> conditionMap);
 	public int checkTask(Map<String, Object> conditionMap);

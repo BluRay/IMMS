@@ -866,6 +866,14 @@
 		</if>
 	</select>
 	
+	<select id="queryBusNumberFollowList" parameterType="Map" resultType="Map">
+	SELECT B.bus_number,IFNULL(F.bus_number,"") AS 'bus_follow',IFNULL(U.username,"") AS username,IFNULL(F.confirmor_date,"") AS confirmor_date FROM BMS_PLAN_BUS B 
+	LEFT JOIN BMS_TECH_TASK_FOLLOW F ON B.bus_number = F.bus_number AND F.tech_task_id = #{task_id} 
+	AND F.factory = #{factory} AND F.workshop = #{workshop}
+	LEFT JOIN BMS_BASE_USER U ON F.confirmor_id = U.staff_number
+	WHERE B.factory_id=#{factory_id} AND B.order_id=(SELECT O.id FROM BMS_OR_ORDER O WHERE O.order_no = #{order_no})
+	</select>
+	
 	<insert id="saveWorkHourInfo" parameterType="list">
 		<selectKey resultType="int" keyProperty="id" order="AFTER">
 			SELECT

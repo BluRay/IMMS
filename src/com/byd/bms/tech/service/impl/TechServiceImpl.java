@@ -555,6 +555,11 @@ public class TechServiceImpl implements ITechService {
 	public List<Map<String, String>> queryStaffWorkHours(Map<String, Object> conditionMap) {
 		return techDao.queryStaffWorkHours(conditionMap);
 	}
+	
+	@Override
+	public List<Map<String, String>> queryBusNumberFollowList(Map<String, Object> conditionMap) {
+		return techDao.queryBusNumberFollowList(conditionMap);
+	}
 
 	@Override
 	public int saveWorkHourInfo(List<Map<String, Object>> swh_list) {

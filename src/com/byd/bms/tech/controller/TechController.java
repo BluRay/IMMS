@@ -64,6 +64,12 @@ public class TechController extends BaseController{
         return mv;
 	}
 	
+	@RequestMapping("/taskAssignPagePro")
+	public ModelAndView taskAssignPagePro(){	//技改任务分配 ++171107 新增技改范围确认功能
+		mv.setViewName("tech/taskAssignPagePro");
+        return mv;
+	}
+	
 	@RequestMapping("/taskAssignPrePage")
 	public ModelAndView taskAssignPrePage(){	//技改任务分配-前段
 		mv.setViewName("tech/taskAssignPrePage");
@@ -868,6 +874,24 @@ public class TechController extends BaseController{
 		Map<String,Object> list = techService.querySingleTasklist(conditions);
 		mv.clear();
 		mv.getModelMap().addAllAttributes(list);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/queryBusNumberFollowList")
+	@ResponseBody
+	public ModelMap queryBusNumberFollowList(){
+		Map<String, Object> conditionMap = new HashMap<String, Object>();
+		conditionMap.put("factory_id", request.getParameter("factory_id"));
+		conditionMap.put("task_id", request.getParameter("task_id"));
+		conditionMap.put("order_no", request.getParameter("order_no"));
+		conditionMap.put("factory", request.getParameter("factory"));
+		conditionMap.put("workshop", request.getParameter("workshop"));
+		List<Map<String,String>> datalist = techService.queryBusNumberFollowList(conditionMap);
+		Map<String, Object> result = new HashMap<String,Object>();
+		result.put("data", datalist);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(result);
 		model = mv.getModelMap();
 		return model;
 	}

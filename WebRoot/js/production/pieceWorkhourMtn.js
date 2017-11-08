@@ -39,6 +39,12 @@ $(document).ready(function() {
 		}
 	})
 	
+	$(document).on("keydown",".skill_parameter",function(event){
+		if (event.keyCode == "13") {								
+			$(this).parent().parent().next().find(".skill_parameter").focus().select();
+		}
+	})
+	
 	$(document).on("click",".dstcopy",function(e){
 		//$(".distribution :eq(0)").focus();
 		var flag=$(e.target).attr("cp_flag");
@@ -569,10 +575,83 @@ $(document).ready(function() {
 				return false;
 			}
 		}
+		
 		/**
-		 * 辅助人力 、底薪模式 判断逻辑
+		 *辅助人力 判断逻辑
 		 */
-		if(salary_model=='辅助人力'||salary_model=='底薪模式'){
+		if(salary_model=='辅助人力'){
+			//判断操作日期有无填写
+			if(work_date.trim().length==0){
+				alert("请填写操作日期！")
+				save_flag=false;
+				return false;
+			}
+			//订单校验
+			if(!order_id||order_id.trim().length==0){
+				alert("请填写有效订单！")
+				save_flag=false;
+				return false;
+			}	
+			work_date=getLastDayOfMonth(work_date);//辅助人力模式操作日期为月最后一天
+			
+			//判断该小班组、操作日期是否已经录入过记录
+			save_flag=validateRecordIn(work_date,order_id);
+			if(!save_flag){
+				return false;
+			}
+			
+			//判断参与度/工时有无为空
+			$.each(trs,function(i,tr){
+				var tds=$(tr).children("td");
+				var work_hour=$(tds).eq(5).find(".work_hour").val();						
+				if(work_hour.trim().length==0){
+					alert("参与度/工时不能为空！");
+					save_flag=false;
+					return false;
+				}
+				var staff_number = $(tds).eq(1).html();
+				var input_staff_number=$(tds).eq(1).find(".staff_number");
+				//alert($(input_staff_number).html())
+				if(input_staff_number!=undefined&&input_staff_number.length>0){
+					staff_number=$(input_staff_number).val()||"";
+				}
+				var staff_name=$(tds).eq(2).html();
+				var job=$(tds).eq(3).html();
+				var skill_parameter=$(tds).eq(4).find(".skill_parameter").val();
+				if (staff_number.trim().length > 0) {
+					var staff={};
+					staff.staff_number=staff_number;
+					staff.staff_name=staff_name;
+					staff.job=job;
+					staff.factory=factory;
+					staff.workshop = workshop;
+					staff.workgroup=workgroup;
+					staff.team=team;
+					staff.org_id=org_id;
+					staff.salary_model=salary_model;
+					staff.work_date=work_date;	
+					staff.skill_parameter=skill_parameter;
+					staff.work_hour=work_hour;
+					staff.bonus=bonus;
+					staff.status='1';
+					staff.order_id=order_id;
+			
+					if(!isContain(staff,staffHourList)){
+						staffHourList.push(staff);
+					}else{
+						saveFlag=false;
+						alert(staff.staff_name+"不能重复维护工时！");
+						return false;
+						
+					}
+				}
+			})
+		}
+		
+		/**
+		 *底薪模式 判断逻辑
+		 */
+		if(salary_model=='底薪模式'){
 			//判断操作日期有无填写
 			if(work_date.trim().length==0){
 				alert("请填写操作日期！")
@@ -602,9 +681,7 @@ $(document).ready(function() {
 				var staff_name=$(tds).eq(2).html();
 				var job=$(tds).eq(3).html();
 				var skill_parameter=$(tds).eq(4).html();
-				if(salary_model=='辅助人力'){
-					skill_parameter=$(tds).eq(4).find(".skill_parameter").val();
-				}
+
 				if (staff_number.trim().length > 0) {
 					var staff={};
 					staff.staff_number=staff_number;
@@ -862,18 +939,21 @@ function zTreeOnClick(event, treeId, treeNode) {
 		$("<td />").html("<input type=\"button\" class=\"btn btn-sm btn-info\" id=\"btnSave\" value=\"保存\" style=\"margin-left: 10px;\"></input>").appendTo(tr);
 		$(table).append(tr);
 		$("#form").html(table).css("display","");
-	}/*else if(salary_model=='辅助人力'){
+	}else if(salary_model=='辅助人力'){
 		var tr=$("<tr />");
+		$("<td />").html("订单：").appendTo(tr);
+		$("<td />").html("<input type=\"text\" id=\"order_no\" class=\"input-medium carType\" style=\"height: 30px; width: 100px;\"></input>").appendTo(tr)		
 		$("<td />").html("操作日期：").appendTo(tr);
-		$("<td />").html("<input id=\"work_date\" class=\"input-medium\" style=\"height: 30px;width: 90px\" onclick=\"WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:new Date(),onpicked:function(){changeWorkDate()}})\" type=\"text\">").appendTo(tr);
+		$("<td />").html("<input id=\"work_date\" class=\"input-medium\" style=\"height: 30px;width: 90px\" onclick=\"WdatePicker({dateFmt:'yyyy-MM',maxDate:new Date(),onpicked:function(){changeWorkDate()}})\" type=\"text\">").appendTo(tr);
 		$("<td />").html("补贴车：").appendTo(tr);
 		$("<td />").html("<input style=\"height: 30px; width: 50px;\" type=\"text\" class=\"input-medium revise\" id=\"bonus\" />").appendTo(tr);	
+		$("<td />").html("车间产量：<span id=\"workshop_prd_qty\">").appendTo(tr);
 		$("<td style='padding-left:10px'/>").html("计资模式：").appendTo(tr);
 		$("<td />").html(salary_model).appendTo(tr);
 		$("<td />").html("<input type=\"button\" class=\"btn btn-sm btn-info\" id=\"btnSave\" value=\"保存\" style=\"margin-left: 10px;\"></input>").appendTo(tr);
 		$(table).append(tr);
 		$("#form").html(table).css("display","");
-	}*/else{
+	}else{
 		var tr=$("<tr />");
 		$("<td />").html("操作日期：").appendTo(tr);
 		$("<td />").html("<input id=\"work_date\" class=\"input-medium\" style=\"width: 90px\" onclick=\"WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:new Date(),onpicked:function(){changeWorkDate()}})\" type=\"text\">").appendTo(tr);
@@ -898,6 +978,15 @@ function zTreeOnClick(event, treeId, treeNode) {
 		}
 
 		order_id=obj.id;
+		
+		/**
+		 * 辅助人力模式获取订单车间产量
+		 */
+		if(salary_model=='辅助人力' && $("#work_date").val().trim().length>0){
+			var prd_qty=ajaxGetWorkshopPrdQty(order_id,factory,workshop,$("#work_date").val());
+			$("#workshop_prd_qty").html(prd_qty)
+		}
+		
 		
 	}, null,"#factory",null);
 	
@@ -933,11 +1022,15 @@ function zTreeOnClick(event, treeId, treeNode) {
 function ajaxQueryTeamStaffDetail(){
 	//var bus_type="";
 	var order_id_update=$("#bus_number").attr("order_id")||$("#order_no").attr("order_id");
-/*	if($("#customer_number").val()!=null&&$("#customer_number").val().length>0){
-		bus_type=$("#customer_number").val().split("-")[0];
-	}*/
 	
-	//alert(bus_type)
+	var work_date=$("#work_date").val();
+/*	if(work_date.trim().length==0){
+		alert("请输入操作日期！");
+	}*/
+	if(salary_model=='辅助人力'){
+		work_date=getLastDayOfMonth(work_date);
+	}
+	
 	$.ajax({
 		url:'getTeamStaffDetail',
 		type:'post',
@@ -950,7 +1043,7 @@ function ajaxQueryTeamStaffDetail(){
 			team:team,
 			org_id:org_id,
 			order_id:order_id_update,
-			work_date:$("#work_date").val()
+			work_date:work_date
 		},
 		success:function(response){
 			if(response.salary_model){
@@ -1021,7 +1114,7 @@ function showStaffList(staff_list){
 		            {"title":"工号","class":"center","data":"staff_number","defaultContent": ""},
 		            {"title":"姓名","class":"center","data":"name","defaultContent": ""},
 		            {"title":"岗位","class":"center","data": "job","defaultContent": ""},	  
-		            {"title":"技能系数","width":"80","class":"center","data":"skill_parameter","defaultContent": "","render":function(data,type,row){
+		            {"title":"技能系数"+"&nbsp;<i title='粘贴整列' name='edit' rel='tooltip'  class='fa fa-clipboard dstcopy' cp_flag='skill_parameter'  style='cursor: pointer;color:blue'></i>","width":"80","class":"center","data":"skill_parameter","defaultContent": "","render":function(data,type,row){
 		            	var html="";
 		            	if(salary_model=='辅助人力'){
 		            		html="<input type='text' class='input-medium skill_parameter' style='width:60px;height:28px;text-align:center' value='"+data+"'  />"+
@@ -1106,6 +1199,13 @@ function changeWorkDate(){
 		showStaffList(staff_list)
 				
 		//updateStaffInfo(staff_list);
+		/**
+		 * 辅助人力模式获取订单车间产量
+		 */
+		if(salary_model=='辅助人力' && (order_id!=""||order_id!="0"||order_id !=undefined)){
+			var prd_qty=ajaxGetWorkshopPrdQty(order_id,factory,workshop,$("#work_date").val());
+			$("#workshop_prd_qty").html(prd_qty)
+		}
 	
 }
 
@@ -1171,7 +1271,7 @@ function validateBus(bus_number,is_customer,work_date){
  * 校验（小班组、操作日期）条件下是否已经维护过工时信息（辅助人力、底薪模式）
  * @returns {Boolean}
  */
-function validateRecordIn(work_date){
+function validateRecordIn(work_date,order_id){
 	
 	var flag=true;
 	$.ajax({
@@ -1185,7 +1285,8 @@ function validateRecordIn(work_date){
 			workgroup:workgroup,
 			team:team,
 			work_date:work_date,
-			salary_model:salary_model
+			salary_model:salary_model,
+			order_id:order_id
 		},
 		success:function(response){
 			if(!response.success){
@@ -1267,7 +1368,7 @@ function updateStaffInfo(staff_list){
 					var skill_parameter=staff.skill_parameter;
 					
 					if(staff_number_v==staff_number){
-						$(tr).children("td").eq(4).html(skill_parameter);						
+						$(tr).children("td").eq(4).find(".skill_parameter").val(skill_parameter);						
 						return false;
 					}
 				})
@@ -1331,4 +1432,28 @@ function ajaxGetWorkgroupPrice(){
 		}
 	})
 	return price;
+}
+
+/**
+ * 获取订单车间产量(辅助人力)
+ */
+function ajaxGetWorkshopPrdQty(order_id,factory,workshop,work_month){
+	var prd_qty=0;
+	$.ajax({
+		type : "get",// 使用get方法访问后台
+		dataType : "json",// 返回json格式的数据
+		url : "getWorkshopPrdQty",
+		async :false,
+		data : {
+			"factory" : factory,
+			"workshop" : workshop,
+			"work_month" :work_month,
+			"order_id":order_id
+		},
+		success : function(response) {
+			prd_qty=response.data
+		}
+	})
+	
+	return prd_qty;
 }

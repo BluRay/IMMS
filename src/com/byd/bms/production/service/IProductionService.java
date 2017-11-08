@@ -110,6 +110,8 @@ public interface IProductionService {
 	public void verifyStaffHours(Map<String, Object> condMap,ModelMap model);
 
 	public void getStaffInfo(Map<String, Object> condMap, ModelMap model);
+
+	public void getWorkshopPrdQty(Map<String, Object> condMap, ModelMap model);
 	/*****************************xiong jianwu end  *****************************/
 
 	/******************* tangjin start**************************/
@@ -189,5 +191,6 @@ public interface IProductionService {
 	public int saveTmpOrderProcedure(Map<String, Object> cmap);
 	public int updateTmpOrder(Map<String, Object> cmap);
 	public String caculateTmpSalary(Map<String, Object> conditionMap);
+
 
 }

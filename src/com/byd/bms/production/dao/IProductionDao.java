@@ -124,7 +124,9 @@ public interface IProductionDao {
 	
 	void updateFactoryOrder(Map<String, Object> m);
 
-	List<Map<String, Object>> queryStaffInfo(Map<String, Object> condMap);
+	List<Map<String, Object>> queryStaffInfo(Map<String, Object> condMap);	
+
+	int queryWorkshopPrdQty(Map<String, Object> condMap);
 	/*****************************xiong jianwu end  *****************************/
 
 	/******************* tangjin start**************************/
@@ -222,5 +224,6 @@ public interface IProductionDao {
 	public int saveTmpOrderProcedure(Map<String, Object> cmap);
 	public int updateTmpOrder(Map<String, Object> cmap);
 	public String caculateTmpSalary(Map<String, Object> conditionMap);
+
 
 }

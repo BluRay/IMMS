@@ -776,6 +776,9 @@
 		<if test="bus_number !=null and bus_number !=''">
 			and h.bus_number=#{bus_number}
 		</if>
+		<if test="order_id !=null and order_id !=''">
+			and h.order_id=#{order_id}
+		</if>
 		<if test="work_date !=null and work_date !=''">
 			and h.work_date=#{work_date}
 		</if>
@@ -847,7 +850,7 @@
 	
 	<!-- 计件工资计算（辅助人力模式） -->
 	<select id="caculatePieceSalary_2" statementType="CALLABLE" parameterType="Map" resultType="String">
-		call P_CACULATE_PIECE_SALLARY_2(#{factory},#{workshop},#{workgroup},#{team},#{work_month});
+		call P_CACULATE_PIECE_SALLARY_2(#{factory},#{workshop},#{workgroup},#{team},#{work_month},#{order_id});
 	</select>
 	
 	<!-- 计件工资计算（底薪模式） -->
@@ -871,12 +874,15 @@
 	
 	<update id="updateStaffHoursStatus" parameterType="Map">
 		update BMS_HR_STAFF_PIECE_HOURS set status=#{status}
-		where factory=#{factory} and workshop=#{workshop} and workgroup=#{workgroup} and team=#{team}
+		where factory=#{factory} and workshop=#{workshop} and workgroup=#{workgroup} and team=#{team} and salary_model=#{salary_model}
 		<if test="bus_number_list !=null and bus_number_list !=''">
-			and find_in_set(bus_number,#{bus_number_list})>0 and salary_model=#{salary_model}
+			and find_in_set(bus_number,#{bus_number_list})>0 
 		</if>
 		<if test="work_date_list !=null and work_date_list !=''">
-			and find_in_set(work_date,#{work_date_list})>0 and salary_model=#{salary_model}
+			and find_in_set(work_date,#{work_date_list})>0 
+		</if>
+		<if test="order_id !=null and order_id !=''">
+			and find_in_set(order_id,#{order_id})>0 
 		</if>
 	</update>
 	
@@ -896,6 +902,52 @@
 	<update id="updateFactoryOrder" parameterType="Map">
 		update BMS_OR_FACTORY_ORDER set status=#{status} where factory_id=#{factory_id} and order_id=#{order_id}
 	</update>
+	
+	<select id="queryWorkshopPrdQty" parameterType="Map" resultType="int">
+		<if test="workshop=='焊装'">
+		select count(b.id)
+		from BMS_PLAN_BUS b
+		left join BMS_BASE_FACTORY f on b.factory_id=f.id
+		where f.factory_name=#{factory} and substring(b.welding_offline_date,1,7)=#{work_month}
+		and b.order_id=#{order_id}
+		</if> 
+		<if test="workshop=='涂装'">
+		select count(b.id)
+		from BMS_PLAN_BUS b
+		left join BMS_BASE_FACTORY f on b.factory_id=f.id
+		where f.factory_name=#{factory} and substring(b.painting_offline_date,1,7)=#{work_month}
+		and b.order_id=#{order_id}
+		</if>
+		<if test="workshop=='底盘'">
+		select count(b.id)
+		from BMS_PLAN_BUS b
+		left join BMS_BASE_FACTORY f on b.factory_id=f.id
+		where f.factory_name=#{factory} and substring(b.chassis_offline_date,1,7)=#{work_month}
+		and b.order_id=#{order_id}
+		</if>
+		<if test="workshop=='总装'">
+		select count(b.id)
+		from BMS_PLAN_BUS b
+		left join BMS_BASE_FACTORY f on b.factory_id=f.id
+		where f.factory_name=#{factory} and substring(b.assembly_offline_date,1,7)=#{work_month}
+		and b.order_id=#{order_id}
+		</if>
+		<if test="workshop=='自制件'">
+		select ifnull(sum(s.quantity),0)
+		from BMS_PD_WORKSHOP_SUPPLY s
+		left join BMS_BASE_FACTORY f ON s.factory_id=f.id
+		where supply_workshop='自制件' and receive_workshop='部件' 
+		and substring(s.supply_date,1,7)=#{work_month} and f.factory_name=#{factory} and s.order_id=#{order_id}
+		</if>
+		<if test="workshop=='部件'">
+		select ifnull(sum(pf.offline_real_qty),0)
+		from BMS_PD_PARTS_PLAN_FINISH pf
+		left join BMS_BASE_FACTORY f ON pf.factory_id=f.id
+		left join BMS_BASE_KEY k on k.value=pf.parts_id and k.key_code='BASE_PARTS'
+		where substring(pf.prod_date,1,7)=#{work_month} and k.key_name='喷砂' and f.factory_name=#{factory}
+		and pf.order_id=#{order_id}
+		</if>
+	</select>
 <!-- ########################### xiong jianwu end#############################-->
 
 	<update id="updateBusMotorNumber" parameterType="map">
@@ -2043,8 +2095,11 @@
 	
 	<!-- added by xiong.jianwu 查询员工计件工时信息 -->
 	<select id="queryStaffHoursDetail" parameterType="Map" resultType="Map">
-		select h.*,s.name staff_name,s.job,s.plant_org,s.workshop_org,sa.ppay
+		select h.*,s.name staff_name,s.job,s.plant_org,s.workshop_org,sa.ppay,
+		concat(o.order_no,' ',o.order_name,' ',t.bus_type_code,' ',o.order_qty,'台') order_desc
 		from BMS_HR_STAFF_PIECE_HOURS h
+		left join BMS_OR_ORDER o on o.id=h.order_id
+		left join BMS_BASE_BUS_TYPE t on t.id=o.bus_type_id
 		left join BMS_HR_PIECE_SALARY sa on
 		<if test="salary_model=='技能系数' or salary_model=='承包制' or salary_model=='自制件承包' ">
 			h.staff_number=sa.staff_number and h.factory=sa.factory
@@ -2052,7 +2107,7 @@
 		</if>
 		<if test="salary_model=='辅助人力' or salary_model=='底薪模式' ">
 			h.staff_number=sa.staff_number and h.factory=sa.factory
-			and h.workshop=sa.workshop and substring(h.work_date,1,7)=sa.work_date
+			and h.workshop=sa.workshop and substring(h.work_date,1,7)=sa.work_date and h.order_id=sa.order_id
 		</if>
 		left join BMS_HR_STAFF s on h.staff_number=s.staff_number
 		where find_in_set(h.status,#{status})>0 
@@ -2067,8 +2122,16 @@
 		</if>
 		<if test="wdate_end !=null and wdate_end !=''">
 			and h.work_date&lt;=#{wdate_end}
-		</if>	 
+		</if>
+		<if test="salary_model=='技能系数' or salary_model=='承包制' or salary_model=='自制件承包' "> 
 		order by h.bus_number,h.work_date,h.staff_number
+		</if>
+		<if test="salary_model=='辅助人力'">
+		order by h.order_id,h.work_date,h.staff_number
+		</if>
+		<if test="salary_model=='底薪模式' ">
+		order by h.work_date,h.staff_number
+		</if>
 	</select>
 	
 	<update id="deleteWaitHourInfo" parameterType="Map">

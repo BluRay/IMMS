@@ -185,7 +185,55 @@
 			</if>	
 		</if>
 		
-		<if test="salary_model=='辅助人力' or salary_model=='底薪模式'">
+		<if test="salary_model=='辅助人力'">
+		select h.*,s.name staff_name,s.job,s.basic_salary,ps.ppay,concat(o.order_no,o.order_name,t.bus_type_code,' ',o.order_qty,'台') order_desc,
+		(select round(sum(p.ppay),2) from BMS_HR_PIECE_SALARY p where p.factory=h.factory and p.workshop=h.workshop
+		and p.workgroup=h.workgroup and p.team=h.team
+		<if test="count_flag=='订单维度'">
+			and p.order_id=ps.order_id  
+		</if>	
+		<if test="count_flag=='人员维度'">
+			and p.staff_number=h.staff_number 
+		</if>	
+		and locate(substring(#{wdate_start},1,7),p.work_date)>0 and p.salary_model=#{salary_model}) as total_ppay
+		from BMS_HR_STAFF_PIECE_HOURS h
+		left join BMS_OR_ORDER o on h.order_id=o.id
+		left join BMS_BASE_BUS_TYPE t on t.id=o.bus_type_id
+		left join BMS_HR_PIECE_SALARY ps 
+		on ps.salary_model=#{salary_model} and h.staff_number=ps.staff_number and h.factory=ps.factory
+		and h.workshop=ps.workshop and h.workgroup=ps.workgroup and h.team=ps.team and locate(ps.work_date,h.work_date)>0 and h.order_id=ps.order_id
+		left join BMS_HR_STAFF s on s.staff_number=h.staff_number
+		where h.factory=#{factory} and h.workshop=#{workshop} and h.salary_model=#{salary_model}
+		<if test="workgroup !=null and workgroup !='全部'">
+				and h.workgroup=#{workgroup}
+			</if>
+			<if test="team !=null and team !='全部'">
+				and h.team=#{team}
+			</if>
+			<if test="staff !=null and staff !=''">
+				and (h.staff_number like concat('%',#{staff},'%') or s.name like concat('%',#{staff},'%') ) 
+			</if>
+			<if test="wdate_start !=null and wdate_start !=''">
+				and h.work_date>=#{wdate_start}
+			</if>
+			<if test="wdate_end !=null and wdate_end !=''">
+				and h.work_date&lt;=#{wdate_end}
+			</if>
+			<if test="order_id !=null and order_id !=''">
+				and h.order_id=#{order_id}
+			</if>
+			<if test="count_flag=='订单维度'">
+				order by h.order_id,h.work_date,h.factory,h.workshop,h.workgroup,h.team
+			</if>	
+			<if test="count_flag=='人员维度'">
+				order by h.staff_number,h.work_date
+			</if>
+			<if test="start !=null and length !='-1' ">
+				LIMIT #{start} ,#{length} 
+			</if>
+		</if>
+		
+		<if test="salary_model=='底薪模式'">
 		select h.*,s.name staff_name,s.job,s.basic_salary,ps.ppay,
 		(select round(sum(p.ppay),2) from BMS_HR_PIECE_SALARY p where p.factory=h.factory and p.workshop=h.workshop
 		and p.workgroup=h.workgroup and p.team=h.team

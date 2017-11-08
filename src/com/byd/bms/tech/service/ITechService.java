@@ -78,6 +78,7 @@ public interface ITechService {
 	public Map<String,Object> querySingleTasklist(String conditions);
 
 	public List<Map<String, String>> queryStaffWorkHours(Map<String, Object> conditionMap);
+	public List<Map<String, String>> queryBusNumberFollowList(Map<String, Object> conditionMap);
 	
 	public int saveWorkHourInfo(List<Map<String, Object>> swh_list);
 	public int deleteWorkHourInfo(Map<String, String> conditionMap);

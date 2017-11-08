@@ -500,9 +500,8 @@ function fadeMessageAlert(title,message, alertClass) {
 function check_All_unAll(tableId, checkall) {
 	if (checkall) {
 		$(tableId + " tbody :checkbox").not(':disabled').prop("checked", true);
-		//alert("选中");
 	} else {
-		$(tableId + " tbody :checkbox ").prop("checked",false);
+		$(tableId + " tbody :checkbox").prop("checked",false);
 	}
 }
 
@@ -1025,4 +1024,20 @@ function getRoleList(){
 	return role_list;
 }
 
+function getLastDayOfMonth(dateString) {
+	if(dateString==null||dateString==''){
+		return "";
+	}
+	var d_list=dateString.split("-");
+	var y=d_list[0];
+	var m=Number(d_list[1])+1;
+	var l_date=new Date(y+"/"+m+"/"+"0");
+	l_y = l_date.getFullYear()
+	l_m = l_date.getMonth() + 1
+	l_d = l_date.getDate()
+	l_m = l_m< 10 ? "0" + l_m :l_m
+	l_d = l_d < 10 ? "0" + l_d : l_d
 	
+	
+	return l_y + "-" + l_m + "-" + l_d;
+}	

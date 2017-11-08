@@ -45,12 +45,17 @@ $(document).ready(function() {
 		var bus_number=null;
 		var work_date=null;
 		var swh_id=null;
+		var order_id=null;
 		var rowdata=null;
 		if(del_flag=='del_all'){//车号(操作日期)批量删除
-			if(salary_model=="技能系数"||salary_model=="承包制"){
+			if(salary_model=="技能系数"||salary_model=="承包制"||salary_model=="自制件承包"){
 				bus_number=$(e.target).parent("td").next("td").html();
 				work_date=$(e.target).parent("td").next("td").next("td").html();
-			}else{
+			}else if(salary_model=="辅助人力"){
+				order_id=$(e.target).attr("order_id");
+				work_date=$(e.target).parent("td").next("td").next("td").html();
+			}
+			else{
 				work_date=$(e.target).parent("td").next("td").html();
 			}
 			
@@ -367,7 +372,42 @@ function showStaffList(staff_hour_list){
 		            }}
 		          ]	;
 	}
-	if(salary_model=='辅助人力'||salary_model=='底薪模式'){
+	if(salary_model=='辅助人力'){
+		fixedColumns={
+	            leftColumns: 2,
+	            rightColumns:0
+	        };
+		rowsGroup=[0,1,2,3];
+		columns= [
+		            {"title":"","width":"30","class":"center","data":"order_id","defaultContent": "","render":function(data,type,row){
+		            	return "<i class=\"fa fa-times bigger-110\" del_flag='del_all' order_id='"+data+"' style=\"cursor: pointer;color: red;\"></i>";
+		            }},
+		            {"title":"订单","class":"center","data":"order_desc","defaultContent": ""},
+		            {"title":"操作日期","class":"center","data":"work_date","defaultContent": ""},
+		            {"title":"补贴车","class":"center","data":"bonus","defaultContent": "","render":function(data,type,row){
+		            	return "<input type='text' class='input-medium bonus' style='width:60px;height:28px;text-align:center' value='"+data+"' />";
+		            }},
+		            {"title":"工号","class":"center","data":"staff_number","defaultContent": ""},
+		            {"title":"姓名","class":"center","data":"staff_name","defaultContent": ""},
+		            {"title":"岗位","class":"center","data": "job","defaultContent": ""},	  
+		            {"title":"技能系数","width":"80","class":"center","data":"skill_parameter","defaultContent": "","render":function(data,type,row){
+		            	var html="";
+		            	if(salary_model=='辅助人力'){
+		            		html="<input type='text' class='input-medium skill_parameter' style='width:60px;height:28px;text-align:center' value='"+data+"'  />";
+		            	}
+		            	return html;
+		            }},		
+		            {"title":"参与度/工时","width":"100","class":"center","data": "work_hour","defaultContent": "","render":function(data,type,row){
+		            	return "<input type='text' class='input-medium work_hour' style='width:60px;height:28px;text-align:center'  value='"+data+"'/>";
+		            }},	
+		            {"title":"车间","class":"center","data":"workshop_org","defaultContent":""},
+		            {"title":"工厂","class":"center","data":"plant_org","defaultContent": ""},
+		            {"title":"","width":"30","class":"center","data":"","defaultContent": "","render":function(data,type,row){
+		            	return "<i class=\"fa fa-times bigger-110\" del_flag='del_single' style=\"cursor: pointer;color: red;\" row='"+JSON.stringify(row)+"' swh_id='"+row.id+"'></i>";
+		            }}
+		          ]	;
+	}
+	if(salary_model=='底薪模式'){
 		fixedColumns={
 	            leftColumns: 2,
 	            rightColumns:0

@@ -59,6 +59,7 @@ $(document).ready(function() {
 		var cboxlist=$("#tableResult tbody :checked");
 		var bus_list=[];
 		var work_date_list=[];
+		var order_list=[];
 		if(cboxlist.length==0){
 			alert("请选择需要审核的工时信息！");
 			return false;
@@ -70,7 +71,13 @@ $(document).ready(function() {
 					var bus_number=$(td).next().html();
 					bus_list.push(bus_number)
 				}
-				if(salary_model=='辅助人力' ||salary_model=='底薪模式' ){
+				if(salary_model=='辅助人力'  ){
+					var order_id=$(cbox).attr("order_id");
+					var work_date=$(td).next().next().html();
+					work_date_list.push(work_date);
+					order_list.push(order_id);
+				}
+				if(salary_model=='底薪模式' ){
 					var work_date=$(td).next().html();
 					work_date_list.push(work_date);
 				}
@@ -79,7 +86,7 @@ $(document).ready(function() {
 		})
 		//alert(bus_list.join(",")+"/"+work_date_list.join(","))
 	
-		ajaxSave(bus_list.join(","),work_date_list.join(","),salary_model);
+		ajaxSave(bus_list.join(","),work_date_list.join(","),salary_model,order_list.join(","));
 	})
 });
 
@@ -208,7 +215,32 @@ function showStaffList(staff_hour_list){
 		         
 		          ]	;
 	}
-	if(salary_model=='辅助人力'||salary_model=='底薪模式'){
+	if(salary_model=='辅助人力'){
+		fixedColumns={
+	            leftColumns: 2,
+	            rightColumns:0
+	        };
+		rowsGroup=[0,1,2,3];
+		columns= [
+		            {"title":"<input id=\"checkall\" type=\"checkbox\" />","width":"30","class":"center","data":"order_id","defaultContent": "","render":function(data,type,row){
+		            	return "<input id='cbx_"+row.order_id+"' type=\"checkbox\"  order_id='"+data+"' />";
+		            }},
+		            {"title":"订单","class":"center","data":"order_desc","defaultContent": ""},
+		            {"title":"操作日期","class":"center","data":"work_date","defaultContent": ""},
+		            {"title":"补贴车","class":"center","data":"bonus","defaultContent": ""},
+		            {"title":"工号","class":"center","data":"staff_number","defaultContent": ""},
+		            {"title":"姓名","class":"center","data":"staff_name","defaultContent": ""},
+		            {"title":"岗位","class":"center","data": "job","defaultContent": ""},	  
+		            {"title":"技能系数","width":"80","class":"center","data":"skill_parameter","defaultContent": ""},		
+		            {"title":"参与度/工时","width":"100","class":"center","data": "work_hour","defaultContent": ""/*,"render":function(data,type,row){
+		            	return "<input type='text' class='input-medium work_hour' style='width:60px;height:28px;text-align:center'  value='"+data+"'/>";
+		            }*/},	
+		            {"title":"计件工资(月)","class":"center","data": "ppay","defaultContent": ""},
+		            {"title":"车间","class":"center","data":"workshop_org","defaultContent":""},
+		            {"title":"工厂","class":"center","data":"plant_org","defaultContent": ""},
+		          ]	;
+	}
+	if(salary_model=='底薪模式'){
 		fixedColumns={
 	            leftColumns: 2,
 	            rightColumns:0
@@ -231,7 +263,6 @@ function showStaffList(staff_hour_list){
 		            {"title":"工厂","class":"center","data":"plant_org","defaultContent": ""},
 		          ]	;
 	}
-	
 	if(salary_model=='自制件承包'){
 		fixedColumns={
 	            leftColumns: 5,
@@ -317,7 +348,7 @@ function ajaxGetStaffHoursDetail(staff_number){
 		})
 }
 
-function ajaxSave(bus_number_list,work_date_list,salary_model){
+function ajaxSave(bus_number_list,work_date_list,salary_model,order_id_list){
 	$.ajax({
 		url:'verifyStaffHours',
 		method:'post',
@@ -330,6 +361,7 @@ function ajaxSave(bus_number_list,work_date_list,salary_model){
 			team:team,
 			bus_number_list:bus_number_list,
 			work_date_list:work_date_list,
+			order_id_list:order_id_list,
 			salary_model:salary_model
 		},
 		success:function(response){

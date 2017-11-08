@@ -505,7 +505,7 @@ public class ProductionServiceImpl implements IProductionService {
 		workhour_list=productionDao.queryStaffWorkhourList(condMap);
 		if(workhour_list.size()>0){
 			model.put("success", false);
-			model.put("message", "在该组织结构下已维护了计件工时信息，请不要重复维护！");
+			model.put("message", "已维护了计件工时信息，请不要重复维护！");
 			return;
 		}		
 	}
@@ -637,6 +637,7 @@ public class ProductionServiceImpl implements IProductionService {
 		String workgroup=staff_hour_list.get(0).get("workgroup").toString();
 		String team=staff_hour_list.get(0).get("team").toString();
 		String work_date=staff_hour_list.get(0).get("work_date").toString();
+		String order_id=staff_hour_list.get(0).get("order_id").toString();
 		
 		Map<String, Object> condMap=new HashMap<String,Object>();
 		condMap.put("factory", factory);
@@ -645,6 +646,7 @@ public class ProductionServiceImpl implements IProductionService {
 		condMap.put("team", team);
 		condMap.put("work_month", work_date.substring(0, 7));
 		condMap.put("work_date", work_date);
+		condMap.put("order_id", order_id);
 		condMap.put("salary_model", "辅助人力");
 
 		//保存工时信息
@@ -925,6 +927,7 @@ public class ProductionServiceImpl implements IProductionService {
 		JSONArray staff_hours_arr=JSONArray.fromObject(str_staffHours);
 		Iterator it_del=staff_hours_arr.iterator();
 		List<Map<String,Object>> staff_hour_list=new ArrayList<Map<String,Object>>();
+		List order_id_list=new ArrayList();
 		
 		while(it_del.hasNext()){
 			JSONObject jel=(JSONObject) it_del.next();
@@ -933,6 +936,11 @@ public class ProductionServiceImpl implements IProductionService {
 			staff.put("edit_date", edit_date);
 			staff.put("status", "1");
 			staff_hour_list.add(staff);
+			int order_id=Integer.parseInt(staff.get("order_id").toString());
+			if(!order_id_list.contains(order_id)){
+				order_id_list.add(order_id);
+			}
+			
 		}
 		String factory =staff_hour_list.get(0).get("factory").toString();
 		String workshop=staff_hour_list.get(0).get("workshop").toString();
@@ -940,12 +948,14 @@ public class ProductionServiceImpl implements IProductionService {
 		String team=staff_hour_list.get(0).get("team").toString();
 		String work_date=staff_hour_list.get(0).get("work_date").toString();
 		
+		
 		Map<String, Object> condMap=new HashMap<String,Object>();
 		condMap.put("factory", factory);
 		condMap.put("workshop", workshop);
 		condMap.put("workgroup", workgroup);
 		condMap.put("team", team);
 		condMap.put("work_month", work_date.substring(0, 7));
+		condMap.put("order_id", StringUtils.join(order_id_list.toArray(),","));
 		condMap.put("salary_model", "辅助人力");
 		/**
 		 * 更新工时信息
@@ -1095,6 +1105,15 @@ public class ProductionServiceImpl implements IProductionService {
 		datalist=productionDao.queryStaffInfo(condMap);
 		model.put("staff_list", datalist);
 	}
+	
+
+	@Override
+	public void getWorkshopPrdQty(Map<String, Object> condMap, ModelMap model) {
+		int qty=productionDao.queryWorkshopPrdQty(condMap);
+		model.put("data", qty);
+		
+	}
+	
 	/*****************************xiong jianwu end  *****************************/
 
 

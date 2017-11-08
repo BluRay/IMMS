@@ -14,7 +14,11 @@ $(document).ready(function(){
 	
 	$(document).on("change","#search_salary_model",function(){
 		var options="<option value='车辆维度'>车辆维度</option><option value='人员维度'>人员维度</option>";
-		if($(this).val()=='辅助人力'||$(this).val()=='底薪模式'){
+		if($(this).val()=='辅助人力'){
+			options="<option value='订单维度'>订单维度</option><option value='人员维度'>人员维度</option>";
+			
+		}
+		if($(this).val()=='底薪模式'){
 			options="<option value='日期维度'>日期维度</option><option value='人员维度'>人员维度</option>";
 			
 		}
@@ -198,10 +202,12 @@ function ajaxQuery(){
 	}
 	
 	if(salary_model=="辅助人力"){
-		if(count_flag=='日期维度'){
-			rowsGroup=[0,1,2,3,4,11]
+		if(count_flag=='订单维度'){
+			rowsGroup=[0,1,2,3,4,13]
 			columns= [
+			          	{"title":"订单","class":"center","data":"order_desc","defaultContent": ""},
 			            {"title":"操作日期","class":"center","data":"work_date","defaultContent": ""},
+			            {"title":"补贴车","class":"center","data":"bonus","defaultContent": ""},
 			            {"title":"工厂","class":"center","data":"factory","defaultContent": ""},
 			            {"title":"车间","class":"center","data":"workshop","defaultContent":""},
 			            {"title":"班组","class":"center","data":"workgroup","defaultContent":""},
@@ -215,7 +221,7 @@ function ajaxQuery(){
 			            {"title":"合计工资","class":"center","data": "total_ppay","defaultContent": ""}	
 			          ]	;
 		}else{
-			rowsGroup=[0,1,2,3,4,5,6,11]
+			rowsGroup=[0,1,2,3,4,5,6,13]
 			columns= [
 			          	{"title":"工号","class":"center","data":"staff_number","defaultContent": ""},
 			          	{"title":"姓名","class":"center","data":"staff_name","defaultContent": ""},
@@ -224,7 +230,9 @@ function ajaxQuery(){
 			            {"title":"班组","class":"center","data":"workgroup","defaultContent":""},
 			            {"title":"小班组","class":"center","data":"team","defaultContent":""},
 			          	{"title":"岗位","class":"center","data": "job","defaultContent": ""},	
+			          	{"title":"订单","class":"center","data":"order_desc","defaultContent": ""},
 			            {"title":"操作日期","class":"center","data":"work_date","defaultContent": ""},
+			            {"title":"补贴车","class":"center","data":"bonus","defaultContent": ""},
 			            {"title":"技能系数","width":"80","class":"center","data":"skill_parameter","defaultContent": ""},  		            
 			            {"title":"参与度/工时","width":"100","class":"center","data": "work_hour","defaultContent": ""},
 			            {"title":"计件工资（月）","class":"center","data": "ppay","defaultContent": ""},
@@ -414,7 +422,7 @@ function ajaxQuery(){
                 		if(count_flag=='车辆维度'){              			
                     		$("#count_info").html("共计"+info.bus_total+"台车辆");
                     	}
-                	if(count_flag=='人员维度'){
+                	if(count_flag=='人员维度' && salary_model!='辅助人力' && salary_model !='底薪模式'){
                     		$("#count_info").html("共计"+info.staff_total+"个人员");
                     	}
                 	}
