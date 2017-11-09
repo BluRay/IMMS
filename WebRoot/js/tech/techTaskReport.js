@@ -105,7 +105,7 @@ function initTable() {
 		    	        	},
 			        	formatter:function(value,row,index){
 		        			var total_hours = 0
-			        		if(row.TECH_LIST==''||row.TIME_LIST==''){
+			        		if(row.TECH_LIST==''||row.TIME_LIST==''||(typeof(row.TECH_LIST)) == "undefined"||(typeof(row.TIME_LIST)) == "undefined"){
 			        			return '-';
 			        		}else{
 				        		tech_str = row.TECH_LIST.replace(/:/g,'":"');

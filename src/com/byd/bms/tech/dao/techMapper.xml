@@ -1341,6 +1341,18 @@
 			VALUES(#{item.task_id},#{item.task_detail_id},#{item.bus_number},#{item.order_no},#{item.factory},#{item.workshop})
 		</foreach>
 	</insert>
+	<select id="getTaskTechList" parameterType="Map" resultType="Map">
+		SELECT F.workshop,F.follow_num FROM BMS_TECH_TASK_FOLLOW_PRE F 
+		WHERE F.tech_task_id = #{task_id} AND F.task_detail_id = #{task_detail_id}
+		UNION ALL
+		SELECT F.workshop,count(F.bus_number) AS follow_num FROM BMS_TECH_TASK_FOLLOW F 
+		WHERE F.tech_task_id = #{task_id} AND F.task_detail_id = #{task_detail_id}
+		GROUP BY F.workshop
+		ORDER BY LOCATE(workshop,'自制件,部件,焊装,涂装,底盘,总装,检测线')
+	</select>
+	<update id="updateTaskTechList" parameterType="Map">
+		UPDATE BMS_TECH_TASK_DETAIL SET tech_list = #{tech_list} WHERE id = #{task_detail_id}
+	</update>
 	
 	<!--新增变更物料清单 -->
 	<insert id="addChangedMaterialList" useGeneratedKeys="true" parameterType="List">

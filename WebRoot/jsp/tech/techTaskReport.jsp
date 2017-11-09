@@ -107,7 +107,7 @@
 	<style type="text/css">
 	.fixed-table-toolbar .bs-bars, .fixed-table-toolbar .search, .fixed-table-toolbar .columns {
 		position: absolute;
-		margin-top: 102px;
+		margin-top: 100px;
 		right: 20px;
 		top: 0px;
 	}
