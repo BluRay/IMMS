@@ -616,8 +616,9 @@ public class TechServiceImpl implements ITechService {
 			map.put("bus_number", jsonArray.getString(i).toString());
 			add_list.add(map);
 		}
-		techDao.addBusFollow(add_list);
-		
+		if(add_list.size() >0 ){
+			techDao.addBusFollow(add_list);
+		}
 		String tech_list_str = "";
 		List<Map<String, Object>> tech_list = new ArrayList<Map<String, Object>>();
 		tech_list = techDao.getTaskTechList(conditionMap);

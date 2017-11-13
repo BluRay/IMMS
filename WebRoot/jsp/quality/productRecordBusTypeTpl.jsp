@@ -33,7 +33,7 @@
 							href="/BMS/index">首页</a></li>
 						<li><a href="#">制程品质</a></li>
 						<li><a href="#">基础数据</a></li>
-						<li><a href="#">车型成品记录表模板</a></li>
+						<li><a href="#">成品记录表模板</a></li>
 					</ul>
 					<!-- /.breadcrumb -->
 
@@ -50,22 +50,45 @@
 				<div class="page-content">
 					<form id="form" class="well form-search">
 						<table>
-							<tr>
+							<!-- <tr>
 								<td>车型：</td>
 								<td>
 									<select name="" id="search_bus_type" class="input-medium carType" style="height: 30px;width:100px;" ></select>
 								</td>
-<!-- 								<td>订单：</td>
-								<td><input style="height: 30px;width:130px;" type="text" class="input-medium revise" placeholder="订单编号..." id="search_order_no" /></td> -->
+								<td>订单：</td>
+								<td><input style="height: 30px;width:130px;" type="text" class="input-medium revise" placeholder="订单编号..." id="search_order_no" /></td>
 								<td>检验节点：</td>
 								<td>
-									<!-- <input type="text"  id="search_parts" class="input-medium" style="height: 30px;width:90px;" ></input> -->
+									<input type="text"  id="search_parts" class="input-medium" style="height: 30px;width:90px;" ></input>
 									<select id="search_node" class="input-medium" style="height: 30px;width:120px;" >
 										<option value=''>全部</option>
 									</select>
 								</td>						
 								<td><input type="button" class="btn btn-sm btn-primary" id="btnQuery" value="查询" style="margin-left: 2px;"></input>						
 										 <input type="button" class="btn btn-sm btn-success" id="btnImport" value="导入" style="margin-left: 2px;"></input>
+								</td>
+							</tr> -->
+							<tr>
+								<td>车型：</td>
+								<td>
+									<select name="" id="search_bus_type" class="input-medium carType" style="height: 30px;width:100px;" ></select>
+								</td>
+ 								<td>订单：</td>
+								<td><input style="height: 30px;width:130px;" type="text" class="input-medium revise" placeholder="订单编号..." id="search_order_no" /></td> 
+								<td>配置：</td>
+								<td>
+									<select name="" id="search_order_config" class="input-medium carType" style="height: 30px;width:100px;" >
+										<option value=''>全部</option>
+									</select>
+								</td>
+								<td>检验节点：</td>
+								<td>
+									<select id="search_node" class="input-medium" style="height: 30px;width:120px;" >
+										<option value=''>全部</option>
+									</select>
+								</td>						
+								<td><input type="button" class="btn btn-sm btn-primary" id="btnQuery" value="查询" style="margin-left: 2px;"></input>						
+									<input type="button" class="btn btn-sm btn-success" id="btnImport" value="导入" style="margin-left: 2px;"></input>
 								</td>
 							</tr>
 
@@ -81,26 +104,28 @@
 				</div>
 
 			<div id="dialog-config" class="hide">
-				<div id="create_form" class="form-horizontal">
+				<div id="create_form" class="form-horizontal">					
 					<div class="form-group">
-						<label class="col-sm-2 control-label no-padding-right" for="" >*&nbsp;车型：</label>
+						<label class="col-sm-2 control-label no-padding-right" for="" >*&nbsp;订单：</label>
 						<div class="col-sm-2">
-							<select id="bus_type" class="input-medium" style="height: 30px;width:100%;" ></select>
-						</div>						
-						<label class="col-sm-2 control-label no-padding-right " for="" >*&nbsp;检验节点：</label>
+							<input id="order" type="text" class="input-medium" style="height: 30px;width:100%;" ></input>
+						</div>	
+						<label class="col-sm-2 control-label no-padding-right" style="width:70px;" >*&nbsp;配置：</label>
+						<div class="col-sm-2">
+							<select id="order_config" class="input-medium" style="height: 30px;width:100%;" >
+								<option value=''>请选择</option>
+							</select>						
+						</div>					
+						<label class="col-sm-2 control-label no-padding-right " style="width:90px;" >*&nbsp;检验节点：</label>
 						<div class="col-sm-2">
 							<select id="node" class="input-medium" style="height: 30px;width:100%" ></select>
 						</div>					
 					</div>
-					<div class="form-group">
+					<!-- <div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right" for="" >*&nbsp;备注：</label>
 						<div class="col-sm-6">
 							<textarea class="input-xlarge" style="width: 100%" id="memo" rows="2"></textarea>
 						</div>
-					</div>
-	<!-- 				<div class="form-group">
-						<label class="col-sm-2 control-label no-padding-right " for="" >&nbsp;检验节点：</label>
-						<select id="node" class="input-medium" style="height: 30px;width:100px;" ></select>
 					</div> -->
 					<div class="form-group">					
 						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="editOrderCode">*&nbsp;模板明细：</label>

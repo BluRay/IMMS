@@ -193,6 +193,7 @@ function getOrderNoSelect(elementId, submitId, fn_backcall, bustype,factoryEleme
 					order=value;
 					selectId = value.id;
 					$(elementId).attr("order_id", selectId);
+					$(elementId).attr("bus_type_id",value.bus_type_id);
 					$(submitId).val(selectId);				
 				}
 			})

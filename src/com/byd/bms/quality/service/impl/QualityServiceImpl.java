@@ -137,7 +137,7 @@ public class QualityServiceImpl implements IQualityService {
 		Map<String,Object> smap=null;
 		
 		if(tpl_header_id==0){//无header_id 新增模板
-			qualityDao.insertPrdRcdBusTypeTplHeader(condMap);
+			qualityDao.insertPrdRcdOrderTplHeader(condMap);
 			tpl_header_id=Integer.parseInt(condMap.get("id").toString());
 			smap=new HashMap<String,Object>();
 			smap.put("tpl_header_id", tpl_header_id);
@@ -145,10 +145,18 @@ public class QualityServiceImpl implements IQualityService {
 			
 			qualityDao.insertPrdRcdTplDetail(smap);
 		}else{//更新模板
+			/**
+			 * 判断该模板是否已经录入了数据，是：提示不能修改该模板，否：可以修改
+			 */
+			int record_count=qualityDao.queryProductRecordCount(condMap);
+			if(record_count>0){
+				throw new RuntimeException("已使用该模板录入了成品记录表数据，不能修改该模板！");
+			}
+			
 			smap=new HashMap<String,Object>();
 			smap.put("tpl_header_id", tpl_header_id);
 			smap.put("detail_list", detail_list);
-			qualityDao.updatePrdRcdBusTypeTplHeader(condMap);
+			qualityDao.updatePrdRcdOrderTplHeader(condMap);
 			qualityDao.deletePrdRcdTplByHeader(tpl_header_id);
 			qualityDao.insertPrdRcdTplDetail(smap);
 		}		

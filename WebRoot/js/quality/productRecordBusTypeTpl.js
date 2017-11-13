@@ -12,14 +12,30 @@ $(document).ready(function(){
 			return false;
 		}
 	})
-
+	
+	$(document).on("input","#search_order_no,#order",function(){
+		//alert("change");
+		$(this).attr("order_id","");
+	})
+	
+	$("#search_order_no").change(function(){
+		getOrderConfigSelect($(this).attr("order_id")||"","","#search_order_config","全部","id") ;
+	})
+	
 	$("#btnImport").click(function(){
-		getBusTypeSelect('','#bus_type','请选择','id')
-		$("#bus_type").prop("disabled",false);
+		$("#order").val("").attr("order_id","").attr("disabled",false);
+		$("#order_config").val("").attr("disabled",false);
+		getOrderNoSelect("#order","#orderId",function(obj){
+			//alert(obj.busType);
+			$("#bus_type").val(obj.busType).attr("bus_type_id",obj.bus_type_id);
+			getOrderConfigSelect(obj.id,"","#order_config","请选择","id") ;
+		});
+		//getBusTypeSelect('','#bus_type','请选择','id')
+		//$("#bus_type").prop("disabled",false);
 		getKeysSelect("CHECK_NODE", "", "#node","请选择","id")
 		$("#node").prop("disabled",false); 
 		drawTplDetailTable("#tplDetailTable");
-		$("#memo").val("").prop("disabled",false);
+		//$("#memo").val("").prop("disabled",false);
 		$("#uploadForm").show();
 		
 		var dialog = $( "#dialog-config" ).removeClass('hide').dialog({
@@ -51,13 +67,15 @@ $(document).ready(function(){
 
 })
 function initPage(){
-	getBusNumberSelect('#nav-search-input');
+	//getBusNumberSelect('#nav-search-input');
+	getOrderNoSelect("#search_order_no","#orderId",null,$('#search_bus_type').val());
 	getBusTypeSelect('','#search_bus_type','全部','id');
 	getKeysSelect("CHECK_NODE", "", "#search_node","全部","id") 
 	ajaxQuery();
 }
 
 function ajaxQuery(){
+	$(".divLoading").addClass("fade in").show();
 	$("#tableResult").DataTable({
 		serverSide: true,
 		paiging:true,
@@ -87,6 +105,8 @@ function ajaxQuery(){
 			var param ={
 					"draw":1,
 					"bus_type_id":$("#search_bus_type").val(),
+					"order_id": $("#search_order_no").attr("order_id"),
+					"order_config_id":$("#search_order_config").val(),
 					"test_node_id":$("#search_node").val()
 				};
             param.length = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
@@ -95,7 +115,7 @@ function ajaxQuery(){
 
             $.ajax({
                 type: "post",
-                url: "getPrdRcdBusTypeTplList",
+                url: "getPrdRcdOrderTplList",
                 cache: false,  //禁用缓存
                 data: param,  //传入组装的参数
                 dataType: "json",
@@ -117,10 +137,11 @@ function ajaxQuery(){
 		
 		},
 		columns: [
-		          	{"title":"车型","class":"center","data":"bus_type_code","defaultContent": ""},
+		          	{"title":"订单","class":"center","data":"order_desc","defaultContent": ""},
+		          	{"title":"配置","class":"center","data":"order_config","defaultContent": ""},
 		            {"title":"检验节点","class":"center","data":"test_node","defaultContent": ""},
-		            {"title":"版本号","class":"center","data":"version","defaultContent": ""},
-		            {"title":"备注","class":"center","data":"memo","defaultContent": ""},
+		            /*{"title":"版本号","class":"center","data":"version","defaultContent": ""},*/
+		            /*{"title":"备注","class":"center","data":"memo","defaultContent": ""},*/
 		            {"title":"维护人","class":"center","data": "editor","defaultContent": ""},
 		            {"title":"维护时间","class":"center","data":"edit_date","defaultContent": ""},		            	            
 		            {"title":"操作","class":"center","data":"","render":function(data,type,row){
@@ -130,6 +151,7 @@ function ajaxQuery(){
 		            }
 		          ]
 	});
+	$(".divLoading").hide();
 }
 
 /**
@@ -175,14 +197,16 @@ function upload(form,file){
 }
 
 function drawTplDetailTable(tableId,data){
-	$(tableId).dataTable({
+	var startIndex= 0;
+
+	var tb=$(tableId).dataTable({
 		paiging:false,
 		ordering:false,
 		searching: false,
 		autoWidth:false,
 		destroy: true,
 		paginate:false,
-		rowsGroup:[0],
+		rowsGroup:[0,1],
 		/*//sScrollY: $(window).height()-250,
 		scrollX: true,*/
 		scrollCollapse: false,
@@ -194,24 +218,70 @@ function drawTplDetailTable(tableId,data){
 			infoEmpty:"",
 			zeroRecords:"请导入模板明细！"
 		},
+	/*	fnCreatedRow : function(nRow, aData, iDisplayIndex){  //datatable 添加序列号
+			
+			var td=$("td:first",nRow);
+			//alert($(td)[0].hidden)
+			if($(td).css("display") !="none"){				
+				startIndex++;
+			}
+			jQuery("td:first", nRow).html(startIndex);
+            //jQuery("td:first", nRow).html(iDisplayIndex +1);  
+              return nRow; 			
+			var api = this.api();
+			var startIndex= api.context[0]._iDisplayStart;//获取到本页开始的条数
+			var j=0;
+			api.column(0).nodes().each(function(cell, i) {
+				//alert($(cell).css("display"))
+				if($(cell).css("display")!="none"){
+					j++;
+				}
+				cell.innerHTML = startIndex + j;
+			}); 
+        },  */
 		data:data||{},
 		columns: [
+		          	{"title":"序号","class":"center","width":"5%","data":"test_item","defaultContent": ""},
 		            {"title":"检验项目","class":"center","width":"15%","data":"test_item","defaultContent": ""},
-		            {"title":"检验标准","class":"center","width":"55%","data":"test_standard","defaultContent": ""},
-		            {"title":"要求","class":"center","data": "test_request","defaultContent": ""},
+		            {"title":"检验标准","class":"center","width":"65%","data":"test_standard","defaultContent": ""},
+		            /*{"title":"要求","class":"center","data": "test_request","defaultContent": ""},*/
 		            {"title":"是否必录项","class":"center","width":"10%","data":"is_null","defaultContent": ""},		            	            
 		          ]	
 	});
+	
+	var api = tb.api();
+	var startIndex= api.context[0]._iDisplayStart;//获取到本页开始的条数
+	var j=0;
+	api.column(0).nodes().each(function(cell, i) {
+		//alert($(cell).css("display"))
+		if($(cell).css("display")!="none"){
+			j++;
+		}
+		cell.innerHTML = startIndex + j;
+	}); 
 }
 
 function ajaxSave(tpl_header_id){
-	var bus_type_id=$("#bus_type").val();
+	var bus_type_id=$("#order").attr("bus_type_id");
+	var order_id=$("#order").attr("order_id");
+	var order_config_id=$("#order_config").val();
 	var test_node_id=$("#node").val();
 	var test_node=$("#node :selected").text();
-	var memo=$("#memo").val();
+	//var memo=$("#memo").val();
 	var tpl_header_id=tpl_header_id;
-	if(bus_type_id==""){
+	/*if(bus_type_id==""){
 		alert("请选择车型！");
+		return false;
+	}*/
+	
+	
+	
+	if(order_id==""||order_id==undefined){
+		alert("请输入有效订单！");
+		return false;
+	}
+	if(order_config_id==""){
+		alert("请选择订单配置！");
 		return false;
 	}
 	if(test_node_id==""){
@@ -222,20 +292,23 @@ function ajaxSave(tpl_header_id){
 		alert("请导入模板明细！");
 		return false;
 	}
-	
+	$(".divLoading").addClass("fade in").show();
 	$.ajax({
 		url:"savePrdRcdBusTypeTpl",
 		type:"post",
 		dataType:"json",
 		data:{
 			bus_type_id:bus_type_id,
+			order_id:order_id,
+			order_config_id:order_config_id,
 			test_node_id:test_node_id,
 			test_node:test_node,
-			memo:memo,
+			//memo:memo,
 			tpl_list_str:JSON.stringify(json_tpl_list),
 			tpl_header_id:tpl_header_id
 		},
 		success:function(response){
+			$(".divLoading").hide();
 			alert(response.message);
 			ajaxQuery();
 			$( "#dialog-config" ).dialog("close");
@@ -244,11 +317,16 @@ function ajaxSave(tpl_header_id){
 }
 
 function showEditPage(row){
-	getBusTypeSelect(row.bus_type_id,'#bus_type','请选择','id');
-	$("#bus_type").prop("disabled",true);
+	//getBusTypeSelect(row.bus_type_id,'#bus_type','请选择','id');
+	//$("#bus_type").prop("disabled",true);
+	$("#order").attr("order_id",row.order_id);
+	$("#order").val(row.order_no).prop("disabled",true);
+	$("#order").attr("tpl_header_id",row.id);
 	getKeysSelect("CHECK_NODE", row.test_node_id, "#node","请选择","id");
 	$("#node").prop("disabled",true);
 	$("#memo").val(row.memo).prop("disabled",false);
+	getOrderConfigSelect(row.order_id||"",row.order_config_id,"#order_config","请选择","id") ;
+	$("#order_config").prop("disabled",true);
 	$("#uploadForm").show();
 	var detail_list=getTplDetailByHeader(row.id)
 	json_tpl_list=detail_list;
@@ -297,11 +375,16 @@ function getTplDetailByHeader(tpl_header_id){
 }
 
 function showInfoPage(row){
-	getBusTypeSelect(row.bus_type_id,'#bus_type','请选择','id');
-	$("#bus_type").prop("disabled",true);
+	//getBusTypeSelect(row.bus_type_id,'#bus_type','请选择','id');
+	//$("#bus_type").prop("disabled",true);
+	$("#order").attr("order_id",row.order_id);
+	$("#order").val(row.order_no).prop("disabled",true);
+	$("#order").attr("tpl_header_id",row.id);
 	getKeysSelect("CHECK_NODE", row.test_node_id, "#node","请选择","id");
 	$("#node").prop("disabled",true);
 	$("#memo").val(row.memo).prop("disabled",true);
+	getOrderConfigSelect(row.order_id||"",row.order_config_id,"#order_config","请选择","id") ;
+	$("#order_config").prop("disabled",true);
 	var detail_list=getTplDetailByHeader(row.id)
 	drawTplDetailTable("#tplDetailTable",detail_list);
 	$("#uploadForm").hide();

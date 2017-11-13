@@ -275,9 +275,15 @@ public class QualityController extends BaseController {
 
 		List<Map<String, String>> addList = new ArrayList<Map<String, String>>();
 		int i=1;
+		int item_no=0;
+		String item="";
 		for (Object[] data : excelModel.getData()) {
 			Map<String, String> infomap = new HashMap<String, String>();
-
+			if(!item.equals(data[0].toString())){
+				item_no++;
+				item=data[0].toString();
+			}
+			infomap.put("test_item_no", item_no+"");
 			infomap.put("test_item", data[0] == null ? null : data[0].toString().trim());
 			infomap.put("test_standard", data[1] == null ? null : data[1].toString().trim());
 			infomap.put("test_request", data[2] == null ? null : data[2].toString().trim());
@@ -317,6 +323,9 @@ public class QualityController extends BaseController {
 		String curTime = df.format(new Date());
 		int userid=(int) session.getAttribute("user_id");
 		Map<String,Object> condMap=new HashMap<String,Object>();
+		
+		condMap.put("order_id", request.getParameter("order_id"));
+		condMap.put("order_config_id", request.getParameter("order_config_id"));
 		condMap.put("bus_type_id", request.getParameter("bus_type_id"));
 		condMap.put("test_node_id", request.getParameter("test_node_id"));
 		condMap.put("test_node", request.getParameter("test_node"));

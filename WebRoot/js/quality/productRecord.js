@@ -37,6 +37,8 @@ $(document).ready(function(){
 		$("#td_customer").hide();
 		$("#factory").attr("disabled",true);
 		$("#order").attr("disabled",true);
+		$("#bus_number").val("").attr("disabled",false);
+		$("#customer_number").val("").attr("disabled",false);
 		$("#order_config").css("display","none");
 		$("#order_config_span").css("display","");
 
@@ -446,6 +448,7 @@ function drawTplDetailTable(tableId,data,editable){
  * 查询成品记录表模板明细
  */
 function ajaxGetTplDetail(){
+	$(".divLoading").addClass("fade in").show();
 	var detail=null;
 	$.ajax({
 		url:"getPrdRcdOrderTpl",
@@ -459,6 +462,7 @@ function ajaxGetTplDetail(){
 			"test_node":$("#check_node :selected").text()
 		},
 		success:function(response){
+			$(".divLoading").hide();
 			detail=response.data;
 			/*var tpl=response.tpl_header;
 			if(response.tpl_header){
@@ -666,6 +670,7 @@ function getAllWorkshops(elementId,valName){
 }
 
 function ajaxSave(){
+	$(".divLoading").addClass("fade in").show();
 	var detail_list_submit=[];
 	var trs=$("#tableDetail tbody").children("tr");
 	var test_date=$("#test_date").val();
@@ -697,7 +702,7 @@ function ajaxSave(){
 		save_flag=false;
 		return false;
 	}
-	if(detail_list.length==0){
+	if(detail_list==undefined||detail_list.length==0){
 		alert("未匹配成品记录订单模板！");
 		save_flag=false;
 		return false;
@@ -781,9 +786,11 @@ function ajaxSave(){
 			data:{
 				"bus_number":bus_number,
 				"test_node":$("#check_node :selected").text(),
+				'test_card_template_head_id':test_card_template_head_id,
 				"record_detail":JSON.stringify(detail_list_submit)
 			},
 			success:function(response){
+				$(".divLoading").hide();
 				alert(response.message);
 				$("#btnShowTpl").attr("disabled",false);
 				ajaxQuery();
@@ -805,6 +812,7 @@ function ajaxQuery(){
 	});
 	test_result=test_result.join(",");
 	
+	$(".divLoading").addClass("fade in").show();
 	var tb=$("#tableResult").DataTable({
 		serverSide: true,
 /*		fixedColumns:   {
@@ -889,7 +897,7 @@ function ajaxQuery(){
 		            }
 		          ],
 	});
-	
+	$(".divLoading").hide();
 }
 
 function showInfoPage(row){

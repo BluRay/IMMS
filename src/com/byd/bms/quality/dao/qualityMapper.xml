@@ -158,10 +158,10 @@
 			SELECT
 			LAST_INSERT_ID()
 		</selectKey>
-		insert into BMS_QM_TEST_CARD_TEMPLATE_DETAILS (test_card_template_id,test_item,test_standard_no,test_standard,test_request,is_null)
+		insert into BMS_QM_TEST_CARD_TEMPLATE_DETAILS (test_card_template_id,test_item_no,test_item,test_standard_no,test_standard,test_request,is_null)
 		values
 		<foreach collection="detail_list" item="detail" index="index" separator=",">
-			(#{tpl_header_id},#{detail.test_item},#{index},#{detail.test_standard},#{detail.test_request},#{detail.is_null})
+			(#{tpl_header_id},#{detail.test_item_no},#{detail.test_item},#{index},#{detail.test_standard},#{detail.test_request},#{detail.is_null})
 		</foreach>	
      </insert>
      
@@ -384,6 +384,9 @@
 		</if>
 		<if test="result !=null and result !=''">
 			and FIND_IN_SET(c.result,#{result}) 
+		</if>
+		<if test="tpl_header_id !=null and tpl_header_id !=''">
+			and c.test_card_template_head_id=#{tpl_header_id}
 		</if>
 		group by c.bus_number,c.test_node) tmp
      </select>
