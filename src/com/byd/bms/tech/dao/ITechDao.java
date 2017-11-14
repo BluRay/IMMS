@@ -74,6 +74,7 @@ public interface ITechDao {
 	public void updateTechTaskFollow(Map<String, Object> condMap);
 	public List<Map<String, Object>> getTaskTechList(Map<String,Object> queryMap);
 	public int updateTaskTechList(Map<String,Object> queryMap);
+	public String getTaskTimeList(Map<String,Object> queryMap);
 	
 	public List<Map<String, Object>> getSingleTaskList(Map<String,Object> queryMap);
 	public int getSingleTaskListCount(Map<String,Object> queryMap);

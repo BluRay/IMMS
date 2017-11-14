@@ -379,6 +379,12 @@
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no=#{order_no}
 		</if>
+		<if test="order_id !=null and order_id !=''">
+			and c.order_id=#{order_id}
+		</if>
+		<if test="order_config_id !=null and order_config_id !=''">
+			and c.order_config_id=#{order_config_id}
+		</if>
 		<if test="bus_number !=null and bus_number !=''">
 			and c.bus_number like concat('%',#{bus_number},'%')
 		</if>
@@ -691,21 +697,23 @@
 		</if>
 	</select>
 	<select id="getKeyPartsTraceCount" parameterType="Map" resultType="int">
-		select count(DISTINCT t.bus_number,t.factory_id,t.workshop )   from BMS_QM_KEY_PARTS t
-				LEFT JOIN BMS_QM_KEY_PARTS_TEMPLATE_DETAILS td on td.id = t.key_parts_template_details_id
+	  select count(1) from (
+		select f.id factory_id,f.factory_name,t.workshop,t.bus_number,o.order_no,
+		o.order_name,c.order_config_name,u.username,t.edit_date,td.key_components_template_id  from BMS_QM_KEY_PARTS t
+				RIGHT JOIN BMS_QM_KEY_PARTS_TEMPLATE_DETAILS td on td.id = t.key_parts_template_details_id
 				LEFT JOIN BMS_QM_KEY_PARTS_TEMPLATE_HEADER th on th.id = td.key_components_template_id 
 				LEFT JOIN BMS_OR_ORDER_CONFIG c on c.id=th.order_config_id and c.order_id = th.order_id
 				LEFT JOIN BMS_OR_ORDER o ON o.id = c.order_id
 		    LEFT JOIN BMS_BASE_FACTORY f on f.id=t.factory_id
 		    LEFT JOIN BMS_BASE_USER u on u.id=t.editor_id 
-        	where 1=1
+        	where t.key_parts_template_details_id>0 AND 1=1 
 		<if test="busNumber!=null and busNumber!=''">
 			and t.bus_number=#{busNumber}
 		</if>
 		<if test="factoryId!=null and factoryId!=''">
 			and t.factory_id=#{factoryId}
 		</if>
-		<if test="workshop!=null and workshop!=''">
+		<if test="workshop!=null and workshop!='全部'">
 			and t.workshop=#{workshop}
 		</if>
 		<if test="orderNo!=null and orderNo!=''">
@@ -717,6 +725,7 @@
 		<if test="orderconfigId!=null and orderconfigId!=''">
 			and c.id=#{orderconfigId}
 		</if>
+		group by t.bus_number,t.factory_id,t.workshop) t1
      </select>
      <update id="updateKeyParts" parameterType="Map">
 		UPDATE BMS_QM_KEY_PARTS SET 
@@ -890,50 +899,58 @@
 			LAST_INSERT_ID()
 		</selectKey>
 		insert into BMS_QM_QUALITY_STANDARDS_CHANGE_LOGS 
-		(record_num,usynopsis,standardfile,bfile_path,afile_path,memo,email_addrs,creator_id,creat_date)
+		(record_num,bus_type,order_id,workshop,scope,implement_factory,implement_bus_number,confirmor,
+		confirm_date,usynopsis,standardfile,bfile_path,afile_path,memo,
+		before_desc,after_desc,email_addrs,creator_id,creat_date)
 		values(
-		#{recordNo},#{usynopsis},#{standardfile},#{bfilePath},#{afilePath},#{memo},#{mailAddrs},#{editorId},#{editDate}
+		#{recordNo},#{busType},#{orderId},#{workshop},#{scope},#{implementFactory},#{implementBusNumber},
+		#{confirmor},#{confirm_date},#{usynopsis},#{standardfile},#{bfilePath},#{afilePath},#{memo},
+		#{beforeDesc},#{afterDesc},#{mailAddrs},#{editorId},#{editDate}
 		)
 	</insert>
-	<select id="selectStdRecord" parameterType="int" resultMap="stdRecordMap">
+	<select id="selectStdRecord" parameterType="int" resultType="Map">
 		select * from BMS_QM_QUALITY_STANDARDS_CHANGE_LOGS where
 		id=#{recordId}
 	</select>
-	<select id="getStdRecordList" parameterType="Map" resultMap="stdRecordMap">
-		select t.*,u.username editor from BMS_QM_QUALITY_STANDARDS_CHANGE_LOGS
-		t
-		left join BMS_BASE_USER u on t.creator_id=u.id where 1=1
-		<if test="recordNo!=null and recordNo!=0">
-			and t.record_num=#{recordNo}
+	<select id="getStdRecordList" parameterType="Map" resultType="Map">
+		select t.*,u.username editor from BMS_QM_QUALITY_STANDARDS_CHANGE_LOGS t
+		 left join BMS_BASE_USER u on t.creator_id=u.id where 1=1
+		<if test="recordno!=null and recordno!=''">
+			and t.record_num=#{recordno}
 		</if>
-		<if test="stdFileName!=null and  stdFileName!=''">
-			and t.standardfile=#{stdFileName}
+		<if test="bustype!=null and bustype!=''">
+			and t.bus_type=#{bustype}
 		</if>
-		<if test="updateStart!=null and  updateStart!=''">
-			<![CDATA[and t.creat_date>=#{updateStart}]]>
+		<if test="workshop!=null and workshop!=''">
+            and t.workshop=#{workshop}
 		</if>
-		<if test="updateEnd!=null and  updateEnd!=''">
-			<![CDATA[and t.creat_date < #{updateEnd}]]>
+		<if test="orderno!=null and orderno!=''">
+			and t.order_id=#{orderno}
 		</if>
-		order by t.creat_date desc
-		<if test="offset!=null">
-			LIMIT #{offset} ,#{pageSize}
+		<if test="usynopsis!=null and usynopsis!=''">
+			and t.usynopsis like concat('%',#{usynopsis},'%')
+		</if>
+		order by t.id desc
+		<if test="start!=null and length!=-1">
+			LIMIT #{start} ,#{length}
 		</if>
 	</select>
 	<select id="getStdRecordCount" parameterType="Map" resultType="int">
-		select count(t.id) from BMS_QM_QUALITY_STANDARDS_CHANGE_LOGS t left
-		join BMS_BASE_USER u on t.creator_id=u.id where 1=1
-		<if test="recordNo!=null and recordNo!=0">
-			and record_num=#{recordNo}
+		select count(t.id) from BMS_QM_QUALITY_STANDARDS_CHANGE_LOGS t where 1=1
+		<if test="recordno!=null and recordno!=''">
+			and t.record_num=#{recordno}
 		</if>
-		<if test="stdFileName!=null and  stdFileName!=''">
-			and standardfile=#{stdFileName}
+		<if test="bustype!=null and bustype!=''">
+			and t.bus_type=#{bustype}
 		</if>
-		<if test="updateStart!=null and  updateStart!=''">
-			<![CDATA[and t.creat_date>=#{updateStart}]]>
+		<if test="workshop!=null and workshop!=''">
+            and t.workshop=#{workshop}
 		</if>
-		<if test="updateEnd!=null and  updateEnd!=''">
-			<![CDATA[and t.creat_date < #{updateEnd}]]>
+		<if test="orderno!=null and orderno!=''">
+			and t.order_id=#{orderno}
+		</if>
+		<if test="usynopsis!=null and usynopsis!=''">
+			and t.usynopsis like concat('%',#{usynopsis},'%')
 		</if>
      </select>
      
@@ -1070,6 +1087,87 @@
 		<if test="is_closed!=null and is_closed!=''">
 			and p.is_closed = #{is_closed}
 		</if>
+	 </select>
+     <select id="getQualityAbnormalRecordList" parameterType="Map" resultType="Map">
+		SELECT p.*,o.order_no FROM BMS_QM_QUALITY_ABNORMAL_RECORD p
+		left join BMS_OR_ORDER o on o.id=p.order_id WHERE deleted='0'
+		<if test="factory!=null and factory!='全部'">
+			and p.factory = #{factory}
+		</if>
+		<if test="workshop!=null and workshop!='' and workshop!='全部'">
+			and p.workshop = #{workshop}
+		</if>
+		<if test="bus_type!=null and bus_type!='全部'">
+			and p.bus_type = #{bus_type}
+		</if>
+		<if test="bus_number!=null and bus_number!=''">
+			and p.bus_number = #{bus_number}
+		</if>
+		<if test="iqc!=null and iqc!=''">
+			and p.iqc like CONCAT('%',#{iqc},'%')
+		</if>
+		<if test="order_no!=null and order_no!=''">
+			and o.order_no = #{order_no}
+		</if>
+		order by p.id desc
+		<if test="start !=null">
+			LIMIT ${start} ,${length} 
+		</if>
 	</select>
-     
+	<select id="getQualityAbnormalRecordCount" parameterType="Map" resultType="int">
+		SELECT count(1) FROM BMS_QM_QUALITY_ABNORMAL_RECORD p 
+		left join BMS_OR_ORDER o on o.id=p.order_id WHERE deleted='0'
+		<if test="factory!=null and factory!='全部'">
+			and p.factory = #{factory}
+		</if>
+		<if test="workshop!=null and workshop!='' and workshop!='全部'">
+			and p.workshop = #{workshop}
+		</if>
+		<if test="bus_type!=null and bus_type!='全部'">
+			and p.bus_type = #{bus_type}
+		</if>
+		<if test="bus_number!=null and bus_number!=''">
+			and p.bus_number = #{bus_number}
+		</if>
+		<if test="iqc!=null and iqc!=''">
+			and p.iqc like CONCAT('%',#{iqc},'%')
+		</if>
+		<if test="order_no!=null and order_no!=''">
+			and o.order_no = #{order_no}
+		</if>
+	</select>
+	<insert id="insertQualityAbnormalRecord" parameterType="Map" useGeneratedKeys="true" keyProperty="id">
+     	<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into BMS_QM_QUALITY_ABNORMAL_RECORD (factory,workshop,bus_type,order_id,bus_number,bug_type,bug_desc,problem_desc,level,
+		iqc,solution,remark,deleted,editor,edit_date) values
+		(#{factory},#{workshop},#{bus_type},#{order_id},#{bus_number},#{bug_type},#{bug_desc},#{problem_desc},#{level},#{iqc},
+		#{solution},#{remark},'0',#{editor},#{edit_date})
+     </insert>
+     <update id="deleteQualityAbnormalRecord" parameterType="java.util.List">
+		update BMS_QM_QUALITY_ABNORMAL_RECORD set deleted='1' where id in
+		<foreach collection="list" item="ids" index="index" open="("
+			close=")" separator=",">
+			#{ids}
+		</foreach>
+	</update>
+	<select id="getBusNumber" parameterType="Map" resultType="Map">
+		SELECT p.* FROM BMS_PLAN_BUS p
+<!-- 		 left join BMS_OR_ORDER o on o.id=p.order_id -->
+		 WHERE p.bus_number = #{bus_number} and p.order_id = #{order_id}
+    </select>
+    <update id="updateStdRecord" parameterType="Map">
+		update BMS_QM_QUALITY_STANDARDS_CHANGE_LOGS set
+		implement_factory=(CASE ifnull(implement_factory,'') WHEN '' THEN #{implement_factory}
+		ELSE concat(implement_factory,',',#{implement_factory}) END),
+		implement_bus_number=(CASE ifnull(implement_bus_number,'') WHEN '' THEN #{implement_bus_number}
+		ELSE concat(implement_bus_number,',',#{implement_bus_number}) END),
+		confirmor=(CASE ifnull(confirmor,'') WHEN '' THEN #{confirmor}
+		ELSE concat(confirmor,',',#{confirmor}) END),
+		confirm_date=(CASE ifnull(confirm_date,'') WHEN '' THEN #{confirm_date}
+		ELSE concat(confirm_date,',',#{confirm_date}) END)
+		where id=#{id}
+	</update>
 </mapper>

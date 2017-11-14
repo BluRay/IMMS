@@ -91,12 +91,21 @@ public interface IQualityService {
 	
   	public int insertStdRecord(BmsBaseQCStdRecord stdRecord);
   	
-  	public BmsBaseQCStdRecord selectStdRecord(int recordId);
+  	public int updateStdRecord(Map<String, Object> stdRecord);
+  	
+  	public Map<String, Object> selectStdRecord(int recordId);
   	
   	public Map<String, Object> getStdRecordList(Map<String,Object> conditionMap);
   	
   	public int getStdRecordCount(Map<String,Object> conditionMap);
-		
+  	
+  	public Map<String, Object> getQualityAbnormalRecordList(Map<String,Object> conMap);
+  	
+  	public int insertQualityAbnormalRecord(Map<String, Object> conMap);
+  	
+  	public void deleteQualityAbnormalRecord(List ids);
+    
+  	public Map<String, Object> checkBusNumber(Map<String,Object> conMap);
 	//======================== tj end=================================//
 	
 	

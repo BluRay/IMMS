@@ -79,7 +79,8 @@ public interface ITechService {
 
 	public List<Map<String, String>> queryStaffWorkHours(Map<String, Object> conditionMap);
 	public List<Map<String, String>> queryBusNumberFollowList(Map<String, Object> conditionMap);
-	public void updateBusNumberFollow(String task_id,String task_detail_id,String order_no,String factory,String workshop,String bus_number);
+	public void updateBusNumberFollow(String task_id,String task_detail_id,String order_no,String factory,String workshop,
+			String bus_number,String zzj_num,String bj_num);
 	
 	public int saveWorkHourInfo(List<Map<String, Object>> swh_list);
 	public int deleteWorkHourInfo(Map<String, String> conditionMap);

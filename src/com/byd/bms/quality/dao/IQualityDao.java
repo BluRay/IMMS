@@ -128,12 +128,23 @@ public interface IQualityDao {
 	//品质标准更新记录 add by tangjin
 	public int insertStdRecord(BmsBaseQCStdRecord stdRecord);
 	
-	public BmsBaseQCStdRecord selectStdRecord(int recordId);
+	public Map<String, Object> selectStdRecord(int recordId);
 	
-	public List<BmsBaseQCStdRecord> getStdRecordList(Map<String,Object> conditionMap);
+	public int updateStdRecord(Map<String, Object> stdRecord);
+	
+	public List<Map<String, Object>> getStdRecordList(Map<String,Object> conditionMap);
 	
 	public int getStdRecordCount(Map<String,Object> conditionMap);
 	
+	public List<Map<String, Object>> getQualityAbnormalRecordList(Map<String, Object> conditionMap);	
+
+	public int getQualityAbnormalRecordCount(Map<String, Object> conditionMap);
+	
+	public int insertQualityAbnormalRecord(Map<String, Object> conditionMap);
+	
+	public void deleteQualityAbnormalRecord(List ids);
+	
+	public Map<String, Object> getBusNumber(Map<String, Object> conMap);
 	//======================== tj end=================================//
 
 	public List<Map<String, String>> getFaultLibList(Map<String, Object> conditionMap);	

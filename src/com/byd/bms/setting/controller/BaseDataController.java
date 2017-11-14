@@ -218,9 +218,9 @@ public class BaseDataController extends BaseController {
 	@ResponseBody
 	public ModelMap getWorkshopList() {
 		Map<String, Object> queryMap = new HashMap<String, Object>();
-		int draw = Integer.parseInt(request.getParameter("draw"));// jquerydatatables
-		int start = Integer.parseInt(request.getParameter("start"));// 分页数据起始数
-		int length = Integer.parseInt(request.getParameter("length"));// 每一页数据条数
+		int draw =request.getParameter("draw")!=null ? Integer.parseInt(request.getParameter("draw")):1;// jquerydatatables
+		int start =request.getParameter("start")!=null? Integer.parseInt(request.getParameter("start")):0;// 分页数据起始数
+		int length =request.getParameter("length")!=null? Integer.parseInt(request.getParameter("length")):-1;// 每一页数据条数
 
 		String workshopName = request.getParameter("workshopName");//
 

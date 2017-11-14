@@ -640,7 +640,7 @@ function initTable() {
     	        	//if(row['assess_date']==undefined||row['assess_date']==''||row['assess_date'].trim().length==0){
 	        		//task_id,task_detail_id,task_content,tech_order_no,switch_mode,switch_node,tech_date
 	        		return "<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"分配\" onclick='ajaxEdit(\"" + 
-	        		row['id'] + "\",\"" + row['task_detail_id'] + "\",\"" + row['task_content'].replace(/\r/ig, "").replace(/\n/ig,"") + "\",\"" + row['tech_order_no'] + "\",\"" + 
+	        		row['id'] + "\",\"" + row['task_detail_id'] + "\",\"" + row['task_content'].replace(/\r/ig, "").replace(/\n/ig,"").replace(/[\',\"]/g,"") + "\",\"" + row['tech_order_no'] + "\",\"" + 
 	        		row['switch_mode'] + "\",\"" + row['switch_node'] + "\",\"" + row['tech_date'] + "\")' style='color:blue;cursor: pointer;'></i>";
     	        	//}
     	        }

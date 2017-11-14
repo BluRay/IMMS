@@ -137,6 +137,7 @@ public class QualityServiceImpl implements IQualityService {
 		Map<String,Object> smap=null;
 		
 		if(tpl_header_id==0){//无header_id 新增模板
+			
 			qualityDao.insertPrdRcdOrderTplHeader(condMap);
 			tpl_header_id=Integer.parseInt(condMap.get("id").toString());
 			smap=new HashMap<String,Object>();
@@ -149,6 +150,7 @@ public class QualityServiceImpl implements IQualityService {
 			 * 判断该模板是否已经录入了数据，是：提示不能修改该模板，否：可以修改
 			 */
 			int record_count=qualityDao.queryProductRecordCount(condMap);
+			
 			if(record_count>0){
 				throw new RuntimeException("已使用该模板录入了成品记录表数据，不能修改该模板！");
 			}
@@ -396,14 +398,14 @@ public class QualityServiceImpl implements IQualityService {
 		return qualityDao.insertStdRecord(stdRecord);
 	}
     // 品质标准更新记录【新增、查询】 add by tangjin
-	public BmsBaseQCStdRecord selectStdRecord(int recordId) {
+	public Map<String, Object> selectStdRecord(int recordId) {
 		return qualityDao.selectStdRecord(recordId);
 	}
 
 	public Map<String, Object> getStdRecordList(
 			Map<String, Object> conditionMap) {
 		int totalCount=0;
-		List<BmsBaseQCStdRecord> datalist=qualityDao.getStdRecordList(conditionMap);
+		List<Map<String, Object>> datalist=qualityDao.getStdRecordList(conditionMap);
 		totalCount=qualityDao.getStdRecordCount(conditionMap);
 		Map<String, Object> result=new HashMap<String,Object>();
 		result.put("draw", conditionMap.get("draw"));
@@ -522,6 +524,33 @@ public class QualityServiceImpl implements IQualityService {
 	public int updateProblemImprove(ProblemImproveBean problemImprove) {
 		return qualityDao.updateProblemImprove(problemImprove);
 	}
-	
+	@Override
+	public Map<String, Object> getQualityAbnormalRecordList(
+			Map<String, Object> conMap) {
+		Map<String, Object> result=new HashMap<String,Object>();
+		int totalCount= qualityDao.getQualityAbnormalRecordCount(conMap);
+		List<Map<String,Object>> datalist= qualityDao.getQualityAbnormalRecordList(conMap);
+		result.put("draw", conMap.get("draw"));
+		result.put("recordsTotal", totalCount);
+		result.put("recordsFiltered", totalCount);
+		result.put("data", datalist);
+		return result;
+	}
+	@Override
+	public int insertQualityAbnormalRecord(Map<String, Object> conMap) {
+		return qualityDao.insertQualityAbnormalRecord(conMap);
+	}
+	@Override
+	public void deleteQualityAbnormalRecord(List ids){
+		qualityDao.deleteQualityAbnormalRecord(ids);
+	}
+	@Override
+	public Map<String, Object> checkBusNumber(Map<String, Object> conMap) {
+		return qualityDao.getBusNumber(conMap);
+	}
+	@Override
+	public int updateStdRecord(Map<String, Object> stdRecord) {
+		return qualityDao.updateStdRecord(stdRecord);
+	}
 		
 }

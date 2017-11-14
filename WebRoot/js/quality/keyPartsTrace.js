@@ -1,6 +1,6 @@
 var pageSize=1;
 var table;
-var table_height = $(window).height()-300;
+var table_height = $(window).height()-250;
 $(document).ready(function(){
 	initPage();
 	$("#breadcrumbs").resize(function() {
@@ -72,15 +72,8 @@ function getBusType(){
 
 function ajaxQuery(){
 	$("#tableData").dataTable({
-		serverSide: true,
-		paiging:true,
-		ordering:false,
-		searching: false,
-		autoWidth:false,
-		destroy: true,
-		scrollY: $(window).height()-245,
-		scrollX: true,
-		/*scrollCollapse: true,*/
+		serverSide: true,paiging:true,ordering:false,searching: false,bAutoWidth:false,
+		destroy: true,sScrollY: table_height,sScrollX:true,orderMulti:false,
 		pageLength: 20,
 		pagingType:"full_numbers",
 		lengthChange:false,
@@ -89,7 +82,13 @@ function ajaxQuery(){
 			emptyTable:"抱歉，未查询到数据！",
 			info:"共计 _TOTAL_ 条，当前第 _PAGE_ 页 共 _PAGES_ 页",
 			infoEmpty:"",
-			paginate: { first:"首页",previous: "上一页",next:"下一页",last:"尾页",loadingRecords: "请稍等,加载中..."}
+			paginate: {
+			  first:"首页",
+		      previous: "上一页",
+		      next:"下一页",
+		      last:"尾页",
+		      loadingRecords: "请稍等,加载中...",		     
+			}
 		},
 		ajax:function (data, callback, settings) {
 			var param ={
@@ -114,11 +113,11 @@ function ajaxQuery(){
                 success: function (result) {
                     //console.log(result);
                 	//封装返回数据
-                    var returnData = {};
-                    returnData.draw = data.draw;						//这里直接自行返回了draw计数器,应该由后台返回
-                    returnData.recordsTotal = result.recordsTotal;		//返回数据全部记录
-                    returnData.recordsFiltered = result.recordsTotal;	//后台不实现过滤功能，每次查询均视作全部结果
-                    returnData.data = result.data;						//返回的数据列表
+                	var returnData = {};
+                    returnData.draw = data.draw;//这里直接自行返回了draw计数器,应该由后台返回
+                    returnData.recordsTotal = result.recordsTotal;//返回数据全部记录
+                    returnData.recordsFiltered = result.recordsTotal;//后台不实现过滤功能，每次查询均视作全部结果
+                    returnData.data = result.data;//返回的数据列表						//返回的数据列表
                     //console.log(returnData);
                     //调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
                     //此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕

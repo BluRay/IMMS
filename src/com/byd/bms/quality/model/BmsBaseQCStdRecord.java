@@ -6,6 +6,14 @@ package com.byd.bms.quality.model;
 public class BmsBaseQCStdRecord {
 	private int id;
 	private String recordNo;//记录编号
+	private String busType;//适用车型
+	private String orderId;//适用订单
+	private String workshop;//适用车间
+	private String scope;//适用工厂范围
+	private String implementFactory;//实施工厂
+	private String implementBusNumber;//实施车号
+	private String confirmor;//确认人
+	private String confirm_date;//确认日期
 	private String usynopsis;//更新内容摘要
 	private String ureason;//标准更新原因
 	private String standardfile;//标准文件名称
@@ -15,6 +23,8 @@ public class BmsBaseQCStdRecord {
 	private String bfilePath;//更替前附件
 	private String adescription;//更替后标准描述
 	private String afilePath;//更替后附件
+	private String beforeDesc;//更替前描述
+	private String afterDesc;//更替后描述
 	private String memo;//备注
 	private int editorId;//编辑者id
 	private String editor;//编辑者名称
@@ -115,6 +125,66 @@ public class BmsBaseQCStdRecord {
 	}
 	public void setAfilePath(String afilePath) {
 		this.afilePath = afilePath;
+	}
+	public String getBusType() {
+		return busType;
+	}
+	public void setBusType(String busType) {
+		this.busType = busType;
+	}
+	public String getOrderId() {
+		return orderId;
+	}
+	public void setOrderId(String orderId) {
+		this.orderId = orderId;
+	}
+	public String getWorkshop() {
+		return workshop;
+	}
+	public void setWorkshop(String workshop) {
+		this.workshop = workshop;
+	}
+	public String getScope() {
+		return scope;
+	}
+	public void setScope(String scope) {
+		this.scope = scope;
+	}
+	public String getImplementFactory() {
+		return implementFactory;
+	}
+	public void setImplementFactory(String implementFactory) {
+		this.implementFactory = implementFactory;
+	}
+	public String getImplementBusNumber() {
+		return implementBusNumber;
+	}
+	public void setImplementBusNumber(String implementBusNumber) {
+		this.implementBusNumber = implementBusNumber;
+	}
+	public String getConfirmor() {
+		return confirmor;
+	}
+	public void setConfirmor(String confirmor) {
+		this.confirmor = confirmor;
+	}
+	public String getConfirm_date() {
+		return confirm_date;
+	}
+	public void setConfirm_date(String confirm_date) {
+		this.confirm_date = confirm_date;
+	}
+	public String getBeforeDesc() {
+		return beforeDesc;
+	}
+	public void setBeforeDesc(String beforeDesc) {
+		this.beforeDesc = beforeDesc;
+	}
+	public String getAfterDesc() {
+		return afterDesc;
+	}
+	public void setAfterDesc(String afterDesc) {
+		this.afterDesc = afterDesc;
 	}
 	
 }

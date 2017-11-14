@@ -611,9 +611,11 @@ public class QualityController extends BaseController {
 	@ResponseBody
 	public ModelMap getFaultListFuzzy(){
 		model=new ModelMap();
+		String bug_type=request.getParameter("bug_type");
 		String bug=request.getParameter("bug");
 		Map<String,Object> condMap=new HashMap<String,Object>();
 		condMap.put("bug", bug);
+		condMap.put("bugType", bug_type);
 		qualityService.getFaultLibFuzzyList(condMap, model);
 		
 		return model;
@@ -1336,20 +1338,20 @@ public class QualityController extends BaseController {
 	@RequestMapping("/showRecordList")
 	@ResponseBody
 	public ModelMap showRecordList() {
-		Map conditionMap = new HashMap();
-		String recordNo = request.getParameter("recordNo");
-		String stdFileName = request.getParameter("stdFileName");
-		String update_start = request.getParameter("start_date");
-		String update_end = request.getParameter("end_date");
-		// 封装查询条件
-		conditionMap.put("recordNo", recordNo);
-		conditionMap.put("stdFileName", stdFileName);
-		conditionMap.put("updateStart", update_start);
-		conditionMap.put("updateEnd", update_end);
+		Map<String,Object> conditionMap = new HashMap<String,Object>();
+		String recordno = request.getParameter("recordno");
+		String bustype = request.getParameter("bustype");
+		String orderno = request.getParameter("orderno");
+		String workshop = request.getParameter("workshop");
+		String usynopsis = request.getParameter("usynopsis");
+		conditionMap.put("recordno", recordno);
+		conditionMap.put("bustype", bustype);
+		conditionMap.put("orderno", orderno);
+		conditionMap.put("workshop", workshop);
+		conditionMap.put("usynopsis", usynopsis);
 		int draw = Integer.parseInt(request.getParameter("draw"));// jquerydatatables
 		int start = Integer.parseInt(request.getParameter("start"));// 分页数据起始数
 		int length = Integer.parseInt(request.getParameter("length"));// 每一页数据条数
-		
 		conditionMap.put("draw", draw);
 		conditionMap.put("start", start);
 		conditionMap.put("length", length);
@@ -1423,10 +1425,10 @@ public class QualityController extends BaseController {
 	@ResponseBody
 	public ModelMap showStdRecord() {
 		Map<String, Object> result = new HashMap<String, Object>();
-		Map conditionMap = new HashMap();
+
 		int id = Integer.parseInt(request.getParameter("id"));
 		
-		BmsBaseQCStdRecord stdRecord = qualityService.selectStdRecord(id);
+		Map<String, Object> stdRecord = qualityService.selectStdRecord(id);
 		result.put("stdRecord",stdRecord);
 		model.addAllAttributes(result);
 
@@ -1492,5 +1494,125 @@ public class QualityController extends BaseController {
 		model = mv.getModelMap();
 		return model;
 	}
+	// 品质异常记录
+	@RequestMapping("/qualityAbnormalRecord")
+	public ModelAndView qualityAbnormalRecord(){ 
+		mv.setViewName("quality/qualityAbnormalRecord");
+		int factory_id =(int) request.getSession().getAttribute("factory_id");
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("factory_id",factory_id);
+		mv.getModelMap().addAllAttributes(map);
+        return mv;  
+    }
+	@RequestMapping("/getQualityAbnormalRecordList")
+	@ResponseBody
+	public ModelMap getQualityAbnormalRecordList() {
+		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
+		int start=(request.getParameter("start")!=null)?Integer.parseInt(request.getParameter("start")):0;		//分页数据起始数
+		int length=(request.getParameter("length")!=null)?Integer.parseInt(request.getParameter("length")):-1;	//每一页数据条数
+		Map<String, Object> condMap = new HashMap<String, Object>();
+		condMap.put("factory", request.getParameter("factory"));
+		condMap.put("workshop", request.getParameter("workshop"));
+		condMap.put("bus_type", request.getParameter("bus_type"));
+		condMap.put("order_no", request.getParameter("order_no"));
+		condMap.put("iqc", request.getParameter("iqc"));
+		condMap.put("bus_number", request.getParameter("bus_number"));
+		condMap.put("draw", draw);
+		condMap.put("start", start);
+		condMap.put("length", length);
+		Map<String, Object> result = qualityService.getQualityAbnormalRecordList(condMap);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(result);
+		model = mv.getModelMap();
+		return model;
+	}
 	
+	@RequestMapping("addQualityAbnormalRecord")
+	@ResponseBody
+	public ModelMap addQualityAbnormalRecord(){
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String user_name=(String) session.getAttribute("user_name");
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("bus_type", request.getParameter("bus_type"));
+		condMap.put("factory", request.getParameter("factory"));
+		condMap.put("workshop", request.getParameter("workshop"));
+		condMap.put("order_id", request.getParameter("order_id"));
+		condMap.put("bus_number", request.getParameter("bus_number"));
+		condMap.put("problem_desc",request.getParameter("problem_desc"));
+		condMap.put("solution", request.getParameter("solution"));
+		condMap.put("iqc", request.getParameter("iqc"));
+		condMap.put("bug_type",request.getParameter("bug_type"));
+		condMap.put("bug_desc", request.getParameter("bug_desc"));
+		condMap.put("level",request.getParameter("level"));
+		condMap.put("remark", request.getParameter("remark"));
+		condMap.put("editor", user_name);
+		condMap.put("edit_date", curTime);
+		String flag=request.getParameter("flag");
+		if(flag.equals("1")){
+			Map<String, Object> map = qualityService.checkBusNumber(condMap);
+			if(map==null){
+				initModel(false,"车号在该订单下不存在",null);
+				return mv.getModelMap();
+			}
+		}
+		try{
+			qualityService.insertQualityAbnormalRecord(condMap);
+			initModel(true,"保存成功！",null);
+		}catch(Exception e){
+			initModel(false,"保存失败！",null);
+		}
+		return mv.getModelMap();
+	}
+	@RequestMapping("/deleteQualityAbnormalRecord")
+	@ResponseBody
+	public ModelMap deleteQualityAbnormalRecord() {
+		try {
+			String ids = request.getParameter("ids");
+			List<String> idlist = new ArrayList<String>();
+			for(String id : ids.split(",")){
+				idlist.add(id);
+			}
+			qualityService.deleteQualityAbnormalRecord(idlist);
+			initModel(true, "success", "");
+		} catch (Exception e) {
+			initModel(false, e.getMessage(), e.toString());
+		}
+		model = mv.getModelMap();
+		return model;
+	}
+	@RequestMapping("checkBusNumber")
+	@ResponseBody
+	public ModelMap checkBusNumber(){
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("order_no", request.getParameter("order_no"));
+		condMap.put("bus_number", request.getParameter("bus_number"));
+		Map<String, Object> result = qualityService.checkBusNumber(condMap);
+		model = mv.getModelMap();
+		model.put("businfo", result);
+		return model;
+	}
+	
+	@RequestMapping("updateStdRecord")
+	@ResponseBody
+	public ModelMap updateStdRecord(){
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("implement_factory", request.getParameter("implement_factory"));
+		condMap.put("implement_bus_number", request.getParameter("implement_bus_number"));
+		condMap.put("confirmor", request.getParameter("confirmor"));
+		condMap.put("confirm_date",  request.getParameter("confirm_date"));
+		condMap.put("id",  Integer.parseInt(request.getParameter("id")));		
+		try{
+			int result=qualityService.updateStdRecord(condMap);
+			if(result>0){
+				initModel(true,"更新成功！",null);
+			}else{
+				initModel(false,"更新失败！",null);
+			}
+			
+		}catch(Exception e){
+			initModel(false,"更新失败！",null);
+		}
+		return mv.getModelMap();
+	}
 }

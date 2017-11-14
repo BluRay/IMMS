@@ -170,6 +170,7 @@
 	<script src="../assets/js/dataTables.fixedColumns.min.js"></script>
 	<script src="../assets/js/bootstrap3-typeahead.js"></script>
 	<script src="../assets/js/ace/elements.fileinput.js"></script>
+	<script src="../assets/js/ace/elements.onpage-help.js"></script>
 	<script type="text/javascript" src="../js/jquery.form.js"></script>
 	<script type="text/javascript" src="../js/datePicker/WdatePicker.js"></script>
 	<script type="text/javascript" src="../js/common.js"></script>

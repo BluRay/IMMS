@@ -296,7 +296,7 @@
 	
 	<select id="queryTechList" parameterType="Map" resultType="Map">
 		<![CDATA[		
-		SELECT concat(d.order_no,'<br>',o.order_name,bt.bus_type_code,' ',o.order_qty,'台') order_desc,d.prod_factory_id,
+		SELECT d.id AS task_detail_id,concat(d.order_no,'<br>',o.order_name,bt.bus_type_code,' ',o.order_qty,'台') order_desc,d.prod_factory_id,
 		group_concat(d.prod_factory,'_',f.id) AS prod_factory,
 		group_concat(d.factory_id,'_',d.factory,'||',d.tech_list separator ';') tech_detail_list,
 		group_concat(d.factory_id,'_',d.factory,'||',(select count(f.bus_number) from BMS_TECH_TASK_FOLLOW f where f.confirmor_date is not null and f.confirmor_date !='' and f.factory=d.factory and f.order_no=d.order_no and f.tech_task_id = #{task_id})  separator ';') follow_detail
@@ -752,9 +752,9 @@
 		union 
 		select f.id from BMS_TECH_TASK_FOLLOW_PRE f where f.tech_task_id=#{tech_task_id} and f.confirmor_date is not null and f.confirmor_date!=''
  		) -->
-		<!-- <if test="order_no !=null and order_no !=''">
+		<if test="order_no !=null and order_no !=''">
 			and order_no=#{order_no}
-		</if> -->
+		</if>
 		<!-- <if test="factory_list !=null and factory_list !=''">
 			and find_in_set(factory,#{factory_list})>0
 		</if> -->
@@ -1327,7 +1327,7 @@
 	</select>
 	
 	<update id="deleteBusFollow" parameterType="Map">
-	DELETE FROM BMS_TECH_TASK_FOLLOW WHERE tech_task_id = #{task_id} AND task_detail_id = #{task_detail_id}
+	DELETE FROM BMS_TECH_TASK_FOLLOW WHERE tech_task_id = #{task_id}
 	AND order_no = #{order_no} AND factory = #{factory} AND workshop = #{workshop} AND confirmor_id IS NULL
 	</update>
 	<insert id="addBusFollow" useGeneratedKeys="true" parameterType="List">
@@ -1337,22 +1337,22 @@
 		</selectKey>
 		<foreach collection="list" index="index" item="item" separator=";">
 			INSERT INTO BMS_TECH_TASK_FOLLOW
-			(tech_task_id, task_detail_id, bus_number, order_no, factory, workshop)
-			VALUES(#{item.task_id},#{item.task_detail_id},#{item.bus_number},#{item.order_no},#{item.factory},#{item.workshop})
+			(tech_task_id, bus_number, order_no, factory, workshop)
+			VALUES(#{item.task_id},#{item.bus_number},#{item.order_no},#{item.factory},#{item.workshop})
 		</foreach>
 	</insert>
 	<select id="getTaskTechList" parameterType="Map" resultType="Map">
-		SELECT F.workshop,F.follow_num FROM BMS_TECH_TASK_FOLLOW_PRE F 
-		WHERE F.tech_task_id = #{task_id} AND F.task_detail_id = #{task_detail_id}
-		UNION ALL
 		SELECT F.workshop,count(F.bus_number) AS follow_num FROM BMS_TECH_TASK_FOLLOW F 
-		WHERE F.tech_task_id = #{task_id} AND F.task_detail_id = #{task_detail_id}
+		WHERE F.tech_task_id = #{task_id} AND F.factory=#{factory} AND F.order_no = #{order_no}
 		GROUP BY F.workshop
 		ORDER BY LOCATE(workshop,'自制件,部件,焊装,涂装,底盘,总装,检测线')
 	</select>
 	<update id="updateTaskTechList" parameterType="Map">
-		UPDATE BMS_TECH_TASK_DETAIL SET tech_list = #{tech_list} WHERE id = #{task_detail_id}
+		UPDATE BMS_TECH_TASK_DETAIL SET tech_list = #{tech_list},time_total = #{time_total} WHERE id = #{task_detail_id}
 	</update>
+	<select id="getTaskTimeList" parameterType="Map" resultType="String">
+		SELECT time_list FROM BMS_TECH_TASK_DETAIL WHERE tech_task_id = #{task_id} AND factory=#{factory} LIMIT 1
+	</select>
 	
 	<!--新增变更物料清单 -->
 	<insert id="addChangedMaterialList" useGeneratedKeys="true" parameterType="List">

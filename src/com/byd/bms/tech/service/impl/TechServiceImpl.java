@@ -593,11 +593,11 @@ public class TechServiceImpl implements ITechService {
 
 	@Override
 	@Transactional
-	public void updateBusNumberFollow(String task_id, String task_detail_id, String order_no, String factory,String workshop, String bus_number) {
+	public void updateBusNumberFollow(String task_id, String task_detail_id, String order_no, String factory,String workshop, String bus_number,String zzj_num,String bj_num) {
 		
 		Map<String,Object> conditionMap=new HashMap<String,Object>();
 		conditionMap.put("task_id", task_id);
-		conditionMap.put("task_detail_id", task_detail_id);
+		//conditionMap.put("task_detail_id", task_detail_id);
 		conditionMap.put("order_no", order_no);
 		conditionMap.put("factory", factory);
 		conditionMap.put("workshop", workshop);
@@ -609,7 +609,7 @@ public class TechServiceImpl implements ITechService {
 			//System.out.println("-->" + i + jsonArray.getString(i).toString());		
 			Map<String, Object> map = new HashMap<String,Object>(); 
 			map.put("task_id", task_id);
-			map.put("task_detail_id", task_detail_id);
+			//map.put("task_detail_id", task_detail_id);
 			map.put("order_no", order_no);
 			map.put("factory", factory);
 			map.put("workshop", workshop);
@@ -619,16 +619,53 @@ public class TechServiceImpl implements ITechService {
 		if(add_list.size() >0 ){
 			techDao.addBusFollow(add_list);
 		}
+
+		//重新计算总工时
+		String time_list = techDao.getTaskTimeList(conditionMap);
+		String[] time_list_arr = {};
+		if(time_list != null)time_list_arr = time_list.split(",");
+		float total = 0;
+		
 		String tech_list_str = "";
+		if(!zzj_num.equals("")){
+			tech_list_str += "自制件:" + zzj_num + ",";
+			for (int i = 0 ; i <time_list_arr.length ; i++ ) {
+				String time = time_list_arr[i];
+				String time_workshop = time.substring(0, time.indexOf(":"));
+				if(time_workshop.equals("自制件")){
+					total += Float.valueOf(zzj_num) * Float.valueOf(time.substring(time.indexOf(":")+1, time.length()));
+				}
+			}
+		}
+		if(!bj_num.equals("")){
+			tech_list_str += "部件:" + bj_num + ",";
+			for (int i = 0 ; i <time_list_arr.length ; i++ ) {
+				String time = time_list_arr[i];
+				String time_workshop = time.substring(0, time.indexOf(":"));
+				if(time_workshop.equals("部件")){
+					total += Float.valueOf(zzj_num) * Float.valueOf(time.substring(time.indexOf(":")+1, time.length()));
+				}
+			}
+		}
 		List<Map<String, Object>> tech_list = new ArrayList<Map<String, Object>>();
 		tech_list = techDao.getTaskTechList(conditionMap);
 		for(Map<String, Object> tech :tech_list){
 			tech_list_str += tech.get("workshop") + ":" + tech.get("follow_num") + ",";
+
+			for (int i = 0 ; i <time_list_arr.length ; i++ ) {
+				String time = time_list_arr[i];
+				String time_workshop = time.substring(0, time.indexOf(":"));
+				if(time_workshop.equals(tech.get("workshop"))){
+					total += Float.valueOf(tech.get("follow_num").toString()) * Float.valueOf(time.substring(time.indexOf(":")+1, time.length()));
+				}
+			}
 		}
+		
 		//System.out.println(tech_list_str.substring(0, tech_list_str.length()-1));
 		Map<String, Object> map = new HashMap<String,Object>(); 
 		map.put("task_detail_id", task_detail_id);
 		map.put("tech_list", tech_list_str.substring(0, tech_list_str.length()-1));
+		map.put("time_total", total);
 		techDao.updateTaskTechList(map);
 	}
 		

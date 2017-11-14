@@ -905,8 +905,10 @@ public class TechController extends BaseController{
 		String factory = request.getParameter("factory");
 		String workshop = request.getParameter("workshop");
 		String bus_number = request.getParameter("bus_number");
+		String zzj_num = request.getParameter("zzj_num");
+		String bj_num = request.getParameter("bj_num");
 		
-		techService.updateBusNumberFollow(task_id, task_detail_id, order_no, factory, workshop, bus_number);
+		techService.updateBusNumberFollow(task_id, task_detail_id, order_no, factory, workshop, bus_number,zzj_num,bj_num);
 		initModel(true,"SUCCESS",null);
 		return model;
 	}
