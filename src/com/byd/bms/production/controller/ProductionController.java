@@ -1024,12 +1024,15 @@ public class ProductionController extends BaseController {
 		condMap.put("work_date_list", work_date_list);
 		condMap.put("order_id", order_id_list);
 		String work_month="";
-		if(work_date_list.contains(",")){
-			String work_date=work_date_list.split(",")[0];
-			work_month=work_date.substring(0, 7);
-			condMap.put("work_month", work_month);
+		if(work_date_list!=null ){
+			if(work_date_list.contains(",")){
+				work_month=work_date_list.split(",")[0].substring(0, 7);
+			}else{
+				work_month=work_date_list.substring(0, 7);
+			}
+						
 		}
-		
+		condMap.put("work_month", work_month);
 		condMap.put("status", "2");
 		
 		productionService.verifyStaffHours(condMap,model);

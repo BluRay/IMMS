@@ -37,7 +37,7 @@ $(document).ready(function () {
 function ajaxQuery(){
 	$table.bootstrapTable('refresh', {url: 'taskAssignPage/getTaskList'});
 }
-function ajaxEdit(task_id,task_detail_id,task_content,tech_order_no,switch_mode,switch_node,tech_date,time_list,status_list,single_time_total,time_total){
+function ajaxEdit(task_id,task_detail_id,task_content,tech_order_no,switch_mode,switch_node,tech_date,time_list,status_list,single_time_total,time_total,order_no){
 	$("#task_assess").clearForm();
 	$("#switch_node").prop("disabled",true);
 	//$("[name=switch_mode]").removeAttr("disabled");
@@ -57,7 +57,7 @@ function ajaxEdit(task_id,task_detail_id,task_content,tech_order_no,switch_mode,
 		var follow_detail=tech_detail.follow_detail;
 		var prod_factory_id=tech_detail.prod_factory_id;
 		var prod_factory=tech_detail.prod_factory;
-		addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id,prod_factory);		
+		addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id,prod_factory,order_no);		
 	});		
 	var mode_index=0;
 	//节点前切换
@@ -99,7 +99,8 @@ function ajaxEdit(task_id,task_detail_id,task_content,tech_order_no,switch_mode,
 				}
 			]
 	});
-	
+
+	$("#task_a_" + order_no).click();
 }
 
 function asessTechTask(time_list,status_list,single_time_total,time_total){
@@ -134,6 +135,7 @@ function asessTechTask(time_list,status_list,single_time_total,time_total){
 					var workshop=$(tr_head).find("td").eq(i).html();
 					//alert(workshop);
 					detail=workshop+":"+$(td).html();
+					//console.log("-->detail = " + detail);
 					tech_detail_list.push(detail);
 				}
 			});		
@@ -195,7 +197,7 @@ function getTechList(task_id){
 	});
 	return tech_list;
 }
-function addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id,prod_factory){
+function addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id,prod_factory,mod_order_no){
 	follow_detail=follow_detail||"";
 	var is_follow=false;
 	$.each(follow_detail.split(";"),function(i,follow){
@@ -215,11 +217,12 @@ function addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id
 	var tasklist=($("#new_tab").find("li"));
 	var taskNum=tasklist.length;
 	var index=taskNum-1;
-	
+	console.log("-->order_no = " + order_no + ";mod_order_no = " + mod_order_no);
 	$("#new_tab").find("li").removeClass("active");
 	$("#new_accordion").find("div").removeClass("active");
-	var tabli="<li class='active'><a href='#new_task"+taskNum+"' data-toggle='tab' style='font-size: 14px; color: #333;display:inline-block'><span>订单"+taskNum+"</span>"
-	+"</a></li>";
+	
+	var tabli="<li class=\"active\"><a href='#new_task"+taskNum+"' id='task_a_"+order_no+"' data-toggle='tab' style='font-size: 14px; color: #333;display:inline-block'><span>订单"+taskNum+"</span></a></li>";
+	
 	$("#new_tab li:eq("+index+")").before(tabli);
 	var tabContent="<div class=\"tab-pane active\" role=\"tabpanel\" id=\"new_task"+taskNum+"\">";
 	tabContent+="<div class=\"panel panel-default\"><div class=\"panel-collapse in\" role=\"tabpanel\">";
@@ -227,9 +230,12 @@ function addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id
 	tabContent+="</div></div></div>";
 	
 	$(tabContent).appendTo($("#new_accordion"));
-	addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factory_id,prod_factory);
+	var is_edit = false;
+	if(order_no == mod_order_no)is_edit = true;
+	addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factory_id,prod_factory,is_edit);
+	
 }
-function addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factory_id,prod_factory){
+function addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factory_id,prod_factory,is_edit){
 	var factory_disable_obj={};
 	follow_detail=follow_detail||"";
 	$.each(follow_detail.split(";"),function(i,follow){
@@ -265,6 +271,11 @@ function addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factor
 				prod_factory_id = prod_factory_arr[i].split("_")[1];
 				prod_factory = prod_factory_arr[i].split("_")[0];
 			}
+			if(is_edit){
+				checked="checked";
+			}else{
+				checked="";
+			}
 			
 			var facotory_div=$("<div style='margin-top:10px'><b>生产工厂：</b><span factory_id='"+(prod_factory_id||factory_id)+"'>"+(prod_factory||factory)+"</span></div>");
 			var ckbox=$("<input style=\"height:15px\" name=\"new_tecn_flag\""+
@@ -272,9 +283,18 @@ function addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factor
 			var tech_factory="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>技改工厂：</b><select style='width:100px;height:28px' class='tech_factory' disabled>"+factory_select_options+"</select>";
 			var tech_table=$("<table class=\"table table-bordered table-striped\" style=\"margin-bottom: 0px;\"></table>");
 			var tr_head=$("<tr><td>自制件</td><td>部件</td><td>焊装</td><td>涂装</td><td>底盘</td><td>总装</td><td>检测线</td></tr>");
-			var tr_body=$("<tr height='31px'><td contenteditable=\"true\">"+(tech_obj['自制件']||'0')+"</td><td contenteditable=\"true\">"+(tech_obj['部件']||'0')+"</td><td>"+
-					(tech_obj['焊装']||'')+"</td><td>"+(tech_obj['涂装']||'')+"</td><td>"+
-					(tech_obj['底盘']||'')+"</td><td>"+(tech_obj['总装']||'')+"</td><td>"+(tech_obj['检测线']||'')+"</td></tr>");
+			var tr_body= "";
+			if(is_edit){
+				tr_body=$("<tr height='31px'><td contenteditable=\"true\">"+(tech_obj['自制件']||'0')+"</td><td contenteditable=\"true\">"+(tech_obj['部件']||'0')+"</td><td>"+
+						(tech_obj['焊装']||'')+"</td><td>"+(tech_obj['涂装']||'')+"</td><td>"+
+						(tech_obj['底盘']||'')+"</td><td>"+(tech_obj['总装']||'')+"</td><td>"+(tech_obj['检测线']||'')+"</td></tr>");
+			}else{
+				tr_body=$("<tr height='31px'><td>"+(tech_obj['自制件']||'0')+"</td><td>"+(tech_obj['部件']||'0')+"</td><td>"+
+						(tech_obj['焊装']||'')+"</td><td>"+(tech_obj['涂装']||'')+"</td><td>"+
+						(tech_obj['底盘']||'')+"</td><td>"+(tech_obj['总装']||'')+"</td><td>"+(tech_obj['检测线']||'')+"</td></tr>");
+			}
+			
+			
 			$(tech_table).append(tr_head).append(tr_body);	
 			$(facotory_div).append(ckbox);
 			$(facotory_div).append(tech_factory);			
@@ -373,7 +393,7 @@ function initTable() {
     	        		//task_id,task_detail_id,task_content,tech_order_no,switch_mode,switch_node,tech_date
     	        		return "<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"分配\" onclick='ajaxEdit(\"" + 
     	        		row['id'] + "\",\"" + row['task_detail_id'] + "\",\"" + row['task_content'].replace(/\r/ig, "").replace(/\n/ig,"") + "\",\"" + row['tech_order_no'] + "\",\"" + 
-    	        		row['switch_mode'] + "\",\"" + row['switch_node'] + "\",\"" + row['tech_date'] + "\",\"" + row['time_list'] + "\",\"" + row['status_list'] + "\",\"" + row['single_time_total'] + "\",\"" + row['time_total'] + "\")' style='color:blue;cursor: pointer;'></i>";
+    	        		row['switch_mode'] + "\",\"" + row['switch_node'] + "\",\"" + row['tech_date'] + "\",\"" + row['time_list'] + "\",\"" + row['status_list'] + "\",\"" + row['single_time_total'] + "\",\"" + row['time_total'] + "\",\"" + row['order_no'] + "\")' style='color:blue;cursor: pointer;'></i>";
     	        	}
     	        }
             }

@@ -65,12 +65,12 @@
 								<td>车号：</td>
 								<td><input style="height: 30px;width:160px;" type="text" class="input-medium revise" placeholder="车号..." id="search_bus_number" /></td> 	
 								
-								<td style="padding-left:5px;">
+							<!-- 	<td style="padding-left:5px;">
 								<label class=""> <input name="search_test_result" value="0" type="checkbox">一次检验合格
 								</label> <label class=""> <input name="search_test_result" value="1" type="checkbox">返工/返修合格
 								</label> <label class=""> <input name="search_test_result" value="2" type="checkbox">让步放行
 								</label>
-								</td>
+								</td> -->
 								<td><input type="button" class="btn btn-sm btn-primary" id="btnQuery" value="查询" style="margin-left: 10px;"></input>						
 										 <input type="button" class="btn btn-sm btn-success" id="btnAdd" value="新增" style="margin-left: 2px;"></input>
 								</td>
@@ -81,7 +81,7 @@
 						
 					<div class="row" >
 					<div class="col-xs-12 " id="scroll_div">
-						<table id="tableResult" class="table table-striped table-bordered table-hover  " style="font-size: 12px;" >
+						<table id="tableResult" class="table table-striped table-bordered table-hover" style="font-size: 12px;" >
 						</table>	
 					</div>
 					</div>
@@ -111,11 +111,11 @@
 						<tr>
 							<td width="80px" style="text-align:right">检验日期： </td>
 							<td width="100px"><input id="test_date" style="width: 100px;height:30px;" type="text" onclick="WdatePicker({el:'test_date',dateFmt:'yyyy-MM-dd'});"></td>
-							<td width="80px" style="text-align:right">检验结论： </td>
+							<!-- <td width="80px" style="text-align:right">检验结论： </td>
 							<td colspan=3><label style="padding-left:10px;"><input name="testResult" value="0" type="radio">一次交检合格 </label>
 							<label style="padding-left:10px;"><input name="testResult" value="1" type="radio">返工/返修合格 </label>
 							<label style="padding-left:10px;"><input name="testResult" value="2" type="radio">让步放行</label>
-							</td>										
+							</td> -->										
 							<td colspan=2>
 								<input class="btn btn-sm btn-primary" id="btnShowTpl" value="确定" style="margin-left: 2px;" type="button">
 								<!-- <input class="btn btn-sm btn-success" id="btnSave" value="保存" style="margin-left: 2px;" type="button"> -->
@@ -125,8 +125,8 @@
 					
 				</div>
 				<div class="row" style="margin-top:10px;">
-					<div class="col-xs-12" id="scroll_div" >
-						<table id="tableDetail" class="table table-striped table-bordered table-hover " style="font-size: 12px;width:2000px;overflow:auto;text-align:center" >
+					<div class="col-xs-12"  >
+						<table id="tableDetail" class="table table-striped table-bordered table-hover " style="font-size: 12px;width:1800px;overflow-x:auto;text-align:center" >
 						</table>	
 					</div>
 				</div>

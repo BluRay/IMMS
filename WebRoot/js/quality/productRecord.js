@@ -234,14 +234,14 @@ function drawTplDetailTable(tableId,data,editable){
 	editable=editable||false;
 	tb_detail=$(tableId).dataTable({
 		paiging:false,
-		 keys: true,
+		keys: true,
 		ordering:false,
 		deferRender: true,
 		searching: false,
 		autoWidth:false,
 		destroy: true,
 		paginate:false,
-		rowsGroup:[0],
+		rowsGroup:[0,5],
 		fixedColumns:   {
             leftColumns: 2,
             rightColumns:1
@@ -259,7 +259,7 @@ function drawTplDetailTable(tableId,data,editable){
 		},
 	columnDefs: [
 	         {
-	            "targets":[3]	,
+	            "targets":[2],
 	            "render":function(data,type,row,meta){
 	            	var el= "<span class=\"block input-icon input-icon-right\"><input  class=\"input-medium test_result\" style='text-align:center;width:100%;height:30px' type=\"text\" value=\""+(data||"")+
 	            	"\" fault_id=\""+row.fault_id+"\">"+
@@ -268,14 +268,47 @@ function drawTplDetailTable(tableId,data,editable){
 	            		el=data;
 	            	}
 	            	return el;
-	            }
+	            },
+	            "createdCell": function (td, cellData, rowData, row, col) {
+	            	var test_card_template_detail_id=rowData.test_card_template_detail_id;
+	            	if(test_card_template_detail_id==null ||test_card_template_detail_id==""){
+	            		test_card_template_detail_id=rowData.id;
+	            	}
+	            	var test_card_template_head_id=rowData.test_card_template_head_id;
+	            	if(test_card_template_head_id==null||test_card_template_head_id==""){
+	            		test_card_template_head_id=rowData.test_card_template_id;
+	            	}
+	            	$(td).data("test_card_template_detail_id",test_card_template_detail_id);
+	            	$(td).data("test_card_template_head_id",test_card_template_head_id);
+	            	var disabled=false;
+	            	if(!editable){
+	            		disabled=true;
+	            	}          	
+	            	/*if(rowData.test_result){
+	        			$(td).find(".test_result").val(rowData.workshop_id);
+	        			$(td).find(".test_result").attr("disabled",disabled)
+	        		}*/
+	             }
 	         },
 	         {
-	        	 "targets":[4],
+	        	 "targets":[3],
 	        	 "render":function(data,type,row,meta){
 		            	var el= "<select  class=\"input-medium judge\" style='width:80px;text-align:center'><option value='合格' selected>合格</option><option value='不合格'>不合格</option></select>";
 		            	if(data=="不合格"){
 		            		el= "<select  class=\"input-medium judge\" style='width:80px;text-align:center'><option value='合格' >合格</option><option value='不合格' selected>不合格</option></select>";
+		            	}
+		            	if(!editable){
+		            		el=data;
+		            	}
+		            	return el;
+		            }
+	         },
+	         {
+	        	 "targets":[4],
+	        	 "render":function(data,type,row,meta){
+		            	var el= "<select  class=\"input-medium rework\" style='width:100%;text-align:center'><option value='合格' selected>合格</option><option value='不合格'>不合格</option></select>";
+		            	if(data=="不合格"){
+		            		el= "<select  class=\"input-medium rework\" style='width:100%;text-align:center'><option value='合格' >合格</option><option value='不合格' selected>不合格</option></select>";
 		            	}
 		            	if(!editable){
 		            		el=data;
@@ -286,80 +319,15 @@ function drawTplDetailTable(tableId,data,editable){
 	         {
 	        	 "targets":[5],
 	        	 "render":function(data,type,row,meta){
-		            	var el= "<select  class=\"input-medium rework\" style='width:100%;text-align:center'><option value='合格' selected>合格</option><option value='不合格'>不合格</option></select>";
-		            	if(data=="不合格"){
-		            		el= "<select  class=\"input-medium rework\" style='width:100%;text-align:center'><option value='合格' >合格</option><option value='不合格' selected>不合格</option></select>";
-		            	}
+		            	var el= "<input  class=\"input-medium tester\" style='text-align:center;height:30px'  type=\"text\" value='"+(row.tester||"")+"'>";
 		            	if(!editable){
-		            		el=data;
+		            		el=row.tester;
 		            	}
 		            	return el;
 		            }
 	         },
-	         {
-	        	 "targets":[6],
-	        	 "render":function(data,type,row,meta){
-		            	var el= "<input  class=\"input-medium tester\" style='text-align:center;height:30px'  type=\"text\" value='"+(data||"")+"'>";
-		            	if(!editable){
-		            		el=data;
-		            	}
-		            	return el;
-		            }
-	         },
-	        {
-            "targets": [7],
-            "render":function(data,type,row,meta){
-            	var el= "<select  class=\"input-medium workshop\" style='text-align:center;width:100%'>"+$("#workshop_tmpl").html()+"</select>";
-            	if(!editable){
-            		el=data;
-            	}
-            	return el;
-            },
-            "createdCell": function (td, cellData, rowData, row, col) {
-            	var test_card_template_detail_id=rowData.test_card_template_detail_id;
-            	if(test_card_template_detail_id==null ||test_card_template_detail_id==""){
-            		test_card_template_detail_id=rowData.id;
-            	}
-            	var test_card_template_head_id=rowData.test_card_template_head_id;
-            	if(test_card_template_head_id==null||test_card_template_head_id==""){
-            		test_card_template_head_id=rowData.test_card_template_id;
-            	}
-            	$(td).data("test_card_template_detail_id",test_card_template_detail_id);
-            	$(td).data("test_card_template_head_id",test_card_template_head_id);
-            	var disabled=false;
-            	if(!editable){
-            		disabled=true;
-            	}          	
-            	if(rowData.workshop_id){
-        			$(td).find(".workshop").val(rowData.workshop_id);
-        			$(td).find(".workshop").attr("disabled",disabled)
-        		}
-             }
-        },
         {
-            "targets": [8],
-            "render":function(data,type,row,meta){
-            	var el="<select  class=\"input-medium workgroup\" style='text-align:center;width:100%'><select>";
-            	if(!editable){
-            		el=data;
-            	}
-            	return el;
-            },
-            "createdCell": function (td, cellData, rowData, row, col) {
-            	var element=$(td).find(".workgroup");
-            	//alert(workgroup_list.length)
-            	var disabled=true;
-            	if(!editable){
-            		disabled=false;
-            	}       	
-            	if(rowData.workgroup_id){        
-            		getSelects(workgroup_list[rowData.workshop]||[], cellData, element,"","id");
-        			$(td).find(".workgroup").val(rowData.workgroup_id)
-        		}
-             }
-        },
-        {
-       	 "targets":[9],
+       	 "targets":[6],
        	 "render":function(data,type,row,meta){
 	       		var el= "<input  class=\"input-medium memo\" style='text-align:center;height:30px'  type=\"text\" value=\""+(data||"")+"\">";
 	        	if(!editable){
@@ -370,69 +338,14 @@ function drawTplDetailTable(tableId,data,editable){
         }],
 		data:data,
 		columns: [
-		            {"title":"检验项目","class":"center","width":"8%","data":"test_item","defaultContent": ""},
-		            {"title":"检验标准","class":"center","width":"25%","data":"test_standard","defaultContent": ""},
-		            {"title":"要求","class":"center","width":"11%","data": "test_request","defaultContent": ""},
-		            {"title":"检验结果","class":"center","width":"15%","data": "test_result","defaultContent": ""/*,"render":function(data,type,row,meta){
-		            	var el= "<span class=\"block input-icon input-icon-right\"><input  class=\"input-medium test_result\" style='text-align:center;width:100%;height:30px' type=\"text\" value=\""+(data||"")+
-		            	"\" fault_id=\""+row.fault_id+"\">"+
-	            		"<i class=\"ace-icon fa fa-arrow-up\" style='cursor:pointer;z-index: 0' title='选择标准故障' onclick='return showQuaStd("+meta.row+")'></i> </span>";
-		            	if(!editable){
-		            		el=data;
-		            	}
-		            	return el;
-		            }*/},
-		            {"title":"判定","class":"center","width":"5%","data": "result_judge","defaultContent": ""/*,"render":function(data,type,row,meta){
-		            	var el= "<select  class=\"input-medium judge\" style='width:80px;text-align:center'><option value='合格' selected>合格</option><option value='不合格'>不合格</option></select>";
-		            	if(data=="不合格"){
-		            		el= "<select  class=\"input-medium judge\" style='width:80px;text-align:center'><option value='合格' >合格</option><option value='不合格' selected>不合格</option></select>";
-		            	}
-		            	if(!editable){
-		            		el=data;
-		            	}
-		            	return el;
-		            }*/},
-		            {"title":"复检判定","class":"center","width":"5%","data": "rework","defaultContent": ""/*,"render":function(data,type,row,meta){
-		            	var el= "<select  class=\"input-medium rework\" style='width:100%;text-align:center'><option value='合格' selected>合格</option><option value='不合格'>不合格</option></select>";
-		            	if(data=="不合格"){
-		            		el= "<select  class=\"input-medium rework\" style='width:100%;text-align:center'><option value='合格' >合格</option><option value='不合格' selected>不合格</option></select>";
-		            	}
-		            	if(!editable){
-		            		el=data;
-		            	}
-		            	return el;
-		            }*/},
-		            {"title":"检验员","class":"center","width":"5%","data": "tester","defaultContent": ""/*,"render":function(data,type,row,meta){
-		            	var el= "<input  class=\"input-medium tester\" style='text-align:center;height:30px'  type=\"text\" value='"+(data||"")+"'>";
-		            	if(!editable){
-		            		el=data;
-		            	}
-		            	return el;
-		            }*/},
-
-		            {"title":"责任车间","class":"center","width":"7%","data": "workshop","defaultContent": ""/*,"render":function(data,type,row,meta){
-		            	var el= "<select  class=\"input-medium workshop\" style='text-align:center;width:100%'>"+$("#workshop_tmpl").html()+"</select>";
-		            	if(!editable){
-		            		el=data;
-		            	}
-		            	return el;
-		            }*/},
-
-		            {"title":"责任班组","class":"center","width":"7%","data": "workgroup","defaultContent": ""/*,"render":function(data,type,row,meta){
-		            	var el="<select  class=\"input-medium workgroup\" style='text-align:center;width:100%'><select>";
-		            	if(!editable){
-		            		el=data;
-		            	}
-		            	return el;
-		            }*/},
-		            {"title":"备注","class":"center","width":"5%","data": "memo","defaultContent": ""/*,"render":function(data,type,row,meta){
-		            	var el= "<input  class=\"input-medium memo\" style='text-align:center;height:30px'  type=\"text\" value=\""+(data||"")+"\">";
-		            	if(!editable){
-		            		el=data;
-		            	}
-		            	return el;
-		            }*/},
-		            {"title":"是否必录项","class":"center is_null","width":"5%","data":"is_null","defaultContent": ""},		
+		            {"title":"检验项目","width":"12%","class":"center","data":"test_item","defaultContent": ""},
+		            {"title":"检验标准","width":"25%","class":"center","data":"test_standard","defaultContent": ""},		          
+		            {"title":"检验结果","width":"15%","class":"center","data": "test_result","defaultContent": ""},
+		            {"title":"判定","width":"10%","class":"center","data": "result_judge","defaultContent": ""},
+		            {"title":"复检判定","width":"10%","class":"center","data": "rework","defaultContent": ""},
+		            {"title":"检验员","width":"12%","class":"center","data": "test_item","defaultContent": "",},
+		            {"title":"备注","width":"12%","class":"center","data": "memo","defaultContent": ""},
+		            {"title":"是否必录项","width":"5%","class":"center is_null","data":"is_null","defaultContent": ""},		
 		         	
 		          ]	
 	});
@@ -692,22 +605,24 @@ function ajaxSave(){
 		order_config_id=$("#bus_number").attr("order_config_id");
 	}
 	
-	if(result==null||result.trim().length==0){
+	/*if(result==null||result.trim().length==0){
 		alert("请选择检验结论!");
 		save_flag=false;
 		return false;
-	}
+	}*/
 	if(test_date==null||test_date.trim().length==0){
 		alert("请输入检验日期!");
 		save_flag=false;
 		return false;
 	}
 	if(detail_list==undefined||detail_list.length==0){
-		alert("未匹配成品记录订单模板！");
+		alert("无匹配的成品记录表模板！");
 		save_flag=false;
 		return false;
 	}
-	var test_card_template_head_id=$(trs[0]).find(".workshop").parent("td").data("test_card_template_head_id");
+
+	var test_card_template_head_id=$(trs[0]).find(".test_result").parent("span").parent("td").data("test_card_template_head_id");
+	//alert(test_card_template_head_id)
 	$.each(trs,function(i,tr){
 		var test_result=$(tr).find(".test_result").val();
 		var fault_id=$(tr).find(".test_result").attr("fault_id")=="undefined"?"0":$(tr).find(".test_result").attr("fault_id");
@@ -718,7 +633,7 @@ function ajaxSave(){
 		var workgroup_id=$(tr).find(".workgroup").val();
 		var memo=$(tr).find(".memo").val();
 		var is_null=$(tr).find(".is_null").html();
-		var test_card_template_detail_id=$(tr).find(".workshop").parent("td").data("test_card_template_detail_id");
+		var test_card_template_detail_id=$(tr).find(".test_result").parent("span").parent("td").data("test_card_template_detail_id");
 		
 		if((workshop_id==null||workshop_id=="")){
 			workshop_id=0;
@@ -885,7 +800,7 @@ function ajaxQuery(){
 		            {"title":"车号","class":"center","data":"bus_number","defaultContent": ""},
 		            {"title":"订单","class":"center","data": "order_desc","defaultContent": ""},
 		            {"title":"检验员","class":"center","data":"tester","defaultContent": ""},		            
-		            {"title":"检验结论","class":"center","data":"result","defaultContent": ""},		    
+		            /*{"title":"检验结论","class":"center","data":"result","defaultContent": ""},	*/	    
 		            {"title":"检验日期","class":"center","data":"test_date","defaultContent": ""},		
 		            {"title":"录入人","class":"center","data": "editor","defaultContent": ""},
 		            {"title":"录入时间","class":"center","data":"edit_date","defaultContent":""},
@@ -966,6 +881,11 @@ function showInfoPage(row){
 			}
 		]
 	});
+	//先destroy datatable，隐藏form
+	if($.fn.dataTable.isDataTable("#tableDetail")){
+		$('#tableDetail').DataTable().destroy();
+		$('#tableDetail').empty();
+	}
 	drawTplDetailTable("#tableDetail",detail_list,false);
 	$(".divLoading").hide();
 }

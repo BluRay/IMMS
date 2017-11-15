@@ -13,7 +13,7 @@
 <link rel="stylesheet" href="../assets/css/jquery-ui.min.css" />
 <link rel="stylesheet" href="../assets/css/jquery.gritter.css" />
 <link rel="stylesheet" href="../css/multiple-select/multiple-select.css" />
-<link rel="stylesheet" href="../css/bootstrap.css" />
+<!-- <link rel="stylesheet" href="../css/bootstrap.css" /> -->
 </head>
 <body class="no-skin" style="font-family: 'Microsoft YaHei';">
 	<!-- 头 -->

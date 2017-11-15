@@ -162,6 +162,32 @@ public class TechServiceImpl implements ITechService {
 		if(task_page.equals("taskAssignPrePage")){
 			//前段
 			//插入技改明细
+			//TODO 重新计算总工时
+			String tech_list = conditionMap.get("tech_list").toString();
+			String time_list = conditionMap.get("time_list").toString();
+			//System.out.println("----> tech_list = " + tech_list + ";time_list = " + time_list);
+			//  ----> tech_list = 自制件:1,部件:2,焊装:6,涂装:6,底盘:6,总装:6;time_list = 自制件:1,部件:1,焊装:1,涂装:1,底盘:1,总装:1,检测线:0,成品库:0,弯弧件:0
+			float total = 0;
+			String[] tech_list_arr = {};
+			if(tech_list != null)tech_list_arr = tech_list.split(",");
+			String[] time_list_arr = {};
+			if(time_list != null)time_list_arr = time_list.split(",");
+			
+			for (int i = 0 ; i <tech_list_arr.length ; i++ ) {
+				String tech = tech_list_arr[i];
+				String tech_workshop = tech.substring(0, tech.indexOf(":"));
+				float tech_num = Float.valueOf(tech.substring(tech.indexOf(":")+1,tech.length()));
+				
+				for (int j = 0 ; j <time_list_arr.length ; j++ ) {
+					String time = time_list_arr[j];
+					String time_workshop = time.substring(0, time.indexOf(":"));
+					if(time_workshop.equals(tech_workshop)){
+						total += tech_num * Float.valueOf(time.substring(time.indexOf(":")+1, time.length()));
+					}
+				}
+			}
+			
+			conditionMap.put("time_total", total);
 			techDao.insertTechTaskDetail(conditionMap);	
 		}else{
 			techDao.deleteTechFollowBus(conditionMap);
