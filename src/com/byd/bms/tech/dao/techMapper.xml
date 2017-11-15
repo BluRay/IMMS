@@ -755,9 +755,9 @@
 		<if test="order_no !=null and order_no !=''">
 			and order_no=#{order_no}
 		</if>
-		<!-- <if test="factory_list !=null and factory_list !=''">
-			and find_in_set(factory,#{factory_list})>0
-		</if> -->
+		<if test="tech_factory !=null and tech_factory !=''">
+			and factory=#{tech_factory}
+		</if>
 	</update>
 	
 	<update id="updateTechTaskInfo" parameterType="Map">

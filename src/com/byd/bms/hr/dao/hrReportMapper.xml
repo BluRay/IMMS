@@ -7,7 +7,7 @@
 	<select id="getRewardsCollectList" resultType="Map"
 		parameterType='Map'>
 		
-		SELECT tmp.*,r.rewards_date,r.reasons,r.add as add_,r.deduct as decuct_,r.group_leader,r.gaffer,r.proposer,r.status 
+		SELECT tmp.*,r.rewards_date,r.reasons,r.add as add_,r.deduct as deduct_,r.group_leader,r.gaffer,r.proposer,r.status 
 			FROM 
 					(SELECT
 							r1.staff_number,s.name,s.workgroup_org,s.team_org,left(r1.rewards_date,7) rewards_month,r1.rewards_factory,r1.rewards_workshop,100

@@ -138,7 +138,7 @@ function getTechBusNum(order_no,factory,tech_date,switch_mode,switch_node,node_l
 		return data_list;
 }
 
-function ajaxEdit(task_id,task_detail_id,task_content,tech_order_no,switch_mode,switch_node,tech_date){
+function ajaxEdit(task_id,task_detail_id,task_content,tech_order_no,switch_mode,switch_node,tech_date,order_no){
 	is_assign = 0;
 	$("#new_accordion").html("");// 清空之前的div
 	
@@ -166,7 +166,7 @@ function ajaxEdit(task_id,task_detail_id,task_content,tech_order_no,switch_mode,
 		var follow_detail=tech_detail.follow_detail;
 		var prod_factory_id=tech_detail.prod_factory_id;
 		var prod_factory=tech_detail.prod_factory;
-		addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id,prod_factory);
+		addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id,prod_factory,order_no);
 		//console.log("follow_detail = " + follow_detail);
 		$.each(follow_detail.split(";"),function(i,follow){
 			//alert(follow.split("||")[1]);
@@ -231,6 +231,7 @@ function ajaxEdit(task_id,task_detail_id,task_content,tech_order_no,switch_mode,
 				}
 			]
 	});
+	$("#task_a_" + order_no).click();
 }
 
 function assignTechTask(){
@@ -337,7 +338,7 @@ function getTechList(task_id){
 	return tech_list;
 }
 
-function addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id,prod_factory){
+function addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id,prod_factory,mod_order_no){
 	follow_detail=follow_detail||"";
 	var is_follow=false;
 	$.each(follow_detail.split(";"),function(i,follow){
@@ -367,7 +368,7 @@ function addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id
 	$("#new_tab").find("li").removeClass("active");
 	$("#new_accordion").find("div").removeClass("active");
 	
-	var tabli="<li class='active'><a href='#new_task"+taskNum+"' data-toggle='tab' style='font-size: 14px; color: #333;display:inline-block'><span>订单"+taskNum+"</span>"
+	var tabli="<li class='active'><a href='#new_task"+taskNum+"' id='task_a_"+order_no+"' data-toggle='tab' style='font-size: 14px; color: #333;display:inline-block'><span>订单"+taskNum+"</span>"
 	+"&nbsp;&nbsp;"+(order_disabled==""?"<i class='fa fa-remove' style='cursor: pointer;color: rgb(218, 208, 208);display:inline-block' onclick='javascript:{if (confirm(\"确认删除？\"))removeTechDetail(this)}'></i>":"")
 	+"</a></li>";
 	
@@ -379,11 +380,13 @@ function addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id
 	tabContent+="</div></div></div>";
 	
 	$(tabContent).appendTo($("#new_accordion"));
-	addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factory_id,prod_factory);
+	var is_edit = false;
+	if(order_no == mod_order_no)is_edit = true;
+	addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factory_id,prod_factory,is_edit);
 	getFuzzyOrder("#order_"+taskNum);
 }
 
-function addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factory_id,prod_factory){
+function addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factory_id,prod_factory,is_edit){
 	var factory_select_options=$("#search_factory").html().replace("全部","请选择");
 	//alert(factory_select_options)	
 	var factory_disable_obj={};
@@ -433,11 +436,25 @@ function addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factor
 				console.log(i+"-->prod_factory_id = " + prod_factory_id);
 				console.log(i+"-->prod_factory = " + prod_factory);
 			}
+			
+			var disabled="";
+			//console.log(is_edit);
+			
+			if(typeof(is_edit) == "undefined"){
+				disabled="";
+			}else{
+				if(is_edit){
+					disabled="";
+				}else{
+					disabled="disabled=\"disabled\"";
+				}
+			}
+			
 			//prod_factory_id=prod_factory_id||factory_id;
 			//prod_factory=prod_factory||factory;
 			var facotory_div=$("<div style='margin-top:10px'><b>生产工厂：</b><span factory_id='"+(prod_factory_id||factory_id)+"'>"+(prod_factory||factory)+"</span></div>");
 			var ckbox=$("<input style=\"height:15px\" name=\"new_tecn_flag\""+
-					" class=\"input-medium\" type=\"checkbox\""+checked+" "+factory_disable_obj[prod_factory]+">");
+					" class=\"input-medium\" "+disabled+" type=\"checkbox\""+checked+" "+factory_disable_obj[prod_factory]+">");
 			var tech_factory="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>技改工厂：</b><select style='width:100px;height:28px' class='tech_factory' >"+factory_select_options+"</select>";
 			var tech_table=$("<table class=\"table table-bordered table-striped\" style=\"margin-bottom: 0px;\"></table>");
 			var tr_head=$("<tr><td>自制件</td><td>部件</td><td>焊装</td><td>涂装</td><td>底盘</td><td>总装</td><td>检测线</td></tr>");
@@ -641,7 +658,7 @@ function initTable() {
 	        		//task_id,task_detail_id,task_content,tech_order_no,switch_mode,switch_node,tech_date
 	        		return "<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"分配\" onclick='ajaxEdit(\"" + 
 	        		row['id'] + "\",\"" + row['task_detail_id'] + "\",\"" + row['task_content'].replace(/\r/ig, "").replace(/\n/ig,"").replace(/[\',\"]/g,"") + "\",\"" + row['tech_order_no'] + "\",\"" + 
-	        		row['switch_mode'] + "\",\"" + row['switch_node'] + "\",\"" + row['tech_date'] + "\")' style='color:blue;cursor: pointer;'></i>";
+	        		row['switch_mode'] + "\",\"" + row['switch_node'] + "\",\"" + row['tech_date'] + "\",\"" + row['order_no'] + "\")' style='color:blue;cursor: pointer;'></i>";
     	        	//}
     	        }
             }
