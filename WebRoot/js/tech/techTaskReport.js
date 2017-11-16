@@ -62,7 +62,7 @@ function initTable() {
 		    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
 		    	        	}
 		            },{
-		            	field: 'ORDER_NO',title: '车型订单',width:'80',align: 'center',valign: 'middle',align: 'center',
+		            	field: 'ORDER_NO',title: '车型订单',width:'140',align: 'center',valign: 'middle',align: 'center',
 		                sortable: false,visible: true,footerFormatter: totalTextFormatter,
 		                cellStyle:function cellStyle(value, row, index, field) {
 		    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
@@ -84,7 +84,16 @@ function initTable() {
 		                sortable: false,visible: true,footerFormatter: totalTextFormatter,
 		                cellStyle:function cellStyle(value, row, index, field) {
 		    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
-		    	        	}
+		    	        	},
+		            formatter:function(value, row, index){
+	            		var html="";
+		            	if(value.length>20){
+		            		html="<i title='"+value+"' style='font-style: normal'>"+value.substring(0,20)+"...</i>"
+		            	}else{
+		            		html=value;
+		            	}
+		            	return html;
+		            	}
 		            },{
 		            	field: 'TECH_LIST',title: '技改台数',align: 'center',valign: 'middle',align: 'center',
 		                sortable: false,visible: true,footerFormatter: totalTextFormatter,
@@ -98,7 +107,7 @@ function initTable() {
 		    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
 		    	        	}
 		            },{
-		            	field: 'ID',title: '技改总工时',align: 'center',valign: 'middle',align: 'center',
+		            	field: 'ID',title: '技改总工时（H）',align: 'center',valign: 'middle',align: 'center',
 		                sortable: false,visible: true,footerFormatter: totalTextFormatter,
 		                cellStyle:function cellStyle(value, row, index, field) {
 		    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
@@ -165,7 +174,7 @@ function initTable() {
 				        			total_hours += tech_obj.检测线*time_obj.检测线;
 				        		}
 			        		}
-			        		return total_hours + "H";
+			        		return total_hours;
 			        	}
 		            },{
 		            	field: 'TECH_SINGLE_PRICE',title: '工时单价',align: 'center',valign: 'middle',align: 'center',
@@ -180,19 +189,19 @@ function initTable() {
 		columns = [
 			          [
 			            {
-			            	field: 'FACTORY',title: '工厂',width:'100',align: 'center',valign: 'middle',align: 'center',
+			            	field: 'FACTORY',title: '工厂',width:'120',align: 'center',valign: 'middle',align: 'center',
 			                sortable: false,visible: true,footerFormatter: totalTextFormatter,
 			                cellStyle:function cellStyle(value, row, index, field) {
 				        	return {css: {"padding-left": "3px", "padding-right": "2px","font-size":"13px"}};
 				        	}
 			            },{
-			            	field: 'TECH_DATE',title: '技改单日期',width:'90',align: 'center',valign: 'middle',align: 'center',
+			            	field: 'TECH_DATE',title: '技改单日期',width:'120',align: 'center',valign: 'middle',align: 'center',
 			                sortable: false,visible: true,footerFormatter: totalTextFormatter,
 			                cellStyle:function cellStyle(value, row, index, field) {
 			    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
 			    	        	}
 			            },{
-			            	field: 'ORDER_NO',title: '车型订单',width:'80',align: 'center',valign: 'middle',align: 'center',
+			            	field: 'ORDER_NO',title: '车型订单',width:'140',align: 'center',valign: 'middle',align: 'center',
 			                sortable: false,visible: true,footerFormatter: totalTextFormatter,
 			                cellStyle:function cellStyle(value, row, index, field) {
 			    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
@@ -214,7 +223,16 @@ function initTable() {
 			                sortable: false,visible: true,footerFormatter: totalTextFormatter,
 			                cellStyle:function cellStyle(value, row, index, field) {
 			    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
-			    	        	}
+			    	        	},
+			    	        formatter:function(value, row, index){
+			            		var html="";
+				            	if(value.length>20){
+				            		html="<i title='"+value+"' style='font-style: normal'>"+value.substring(0,20)+"...</i>"
+				            	}else{
+				            		html=value;
+				            	}
+				            	return html;
+				            	}
 			            },{
 			            	field: 'SAP_NO',title: 'SAP料号',width:'120',align: 'center',valign: 'middle',align: 'center',
 			                sortable: false,visible: true,footerFormatter: totalTextFormatter,

@@ -731,8 +731,11 @@
 	<insert id="insertTechTaskDetail" useGeneratedKeys="true" parameterType="Map">
 		insert into BMS_TECH_TASK_DETAIL (tech_task_id,order_no,factory,factory_id,prod_factory,prod_factory_id,tech_list,time_list,status_list,single_time_total,time_total)
 		values (#{tech_task_id},#{order_no},#{tech_factory},#{tech_factory_id},#{factory_list},#{factory_id},#{tech_list},#{time_list},#{status_list},#{single_time_total},#{time_total})  
-
 	</insert>
+	<update id="deleteTechFollowPre" parameterType="Map">
+	DELETE FROM BMS_TECH_TASK_FOLLOW_PRE WHERE tech_task_id =#{tech_task_id}
+	AND order_no = #{order_no} AND factory = #{tech_factory}
+	</update>
 	
 	<update id="deleteTechFollowBus" parameterType="Map">
 		delete from BMS_TECH_TASK_FOLLOW where tech_task_id=#{tech_task_id}
@@ -1119,10 +1122,12 @@
 	</select>
 	
 	<select id="queryTechTaskReport" parameterType="Map" resultType="Map">
-		SELECT D.FACTORY,T.TECH_DATE,D.ORDER_NO,T.TECH_ORDER_NO,K1.KEY_NAME AS DUTY_UNIT,T.TASK_CONTENT,T.TECH_ORDER_NO,D.TECH_LIST,D.TIME_LIST,
+		SELECT D.FACTORY,T.TECH_DATE,CONCAT(o.order_no,' ',o.order_name,t.bus_type_code,' ',o.order_qty,'台') AS ORDER_NO,T.TECH_ORDER_NO,K1.KEY_NAME AS DUTY_UNIT,T.TASK_CONTENT,T.TECH_ORDER_NO,D.TECH_LIST,D.TIME_LIST,
 		T.TECH_SINGLE_PRICE
 		FROM BMS_TECH_TASK_DETAIL D
 		LEFT JOIN BMS_TECH_TASK T ON D.tech_task_id = T.id
+		LEFT JOIN BMS_OR_ORDER o ON D.order_no = o.order_no
+		LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id=t.id
 		LEFT JOIN BMS_BASE_KEY K1 ON T.duty_unit = K1.id WHERE 1=1 
 		<if test="task_content !=null and task_content !=''">
 			AND T.TASK_CONTENT LIKE CONCAT(#{task_content},'%')
@@ -1175,14 +1180,16 @@
 	</select>
 	
 	<select id="queryTechTaskReport2" parameterType="Map" resultType="Map">
-		SELECT D.FACTORY,T.TECH_DATE,D.ORDER_NO,T.TECH_ORDER_NO,K1.KEY_NAME AS DUTY_UNIT,T.TASK_CONTENT,M.ID,M.SAP_NO,M.MATERIAL_DESC,
+		SELECT D.FACTORY,T.TECH_DATE,CONCAT(o.order_no,' ',o.order_name,t.bus_type_code,' ',o.order_qty,'台') AS ORDER_NO,T.TECH_ORDER_NO,K1.KEY_NAME AS DUTY_UNIT,T.TASK_CONTENT,M.ID,M.SAP_NO,M.MATERIAL_DESC,
 		M.MATERIAL_TYPE,M.MATERIAL_SPEC,M.UNIT,M.SUPPLIER_CODE,
 		M.SINGLE_LOSS,M.LEVEL_USAGE,M.SINGLE_WEIGHT,M.SINGLE_USAGE,M.WORKSHOP,M.PROCESS,
 		M.ASSEMB_SITE,
 		(SELECT COUNT(DISTINCT F.bus_number) AS BUS_COUNT FROM BMS_TECH_TASK_FOLLOW F WHERE F.TECH_TASK_ID = M.TECH_TASK_ID AND F.factory = D.FACTORY) AS BUS_COUNT
 		FROM BMS_TECH_MATERIAL M
 		LEFT JOIN BMS_TECH_TASK_DETAIL D ON M.tech_task_id = D.tech_task_id
-		LEFT JOIN BMS_TECH_TASK T ON M.tech_task_id = T.id
+		LEFT JOIN BMS_TECH_TASK T ON M.tech_task_id = T.id		
+		LEFT JOIN BMS_OR_ORDER o ON D.order_no = o.order_no
+		LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id=t.id
 		LEFT JOIN BMS_BASE_KEY K1 ON T.duty_unit = K1.id WHERE 1=1 
 		<if test="task_content !=null and task_content !=''">
 			AND T.TASK_CONTENT LIKE CONCAT(#{task_content},'%')

@@ -189,7 +189,8 @@ public class TechServiceImpl implements ITechService {
 				}
 				
 			}
-			
+			//删除前段跟进数据
+			techDao.deleteTechFollowPre(conditionMap);	
 			conditionMap.put("time_total", total);
 			techDao.insertTechTaskDetail(conditionMap);	
 		}else{
