@@ -69,6 +69,8 @@ $(document).ready(function() {
 			if(td.css("display")!='none'){
 				if(salary_model=='技能系数' ||salary_model=='承包制'||salary_model=='自制件承包' ){
 					var bus_number=$(td).next().html();
+					var work_date=$(td).next().next().html();
+					work_date_list.push(work_date);
 					bus_list.push(bus_number)
 				}
 				if(salary_model=='辅助人力'  ){

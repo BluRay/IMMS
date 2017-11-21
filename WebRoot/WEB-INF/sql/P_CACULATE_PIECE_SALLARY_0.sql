@@ -50,12 +50,10 @@ BEGIN
 	
 	#删除之前的工资
 
-
-
-
 	delete from BMS_HR_PIECE_SALARY 
 	where factory=q_factory and workshop=q_workshop and workgroup=q_workgroup and team=q_team 
-	and work_date>=q_start_date and work_date<=q_end_date  and FIND_IN_SET(bus_number,q_bus_number)>0
+	#and work_date>=q_start_date and work_date<=q_end_date  
+	and FIND_IN_SET(bus_number,q_bus_number)>0
 	and salary_model='技能系数';
 
 	#向计件工资计算表中插入工资记录	

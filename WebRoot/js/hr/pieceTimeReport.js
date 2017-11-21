@@ -49,9 +49,9 @@ $(document).ready(function(){
 	
 	//导出功能
 	$(document).on("click",".buttons-excel",function(){
+		exportExcelTableHtml();
 		//ajaxQuery(0,'all');
-		$("#tableResult tbody").children("tr").children("td:hidden").remove();
-		htmlToExcel("tableResult", "", "","计件工时统计","计件工时统计");
+		//$("#tableResult tbody").children("tr").children("td:hidden").remove();
 		return false;
 	});
 });
@@ -113,6 +113,9 @@ function ajaxQuery(){
 	var rowsGroup=[];
 	var salary_model=$("#search_salary_model").val();
 	var count_flag=$("#search_count_flag").val();
+	
+	
+	
 	if(salary_model=="技能系数"){
 		if(count_flag=='车辆维度'){
 			rowsGroup=[0,1,2,3,4,5,6,7,8,15]
@@ -324,11 +327,11 @@ function ajaxQuery(){
 	
 	var tb=$("#tableResult").DataTable({
 		serverSide: true,
-		/*deferRender: true,*/
+		deferRender: true,
 		dom: 'Bfrtip',
 		lengthMenu: [
-		             [ 200, 500, 1000, -1 ],
-		             [ '显示200行', '显示500行', '显示1000行', '全部' ]
+		             [ 200, 500, 1000 ],
+		             [ '显示200行', '显示500行', '显示1000行' ]
 		         ],
 	    buttons: [
 	        {extend:'excelHtml5',enabled:false,title:'data_export',className:'black',text:'<i class=\"fa fa-file-excel-o bigger-130\" tooltip=\"导出excel\"></i>'},
@@ -436,4 +439,335 @@ function ajaxQuery(){
 	$("#tableResult_info").addClass('col-xs-6');
 	$("#tableResult_paginate").addClass('col-xs-6');
 	$(".dt-buttons").css("margin-top","-50px").find("a").css("border","0px");
+}
+
+function exportExcelTableHtml(){
+	/**
+	 * 获取全部数据
+	 */
+	$(".divLoading").addClass("fade in").show();
+	var salary_model=$("#search_salary_model").val();
+	var count_flag=$("#search_count_flag").val();
+	var result=null;
+	var param ={
+			"draw":1,
+			"order_no":$("#search_order_no").val(),
+			"factory":$("#search_factory :selected").text(),
+			"workshop":$("#search_workshop :selected").text(),
+			"workgroup":$("#search_workgroup :selected").text(),
+			"team":$("#search_team :selected").text(),
+			"staff":$("#staff_number").val(),
+			"bus_number":$("#bus_number").val(),
+			"order_id":$("#search_order_no").attr("order_id"),
+			"wdate_start":$("#wdate_start").val(),
+			"wdate_end":$("#wdate_end").val(),
+			"salary_model":salary_model,
+			"count_flag":count_flag,
+			"length":-1
+		};
+	
+	$.ajax({
+        type: "post",
+        url: "getStaffPieceHours",
+        cache: false,  //禁用缓存
+        async:false,
+        data: param,  //传入组装的参数
+        dataType: "json",
+        success: function (response) {       	
+        	result=response.data;       	    	
+        }
+    });
+	
+	
+	
+	/**
+	 * 封装excel数据
+	 */
+	var rowsGroup=[];
+	var excel_html="";
+	var columns=[];
+	if(salary_model=="技能系数"){
+		if(count_flag=='车辆维度'){
+			rowsGroup=[0,1,15]
+			columns= [
+			            {"title":"车号","class":"center","width":"160","data":"bus_number","defaultContent": ""},
+			            {"title":"订单","class":"center","width":"180","data":"order_desc","defaultContent": ""},
+			            {"title":"操作日期","class":"center","data":"work_date","defaultContent": ""},
+			            {"title":"单价","class":"center","data":"standard_price","defaultContent": ""},
+			            {"title":"补贴车","class":"center","data":"bonus","defaultContent": ""},
+			            {"title":"工厂","class":"center","data":"factory","defaultContent": ""},
+			            {"title":"车间","class":"center","data":"workshop","defaultContent":""},
+			            {"title":"班组","class":"center","data":"workgroup","defaultContent":""},
+			            {"title":"小班组","class":"center","data":"team","defaultContent":""},
+			            {"title":"工号","class":"center","data":"staff_number","defaultContent": ""},
+			            {"title":"姓名","class":"center","data":"staff_name","defaultContent": ""},
+			            {"title":"岗位","class":"center","data": "job","defaultContent": ""},		            
+			            {"title":"技能系数","width":"80","class":"center","data":"skill_parameter","defaultContent": ""},		            
+			            {"title":"参与度/工时","width":"100","class":"center","data": "work_hour","defaultContent": ""},
+			            {"title":"计件工资","class":"center","data": "ppay","defaultContent": ""},
+			            {"title":"合计工资","class":"center","data": "total_ppay","defaultContent": ""}	
+			          ]	;
+		}else{
+			rowsGroup=[0,1,2,3,4,5,6,15]
+			columns= [
+			          	{"title":"工号","class":"center","data":"staff_number","defaultContent": ""},
+			          	{"title":"姓名","class":"center","data":"staff_name","defaultContent": ""},
+			          	{"title":"工厂","class":"center","data":"factory","defaultContent": ""},
+			            {"title":"车间","class":"center","data":"workshop","defaultContent":""},
+			            {"title":"班组","class":"center","data":"workgroup","defaultContent":""},
+			            {"title":"小班组","class":"center","data":"team","defaultContent":""},
+			          	{"title":"岗位","class":"center","data": "job","defaultContent": ""},	
+			          	{"title":"车号","class":"center","width":"160","data":"bus_number","defaultContent": ""},
+			            {"title":"订单","class":"center","width":"180","data":"order_desc","defaultContent": ""},
+			            {"title":"操作日期","class":"center","data":"work_date","defaultContent": ""},			            
+			            {"title":"单价","class":"center","data":"standard_price","defaultContent": ""},
+			            {"title":"补贴车","class":"center","data":"bonus","defaultContent": ""},
+			            {"title":"技能系数","width":"80","class":"center","data":"skill_parameter","defaultContent": ""},  		            
+			            {"title":"参与度/工时","width":"100","class":"center","data": "work_hour","defaultContent": ""},
+			            {"title":"计件工资","class":"center","data": "ppay","defaultContent": ""},
+			            {"title":"合计工资","class":"center","data": "total_ppay","defaultContent": ""}	
+			          ]	;
+		}
+	}
+	
+	if(salary_model=="承包制"){
+		if(count_flag=='车辆维度'){
+			rowsGroup=[0,1,2,3,4,5,6,7,8,15]
+			columns= [
+			            {"title":"车号","class":"center","width":"160","data":"bus_number","defaultContent": ""},
+			            {"title":"订单","class":"center","width":"180","data":"order_desc","defaultContent": ""},
+			            {"title":"操作日期","class":"center","data":"work_date","defaultContent": ""},
+			            {"title":"单价","class":"center","data":"standard_price","defaultContent": ""},
+			            {"title":"补贴车","class":"center","data":"bonus","defaultContent": ""},
+			            {"title":"工厂","class":"center","data":"factory","defaultContent": ""},
+			            {"title":"车间","class":"center","data":"workshop","defaultContent":""},
+			            {"title":"班组","class":"center","data":"workgroup","defaultContent":""},
+			            {"title":"小班组","class":"center","data":"team","defaultContent":""},
+			            {"title":"工号","class":"center","data":"staff_number","defaultContent": ""},
+			            {"title":"姓名","class":"center","data":"staff_name","defaultContent": ""},
+			            {"title":"岗位","class":"center","data": "job","defaultContent": ""},		            
+			            {"title":"分配金额","width":"80","class":"center","data":"distribution","defaultContent": ""},		            
+			            {"title":"参与度/工时","width":"100","class":"center","data": "work_hour","defaultContent": ""},
+			            {"title":"计件工资","class":"center","data": "ppay","defaultContent": ""},
+			            {"title":"合计工资","class":"center","data": "total_ppay","defaultContent": ""}	
+			          ]	;
+		}else{
+			rowsGroup=[0,1,2,3,4,5,6,15]
+			columns= [
+			          	{"title":"工号","class":"center","data":"staff_number","defaultContent": ""},
+			          	{"title":"姓名","class":"center","data":"staff_name","defaultContent": ""},
+			          	{"title":"工厂","class":"center","data":"factory","defaultContent": ""},
+			            {"title":"车间","class":"center","data":"workshop","defaultContent":""},
+			            {"title":"班组","class":"center","data":"workgroup","defaultContent":""},
+			            {"title":"小班组","class":"center","data":"team","defaultContent":""},
+			          	{"title":"岗位","class":"center","data": "job","defaultContent": ""},	
+			          	{"title":"车号","class":"center","width":"160","data":"bus_number","defaultContent": ""},
+			            {"title":"订单","class":"center","width":"180","data":"order_desc","defaultContent": ""},
+			            {"title":"操作日期","class":"center","data":"work_date","defaultContent": ""},			            
+			            {"title":"单价","class":"center","data":"standard_price","defaultContent": ""},
+			            {"title":"补贴车","class":"center","data":"bonus","defaultContent": ""},
+			            {"title":"分配金额","width":"80","class":"center","data":"distribution","defaultContent": ""},  		            
+			            {"title":"参与度/工时","width":"100","class":"center","data": "work_hour","defaultContent": ""},
+			            {"title":"计件工资","class":"center","data": "ppay","defaultContent": ""},
+			            {"title":"合计工资","class":"center","data": "total_ppay","defaultContent": ""}	
+			          ]	;
+		}
+	}
+	
+	if(salary_model=="辅助人力"){
+		if(count_flag=='订单维度'){
+			rowsGroup=[0,1,2,3,4,13]
+			columns= [
+			          	{"title":"订单","class":"center","data":"order_desc","defaultContent": ""},
+			            {"title":"操作日期","class":"center","data":"work_date","defaultContent": ""},
+			            {"title":"补贴车","class":"center","data":"bonus","defaultContent": ""},
+			            {"title":"工厂","class":"center","data":"factory","defaultContent": ""},
+			            {"title":"车间","class":"center","data":"workshop","defaultContent":""},
+			            {"title":"班组","class":"center","data":"workgroup","defaultContent":""},
+			            {"title":"小班组","class":"center","data":"team","defaultContent":""},
+			            {"title":"工号","class":"center","data":"staff_number","defaultContent": ""},
+			            {"title":"姓名","class":"center","data":"staff_name","defaultContent": ""},
+			            {"title":"岗位","class":"center","data": "job","defaultContent": ""},		            
+			            {"title":"技能系数","width":"80","class":"center","data":"skill_parameter","defaultContent": ""},		            
+			            {"title":"参与度/工时","width":"100","class":"center","data": "work_hour","defaultContent": ""},
+			            {"title":"计件工资（月）","class":"center","data": "ppay","defaultContent": ""},
+			            {"title":"合计工资","class":"center","data": "total_ppay","defaultContent": ""}	
+			          ]	;
+		}else{
+			rowsGroup=[0,1,2,3,4,5,6,13]
+			columns= [
+			          	{"title":"工号","class":"center","data":"staff_number","defaultContent": ""},
+			          	{"title":"姓名","class":"center","data":"staff_name","defaultContent": ""},
+			          	{"title":"工厂","class":"center","data":"factory","defaultContent": ""},
+			            {"title":"车间","class":"center","data":"workshop","defaultContent":""},
+			            {"title":"班组","class":"center","data":"workgroup","defaultContent":""},
+			            {"title":"小班组","class":"center","data":"team","defaultContent":""},
+			          	{"title":"岗位","class":"center","data": "job","defaultContent": ""},	
+			          	{"title":"订单","class":"center","data":"order_desc","defaultContent": ""},
+			            {"title":"操作日期","class":"center","data":"work_date","defaultContent": ""},
+			            {"title":"补贴车","class":"center","data":"bonus","defaultContent": ""},
+			            {"title":"技能系数","width":"80","class":"center","data":"skill_parameter","defaultContent": ""},  		            
+			            {"title":"参与度/工时","width":"100","class":"center","data": "work_hour","defaultContent": ""},
+			            {"title":"计件工资（月）","class":"center","data": "ppay","defaultContent": ""},
+			            {"title":"合计工资","class":"center","data": "total_ppay","defaultContent": ""}	
+			          ]	;
+		}
+	}
+	
+	if(salary_model=="底薪模式"){
+		if(count_flag=='日期维度'){
+			rowsGroup=[0,1,2,3,4,12]
+			columns= [
+			            {"title":"操作日期","class":"center","data":"work_date","defaultContent": ""},
+			            {"title":"工厂","class":"center","data":"factory","defaultContent": ""},
+			            {"title":"车间","class":"center","data":"workshop","defaultContent":""},
+			            {"title":"班组","class":"center","data":"workgroup","defaultContent":""},
+			            {"title":"小班组","class":"center","data":"team","defaultContent":""},
+			            {"title":"工号","class":"center","data":"staff_number","defaultContent": ""},
+			            {"title":"姓名","class":"center","data":"staff_name","defaultContent": ""},
+			            {"title":"岗位","class":"center","data": "job","defaultContent": ""},		            
+			            {"title":"底薪","class":"center","data": "basic_salary","defaultContent": ""},
+			            {"title":"技能系数","width":"80","class":"center","data":"skill_parameter","defaultContent": ""},		            
+			            {"title":"参与度/工时","width":"100","class":"center","data": "work_hour","defaultContent": ""},
+			            {"title":"计件工资（月）","class":"center","data": "ppay","defaultContent": ""},
+			            {"title":"合计工资","class":"center","data": "total_ppay","defaultContent": ""}	
+			          ]	;
+		}else{
+			rowsGroup=[0,1,2,3,4,5,6,7,12]
+			columns= [
+			          	{"title":"工号","class":"center","data":"staff_number","defaultContent": ""},
+			          	{"title":"姓名","class":"center","data":"staff_name","defaultContent": ""},
+			          	{"title":"工厂","class":"center","data":"factory","defaultContent": ""},
+			            {"title":"车间","class":"center","data":"workshop","defaultContent":""},
+			            {"title":"班组","class":"center","data":"workgroup","defaultContent":""},
+			            {"title":"小班组","class":"center","data":"team","defaultContent":""},
+			          	{"title":"岗位","class":"center","data": "job","defaultContent": ""},
+			          	{"title":"底薪","class":"center","data": "basic_salary","defaultContent": ""},
+			            {"title":"操作日期","class":"center","data":"work_date","defaultContent": ""},
+			            {"title":"技能系数","width":"80","class":"center","data":"skill_parameter","defaultContent": ""},  		            
+			            {"title":"参与度/工时","width":"100","class":"center","data": "work_hour","defaultContent": ""},
+			            {"title":"计件工资（月）","class":"center","data": "ppay","defaultContent": ""},
+			            {"title":"合计工资","class":"center","data": "total_ppay","defaultContent": ""}	
+			          ]	;
+		}
+	}
+	if(salary_model=="自制件承包"){
+		if(count_flag=='车辆维度'){
+			rowsGroup=[0,1,2,3,4,5,6,7,8,15]
+			columns= [
+			            {"title":"车号","class":"center","width":"160","data":"bus_number","defaultContent": ""},
+			            {"title":"订单","class":"center","width":"180","data":"order_desc","defaultContent": ""},
+			            {"title":"操作日期","class":"center","data":"work_date","defaultContent": ""},
+			            {"title":"单价","class":"center","data":"standard_price","defaultContent": ""},
+			            {"title":"补贴车","class":"center","data":"bonus","defaultContent": ""},
+			            {"title":"工厂","class":"center","data":"factory","defaultContent": ""},
+			            {"title":"车间","class":"center","data":"workshop","defaultContent":""},
+			            {"title":"班组","class":"center","data":"workgroup","defaultContent":""},
+			            {"title":"小班组","class":"center","data":"team","defaultContent":""},
+			            {"title":"工号","class":"center","data":"staff_number","defaultContent": ""},
+			            {"title":"姓名","class":"center","data":"staff_name","defaultContent": ""},
+			            {"title":"岗位","class":"center","data": "job","defaultContent": ""},		            
+			            {"title":"分配金额","width":"80","class":"center","data":"distribution","defaultContent": ""},		            
+			            {"title":"参与度/工时","width":"100","class":"center","data": "work_hour","defaultContent": ""},
+			            {"title":"计件工资","class":"center","data": "ppay","defaultContent": ""},
+			            {"title":"合计工资","class":"center","data": "total_ppay","defaultContent": ""}	
+			          ]	;
+		}else{
+			rowsGroup=[0,1,2,3,4,5,6,15]
+			columns= [
+			          	{"title":"工号","class":"center","data":"staff_number","defaultContent": ""},
+			          	{"title":"姓名","class":"center","data":"staff_name","defaultContent": ""},
+			          	{"title":"工厂","class":"center","data":"factory","defaultContent": ""},
+			            {"title":"车间","class":"center","data":"workshop","defaultContent":""},
+			            {"title":"班组","class":"center","data":"workgroup","defaultContent":""},
+			            {"title":"小班组","class":"center","data":"team","defaultContent":""},
+			          	{"title":"岗位","class":"center","data": "job","defaultContent": ""},	
+			          	{"title":"车号","class":"center","width":"160","data":"bus_number","defaultContent": ""},
+			            {"title":"订单","class":"center","width":"180","data":"order_desc","defaultContent": ""},
+			            {"title":"操作日期","class":"center","data":"work_date","defaultContent": ""},			            
+			            {"title":"单价","class":"center","data":"standard_price","defaultContent": ""},
+			            {"title":"补贴车","class":"center","data":"bonus","defaultContent": ""},
+			            {"title":"分配金额","width":"80","class":"center","data":"distribution","defaultContent": ""},  		            
+			            {"title":"参与度/工时","width":"100","class":"center","data": "work_hour","defaultContent": ""},
+			            {"title":"计件工资","class":"center","data": "ppay","defaultContent": ""},
+			            {"title":"合计工资","class":"center","data": "total_ppay","defaultContent": ""}	
+			          ]	;
+		}
+	}
+	/**
+	 * 创建table
+	 */
+	var table=document.createElement("table");
+	table.id="tb_excel";
+	table.style.display="";
+	/**
+	 * 创建table head
+	 */
+	var table_head=$("<tr />");
+	$.each(columns,function(i,column){
+		var th=$("<th />");
+		th.attr("class",column.class);
+		th.attr("width",column.width);
+		th.html(column.title);
+		$(table_head).append(th);
+	})
+	
+	
+	var warp = document.createDocumentFragment();//创建文档碎片节点,最后渲染该碎片节点，减少浏览器渲染消耗的资源
+	
+	var data_process={};
+	data_process.result=result;
+	data_process.columns=columns;
+	data_process.rowsGroup=rowsGroup;
+	
+
+    var curWwwPath=window.document.location.href;  
+    //获取主机地址之后的目录，如： uimcardprj/share/meun.jsp  
+    var pathName=window.document.location.pathname;  
+    var pos=curWwwPath.indexOf(pathName);  
+    //获取主机地址，如： http://localhost:8083  
+    var localhostPaht=curWwwPath.substring(0,pos);  
+    //获取带"/"的项目名，如：/uimcardprj  
+    var projectName=pathName.substring(0,pathName.substr(1).indexOf('/')+1);  
+    var baseRoot = localhostPaht+projectName;  
+	
+	var worker=new Worker(baseRoot+"/js/hr/mergeTableCell.js")
+	worker.postMessage(data_process);
+	worker.onmessage=function(event){
+		
+	var trs_data=event.data;
+	$.each(trs_data,function(i,tr_obj){
+		var tr=$("<tr />");
+		$.each(tr_obj,function(j,td_obj){
+			var td=$("<td />");
+			td.attr("class",td_obj.class);
+			td.attr("rowspan",td_obj.rowspan);
+			td.attr("width",td_obj.width);
+			td.html(td_obj.html);
+
+			if(!td_obj.hidden){
+				$(td).appendTo(tr)
+			}
+			
+		});
+		$(warp).append(tr);
+	})
+	
+	$(table).append($(warp));
+		
+		
+	document.body.appendChild(table);
+		
+	/**
+	 * 导出excel
+	 */
+	htmlToExcel("tb_excel", "", "","计件工时统计","计件工时统计");
+	
+	
+	//导出后清除表格
+	document.body.removeChild(table);
+	$(".divLoading").hide();	
+	}
+
+	  
 }

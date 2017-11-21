@@ -37,7 +37,7 @@
 			and tfp.workshop=#{workshop}
 		</if>
 		group by tfp.tech_task_id,tfp.order_no,tfp.factory,tfp.workshop) tmp 
-		WHERE tmp.tech_task_id=t.id and tmp.factory=d.factory and tmp.order_no=d.order_no) follow_num,
+		WHERE tmp.tech_task_id=t.id and tmp.factory=d.factory and tmp.order_no=d.order_no limit 1) follow_num,
 		(SELECT group_concat(tmp.workshop,':',tmp.ready_hour_total separator ',') ready_hour_list
 		FROM(
 		SELECT h.ecn_task_id tech_task_id,h.factory,h.workshop,ifnull(sum(h.work_hour),0)ready_hour_total
@@ -185,7 +185,7 @@
 			and tfp.workshop=#{workshop}
 		</if>
 		group by tfp.tech_task_id,tfp.order_no,tfp.factory,tfp.workshop) tmp 
-		WHERE tmp.tech_task_id=t.id and tmp.factory=d.factory and tmp.order_no=d.order_no) follow_list,
+		WHERE tmp.tech_task_id=t.id and tmp.factory=d.factory and tmp.order_no=d.order_no  limit 1) follow_list,
 		(SELECT group_concat(tmp.workshop,':',tmp.ready_hour_total separator ',') ready_hour_list
 		FROM(
 		SELECT h.ecn_task_id tech_task_id,h.factory,h.workshop,ifnull(sum(h.work_hour),0)ready_hour_total

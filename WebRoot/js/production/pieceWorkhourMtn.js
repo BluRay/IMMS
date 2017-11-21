@@ -349,7 +349,7 @@ $(document).ready(function() {
 					return false;
 				}			
 				var area=cutomer_number.split("_");
-				if(area.length<=1){
+				if(area.length<=1 && workshop!='部件'){
 					alert("输入格式不正确，自编号格式为：车型-订单_起始号-结束号！");
 					save_flag=false;
 					return false;
@@ -365,7 +365,10 @@ $(document).ready(function() {
 						bus_count=parseInt(bus_end,0)-parseInt(bus_start,0)+1;
 					}					
 				}
-				if(bus_count<0){
+				if(workshop=='部件'){
+					bus_count=1;
+				}
+				if(bus_count<0 && workshop!='部件'){
 					alert("结束号必须大于起始号");
 					save_flag=false;
 					return false;			
@@ -462,7 +465,7 @@ $(document).ready(function() {
 					return false;
 				}			
 				var area=cutomer_number.split("_");
-				if(area.length<=1){
+				if(area.length<=1 && workshop!='部件'){
 					alert("输入格式不正确，自编号格式为：车型-订单_起始号-结束号！");
 					save_flag=false;
 					return false;
@@ -478,7 +481,10 @@ $(document).ready(function() {
 						bus_count=parseInt(bus_end,0)-parseInt(bus_start,0)+1;
 					}					
 				}
-				if(bus_count<0){
+				if(workshop=='部件'){
+					bus_count=1;
+				}
+				if(bus_count<0 && workshop!='部件'){
 					alert("结束号必须大于起始号");
 					save_flag=false;
 					return false;
@@ -924,7 +930,12 @@ function zTreeOnClick(event, treeId, treeNode) {
 			$("<td />").html("订单：").appendTo(tr);
 			$("<td />").html("<input type=\"text\" id=\"order_no\" class=\"input-medium carType\" style=\"height: 30px; width: 100px;\"></input>").appendTo(tr);
 			$("<td />").html("自编号：").appendTo(tr);
-			$("<td />").html("<input type=\"text\" id=\"customer_number\" placeholder=\"车型-订单_起始号-结束号\" class=\"input-medium carType\" style=\"height: 30px; width: 150px;\"></input>").appendTo(tr);
+			
+			if(workshop=='部件'){
+				$("<td />").html("<input type=\"text\" id=\"customer_number\" placeholder=\"车型-订单_编号\" class=\"input-medium carType\" style=\"height: 30px; width: 150px;\"></input>").appendTo(tr);
+			}else{
+				$("<td />").html("<input type=\"text\" id=\"customer_number\" placeholder=\"车型-订单_起始号-结束号\" class=\"input-medium carType\" style=\"height: 30px; width: 150px;\"></input>").appendTo(tr);
+			}
 		}else{
 			$("<td />").html("车号：").appendTo(tr);
 			$("<td />").html("<input type=\"text\" id=\"bus_number\" class=\"input-medium carType\" style=\"height: 30px; width: 150px;\"></input>").appendTo(tr);

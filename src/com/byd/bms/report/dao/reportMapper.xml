@@ -478,12 +478,15 @@
 		<![CDATA[
 		select
 		a.*,b.target_val from(
-		SELECT COUNT(DISTINCT h.bus_number) bus_num, COUNT( h.result_judge) bug_num,
-		substring(h.edit_date,1,10) item,h.test_node_id,h.test_node,h.factory_id
-		FROM BMS_QM_TEST_CARD h 
-		WHERE h.factory_id=#{factoryId} AND h.test_node_id=#{test_node_id} AND h.result_judge ='不合格' 
+		
+		SELECT COUNT(DISTINCT h.bus_number) bus_num, COUNT( h.id) bug_num,
+		substring(h.edit_date,1,10) item,h.test_node_id,h.test_node,f.id AS factory_id
+		FROM BMS_QM_QUALITY_ABNORMAL_RECORD h
+		LEFT JOIN BMS_BASE_FACTORY f ON h.factory = f.factory_name
+		WHERE f.id=#{factoryId} AND h.test_node_id=#{test_node_id}
 		AND substring(h.edit_date,1,10) >= #{startDate} AND substring(h.edit_date,1,10) <= #{endDate}
 		GROUP BY substring(h.edit_date,1,10)
+		
 		) a
 		left join (
 		select max(p.target_value) target_val,p.eend_date,p.factory_id,p.test_node_id
@@ -501,11 +504,12 @@
 		<![CDATA[
 		select a.*,b.target_val from(
 		
-		SELECT COUNT(DISTINCT h.bus_number) bus_num, COUNT( h.result_judge) bug_num,
-		(week(h.edit_date)-week(#{startDate})+1) item,h.test_node_id,h.test_node,h.factory_id
-		FROM BMS_QM_TEST_CARD h 
-		WHERE h.factory_id=#{factoryId} AND h.test_node_id=#{test_node_id} AND h.result_judge ='不合格' 
-		AND substring(h.edit_date,1,10) >=#{startDate} AND substring(h.edit_date,1,10) <=#{endDate}
+		SELECT COUNT(DISTINCT h.bus_number) bus_num, COUNT( h.id) bug_num,
+		substring(h.edit_date,1,10) item,h.test_node_id,h.test_node,f.id AS factory_id
+		FROM BMS_QM_QUALITY_ABNORMAL_RECORD h
+		LEFT JOIN BMS_BASE_FACTORY f ON h.factory = f.factory_name
+		WHERE f.id=#{factoryId} AND h.test_node_id=#{test_node_id}
+		AND substring(h.edit_date,1,10) >= #{startDate} AND substring(h.edit_date,1,10) <= #{endDate}
 		GROUP BY week(h.edit_date)
 		
 		) a
@@ -526,11 +530,12 @@
 		select a.*,b.target_val
 		from(
 		
-		SELECT COUNT(DISTINCT h.bus_number) bus_num, COUNT( h.result_judge) bug_num,
-		month(h.edit_date) item,h.test_node_id,h.test_node,h.factory_id
-		FROM BMS_QM_TEST_CARD h 
-		WHERE h.factory_id=#{factoryId} AND h.test_node_id=#{test_node_id} AND h.result_judge ='不合格' 
-		AND substring(h.edit_date,1,10) >=#{startDate} AND substring(h.edit_date,1,10) <=#{endDate}
+		SELECT COUNT(DISTINCT h.bus_number) bus_num, COUNT( h.id) bug_num,
+		substring(h.edit_date,1,10) item,h.test_node_id,h.test_node,f.id AS factory_id
+		FROM BMS_QM_QUALITY_ABNORMAL_RECORD h
+		LEFT JOIN BMS_BASE_FACTORY f ON h.factory = f.factory_name
+		WHERE f.id=#{factoryId} AND h.test_node_id=#{test_node_id}
+		AND substring(h.edit_date,1,10) >= #{startDate} AND substring(h.edit_date,1,10) <= #{endDate}
 		GROUP BY month(h.edit_date)	
 		
 		) a
@@ -550,13 +555,16 @@
 		<![CDATA[
 		select a.*,b.target_val
 		from(
-		SELECT COUNT(DISTINCT h.bus_number) bus_num, COUNT( h.result_judge) bug_num,
-		o.order_no item,h.test_node_id,h.test_node,h.factory_id
-		FROM BMS_QM_TEST_CARD h 
+		
+		SELECT COUNT(DISTINCT h.bus_number) bus_num, COUNT( h.id) bug_num,
+		o.order_no item,h.test_node_id,h.test_node,f.id AS factory_id
+		FROM BMS_QM_QUALITY_ABNORMAL_RECORD h
+		LEFT JOIN BMS_BASE_FACTORY f ON h.factory = f.factory_name
 		LEFT JOIN BMS_OR_ORDER o on h.order_id=o.id
-		WHERE h.factory_id=#{factoryId} AND h.test_node_id=#{test_node_id} AND h.result_judge ='不合格' 
-		AND substring(h.edit_date,1,10) >=#{startDate} AND substring(h.edit_date,1,10) <=#{endDate} 
-		GROUP BY o.order_no	) a
+		WHERE f.id=#{factoryId} AND h.test_node_id=#{test_node_id}
+		AND substring(h.edit_date,1,10) >= #{startDate} AND substring(h.edit_date,1,10) <= #{endDate}
+		GROUP BY o.order_no	
+		) a
 		left join (
 		select max(p.target_value) target_val,p.eend_date,p.factory_id,p.test_node_id
 		from BMS_QM_QUALITY_TARGET_PARAMETER  p
@@ -571,12 +579,13 @@
 	</select>
 	<select id="queryDPUDetail" parameterType="Map" resultType="Map">
 	<![CDATA[
-	SELECT h.bus_number,f.factory_name,k.key_name AS test_node,l.bug,h.test_result,h.memo,h.tester,h.test_date FROM BMS_QM_TEST_CARD h
-	LEFT JOIN BMS_BASE_FACTORY f ON f.id=h.factory_id
+	
+	SELECT h.bus_number,h.factory,k.key_name AS test_node,h.problem_desc AS bug,h.bug_desc AS test_result,h.remark AS memo,h.editor AS tester,
+	h.edit_date AS test_date 
+	FROM BMS_QM_QUALITY_ABNORMAL_RECORD h
+	LEFT JOIN BMS_BASE_FACTORY f ON f.factory_name=h.factory
 	LEFT JOIN BMS_BASE_KEY k ON k.id = h.test_node_id
-	LEFT JOIN BMS_QM_STANDARD_FAULT_LIBRARY l ON h.fault_id = l.id
-	WHERE h.result_judge = '不合格'
-	AND h.test_node_id=#{test_node_id} AND h.factory_id=#{factoryId} AND substring(h.edit_date,1,10) >=#{startDate} 
+	WHERE h.test_node_id=#{test_node_id} AND f.id=#{factoryId} AND substring(h.edit_date,1,10) >=#{startDate} 
 	AND substring(h.edit_date,1,10) <=#{endDate}
 	ORDER BY h.edit_date DESC
 	]]>
@@ -586,12 +595,10 @@
 	</select>
 	<select id="queryDPUDetailCount" parameterType="Map" resultType="int">
 	<![CDATA[
-	SELECT COUNT(h.id) FROM BMS_QM_TEST_CARD h
-	LEFT JOIN BMS_BASE_FACTORY f ON f.id=h.factory_id
+	SELECT COUNT(h.id) FROM BMS_QM_QUALITY_ABNORMAL_RECORD h
+	LEFT JOIN BMS_BASE_FACTORY f ON f.factory_name=h.factory
 	LEFT JOIN BMS_BASE_KEY k ON k.id = h.test_node_id
-	LEFT JOIN BMS_QM_STANDARD_FAULT_LIBRARY l ON h.fault_id = l.id
-	WHERE h.result_judge = '不合格'
-	AND h.test_node_id=#{test_node_id} AND h.factory_id=#{factoryId} AND substring(h.edit_date,1,10) >=#{startDate} 
+	WHERE h.test_node_id=#{test_node_id} AND f.id=#{factoryId} AND substring(h.edit_date,1,10) >=#{startDate} 
 	AND substring(h.edit_date,1,10) <=#{endDate}
 	]]>
 	</select>
@@ -719,46 +726,33 @@
 	<!-- 制程问题严重等级分布报表 数据查询 -->
 	<select id="queryProcessProblemData" parameterType="Map" resultType="Map">
 	<![CDATA[
-	SELECT GROUP_CONCAT(tmp.workshop_name,':',bug_count+'') bug_desc,tmp.serious_level
+	SELECT GROUP_CONCAT(tmp.workshop_name,':',bug_count+'') bug_desc,tmp.level AS serious_level
 	FROM (
-	SELECT COUNT(l.serious_level) bug_count,l.serious_level,tmp.workshop_name FROM (
-	SELECT h.test_result,k.key_name AS workshop_name,h.test_node_id,h.fault_id FROM BMS_QM_TEST_CARD h
-	LEFT JOIN BMS_BASE_KEY k ON k.id = h.test_node_id
-	WHERE h.factory_id=#{factoryId} AND h.result_judge = '不合格' and substring(h.edit_date,1,10) >=#{startDate} 
-	and substring(h.edit_date,1,10) <=#{endDate}) tmp
-	LEFT JOIN BMS_QM_STANDARD_FAULT_LIBRARY l on tmp.fault_id = l.id
-	WHERE l.serious_level is not null GROUP BY tmp.test_node_id,l.serious_level
-	)tmp GROUP BY tmp.serious_level
+	SELECT COUNT(h.level) bug_count,h.level,h.test_node AS workshop_name FROM BMS_QM_QUALITY_ABNORMAL_RECORD h
+    LEFT JOIN BMS_BASE_FACTORY f ON f.factory_name=h.factory
+	WHERE f.id=#{factoryId} AND substring(h.edit_date,1,10) >=#{startDate} 
+	AND substring(h.edit_date,1,10) <=#{endDate} AND h.level is not null AND h.test_node is not null
+    GROUP BY h.test_node_id,h.level
+    )tmp GROUP BY tmp.level
 	]]>
 	</select>
 	<select id="queryProcessProblemDetail" parameterType="Map" resultType="Map">
 		<![CDATA[
-        SELECT COUNT(l.serious_level) bug_count,tmp.workgroup_name,l.serious_level,tmp.workshop_name,tmp.test_result FROM (
-		SELECT h.test_result,k.key_name AS workshop_name,h.test_node_id,h.fault_id,
-		w.workgroup_name FROM  BMS_QM_TEST_CARD h
-		LEFT JOIN BMS_BASE_KEY k ON k.id = h.test_node_id
-		LEFT JOIN BMS_BASE_STANDARD_WORKGROUP w ON h.workgroup_id = w.id
-		WHERE 
-		h.factory_id=#{factoryId} AND h.result_judge = '不合格' and substring(h.edit_date,1,10) >=#{startDate} 
-		and substring(h.edit_date,1,10) <=#{endDate}
-		) tmp
-		LEFT JOIN BMS_QM_STANDARD_FAULT_LIBRARY l ON tmp.fault_id = l.id
-		WHERE l.serious_level IS NOT NULL
-		GROUP BY tmp.test_node_id,l.serious_level
+        SELECT COUNT(h.level) bug_count,h.test_node AS workshop_name,h.level AS serious_level,h.bug_desc AS test_result FROM BMS_QM_QUALITY_ABNORMAL_RECORD h
+  		LEFT JOIN BMS_BASE_FACTORY f ON f.factory_name=h.factory
+		WHERE f.id=#{factoryId} AND substring(h.edit_date,1,10) >=#{startDate} 
+		AND substring(h.edit_date,1,10) <=#{endDate} AND h.level is not null AND h.test_node is not null
+ 	 	GROUP BY h.test_node_id,h.level
 		]]>
 	</select>
 	<select id="queryProcessProblemCount" parameterType="Map" resultType="int">
 		<![CDATA[
 		SELECT COUNT(t.bug_count) AS count FROM (
-		SELECT COUNT(l.serious_level) bug_count,tmp.workgroup_name,l.serious_level,tmp.workshop_name,tmp.test_result FROM (
-		SELECT h.test_result,k.key_name AS workshop_name,h.test_node_id,h.fault_id,
-		w.workgroup_name FROM  BMS_QM_TEST_CARD h
-		LEFT JOIN BMS_BASE_KEY k ON k.id = h.test_node_id
-		LEFT JOIN BMS_BASE_STANDARD_WORKGROUP w ON h.workgroup_id = w.id
-		WHERE h.result_judge = '不合格') tmp
-		LEFT JOIN BMS_QM_STANDARD_FAULT_LIBRARY l ON tmp.fault_id = l.id
-		WHERE l.serious_level IS NOT NULL
-		GROUP BY tmp.test_node_id,l.serious_level
+		SELECT COUNT(h.level) bug_count,h.test_node AS workshop_name,h.level AS serious_level,h.bug_desc AS test_result FROM BMS_QM_QUALITY_ABNORMAL_RECORD h
+  		LEFT JOIN BMS_BASE_FACTORY f ON f.factory_name=h.factory
+		WHERE f.id=#{factoryId} AND substring(h.edit_date,1,10) >=#{startDate} 
+		AND substring(h.edit_date,1,10) <=#{endDate} AND h.level is not null AND h.test_node is not null
+ 	 	GROUP BY h.test_node_id,h.level
 		) t
 		]]>
 	</select>
