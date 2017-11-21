@@ -58,14 +58,14 @@ public class OrderReviewController extends BaseController{
 	 */
 	@RequestMapping(value = "apply", method= RequestMethod.GET)
 	public String apply(Model model, String processId, String orderId, String taskId, String taskName,
-			String reviewOrderId,String factoryId) {
+			String reviewOrderId,String factoryId,String flag) {
 		//将请求参数继续传递给视图页面
 		model.addAttribute("processId", processId);
 		model.addAttribute("orderId", orderId);
 		model.addAttribute("taskId", taskId);
 		model.addAttribute("reviewOrderId", reviewOrderId);
 		model.addAttribute("factoryId", factoryId);
-		
+		model.addAttribute("flag", flag);
 		//根据taskId是否为空来标识当前请求的页面是否为活动任务的节点页面
 		if(StringUtils.isEmpty(orderId) || StringUtils.isNotEmpty(taskId)) {
 			//设置操作人为当前登录用户
@@ -301,8 +301,10 @@ public class OrderReviewController extends BaseController{
 		String factoryOrderId=request.getParameter("factoryOrderId");//工厂订单编号【BMS_OR_FACTORY_ORDER】
         String factory=request.getParameter("factoryId");
         String id=request.getParameter("id");
+        String flag=request.getParameter("flag");
         condMap.put("factoryOrderId", factoryOrderId);
 		condMap.put("factoryId", factory);
+		condMap.put("flag", flag);
 		condMap.put("id", id);
 		Map<String,Object> result=new HashMap<String,Object>();
 		BmsOrderReviewResults bmsOrderReviewResults=reviewService.getOrderReview(condMap);
@@ -331,6 +333,7 @@ public class OrderReviewController extends BaseController{
 		model=new ModelMap();
 		Map<String,Object> conditionMap=new HashMap<String,Object>();
 		if (request.getParameter("factory_order_id") != null) conditionMap.put("factory_order_id", request.getParameter("factory_order_id"));
+		if (request.getParameter("flag") != null) conditionMap.put("flag", request.getParameter("flag"));
 		if ((request.getParameter("search_factory") != "")&&(request.getParameter("search_factory") != null)) conditionMap.put("search_factory", Integer.valueOf(request.getParameter("search_factory")));
 		if (request.getParameter("order_id") != null){
 			conditionMap.put("order_id", request.getParameter("order_id"));

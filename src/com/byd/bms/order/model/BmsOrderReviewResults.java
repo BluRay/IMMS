@@ -60,6 +60,7 @@ public class BmsOrderReviewResults {
 	private String factoryName;
 	private String factoryCode;
 	private String capacity;
+	private String flag;
 	public int getId() {
 		return id;
 	}
@@ -386,5 +387,11 @@ public class BmsOrderReviewResults {
 	}
 	public void setCapacity(String capacity) {
 		this.capacity = capacity;
+	}
+	public String getFlag() {
+		return flag;
+	}
+	public void setFlag(String flag) {
+		this.flag = flag;
 	}
 }

@@ -48,7 +48,7 @@
 						<table>
 							<tr>
 								<td>工厂</td>
-								<td>&nbsp;车间</td>
+								<td>&nbsp;检验节点</td>
 								<td>&nbsp;车型</td>
 								<td>&nbsp;订单</td>
 								<td>&nbsp;车号</td>
@@ -57,7 +57,7 @@
 							</tr>
 							<tr>
 								<td style="padding-right:5px"><select id="search_factory" class="form-control" style="width:100px"></select></td>
-								<td style="padding-right:5px"><select id="search_workshop"  class="form-control"  style="width:80px"></select></td>
+								<td style="padding-right:5px"><select id="search_test_node"  class="form-control"  style="width:80px"></select></td>
 								<td style="padding-right:5px"><select id="search_bustype" class="form-control busType" style="width:80px"></select></td>
 								<td><input id="search_order_no" placeholder="订单..." style="width:110px" type="text">&nbsp;</td>
 								<td><input id="search_bus_number" placeholder="车号..." style="width:180px" type="text">&nbsp;</td>
@@ -70,7 +70,7 @@
 							</tr>
 						</table>
 					</div>	
-					<table id="tableData" class="table table-striped table-bordered table-hover" style="width:1600px;overflow-x:auto;overflow-y:scroll;font-size: 12px;">
+					<table id="tableData" class="table table-striped table-bordered table-hover" style="overflow-x:auto;overflow-y:scroll;font-size: 12px;">
 					</table>
 					</div>
 			</div><!-- /.main-content -->
@@ -91,7 +91,7 @@
 						<td style="width:150px">
 							<select id="new_factory" class="form-control" style="width:150px"></select>
 							<input type='hidden' id="default_factory" value=${factory_id }></td>
-						<td align="right" style="width:100px">* 车间：</td><td style="width:150px"><select id="new_workshop" class="input-small" style="width:150px"></select></td>
+						<td align="right" style="width:100px">* 检验节点：</td><td style="width:150px"><select id="new_test_node" class="input-small" style="width:150px"></select></td>
 					</tr>
 					<tr style="height:40px">
 						<td align="right" style="width:100px">车号：</td><td colspan=3 id="bus_number_td"><input type="text" class="input-medium" id="new_busnumber" style="width:400px"/></td>

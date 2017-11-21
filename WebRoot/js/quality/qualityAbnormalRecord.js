@@ -1,6 +1,6 @@
 var pageSize=1;
 var table;
-var table_height = $(window).height()-260;
+var table_height = $(window).height()-280;
 var checkMap={ '焊装':'焊装', '涂装':'涂装','底盘':'底盘','总装':'总装'};
 $(document).ready(function(){
 	initPage();
@@ -27,6 +27,8 @@ $(document).ready(function(){
 		$("#new_factory option[value='"+factory_id+"']").prop("selected",true);
 		getBusType();
 		getOrderNoSelect("#search_order_no","#orderId");
+		getKeysSelect("CHECK_NODE", "", "#search_test_node","全部","id");
+		getKeysSelect("CHECK_NODE", "", "#new_test_node","请选择","id");
 	}
 	
 	$('#new_factory').change(function(){ 
@@ -321,8 +323,14 @@ function btnNewConfirm(flag){
 	if($("#new_order_no").val()==''){
 		alert("请输入订单编号！");$("#new_order_no").focus();return false;
 	}
+	if($("#new_test_node").val()==''){
+		alert("请选择检验节点！");$("#new_test_node").focus();return false;
+	}
 	if($("#new_busnumber").val()==''){
 		alert("请输入车号！");$("#new_busnumber").focus();return false;
+	}
+	if($("#new_problem_desc").val()==''){
+		alert("请输入问题描述！");$("#new_problem_desc").focus();return false;
 	}
 	if($("#new_bug_type").val()==''){
 		alert("请选择故障类型！");$("#new_bug_type").focus();return false;
@@ -330,18 +338,19 @@ function btnNewConfirm(flag){
 	if($("#new_bug_desc").val()==''){
 		alert("请选择故障描述！");$("#new_bug_desc").focus();return false;
 	}
-	var workshop=$("#new_workshop :selected").text();
-	var checkFlag="0"; // 四大车间需要验证车号
-	if(checkMap.hasOwnProperty(workshop)){
-		checkFlag="1";
-	}
+//	var workshop=$("#new_workshop :selected").text();
+//	var checkFlag="0"; // 四大车间需要验证车号
+//	if(checkMap.hasOwnProperty(workshop)){
+//		checkFlag="1";
+//	}
 	$.ajax({
 		url: "addQualityAbnormalRecord",
 		dataType : "json",
 		type : "post",
 	    data: {
 	    	"factory":$("#new_factory :selected").text(),
-	    	"workshop":$("#new_workshop :selected").text(),
+	    	"test_node_id":$("#new_test_node").val(),
+	    	"test_node":$("#new_test_node :selected").text(),
 	    	"bus_type":$("#new_bus_type :selected").text(),
 	    	"bus_number":$("#new_busnumber").val(),
 	    	"order_id":$("#new_order_id").val(),
@@ -352,7 +361,7 @@ function btnNewConfirm(flag){
 	    	"remark":$("#new_remark").val(),
 	    	"bug_type":$("#new_bug_type").val(),
 	    	"bug_desc":$("#new_bug_desc").val(),
-	    	"flag":checkFlag
+	    //	"flag":checkFlag
 	    },
 		async: false,
 	    success:function (response) {
@@ -399,7 +408,7 @@ function ajaxQuery(){
 				"factory" : $("#search_factory :selected").text(),
 				"bus_type" : $("#search_bustype :selected").text(),
 				"bus_number" : $("#search_bus_number").val(),
-				"workshop" : $("#search_workshop :selected").text(),
+				"test_node_id" : $("#search_test_node").val(),
 				"iqc" : $("#search_iqc").val()
 			};
             param.length = data.length;					//页面显示记录条数，在页面显示每页显示多少项的时候
@@ -431,18 +440,24 @@ function ajaxQuery(){
 		            {"title":"<input type='checkbox' id='selectAll' onclick='selectAll()'/>",width:'50',"class":"center","data":"id","render": function ( data, type, row ) {
 	                    return "<input id='id' value='"+data+"' type='hidden' /><input type='checkbox' fid='cb_"+data+"'>";
 	                },"defaultContent": ""},
-		            {"title":"车号",width:'160',"class":"center","data":"bus_number","defaultContent": ""},
+		            {"title":"车号",width:'150',"class":"center","data":"bus_number","defaultContent": ""},
 		            {"title":"工厂",width:'80',"class":"center","data":"factory","defaultContent": ""},
-		            {"title":"车型",width:'50',"class":"center","data":"bus_type","defaultContent": ""},
+		            {"title":"检验节点",width:'60',"class":"center","data":"test_node","defaultContent": ""},
 		            {"title":"订单",width:'80',"class":"center","data":"order_no","defaultContent": ""},
-		            {"title":"车间",width:'90',"class":"center","data":"workshop","defaultContent": ""},
-		            {"title":"问题描述",width:'350',"class":"center","data":"problem_desc","defaultContent": ""},
-		            {"title":"缺陷等级",width:'90',"class":"center","data":"level","defaultContent": ""},
-		            {"title":"处理方式",width:'140',"class":"center","data":"solution","defaultContent": ""},
-		            {"title":"检验员",width:'90',"class":"center","data":"iqc","defaultContent": ""},
-		            {"title":"备注",width:'60',"class":"center","data":"remark","defaultContent": ""},
+		            //{"title":"车间",width:'90',"class":"center","data":"workshop","defaultContent": ""},
+		            {"title":"问题描述",width:'110',"class":"center","data":"problem_desc","render": function ( data, type, row ) {
+					    return data.length>8 ? '<div title=\''+data+'\'>'+data.substring(0,8)+'...</div>' : data;
+					},"defaultContent": ""},
+		            {"title":"缺陷等级",width:'80',"class":"center","data":"level","defaultContent": ""},
+		            {"title":"处理方式",width:'100',"class":"center","data":"solution","render": function ( data, type, row ) {
+					    return data.length>8 ? '<div title=\''+data+'\'>'+data.substring(0,8)+'...</div>' : data;
+					},"defaultContent": ""},
+		            {"title":"检验员",width:'80',"class":"center","data":"iqc","defaultContent": ""},
+		            {"title":"备注",width:'60',"class":"center","data":"remark","render": function ( data, type, row ) {
+					    return data.length>8 ? '<div title=\''+data+'\'>'+data.substring(0,8)+'...</div>' : data;
+					},"defaultContent": ""},
 		            {"title":"维护人",width:'70',"class":"center","data":"editor","defaultContent": ""},
-		            {"title":"维护时间",width:'140',"class":"center","data":"edit_date","defaultContent": ""},
+		            {"title":"维护时间",width:'120',"class":"center","data":"edit_date","defaultContent": ""},
 //		            {"title":"操作",width:'80',"class":"center","data":null,"defaultContent": "",
 //		            	"render": function ( data, type, row ) {
 //		            		return "<i class=\"glyphicon glyphicon-search bigger-130 showbus\" title=\"查看\" onclick='showProblemImprove(" 

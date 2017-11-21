@@ -36,6 +36,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<input type="hidden" id="taskId" name="taskId" value="${taskId}" />
 					<input type="hidden" id="reviewOrderId" name="reviewOrderId" value="${reviewOrderId}"/>
 					<input type="hidden" id="factoryId" name="factoryId" value="${factoryId }"/>
+					<input type="hidden" id="flag" name="flag" value="${flag }"/>
 					<table id="tableData" class="table table-striped table-bordered table-hover dataTable no-footer"
 					            style="font-size: 14px;" role="grid">
 						 <tr role="row" class="odd">
@@ -143,7 +144,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             				"taskId" : $("#taskId").val(),
             				"reviewOrderId" : $("#reviewOrderId").val(),
             				"factoryId" : $("#factoryId").val(),
-            				"type" : "apply"
+            				"type" : "apply",
+            				"flag" : $("#flag").val()
             				},
             			error: function () {},
             			success: function (response) {

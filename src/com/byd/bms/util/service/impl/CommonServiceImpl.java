@@ -183,7 +183,7 @@ public class CommonServiceImpl implements ICommonService {
 			if(review!=null){
 				BmsBaseTask task=new BmsBaseTask();
 				String params="?processId="+review.getWfProcessId()+"&orderId="+majorWork.getOrderId()
-						+"&taskId="+majorWork.getTaskId()+"&reviewResultId="+review.getId()
+						+"&taskId="+majorWork.getTaskId()+"&reviewResultId="+review.getId()+"&flag="+review.getFlag()
 						+"&factoryId="+review.getFactoryId()+"&orderNo="+review.getOrderNo()+"&reviewOrderId="+review.getOrderId();
 				task.setUrl(url);
 				task.setParams(params);

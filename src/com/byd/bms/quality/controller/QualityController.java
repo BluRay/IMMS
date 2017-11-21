@@ -1512,7 +1512,7 @@ public class QualityController extends BaseController {
 		int length=(request.getParameter("length")!=null)?Integer.parseInt(request.getParameter("length")):-1;	//每一页数据条数
 		Map<String, Object> condMap = new HashMap<String, Object>();
 		condMap.put("factory", request.getParameter("factory"));
-		condMap.put("workshop", request.getParameter("workshop"));
+		condMap.put("test_node_id", request.getParameter("test_node_id"));
 		condMap.put("bus_type", request.getParameter("bus_type"));
 		condMap.put("order_no", request.getParameter("order_no"));
 		condMap.put("iqc", request.getParameter("iqc"));
@@ -1536,7 +1536,8 @@ public class QualityController extends BaseController {
 		Map<String,Object> condMap=new HashMap<String,Object>();
 		condMap.put("bus_type", request.getParameter("bus_type"));
 		condMap.put("factory", request.getParameter("factory"));
-		condMap.put("workshop", request.getParameter("workshop"));
+		condMap.put("test_node_id", request.getParameter("test_node_id"));
+		condMap.put("test_node", request.getParameter("test_node"));
 		condMap.put("order_id", request.getParameter("order_id"));
 		condMap.put("bus_number", request.getParameter("bus_number"));
 		condMap.put("problem_desc",request.getParameter("problem_desc"));
@@ -1548,14 +1549,14 @@ public class QualityController extends BaseController {
 		condMap.put("remark", request.getParameter("remark"));
 		condMap.put("editor", user_name);
 		condMap.put("edit_date", curTime);
-		String flag=request.getParameter("flag");
-		if(flag.equals("1")){
-			Map<String, Object> map = qualityService.checkBusNumber(condMap);
-			if(map==null){
-				initModel(false,"车号在该订单下不存在",null);
-				return mv.getModelMap();
-			}
-		}
+//		String flag=request.getParameter("flag");
+//		if(flag.equals("1")){
+//			Map<String, Object> map = qualityService.checkBusNumber(condMap);
+//			if(map==null){
+//				initModel(false,"车号在该订单下不存在",null);
+//				return mv.getModelMap();
+//			}
+//		}
 		try{
 			qualityService.insertQualityAbnormalRecord(condMap);
 			initModel(true,"保存成功！",null);

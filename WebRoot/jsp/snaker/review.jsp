@@ -96,6 +96,7 @@
 	    var taskName = "${task.taskName}";
 	    var factory_order_id="${reviewOrderId}";
 	    var factoryId="${factoryId}";
+	    var flag="${flag}";
 	    // 加载订单明细
 	    $.ajax({
 			type:'GET',
@@ -112,7 +113,7 @@
 				display(data.process, data.active);
 			}
 		});
-	    queryOrderInfo(factory_order_id,factoryId);
+	    queryOrderInfo(factory_order_id,factoryId,flag);
 	    $.ajax({
 			type:'GET',
 			url:"/BMS/snaker/flow/node",
@@ -129,7 +130,7 @@
 				var iscurrent = false;
 				for(var i = 0; i < data.length; i++) {
  					var node = data[i];
-					var iframeUrl = '/BMS'+node.form + '?processId=${processId}&orderId=${orderId}&reviewOrderId=${reviewOrderId}&factoryId=${factoryId}&reviewResultId=${reviewResultId}&taskName=' + node.name;
+					var iframeUrl = '/BMS'+node.form + '?processId=${processId}&orderId=${orderId}&reviewOrderId=${reviewOrderId}&factoryId=${factoryId}&reviewResultId=${reviewResultId}&flag=${flag}&taskName=' + node.name;
 		
 					if(taskName == node.name || (taskName == '' && i == 0)) {
 						iscurrent = true;
@@ -173,13 +174,14 @@
 				$('#default-buttons .btn').toggleClass('no-border');
 		});
 	//});
-	function queryOrderInfo(factory_order_id,factoryId){
+	function queryOrderInfo(factory_order_id,factoryId,flag){
 		$.ajax({
 			type:'GET',
 			url:"/BMS/order/review/showOrderDetailList",
 			data:{
 				"factory_order_id":factory_order_id,
-				"search_factory":factoryId
+				"search_factory":factoryId,
+				"flag":flag
 				},
 			dataType: "json",
 			error: function(){

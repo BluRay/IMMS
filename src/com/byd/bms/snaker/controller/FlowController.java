@@ -145,13 +145,14 @@ public class FlowController extends BaseController{
      */
     @RequestMapping(value = "all")
     public ModelAndView all(Model model, String processId, String orderId, String taskId,
-    		String reviewOrderId,String factoryId,String reviewResultId) {
+    		String reviewOrderId,String factoryId,String reviewResultId,String flag) {
 		model.addAttribute("processId", processId);
 		model.addAttribute("orderId", orderId); // 评审流程ID 【wf_order】
 		model.addAttribute("taskId", taskId);
 		model.addAttribute("reviewOrderId", reviewOrderId); //工厂订单ID 【bms_or_factory_order】
 		model.addAttribute("reviewResultId", reviewResultId); // 评审结果表ID 【bms_order_review_result】
 		model.addAttribute("factoryId", factoryId);
+		model.addAttribute("flag", flag);
         if(StringUtils.isNotEmpty(processId)) {
             model.addAttribute("process", facets.getEngine().process().getProcessById(processId));
         }
@@ -350,6 +351,7 @@ public class FlowController extends BaseController{
     	String purchasedetail= request.getParameter("purchasedetail");
     	String technicaldatanode= request.getParameter("technicaldatanode");
     	String capacity= request.getParameter("capacity");
+    	String flag= request.getParameter("flag");
     	bmsOrderReviewResults.setPaintonlineDate(paintonlineDate);
     	bmsOrderReviewResults.setWeldingonlineDate(weldingonlineDate);
     	bmsOrderReviewResults.setPartsonlineDate(partsonlineDate);
@@ -370,6 +372,7 @@ public class FlowController extends BaseController{
     	bmsOrderReviewResults.setTechnicaldatanode(technicaldatanode);
     	bmsOrderReviewResults.setApplyInfo(applyInfo);
     	bmsOrderReviewResults.setCapacity(capacity);
+    	bmsOrderReviewResults.setFlag(flag);
     	return bmsOrderReviewResults;
     }
     @RequestMapping({"processtest"})

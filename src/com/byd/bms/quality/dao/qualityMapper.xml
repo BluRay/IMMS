@@ -1094,8 +1094,8 @@
 		<if test="factory!=null and factory!='全部'">
 			and p.factory = #{factory}
 		</if>
-		<if test="workshop!=null and workshop!='' and workshop!='全部'">
-			and p.workshop = #{workshop}
+		<if test="test_node_id!=null and test_node_id!='' and test_node_id!='全部'">
+			and p.test_node_id = #{test_node_id}
 		</if>
 		<if test="bus_type!=null and bus_type!='全部'">
 			and p.bus_type = #{bus_type}
@@ -1120,8 +1120,8 @@
 		<if test="factory!=null and factory!='全部'">
 			and p.factory = #{factory}
 		</if>
-		<if test="workshop!=null and workshop!='' and workshop!='全部'">
-			and p.workshop = #{workshop}
+		<if test="test_node_id!=null and test_node_id!='' and test_node_id!='全部'">
+			and p.test_node_id = #{test_node_id}
 		</if>
 		<if test="bus_type!=null and bus_type!='全部'">
 			and p.bus_type = #{bus_type}
@@ -1141,9 +1141,9 @@
 			SELECT
 			LAST_INSERT_ID()
 		</selectKey>
-		insert into BMS_QM_QUALITY_ABNORMAL_RECORD (factory,workshop,bus_type,order_id,bus_number,bug_type,bug_desc,problem_desc,level,
+		insert into BMS_QM_QUALITY_ABNORMAL_RECORD (factory,test_node_id,test_node,bus_type,order_id,bus_number,bug_type,bug_desc,problem_desc,level,
 		iqc,solution,remark,deleted,editor,edit_date) values
-		(#{factory},#{workshop},#{bus_type},#{order_id},#{bus_number},#{bug_type},#{bug_desc},#{problem_desc},#{level},#{iqc},
+		(#{factory},#{test_node_id},#{test_node},#{bus_type},#{order_id},#{bus_number},#{bug_type},#{bug_desc},#{problem_desc},#{level},#{iqc},
 		#{solution},#{remark},'0',#{editor},#{edit_date})
      </insert>
      <update id="deleteQualityAbnormalRecord" parameterType="java.util.List">

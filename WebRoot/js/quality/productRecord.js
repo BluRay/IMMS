@@ -662,7 +662,7 @@ function ajaxSave(){
 			save_flag=false;
 			return false;
 		}
-		if(result_judge=='不合格'||is_null=="是"){
+		if(result_judge=='不合格'||is_null=="是"||tester.trim().length>0||test_result.trim().length>0){
 			var obj={};
 			obj.test_card_template_detail_id=test_card_template_detail_id;
 			obj.test_card_template_head_id=test_card_template_head_id;

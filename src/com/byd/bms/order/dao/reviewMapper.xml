@@ -5,7 +5,8 @@
 		SELECT f.production_qty,a.id AS 'factory_id',a.factory_code,
 		a.factory_name,f.id as factory_order_id,o.order_no,o.productive_year,o.delivery_date,
 		CONCAT(o.order_name,t.bus_type_code,o.order_qty,'台') AS 'order_name_str',f.status,
-		IFNULL(r.review_status,'0') as review_status,IFNULL(r.id,'') as reviewId
+		IFNULL(r.review_status,'0') as review_status,IFNULL(r.id,'') as reviewId,r.flag,
+		(select count(1) from BMS_OR_ORDER_REVIEW_RESULTS s where s.order_id=f.id) count
 		FROM BMS_OR_ORDER o			
 		LEFT JOIN BMS_OR_FACTORY_ORDER f ON f.order_id = o.id
 		LEFT JOIN BMS_BASE_FACTORY a ON f.factory_id = a.id 
@@ -59,12 +60,12 @@
 		(order_id,factory_id,capacity,partsonline_date,weldingonline_date,paintonline_date,chassisonline_date,
 		assemblyonline_date,warehousing_date,modelexport_date,drawingexport_date,detaildemand_node,
 		sopdemand_node,bomdemand_node,sipdemand_node,apply_info,review_Status,
-		wf_order_id,wf_process_id,editor_Id,edit_Date)
+		wf_order_id,wf_process_id,editor_Id,edit_Date,flag)
 		values
 		(#{orderId},#{factoryId},#{capacity},#{partsonlineDate},#{weldingonlineDate},#{paintonlineDate},
 		#{chassisonlineDate},#{assemblyonlineDate},#{warehousingDate},#{modelexportDate},#{drawingexportDate},
 		#{detaildemandNode},#{sopdemandNode},#{bomdemandNode},#{sipdemandNode},#{applyInfo},
-		'1',#{wfOrderId},#{wfProcessId},#{editorId},#{editDate})
+		'1',#{wfOrderId},#{wfProcessId},#{editorId},#{editDate},#{flag})
 	</insert>
 	<update id='updateBmsOrderReviewResults' parameterType="Map">
 		update BMS_OR_ORDER_REVIEW_RESULTS set 
@@ -107,12 +108,15 @@
 		drawingexport_date drawingexportDate,detaildemand_node detaildemandNode,
 		sopdemand_node sopdemandNode,bomdemand_node bomdemandNode,sipdemand_node sipdemandNode,
 		wf_order_id wfOrderId,wf_process_id wfProcessId,o.order_no as orderNo,
-		f.factory_name factoryName,f.factory_code factoryCode,apply_info applyInfo
+		f.factory_name factoryName,f.factory_code factoryCode,apply_info applyInfo,r.flag flag
 		from BMS_OR_ORDER_REVIEW_RESULTS r
 		left join BMS_OR_FACTORY_ORDER f1 on r.order_id=f1.id
 		left join BMS_OR_ORDER o on f1.order_id=o.id
 		left join BMS_BASE_FACTORY f on r.factory_id=f.id
 		where 1=1
+		<if test="flag !=null and flag !=''"> 
+			and flag=#{flag}
+		</if>
 		<if test="factoryOrderId !=null and factoryOrderId !=''"> 
 			and r.order_id=#{factoryOrderId}
 		</if>
@@ -175,7 +179,10 @@
 		left join BMS_OR_ORDER o on o.id=d.order_id
 		left join BMS_BASE_BUS_TYPE t on o.bus_type_id = t.id
 		left join BMS_OR_ORDER_REVIEW_RESULTS r on r.order_id=d.id
-		where 1=1
+		<if test="flag!=null and flag!=''">
+			and r.flag=#{flag}
+		</if>
+		where 1=1 
 		<if test="factory_order_id!=null">
 			and d.id like CONCAT('%',#{factory_order_id},'%')   
 		</if>
