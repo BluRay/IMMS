@@ -369,7 +369,7 @@ public class ProductionServiceImpl implements IProductionService {
 		//String user="TEST";
 		//String password="byd123456";
 		//正式 服务器IP:10.9.37.139，账户：bms，密码：BMS@2017
-		String connectDB="jdbc:sqlserver://10.3.12.134;DatabaseName=HGZ_DATABASE";//数据源
+		String connectDB="jdbc:sqlserver://10.9.37.139;DatabaseName=HGZ_DATABASE";//数据源
 		String user="bms";
 		String password="BMS@2017";
 	
