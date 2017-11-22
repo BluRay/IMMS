@@ -365,9 +365,13 @@ public class ProductionServiceImpl implements IProductionService {
 	@Override
 	public void transferDataToHGZSys(List<Map<String, Object>> buslist,ModelMap model) {
 		String JDriver="com.microsoft.sqlserver.jdbc.SQLServerDriver";//SQL数据库引擎
+		//String connectDB="jdbc:sqlserver://10.3.12.134;DatabaseName=HGZ_DATABASE";//数据源
+		//String user="TEST";
+		//String password="byd123456";
+		//正式 服务器IP:10.9.37.139，账户：bms，密码：BMS@2017
 		String connectDB="jdbc:sqlserver://10.3.12.134;DatabaseName=HGZ_DATABASE";//数据源
-		String user="TEST";
-		String password="byd123456";
+		String user="bms";
+		String password="BMS@2017";
 	
 		List<Map<String,Object>> updateList=new ArrayList<Map<String,Object>>();
 		List<Map<String,Object>> insertList=new ArrayList<Map<String,Object>>();
