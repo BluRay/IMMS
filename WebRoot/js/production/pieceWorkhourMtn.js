@@ -1366,6 +1366,7 @@ function validateRecordIn(work_date,order_id){
 }
 
 function ajaxSave(staffHourList,salary_model,is_customer){
+	$(".divLoading").addClass("fade in").show();
 	$.ajax({
 		url:'saveStaffHours',
 		method:'post',
@@ -1378,6 +1379,7 @@ function ajaxSave(staffHourList,salary_model,is_customer){
 		},
 		success:function(response){
 			//alert(response.message);
+			$(".divLoading").hide();	
 			fadeMessageAlert("",response.message, response.success?"gitter-success":"gitter-warning")
 		}
 	});

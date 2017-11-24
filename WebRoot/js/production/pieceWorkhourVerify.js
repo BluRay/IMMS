@@ -351,6 +351,7 @@ function ajaxGetStaffHoursDetail(staff_number){
 }
 
 function ajaxSave(bus_number_list,work_date_list,salary_model,order_id_list){
+	$(".divLoading").addClass("fade in").show();
 	$.ajax({
 		url:'verifyStaffHours',
 		method:'post',
@@ -367,6 +368,7 @@ function ajaxSave(bus_number_list,work_date_list,salary_model,order_id_list){
 			salary_model:salary_model
 		},
 		success:function(response){
+			$(".divLoading").hide();
 			fadeMessageAlert("",response.message, "gitter-success")
 			//先destroy datatable，隐藏form
 			if($.fn.dataTable.isDataTable("#tableResult")){

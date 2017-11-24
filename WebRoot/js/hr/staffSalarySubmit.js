@@ -1,4 +1,5 @@
 var staff_salary_list=[];
+var tb={};
 $(document).ready(function(){
 	initPage();
 	
@@ -71,7 +72,18 @@ $(document).ready(function(){
 		})
 		
 	})
+	
+	//导出功能
+	$(document).on("click",".buttons-excel",function(){
+		/**
+		 * 导出excel
+		 */
+		htmlToExcel("tableResult", "", "","计件工资提交","计件工资提交");
+		return false;
+	});
+	
 });
+
 
 function initPage(){	
 	getBusNumberSelect('#nav-search-input');
@@ -173,7 +185,7 @@ function ajaxQuery(){
 	            }},
 	          ]	;
 	
-	var tb=$("#tableResult").DataTable({
+	tb=$("#tableResult").dataTable({
 		serverSide: true,
 		fixedColumns:   {
             leftColumns: 2,
@@ -185,7 +197,7 @@ function ajaxQuery(){
 		             [ '显示20行', '显示50行', '显示100行', '全部' ]
 		         ],*/
 	    buttons: [
-	        {extend:'excelHtml5',title:'data_export',className:'black',text:'<i class=\"fa fa-file-excel-o bigger-130\" tooltip=\"导出excel\"></i>'},
+	        {extend:'excelHtml5',title:'data_export',enabled:false,className:'black',text:'<i class=\"fa fa-file-excel-o bigger-130\" tooltip=\"导出excel\"></i>'},
 	        {extend:'colvis',text:'<i class=\"fa fa-list bigger-130\" tooltip=\"选择展示列\"></i>'},
 	       /* {extend:'pageLength',text:'显示行'}*/
 	       
@@ -268,4 +280,5 @@ function ajaxQuery(){
 	$("#tableResult_paginate").addClass('col-xs-6');
 	//alert('A ');
 	$(".dt-buttons").css("margin-top","-50px").find("a").css("border","0px");
+
 }

@@ -543,6 +543,7 @@ function ajaxGetStaffHoursDetail(staff_number){
 }
 
 function ajaxSave(staffHourList,salary_model,is_customer){
+	$(".divLoading").addClass("fade in").show();
 	$.ajax({
 		url:'updateStaffHours',
 		method:'post',
@@ -554,7 +555,8 @@ function ajaxSave(staffHourList,salary_model,is_customer){
 			salary_model:salary_model
 		},
 		success:function(response){
-			fadeMessageAlert("",response.message, "gitter-success")
+			$(".divLoading").hide();	
+			fadeMessageAlert("",response.message, "gitter-success")			
 			//先destroy datatable，隐藏form
 			if($.fn.dataTable.isDataTable("#tableResult")){
 				$('#tableResult').DataTable().destroy();
