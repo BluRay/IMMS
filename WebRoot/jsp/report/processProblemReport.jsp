@@ -56,7 +56,7 @@
 						</table>
 					</div>
 					
-					<div id="chartsContainer" style="min-width: 1200px; max-width: 500px; margin: auto;"></div>
+					<div id="chartsContainer" style="min-width: 1000px; max-width: 500px; margin: auto;"></div>
 					<table id="tableData" class="table table-striped table-bordered table-hover" style="font-size: 12px;">
 					</table>
 					
