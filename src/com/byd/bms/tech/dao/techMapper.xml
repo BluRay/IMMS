@@ -40,7 +40,7 @@
 		WHERE tmp.tech_task_id=t.id and tmp.factory=d.factory and tmp.order_no=d.order_no limit 1) follow_num,
 		(SELECT group_concat(tmp.workshop,':',tmp.ready_hour_total separator ',') ready_hour_list
 		FROM(
-		SELECT h.ecn_task_id tech_task_id,h.factory,h.workshop,ifnull(sum(h.work_hour),0)ready_hour_total
+		SELECT h.ecn_task_detail_id tech_task_id,h.factory,h.workshop,ifnull(sum(h.work_hour),0)ready_hour_total
 		FROM BMS_HR_STAFF_TECH_HOURS h
 		WHERE h.status !='2' 
 		<if test="factory !=null and factory !='全部'">
@@ -49,7 +49,7 @@
 		<if test="workshop !=null and workshop !=''">
 			and h.workshop=#{workshop}
 		</if>
-		group by h.ecn_task_id,h.factory,h.workshop) tmp  WHERE tmp.tech_task_id=t.id and tmp.factory=d.factory ) ready_hour_list,
+		group by h.ecn_task_detail_id,h.factory,h.workshop) tmp  WHERE tmp.tech_task_id=d.id and tmp.factory=d.factory ) ready_hour_list,
 		d.factory_id,d.factory,d.tech_list,IFNULL(d.time_list,'') AS time_list,d.single_time_total,d.time_total,d.prod_factory_id,d.prod_factory,d.status_list
 		FROM BMS_TECH_TASK t
 		LEFT JOIN BMS_BASE_KEY k on t.tech_type=k.id and k.key_code='ECN_TYPE'
@@ -94,7 +94,7 @@
 			and t.finish_date !=''
 		</if>
 		<if test="status=='未维护'">
-			and  not exists (SELECT distinct h.ecn_task_id tech_task_id
+			and  not exists (SELECT distinct h.ecn_task_detail_id tech_task_id
 			FROM BMS_HR_STAFF_TECH_HOURS h
 			WHERE 1=1 
 			<if test="factory !=null and factory !='全部'">
@@ -104,10 +104,10 @@
 			and h.workshop=#{workshop}
 			</if>
 			
-			and h.work_hour>0 and d.id=h.ecn_task_id) 
+			and h.work_hour>0 and d.id=h.ecn_task_detail_id) 
 		</if>
 		<if test="status=='未审批'">
-			and exists (SELECT distinct h.ecn_task_id tech_task_id
+			and exists (SELECT distinct h.ecn_task_detail_id tech_task_id
 			FROM BMS_HR_STAFF_TECH_HOURS h
 			WHERE  h.status='0' 
 			<if test="factory !=null and factory !='全部'">
@@ -116,10 +116,10 @@
 			<if test="workshop !=null and workshop !=''">
 			and h.workshop=#{workshop}
 			</if>
-			and h.work_hour>0 and d.id=h.ecn_task_id) 
+			and h.work_hour>0 and d.id=h.ecn_task_detail_id) 
 		</if>
 		<if test="status=='已审批'">
-			and exists (SELECT distinct h.ecn_task_id tech_task_id
+			and exists (SELECT distinct h.ecn_task_detail_id tech_task_id
 			FROM BMS_HR_STAFF_TECH_HOURS h
 			WHERE h.status='1' 
 			<if test="factory !=null and factory !='全部'">
@@ -128,10 +128,10 @@
 			<if test="workshop !=null and workshop !=''">
 			and h.workshop=#{workshop}
 			</if>
-			and h.work_hour>0 and d.id=h.ecn_task_id) 
+			and h.work_hour>0 and d.id=h.ecn_task_detail_id) 
 		</if>
 		<if test="status=='已驳回'">
-			and exists (SELECT distinct h.ecn_task_id tech_task_id
+			and exists (SELECT distinct h.ecn_task_detail_id tech_task_id
 			FROM BMS_HR_STAFF_TECH_HOURS h
 			WHERE h.status='2' 
 			<if test="factory !=null and factory !='全部'">
@@ -140,7 +140,7 @@
 			<if test="workshop !=null and workshop !=''">
 			and h.workshop=#{workshop}
 			</if>
-			and h.work_hour>0 and d.id=h.ecn_task_id) 
+			and h.work_hour>0 and d.id=h.ecn_task_detail_id) 
 		</if>		
 		order by t.tech_date desc
 		<if test="start!=null">
@@ -185,10 +185,10 @@
 			and tfp.workshop=#{workshop}
 		</if>
 		group by tfp.tech_task_id,tfp.order_no,tfp.factory,tfp.workshop) tmp 
-		WHERE tmp.tech_task_id=t.id and tmp.factory=d.factory and tmp.order_no=d.order_no  limit 1) follow_list,
+		WHERE tmp.tech_task_id=d.id and tmp.factory=d.factory and tmp.order_no=d.order_no  limit 1) follow_list,
 		(SELECT group_concat(tmp.workshop,':',tmp.ready_hour_total separator ',') ready_hour_list
 		FROM(
-		SELECT h.ecn_task_id tech_task_id,h.factory,h.workshop,ifnull(sum(h.work_hour),0)ready_hour_total
+		SELECT h.ecn_task_detail_id tech_task_id,h.factory,h.workshop,ifnull(sum(h.work_hour),0)ready_hour_total
 		FROM BMS_HR_STAFF_TECH_HOURS h
 		WHERE  h.status !='2' 
 		<if test="factory !=null and factory !='全部'">
@@ -197,7 +197,7 @@
 		<if test="workshop !=null and workshop !=''">
 			and h.workshop=#{workshop}
 		</if>
-		group by h.ecn_task_id,h.factory,h.workshop) tmp  WHERE tmp.tech_task_id=d.id and tmp.factory=d.factory ) ready_hour_list,
+		group by h.ecn_task_detail_id,h.factory,h.workshop) tmp  WHERE tmp.tech_task_id=d.id and tmp.factory=d.factory ) ready_hour_list,
 		d.factory_id,d.factory,d.tech_list,d.time_list,d.single_time_total,d.time_total,d.prod_factory_id,d.prod_factory
 		FROM BMS_TECH_TASK t
 		LEFT JOIN BMS_BASE_KEY k on t.tech_type=k.id and k.key_code='ECN_TYPE'
@@ -242,7 +242,7 @@
 			and t.finish_date !=''
 		</if>
 		<if test="status=='未维护'">
-			and  not exists (SELECT distinct h.ecn_task_id tech_task_id
+			and  not exists (SELECT distinct h.ecn_task_detail_id tech_task_id
 			FROM BMS_HR_STAFF_TECH_HOURS h
 			WHERE 1=1 
 			<if test="factory !=null and factory !='全部'">
@@ -252,10 +252,10 @@
 			and h.workshop=#{workshop}
 			</if>
 			
-			and h.work_hour>0 and d.id=h.ecn_task_id) 
+			and h.work_hour>0 and d.id=h.ecn_task_detail_id) 
 		</if>
 		<if test="status=='未审批'">
-			and exists (SELECT distinct h.ecn_task_id tech_task_id
+			and exists (SELECT distinct h.ecn_task_detail_id tech_task_id
 			FROM BMS_HR_STAFF_TECH_HOURS h
 			WHERE h.status='0' 
 			<if test="factory !=null and factory !='全部'">
@@ -264,10 +264,10 @@
 			<if test="workshop !=null and workshop !=''">
 			and h.workshop=#{workshop}
 			</if>
-			and h.work_hour>0 and d.id=h.ecn_task_id) 
+			and h.work_hour>0 and d.id=h.ecn_task_detail_id) 
 		</if>
 		<if test="status=='已审批'">
-			and exists (SELECT distinct h.ecn_task_id tech_task_id
+			and exists (SELECT distinct h.ecn_task_detail_id tech_task_id
 			FROM BMS_HR_STAFF_TECH_HOURS h
 			WHERE h.status='1' 
 			<if test="factory !=null and factory !='全部'">
@@ -276,10 +276,10 @@
 			<if test="workshop !=null and workshop !=''">
 			and h.workshop=#{workshop}
 			</if>
-			and h.work_hour>0 and d.id=h.ecn_task_id) 
+			and h.work_hour>0 and d.id=h.ecn_task_detail_id) 
 		</if>
 		<if test="status=='已驳回'">
-			and exists (SELECT distinct h.ecn_task_id tech_task_id
+			and exists (SELECT distinct h.ecn_task_detail_id tech_task_id
 			FROM BMS_HR_STAFF_TECH_HOURS h
 			WHERE h.status='2' 
 			<if test="factory !=null and factory !='全部'">
@@ -288,7 +288,7 @@
 			<if test="workshop !=null and workshop !=''">
 			and h.workshop=#{workshop}
 			</if>
-			and h.work_hour>0 and d.id=h.ecn_task_id) 
+			and h.work_hour>0 and d.id=h.ecn_task_detail_id) 
 		</if>
 		
 		) task
@@ -854,8 +854,8 @@
 		<if test="workMonth!=null and workMonth !=''">
 			and h.work_date like concat(#{workMonth},'%')
 		</if>
-		<if test="ecnTaskId !=null and ecnTaskId !=''">
-			and h.ecn_task_id=#{ecnTaskId}
+		<if test="ecn_task_detail_id !=null and ecn_task_detail_id !=''">
+			and h.ecn_task_detail_id=#{ecn_task_detail_id}
 		</if>
 		<if test="factory !=null and factory !=''">
 			and h.factory=#{factory}
@@ -885,9 +885,9 @@
 		<foreach collection="list" item="detail" index="index"
 			separator=";">
 			insert into BMS_HR_STAFF_TECH_HOURS
-			(org_id,ecn_task_id,work_date,staff_number,work_hour,editor_id,edit_date,skill_parameter,factory,workshop,workgroup,team)
+			(org_id,ecn_task_detail_id,work_date,staff_number,work_hour,editor_id,edit_date,skill_parameter,factory,workshop,workgroup,team)
 			values
-			(#{detail.subgroupId},#{detail.ecnTaskId},#{detail.workDate},#{detail.staff_number},#{detail.workHour},#{detail.editorId},#{detail.editDate},
+			(#{detail.subgroupId},#{detail.task_detail_id},#{detail.workDate},#{detail.staff_number},#{detail.workHour},#{detail.editorId},#{detail.editDate},
 			#{detail.skillParameter},#{detail.factory},#{detail.workshop},#{detail.workgroup},#{detail.team})
 		</foreach>
 	</insert>

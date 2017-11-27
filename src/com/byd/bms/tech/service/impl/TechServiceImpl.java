@@ -420,6 +420,9 @@ public class TechServiceImpl implements ITechService {
 			String tech_list=(String) data.get("tech_list");
 			String time_list=(String) data.get("time_list");
 			String follow_list=(String) data.get("follow_list");
+			
+			String follow_num=String.valueOf(data.get("follow_num"));
+			
 			String ready_hour_list=(String) data.get("ready_hour_list");
 			Pattern p=Pattern.compile(":");
 			Pattern p1=Pattern.compile(",");
@@ -466,7 +469,8 @@ public class TechServiceImpl implements ITechService {
 						data_cp.put("workshop", workshop);
 						data_cp.put("tech_num", tech_num);
 						data_cp.put("tech_time", time_jso.get(workshop));
-						data_cp.put("follow_num", follow_jso.get(workshop));
+						//data_cp.put("follow_num", follow_jso.get(workshop));
+						data_cp.put("follow_num", follow_num);
 						data_cp.put("ready_hour", readyHour_jso.get(workshop));
 						rows.add(data_cp);
 					}

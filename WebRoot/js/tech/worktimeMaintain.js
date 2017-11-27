@@ -80,10 +80,10 @@ $(document).ready(function(){
 	$("#btnSwhQuery").click (function () {
 		var staffNum=$("#edit_cardNumber").val();
 		var workDate=$("#edit_workDate").val();
-		var ecnTaskId=$("#edit_ecnTaskId").val();
+		var ecn_task_detail_id=$("#edit_ecnTaskId").val();		//
 		var factory=$("#edit_factory").val();
 		var workshop=$("#edit_workshop_search").val();
-		var conditions="{staffNum:'"+staffNum+"',workDate:'"+workDate+"',ecnTaskId:'"+ecnTaskId+"',factory:'"+factory+"',workshop:'"+workshop+"'}";
+		var conditions="{staffNum:'"+staffNum+"',workDate:'"+workDate+"',ecn_task_detail_id:'"+ecn_task_detail_id+"',factory:'"+factory+"',workshop:'"+workshop+"'}";
 		console.log("-->conditions = " + conditions);
 		var swhlist=ajaxGetStaffWorkHours(conditions);
 		generateWorkhourTb(swhlist);
@@ -332,8 +332,8 @@ function ajaxQuery(){
 		            },
 		            {"title":"操作",width:'100',"class":"center","data":null,"defaultContent": "",
 		            	"render": function ( data, type, row ) {
-		            		return "<i class=\"glyphicon glyphicon-plus bigger-130 showbus\" title=\"维护\" onclick='addWorkTime(\"" + row['order_no'] + "\",\""+ row['tech_order_no'] +"\",\""+ row['task_content'].replace(/\r/ig, "").replace(/\n/ig, "") +"\",\""+ row['id'] +"\",\""+ row['factory'] +"\",\""+ $("#search_workshop :selected").text() +"\",\""+ row['tech_list'] +"\")' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;" + 
-		            		"<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"编辑\" onclick='editWorkTime(\"" + row['order_no'] + "\",\""+ row['tech_order_no'] +"\",\""+ row['task_content'].replace(/\r/ig, "").replace(/\n/ig, "") +"\",\""+ row['id'] +"\",\""+ row['factory'] +"\",\""+ $("#search_workshop :selected").text() +"\",\""+ row['tech_list'] +"\",\""+ row['id'] +"\")' style='color:blue;cursor: pointer;'></i>";
+		            		return "<i class=\"glyphicon glyphicon-plus bigger-130 showbus\" title=\"维护\" onclick='addWorkTime(\"" + row['order_no'] + "\",\""+ row['tech_order_no'] +"\",\""+ row['task_content'].replace(/\r/ig, "").replace(/\n/ig, "") +"\",\""+ row['task_detail_id'] +"\",\""+ row['factory'] +"\",\""+ $("#search_workshop :selected").text() +"\",\""+ row['tech_list'] +"\")' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;" + 
+		            		"<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"编辑\" onclick='editWorkTime(\"" + row['order_no'] + "\",\""+ row['tech_order_no'] +"\",\""+ row['task_content'].replace(/\r/ig, "").replace(/\n/ig, "") +"\",\""+ row['id'] +"\",\""+ row['factory'] +"\",\""+ $("#search_workshop :selected").text() +"\",\""+ row['tech_list'] +"\",\""+ row['task_detail_id'] +"\")' style='color:blue;cursor: pointer;'></i>";
 		            	},
 		            }
 		          ],
@@ -383,20 +383,22 @@ function getTaskAllSelectedBusNum(order_no,factory,taskid,switch_mode,workshop){
 	});
 }
 
-function editWorkTime(order_no,tech_order_no,task_content,task_id,factory,workshop,tech_list,task_id){
+function editWorkTime(order_no,tech_order_no,task_content,task_id,factory,workshop,tech_list,task_detail_id){
 	edit_list=[];
 	$("#edit_orderNo").html(tech_order_no);
 	$("#edit_task").html(task_content);
-	$("#edit_ecnTaskId").val(task_id);
+	$("#edit_ecnTaskId").val(task_detail_id);
 	$("#edit_factory").val(factory);
 	$("#edit_workshop").val(workshop);
 	
-	var conditions="{ecnTaskId:'"+task_id+"',factory:'"+factory+"',workshop:'"+workshop+"'}";
+	var conditions="{ecn_task_detail_id:'"+task_detail_id+"',factory:'"+factory+"',workshop:'"+workshop+"'}";
 	//console.log("-->editWorkTime = " + conditions);
 	var swhlist=ajaxGetStaffWorkHours(conditions);
 	generateWorkhourTb(swhlist,true);
 	
 	queryWorkshopList();
+	
+	$("#edit_workshop_search").val(workshop);
 	
 	$("#dialog-edit").removeClass('hide').dialog({
 		resizable: false,
@@ -597,7 +599,7 @@ function btnConfirm(){
 		if(staffId !=undefined &&staffId.trim().length>0){
 			var staff = {};
 			staff.orderId = $(tr).data("id");
-			staff.ecnTaskId = model_task_detail_id;
+			staff.task_detail_id = model_task_detail_id;
 			staff.workDate=workDate;
 			staff.staff_id=staffId;
 			staff.staff_number=staff_number;
@@ -644,7 +646,7 @@ function btnConfirm(){
 	console.log("-->staffNumlist = " + staffNumlist);
 	console.log("-->stafflist = " , stafflist);
 	var conditions="{staffNum:'"+staffNumlist+"',workDate:'"+
-	$("#mta_wdate").val()+"',ecnTaskId:"+model_task_detail_id+"}";
+	$("#mta_wdate").val()+"',ecn_task_detail_id:"+model_task_detail_id+"}";
 	var sfwlist=ajaxGetStaffWorkHours(conditions);
 	if(sfwlist.length>0){
 		saveFlag=false;
