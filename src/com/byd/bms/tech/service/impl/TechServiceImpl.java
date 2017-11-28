@@ -454,13 +454,13 @@ public class TechServiceImpl implements ITechService {
 			}
 			
 			
-			if(StringUtils.isNotEmpty(follow_list)){
-				follow_list="{\""+follow_list+"\"}";
-				Matcher m=p.matcher(follow_list);
-				follow_list=m.replaceAll("\":\"");
-				Matcher m1=p1.matcher(follow_list);
-				follow_list=m1.replaceAll("\",\"");
-				follow_jso=JSONObject.fromObject(follow_list);
+			if(!follow_num.equals("null")){
+				follow_num="{\""+follow_num+"\"}";
+				Matcher m=p.matcher(follow_num);
+				follow_num=m.replaceAll("\":\"");
+				Matcher m1=p1.matcher(follow_num);
+				follow_num=m1.replaceAll("\",\"");
+				follow_jso=JSONObject.fromObject(follow_num);
 			}
 			
 			if(StringUtils.isNotEmpty(ready_hour_list)){
@@ -483,8 +483,8 @@ public class TechServiceImpl implements ITechService {
 						data_cp.put("workshop", workshop);
 						data_cp.put("tech_num", tech_num);
 						data_cp.put("tech_time", time_jso.get(workshop));
-						//data_cp.put("follow_num", follow_jso.get(workshop));
-						data_cp.put("follow_num", follow_num);
+						data_cp.put("follow_num", follow_jso.get(workshop));
+						//data_cp.put("follow_num", follow_num);
 						data_cp.put("ready_hour", readyHour_jso.get(workshop));
 						rows.add(data_cp);
 					}

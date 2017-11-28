@@ -103,7 +103,7 @@
 					<td width="100px"><input type="text" style="width:100px" class="input-medium" style="margin-bottom: 0px;height:30px" id="edit_cardNumber"/></td>
 					<td width="80px" style="text-align:right">操作月份：</td>
 					<td width="100px"><input type="text" style="width:100px" class="input-medium" style="margin-bottom: 0px;height:30px" id="edit_workDate" onclick="WdatePicker({dateFmt:'yyyy-MM'})"/></td>
-					<td width="60px" style="text-align:right">车间：</td>
+					<td width="80px" style="text-align:right">员工车间：</td>
 					<td width="80px" style="text-align:right"><select id="edit_workshop_search"></select></td>
 					<td><input type="button" class="btn btn-primary" id="btnSwhQuery" value="查询" style="margin-left: 2px;line-height:0; height:32px"></input></td>
 					<td></td>

@@ -391,14 +391,14 @@ function editWorkTime(order_no,tech_order_no,task_content,task_id,factory,worksh
 	$("#edit_factory").val(factory);
 	$("#edit_workshop").val(workshop);
 	
-	var conditions="{ecn_task_detail_id:'"+task_detail_id+"',factory:'"+factory+"',workshop:'"+workshop+"'}";
+	var conditions="{ecn_task_detail_id:'"+task_detail_id+"',factory:'"+factory+"',workshop:''}";
 	//console.log("-->editWorkTime = " + conditions);
 	var swhlist=ajaxGetStaffWorkHours(conditions);
 	generateWorkhourTb(swhlist,true);
 	
 	queryWorkshopList();
 	
-	$("#edit_workshop_search").val(workshop);
+	//$("#edit_workshop_search").val(workshop);
 	
 	$("#dialog-edit").removeClass('hide').dialog({
 		resizable: false,
@@ -745,7 +745,7 @@ function queryWorkshopList(){
 		async : false,
 		error : function(response) {alert(response.message)},
 		success : function(response) {
-			var strs ="";
+			var strs ="<option value=''>全部</option>";
 			$.each(response.data, function(index, value) {
 				strs += "<option value=" + value.name + ">" + value.name + "</option>";
 			});

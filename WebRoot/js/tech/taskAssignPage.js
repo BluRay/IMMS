@@ -456,7 +456,7 @@ function addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factor
 			var ckbox=$("<input style=\"height:15px\" name=\"new_tecn_flag\""+
 					" class=\"input-medium\" "+disabled+" type=\"checkbox\""+checked+" "+factory_disable_obj[prod_factory]+">");
 			var tech_factory="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>技改工厂：</b><select style='width:100px;height:28px' class='tech_factory' >"+factory_select_options+"</select>";
-			var tech_table=$("<table class=\"table table-bordered table-striped\" style=\"margin-bottom: 0px;\"></table>");
+			var tech_table=$("<table id=\"tb_\" class=\"table table-bordered table-striped\" style=\"margin-bottom: 0px;\"></table>");
 			var tr_head=$("<tr><td>自制件</td><td>部件</td><td>焊装</td><td>涂装</td><td>底盘</td><td>总装</td><td>检测线</td></tr>");
 			var tr_body=$("<tr height='31px'><td>"+(tech_obj['自制件']||'')+"</td><td>"+(tech_obj['部件']||'')+"</td><td>"+
 					(tech_obj['焊装']||'')+"</td><td>"+(tech_obj['涂装']||'')+"</td><td>"+

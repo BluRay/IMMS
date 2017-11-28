@@ -281,6 +281,7 @@ function addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factor
 				checked="";
 			}
 			if(prod_factory == mod_factory){
+			//if(true){
 				var facotory_div=$("<div style='margin-top:10px'><b>生产工厂：</b><span factory_id='"+(prod_factory_id||factory_id)+"'>"+(prod_factory||factory)+"</span></div>");
 				var ckbox=$("<input style=\"height:15px\" name=\"new_tecn_flag\""+
 						" class=\"input-medium\" type=\"checkbox\" "+checked+" "+factory_disable_obj[prod_factory]+">");

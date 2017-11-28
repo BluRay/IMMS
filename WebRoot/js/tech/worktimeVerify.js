@@ -319,7 +319,7 @@ function verifyWorkTime(order_no,tech_order_no,task_content,task_detail_id,facto
 	}   
 	queryWorkshopList();
 	
-	$("#edit_workshop_search").val(workshop);
+	//$("#edit_workshop_search").val(workshop);
 	
 	$.each(tech_list.split(","),function(index,tech){
 		
@@ -343,7 +343,7 @@ function verifyWorkTime(order_no,tech_order_no,task_content,task_detail_id,facto
 	var totalQty=tech_num;
 	var singleHour=single_hour;
 	
-	var conditions="{ecn_task_detail_id:'"+task_detail_id+"',workMonth:'"+workMonth+"',factory:'"+factory+"',workshop:'"+workshop+"'}";
+	var conditions="{ecn_task_detail_id:'"+task_detail_id+"',workMonth:'"+workMonth+"',factory:'"+factory+"',workshop:''}";
 	console.log("-->tech_order_no = " + tech_order_no);
 	swhlist = ajaxGetStaffWorkHours(conditions);
 	swh_list = swhlist;
@@ -580,7 +580,7 @@ function queryWorkshopList(){
 		async : false,
 		error : function(response) {alert(response.message)},
 		success : function(response) {
-			var strs ="";
+			var strs ="<option value=''>全部</option>";
 			$.each(response.data, function(index, value) {
 				strs += "<option value=" + value.name + ">" + value.name + "</option>";
 			});
