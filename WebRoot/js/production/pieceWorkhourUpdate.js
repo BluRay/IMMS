@@ -21,6 +21,10 @@ $(document).ready(function() {
 			alert("请选择小班组！");
 			return false;
 		}
+	/*	if($("#wdate_start").val().trim().length==0||$("#wdate_end").val().trim().length==0){
+			alert("请选择日期范围！");
+			return false;
+		}*/
 		//先destroy datatable，隐藏form
 		if($.fn.dataTable.isDataTable("#tableResult")){
 			$('#tableResult').DataTable().destroy();
@@ -300,12 +304,12 @@ function zTreeOnClick(event, treeId, treeNode) {
 
 	
 	//显示选择的小班组人员列表
-	ajaxGetStaffHoursDetail();
+/*	ajaxGetStaffHoursDetail();
 	if(staff_hour_list.length>0){
 		showStaffList(staff_hour_list);
 	}else{
 		alert("未查询到数据！");
-	}
+	}*/
 	
 };
 
@@ -527,6 +531,10 @@ function ajaxGetStaffHoursDetail(staff_number){
 			async:false,
 			data:{
 				org_id:org_id,
+				factory:factory,
+				workshop:workshop,
+				workgroup:workgroup,
+				team:team,
 				bus_number:$("#bus_number").val(),
 				wdate_start:$("#wdate_start").val(),
 				wdate_end:$("#wdate_end").val(),
@@ -537,7 +545,10 @@ function ajaxGetStaffHoursDetail(staff_number){
 					salary_model=response.salary_model.salary_model;
 					is_customer=response.salary_model.customer_no_flag;
 				}
-				staff_hour_list=response.staff_hour_list;				
+				staff_hour_list=response.staff_hour_list;	
+				if(staff_hour_list.length<=0){
+					alert("未查询到数据！");
+				}
 			}
 		})
 }

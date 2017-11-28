@@ -48,20 +48,20 @@ BEGIN
 
 	set query_staff_numbers=@query_staff_numbers ;
 	
-	select group_concat(distinct h1.ecn_task_id separator ''',''') into query_ecn_task_ids
+	select group_concat(distinct h1.ecn_task_detail_id separator ''',''') into query_ecn_task_ids
 	from BMS_HR_STAFF_TECH_HOURS h1 left join BMS_HR_STAFF s on h1.staff_number=s.staff_number
 	where find_in_set(s.staff_number,query_staff_numbers)>0 and h1.status in ('1','3') and substr(h1.work_date,1,7)=q_month;
 
 	DROP TEMPORARY TABLE IF EXISTS staff_hours_count;
 	if query_ecn_task_ids is  null then
-		set query_ecn_task_ids='''''';		
+		set query_ecn_task_ids='';		
 	end if;
 
 	#select query_bus_numbers;
 	#select query_ecn_task_ids;
 
     set v_sql=concat('create TEMPORARY  TABLE staff_hours_count select h1.* from BMS_HR_STAFF_TECH_HOURS h1 left join BMS_HR_STAFF s on h1.staff_number=s.staff_number
-		where h1.ecn_task_id in (''',query_ecn_task_ids,''')  and h1.factory=''',q_factory,''' and h1.workshop=''',q_workshop,''' and substr(h1.work_date,1,7)=''',q_month,''' and h1.status in (''1'',''3'') ');
+		where h1.ecn_task_detail_id in (''',query_ecn_task_ids,''')  and h1.factory=''',q_factory,''' and h1.workshop=''',q_workshop,''' and substr(h1.work_date,1,7)=''',q_month,''' and h1.status in (''1'',''3'') ');
 	set @vsql=v_sql;
 	#select @vsql;
 	prepare  stmt from @vsql;
@@ -73,9 +73,7 @@ BEGIN
 	create TEMPORARY TABLE ECN_HOUR_TOTAL as
 	select t.id,sum(ifnull(h.work_hour,0)) total_real_hour,substr(h.work_date,1,7) work_month
 	from staff_hours_count h
-	#left join BMS_HR_STAFF_UPDATE_RECORD r on h.staff_id=r.staff_id  and r.type='skill_parameter' and substr(r.edit_date,1,7)<=substr(h.work_date,1,7)
-	#and r.edit_date=(select max(r1.edit_date) from BMS_HR_STAFF_UPDATE_RECORD r1 where h.staff_id=r1.staff_id  and r1.type='skill_parameter' and substr(r1.edit_date,1,7)<=substr(h.work_date,1,7))
-	join BMS_TECH_TASK_DETAIL t on h.ecn_task_id=t.id
+	join BMS_TECH_TASK_DETAIL t on h.ecn_task_detail_id=t.id and t.factory=h.factory  
 	where h.status in('1','3') and h.work_hour>0
 	group by t.id,h.workshop,substr(h.work_date,1,7);
 
@@ -94,7 +92,7 @@ BEGIN
 
 	drop TEMPORARY TABLE IF EXISTS ECN_UNIT_TIME;
 
-	set v_sql=concat('create TEMPORARY TABLE  ECN_UNIT_TIME as select d.id ecn_task_id,d.factory,d.order_no,''',q_workshop,''' workshop,',
+	set v_sql=concat('create TEMPORARY TABLE  ECN_UNIT_TIME as select d.id ecn_task_detail_id,d.factory,d.order_no,''',q_workshop,''' workshop,',
 	'replace(left(substring(d.time_list,instr(d.time_list,''',q_workshop,''')),instr(substring(concat(d.time_list,'',''),instr(d.time_list,''',q_workshop,''')),'','')-1),concat(''',
 	q_workshop,''','':''),'''') unit_time',' from BMS_TECH_TASK_DETAIL d where d.id in (''',query_ecn_task_ids,''')');
 	set @vsql=v_sql;
@@ -105,7 +103,7 @@ BEGIN
 
 	drop TEMPORARY TABLE IF EXISTS ECN_BUS_NUMBER;
 	create TEMPORARY TABLE  ECN_BUS_NUMBER as
-	select d.id ecn_task_id,d.factory,d.order_no,q_workshop workshop,
+	select d.id ecn_task_detail_id,d.factory,d.order_no,q_workshop workshop,
 	replace(left(substring(d.tech_list,instr(d.tech_list,q_workshop)),instr(substring(concat(d.tech_list,','),instr(d.tech_list,q_workshop)),',')-1),concat(q_workshop,':'),'') ecn_number
 	from BMS_TECH_TASK_DETAIL d
 	where find_in_set(d.id,query_ecn_task_ids)>0;
@@ -117,17 +115,13 @@ BEGIN
 	select NULL,s.staff_number,s.name staff_name,s.job,s.plant_org,s.workshop_org,s.workgroup_org,s.team_org,h.skill_parameter,h.hour_price,h.work_hour,
 		case when tmp.total_real_hour<(tmp2.ecn_bus_total*t1.unit_time)*0.8 then  round((h.work_hour/(tmp.total_real_hour))*(tmp.total_real_hour*1.2),4) 
 		else  round((h.work_hour/tmp.total_real_hour)*tmp2.ecn_bus_total*t1.unit_time,4) end as real_work_hour,		
-		h.work_date,t.id task_id,tt.tech_order_no,tt.task_content,t1.unit_time*tmp2.ecn_bus_total total_hours,'' task_qty,h.factory,h.workshop,h.workgroup,h.team
+		h.work_date,t.id ecn_task_detail_id,tt.tech_order_no,tt.task_content,t1.unit_time*tmp2.ecn_bus_total total_hours,'' task_qty,h.factory,h.workshop,h.workgroup,h.team
 	from staff_hours_count h
 	left join BMS_HR_STAFF s on s.staff_number=h.staff_number
-	#left join BMS_HR_STAFF_UPDATE_RECORD r on h.staff_id=r.staff_id and r.type='skill_parameter' and substr(r.edit_date,1,7)<=substr(h.work_date,1,7)
-		#and r.edit_date=(select max(r1.edit_date) from BMS_HR_STAFF_UPDATE_RECORD r1 where h.staff_id=r1.staff_id and r1.type='skill_parameter' and substr(r1.edit_date,1,7)<=substr(h.work_date,1,7))
-	left join BMS_TECH_TASK_DETAIL t on h.ecn_task_id=t.id
+	left join BMS_TECH_TASK_DETAIL t on h.ecn_task_detail_id=t.id
 	left join BMS_TECH_TASK tt on tt.id=t.tech_task_id
-	left join ECN_UNIT_TIME t1 on h.ecn_task_id=t1.ecn_task_id and t1.factory=h.factory and t1.workshop=h.workshop 
-	left join ECN_BUS_NUMBER bn on bn.ecn_task_id=h.ecn_task_id and bn.factory=h.factory and bn.workshop=h.workshop
-	#left join BMS_HR_BASE_PRICE p on  p.factory=h.factory and p.type='3' and h.work_date>=p.start_date and h.work_date<=p.end_date
-		#and p.edit_date=(select max(p1.edit_date) from BMS_HR_BASE_PRICE p1 where p1.factory=p.factory and p1.type=p.type and h.work_date>=p1.start_date and h.work_date<=p1.end_date)
+	left join ECN_UNIT_TIME t1 on h.ecn_task_detail_id=t1.ecn_task_detail_id and t1.factory=h.factory and t1.workshop=h.workshop 
+	left join ECN_BUS_NUMBER bn on bn.ecn_task_detail_id=h.ecn_task_detail_id and bn.factory=h.factory and bn.workshop=h.workshop
 	left join ECN_HOUR_TOTAL tmp on tmp.id=t.id and substr(h.work_date,1,7)=tmp.work_month
 	left join ECN_BUS_TOTAL tmp2 on t.id=tmp2.task_detail_id and substr(h.work_date,1,7)=tmp2.work_month and tmp2.workshop=h.workshop
 	where h.status in('1','3') and h.work_hour>0 and h.factory=q_factory and h.workshop=q_workshop;

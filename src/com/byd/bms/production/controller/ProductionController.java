@@ -924,8 +924,22 @@ public class ProductionController extends BaseController {
 		String wdate_start=request.getParameter("wdate_start");
 		String wdate_end=request.getParameter("wdate_end");
 		String status=request.getParameter("status");
+		String factory=request.getParameter("factory");
+		String workshop=request.getParameter("workshop");
+		String workgroup=request.getParameter("workgroup");
+		String team=request.getParameter("team");
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("org_id", org_id);
+		condMap.put("bus_number", bus_number);
+		condMap.put("wdate_start", wdate_start);
+		condMap.put("wdate_end", wdate_end);
+		condMap.put("status", status);
+		condMap.put("factory", factory);
+		condMap.put("workshop", workshop);
+		condMap.put("workgroup", workgroup);
+		condMap.put("team", team);
 		
-		productionService.getStaffHoursDetail(org_id,bus_number,wdate_start,wdate_end,status,model);
+		productionService.getStaffHoursDetail(condMap,model);
 		return model;
 	}
 	

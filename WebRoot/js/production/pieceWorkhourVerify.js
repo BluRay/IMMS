@@ -21,6 +21,11 @@ $(document).ready(function() {
 			alert("请选择小班组！");
 			return false;
 		}
+		if($("#wdate_start").val().trim().length==0||$("#wdate_end").val().trim().length==0){
+			alert("请选择日期范围！");
+			return false;
+		}
+		
 		//先destroy datatable，隐藏form
 		if($.fn.dataTable.isDataTable("#tableResult")){
 			$('#tableResult').DataTable().destroy();
@@ -147,12 +152,12 @@ function zTreeOnClick(event, treeId, treeNode) {
 
 	
 	//显示选择的小班组人员列表
-	ajaxGetStaffHoursDetail();
+	/*ajaxGetStaffHoursDetail();
 	if(staff_hour_list.length>0){
 		showStaffList(staff_hour_list);
 	}else{
 		alert("抱歉，未查询到工时信息!");
-	}
+	}*/
 	
 };
 
@@ -211,7 +216,7 @@ function showStaffList(staff_hour_list){
 		            {"title":"分配金额","width":"100","class":"center","data": "distribution","defaultContent": ""/*,"render":function(data,type,row){
 		            	return "<input type='text' class='input-medium distribution' style='width:60px;height:28px;text-align:center'  value='"+data+"'/>"
 		            }*/},
-		            {"title":"计件工资","class":"center","data": "ppay","defaultContent": ""},
+		            /*{"title":"计件工资","class":"center","data": "ppay","defaultContent": ""},*/
 		            {"title":"车间","class":"center","data":"workshop_org","defaultContent":""},
 		            {"title":"工厂","class":"center","data":"plant_org","defaultContent": ""},
 		         
@@ -237,7 +242,7 @@ function showStaffList(staff_hour_list){
 		            {"title":"参与度/工时","width":"100","class":"center","data": "work_hour","defaultContent": ""/*,"render":function(data,type,row){
 		            	return "<input type='text' class='input-medium work_hour' style='width:60px;height:28px;text-align:center'  value='"+data+"'/>";
 		            }*/},	
-		            {"title":"计件工资(月)","class":"center","data": "ppay","defaultContent": ""},
+		            /*{"title":"计件工资(月)","class":"center","data": "ppay","defaultContent": ""},*/
 		            {"title":"车间","class":"center","data":"workshop_org","defaultContent":""},
 		            {"title":"工厂","class":"center","data":"plant_org","defaultContent": ""},
 		          ]	;
@@ -260,7 +265,7 @@ function showStaffList(staff_hour_list){
 		            {"title":"参与度/工时","width":"100","class":"center","data": "work_hour","defaultContent": ""/*,"render":function(data,type,row){
 		            	return "<input type='text' class='input-medium work_hour' style='width:60px;height:28px;text-align:center'  value='"+data+"'/>";
 		            }*/},	
-		            {"title":"计件工资(月)","class":"center","data": "ppay","defaultContent": ""},
+		            /*{"title":"计件工资(月)","class":"center","data": "ppay","defaultContent": ""},*/
 		            {"title":"车间","class":"center","data":"workshop_org","defaultContent":""},
 		            {"title":"工厂","class":"center","data":"plant_org","defaultContent": ""},
 		          ]	;
@@ -288,7 +293,7 @@ function showStaffList(staff_hour_list){
 		            {"title":"分配金额","width":"70","class":"center","data": "distribution","defaultContent": ""/*,"render":function(data,type,row){
 		            	return "<input type='text' class='input-medium distribution' style='width:60px;height:28px;text-align:center'  value='"+data+"'/>"
 		            }*/},
-		            {"title":"计件工资","width":"70","class":"center","data": "ppay","defaultContent": ""},
+		           /* {"title":"计件工资","width":"70","class":"center","data": "ppay","defaultContent": ""},*/
 		            {"title":"车间","class":"center","data":"workshop_org","defaultContent":""},
 		            {"title":"工厂","class":"center","data":"plant_org","defaultContent": ""},
 		         
@@ -335,6 +340,10 @@ function ajaxGetStaffHoursDetail(staff_number){
 			async:false,
 			data:{
 				org_id:org_id,
+				factory:factory,
+				workshop:workshop,
+				workgroup:workgroup,
+				team:team,
 				bus_number:$("#bus_number").val(),
 				wdate_start:$("#wdate_start").val(),
 				wdate_end:$("#wdate_end").val(),
@@ -345,7 +354,10 @@ function ajaxGetStaffHoursDetail(staff_number){
 					salary_model=response.salary_model.salary_model;
 					is_customer=response.salary_model.customer_no_flag;
 				}
-				staff_hour_list=response.staff_hour_list;				
+				staff_hour_list=response.staff_hour_list;		
+				if(staff_hour_list.length<=0){
+					alert("未查询到数据！");
+				}
 			}
 		})
 }

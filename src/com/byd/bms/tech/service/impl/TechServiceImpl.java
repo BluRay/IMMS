@@ -157,7 +157,7 @@ public class TechServiceImpl implements ITechService {
 		//前段分配不需操作FollowBus
 		//System.out.println("----> task_page = " + task_page);
 		//删除技改明细中（BMS_TECH_TASK_DETAIL）技改明细
-		techDao.deleteTechTaskDetail(conditionMap);
+		////techDao.deleteTechTaskDetail(conditionMap);
 		
 		if(task_page.equals("taskAssignPrePage")){
 			//前段
@@ -192,7 +192,13 @@ public class TechServiceImpl implements ITechService {
 			//删除前段跟进数据
 			techDao.deleteTechFollowPre(conditionMap);	
 			conditionMap.put("time_total", total);
-			techDao.insertTechTaskDetail(conditionMap);	
+			int id = techDao.getTechTaskDetailId(conditionMap);
+			if(id == 0){
+				techDao.insertTechTaskDetail(conditionMap);	
+			}else{
+				conditionMap.put("id", id);
+				techDao.updateTechTaskDetail(conditionMap);	
+			}
 		}else{
 			techDao.deleteTechFollowBus(conditionMap);
 			for(Object o:jsa){
@@ -230,7 +236,15 @@ public class TechServiceImpl implements ITechService {
 					techDao.insertTechFollowBus(followList);
 				}
 				//插入技改明细
-				techDao.insertTechTaskDetail(conditionMap);										
+				////techDao.insertTechTaskDetail(conditionMap);		
+				//插入-更新 技改明细
+				int id = techDao.getTechTaskDetailId(conditionMap);
+				if(id == 0){
+					techDao.insertTechTaskDetail(conditionMap);	
+				}else{
+					conditionMap.put("id", id);
+					techDao.updateTechTaskDetail(conditionMap);	
+				}
 			}	
 		}		
 		cdmap.put("editor_id", edit_user);

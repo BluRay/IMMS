@@ -728,6 +728,16 @@
     	</foreach> 
 	</insert>
 	
+	<select id="getTechTaskDetailId" parameterType="Map" resultType="int">
+		SELECT IFNULL(SUM(id)+0,0) AS id FROM BMS_TECH_TASK_DETAIL WHERE tech_task_id=#{tech_task_id} AND order_no = #{order_no} AND factory = #{tech_factory}
+	</select>
+	<update id="updateTechTaskDetail" parameterType="Map">
+	UPDATE bms.BMS_TECH_TASK_DETAIL
+	SET tech_task_id=#{tech_task_id}, order_no=#{order_no}, factory_id=#{tech_factory_id}, factory=#{tech_factory}, prod_factory_id=#{factory_id}, 
+	prod_factory=#{factory_list}, tech_list=#{tech_list}, time_list=#{time_list}, status_list=#{status_list}, single_time_total=#{single_time_total}, time_total=#{time_total}
+	WHERE id=#{id}
+	</update>
+	
 	<insert id="insertTechTaskDetail" useGeneratedKeys="true" parameterType="Map">
 		insert into BMS_TECH_TASK_DETAIL (tech_task_id,order_no,factory,factory_id,prod_factory,prod_factory_id,tech_list,time_list,status_list,single_time_total,time_total)
 		values (#{tech_task_id},#{order_no},#{tech_factory},#{tech_factory_id},#{factory_list},#{factory_id},#{tech_list},#{time_list},#{status_list},#{single_time_total},#{time_total})  

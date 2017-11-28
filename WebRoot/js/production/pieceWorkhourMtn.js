@@ -349,7 +349,7 @@ $(document).ready(function() {
 					return false;
 				}			
 				var area=cutomer_number.split("_");
-				if(area.length<=1 && workshop!='部件'){
+				if(area.length<=1 && workshop=='自制件'){
 					alert("输入格式不正确，自编号格式为：车型-订单_起始号-结束号！");
 					save_flag=false;
 					return false;
@@ -365,12 +365,12 @@ $(document).ready(function() {
 						bus_count=parseInt(bus_end,0)-parseInt(bus_start,0)+1;
 					}					
 				}
-				if(area.length<=1&&workshop=='部件'){					
+				if(area.length<=1&&workshop!='自制件'){					
 					alert("输入格式不正确，自编号格式为：车型-订单-年份_编号！");
 					save_flag=false;
 					return false;
 				}else{
-					var year=area[1].split("-")[2];
+					var year=area[0].split("-")[2];
 					if(isNaN(parseInt(year))){
 						alert("年份必须为4位数字！");
 						save_flag=false;
@@ -382,7 +382,7 @@ $(document).ready(function() {
 						return false;
 					}
 				}
-				if(area[1].split("-").length>1){
+				if(area[1].split("-").length>1 && workshop!='自制件'){
 					bus_start=area[1].split("-")[0];
 					bus_end=area[1].split("-")[1];
 					if(bus_end!=undefined|| bus_end!=null){
@@ -391,10 +391,10 @@ $(document).ready(function() {
 						return false;
 					}
 				}
-				if(workshop=='部件'){
+				if(workshop!='自制件'){
 					bus_count=1;
 				}
-				if(bus_count<0 && workshop!='部件'){
+				if(bus_count<0 && workshop=='自制件'){
 					alert("结束号必须大于起始号");
 					save_flag=false;
 					return false;			
@@ -491,7 +491,7 @@ $(document).ready(function() {
 					return false;
 				}			
 				var area=cutomer_number.split("_");
-				if(area.length<=1 && workshop!='部件'){
+				if(area.length<=1 && workshop=='自制件'){
 					alert("输入格式不正确，自编号格式为：车型-订单_起始号-结束号！");
 					save_flag=false;
 					return false;
@@ -507,12 +507,12 @@ $(document).ready(function() {
 						bus_count=parseInt(bus_end,0)-parseInt(bus_start,0)+1;
 					}					
 				}
-				if(area.length<=1&&workshop=='部件'){					
+				if(area.length<=1&&workshop!='自制件'){					
 					alert("输入格式不正确，自编号格式为：车型-订单-年份_编号！");
 					save_flag=false;
 					return false;
 				}else{
-					var year=area[1].split("-")[2];
+					var year=area[0].split("-")[2];
 					if(isNaN(parseInt(year))){
 						alert("年份必须为4位数字！");
 						save_flag=false;
@@ -524,7 +524,7 @@ $(document).ready(function() {
 						return false;
 					}
 				}
-				if(area[1].split("-").length>1){
+				if(area[1].split("-").length>1 && workshop!='自制件'){
 					bus_start=area[1].split("-")[0];
 					bus_end=area[1].split("-")[1];
 					if(bus_end!=undefined|| bus_end!=null){
@@ -533,10 +533,10 @@ $(document).ready(function() {
 						return false;
 					}
 				}
-				if(workshop=='部件'){
+				if(workshop!='自制件'){
 					bus_count=1;
 				}
-				if(bus_count<0 && workshop!='部件'){
+				if(bus_count<0 && workshop=='自制件'){
 					alert("结束号必须大于起始号");
 					save_flag=false;
 					return false;
@@ -983,7 +983,7 @@ function zTreeOnClick(event, treeId, treeNode) {
 			$("<td />").html("<input type=\"text\" id=\"order_no\" class=\"input-medium carType\" style=\"height: 30px; width: 100px;\"></input>").appendTo(tr);
 			$("<td />").html("自编号：").appendTo(tr);
 			
-			if(workshop=='部件'){
+			if(workshop!='自制件'){
 				$("<td />").html("<input type=\"text\" id=\"customer_number\" placeholder=\"车型-订单-年份_编号\" class=\"input-medium carType\" style=\"height: 30px; width: 150px;\"></input>").appendTo(tr);
 			}else{
 				$("<td />").html("<input type=\"text\" id=\"customer_number\" placeholder=\"车型-订单_起始号-结束号\" class=\"input-medium carType\" style=\"height: 30px; width: 150px;\"></input>").appendTo(tr);

@@ -86,7 +86,7 @@ public interface IProductionService {
 	public void saveStaffHours_cal4(String str_staffHours, String edit_date,
 			String editor_id, ModelMap model);
 
-	public void getStaffHoursDetail(String org_id, String bus_number, String wdate_start, String wdate_end,String status, ModelMap model);
+	public void getStaffHoursDetail(Map<String,Object> condMap, ModelMap model);
 
 	public void deleteStaffHours(Map<String, Object> condMap, ModelMap model);
 	
