@@ -166,7 +166,8 @@ function ajaxEdit(task_id,task_detail_id,task_content,tech_order_no,switch_mode,
 		var follow_detail=tech_detail.follow_detail;
 		var prod_factory_id=tech_detail.prod_factory_id;
 		var prod_factory=tech_detail.prod_factory;
-		addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id,prod_factory,order_no);
+		var task_detail_id_list = tech_detail.task_detail_id_list;
+		addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id,prod_factory,order_no,task_detail_id_list);
 		//console.log("follow_detail = " + follow_detail);
 		$.each(follow_detail.split(";"),function(i,follow){
 			//alert(follow.split("||")[1]);
@@ -267,6 +268,8 @@ function assignTechTask(){
 		if($(cbox).prop('checked')==true && !$(cbox).prop("disabled")==true){
 			var tech_detail_list=[];
 			var tb=$(cbox).parent("div").next("table");
+			var d_id = tb.attr("id").replace("tb_","");
+			//console.log("-->d_id = " + d_id);
 			var tr_body=$(tb).find("tr").eq(1);
 			var tr_head=$(tb).find("tr").eq(0);
 			$.each(tr_body.children("td"),function(i,td){
@@ -279,7 +282,7 @@ function assignTechTask(){
 			});		
 			var obj={};
 			obj.tech_task_id=tech_task_id;
-			obj.task_detail_id = (task_detail_id==undefined)?"":task_detail_id;
+			obj.task_detail_id = d_id;
 			obj.factory_list=factory;
 			obj.factory_id=factory_id;
 			obj.order_no=order_no;
@@ -294,6 +297,7 @@ function assignTechTask(){
 		}
 	});
 	if(conditions.length>0){
+		
 		$.ajax({
 			url:"assignTechTask",
 			dataType:"json",
@@ -338,7 +342,7 @@ function getTechList(task_id){
 	return tech_list;
 }
 
-function addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id,prod_factory,mod_order_no){
+function addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id,prod_factory,mod_order_no,task_detail_id_list){
 	follow_detail=follow_detail||"";
 	var is_follow=false;
 	$.each(follow_detail.split(";"),function(i,follow){
@@ -382,11 +386,11 @@ function addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id
 	$(tabContent).appendTo($("#new_accordion"));
 	var is_edit = false;
 	if(order_no == mod_order_no)is_edit = true;
-	addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factory_id,prod_factory,is_edit);
+	addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factory_id,prod_factory,is_edit,task_detail_id_list);
 	getFuzzyOrder("#order_"+taskNum);
 }
 
-function addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factory_id,prod_factory,is_edit){
+function addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factory_id,prod_factory,is_edit,task_detail_id_list){
 	var factory_select_options=$("#search_factory").html().replace("全部","请选择");
 	//alert(factory_select_options)	
 	var factory_disable_obj={};
@@ -403,7 +407,8 @@ function addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factor
 			return false;
 		}
 	})
-	
+	var d_id = [0,0,0,0,0,0,0,0,0];
+	if(typeof(task_detail_id_list) != "undefined")d_id = task_detail_id_list.split(",");
 	
 	taskElement="#new_task"+taskNum;
 	tech_detail_list=tech_detail_list||"";
@@ -456,7 +461,7 @@ function addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factor
 			var ckbox=$("<input style=\"height:15px\" name=\"new_tecn_flag\""+
 					" class=\"input-medium\" "+disabled+" type=\"checkbox\""+checked+" "+factory_disable_obj[prod_factory]+">");
 			var tech_factory="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>技改工厂：</b><select style='width:100px;height:28px' class='tech_factory' >"+factory_select_options+"</select>";
-			var tech_table=$("<table id=\"tb_\" class=\"table table-bordered table-striped\" style=\"margin-bottom: 0px;\"></table>");
+			var tech_table=$("<table id=\"tb_"+d_id[i]+"\" class=\"table table-bordered table-striped\" style=\"margin-bottom: 0px;\"></table>");
 			var tr_head=$("<tr><td>自制件</td><td>部件</td><td>焊装</td><td>涂装</td><td>底盘</td><td>总装</td><td>检测线</td></tr>");
 			var tr_body=$("<tr height='31px'><td>"+(tech_obj['自制件']||'')+"</td><td>"+(tech_obj['部件']||'')+"</td><td>"+
 					(tech_obj['焊装']||'')+"</td><td>"+(tech_obj['涂装']||'')+"</td><td>"+

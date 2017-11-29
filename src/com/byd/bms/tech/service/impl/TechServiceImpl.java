@@ -238,11 +238,12 @@ public class TechServiceImpl implements ITechService {
 				//插入技改明细
 				////techDao.insertTechTaskDetail(conditionMap);		
 				//插入-更新 技改明细
-				int id = techDao.getTechTaskDetailId(conditionMap);
-				if(id == 0){
+				String d_id = (String) conditionMap.get("task_detail_id");
+				//int id = techDao.getTechTaskDetailId(conditionMap);
+				if(d_id.equals("0")){
 					techDao.insertTechTaskDetail(conditionMap);	
 				}else{
-					conditionMap.put("id", id);
+					conditionMap.put("id", d_id);
 					techDao.updateTechTaskDetail(conditionMap);	
 				}
 			}	
