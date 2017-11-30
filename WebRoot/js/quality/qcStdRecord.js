@@ -7,15 +7,13 @@ $(document).ready(function(){
 		ajaxQuery();
 		getFactorySelect("quality/qcStdRecord",'',"#multiple_factory",null,'name');
 		getBusTypeSelect("","#search_bustype","全部","name");
-		getBusTypeSelect("","#bus_type","全部","name");
+		getBusTypeSelect("","#bus_type",null,"name");
 		getOrderNoSelect("#order_no","#orderId");
 		getOrderNoSelect("#search_order","#orderId");
 		getWorkshop();
+		getBusNumberSelect('#busnumber_submit');
 		var now = new Date(); //当前日期
 		$("#confirm_date_submit").val(formatDate(now));
-		$("#multiple_factory").multipleSelect({
-	        selectAll: true
-	    });
 	}
 	$('#nav-search-input').bind('keydown', function(event) {
 		if (event.keyCode == "13") {
@@ -29,10 +27,16 @@ $(document).ready(function(){
 	$(".btnQuery").on("click",function(){
 		ajaxQuery();
 	});
-	
-//	$("#btnDelete").on("click",function(){
-//		ajaxDelete();
-//	});
+	$("#scope_show").focus(function(){
+		$(this).hide();
+		var val=$(this).val();
+		$("#multiple_factory_show").siblings().find('.ms-choice').children('span').text(val);
+		$("#multiple_factory_show").siblings().find('.ms-choice').show();
+	});
+//	$("#multiple_factory_show").siblings().find('.ms-choice').children('span').on("change",function(){
+//		alert($(this).text());
+//		$("#scope_show").val($("#multiple_factory_show").siblings().find('.ms-choice').children('span').text());
+//	}); 
 	
 	$(document).on("click","#btnAdd",function(){
 		$("#afile").val("");
@@ -41,6 +45,12 @@ $(document).ready(function(){
     	$("#usynopsis").val("");
     	$("#bfile").val("");
     	$("#memo").val("");
+    	$("#bus_type").multipleSelect({
+	        selectAll: true
+	    });
+    	$("#multiple_factory").multipleSelect({
+	        selectAll: true
+	    });
 		var dialog = $( "#dialog-add" ).removeClass('hide').dialog({
 			width:650,
 			modal: true,
@@ -80,6 +90,7 @@ $(document).ready(function(){
 							$("#afile").focus();
 							return false;
 						}
+						
 						$("#addForm").submit();
 						$( this ).dialog( "close" ); 
 					} 
@@ -96,7 +107,7 @@ function ajaxQuery(){
 		serverSide: true,
 		fixedColumns:   {
             leftColumns: 0,
-            rightColumns:0
+            rightColumns:1
         },
         paging:true,
 		ordering:false,
@@ -161,9 +172,27 @@ function ajaxQuery(){
 		columns: [
             {"title":"记录编号","class":"center","data":"record_num","defaultContent": ""},
             {"title":"适用车型","class":"center","data":"bus_type","defaultContent": ""},
-            {"title":"适用订单","class":"center","data":"order_id","defaultContent": ""},
+            {"title":"适用订单","class":"center","data":"order_id","defaultContent": "","render":function(data, type, row){
+            	var html=""
+                	data=data.replace(/'/g,"&apos;").replace(/\r/ig, "&nbsp;").replace(/\n/ig, "&nbsp;");
+            	if(data.length>9){
+            		html="<i title='"+data+"' style='font-style: normal'>"+data.substring(1,9)+"...</i>"
+            	}else{
+            		html=data;
+            	}
+            	return html;
+            }},
             {"title":"适用车间","class":"center","data":"workshop","defaultContent": ""},
-            {"title":"更新内容摘要","class":"center","data":"usynopsis","defaultContent": ""},
+            {"title":"更新内容摘要","class":"center","data":"usynopsis","defaultContent": "","render":function(data, type, row){
+            	var html=""
+            	data=data.replace(/'/g,"&apos;").replace(/\r/ig, "&nbsp;").replace(/\n/ig, "&nbsp;");
+        	if(data.length>15){
+        		html="<i title='"+data+"' style='font-style: normal'>"+data.substring(1,10)+"...</i>"
+        	}else{
+        		html=data;
+        	}
+        	return html;
+        	}},
             {"title":"发布范围","class":"center","data":"scope","defaultContent": "","render":function(data, type, row){
             	var result="";
             	if(data!=undefined && data!=''){
@@ -173,7 +202,7 @@ function ajaxQuery(){
                 		if(implement_factory!=undefined && implement_factory.indexOf(dataArr[i])>=0){
                 			result+=dataArr[i]+";";
                 		}else{
-                			result+="<a style='cursor:pointer' onclick=openDialogEdit('"+dataArr[i]+"','"+row.id+"')>"+dataArr[i]+"</a>"+";";
+                			result+="<a style='cursor:pointer' onclick=openDialogEdit(\'"+$.trim(dataArr[i])+"\',\'"+row.id+"\')>"+dataArr[i]+"</a>"+";";
                 		}
                 	}
                 	result=result.substring(0,result.length-1);
@@ -181,22 +210,34 @@ function ajaxQuery(){
             	return result;
             }},  
             {"title":"发布人","class":"center","data":"editor","defaultContent": ""}, 
-            {"title":"发布日期","class":"center","data": "creat_date","defaultContent": ""},
+            {"title":"发布日期","class":"center","data": "creat_date","defaultContent": "","render":function(data, type, row){
+            	var html=""
+            	if(data.length>10){
+            		html=data.substring(0,10);
+            	}
+            	return html;
+            	}},
             {"title":"工厂反馈进度","class":"center","data":"implement_factory","defaultContent": "","render":function(data, type, row){
             	var result="";
             	if(data!='' && data!=undefined){
             		var dataArr=data.split(",");
                 	for(var i=0;i<dataArr.length;i++){
-                		result+="<a style='cursor:pointer' onclick=openDialogDisplay('"+dataArr[i]+"','"+row.id+"')>"+dataArr[i]+"</a>"+";";
+            			result+="<a style='cursor:pointer' onclick=openDialogDisplay(\'"+$.trim(dataArr[i])+"\',\'"+row.id+"\')>"+dataArr[i]+"</a>"+";";
                 	}
                 	result=result.substring(0,result.length-1);
             	}
             	return result;
             }},  
-            {"title":"查看","class":"center","data":"id","defaultContent":"","render":function(data, type, row){ 
-            	return "<i class=\"glyphicon glyphicon-search bigger-110 show\" onclick='show(" 
-		            		+ data+ ")' style='color:green;cursor: pointer;'></i>";
-		    }}
+            {"title":"","class":"center","data":null,"defaultContent":"","render":function(data, type, row){ 
+            	return "<i class=\"glyphicon glyphicon-search bigger-130 show\" onclick='show(" 
+		            		+ row['id']+ ")' style='color:green;cursor: pointer;'></i>" 
+		            	},
+		            },
+            {"title":"","class":"center","data":null,"defaultContent":"","render":function(data, type, row){ 
+            	return "<i class=\"ace-icon fa fa-pencil bigger-130\" title=\"编辑\" onclick='edit(" 
+		            		+ row['id'] + ")' style='color:green;cursor: pointer;'></i>"
+		            	},
+		            }
           ],
 	});
 }
@@ -234,7 +275,8 @@ function openDialogEdit(factory,id){
 		url:"showStdRecord",
 		type: "post",
 		data:{
-			"id":id
+			"id":id,
+			"implement_factory":factory
 		},
 		dataType:"json",
 		success:function(response){
@@ -248,6 +290,17 @@ function openDialogEdit(factory,id){
 			$('#before_desc_submit').val(response.stdRecord.before_desc);
 			$('#after_desc_submit').val(response.stdRecord.after_desc);
 			$('#implement_factory_submit').val(factory);
+			if(response.stdRecord.implement_bus_number!=''){
+				$("#busnumber_submit").val(response.stdRecord.implement_bus_number);
+			}
+			if(response.stdRecord.confirmor!=''){
+			    $("#confirmor_submit").val(response.stdRecord.confirmor);
+			}
+			if(response.stdRecord.confirm_date!=''){
+			    $("#confirm_date_submit").val(response.stdRecord.confirm_date);
+			}
+			$("#id_submit").val(response.stdRecord.implement_info_id);
+			
 			var val=$('#urlPath').val();
 			if(response.stdRecord.bfile_path!=null){
 				$('#bfile_path_submit').text("查看");
@@ -291,7 +344,8 @@ function openDialogDisplay(factory,id){
 		url:"showStdRecord",
 		type: "post",
 		data:{
-			"id":id
+			"id":id,
+			"implement_factory":factory
 		},
 		dataType:"json",
 		success:function(response){
@@ -304,6 +358,7 @@ function openDialogDisplay(factory,id){
 			$('#scope_submit').val(response.stdRecord.scope);
 			$('#before_desc_submit').val(response.stdRecord.before_desc);
 			$('#after_desc_submit').val(response.stdRecord.after_desc);
+			
 			$('#implement_factory_submit').val(factory);
 			var val=$('#urlPath').val();
 			if(response.stdRecord.bfile_path!=null){
@@ -313,25 +368,11 @@ function openDialogDisplay(factory,id){
 				$('#bfile_path_submit').text("");
 			}
 			$('#afile_path_submit').attr("href",val+response.stdRecord.afile_path);
-            var index=0;
-			var implementfactory=response.stdRecord.implement_factory;
-			if(implementfactory!='' && implementfactory!=undefined){
-				var factoryArr=implementfactory.split(",");
-				for(var i=0;i<factoryArr.length;i++){
-					if(factoryArr[i]==factory){
-						index=i;
-					}
-				}
-			}
-			var implement_bus_number=response.stdRecord.implement_bus_number;
-			var implement_bus_number_arr=implement_bus_number.split(",");
-			$("#busnumber_submit").val(implement_bus_number_arr[index]);
-			var confirmor=response.stdRecord.confirmor;
-			var confirmor_arr=confirmor.split(",");
-			$("#confirmor_submit").val(confirmor_arr[index]);
-			var confirm_date=response.stdRecord.confirm_date;
-			var confirm_date_arr=confirm_date.split(",");
-			$("#confirm_date_submit").val(confirm_date_arr[index]);
+           
+			
+			$("#busnumber_submit").val(response.stdRecord.implement_bus_number);
+			$("#confirmor_submit").val(response.stdRecord.confirmor);
+			$("#confirm_date_submit").val(response.stdRecord.confirm_date);
 		}
 	})
 	var dialog = $( "#dialog-factory" ).removeClass('hide').dialog({
@@ -352,6 +393,14 @@ function openDialogDisplay(factory,id){
 	});
 }
 function show(id){
+	$('.updatefile').hide();
+	$("#multiple_factory_show").hide();
+	getFactorySelect("quality/qcStdRecord",'',"#multiple_factory_show",null,'name');
+	$("#multiple_factory_show").multipleSelect({
+        selectAll: true
+    });
+	$("#scope_show").hide();
+	//$("#multiple_factory_show").siblings().find('.ms-choice').hide();
 	$.ajax({
 		url:"showStdRecord",
 		type: "post",
@@ -367,6 +416,7 @@ function show(id){
 			$('#order_show').val(response.stdRecord.order_id);
 			$('#workshop_show').val(response.stdRecord.workshop);
 			$('#scope_show').val(response.stdRecord.scope);
+			$("#multiple_factory_show").siblings().find('.ms-choice').children('span').text(response.stdRecord.scope);
 			$('#before_desc_show').val(response.stdRecord.before_desc);
 			$('#after_desc_show').val(response.stdRecord.after_desc);
 			var val=$('#urlPath').val();
@@ -399,7 +449,98 @@ function show(id){
 		]
 	});
 }; 
-function update(id){
+function edit(id){
+	$('.updatefile').show();
+	$("#scope_show").hide();
+	getFactorySelect("quality/qcStdRecord",'',"#multiple_factory_show",null,'name');
+	$("#multiple_factory_show").hide();
+	
+	$("#multiple_factory_show").multipleSelect({
+        selectAll: true
+    });
+	//$("#multiple_factory_show").siblings().find('.ms-choice').hide();
+	$.ajax({
+		url:"showStdRecord",
+		type: "post",
+		data:{
+			"id":id
+		},
+		dataType:"json",
+		success:function(response){
+			$("#id_show").val(response.stdRecord.id);
+			$('#recordno_show').val(response.stdRecord.record_num);
+			$('#bustype_show').val(response.stdRecord.bus_type);
+			$('#afile_path_show').attr("href",val+response.stdRecord.afile_path);
+			$('#usynopsis_show').val(response.stdRecord.usynopsis);
+			$('#order_show').val(response.stdRecord.order_id);
+			$('#workshop_show').val(response.stdRecord.workshop);
+			var scope=response.stdRecord.scope;
+			$('#scope_show').val(scope);
+			$("#multiple_factory_show").siblings().find('.ms-choice').children('span').text(scope);
+			var scopeArr=scope.split(",");
+			for(var i=0;i<scopeArr.length;i++){
+				$("#table-edit").children().find("ul").children().each(function(){
+					var objval=$(this).children().children().eq(0).val();
+					if($.trim(scopeArr[i])==objval){
+						$(this).children().children().eq(0).prop("checked",true);
+					}
+				});
+			}
+			$('#before_desc_show').val(response.stdRecord.before_desc);
+			$('#after_desc_show').val(response.stdRecord.after_desc);
+			var val=$('#urlPath').val();
+			if(response.stdRecord.bfile_path!=null){
+				$('#bfile_path_show').text("查看");
+				$('#bfile_path_show').attr("href",val+response.stdRecord.bfile_path);
+			}else{
+				$('#bfile_path').text("");
+			}
+			
+			$('#afile_path_show').attr("href",val+response.stdRecord.afile_path);
+			$("#memo_show").val(response.stdRecord.memo);
+		}
+	})
+	var dialog = $( "#dialog-edit" ).removeClass('hide').dialog({
+		width:620,
+		height:580,
+		modal: true,
+		title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-gear green"></i> 品质标准更新记录查看</h4></div>',
+		title_html: true,
+		buttons: [ 
+			{
+				text: "取消",
+				"class" : "btn btn-minier",
+				click: function() {
+					$( this ).dialog( "close" ); 
+					$("#editForm")[0].reset();
+				} 
+			},
+			{
+				text: "确认",
+				"class" : "btn btn-primary btn-minier",
+				click: function() {
+					var scope=$("#multiple_factory_show").siblings().find('.ms-choice').children('span').text();
+					if(scope!=''){
+						$("#scope_show").val(scope);
+					}
+					if(scope=='全选'){
+						var all="";
+						$("#multiple_factory_show option").each(function(){
+							all+=$(this).val()+",";
+						});
+						alert(all.substring(0,all.length-1)); return false;
+						$("#scope_show").val(all.substring(0,all.length-1));
+					}
+
+					$("#editForm").submit();
+					$( this ).dialog( "close" ); 
+					//$("#editForm")[0].reset();
+				} 
+			}
+		]
+	});
+}; 
+function updateStd(id){
 	if($("#implement_factory_submit").val()==''){
 		alert("实施工厂不能为空");
 		$("#implement_factory_submit").focus();
@@ -425,6 +566,58 @@ function update(id){
 		type: "post",
 		data:{
 			"id":id,
+			"scope":$("#multiple_factory_show").val(),
+			"implement_bus_number":$("#busnumber_submit").val(),
+			"confirmor":$("#confirmor_submit").val(),
+			"confirm_date":$("#confirm_date_submit").val()
+		},
+		dataType:"json",
+		success:function(response){
+			if(response.success){
+		    	$.gritter.add({
+					title: '系统提示：',
+					text: '<h5>保存成功！</h5>',
+					class_name: 'gritter-info'
+				});
+		    	$( "#dialog-factory" ).dialog( "close" );
+		    	ajaxQuery();
+	    	}else{
+	    		$.gritter.add({
+					title: '系统提示：',
+					text: '<h5>保存失败！</h5><br>',
+					class_name: 'gritter-info'
+				});
+	    	}
+		}
+	});
+}
+function update(id){
+	if($("#implement_factory_submit").val()==''){
+		alert("实施工厂不能为空");
+		$("#implement_factory_submit").focus();
+		return false;
+	}
+	if($("#busnumber_submit").val()==''){
+		alert("实施车号不能为空");
+		$("#busnumber_submit").focus();
+		return false;
+	}
+	if($("#confirmor_submit").val()==''){
+		alert("确认人不能为空");
+		$("#confirmor_submit").focus();
+		return false;
+	}
+	if($("#confirm_date_submit").val()==''){
+		alert("确认日期不能为空");
+		$("#confirm_date_submit").focus();
+		return false;
+	}
+	$.ajax({
+		url:"addStdImplementInfo",
+		type: "post",
+		data:{
+			"id":$("#id_submit").val(),
+			"quality_standard_id":id,
 			"implement_factory":$("#implement_factory_submit").val(),
 			"implement_bus_number":$("#busnumber_submit").val(),
 			"confirmor":$("#confirmor_submit").val(),
@@ -438,7 +631,7 @@ function update(id){
 					text: '<h5>保存成功！</h5>',
 					class_name: 'gritter-info'
 				});
-		    	$( this ).dialog( "close" );
+		    	$( "#dialog-factory" ).dialog( "close" );
 		    	ajaxQuery();
 	    	}else{
 	    		$.gritter.add({

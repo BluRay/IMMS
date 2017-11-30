@@ -87,19 +87,22 @@
 								<td style="width:150px">
 									<input type="text" class="input-medium" id="recordNo" name="recordNo" style="width:150px"/>
 								</td>
-								<td align="right" style="width:100px">* 适用车型：</td>
+								<td align="right" style="width:100px">* 适用车间：</td>
 								<td style="width:150px">
-								    <select name="busType" id="bus_type" style="width:150px;height:30px;">
+								    <select name="workshop" id="workshop" class="workshop" style="width:150px;height:30px;">
 								    </select>
 								</td>
 							</tr>
 							<tr style="height:40px">
 								<td align="right" style="width:100px">* 适用订单：</td>
-								<td style="width:150px">
-								    <input type="text" name="orderId" class="input-medium" id="order_no" style="width:150px;height:30px;"/>
-								<td align="right" style="width:100px">* 适用车间：</td>
-								<td style="width:150px">
-								    <select name="workshop" id="workshop" class="workshop" style="width:150px;height:30px;">
+								<td colspan=3>
+								    <input type="text" name="orderId" class="input-medium" id="order_no" style="width:400px;height:30px;"/>
+								</td>
+							</tr>
+							<tr style="height:40px">
+								<td align="right" style="width:100px">* 适用车型：</td>
+								<td colspan=3>
+								    <select multiple="multiple" name="busType" id="bus_type" style="width:400px;height:30px;">
 								    </select>
 								</td>
 							</tr>
@@ -142,71 +145,6 @@
                                 </td>
 							</tr>
 						</table>
-<!-- 						<div class="form-group"> -->
-<!-- 							<label class="col-sm-3 control-label no-padding-right" for="add">*&nbsp;记录编号</label> -->
-<!-- 							<div class="col-sm-9"> -->
-<!-- 								<input type="text" class="input-medium" id="recordNo" name="recordNo" style="width:360px;height:30px;"/> -->
-<!-- 							</div> -->
-<!-- 						</div> -->
-<!-- 						<div class="form-group"> -->
-<!-- 							<label class="col-sm-3 control-label no-padding-right">*&nbsp;适用车型</label> -->
-<!-- 							<div class="col-sm-9"> -->
-<!-- 								<select name="busType" id="bus_type" style="width:360px;height:30px;"> -->
-<!-- 								</select> -->
-<!-- 							</div> -->
-<!-- 						</div> -->
-<!-- 						<div class="form-group"> -->
-<!-- 							<label class="col-sm-3 control-label no-padding-right">*&nbsp;适用订单</label> -->
-<!-- 							<div class="col-sm-9"> -->
-<!-- 								<input type="text" name="orderId" class="input-medium" id="order_no" style="width:360px;height:30px;"/> -->
-<!-- 							</div> -->
-<!-- 						</div> -->
-<!-- 						<div class="form-group"> -->
-<!-- 							<label class="col-sm-3 control-label no-padding-right">*&nbsp;适用车间</label> -->
-<!-- 							<div class="col-sm-9"> -->
-<!-- 								<select name="workshop" id="workshop" style="width:360px;height:30px;"> -->
-<!-- 								</select> -->
-<!-- 							</div> -->
-<!-- 						</div> -->
-<!-- 						<div class="form-group"> -->
-<!-- 							<label class="col-sm-3 control-label no-padding-right">*&nbsp;发布范围</label> -->
-<!-- 							<div class="col-sm-9"> -->
-<!-- 							    <select multiple="multiple" name="scope" id="multiple_factory" style="width:360px;height:30px;"> -->
-<!--                                 </select> -->
-<!-- 							</div> -->
-<!-- 						</div> -->
-<!-- 						<div class="form-group"> -->
-<!-- 							<label class="col-sm-3 control-label no-padding-right" for="add">*&nbsp;更新内容摘要</label> -->
-<!-- 							<div class="col-sm-9"> -->
-<!-- 								<textarea class="input-xlarge" id="usynopsis" style="width:420px;" rows="1" name="usynopsis"></textarea> -->
-<!-- 							</div> -->
-<!-- 						</div> -->
-<!-- 						<div class="form-group"> -->
-<!-- 							<label class="col-sm-3 control-label no-padding-right" for="add">*&nbsp;更新前描述</label> -->
-<!-- 							<div class="col-sm-9"> -->
-<!-- 								<textarea class="input-xlarge" style="width:420px;" rows="1" name="before_desc"></textarea> -->
-<!-- 							</div> -->
-<!-- 						</div> -->
-<!-- 						<div class="form-group"> -->
-<!-- 							<label class="col-sm-3 control-label no-padding-right" for="add">&nbsp;更替前附件</label> -->
-<!-- 							<div class="col-sm-9"> -->
-<!-- 								<input class="maintain" type="file" name="bfile" id="bfile" style="width:210px"/>					 -->
-<!-- 								<input type="submit" value="上传" class="btn btn-primary maintain"/> -->
-<!-- 							</div> -->
-<!-- 						</div> -->
-<!-- 						<div class="form-group"> -->
-<!-- 							<label class="col-sm-3 control-label no-padding-right" for="add">*&nbsp;更新后描述</label> -->
-<!-- 							<div class="col-sm-9"> -->
-<!-- 								<textarea class="input-xlarge" style="width:420px;" rows="1" name="after_desc"></textarea> -->
-<!-- 							</div> -->
-<!-- 						</div> -->
-<!-- 						<div class="form-group"> -->
-<!-- 							<label class="col-sm-3 control-label no-padding-right" for="add">*&nbsp;更替后附件</label> -->
-<!-- 							<div class="col-sm-9"> -->
-<!-- 								<input class="maintain" type="file" name="afile" id="afile" style="width:210px"/>					 -->
-<!-- 								<input type="submit" value="上传" class="btn btn-primary maintain"/> -->
-<!-- 							</div> -->
-<!-- 						</div> -->
 					</form>
 				</div>	
 				<div id="dialog-factory" class="hide">
@@ -215,15 +153,15 @@
 							<td align="right" style="width:100px">* 记录编号：</td>
 							<td style="width:150px">
 								<input type="text" class="input-medium" id="recordno_submit" style="width:150px" readonly="readonly"/>
-								<input type='hidden' id="id">
+								<input type='hidden' id="id_submit">
 							</td>
 							<td align="right" style="width:100px">* 适用车型：</td>
 							<td style="width:150px"><input type="text" class="input-medium" id="bustype_submit" style="width:150px" readonly="readonly"/></td>
 						</tr>
 						<tr style="height:40px">
-							<td align="right" style="width:100px">* 适用工厂：</td>
+							<td align="right" style="width:100px">* 适用订单：</td>
 							<td style="width:150px">
-								<input type="text" class="input-medium" style="width:150px;height:30px;" id="factory_submit" readonly="readonly"/>
+								<input type="text" class="input-medium" style="width:150px;height:30px;" id="order_submit" readonly="readonly"/>
 							<td align="right" style="width:100px">* 适用车间：</td>
 							<td style="width:150px">
 								<input type="text" class="input-medium" style="width:150px;height:30px;" id="workshop_submit" readonly="readonly"/>
@@ -259,7 +197,7 @@
 					    <tr style="height:40px">
 							<td align="right" style="width:100px">* 实施工厂：</td>
 							<td style="width:150px">
-								<input type="text" class="input-medium" style="width:150px;height:30px;" id="implement_factory_submit"/>
+								<input type="text" class="input-medium" style="width:150px;height:30px;" id="implement_factory_submit" readonly="readonly"/>
 							<td align="right" style="width:100px">* 实施车号：</td>
 							<td style="width:150px">
 								<input type="text" class="input-medium" style="width:150px;height:30px;" id="busnumber_submit"/>
@@ -277,53 +215,67 @@
 					</table>
 				</div>
 				<div id="dialog-edit" class="hide">
-					<form id="editForm" class="form-horizontal">
-						<table>
+					<form id="editForm" class="form-horizontal" class="form-horizontal" method="post" enctype="multipart/form-data" action="updateStdRecord">
+						<table id="table-edit">
 							<tr style="height:40px">
 								<td align="right" style="width:100px">* 记录编号：</td>
 								<td style="width:150px">
 									<input type="text" class="input-medium" id="recordno_show" style="width:150px"/>
-									<input type='hidden' id="id">
+									<input type='hidden' id="id_show" name="id">
 								</td>
 								<td align="right" style="width:100px">* 适用车型：</td>
-								<td style="width:150px"><input type="text" class="input-medium" id="bustype_show" style="width:150px"/></td>
+								<td style="width:150px"><input type="text" name="busType" class="input-medium" id="bustype_show" style="width:150px"/></td>
 							</tr>
 							<tr style="height:40px">
 								<td align="right" style="width:100px">* 适用订单：</td>
 								<td style="width:150px">
-									<input type="text" class="input-medium" style="width:150px;height:30px;" id="order_show"/>
+									<input type="text" class="input-medium" name="orderId" style="width:150px;height:30px;" id="order_show"/>
 								<td align="right" style="width:100px">* 适用车间：</td>
 								<td style="width:150px">
-									<input type="text" class="input-medium" style="width:150px;height:30px;" id="workshop_show"/>
+									<input type="text" class="input-medium" name="workshop" style="width:150px;height:30px;" id="workshop_show"/>
 								</td>
 							</tr>
 							<tr style="height:40px">
 								<td align="right" style="width:100px">适用范围：</td>
 								<td colspan=3>
-								   <input type="text" class="input-medium" style="width:400px;height:30px;" id="scope_show"/>
-<!-- 								    <select multiple="multiple" name="scope" id="multiple_factory_show" style="width:400px;height:30px;"> -->
-<!--                                     </select> -->
+								   <input type="text" class="input-medium" name="scope" style="width:400px;height:30px;" id="scope_show"/>
+								    <select multiple="multiple" id="multiple_factory_show" style="width:400px;height:30px;">
+                                    </select>
 								</td>
 							</tr>
 							<tr style="height:40px">
 								<td align="right" style="width:100px">更新内容摘要：</td>
-								<td colspan=3><textarea class="input-medium" id="usynopsis_show" style="width:400px"></textarea></td>
+								<td colspan=3><textarea class="input-medium" name="usynopsis" id="usynopsis_show" style="width:400px"></textarea></td>
 							</tr>
 							<tr style="height:40px">
 								<td align="right" style="width:100px">更替前附件：</td>
-								<td colspan=3><label class="control-label" style="padding-left:2px;align:left"><a href="" class="text-info" id="bfile_path_show" target="_blank">查看</a></label></td>
+								<td colspan=3>
+									<label class="control-label updatefile" style="padding-left:2px;align:left">
+									    <input class="maintain" type="file" name="bfile" id="bfile_show" style="width:210px"/>
+									</label>
+									<label class="control-label" style="padding-left:2px;align:left">
+									    <a href="" class="text-info" id="bfile_path_show" target="_blank">查看</a>
+									</label>
+								</td>
 							</tr>
 							<tr style="height:40px">
 								<td align="right" style="width:100px">更新前描述：</td>
-								<td colspan=3><textarea class="input-medium" id="before_desc_show" style="width:400px;" rows="1" name="before_desc"></textarea></td>
+								<td colspan=3><textarea class="input-medium" name="beforeDesc" id="before_desc_show" style="width:400px;" rows="1" name="before_desc"></textarea></td>
 							</tr>
 							<tr style="height:40px">
 								<td align="right" style="width:100px">更替后附件：</td>
-								<td colspan=3><label class="control-label" style="padding-left:2px;align:left"><a href="" class="text-info" id="afile_path_show" target="_blank">查看</a></label></td>
+								<td colspan=3>
+								<label class="control-label updatefile" style="padding-left:2px;align:left">
+								    <input class="maintain" type="file" name="afile" id="afile_show" style="width:210px"/>
+								</label>
+								<label class="control-label" style="padding-left:2px;align:left">
+								    <a href="" class="text-info" id="afile_path_show" target="_blank">查看</a>
+								</label>
+								</td>
 							</tr>
 							<tr style="height:40px">
 								<td align="right" style="width:100px">更新后描述：</td>
-								<td colspan=3><textarea class="input-medium" id="after_desc_show" style="width:400px;" rows="1" name="after_desc"></textarea></td>
+								<td colspan=3><textarea class="input-medium" name="afterDesc" id="after_desc_show" style="width:400px;" rows="1" name="after_desc"></textarea></td>
 							</tr>
 							<tr style="height:10px;">
 								<td colspan=4></td>
@@ -331,7 +283,7 @@
 							<tr style="height:40px">
 								<td align="right" style="width:100px">备注：</td>
 								<td colspan=3>
-								    <textarea class="input-xlarge" style="width:400px;" id="memo_show" rows="1" name="memo"></textarea>
+								    <textarea class="input-xlarge" style="width:400px;" name="memo" id="memo_show" rows="1" name="memo"></textarea>
                                 </td>
 							</tr>
 						</table>
@@ -418,6 +370,7 @@
 	<script src="../js/common.js"></script>
 	<script src="../assets/js/bootstrap3-typeahead.js"></script>
 	<script src="../js/jsrender.min.js"></script>
+<!-- 	<script src="../js/bootstrap.js"></script> -->
 	<script src="../js/multiple-select.js"></script>
 	<script src="../js/quality/qcStdRecord.js"></script>
 </body>

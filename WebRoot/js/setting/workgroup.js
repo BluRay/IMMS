@@ -300,7 +300,6 @@ jQuery(function($) {
 		}
 		var type=1; // 小班组
 		var parentId=$("#new_parentId").val();
-		alert(parentId+"--"+parentId.indexOf("t"));
 		if(parentId.indexOf("t")>=0){
 			type=0; // 标准班组
 		}

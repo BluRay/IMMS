@@ -91,9 +91,9 @@ public interface IQualityService {
 	
   	public int insertStdRecord(BmsBaseQCStdRecord stdRecord);
   	
-  	public int updateStdRecord(Map<String, Object> stdRecord);
+  	public int updateStdRecord(BmsBaseQCStdRecord stdRecord);
   	
-  	public Map<String, Object> selectStdRecord(int recordId);
+  	public Map<String, Object> selectStdRecord(Map<String,Object> conditionMap);
   	
   	public Map<String, Object> getStdRecordList(Map<String,Object> conditionMap);
   	
@@ -106,7 +106,9 @@ public interface IQualityService {
   	public void deleteQualityAbnormalRecord(List ids);
     
   	public Map<String, Object> checkBusNumber(Map<String,Object> conMap);
-	//======================== tj end=================================//
+	
+  	public int insertQualityStdImplementInfo(Map<String,Object> conMap);
+  	//======================== tj end=================================//
 	
 	
 	

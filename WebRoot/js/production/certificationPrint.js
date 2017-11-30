@@ -3,8 +3,8 @@ $(document).ready(function () {
 	initPage();
 	function initPage(){
 		getBusNumberSelect('#nav-search-input');
-		getFactorySelect("production/certificationPrint","","#search_factory",null,"id")
-		$("#search_factory").attr("disabled","disabled");
+		getFactorySelect("production/certificationPrint","","#search_factory","全部","id")
+		//$("#search_factory").attr("disabled","disabled");
 		getOrderNoSelect("#search_order_no","#orderId");
 	}
 

@@ -4,7 +4,7 @@
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta charset="utf-8" />
-		<title>合格证打印</title>
+		<title>合格证数据传输</title>
 		<meta name="description" content="Common Buttons &amp; Icons" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 		<link rel="stylesheet" href="../assets/css/jquery-ui.min.css" />
@@ -31,7 +31,7 @@
 					<ul class="breadcrumb">
 						<li><i class="ace-icon fa fa-home home-icon"></i><a href="/BMS/index">首页</a></li>
 						<li><a href="#">生产执行</a></li>
-						<li class="active">合格证打印</li>
+						<li class="active">合格证数据传输</li>
 					</ul><!-- /.breadcrumb -->
 
 					<!-- #section:basics/content.searchbox -->
@@ -49,7 +49,7 @@
 						<table>
 							<tr>
 								<td>生产工厂：</td>
-								<td><select disabled="disabled" name="" id="search_factory" class="input-medium carType"></select></td>
+								<td><select name="" id="search_factory" class="input-medium carType"></select></td>
 								<td>订单编号：</td>
 								<td>
 								<input type="text" class="input-medium revise" id="search_order_no" style="height: 30px;" />

@@ -908,13 +908,24 @@
 		#{beforeDesc},#{afterDesc},#{mailAddrs},#{editorId},#{editDate}
 		)
 	</insert>
-	<select id="selectStdRecord" parameterType="int" resultType="Map">
-		select * from BMS_QM_QUALITY_STANDARDS_CHANGE_LOGS where
-		id=#{recordId}
+	<select id="selectStdRecord" parameterType="Map" resultType="Map">
+		select i.id implement_info_id,t.id quality_standard_id,record_num,bus_type,order_id,workshop,scope,i.implement_factory,i.implement_bus_number,i.confirmor,
+		i.confirm_date,usynopsis,standardfile,bfile_path,afile_path,memo,
+		before_desc,after_desc from BMS_QM_QUALITY_STANDARDS_CHANGE_LOGS t
+		left join BMS_QM_QUALITY_STANDARD_IMPLEMENT_INFO i on t.id=i.quality_standard_id
+		 where quality_standard_id=#{id} and i.implement_factory=#{implement_factory}  and i.deleted='0'
+	</select>
+	<select id="selectStdRecordById" parameterType="int" resultType="Map">
+		select id,id quality_standard_id,record_num,bus_type,order_id,workshop,scope,
+		usynopsis,standardfile,bfile_path,afile_path,memo,
+		before_desc,after_desc from BMS_QM_QUALITY_STANDARDS_CHANGE_LOGS t where id=#{id} 
 	</select>
 	<select id="getStdRecordList" parameterType="Map" resultType="Map">
-		select t.*,u.username editor from BMS_QM_QUALITY_STANDARDS_CHANGE_LOGS t
-		 left join BMS_BASE_USER u on t.creator_id=u.id where 1=1
+		select t.id,t.record_num,t.bus_type,t.order_id,t.workshop,t.scope,t.usynopsis,t.afile_path,t.bfile_path,
+         t.after_desc,t.before_desc,t.memo,t.creat_date,GROUP_CONCAT(i.implement_factory) implement_factory,
+         u.username editor from BMS_QM_QUALITY_STANDARDS_CHANGE_LOGS t
+         left join BMS_QM_QUALITY_STANDARD_IMPLEMENT_INFO i on i.quality_standard_id=t.id and i.deleted='0'
+		 left join BMS_BASE_USER u on t.creator_id=u.id where 1=1 GROUP BY t.id
 		<if test="recordno!=null and recordno!=''">
 			and t.record_num=#{recordno}
 		</if>
@@ -1110,7 +1121,7 @@
 			and o.order_no = #{order_no}
 		</if>
 		order by p.id desc
-		<if test="start !=null">
+		<if test="start !=null and length!=-1">
 			LIMIT ${start} ,${length} 
 		</if>
 	</select>
@@ -1158,16 +1169,61 @@
 <!-- 		 left join BMS_OR_ORDER o on o.id=p.order_id -->
 		 WHERE p.bus_number = #{bus_number} and p.order_id = #{order_id}
     </select>
-    <update id="updateStdRecord" parameterType="Map">
+    <update id="updateStdRecord" parameterType="com.byd.bms.quality.model.BmsBaseQCStdRecord">
 		update BMS_QM_QUALITY_STANDARDS_CHANGE_LOGS set
-		implement_factory=(CASE ifnull(implement_factory,'') WHEN '' THEN #{implement_factory}
-		ELSE concat(implement_factory,',',#{implement_factory}) END),
-		implement_bus_number=(CASE ifnull(implement_bus_number,'') WHEN '' THEN #{implement_bus_number}
-		ELSE concat(implement_bus_number,',',#{implement_bus_number}) END),
-		confirmor=(CASE ifnull(confirmor,'') WHEN '' THEN #{confirmor}
-		ELSE concat(confirmor,',',#{confirmor}) END),
-		confirm_date=(CASE ifnull(confirm_date,'') WHEN '' THEN #{confirm_date}
-		ELSE concat(confirm_date,',',#{confirm_date}) END)
+		<if test="bfilePath!=null and bfilePath!=''">
+			bfile_path = #{bfilePath},
+		</if>
+		<if test="afilePath!=null and afilePath!=''">
+			afile_path = #{afilePath},
+		</if>
+		<if test="scope!=null and scope!=''">
+			scope = #{scope},
+		</if>
+		<if test="usynopsis!=null and usynopsis!=''">
+			usynopsis = #{usynopsis},
+		</if>
+		<if test="beforeDesc!=null and beforeDesc!=''">
+			before_desc = #{beforeDesc},
+		</if>
+		<if test="afterDesc!=null and afterDesc!=''">
+			after_desc = #{afterDesc},
+		</if>
+		memo = #{memo}
 		where id=#{id}
+	</update>
+	<update id="updateQualityStdImplementInfo" parameterType="Map">
+		update BMS_QM_QUALITY_STANDARD_IMPLEMENT_INFO set
+			
+		<if test="implement_bus_number!=null and implement_bus_number!=''">
+			implement_bus_number = #{implement_bus_number},
+		</if>
+		<if test="confirmor!=null and confirmor!=''">
+			confirmor = #{confirmor},
+		</if>
+		<if test="confirm_date!=null and confirm_date!=''">
+			confirm_date = #{confirm_date},
+		</if>
+		implement_factory = #{implement_factory}
+		where id=#{id}
+	</update>
+	<insert id="insertQualityStdImplementInfo" parameterType="Map" useGeneratedKeys="true" keyProperty="id">
+     	<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into BMS_QM_QUALITY_STANDARD_IMPLEMENT_INFO (implement_factory,implement_bus_number,
+		quality_standard_id,confirmor,confirm_date,deleted,editor,edit_date)
+		values (#{implement_factory},#{implement_bus_number},#{quality_standard_id},#{confirmor},#{confirm_date},'0',#{editor},#{edit_date})
+     </insert>
+     
+     <update id="deleteStandardImplementInfo" parameterType="Map">
+		update BMS_QM_QUALITY_STANDARD_IMPLEMENT_INFO set deleted='1'
+		where implement_factory not in 
+		<foreach collection="list" index="index" item="item"
+			open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		and quality_standard_id=#{quality_standard_id}
 	</update>
 </mapper>

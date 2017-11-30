@@ -1,6 +1,6 @@
 var pageSize=1;
 var table;
-var table_height = $(window).height()-280;
+var table_height = $(window).height()-290;
 var checkMap={ '焊装':'焊装', '涂装':'涂装','底盘':'底盘','总装':'总装'};
 $(document).ready(function(){
 	initPage();
@@ -395,6 +395,16 @@ function ajaxQuery(){
         },paiging:true,ordering:false,searching: false,bAutoWidth:false,
 		destroy: true,sScrollY: table_height,sScrollX:true,orderMulti:false,
 		pageLength: 20,pagingType:"full_numbers",lengthChange:false,
+		
+	    dom: 'Bfrtip',
+		lengthMenu: [
+             [ 20, 50, 100, -1 ],
+             [ '显示20行', '显示50行', '显示100行', '全部' ]
+         ],
+         buttons: [
+       	     {extend:'excelHtml5',title:'data_export',className:'black',text:'<i class=\"fa fa-file-excel-o bigger-130\" tooltip=\"导出excel\"></i>'},
+       	     {extend:'pageLength',text:'显示行'}
+       	],
 		language: {
 			emptyTable:"抱歉，未查询到数据！",
 			info:"共计 _TOTAL_ 条，当前第 _PAGE_ 页 共 _PAGES_ 页",
@@ -468,7 +478,7 @@ function ajaxQuery(){
 //		            }
 		          ],
 	});
-	
+	$(".dt-buttons").css("margin-top","-50px").css("margin-left","-10px").find("a").css("border","0px");
 }
 
 function getBusType(){

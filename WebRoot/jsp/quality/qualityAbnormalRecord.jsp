@@ -7,9 +7,14 @@
 		<title>品质异常记录</title>
 		<meta name="description" content="Common Buttons &amp; Icons" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-		<link rel="stylesheet" href="../assets/css/jquery-ui.min.css" />
-		<link rel="stylesheet" href="../assets/css/jquery-ui.custom.min.css" />
+		<link rel="stylesheet" href="../assets/css/fixedColumns.bootstrap.min.css" />
+		<link rel="stylesheet" href="../assets/css/fixedColumns.dataTables.min.css" />
+		<!-- <link rel="stylesheet" href="../css/bootstrap-table.css">
+		<link rel="stylesheet" href="../css/bootstrap-editable.css"> -->
+		<link rel="stylesheet" href="../assets/css/jquery-ui.min.css"  >
+		<link rel="stylesheet" href="../assets/css/buttons.dataTables.css" />
 		<link rel="stylesheet" href="../assets/css/jquery.gritter.css" />
+		<link rel="stylesheet" href="../assets/css/buttons.dataTables.css" />
 		<style type="text/css">
 		.center{padding-left:0px}
 		</style>
@@ -184,17 +189,19 @@
 	</div>
 	</body>
 	<script src="../assets/js/jquery-ui.min.js"></script>
-	<script src="../assets/js/jquery.ui.touch-punch.min.js"></script>
-	<script src="../assets/js/jquery.gritter.min.js"></script>
 	<script src="../assets/js/jquery.dataTables.min.js"></script>
 	<script src="../assets/js/jquery.dataTables.bootstrap.js"></script>
 	<script src="../assets/js/dataTables.fixedColumns.min.js"></script>
+	<script src="../assets/js/dataTables.rowGroup.js"></script>
+	<script src="../assets/js/dataTables.rowGroup.min.js"></script>
+	<script src="../assets/js/ace/elements.onpage-help.js"></script>
+	<script src="../assets/js/ace/ace.onpage-help.js"></script>
 	<script src="../assets/js/bootstrap3-typeahead.js"></script>
-	<script src="../assets/js/ace/elements.fileinput.js"></script>
-	<script type="text/javascript" src="../js/jquery.form.js"></script>
-	<script type="text/javascript" src="../js/datePicker/WdatePicker.js"></script>
-	<script type="text/javascript" src="../js/common.js"></script>
-	<script type="text/javascript" src="../assets/js/bootstrap3-typeahead.js"></script>
-	<script type="text/javascript" src="../js/jsrender.min.js"></script>
+	<script src="../js/jquery.form.js"></script>
+	<script src="../assets/js/jszip.min.js"></script>
+	<script src="../assets/js/dataTables.buttons.js"></script>
+	<script src="../assets/js/buttons.colVis.js"></script>
+	<script src="../assets/js/buttons.html5.js"></script>
+	<script src="../js/common.js"></script>
 	<script type="text/javascript" src="../js/quality/qualityAbnormalRecord.js"></script>
 </html>

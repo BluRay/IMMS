@@ -1425,10 +1425,12 @@ public class QualityController extends BaseController {
 	@ResponseBody
 	public ModelMap showStdRecord() {
 		Map<String, Object> result = new HashMap<String, Object>();
-
+		Map<String, Object> conmap = new HashMap<String, Object>();
 		int id = Integer.parseInt(request.getParameter("id"));
-		
-		Map<String, Object> stdRecord = qualityService.selectStdRecord(id);
+		String implement_factory=request.getParameter("implement_factory");
+		conmap.put("id", id);
+		conmap.put("implement_factory", implement_factory);
+		Map<String, Object> stdRecord = qualityService.selectStdRecord(conmap);
 		result.put("stdRecord",stdRecord);
 		model.addAllAttributes(result);
 
@@ -1596,23 +1598,87 @@ public class QualityController extends BaseController {
 	
 	@RequestMapping("updateStdRecord")
 	@ResponseBody
-	public ModelMap updateStdRecord(){
+	public ModelAndView updateStdRecord(BmsBaseQCStdRecord stdRecord,@RequestParam("afile") MultipartFile afile,
+			@RequestParam("bfile") MultipartFile bfile) {
+		int editor_id =(int) request.getSession().getAttribute("user_id");
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String edit_date = df.format(new Date());
+		String bpath = "docs/upload/qcStandard/";
+		
+		// 把上传的文件放到指定的路径下
+		String path = request.getSession().getServletContext().getRealPath(bpath);
+
+		// 写到指定的路径中
+		File file = new File(path);
+		// 如果指定的路径没有就创建
+		if (!file.exists()) {
+			file.mkdirs();
+		}
+		String afile_db ="";
+		if (afile != null) {
+			if(afile.getOriginalFilename().indexOf(".")>0){
+				afile_db = "qcAfile_"
+						+ edit_date.replace("-", "").replace(":", "").replace(" ", "")
+						+ afile.getOriginalFilename().substring(afile.getOriginalFilename().indexOf("."),
+								afile.getOriginalFilename().length());
+				try {
+					FileUtils.copyInputStreamToFile(afile.getInputStream(), new File(file, afile_db));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				
+				stdRecord.setAfilePath(bpath+ afile_db);
+			}else{
+				stdRecord.setAfilePath(null);
+			}
+		}
+		String bfile_db= "";
+		if (bfile!= null) {
+			if(bfile.getOriginalFilename().indexOf(".")>0){
+				bfile_db= "qcBfile_"
+						+ edit_date.replace("-", "").replace(":", "").replace(" ", "")
+						+ bfile.getOriginalFilename().substring(bfile.getOriginalFilename().indexOf("."),
+								bfile.getOriginalFilename().length());
+				try {
+					FileUtils.copyInputStreamToFile(bfile.getInputStream(), new File(file, bfile_db));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				stdRecord.setBfilePath(bpath+ bfile_db);
+			}else{
+				stdRecord.setBfilePath(null);
+			}
+		}
+		qualityService.updateStdRecord(stdRecord);
+		
+		mv.setViewName("redirect:/quality/qcStdRecord");
+		return mv;
+	}
+	@RequestMapping("addStdImplementInfo")
+	@ResponseBody
+	public ModelMap addStdImplementInfo(){
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String user_name=(String) session.getAttribute("user_name");
 		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("id", request.getParameter("id"));
 		condMap.put("implement_factory", request.getParameter("implement_factory"));
 		condMap.put("implement_bus_number", request.getParameter("implement_bus_number"));
 		condMap.put("confirmor", request.getParameter("confirmor"));
 		condMap.put("confirm_date",  request.getParameter("confirm_date"));
-		condMap.put("id",  Integer.parseInt(request.getParameter("id")));		
+		condMap.put("quality_standard_id",  request.getParameter("quality_standard_id"));		
+		condMap.put("editor", user_name);
+		condMap.put("edit_date", curTime);
 		try{
-			int result=qualityService.updateStdRecord(condMap);
+			int result=qualityService.insertQualityStdImplementInfo(condMap);
 			if(result>0){
-				initModel(true,"更新成功！",null);
+				initModel(true,"保存成功！",null);
 			}else{
-				initModel(false,"更新失败！",null);
+				initModel(false,"保存失败！",null);
 			}
 			
 		}catch(Exception e){
-			initModel(false,"更新失败！",null);
+			initModel(false,"保存失败！",null);
 		}
 		return mv.getModelMap();
 	}

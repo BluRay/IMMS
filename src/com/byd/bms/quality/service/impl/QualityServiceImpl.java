@@ -398,8 +398,13 @@ public class QualityServiceImpl implements IQualityService {
 		return qualityDao.insertStdRecord(stdRecord);
 	}
     // 品质标准更新记录【新增、查询】 add by tangjin
-	public Map<String, Object> selectStdRecord(int recordId) {
-		return qualityDao.selectStdRecord(recordId);
+	public Map<String, Object> selectStdRecord(Map<String,Object> conditionMap) {
+		Map<String,Object> map=qualityDao.selectStdRecord(conditionMap);
+		if(map==null){
+			Integer id=Integer.parseInt(conditionMap.get("id").toString());
+			map=qualityDao.selectStdRecordById(id);
+		}
+		return map;
 	}
 
 	public Map<String, Object> getStdRecordList(
@@ -549,8 +554,31 @@ public class QualityServiceImpl implements IQualityService {
 		return qualityDao.getBusNumber(conMap);
 	}
 	@Override
-	public int updateStdRecord(Map<String, Object> stdRecord) {
+	public int updateStdRecord(BmsBaseQCStdRecord stdRecord) {
+		Integer quality_standard_id=stdRecord.getId();
+		String scope=stdRecord.getScope();
+		Map<String,Object> conMap=new HashMap<String,Object>();
+		conMap.put("quality_standard_id", quality_standard_id);
+		String[] scopeArr=scope.split(",");
+		List<String> list=new ArrayList<String>();
+		for(String str : scopeArr){
+			list.add(str.trim());
+		}
+		conMap.put("list", list);
+		qualityDao.deleteStandardImplementInfo(conMap);
 		return qualityDao.updateStdRecord(stdRecord);
+	}
+	@Override
+	public int insertQualityStdImplementInfo(Map<String, Object> conMap) {
+		String idstr=conMap.get("id")!=null ? conMap.get("id").toString() : "";
+		Integer id=(idstr!="" ? Integer.parseInt(idstr):0);
+		int result=0;
+		if(id==0){
+			result=qualityDao.insertQualityStdImplementInfo(conMap);
+		}else{
+			result=qualityDao.updateQualityStdImplementInfo(conMap);
+		}
+		return result;
 	}
 		
 }

@@ -57,7 +57,8 @@ function ajaxEdit(task_id,task_detail_id,task_content,tech_order_no,switch_mode,
 		var follow_detail=tech_detail.follow_detail;
 		var prod_factory_id=tech_detail.prod_factory_id;
 		var prod_factory=tech_detail.prod_factory;
-		addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id,prod_factory,order_no,mod_factory);		
+		var tech_factory=tech_detail.tech_factory;
+		addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id,prod_factory,tech_factory,order_no,mod_factory);		
 	});		
 	var mode_index=0;
 	//节点前切换
@@ -197,7 +198,7 @@ function getTechList(task_id){
 	});
 	return tech_list;
 }
-function addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id,prod_factory,mod_order_no,mod_factory){
+function addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id,prod_factory,tech_factory,mod_order_no,mod_factory){
 	follow_detail=follow_detail||"";
 	var is_follow=false;
 	$.each(follow_detail.split(";"),function(i,follow){
@@ -232,14 +233,13 @@ function addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id
 	$(tabContent).appendTo($("#new_accordion"));
 	var is_edit = false;
 	if(order_no == mod_order_no)is_edit = true;
-	console.log("-->prod_factory = " + prod_factory.substring(0,prod_factory.indexOf("_")) + ";mod_factory = " + mod_factory);
 	//var is_factory = false;
 	//if(prod_factory.substring(0,prod_factory.indexOf("_")) == mod_factory)is_factory = true;
 	//console.log(is_factory);
-	addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factory_id,prod_factory,is_edit,mod_factory);
+	addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factory_id,prod_factory,tech_factory,is_edit,mod_factory);
 	
 }
-function addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factory_id,prod_factory,is_edit,mod_factory){
+function addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factory_id,prod_factory,tech_factory,is_edit,mod_factory){
 	var factory_disable_obj={};
 	follow_detail=follow_detail||"";
 	$.each(follow_detail.split(";"),function(i,follow){
@@ -250,12 +250,15 @@ function addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factor
 	var factory_select_options=$("#search_factory").html().replace("全部","请选择");
 	taskElement="#new_task"+taskNum;
 	tech_detail_list=tech_detail_list||"";
-	//console.log('---->tech_detail_list = ' + tech_detail_list);
 	if(tech_detail_list.trim().length>0){
 		var tech_detail_arr=tech_detail_list.split(";");
 		if(typeof(prod_factory) != "undefined"){
 			var prod_factory_arr=prod_factory.split(",");
 		}
+		if(typeof(tech_factory) != "undefined"){
+			var tech_factory_arr=tech_factory.split(",");
+		}
+		console.log('---->tech_factory_arr = ' , tech_factory_arr);
 		var content=$("<div id=\"tech_factory_"+taskNum+"\" class=\"tech_factory\"/>");
 		$.each(tech_detail_arr,function(i,tech_detail){
 			var factory=tech_detail.split("||")[0].split("_")[1];
@@ -280,8 +283,9 @@ function addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factor
 			}else{
 				checked="";
 			}
-			if(prod_factory == mod_factory){
-			//if(true){
+			console.log(i + tech_factory_arr[i] + "-->tech_factory = " + tech_factory + ";mod_factory = " + mod_factory);
+			if(tech_factory_arr[i] == mod_factory){
+			//if(prod_factory == mod_factory){
 				var facotory_div=$("<div style='margin-top:10px'><b>生产工厂：</b><span factory_id='"+(prod_factory_id||factory_id)+"'>"+(prod_factory||factory)+"</span></div>");
 				var ckbox=$("<input style=\"height:15px\" name=\"new_tecn_flag\""+
 						" class=\"input-medium\" type=\"checkbox\" "+checked+" "+factory_disable_obj[prod_factory]+">");
@@ -395,7 +399,7 @@ function initTable() {
                 cellStyle:function cellStyle(value, row, index, field) {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};},
     	        formatter:function(value, row, index){
-    	        	console.log('---->assign_date = ' + row['assign_date'])
+    	        	//console.log('---->assign_date = ' + row['assign_date'])
     	        	if(row['assign_date'].trim().length>0){
     	        		//task_id,task_detail_id,task_content,tech_order_no,switch_mode,switch_node,tech_date
     	        		return "<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"分配\" onclick='ajaxEdit(\"" + 
