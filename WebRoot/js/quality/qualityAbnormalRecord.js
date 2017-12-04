@@ -456,7 +456,7 @@ function ajaxQuery(){
 		            {"title":"订单",width:'80',"class":"center","data":"order_no","defaultContent": ""},
 		            //{"title":"车间",width:'90',"class":"center","data":"workshop","defaultContent": ""},
 		            {"title":"问题描述",width:'110',"class":"center","data":"problem_desc","render": function ( data, type, row ) {
-					    return data.length>8 ? '<div title=\''+data+'\'>'+data.substring(0,8)+'...</div>' : data;
+					    return data.length>50 ? '<div title=\''+data+'\'>'+data.substring(0,50)+'...</div>' : data;
 					},"defaultContent": ""},
 		            {"title":"缺陷等级",width:'80',"class":"center","data":"level","defaultContent": ""},
 		            {"title":"处理方式",width:'100',"class":"center","data":"solution","render": function ( data, type, row ) {
@@ -555,7 +555,7 @@ function getBugLevel(){
 		},
 		error: function () {},
 		success: function (response) {
-			var strs = "<option value=''>全部</option>";
+			var strs = "";
 			var map = {};
 		    $.each(response.data, function(index, value) {
 		    	if (!map.hasOwnProperty(value.faultLevel)) {  

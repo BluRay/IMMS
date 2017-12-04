@@ -562,7 +562,7 @@ public class QualityServiceImpl implements IQualityService {
 		String[] scopeArr=scope.split(",");
 		List<String> list=new ArrayList<String>();
 		for(String str : scopeArr){
-			list.add(str.trim());
+			list.add(str.replace("\\s*", "").trim());
 		}
 		conMap.put("list", list);
 		qualityDao.deleteStandardImplementInfo(conMap);

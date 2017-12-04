@@ -554,7 +554,8 @@
 		F.bus_number = (SELECT B.bus_number FROM BMS_PLAN_BUS B WHERE B.VIN = #{bus_number}))
 	</select>
 	<select id="getQmTestCardList" parameterType="String" resultType="Map">
-		SELECT T.bus_number,T.test_node,T.test_result,T.result_judge,T.rework,T.tester,T.test_date FROM BMS_QM_TEST_CARD T
+		SELECT T.bus_number,T.test_node,T.test_result,T.result_judge,T.rework,T.tester,T.test_date,D.test_standard FROM BMS_QM_TEST_CARD T
+		LEFT JOIN BMS_QM_TEST_CARD_TEMPLATE_DETAILS D ON T.test_card_template_detail_id = D.id
 		WHERE (T.bus_number = #{bus_number} OR T.bus_number = (SELECT B.bus_number FROM BMS_PLAN_BUS B WHERE B.VIN = #{bus_number}))
 		ORDER BY T.test_node DESC
 	</select>	
@@ -696,8 +697,11 @@
 		LEFT JOIN BMS_OR_ORDER_CONFIG c on c.id=b.order_config_id 
 		LEFT JOIN BMS_BASE_FACTORY f ON b.factory_id = f.id 
 		LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id = t.id 
-		WHERE b.factory_id =#{factory_id} and b.vin IS NOT NULL and b.left_motor_number IS NOT NULL 
+		WHERE b.vin IS NOT NULL and b.left_motor_number IS NOT NULL 
 		and b.right_motor_number IS NOT NULL
+		<if test="factory_id!=''">
+			AND b.factory_id =#{factory_id}
+		</if>
 		<if test="order_no!=''">
 			and o.order_no= #{order_no}
 		</if>
@@ -716,8 +720,11 @@
 		SELECT count(b.id) FROM BMS_PLAN_BUS b
 		LEFT OUTER JOIN BMS_OR_ORDER o ON b.order_id = o.id
 		LEFT OUTER JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id = t.id
-		WHERE b.factory_id = #{factory_id} and b.vin IS NOT NULL and
+		WHERE b.vin IS NOT NULL and
 		b.left_motor_number IS NOT NULL and b.right_motor_number IS NOT NULL
+		<if test="factory_id!=''">
+			AND b.factory_id =#{factory_id}
+		</if>
 		<if test="order_no!=''">
 			and o.order_no= #{order_no}
 		</if>

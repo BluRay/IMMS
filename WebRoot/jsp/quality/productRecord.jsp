@@ -126,7 +126,7 @@
 				</div>
 				<div class="row" style="margin-top:10px;">
 					<div class="col-xs-12"  >
-						<table id="tableDetail" class="table table-striped table-bordered table-hover " style="font-size: 12px;width:1800px;overflow-x:auto;text-align:center" >
+						<table id="tableDetail" class="table table-striped table-bordered table-hover " style="font-size: 12px;overflow-x:auto;text-align:center" >
 						</table>	
 					</div>
 				</div>

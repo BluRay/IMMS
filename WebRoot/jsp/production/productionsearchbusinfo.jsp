@@ -133,6 +133,7 @@
 											<th style="text-align:center;">序号</th>
 											<th style="text-align:center;">车号</th>
 											<th style="text-align:center;">节点</th>
+											<th style="text-align:center;">检测标准</th>
 											<th style="text-align:center;">检测结果</th>
 											<th style="text-align:center;">结果判定</th>
 											<th style="text-align:center;">返工/返修</th>

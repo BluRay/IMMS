@@ -16,7 +16,7 @@ $(document).ready(function(){
 	
 	$(document).on("change","#search_factory",function(){
 		var factory=$("#search_factory :selected").text();
-		getWorkshopSelect("hrReport/pieceTimeReport",factory,"","#search_workshop",null,"id")
+		getWorkshopSelect("hrReport/staffSalarySubmit",factory,"","#search_workshop",null,"id")
 		var workshop=$("#search_workshop :selected").text();
 		getWorkgroupSelect(factory,workshop,"","#search_workgroup","全部","id")
 		$("#search_team").html("<option value=''>全部</option>");
@@ -88,8 +88,8 @@ $(document).ready(function(){
 function initPage(){	
 	getBusNumberSelect('#nav-search-input');
 	$("#search_form")[0].reset();
-	getFactorySelect("hrReport/pieceTimeReport","","#search_factory",null,"id")	
-	getWorkshopSelect("hrReport/pieceTimeReport",$("#search_factory :selected").text(),"","#search_workshop",null,"id")
+	getFactorySelect("hrReport/staffSalarySubmit","","#search_factory",null,"id")	
+	getWorkshopSelect("hrReport/staffSalarySubmit",$("#search_factory :selected").text(),"","#search_workshop",null,"id")
 	getWorkgroupSelect($("#search_factory :selected").text(),$("#search_workshop :selected").text(),"","#search_workgroup","全部","id")
 	var cur_date=new Date();
 	var c_year=cur_date.getFullYear();

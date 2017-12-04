@@ -144,9 +144,13 @@ function ajaxQuery(){
 		            /*{"title":"备注","class":"center","data":"memo","defaultContent": ""},*/
 		            {"title":"维护人","class":"center","data": "editor","defaultContent": ""},
 		            {"title":"维护时间","class":"center","data":"edit_date","defaultContent": ""},		            	            
-		            {"title":"操作","class":"center","data":"","render":function(data,type,row){
-		            	return "<i class=\"glyphicon glyphicon-search bigger-130 showbus\" title='查看' onclick = 'showInfoPage(" + JSON.stringify(row)+");' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;&nbsp;"+ 
-		            	"<i class=\"ace-icon fa fa-upload bigger-130 editorder\" title='编辑' onclick = 'showEditPage(" + JSON.stringify(row)+ ");' style='color:green;cursor: pointer;'></i>";
+		            {"title":"操作","width":"60","class":"left","data":"","render":function(data,type,row){
+		            	var html="<i class=\"glyphicon glyphicon-search bigger-130 showbus\" title='查看' onclick = 'showInfoPage(" + JSON.stringify(row)+");' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;&nbsp;";
+		            	if(row.record_num==0){
+		            		html+="<i class=\"ace-icon fa fa-upload bigger-130 editorder\" title='编辑' onclick = 'showEditPage(" + JSON.stringify(row)+ ");' style='color:green;cursor: pointer;'></i>";
+		            	}
+		            	return html;
+		            	
 		            	}
 		            }
 		          ]

@@ -176,7 +176,8 @@
      
      <select id="queryPrdRcdOrderTplList" parameterType="Map" resultType="Map">
      	select h.id,t.bus_type_code bus_type,o.order_no,h.order_id,concat(o.order_no,' ',o.order_name,t.bus_type_code,' ',o.order_qty,'台') order_desc,h.bus_type_id,
-     	h.order_config_id,c.order_config_name order_config,h.test_node_id,h.test_node,h.version,h.version_cp,u.username editor,h.edit_date
+     	h.order_config_id,c.order_config_name order_config,h.test_node_id,h.test_node,h.version,h.version_cp,u.username editor,h.edit_date,
+     	(select count(t.bus_number) from BMS_QM_TEST_CARD t where t.test_card_template_head_id=h.id) record_num
      	from BMS_QM_TEST_CARD_TEMPLATE_HEADER h
      	left join BMS_BASE_BUS_TYPE t on h.bus_type_id=t.id
      	left join BMS_OR_ORDER o on o.id=h.order_id
@@ -911,7 +912,7 @@
 	<select id="selectStdRecord" parameterType="Map" resultType="Map">
 		select i.id implement_info_id,t.id quality_standard_id,record_num,bus_type,order_id,workshop,scope,i.implement_factory,i.implement_bus_number,i.confirmor,
 		i.confirm_date,usynopsis,standardfile,bfile_path,afile_path,memo,
-		before_desc,after_desc from BMS_QM_QUALITY_STANDARDS_CHANGE_LOGS t
+		before_desc,after_desc,i.editor implement_editor,i.edit_date implement_edit_date from BMS_QM_QUALITY_STANDARDS_CHANGE_LOGS t
 		left join BMS_QM_QUALITY_STANDARD_IMPLEMENT_INFO i on t.id=i.quality_standard_id
 		 where quality_standard_id=#{id} and i.implement_factory=#{implement_factory}  and i.deleted='0'
 	</select>
@@ -923,7 +924,7 @@
 	<select id="getStdRecordList" parameterType="Map" resultType="Map">
 		select t.id,t.record_num,t.bus_type,t.order_id,t.workshop,t.scope,t.usynopsis,t.afile_path,t.bfile_path,
          t.after_desc,t.before_desc,t.memo,t.creat_date,GROUP_CONCAT(i.implement_factory) implement_factory,
-         u.username editor from BMS_QM_QUALITY_STANDARDS_CHANGE_LOGS t
+         u.username editor,i.editor implement_editor,i.edit_date implement_edit_date from BMS_QM_QUALITY_STANDARDS_CHANGE_LOGS t
          left join BMS_QM_QUALITY_STANDARD_IMPLEMENT_INFO i on i.quality_standard_id=t.id and i.deleted='0'
 		 left join BMS_BASE_USER u on t.creator_id=u.id where 1=1 GROUP BY t.id
 		<if test="recordno!=null and recordno!=''">
@@ -1171,6 +1172,15 @@
     </select>
     <update id="updateStdRecord" parameterType="com.byd.bms.quality.model.BmsBaseQCStdRecord">
 		update BMS_QM_QUALITY_STANDARDS_CHANGE_LOGS set
+		<if test="busType!=null and busType!=''">
+			bus_type = #{busType},
+		</if>
+		<if test="orderId!=null and orderId!=''">
+			order_id = #{orderId},
+		</if>
+		<if test="bfilePath!=null and bfilePath!=''">
+			bfile_path = #{bfilePath},
+		</if>
 		<if test="bfilePath!=null and bfilePath!=''">
 			bfile_path = #{bfilePath},
 		</if>

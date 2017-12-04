@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <meta charset="utf-8" />
-<title>人员去向统计</title>
+<title>人员动向统计</title>
 <meta name="description" content="Common Buttons &amp; Icons" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />	
@@ -34,7 +34,7 @@
 					<ul class="breadcrumb">
 						<li><i class="ace-icon fa fa-home home-icon"></i><a
 							href="/BMS/index">首页</a></li>
-						<li class="active">人员去向统计</li>
+						<li class="active">人员动向统计</li>
 					</ul>
 					<!-- /.breadcrumb -->
 
@@ -54,11 +54,13 @@
 						<tr>
 							<td style="text-align:right">工厂/部门：</td>
 							<td>
+								<!-- <input type="text" id="factory" class="input-medium" style="width:100px;height:30px" /> -->
 								<select id="factory" class="input-medium" style="width:100px; "></select>
 							</td>
 							<td style="text-align:right">车间/科室：</td>
 							<td>
 								<select id="workshop" class="input-medium" style="width:100px; "></select>
+								<!-- <input type="text" id="workshop" class="input-medium" style="width:100px;height:30px" /> -->
 							</td>
 							<td style="text-align:right" >日期：</td>
 							<td >
@@ -75,19 +77,35 @@
 							
 							<td>
 							<input class="btn btn-sm btn-primary" id="btnQuery" value="查询" style="margin-left:5px;top:1px;" type="button">								
-							
+							<!-- <input class="btn btn-sm btn-success" id="btnUpload" value="导入" style="margin-left: 0px;top:1px;" type="button">							 -->
+							</td>
 						</tr>						
 						</table>
 					</form>
 
+					<div id="divBulkAdd" class="well" style="display: none;">
+						<button id="btnBulkHide" type="button" class="close"><i class="ace-icon fa fa-times"></i></button>
+						<form id="attendanceUploadForm" action="#" enctype="multipart/form-data" method="post">
+						<table>
+							<tbody>
+							<tr>
+								<td><input id="file" name="file" accept="*.xlsx" type="file"></td>
+								<td><input id="btn_upload" class="btn btn-sm btn-primary" value="上传并导入" onclick="javascript:return LimitAttach(this.form, this.form.file.value)" type="button"></td>
+								<td></td><td><a id="upload_template" href="../docs/人员考勤模板-计件.xlsx">下载批导模板</a></td>
+							</tr>
+							</tbody>
+						</table>
+						</form>
+					</div>
+		            
 					<div class="row">
 						<div class="col-xs-12" >						
-							<table id="attendanceTable" style="table-layout: fixed;display:none;font-size:12px;text-align:center;width: 3500px;max-width:3500px;" class="table table-bordered table-striped" > <!--  -->
+							<table id="attendanceTable" style="table-layout: fixed;display:none;font-size:12px;text-align:center;width: 3500px;max-width:3500px;" class="table table-bordered table-striped" >
 								<thead>
 									<tr id="">
-										<th style="text-align:center;width:100px" rowspan=2>工厂/部门</th>
-										<th style="text-align:center;width:100px;" rowspan=2>车间/科室</th>
-										<!-- <th style="text-align:center;width:90px;" rowspan=2>班组</th> -->
+										<th style="text-align:center;" rowspan=2>工厂/部门</th>
+										<th style="text-align:center;" rowspan=2>车间/科室</th>
+										<th style="text-align:center;" rowspan=2>班组</th>
 										<th style="text-align:center;"colspan=2 >直接人力（计件）</th>
 										<th style="text-align:center;"colspan=2>短期工</th>
 										<th style="text-align:center;" colspan=5>人数差异原因分类</th>
@@ -144,11 +162,11 @@
 								</tbody>
 							</table>
 							
-							<table id="attendanceTable_hour" style="display:none;table-layout: fixed;font-size:12px;text-align:center;width: 3500px;max-width:3500px;" class="table table-bordered table-striped" > <!--  -->
+							<table id="attendanceTable_hour" style="display:none;table-layout: fixed;text-align:center;font-size:12px;width: 3500px;max-width:3500px;" class="table table-bordered table-striped" > <!--  -->
 								<thead>
 									<tr id="">
-										<th style="text-align:center;width:100px" rowspan=2>工厂/部门</th>
-										<th style="text-align:center;width:100px;" rowspan=2>车间/科室</th>
+										<th style="text-align:center;width:120" rowspan=2>工厂/部门</th>
+										<th style="text-align:center;width:120;" rowspan=2>车间/科室</th>
 										<!-- <th style="text-align:center;width:90px;" rowspan=2>班组</th> -->
 										<th style="text-align:center;"colspan=2 >辅助人力（计时）</th>
 										<!-- <th style="text-align:center;"colspan=2>短期工</th> -->
@@ -233,7 +251,7 @@
 		<script src="../assets/js/buttons.html5.js"></script>
 		<script src="../assets/js/jquery.gritter.min.js"></script>
 		<script src="../js/common.js"></script>
-		<script src="../js/hr/attendanceReport.js"></script>
+		<script src="../js/hr/attendanceUpload.js"></script>
 </body>
 
 </html>

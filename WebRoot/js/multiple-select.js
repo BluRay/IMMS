@@ -270,7 +270,7 @@
                         selected ? ' checked="checked"' : '',
                         disabled ? ' disabled="disabled"' : '',
                         sprintf(' data-group="%s"', group)),
-                    sprintf('&nbsp;&nbsp;%s', text),
+                    sprintf(' %s', text),
                     '</label>',
                     '</li>'
                 ].join(''));

@@ -180,6 +180,7 @@ function ajaxQueryTab03(){
     			$("<td style=\"text-align:center;padding:3px\" />").html(index + 1).appendTo(tr);
     			$("<td style=\"text-align:center;padding:3px\" />").html(value.bus_number).appendTo(tr);
     			$("<td style=\"text-align:center;padding:3px\" />").html(value.test_node).appendTo(tr);
+    			$("<td style=\"text-align:center;padding:3px\" />").html(value.test_standard).appendTo(tr);
     			$("<td style=\"text-align:center;padding:3px\" />").html(value.test_result).appendTo(tr);
     			$("<td style=\"text-align:center;padding:3px\" />").html(value.result_judge).appendTo(tr);
     			$("<td style=\"text-align:center;padding:3px\" />").html(value.rework).appendTo(tr);

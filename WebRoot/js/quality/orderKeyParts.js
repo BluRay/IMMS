@@ -65,7 +65,7 @@ function drawKeyPartsTable(tableId,data){
 		            {"title":"装配车间","class":"center","data":"workshop","defaultContent":""},
 		            {"title":"工序","class":"center","data":"process","defaultContent": ""},	
 		            {"title":"3C件","class":"center","data":"ccc","defaultContent": "","width":"6%"},
-		            {"title":"3C编号","class":"center","data":"cccNo","defaultContent": ""},	
+		            {"title":"批次","class":"center","data":"cccNo","defaultContent": ""},	
 		          ]	
 	});
 }

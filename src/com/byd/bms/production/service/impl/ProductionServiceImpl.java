@@ -393,7 +393,6 @@ public class ProductionServiceImpl implements IProductionService {
 					insertList.add(bus);
 				}
 			}
-			
 			for(Map<String,Object>bus:updateList){
 				StringBuffer sb=new StringBuffer("update PRINT_TABLE set ");
 				sb.append("CLXH='").append(bus.get("vehicle_model")).append("',");

@@ -95,7 +95,7 @@ function ajaxQuery(){
 	        {extend:'pageLength',text:'显示20行'}
 	       
 	    ],
-        rowsGroup:[0,1,2,3,4,5,6],
+        rowsGroup:[0,1,2,3,4],
 		paiging:true,
 		ordering:false,
 		searching: false,

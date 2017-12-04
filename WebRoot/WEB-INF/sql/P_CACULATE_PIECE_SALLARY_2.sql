@@ -36,14 +36,13 @@ BEGIN
 	#select * from staff_hours_count;
 
 	#班组计件工资总额：班组承包单价*车间产量  本车间产量：以计划科发出的产量数量为准
-
 	drop TEMPORARY TABLE IF EXISTS TEAM_PRICE_SUM;
 	create TEMPORARY TABLE TEAM_PRICE_SUM ENGINE = MEMORY as 
-	select sum((p.qty+(select s.bonus from staff_hours_count s where s.order_id=p.order_id and s.workshop=p.workshop limit 1))
+	select (sum(p.qty)+(select s.bonus from staff_hours_count s where s.order_id=p.order_id and s.workshop=p.workshop limit 1))
 	* ifnull((select wp.standard_price from BMS_HR_WORKGROUP_PRICE wp 
 		where wp.factory=q_factory and wp.workshop=q_workshop and wp.workgroup=q_workgroup and wp.team=q_team
 	and wp.order_id=p.order_id and wp.effective_date<=p.cal_date
-	order by wp.effective_date desc limit 1),0)) total_price, p.workshop,p.order_id
+	order by wp.effective_date desc limit 1),0) total_price, p.workshop,p.order_id
 	from(select count(b.id) qty,'焊装' workshop,b.order_id,substring(b.welding_offline_date,1,10) cal_date
 		from BMS_PLAN_BUS b
 		left join BMS_BASE_FACTORY f on b.factory_id=f.id
@@ -68,16 +67,19 @@ BEGIN
 		where f.factory_name=q_factory and substring(b.assembly_offline_date,1,7)=q_month
 		group by substring(b.assembly_offline_date,1,10),b.order_id
 	union all
-		select ifnull(sum(s.quantity),0) qty,'自制件' workshop,s.order_id,s.supply_date cal_date
+		select ifnull(sum(s.quantity),0) qty,'自制件' workshop,s.order_id,substring(s.supply_date,1,10) cal_date
 		from BMS_PD_WORKSHOP_SUPPLY s
 		left join BMS_BASE_FACTORY f ON s.factory_id=f.id
 		where supply_workshop='自制件' and receive_workshop='部件' and substring(s.supply_date,1,7)=q_month and f.factory_name=q_factory
+		group by substring(s.supply_date,1,10),s.order_id
 	union all
-		select ifnull(sum(pf.offline_real_qty),0) qty,'部件' workshop,pf.order_id,pf.prod_date cal_date
+		select ifnull(sum(pf.offline_real_qty),0) qty,'部件' workshop,pf.order_id,substring(pf.prod_date,1,10) cal_date
 		from BMS_PD_PARTS_PLAN_FINISH pf
 		left join BMS_BASE_FACTORY f ON pf.factory_id=f.id
 		left join BMS_BASE_KEY k on k.value=pf.parts_id and k.key_code='BASE_PARTS'
-		where substring(pf.prod_date,1,7)=q_month and k.key_name='喷砂' and f.factory_name=q_factory) p
+		where substring(pf.prod_date,1,7)=q_month and k.key_name='喷砂' and f.factory_name=q_factory
+		group by substring(pf.prod_date,1,10),pf.order_id
+		) p
 	where p.workshop=q_workshop
 	group by p.workshop,p.order_id;
 	

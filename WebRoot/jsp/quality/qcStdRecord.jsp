@@ -125,7 +125,7 @@
 							</tr>
 							<tr style="height:40px">
 								<td align="right" style="width:100px">更新前描述：</td>
-								<td colspan=3><textarea class="input-medium" id="before_desc_show" style="width:400px;" rows="1" name="beforeDesc"></textarea></td>
+								<td colspan=3><textarea class="input-medium" style="width:400px;" rows="1" name="beforeDesc"></textarea></td>
 							</tr>
 							<tr style="height:40px">
 								<td align="right" style="width:100px">更替后附件：</td>
@@ -212,6 +212,15 @@
 								<input id="confirm_date_submit" style="width:150px" type="text" onClick="WdatePicker({el:'confirm_date_submit',dateFmt:'yyyy-MM-dd'});">
 							</td>
 						</tr>
+						<tr style="height:40px;display:none" id="edit_info_tr">
+							<td align="right" style="width:100px">* 录入人：</td>
+							<td style="width:150px">
+								<input type="text" class="input-medium" style="width:150px;height:30px;" id="editor_submit" readonly="readonly"/>
+							<td align="right" style="width:100px">* 录入时间：</td>
+							<td style="width:150px">
+								<input id="edit_date_submit" style="width:150px" type="text" readonly="readonly"/>
+							</td>
+						</tr>
 					</table>
 				</div>
 				<div id="dialog-edit" class="hide">
@@ -220,20 +229,25 @@
 							<tr style="height:40px">
 								<td align="right" style="width:100px">* 记录编号：</td>
 								<td style="width:150px">
-									<input type="text" class="input-medium" id="recordno_show" style="width:150px"/>
+									<input type="text" class="input-medium" id="recordno_show" style="width:150px" readonly="readonly"/>
 									<input type='hidden' id="id_show" name="id">
 								</td>
-								<td align="right" style="width:100px">* 适用车型：</td>
-								<td style="width:150px"><input type="text" name="busType" class="input-medium" id="bustype_show" style="width:150px"/></td>
+								<td align="right" style="width:100px">* 适用车间：</td>
+								<td style="width:150px">
+<!-- 									<input type="text" class="input-medium" name="workshop" style="width:150px;height:30px;" id="workshop_show" readonly="readonly"/> -->
+								    <select name="workshop" id="workshop_show" class="workshop" style="width:150px;height:30px;">
+								    </select>
+								</td>
 							</tr>
 							<tr style="height:40px">
 								<td align="right" style="width:100px">* 适用订单：</td>
-								<td style="width:150px">
-									<input type="text" class="input-medium" name="orderId" style="width:150px;height:30px;" id="order_show"/>
-								<td align="right" style="width:100px">* 适用车间：</td>
-								<td style="width:150px">
-									<input type="text" class="input-medium" name="workshop" style="width:150px;height:30px;" id="workshop_show"/>
+								<td colspan=3>
+									<input type="text" class="input-medium" name="orderId" style="width:400px;height:30px;" id="order_show"/>
 								</td>
+							</tr>
+							<tr style="height:40px">
+								<td align="right" style="width:100px">* 适用车型：</td>
+								<td colspan=3><input type="text" name="busType" class="input-medium" id="bustype_show" style="width:400px"/></td>
 							</tr>
 							<tr style="height:40px">
 								<td align="right" style="width:100px">适用范围：</td>

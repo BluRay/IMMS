@@ -107,7 +107,7 @@ function ajaxQuery(){
 		serverSide: true,
 		fixedColumns:   {
             leftColumns: 0,
-            rightColumns:1
+            rightColumns:0
         },
         paging:true,
 		ordering:false,
@@ -202,7 +202,12 @@ function ajaxQuery(){
                 		if(implement_factory!=undefined && implement_factory.indexOf(dataArr[i])>=0){
                 			result+=dataArr[i]+";";
                 		}else{
-                			result+="<a style='cursor:pointer' onclick=openDialogEdit(\'"+$.trim(dataArr[i])+"\',\'"+row.id+"\')>"+dataArr[i]+"</a>"+";";
+                			if((i+1)%2==0){
+                				result+= "<a style='cursor:pointer' onclick=openDialogEdit(\'"+$.trim(dataArr[i])+"\',\'"+row.id+"\')>"+dataArr[i]+"</a>"+";<br>";
+                			}else{
+                				result+="<a style='cursor:pointer' onclick=openDialogEdit(\'"+$.trim(dataArr[i])+"\',\'"+row.id+"\')>"+dataArr[i]+"</a>"+";";
+                			}
+                			
                 		}
                 	}
                 	result=result.substring(0,result.length-1);
@@ -222,7 +227,11 @@ function ajaxQuery(){
             	if(data!='' && data!=undefined){
             		var dataArr=data.split(",");
                 	for(var i=0;i<dataArr.length;i++){
-            			result+="<a style='cursor:pointer' onclick=openDialogDisplay(\'"+$.trim(dataArr[i])+"\',\'"+row.id+"\')>"+dataArr[i]+"</a>"+";";
+            			if((i+1)%2==0){
+            				result+= "<a style='cursor:pointer' onclick=openDialogDisplay(\'"+$.trim(dataArr[i])+"\',\'"+row.id+"\')>"+dataArr[i]+"</a>"+";<br>";
+            			}else{
+            				result+="<a style='cursor:pointer' onclick=openDialogDisplay(\'"+$.trim(dataArr[i])+"\',\'"+row.id+"\')>"+dataArr[i]+"</a>"+";";
+            			}
                 	}
                 	result=result.substring(0,result.length-1);
             	}
@@ -271,6 +280,10 @@ function openDialogEdit(factory,id){
 	$("#busnumber_submit").val("");
 	$("#confirmor_submit").val("");
 	$("#confirm_date_submit").val("");
+	$("#edit_info_tr").hide();
+	$('#busnumber_submit').removeAttr("readonly");
+	$('#confirmor_submit').removeAttr("readonly");
+	$('#confirm_date_submit').removeAttr("readonly");
 	$.ajax({
 		url:"showStdRecord",
 		type: "post",
@@ -340,6 +353,10 @@ function openDialogDisplay(factory,id){
 	$("#busnumber_submit").val("");
 	$("#confirmor_submit").val("");
 	$("#confirm_date_submit").val("");
+	$("#edit_info_tr").show();
+	$('#busnumber_submit').attr("readonly",true);
+	$('#confirmor_submit').attr("readonly",true);
+	$('#confirm_date_submit').attr("readonly",true);
 	$.ajax({
 		url:"showStdRecord",
 		type: "post",
@@ -358,7 +375,8 @@ function openDialogDisplay(factory,id){
 			$('#scope_submit').val(response.stdRecord.scope);
 			$('#before_desc_submit').val(response.stdRecord.before_desc);
 			$('#after_desc_submit').val(response.stdRecord.after_desc);
-			
+			$('#editor_submit').val(response.stdRecord.implement_editor);
+			$('#edit_date_submit').val(response.stdRecord.implement_edit_date);
 			$('#implement_factory_submit').val(factory);
 			var val=$('#urlPath').val();
 			if(response.stdRecord.bfile_path!=null){
@@ -377,13 +395,13 @@ function openDialogDisplay(factory,id){
 	})
 	var dialog = $( "#dialog-factory" ).removeClass('hide').dialog({
 		width:660,
-		height:600,
+		height:620,
 		modal: true,
 		title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-gear green"></i> 工厂反馈查看</h4></div>',
 		title_html: true,
 		buttons: [ 
 			{
-				text: "取消",
+				text: "关闭",
 				"class" : "btn btn-minier",
 				click: function() {
 					$( this ).dialog( "close" ); 
@@ -396,11 +414,17 @@ function show(id){
 	$('.updatefile').hide();
 	$("#multiple_factory_show").hide();
 	getFactorySelect("quality/qcStdRecord",'',"#multiple_factory_show",null,'name');
+	$('#usynopsis_show').attr("readonly",true);
+	$('#order_show').attr("readonly",true);
+	$('#workshop_show').attr("readonly",true);
+	$('#bustype_show').attr("readonly",true);
+	$('#before_desc_show').attr("readonly",true);
+	$('#after_desc_show').attr("readonly",true);
+	$('#memo_show').attr("readonly",true);
 	$("#multiple_factory_show").multipleSelect({
         selectAll: true
     });
 	$("#scope_show").hide();
-	//$("#multiple_factory_show").siblings().find('.ms-choice').hide();
 	$.ajax({
 		url:"showStdRecord",
 		type: "post",
@@ -414,7 +438,7 @@ function show(id){
 			$('#afile_path_show').attr("href",val+response.stdRecord.afile_path);
 			$('#usynopsis_show').val(response.stdRecord.usynopsis);
 			$('#order_show').val(response.stdRecord.order_id);
-			$('#workshop_show').val(response.stdRecord.workshop);
+			$('#workshop_show option[value='+response.stdRecord.workshop+']').attr("selected",true);
 			$('#scope_show').val(response.stdRecord.scope);
 			$("#multiple_factory_show").siblings().find('.ms-choice').children('span').text(response.stdRecord.scope);
 			$('#before_desc_show').val(response.stdRecord.before_desc);
@@ -433,13 +457,13 @@ function show(id){
 	})
 	var dialog = $( "#dialog-edit" ).removeClass('hide').dialog({
 		width:620,
-		height:580,
+		height:600,
 		modal: true,
 		title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-gear green"></i> 品质标准更新记录查看</h4></div>',
 		title_html: true,
 		buttons: [ 
 			{
-				text: "取消",
+				text: "关闭",
 				"class" : "btn btn-minier",
 				click: function() {
 					$( this ).dialog( "close" ); 
@@ -454,11 +478,16 @@ function edit(id){
 	$("#scope_show").hide();
 	getFactorySelect("quality/qcStdRecord",'',"#multiple_factory_show",null,'name');
 	$("#multiple_factory_show").hide();
-	
+	$('#usynopsis_show').removeAttr("readonly");
+	$('#order_show').removeAttr("readonly");
+	$('#workshop_show').removeAttr("readonly");
+	$('#bustype_show').removeAttr("readonly");
+	$('#before_desc_show').removeAttr("readonly");
+	$('#after_desc_show').removeAttr("readonly");
+	$('#memo_show').removeAttr("readonly");
 	$("#multiple_factory_show").multipleSelect({
         selectAll: true
     });
-	//$("#multiple_factory_show").siblings().find('.ms-choice').hide();
 	$.ajax({
 		url:"showStdRecord",
 		type: "post",
@@ -473,7 +502,7 @@ function edit(id){
 			$('#afile_path_show').attr("href",val+response.stdRecord.afile_path);
 			$('#usynopsis_show').val(response.stdRecord.usynopsis);
 			$('#order_show').val(response.stdRecord.order_id);
-			$('#workshop_show').val(response.stdRecord.workshop);
+			$('#workshop_show option[value='+response.stdRecord.workshop+']').attr("selected",true);
 			var scope=response.stdRecord.scope;
 			$('#scope_show').val(scope);
 			$("#multiple_factory_show").siblings().find('.ms-choice').children('span').text(scope);
@@ -502,7 +531,7 @@ function edit(id){
 	})
 	var dialog = $( "#dialog-edit" ).removeClass('hide').dialog({
 		width:620,
-		height:580,
+		height:600,
 		modal: true,
 		title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-gear green"></i> 品质标准更新记录查看</h4></div>',
 		title_html: true,

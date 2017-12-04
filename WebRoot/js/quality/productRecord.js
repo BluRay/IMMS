@@ -240,7 +240,7 @@ function drawTplDetailTable(tableId,data,editable){
 		autoWidth:false,
 		destroy: true,
 		paginate:false,
-		rowsGroup:[0,1,6],
+		rowsGroup:[0,1,7],
 		fixedColumns:   {
             leftColumns: 2,
             rightColumns:1
@@ -258,7 +258,7 @@ function drawTplDetailTable(tableId,data,editable){
 		},
 	columnDefs: [
 	         {
-	            "targets":[3],
+	            "targets":[4],
 	            "render":function(data,type,row,meta){
 	            	var el= "<span class=\"block input-icon input-icon-right\"><input  class=\"input-medium test_result\" style='text-align:center;width:100%;height:30px' type=\"text\" value=\""+(data||"")+
 	            	"\" fault_id=\""+row.fault_id+"\">"
@@ -290,24 +290,11 @@ function drawTplDetailTable(tableId,data,editable){
 	             }
 	         },
 	         {
-	        	 "targets":[4],
-	        	 "render":function(data,type,row,meta){
-		            	var el= "<select  class=\"input-medium judge\" style='width:80px;text-align:center'><option value='合格' selected>合格</option><option value='不合格'>不合格</option></select>";
-		            	if(data=="不合格"){
-		            		el= "<select  class=\"input-medium judge\" style='width:80px;text-align:center'><option value='合格' >合格</option><option value='不合格' selected>不合格</option></select>";
-		            	}
-		            	if(!editable){
-		            		el=data;
-		            	}
-		            	return el;
-		            }
-	         },
-	         {
 	        	 "targets":[5],
 	        	 "render":function(data,type,row,meta){
-		            	var el= "<select  class=\"input-medium rework\" style='width:100%;text-align:center'><option value='' selected><option value='合格'>合格</option><option value='不合格'>不合格</option></select>";
+		            	var el= "<select  class=\"input-medium judge\" style='width:80px;text-align:center'><option value='合格' selected>合格</option><option value='不合格'>不合格</option><option value='让步放行'>让步放行</option></select>";
 		            	if(data=="不合格"){
-		            		el= "<select  class=\"input-medium rework\" style='width:100%;text-align:center'><option value=''><option value='合格' >合格</option><option value='不合格' selected>不合格</option></select>";
+		            		el= "<select  class=\"input-medium judge\" style='width:80px;text-align:center'><option value='合格' >合格</option><option value='不合格' selected>不合格</option><option value='让步放行'>让步放行</option></select>";
 		            	}
 		            	if(!editable){
 		            		el=data;
@@ -318,7 +305,20 @@ function drawTplDetailTable(tableId,data,editable){
 	         {
 	        	 "targets":[6],
 	        	 "render":function(data,type,row,meta){
-		            	var el= "<input  class=\"input-medium tester\" style='text-align:center;height:30px'  type=\"text\" value='"+(row.tester||"")+"'>";
+		            	var el= "<select  class=\"input-medium rework\" style='width:80px;text-align:center'><option value='' selected><option value='合格'>合格</option><option value='不合格'>不合格</option><option value='让步放行'>让步放行</option></select>";
+		            	if(data=="不合格"){
+		            		el= "<select  class=\"input-medium rework\" style='width:80px;text-align:center'><option value=''><option value='合格' >合格</option><option value='不合格' selected>不合格</option><option value='让步放行'>让步放行</option></select>";
+		            	}
+		            	if(!editable){
+		            		el=data;
+		            	}
+		            	return el;
+		            }
+	         },
+	         {
+	        	 "targets":[7],
+	        	 "render":function(data,type,row,meta){
+		            	var el= "<input  class=\"input-medium tester\" style='width:100%;text-align:center;height:30px'  type=\"text\" value='"+(row.tester||"")+"'>";
 		            	if(!editable){
 		            		el=row.tester;
 		            	}
@@ -326,9 +326,9 @@ function drawTplDetailTable(tableId,data,editable){
 		            }
 	         },
         {
-       	 "targets":[7],
+       	 "targets":[8],
        	 "render":function(data,type,row,meta){
-	       		var el= "<input  class=\"input-medium memo\" style='text-align:center;height:30px'  type=\"text\" value=\""+(data||"")+"\">";
+	       		var el= "<input  class=\"input-medium memo\" style='width:100%;text-align:center;height:30px'  type=\"text\" value=\""+(data||"")+"\">";
 	        	if(!editable){
 	        		el=data;
 	        	}
@@ -337,15 +337,16 @@ function drawTplDetailTable(tableId,data,editable){
         }],
 		data:data,
 		columns: [
-		          	{"title":"序号","class":"center","width":"5%","data":"test_item","defaultContent": ""},
-		            {"title":"检验项目","width":"12%","class":"center","data":"test_item","defaultContent": ""},
-		            {"title":"检验标准","width":"25%","class":"center","data":"test_standard","defaultContent": ""},		          
-		            {"title":"检验结果","width":"80","class":"center","data": "test_result","defaultContent": ""},
-		            {"title":"判定","width":"10%","class":"center","data": "result_judge","defaultContent": ""},
-		            {"title":"复检判定","width":"10%","class":"center","data": "rework","defaultContent": ""},
-		            {"title":"检验员","width":"12%","class":"center","data": "test_item","defaultContent": "",},
-		            {"title":"备注","width":"12%","class":"center","data": "memo","defaultContent": ""},
-		            {"title":"是否必录项","width":"5%","class":"center is_null","data":"is_null","defaultContent": ""},		
+		          	{"title":"序号","class":"center","width":"50","data":"test_item","defaultContent": ""},
+		            {"title":"检验项目","width":"120","class":"center","data":"test_item","defaultContent": ""},		           
+		            {"title":"检验标准","width":"200","class":"center","data":"test_standard","defaultContent": ""},	
+		            {"title":"是否必录项","width":"80","class":"center is_null","data":"is_null","defaultContent": ""},	
+		            {"title":"检验结果","width":"100","class":"center","data": "test_result","defaultContent": ""},
+		            {"title":"判定","width":"60","class":"center","data": "result_judge","defaultContent": ""},
+		            {"title":"复检判定","width":"60","class":"center","data": "rework","defaultContent": ""},
+		            {"title":"检验员","width":"80","class":"center","data": "test_item","defaultContent": "",},
+		            {"title":"备注","width":"100","class":"center","data": "memo","defaultContent": ""},
+		           	
 		         	
 		          ]	
 	});
@@ -964,7 +965,7 @@ function showEditPage(row){
 		$("#btnShowTpl").attr("disabled",true);
 	}
 	var dialog = $( "#dialog-config" ).removeClass('hide').dialog({
-		width:1100,
+		width:1300,
 		height:550,
 		modal: true,
 		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i>成品记录表录入</h4></div>",
