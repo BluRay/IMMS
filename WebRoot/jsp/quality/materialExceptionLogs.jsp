@@ -10,6 +10,8 @@
 		<link rel="stylesheet" href="../assets/css/jquery-ui.min.css" />
 		<link rel="stylesheet" href="../assets/css/jquery-ui.custom.min.css" />
 		<link rel="stylesheet" href="../assets/css/jquery.gritter.css" />
+		<link rel="stylesheet" href="../assets/css/fixedColumns.bootstrap.min.css" />
+        <link rel="stylesheet" href="../assets/css/fixedColumns.dataTables.min.css" />
 	</head>
 	<body class="no-skin" style="font-family: 'Microsoft YaHei';">
 		<!-- 头 -->
@@ -70,6 +72,7 @@
 								<td>
 								   <input id="btnQuery" type="button" class="btn btn-sm btn-primary" value="查询" style="margin-left: 10px;"></input>
 								   <input id="btnAdd" type="button" class="btn btn-sm btn-success" value="新增" style="margin-left: 2px;"></input>
+								   <input id="btnImport" type="button" class="btn btn-sm btn-info" value="导入" style="margin-left: 2px;"></input>
 								</td>
 							</tr>
 						</table>	
@@ -259,7 +262,28 @@
 				</form>
 				</div>
 			</div>
-
+            <div id="dialog-import" class="hide">
+				<div id="" class="form-horizontal">
+					<div class="form-group" id="importDiv">					
+					    <label class="col-sm-2 control-label no-padding-right" for="">*&nbsp;文件：</label>
+						<form id="uploadForm" action="" enctype="multipart/form-data" method="post">
+							<div class="col-sm-4" style="margin-left:-10px;">
+								<input id="file" style="margin-left:0px;padding:0px 0px;font-size: 12px" class="btn btn-info btn-small" name="file" type="file"> 				
+							</div>
+							<div class="col-sm-4">
+								<input id="btn_upload" style="padding:0px 0px;font-size: 12px;height:30px;width:60px" class="btn btn-primary" value="导入" onclick="javascript:return upload(this.form, this.form.file.value)" type="button"> 
+								<a href="../docs/materialExceptionLogs.xls">下载模板</a>
+							</div>							
+						</form>
+					</div>									
+				</div>
+				<div class="form-group">					
+					<div class="col-sm-12">			
+						<table class="table table-striped table-bordered table-hover" style="width: 2200px;font-size:12px;overflow-x:auto;table-layout:fixed;" id="importData">
+						</table>
+					</div>
+				</div>
+		     </div>
 			<!-- 脚 -->
 			<%-- <jsp:include page="footer.jsp" flush="true"/> --%>
 			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse"><i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i></a>

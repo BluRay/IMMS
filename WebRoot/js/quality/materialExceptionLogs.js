@@ -34,6 +34,17 @@ $(document).ready(function(){
 			alert("请上传正确的文件!");
 			return false;
 	    });
+		$('#file').ace_file_input({
+			no_file:'请选择要上传的文件...',
+			btn_choose:'选择文件',
+			btn_change:'重新选择',
+			droppable:false,
+			onchange:null,
+			thumbnail:false, //| true | large
+			allowExt: ['xlsx','xls'],
+		}).on('file.error.ace', function(event, info) {
+			alert("Please Choose xls File!");
+	    });
 		ajaxQuery();
 	}
 	
@@ -81,7 +92,180 @@ $(document).ready(function(){
 				]
 		});
 	});
-	
+	$("#btnImport").click(function(){
+		if($.fn.dataTable.isDataTable("#importData")){
+			$('#importData').DataTable().destroy();
+			$('#importData').empty();
+		}
+		$("#importDiv").show();
+		var dialog = $( "#dialog-import" ).removeClass('hide').dialog({
+			width:1200,
+			height:600,
+			modal: true,
+			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i>物料异常记录导入</h4></div>",
+			title_html: true,
+			buttons: [ 
+				{
+					text: "取消",
+					"class" : "btn btn-minier",
+					click: function() {
+						$( this ).dialog( "close" ); 
+					} 
+				},
+				{
+					text: "保存",
+					"class" : "btn btn-primary btn-minier",
+					click: function() {
+						var trs=$("#importData tbody").find("tr");
+						if(trs.length==0){
+							alert("没有可保存的数据");
+							return false;
+						}
+						var save_flag=true;
+						var addList=[];
+						$.each(trs,function(i,tr){
+							var tds=$(tr).children("td");
+							var error=$(tds).eq(17).children().eq(0).text();
+							if(error!=''){
+								save_flag=false;
+							}
+							var data={};
+							data.material = $(tds).eq(0).html();
+							data.occur_date = $(tds).eq(1).html();
+							data.factory_id = $(tds).eq(17).children().eq(1).val();
+							data.workshop_id = $(tds).eq(17).children().eq(2).val();
+							data.order_id = $(tds).eq(17).children().eq(3).val();
+							data.bus_type_id = $(tds).eq(17).children().eq(4).val();
+							data.description = $(tds).eq(6).html();
+							data.tmp_measures = $(tds).eq(7).html();
+							data.fault_reason = $(tds).eq(8).html();
+							data.imp_measure = $(tds).eq(9).html();
+							data.bug_level = $(tds).eq(10).html();
+							data.resp_unit = $(tds).eq(11).html();
+							data.resp_person = $(tds).eq(12).html();
+							data.verify_result = $(tds).eq(13).html();
+							data.verifer = $(tds).eq(14).html();
+							data.expc_finish_date = $(tds).eq(15).html();
+							data.memo = $(tds).eq(16).html();
+							addList.push(data);
+						});
+						if(save_flag){
+							$.ajax({
+								url:'saveMaterialExceptionLogsByBatch',
+								method:'post',
+								dataType:'json',
+								async:false,
+								data:{
+									"addList":JSON.stringify(addList)
+								},
+								success:function(response){
+						            if(response.success){
+						            	$( "#dialog-import" ).dialog("close");
+						            	$.gritter.add({
+											title: 'Message：',
+											text: "<h5>保存成功</h5>",
+											class_name: 'gritter-info'
+										});
+						            }else{
+						            	$.gritter.add({
+											title: 'Message：',
+											text: "<h5>保存失败</h5>",
+											class_name: 'gritter-info'
+										});
+						            }
+								}
+							});
+						}else{
+							alert("导入数据存在异常,请修改后在导入");
+						}
+					} 
+				}
+			]
+		});
+	});
+	$("#btn_upload").click (function () {
+		if($("#file").val()==''){
+			alert("请选择导入文件");
+			return false;
+		}
+		$("#uploadForm").ajaxSubmit({
+			url:"uploadMaterialExceptionLogs",
+			type: "post",
+			dataType:"json",
+			success:function(response){
+				if(response.success){	
+					if($.fn.dataTable.isDataTable("#importData")){
+						$('#importData').DataTable().destroy();
+						$('#importData').empty();
+					}
+					var datalist=response.data;
+					var columns=[
+			            {"title":"物料名称","width":"100","class":"center","data":"material","defaultContent": ""},
+			            {"title":"发生日期","width":"80","class":"center","data":"occur_date","defaultContent": ""},
+			            {"title":"发生工厂","width":"75","class":"center","data": "factory","defaultContent": ""},
+			            {"title":"发生车间","width":"70","class":"center","data":"workshop","defaultContent": ""},
+			            {"title":"订单编号","width":"80","class":"center","data":"order_no","defaultContent": ""},
+			            {"title":"车型","width":"50","class":"center","data": "bus_type","defaultContent": ""},
+			            {"title":"异常描述","class":"center","data":"description","defaultContent": ""},
+			            {"title":"临时措施","class":"center","data":"tmp_measures","defaultContent": ""},
+			            {"title":"原因分析","class":"center","data": "fault_reason","defaultContent": ""},
+			            {"title":"改善措施","class":"center","data":"imp_measure","defaultContent": ""},
+			            {"title":"严重等级","width":"70","class":"center","data":"bug_level","defaultContent": ""},
+			            {"title":"责任单位","width":"80","class":"center","data": "resp_unit","defaultContent": ""},
+			            {"title":"责任人","width":"70","class":"center","data":"resp_person","defaultContent": ""},
+			            {"title":"验证结果","width":"70","class":"center","data":"verify_result","defaultContent": ""},
+			            {"title":"验证人","width":"70","class":"center","data": "verifer","defaultContent": ""},
+			            {"title":"计划完成日期","width":"100","class":"center","data":"expc_finish_date","defaultContent": ""},
+			            {"title":"备注","class":"center","data": "memo","defaultContent": ""},
+			            {"title":"","class":"center","data": "error","defaultContent": "","render":function(data,type,row){
+			            	 return "<label>"+data+"</label><input type='hidden' value='"+row.factory_id+"' class='factory_id'/>"+
+			            	 "<input type='hidden' value='"+row.workshop_id+"' class='workshop_id'/>"+
+			            	 "<input type='hidden' value='"+row.order_id+"' class='order_id'/>"+
+                             "<input type='hidden' value='"+row.bus_type_id+"' class='bus_type_id'/>";
+			               }
+			            }
+			        ];
+
+					$("#importData").DataTable({
+						paiging:false,
+						ordering:false,
+						fixedColumns:   {
+				            leftColumns: 0,
+				            rightColumns:1
+				        },
+						processing:true,
+						searching: false,
+						autoWidth:false,
+						paginate:false,
+						sScrollY: $(window).height()-300,
+						scrollX: true,
+						scrollCollapse: true,
+						lengthChange:false,
+						orderMulti:false,
+						info:false,
+						aoColumnDefs : [
+		                    {
+			                "aTargets" :[17],
+			                "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) { 
+			                	if($(nTd).children().eq(0).text()!=''){
+			                		//数据格式错误 整行用红色字体标示
+			                		$(nTd).parent().css('color', '#ff0000');
+				                	$(nTd).css('color', '#ff0000').css('font-weight', 'bold').css('width','200px');
+			                	}
+			                }   
+			                },
+			            ],
+						data:datalist,
+						columns:columns
+					});
+				}
+				//$(".divLoading").hide();
+			},
+			complete:function(){
+				$(".remove").click();
+			}				
+		});
+	});
 });
 
 function showExceptionLogs(id){

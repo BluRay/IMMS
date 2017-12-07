@@ -411,6 +411,43 @@
 		where h.id=#{test_card_template_head_id}
 		order by cast(test_standard_no as signed)
      </select>
+     
+     <select id="queryBusByPartsBatch" parameterType="Map" resultType="Map">    	
+		select a.*,f.factory_name,concat(o.order_no,' ',o.order_name,left(a.bus_number,LOCATE('-',a.bus_number)-1), ' ',o.order_qty,'台') order_desc
+		from(
+		select distinct  upper(p.bus_number) bus_number,p.factory_id,p.workshop,p.parts_name,p.batch,p.edit_date
+		from BMS_QM_KEY_PARTS p
+		where 1=1
+		<if test="batch !=null and batch !=''">
+			and p.batch=#{batch}
+		</if>
+		<if test="parts_name !=null and parts_name !=''">
+			and p.parts_name like concat('%',#{parts_name},'%')
+		</if>
+        ) a
+		left join BMS_BASE_FACTORY f on f.id=a.factory_id
+		left join BMS_PLAN_BUS b on b.bus_number=a.bus_number
+		left join BMS_OR_ORDER o on o.id=b.order_id
+		order by a.bus_number
+		<if test="start !=null">
+			limit #{start},#{length}
+		</if>
+		
+     </select>
+     
+     <select id="queryBusByPartsBatchCount" parameterType="Map" resultType="int">
+     	select count(a.bus_number) from (
+     	select distinct upper(p.bus_number) bus_number,p.factory_id,p.workshop,p.parts_name,p.batch
+		from BMS_QM_KEY_PARTS p
+		where 1=1
+		<if test="batch !=null and batch !=''">
+			and p.batch=#{batch}
+		</if>
+		<if test="parts_name !=null and parts_name !=''">
+			and p.parts_name like concat('%',#{parts_name},'%')
+		</if>
+		) a
+     </select>
 <!-- ======================== xjw end=================================-->
 
 <!-- ======================== yk start=================================-->
@@ -1236,4 +1273,20 @@
 		</foreach>
 		and quality_standard_id=#{quality_standard_id}
 	</update>
+	<insert id="saveMaterialExceptionLogsByBatch" parameterType="Map" useGeneratedKeys="true" keyProperty="id" >
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into BMS_QM_MATERIAL_EXCEPTION_LOGS 
+		(occur_date,factory_id,workshop_id,bus_type_id,order_id,material,bug_level,description,tmp_measures,fault_reason,
+		imp_measure,resp_unit,resp_person,expc_finish_date,verify_result,verifier,memo,creater_id,creat_date) 
+		values
+		<foreach collection="list" item="detail" index="index" separator=",">
+			(#{detail.occur_date},#{detail.factory_id},#{detail.workshop_id},#{detail.bus_type_id},#{detail.order_id},
+			#{detail.material},#{detail.bug_level},#{detail.description},#{detail.tmp_measures},#{detail.fault_reason},
+			#{detail.imp_measure},#{detail.resp_unit},#{detail.resp_person},#{detail.expc_finish_date},#{detail.verify_result},
+			#{detail.verifer},#{detail.memo},#{creator_id},#{edit_date})
+		</foreach>		
+	</insert>
 </mapper>

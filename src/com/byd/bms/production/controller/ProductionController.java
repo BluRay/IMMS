@@ -962,6 +962,8 @@ public class ProductionController extends BaseController {
 		condMap.put("work_month", request.getParameter("work_date").substring(0, 7));
 		condMap.put("swh_id", request.getParameter("swh_id"));
 		condMap.put("salary_model", request.getParameter("salary_model"));
+		String order_id=request.getParameter("order_id");
+		condMap.put("order_id", order_id);
 		
 		productionService.deleteStaffHours(condMap,model);
 		return model;

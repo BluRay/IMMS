@@ -47,6 +47,8 @@ public interface IQualityService {
 	void getProductRecordList(Map<String, Object> condMap, ModelMap model);
 
 	void getProductRecordDetail(Map<String, Object> condMap, ModelMap model);
+
+	void getBusByPartsBatch(Map<String, Object> condMap, ModelMap model);
 	//======================== xjw end=================================//
 		
 	
@@ -108,12 +110,15 @@ public interface IQualityService {
   	public Map<String, Object> checkBusNumber(Map<String,Object> conMap);
 	
   	public int insertQualityStdImplementInfo(Map<String,Object> conMap);
+  	
+  	public int saveMaterialExceptionLogsByBatch(Map<String, Object> conMap);
   	//======================== tj end=================================//
 	
 	
 	
 	
 	public Map<String,Object> getFaultLibList(Map<String, Object> conditionMap);
+
 
 
 }

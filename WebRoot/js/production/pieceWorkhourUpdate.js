@@ -83,7 +83,8 @@ $(document).ready(function() {
 				bus_number:bus_number,
 				work_date:work_date,
 				swh_id:swh_id,
-				salary_model:salary_model
+				salary_model:salary_model,
+				order_id:order_id
 			},
 			success:function(response){
 				if(response.success){

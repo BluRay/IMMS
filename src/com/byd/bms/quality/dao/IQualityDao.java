@@ -77,6 +77,9 @@ public interface IQualityDao {
 	
 	int insertProductRecordNoFault(Map<String, Object> condMap);
 	
+	List<Map<String, Object>> queryBusByPartsBatch(Map<String, Object> condMap);
+
+	int queryBusByPartsBatchCount(Map<String, Object> condMap);
 	//======================== xjw end=================================//
 	
 	
@@ -153,6 +156,8 @@ public interface IQualityDao {
 	public int insertQualityStdImplementInfo(Map<String, Object> stdRecord);
 	
 	public int deleteStandardImplementInfo(Map<String, Object> conditionMap);
+	
+	public int saveMaterialExceptionLogsByBatch(Map<String, Object> map);
 	//======================== tj end=================================//
 
 	public List<Map<String, String>> getFaultLibList(Map<String, Object> conditionMap);	

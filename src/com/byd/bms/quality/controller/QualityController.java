@@ -28,6 +28,7 @@ import org.springframework.web.context.ContextLoader;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.byd.bms.order.service.IOrderService;
 import com.byd.bms.quality.service.IQualityService;
 import com.byd.bms.quality.model.BmsBaseQCStdRecord;
 import com.byd.bms.quality.model.MaterialExceptionLogs;
@@ -35,6 +36,11 @@ import com.byd.bms.quality.model.ProblemImproveBean;
 import com.byd.bms.quality.model.ProcessFaultBean;
 import com.byd.bms.quality.model.QualityTargetBean;
 import com.byd.bms.quality.model.StdFaultLibBean;
+import com.byd.bms.setting.model.BmsBaseBusType;
+import com.byd.bms.setting.model.BmsBaseFactory;
+import com.byd.bms.setting.model.BmsBaseWorkshop;
+import com.byd.bms.setting.service.IBaseDataService;
+import com.byd.bms.setting.service.ISettingService;
 import com.byd.bms.util.ExcelModel;
 import com.byd.bms.util.ExcelTool;
 import com.byd.bms.util.controller.BaseController;
@@ -54,7 +60,10 @@ public class QualityController extends BaseController {
 	static Logger logger = Logger.getLogger("QUALITY");
 	@Autowired
 	protected IQualityService qualityService;
-	
+	@Autowired
+	protected IOrderService orderService;
+	@Autowired
+	protected IBaseDataService baseDataService;
 	//======================== xjw start=================================//
 	/**
 	 * 订单关键零部件页面
@@ -620,6 +629,42 @@ public class QualityController extends BaseController {
 		
 		return model;
 	}
+	
+	/**
+	 * 零部件批次查询页面
+	 * @return
+	 */
+	@RequestMapping("/partsBatchQuery")
+	public ModelAndView partsBatchQuery(){
+		mv.setViewName("quality/partsBatchQuery");
+		return mv;
+	}
+	
+	/**
+	 * 根据零部件、批次查询车辆信息
+	 * @return
+	 */
+	@RequestMapping("/getBusByPartsBatch")
+	@ResponseBody
+	public ModelMap getBusByPartsBatch(){
+		model.clear();
+		int draw=Integer.parseInt(request.getParameter("draw"));//jquerydatatables 
+		int start=Integer.parseInt(request.getParameter("start"));//分页数据起始数
+		int length=Integer.parseInt(request.getParameter("length"));//每一页数据条数
+		String parts_name=request.getParameter("parts_name");
+		String batch=request.getParameter("batch");
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("parts_name", parts_name);
+		condMap.put("batch", batch);
+		condMap.put("draw", draw);
+		condMap.put("start", start);
+		condMap.put("length", length);
+		
+		qualityService.getBusByPartsBatch(condMap, model);		
+		
+		return model;
+	}
+	
 	//======================== xjw end=================================//
 	
 	
@@ -1679,6 +1724,193 @@ public class QualityController extends BaseController {
 			
 		}catch(Exception e){
 			initModel(false,"保存失败！",null);
+		}
+		return mv.getModelMap();
+	}
+	@RequestMapping(value="/uploadMaterialExceptionLogs",method=RequestMethod.POST)
+	@ResponseBody
+	public ModelMap uploadMaterialExceptionLogs(@RequestParam(value="file",required=false) MultipartFile file){
+		logger.info("uploading.....");
+		String fileName=file.getOriginalFilename();
+		try{
+		ExcelModel excelModel = new ExcelModel();
+		excelModel.setReadSheets(1);
+		excelModel.setStart(1);
+		Map<String, Integer> dataType = new HashMap<String, Integer>();
+		dataType.put("0", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("1", ExcelModel.CELL_TYPE_DATE);
+		dataType.put("2", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("3", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("4", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("5", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("6", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("7", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("8", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("9", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("10", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("11", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("12", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("13", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("14", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("15", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("16", ExcelModel.CELL_TYPE_CANNULL);
+		excelModel.setDataType(dataType);
+		excelModel.setPath(fileName);
+		File tempfile=new File(fileName);
+		file.transferTo(tempfile);
+		/**
+		 * 读取输入流中的excel文件，并且将数据封装到ExcelModel对象中
+		 */
+		InputStream is = new FileInputStream(tempfile);
+
+		ExcelTool excelTool = new ExcelTool();
+		excelTool.readExcel(is, excelModel);
+		Map<String,Object> queryMap=new HashMap<String,Object>();
+		queryMap.put("length", -1);
+		Map<String,Object> factoryMap=baseDataService.getFactoryList(queryMap);
+		List factorydata=(List) factoryMap.get("data");
+		Map<String,Object> workshopMap=baseDataService.getWorkshopList(queryMap);
+		List workshopdata=(List) workshopMap.get("data");
+		Map<String,Object> busTypeMap=baseDataService.getBusTypeList(queryMap);
+		List bustypedata=(List) busTypeMap.get("data");
+        Map<String,Object> orderMap=orderService.getOrderListPage(queryMap);
+        List orderdata=(List) orderMap.get("data");
+		List<Map<String, Object>> addList = new ArrayList<Map<String, Object>>();
+		for (Object[] data : excelModel.getData()) {
+			Map<String, Object> infomap = new HashMap<String, Object>();
+			String errorMessage="";
+			if(data[0] == null){
+				errorMessage="物料名称不能为空;";
+			}else if(data[0].toString().trim().equals("")){
+				errorMessage="物料名称不能为空;";
+			}
+			infomap.put("material", data[0] == null ? null : data[0].toString().trim());
+			infomap.put("occur_date", data[1] == null ? null : data[1].toString().trim());
+			if(data[2] == null){
+				errorMessage="发生工厂不能为空;";
+			}else if(data[2].toString().trim().equals("")){
+				errorMessage="发生工厂不能为空;";
+			}else{
+				String ipmfactory=data[2].toString().trim();
+				for(Object factory : factorydata){
+					BmsBaseFactory entity=(BmsBaseFactory)factory;
+					if(ipmfactory.equals(entity.getFactoryName())){
+						infomap.put("factory", data[2].toString().trim());
+						infomap.put("factory_id",entity.getId());
+						break;
+					}
+				}
+				if(infomap.get("factory")==null){
+					infomap.put("factory", data[2].toString().trim());
+					errorMessage+="发生工厂不存在;";
+				}
+			}
+			if(data[3] == null){
+				errorMessage="发生车间不能为空;";
+			}else if(data[3].toString().trim().equals("")){
+				errorMessage="发生车间不能为空;";
+			}else{
+				String ipmworkshop=data[3].toString().trim();
+				for(Object workshop : workshopdata){
+					BmsBaseWorkshop entity=(BmsBaseWorkshop)workshop;
+					if(ipmworkshop.equals(entity.getWorkshopName())){
+						infomap.put("workshop", data[3].toString().trim());
+						infomap.put("workshop_id",entity.getId());
+						break;
+					}
+				}
+				if(infomap.get("workshop")==null){
+					infomap.put("workshop", data[3].toString().trim());
+					errorMessage+="发生车间不存在;";
+				}
+			}
+			if(data[4]!= null && !data[4].toString().trim().equals("")){
+				
+				String ipmorderno=data[4].toString().trim();
+				for(Object order : orderdata){
+					Map<String, Object> entity=(Map<String, Object>)order;
+					if(ipmorderno.equals(entity.get("order_no").toString())){
+						infomap.put("order_no", data[4].toString().trim());
+						infomap.put("order_id",entity.get("id"));
+						break;
+					}
+				}
+				if(infomap.get("order_no")==null){
+					infomap.put("order_no", data[4].toString().trim());
+					errorMessage+="订单编号不存在;";
+				}
+			}
+			if(data[5] != null && !data[5].toString().trim().equals("")){
+			    String ipmbustype=data[5].toString().trim();
+				for(Object bustype : bustypedata){
+				 BmsBaseBusType entity=(BmsBaseBusType )bustype;
+					if(ipmbustype.equals(entity.getBusTypeCode())){
+						infomap.put("bus_type", data[5].toString().trim());
+						infomap.put("bus_type_id",entity.getId());
+						break;
+					}
+				}
+				if(infomap.get("bus_type")==null){
+					infomap.put("bus_type", data[5].toString().trim());
+					errorMessage+="车型不存在;";
+				}
+			}
+			if(data[6] == null){
+				errorMessage="异常描述不能为空";
+			}else if(data[6].toString().trim().equals("")){
+				errorMessage="异常描述不能为空";
+			}
+			infomap.put("description", data[6] == null ? null : data[6].toString().trim());
+			
+			infomap.put("tmp_measures", data[7] == null ? null : data[7].toString().trim());
+			infomap.put("fault_reason", data[8] == null ? null : data[8].toString().trim());
+			infomap.put("imp_measure", data[9] == null ? null : data[9].toString().trim());
+			infomap.put("bug_level", data[10] == null ? null : data[10].toString().trim());
+			infomap.put("resp_unit", data[11] == null ? null : data[11].toString().trim());
+			infomap.put("resp_person", data[12] == null ? null : data[12].toString().trim());
+			infomap.put("verify_result", data[13] == null ? null : data[13].toString().trim());
+			infomap.put("verifer", data[14] == null ? null : data[14].toString().trim());
+			infomap.put("expc_finish_date", data[15] == null ? null : data[15].toString().trim());
+			infomap.put("memo", data[16] == null ? null : data[16].toString().trim());
+			infomap.put("error", errorMessage);
+			addList.add(infomap);
+		}
+		initModel(true,"",addList);
+		
+		}catch(Exception e){
+			initModel(false,e.getMessage(),null);
+		}
+		return mv.getModelMap();
+	}
+	@RequestMapping("saveMaterialExceptionLogsByBatch")
+	@ResponseBody
+	public ModelMap saveMaterialExceptionLogsByBatch(){
+	    Map<String,Object> map=new HashMap<String,Object>();
+		JSONArray add_arr=JSONArray.fromObject(request.getParameter("addList"));
+		Iterator it=add_arr.iterator();
+		List<Map<String,Object>> detail=new ArrayList<Map<String,Object>>();
+		while(it.hasNext()){
+			JSONObject jel=(JSONObject) it.next();
+			Map<String,Object> object=(Map<String, Object>) JSONObject.toBean(jel, Map.class);
+			detail.add(object);
+		}
+		map.put("list", detail);
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		int userid=(int) session.getAttribute("user_id");
+		map.put("creator_id", userid);
+		map.put("edit_date", curTime);
+		try{
+			int result=qualityService.saveMaterialExceptionLogsByBatch(map);
+			if(result>0){
+				initModel(true,"保存成功！",null);
+			}else{
+				initModel(false,"保存成功！",null);
+			}
+			
+		}catch(Exception e){
+			logger.error(e.getMessage());
+			initModel(false,"保存失败！"+e.getMessage(),null);
 		}
 		return mv.getModelMap();
 	}

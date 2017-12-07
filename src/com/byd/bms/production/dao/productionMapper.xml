@@ -829,6 +829,13 @@
 			where id=#{swh_id}
 			</when>
 			
+			<when test="order_id !=null and order_id !='' and (swh_id==null or swh_id=='')">
+			delete from BMS_HR_STAFF_PIECE_HOURS
+			where factory=#{factory} and workshop=#{workshop} and workgroup=#{workgroup} and team=#{team} 
+			and work_date=#{work_date} and salary_model=#{salary_model}
+			and order_id=#{order_id}
+			</when>
+			
 			<when test="bus_number !=null and bus_number !='' and (swh_id==null or swh_id=='')">
 			delete from BMS_HR_STAFF_PIECE_HOURS
 			where factory=#{factory} and workshop=#{workshop} and workgroup=#{workgroup} and team=#{team} 
@@ -836,7 +843,7 @@
 			and bus_number=#{bus_number}
 			</when>
 			
-			<when test="work_date !=null and work_date !='' and (bus_number==null or bus_number=='') and (swh_id==null or swh_id=='')">
+			<when test="work_date !=null and work_date !='' and (bus_number==null or bus_number=='') and (swh_id==null or swh_id=='') and (order_id==null or order_id =='')">
 			delete from BMS_HR_STAFF_PIECE_HOURS
 			where factory=#{factory} and workshop=#{workshop} and workgroup=#{workgroup} and team=#{team} 
 			and work_date=#{work_date} and salary_model=#{salary_model}	

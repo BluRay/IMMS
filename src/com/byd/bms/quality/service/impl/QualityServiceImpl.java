@@ -301,6 +301,21 @@ public class QualityServiceImpl implements IQualityService {
 			ModelMap model) {
 		model.put("data",qualityDao.queryProductRecordDetail(condMap));
 	}
+	
+	
+	@Override
+	public void getBusByPartsBatch(Map<String, Object> condMap, ModelMap model) {
+		int totalCount=0;
+		List<Map<String, Object>> datalist=qualityDao.queryBusByPartsBatch(condMap);
+		totalCount=qualityDao.queryBusByPartsBatchCount(condMap);
+		Map<String, Object> result=new HashMap<String,Object>();
+		result.put("draw", condMap.get("draw"));
+		result.put("recordsTotal", totalCount);
+		result.put("recordsFiltered", totalCount);
+		result.put("data", datalist);
+		model.addAllAttributes(result);
+		
+	}
 	//======================== xjw end=================================//
 		
 	
@@ -309,7 +324,7 @@ public class QualityServiceImpl implements IQualityService {
 			
 	//======================== yk end=================================//
 			
-			
+	
 	//========================tj start=================================//
 	@Override
 	public Map<String, Object> getKeyPartsTraceList(
@@ -579,6 +594,10 @@ public class QualityServiceImpl implements IQualityService {
 			result=qualityDao.updateQualityStdImplementInfo(conMap);
 		}
 		return result;
+	}
+	@Override
+	public int saveMaterialExceptionLogsByBatch(Map<String, Object> conMap) {
+		return qualityDao.saveMaterialExceptionLogsByBatch(conMap);
 	}
 		
 }
