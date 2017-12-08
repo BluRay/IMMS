@@ -434,6 +434,7 @@ function editWorkTime(order_no,tech_order_no,task_content,task_id,factory,worksh
 function btnEditConfirm(){
 	if(edit_list.length>0){
 		ajaxUpdate(JSON.stringify(edit_list));
+		$("#dialog-edit").dialog( "close" );
 	}else{
 		alert("无数据更改！");
 	}
@@ -507,7 +508,15 @@ function addWorkTime(order_no,tech_order_no,task_content,task_detail_id,factory,
 					id:"btn_ok",
 					"class" : "btn btn-success btn-minier",
 					click: function() {
-						btnConfirm();
+						btnConfirm(0);
+					} 
+				},
+				{
+					text: "保存并新增",
+					id:"btn_ok",
+					"class" : "btn btn-info btn-minier",
+					click: function() {
+						btnConfirm(1);
 					} 
 				}
 			]
@@ -561,7 +570,7 @@ function checkEditWorkHours(obj){
 	}
 }
 
-function btnConfirm(){
+function btnConfirm(is_more){
 	var inputlist = $("#table_workhour input[class='input-small card_num']");
 	console.log("-->inputlist.length = " + inputlist.length);
 	var saveFlag=true;
@@ -655,6 +664,14 @@ function btnConfirm(){
 	}
 	if(saveFlag&&stafflist.length>0){
 		ajaxSave(JSON.stringify(stafflist));
+		if(is_more == 0){
+			$("#dialog-add").dialog( "close" );
+		}else{
+			edit_list=[];
+			$("#group").val('');
+			$("#subgroup").val('');
+			$("#tb_workhour").html("");
+		}
 	}
 }
 
@@ -680,7 +697,6 @@ function ajaxUpdate(conditions){
 		},
 		success : function(response) {
 			if (response.success) {
-				$("#dialog-edit").dialog( "close" );
 				$.gritter.add({
 					title: '系统提示：',
 					text: '<h5>操作成功！</h5>',
@@ -705,7 +721,6 @@ function ajaxSave(conditions) {
 		},
 		success : function(response) {
 			if (response.success) {
-				$("#dialog-add").dialog( "close" );
 				$.gritter.add({
 					title: '系统提示：',
 					text: '<h5>操作成功！</h5>',

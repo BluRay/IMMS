@@ -122,6 +122,7 @@
 		<script src="../assets/js/buttons.colVis.js"></script>
 		<script src="../assets/js/buttons.html5.js"></script>
 		<script src="../assets/js/jquery.gritter.min.js"></script>
+		<script src="../js/exportTable2Excel.js"></script>
 		<script src="../js/common.js"></script>
 		<script src="../js/hr/staffSalaryBalance.js"></script>
 </body>

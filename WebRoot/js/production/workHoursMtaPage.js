@@ -629,14 +629,22 @@ function addWorkTime(id,tmp_order_no,reason_content,total_qty,finished_qty,workh
 					id:"btn_ok",
 					"class" : "btn btn-success btn-minier",
 					click: function() {
-						btnAddConfirm(id);
+						btnAddConfirm(id,0);
+					} 
+				},
+				{
+					text: "保存并新增",
+					id:"btn_ok",
+					"class" : "btn btn-info btn-minier",
+					click: function() {
+						btnAddConfirm(id,1);
 					} 
 				}
 			]
 	});
 }
 
-function btnAddConfirm(id){
+function btnAddConfirm(id,is_more){
 	var inputlist = $("#table_workhour input[class='input-small card_num']");
 	var saveFlag = true;
 	var stafflist = [];
@@ -721,6 +729,14 @@ function btnAddConfirm(id){
 	
 	if (saveFlag && stafflist.length > 0) {
 		ajaxSave(JSON.stringify(stafflist));	
+		if(is_more == 0){
+			$("#dialog-add").dialog( "close" );
+		}else{
+			$("#group").val('');
+			$("#subgroup").val('');
+			$("#tb_workhour").html("");
+			edit_list=[];
+		}
 	}
 	
 }
@@ -735,7 +751,6 @@ function ajaxSave(conditions) {
 		},
 		success : function(response) {
 			if (response.success) {
-				$("#dialog-add").dialog( "close" );
 				$.gritter.add({
 					title: '系统提示：',
 					text: '<h5>操作成功！</h5>',

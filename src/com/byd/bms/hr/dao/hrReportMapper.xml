@@ -453,7 +453,7 @@
 		select distinct s1.staff_number,s1.name staff_name
 		from BMS_HR_STAFF s1
 		where s1.plant_org=#{factory} and s1.workshop_org=#{workshop} and s1.salary_type='计件' 
-		and (s1.status='在职' or (s1.status='离职' and s1.leave_date >=concat(#{month},'-01')))
+		and (s1.status='在职' or (s1.status='离职' and DATE_FORMAT(s1.leave_date, '%Y-%m-%d') >=concat(#{month},'-01')))
 		<if test="workgroup !=null and workgroup !='全部'">
 			and s1.workgroup_org=#{workgroup}
 		</if>
@@ -531,7 +531,7 @@
 		) st on st.staff_number=sh.staff_number
 		left join BMS_HR_STAFF s on s.staff_number=sh.staff_number
 		where sh.month=#{month} and sh.submit_factory=#{factory} and sh.submit_workshop=#{workshop} 
-		and (s.status='在职' or (s.status='离职' and s.leave_date >=concat(#{month},'-01')))
+		and (s.status='在职' or (s.status='离职' and DATE_FORMAT(s.leave_date, '%Y-%m-%d') >=concat(#{month},'-01')))
 		<if test="staff !=null and staff !=''">
 		and (st.staff_number like concat('%',#{staff},'%') or st.staff_name like concat('%',#{staff},'%') )
 		</if>
@@ -543,7 +543,7 @@
 		from BMS_HR_PIECE_SALARY_HISTORY sh
 		left join BMS_HR_STAFF s on s.staff_number=sh.staff_number
 		where sh.month=#{month} and s.plant_org=#{factory} and s.workshop_org=#{workshop} 
-		and (s.status='在职' or (s.status='离职' and s.leave_date >=concat(#{month},'-01')))
+		and (s.status='在职' or (s.status='离职' and DATE_FORMAT(s.leave_date, '%Y-%m-%d') >=concat(#{month},'-01')))
 		<if test="workgroup !=null and workgroup !='全部'">
 		 and s.workgroup_org=#{workgroup}
 		</if>

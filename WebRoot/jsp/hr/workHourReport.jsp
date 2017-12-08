@@ -82,7 +82,8 @@
 							<input type="text" id="waitmanhourdate" class="input-medium"style="width:80px;height: 30px;" onclick="WdatePicker({dateFmt:'yyyy-MM'})"/>
 						</td>
 						<td>
-							<input class="btn btn-sm btn-primary" id="btnQuery" value="查询" style="margin-left: 10px;top:1px;" type="button">							
+							<input class="btn btn-sm btn-primary" id="btnQuery" value="查询" style="margin-left: 10px;top:1px;" type="button">
+							<input class="btn btn-sm btn-info" id="btnExport" value="导出" style="margin-left: 10px;top:1px;" type="button">							
 						</td>
 						</tr>
 						</table>
@@ -117,6 +118,7 @@
 		<script src="../assets/js/buttons.colVis.js"></script>
 		<script src="../assets/js/buttons.html5.js"></script>
 		<script src="../js/common.js"></script>
+		<script src="../js/exportTable2Excel.js"></script>
 		<script src="../js/hr/workHourReport.js"></script>
 	</body>
 </html>

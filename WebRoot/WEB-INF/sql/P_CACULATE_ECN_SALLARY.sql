@@ -12,8 +12,8 @@ BEGIN
 	SET SESSION  group_concat_max_len = 200000; 
 	SET SESSION max_heap_table_size=128*1024*1024;
 
-	set query_condition=concat('and ((s.status=''离职'' and s.leave_date>=''',q_month,''') or s.status=''在职'')');
-	set query_condition_2=concat('and ((s1.status=''离职'' and s1.leave_date>=''',q_month,''') or s1.status=''在职'')');
+	set query_condition=concat('and ((s.status=''离职'' and DATE_FORMAT(s.leave_date, ''%Y-%m-%d'')>=''',q_month,''') or s.status=''在职'')');
+	set query_condition_2=concat('and ((s1.status=''离职'' and DATE_FORMAT(s1.leave_date, ''%Y-%m-%d'')>=''',q_month,''') or s1.status=''在职'')');
 	set limit_cond='';
 
 	if q_factory !='' and q_factory is not null then

@@ -106,6 +106,15 @@ $(document).ready(function(){
 		})
 		
 	})
+	
+	//导出功能
+	$(document).on("click",".buttons-excel",function(){
+		/**
+		 * 导出excel
+		 */
+		htmlToExcel("tableResult", "", "","计件工资结算","计件工资结算");
+		return false;
+	});
 });
 
 function initPage(){	
@@ -223,7 +232,7 @@ function ajaxQuery(){
 		             [ '显示20行', '显示50行', '显示100行', '全部' ]
 		         ],*/
 	    buttons: [
-	        {extend:'excelHtml5',title:'data_export',className:'black',text:'<i class=\"fa fa-file-excel-o bigger-130\" tooltip=\"导出excel\"></i>'},
+	        {extend:'excelHtml5',title:'data_export',enabled:false,className:'black',text:'<i class=\"fa fa-file-excel-o bigger-130\" tooltip=\"导出excel\"></i>'},
 	        {extend:'colvis',text:'<i class=\"fa fa-list bigger-130\" tooltip=\"选择展示列\"></i>'},
 	        /*{extend:'pageLength',text:'显示20行'}*/
 	       

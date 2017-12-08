@@ -2441,6 +2441,7 @@
 	(SELECT R.no FROM BMS_PD_TMP_HOURS R WHERE R.reason_content = O.reason_content LIMIT 1) AS NO
 	FROM BMS_PD_TMP_ORDER O
 	LEFT OUTER JOIN BMS_HR_STAFF_TMP_HOURS H ON H.temp_order_id = O.id 
+	WHERE O.deleted = 0 
 	GROUP BY O.id) T 
 	LEFT OUTER JOIN BMS_BASE_USER U ON T.applier = U.id
 	WHERE 1=1 
@@ -2472,6 +2473,7 @@
 	IF((REPLACE(REPLACE(GROUP_CONCAT(H.status),',',''),'1','')=''),'已审批','未审批') AS '审批状态'
 	FROM BMS_PD_TMP_ORDER O
 	LEFT OUTER JOIN BMS_HR_STAFF_TMP_HOURS H ON H.temp_order_id = O.id 
+	WHERE O.deleted = 0 
 	GROUP BY O.id) T WHERE 1=1 
 	<if test="factory !=null">
 		and T.factory = #{factory}
