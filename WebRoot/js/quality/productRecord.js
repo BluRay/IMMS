@@ -49,7 +49,7 @@ $(document).ready(function(){
 		$("input[name='testResult']").attr("disabled",false);
 		
 		var dialog = $( "#dialog-config" ).removeClass('hide').dialog({
-			width:1100,
+			width:1300,
 			height:550,
 			modal: true,
 			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i>成品记录表录入</h4></div>",
@@ -63,10 +63,10 @@ $(document).ready(function(){
 					} 
 				},
 				{
-					text: "保存",
+					text: "保存&继续",
 					"class" : "btn btn-primary btn-minier",
 					click: function() {
-						ajaxSave(); 
+						ajaxSave(true); 
 					} 
 				}
 			]
@@ -77,7 +77,7 @@ $(document).ready(function(){
 	 * 点击“确定”查询成品记录表订单模板
 	 */
 	$("#btnShowTpl").click(function(){
-	
+		
 		var tpl_detail=ajaxGetTplDetail();
 		detail_list=tpl_detail;
 		drawTplDetailTable("#tableDetail",tpl_detail,true);
@@ -388,6 +388,9 @@ function ajaxGetTplDetail(){
 		success:function(response){
 			$(".divLoading").hide();
 			detail=response.data;
+			if(!response.success){
+				alert(response.message)
+			}
 			/*var tpl=response.tpl_header;
 			if(response.tpl_header){
 				$("#bus_number").attr("order_id",tpl.order_id);
@@ -593,7 +596,7 @@ function getAllWorkshops(elementId,valName){
 	
 }
 
-function ajaxSave(){
+function ajaxSave(continue_flag){
 	$(".divLoading").addClass("fade in").show();
 	var detail_list_submit=[];
 	var trs=$("#tableDetail tbody").children("tr");
@@ -720,7 +723,13 @@ function ajaxSave(){
 				alert(response.message);
 				$("#btnShowTpl").attr("disabled",false);
 				ajaxQuery();
-				$("#dialog-config").dialog("close");
+				if(continue_flag){//保存并继续
+					detail_list_submit=[]
+					drawTplDetailTable("#tableDetail",detail_list_submit,true);
+				}else{
+					$("#dialog-config").dialog("close");
+				}
+				
 			}
 		})	
 	}
@@ -877,7 +886,7 @@ function showInfoPage(row){
 	var detail_list=getProductRecordDetail(row.bus_number,row.test_node,row.factory_id,row.test_card_template_head_id);
 	
 	var dialog = $( "#dialog-config" ).removeClass('hide').dialog({
-		width:1100,
+		width:1300,
 		height:550,
 		modal: true,
 		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i>成品记录表查看</h4></div>",

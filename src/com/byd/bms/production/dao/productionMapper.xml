@@ -833,20 +833,20 @@
 			delete from BMS_HR_STAFF_PIECE_HOURS
 			where factory=#{factory} and workshop=#{workshop} and workgroup=#{workgroup} and team=#{team} 
 			and work_date=#{work_date} and salary_model=#{salary_model}
-			and order_id=#{order_id}
+			and find_in_set(order_id,#{order_id})>0
 			</when>
 			
 			<when test="bus_number !=null and bus_number !='' and (swh_id==null or swh_id=='')">
 			delete from BMS_HR_STAFF_PIECE_HOURS
 			where factory=#{factory} and workshop=#{workshop} and workgroup=#{workgroup} and team=#{team} 
-			and work_date=#{work_date} and salary_model=#{salary_model}
-			and bus_number=#{bus_number}
+			and find_in_set(work_date,#{work_date})>0 and salary_model=#{salary_model}
+			and find_in_set(bus_number,#{bus_number})>0
 			</when>
 			
 			<when test="work_date !=null and work_date !='' and (bus_number==null or bus_number=='') and (swh_id==null or swh_id=='') and (order_id==null or order_id =='')">
 			delete from BMS_HR_STAFF_PIECE_HOURS
 			where factory=#{factory} and workshop=#{workshop} and workgroup=#{workgroup} and team=#{team} 
-			and work_date=#{work_date} and salary_model=#{salary_model}	
+			and find_in_set(work_date,#{work_date})>0 and salary_model=#{salary_model}	
 			</when>
 		</choose>
 			

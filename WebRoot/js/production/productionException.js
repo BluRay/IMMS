@@ -104,6 +104,8 @@ $(document).ready(function () {
     }
 	
 	function ajaxValidate (){
+		var workshop_name=$('#exec_workshop').find("option:selected").text();
+		
 		$.ajax({
             type: "get",
             dataType: "json",
@@ -115,24 +117,32 @@ $(document).ready(function () {
                 "workshop_name":$('#exec_workshop').find("option:selected").text()
             },
             success: function(response){
-                    $("#vinText").attr("disabled","disabled");
+                    //$("#vinText").attr("disabled","disabled");
+                    var customer_no_flag=$('#exec_workshop :selected').attr("customer_no_flag")
                     //show car infomation
-                    if(response.businfo == ""){
-                    	fadeMessageAlert("没有对应车号的车辆信息！","alert-error");
+                    if(response.businfo == null && customer_no_flag=='0'){
+                    	$("#infoColor").html("");
+                		$("#infoSeats").html("");
+                		$("#infoWorkShop").html("");
+                		$("#infoLine").html("");
+                		$("#infoProcess").html("");
+                		$("#infoOrder").html("");
+                		$("#infoStatus").html("");
+                    	fadeMessageAlert(null,"没有对应车号的车辆信息！","gritter-error");
                     }else{
                     	toggleVinHint(false);
-                    	var bus = response.businfo;
-                    	$("#infoColor").html(bus.bus_color);
-                		$("#infoSeats").html(bus.bus_seats);
-                		$("#infoWorkShop").html(bus.workshop);
-                		$("#infoLine").html(bus.line);
-                		$("#infoProcess").html(bus.process_name);
-                		$("#infoOrder").html(bus.order_desc);
-                		$("#infoStatus").html(bus.status=='0'?'正常':'冻结');
+                    	var bus = response.businfo||{};
+                    	$("#infoColor").html(bus.bus_color||"");
+                		$("#infoSeats").html(bus.bus_seats||"");
+                		$("#infoWorkShop").html(bus.workshop||"");
+                		$("#infoLine").html(bus.line||"");
+                		$("#infoProcess").html(bus.process_name||"");
+                		$("#infoOrder").html(bus.order_desc||"");
+                		$("#infoStatus").html(bus.status=='0'?'正常':(bus.status=='1'?'冻结':''));
                 		$("#btnSubmit").removeAttr("disabled");
                         
                         //alert($('#vinText').attr("value"));
-                        if(busNoArray.indexOf($('#vinText').attr("value")) < 0){
+                        if(busNoArray.indexOf($('#vinText').val()) < 0){
 	                        var trindex=$("#dispatchDetail").find("tr").length-1;
 	                        var tr = $("<tr />");
 							var busNumberInput = "<input style='border:0;width:100%;background-color:white;' " +
@@ -291,6 +301,7 @@ function getAllWorkshopSelect() {
 		dataType : "json",
 		data : {
 				factory:$("#exec_factory :selected").text(),
+				org_kind:'1',
 				function_url:'production/exception'
 			},
 		async : false,
@@ -298,7 +309,17 @@ function getAllWorkshopSelect() {
 			alert(response.message)
 		},
 		success : function(response) {
-			getSelects(response.data, "", "#exec_workshop",null,"id");
+			//getSelects(response.data, "", "#exec_workshop",null,"id");
+			var strs ="";
+			
+			$("#exec_workshop").html("");
+			$.each(response.data, function(index, value) {
+				strs += "<option value=" + value.id+(value.org_id?(" org_id="+value.org_id):"") +
+				" customer_no_flag='"+value.customer_no_flag+"' "+
+				">" + value.name
+				+ "</option>";
+			});
+			$("#exec_workshop").append(strs);
 		}
 	});
 }

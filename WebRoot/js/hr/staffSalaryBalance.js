@@ -164,7 +164,7 @@ function ajaxQuery(){
 	            {"title":"补贴车","class":"center","data":"bonus_total","defaultContent": ""},
 	            {"title":"计件工资","width":"80","class":"center","data":"piece_pay_total","defaultContent": ""},  		            
 	            {"title":"技改工时","width":"100","class":"center","data": "ecnwh_total","defaultContent": ""},
-	            {"title":"计改工资","class":"center","data": "ecn_pay_total","defaultContent": ""},
+	            {"title":"技改工资","class":"center","data": "ecn_pay_total","defaultContent": ""},
 	            {"title":"额外工时","class":"center","data": "tmpwh_total","defaultContent": ""},
 	            {"title":"额外工资","class":"center","data": "tmp_pay_total","defaultContent": ""},
 	            {"title":"等待工时","class":"center","data": "wwh_total","defaultContent": ""},
@@ -176,6 +176,7 @@ function ajaxQuery(){
 	            {"title":"放假工资","class":"center","data": "holiday_salary","defaultContent": ""},
 	            {"title":"计时工资","class":"center","data": "hourly_salary","defaultContent": ""},
 	            {"title":"支援工资","class":"center","data": "support_salary","defaultContent": ""},
+	            {"title":"特殊工资","class":"center","data": "specical_salary","defaultContent": ""},
 	            
 	            {"title":"考核扣款","class":"center","data": "deduct_pay_total","defaultContent": ""},
 	            {"title":"实发工资","class":"center","data": "","defaultContent": "","render":function(data,type,row){
@@ -189,6 +190,7 @@ function ajaxQuery(){
 	            	salary_final=numAdd(salary_final,isNaN(Number(row.after_sale_salary))?0:Number(row.after_sale_salary));
 	            	salary_final=numAdd(salary_final,isNaN(Number(row.paid_leave_salary))?0:Number(row.paid_leave_salary));
 	            	salary_final=numAdd(salary_final,isNaN(Number(row.holiday_salary))?0:Number(row.holiday_salary));
+	            	salary_final=numAdd(salary_final,isNaN(Number(row.specical_salary))?0:Number(row.specical_salary));
 	            	salary_final=numAdd(salary_final,isNaN(Number(row.hourly_salary))?0:Number(row.hourly_salary));
 	            	salary_final=numAdd(salary_final,isNaN(Number(row.support_salary))?0:Number(row.support_salary));	            	
 	            	
@@ -205,6 +207,7 @@ function ajaxQuery(){
 	            	salary_final=numAdd(salary_final,isNaN(Number(row.after_sale_salary))?0:Number(row.after_sale_salary));
 	            	salary_final=numAdd(salary_final,isNaN(Number(row.paid_leave_salary))?0:Number(row.paid_leave_salary));
 	            	salary_final=numAdd(salary_final,isNaN(Number(row.holiday_salary))?0:Number(row.holiday_salary));
+	            	salary_final=numAdd(salary_final,isNaN(Number(row.specical_salary))?0:Number(row.specical_salary));
 	            	salary_final=numAdd(salary_final,isNaN(Number(row.hourly_salary))?0:Number(row.hourly_salary));
 	            	salary_final=numAdd(salary_final,isNaN(Number(row.support_salary))?0:Number(row.support_salary));
 	            	

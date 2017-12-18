@@ -355,7 +355,7 @@
 		and es.staff_number=st.staff_number and es.work_date like concat(#{month},'%')) ecnwh_total,
 		(select round(sum(r.add-r.deduct),1) from BMS_HR_REWARDS r where r.staff_number=st.staff_number and r.rewards_date like concat(#{month},'%') ) dscore_total,
 		(select sum(r.add-r.deduct)*5 from BMS_HR_REWARDS r where r.staff_number=st.staff_number and r.rewards_date like concat(#{month},'%') ) deduct_pay_total,
-		s.status,a.attendance_days,a.attendance_hours,ss.pre_sale_salary,ss.after_sale_salary,ss.support_salary,ss.hourly_salary,ss.holiday_salary,ss.paid_leave_salary,		
+		s.status,a.attendance_days,a.attendance_hours,ss.pre_sale_salary,ss.after_sale_salary,ss.support_salary,ss.hourly_salary,ss.holiday_salary,ss.paid_leave_salary,ss.specical_salary,		
 		<choose>	
 		<when test="workshop=='自制件'">
 		(select sum(s.quantity) qty
@@ -564,14 +564,14 @@
 		insert into BMS_HR_PIECE_SALARY_HISTORY 
 		(month,staff_number,staff_name,job,plant_org,workshop_org,workgroup_org,team_org,
 		attendance_days,attendance_hours,piece_total,bonus_total,piece_pay_total,ecnwh_total,ecn_pay_total,wwh_total,wait_pay_total,tmpwh_total,tmp_pay_total,
-		dscore_total,deduct_pay_total,pre_sale_salary,after_sale_salary,paid_leave_salary,holiday_salary,hourly_salary,support_salary,
+		dscore_total,deduct_pay_total,pre_sale_salary,after_sale_salary,paid_leave_salary,holiday_salary,specical_salary,hourly_salary,support_salary,
 		saver,save_date,submit_factory,submit_workshop,status,production_qty
 		) 
 		values 
 		<foreach collection="staff_salary_list" item="detail" index="index" separator=",">
 		(#{month},#{detail.staff_number},#{detail.staff_name},#{detail.job},#{detail.plant_org},#{detail.workshop_org},#{detail.workgroup_org},#{detail.team_org},#{detail.attendance_days},#{detail.attendance_hours},
 		#{detail.piece_total},#{detail.bonus_total},#{detail.piece_pay_total},#{detail.ecnwh_total},#{detail.ecn_pay_total},#{detail.wwh_total},#{detail.wait_pay_total},#{detail.tmpwh_total},#{detail.tmp_pay_total},
-		#{detail.dscore_total},#{detail.deduct_pay_total},#{detail.pre_sale_salary},#{detail.after_sale_salary},#{detail.paid_leave_salary},#{detail.holiday_salary},#{detail.hourly_salary},#{detail.support_salary},
+		#{detail.dscore_total},#{detail.deduct_pay_total},#{detail.pre_sale_salary},#{detail.after_sale_salary},#{detail.paid_leave_salary},#{detail.holiday_salary},#{detail.specical_salary},#{detail.hourly_salary},#{detail.support_salary},
 		#{saver},#{save_date},#{factory},#{workshop},'已提交',#{detail.output}
 		)
 		</foreach>

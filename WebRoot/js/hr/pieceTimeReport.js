@@ -699,7 +699,7 @@ function exportExcelTableHtml(){
 	 */
 	var table=document.createElement("table");
 	table.id="tb_excel";
-	table.style.display="";
+	table.style.display="none";
 	/**
 	 * 创建table head
 	 */
@@ -741,6 +741,7 @@ function exportExcelTableHtml(){
 		$.each(tr_obj,function(j,td_obj){
 			var td=$("<td />");
 			td.attr("class",td_obj.class);
+			td.attr("id",td_obj.id);
 			td.attr("rowspan",td_obj.rowspan);
 			td.attr("width",td_obj.width);
 			td.html(td_obj.html);
@@ -765,7 +766,8 @@ function exportExcelTableHtml(){
 	
 	
 	//导出后清除表格
-	document.body.removeChild(table);
+	//document.body.removeChild(table);
+	worker.terminate();
 	$(".divLoading").hide();	
 	}
 

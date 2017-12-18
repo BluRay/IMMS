@@ -43,16 +43,58 @@ $(document).ready(function() {
 		$("#bus_number").attr("order_id","");
 	});
 	
+	//全选反选
+	$(document).on("click","#checkall",function(){
+		//alert("aa");
+		if ($('#checkall').is(":checked")) {
+			//alert("选中")
+			check_All_unAll("#tableResult",true);
+		}
+		if($('#checkall').is(":checked")==false){
+			
+			check_All_unAll("#tableResult",false);
+		}
+		
+	})
+	
 	// 工时删除
 	$(document).on("click",".fa-times", function(e) {
 		var del_flag=$(e.target).attr("del_flag");
-		var bus_number=null;
-		var work_date=null;
+		var cboxlist=$("#tableResult tbody :checked");
+		var bus_list=[];
+		var work_date_list=[];
 		var swh_id=null;
-		var order_id=null;
+		var order_list=[];
 		var rowdata=null;
 		if(del_flag=='del_all'){//车号(操作日期)批量删除
-			if(salary_model=="技能系数"||salary_model=="承包制"||salary_model=="自制件承包"){
+			if(cboxlist.length==0){
+				alert("请选择需要删除的工时信息！");
+				return false;
+			}
+			$.each(cboxlist,function(i,cbox){
+				var td=$(cbox).parent("td");
+				if(td.css("display")!='none'){
+					if(salary_model=='技能系数' ||salary_model=='承包制'||salary_model=='自制件承包' ){
+						var bus_number=$(td).next().html();
+						var work_date=$(td).next().next().html();
+						work_date_list.push(work_date);
+						bus_list.push(bus_number)
+					}
+					if(salary_model=='辅助人力'  ){
+						var order_id=$(cbox).attr("order_id");
+						var work_date=$(td).next().next().html();
+						work_date_list.push(work_date);
+						order_list.push(order_id);
+					}
+					if(salary_model=='底薪模式' ){
+						var work_date=$(td).next().html();
+						work_date_list.push(work_date);
+					}
+
+				}
+			})
+			
+			/*if(salary_model=="技能系数"||salary_model=="承包制"||salary_model=="自制件承包"){
 				bus_number=$(e.target).parent("td").next("td").html();
 				work_date=$(e.target).parent("td").next("td").next("td").html();
 			}else if(salary_model=="辅助人力"){
@@ -61,13 +103,16 @@ $(document).ready(function() {
 			}
 			else{
 				work_date=$(e.target).parent("td").next("td").html();
-			}
+			}*/
 			
 		}else{//单条数据删除
 			swh_id=$(e.target).attr("swh_id");
 			rowdata=JSON.parse($(e.target).attr("row"));
-			bus_number=rowdata.bus_number;
-			work_date=rowdata.work_date;
+			/*bus_number=rowdata.bus_number;
+			work_date=rowdata.work_date;*/
+			//bus_list.push(rowdata.bus_number)
+			//work_date_list.push(rowdata.work_date);
+			
 			
 		}
 		if(confirm("是否确认删除？"))
@@ -80,11 +125,11 @@ $(document).ready(function() {
 				workshop:workshop,
 				workgroup:workgroup,
 				team:team,
-				bus_number:bus_number,
-				work_date:work_date,
+				bus_number:bus_list.join(","),
+				work_date:work_date_list.join(","),
 				swh_id:swh_id,
 				salary_model:salary_model,
-				order_id:order_id
+				order_id:order_list.join(",")
 			},
 			success:function(response){
 				if(response.success){
@@ -325,8 +370,10 @@ function showStaffList(staff_hour_list){
 	        };
 		rowsGroup=[0,1,2,3,4];
 		columns= [
-		            {"title":"","width":"30","class":"center","data":"bus_number","defaultContent": "","render":function(data,type,row){
-		            	return "<i class=\"fa fa-times bigger-110\" del_flag='del_all' style=\"cursor: pointer;color: red;\"></i>";
+		            {"title":"<input id=\"checkall\" type=\"checkbox\" />","width":"30","class":"center","data":"bus_number","defaultContent": "","render":function(data,type,row){
+		            	var html="<input  type=\"checkbox\" bus='"+data+"'/>";
+		            		/*"<i class=\"fa fa-times bigger-110\" del_flag='del_all' style=\"cursor: pointer;color: red;\"></i>";*/
+		            	return html;
 		            }},
 		            {"title":"车号","class":"center","data":"bus_number","defaultContent": ""},
 		            {"title":"操作日期","class":"center","data":"work_date","defaultContent": ""},
@@ -355,8 +402,9 @@ function showStaffList(staff_hour_list){
 	        };
 		rowsGroup=[0,1,2,3,4];
 		columns= [
-		            {"title":"","width":"30","class":"center","data":"bus_number","defaultContent": "","render":function(data,type,row){
-		            	return "<i class=\"fa fa-times bigger-110\" del_flag='del_all' style=\"cursor: pointer;color: red;\"></i>";
+		            {"title":"<input id=\"checkall\" type=\"checkbox\" />","width":"30","class":"center","data":"bus_number","defaultContent": "","render":function(data,type,row){
+		            	return "<input  type=\"checkbox\" bus='"+data+"'/>";
+		            	//"<i class=\"fa fa-times bigger-110\" del_flag='del_all' style=\"cursor: pointer;color: red;\"></i>";
 		            }},
 		            {"title":"车号","class":"center","data":"bus_number","defaultContent": ""},
 		            {"title":"操作日期","class":"center","data":"work_date","defaultContent": ""},
@@ -384,8 +432,9 @@ function showStaffList(staff_hour_list){
 	        };
 		rowsGroup=[0,1,2,3];
 		columns= [
-		            {"title":"","width":"30","class":"center","data":"order_id","defaultContent": "","render":function(data,type,row){
-		            	return "<i class=\"fa fa-times bigger-110\" del_flag='del_all' order_id='"+data+"' style=\"cursor: pointer;color: red;\"></i>";
+		            {"title":"<input id=\"checkall\" type=\"checkbox\" />","width":"30","class":"center","data":"order_id","defaultContent": "","render":function(data,type,row){
+		            	return "<input  type=\"checkbox\" order_id='"+data+"'/>";
+		            	//"<i class=\"fa fa-times bigger-110\" del_flag='del_all' order_id='"+data+"' style=\"cursor: pointer;color: red;\"></i>";
 		            }},
 		            {"title":"订单","class":"center","data":"order_desc","defaultContent": ""},
 		            {"title":"操作日期","class":"center","data":"work_date","defaultContent": ""},
@@ -419,8 +468,9 @@ function showStaffList(staff_hour_list){
 	        };
 		rowsGroup=[0,1];
 		columns= [
-		            {"title":"","width":"30","class":"center","data":"work_date","defaultContent": "","render":function(data,type,row){
-		            	return "<i class=\"fa fa-times bigger-110\" del_flag='del_all' style=\"cursor: pointer;color: red;\"></i>";
+		            {"title":"<input id=\"checkall\" type=\"checkbox\" />","width":"30","class":"center","data":"work_date","defaultContent": "","render":function(data,type,row){
+		            	return "<input  type=\"checkbox\" work_date='"+data+"'/>";
+		            	//"<i class=\"fa fa-times bigger-110\" del_flag='del_all' style=\"cursor: pointer;color: red;\"></i>";
 		            }},
 		            {"title":"操作日期","class":"center","data":"work_date","defaultContent": ""},
 		            {"title":"工号","class":"center","data":"staff_number","defaultContent": ""},
@@ -451,8 +501,9 @@ function showStaffList(staff_hour_list){
 	        };
 		rowsGroup=[0,1,2,3,4];
 		columns= [
-		            {"title":"","width":"30","class":"center","data":"bus_number","defaultContent": "","render":function(data,type,row){
-		            	return "<i class=\"fa fa-times bigger-110\" del_flag='del_all' style=\"cursor: pointer;color: red;\"></i>";
+		            {"title":"<input id=\"checkall\" type=\"checkbox\" />","width":"30","class":"center","data":"bus_number","defaultContent": "","render":function(data,type,row){
+		            	return "<input  type=\"checkbox\" bus_number='"+data+"'/>";
+		            	//"<i class=\"fa fa-times bigger-110\" del_flag='del_all' style=\"cursor: pointer;color: red;\"></i>";
 		            }},
 		            {"title":"车号","class":"center","data":"bus_number","defaultContent": ""},
 		            {"title":"操作日期","width":"90","class":"center","data":"work_date","defaultContent": ""},

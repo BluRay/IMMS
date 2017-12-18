@@ -358,7 +358,7 @@
 		<if test="result !=null and result !=''">
 			and FIND_IN_SET(c.result,#{result}) 
 		</if>
-			group by c.bus_number,c.test_node
+			group by c.bus_number,c.test_node,c.test_card_template_head_id
 			order by c.edit_date desc
     	<if test="start !=null">
 			limit #{start},#{length}

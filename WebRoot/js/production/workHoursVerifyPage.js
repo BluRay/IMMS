@@ -316,7 +316,7 @@ function ajaxCaculateSalary(conditions) {
 			if (response.success) {
 				
 			} else {
-				alert(response.message);
+				//alert(response.message);
 			}
 		}
 	});

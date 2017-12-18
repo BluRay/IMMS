@@ -91,7 +91,7 @@
 	</select>
 	
 	<select id="queryWorkshopListAuth" parameterType="Map" resultType="Map">			
-		SELECT o.id org_id,o.foreign_id id,o.name 
+		SELECT o.id org_id,o.foreign_id id,o.name,o.customer_no_flag 
 		FROM BMS_BASE_ORG o
 		LEFT JOIN BMS_BASE_ORG o1 ON o.parent_id=o1.id
 		WHERE o.org_type='2' and o1.name=#{factory} and o.deleted='0' 

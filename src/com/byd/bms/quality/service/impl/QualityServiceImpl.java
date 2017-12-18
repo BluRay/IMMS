@@ -243,16 +243,27 @@ public class QualityServiceImpl implements IQualityService {
 	
 	@Override
 	public void getPrdRcdOrderTpl(Map<String, Object> condMap, ModelMap model) {
-		Map<String,Object> tpl_header=qualityDao.queryPrdRcdOrderTplHeader(condMap);
-		if(tpl_header==null){
-			model.put("message", "未匹配到订单模板！");
+		/**
+		 * 查找模板前先判断该车号是否有录入了该节点的成品记录表数据，是：返回错误信息，提示已录入；否：查找模板
+		 */
+		int record_count=qualityDao.queryProductRecordCount(condMap);
+		if(record_count>0){
+			model.put("message", "车号"+condMap.get("bus_number")+"已在该节点录入了成品记录表记录！");
 			model.put("success", false);
 		}else{
-			String tpl_header_id=tpl_header.get("id").toString();
-			model.put("success", true);
-			model.put("data", qualityDao.queryPrdRcdTplDetail(tpl_header_id));
-			model.put("tpl_header", tpl_header);
-		}	
+			Map<String,Object> tpl_header=qualityDao.queryPrdRcdOrderTplHeader(condMap);
+			if(tpl_header==null){
+				model.put("message", "未匹配到订单模板！");
+				model.put("success", false);
+			}else{
+				String tpl_header_id=tpl_header.get("id").toString();
+				model.put("success", true);
+				model.put("data", qualityDao.queryPrdRcdTplDetail(tpl_header_id));
+				model.put("tpl_header", tpl_header);
+			}	
+		}
+		
+		
 	}
 
 	@Override

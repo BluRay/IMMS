@@ -81,6 +81,7 @@
 										</td>
 										<td><input class="btn btn-sm btn-primary" id="btnQuery" value="查询" style="margin-left: 2px;" type="button">
 											<input class="btn btn-sm btn-success" id="btnSave" value="保存" style="margin-left: 2px;" type="button"> 
+											<input class="btn btn-sm btn-danger fa-times" del_flag='del_all' id="btnDelete" value="删除" style="margin-left: 2px;" type="button"> 
 										</td>
 										</tr>
 									</table>

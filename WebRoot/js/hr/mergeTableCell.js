@@ -49,8 +49,9 @@ onmessage =function(event){
 				if(cell_data==cell_data_lst){//相同值需要合并					
 					var flag=true;
 					
-					for(var jj=0;jj<index;jj++){
-						var column_last=columns[jj]||columns[0];//前一个合并列
+					for(var jj=j-1;jj>=0;jj--){
+						var ii=rowsGroup[jj];
+						var column_last=columns[ii]//前一个合并列
 						var cell_data_clst=data[column_last.data];//前一个合并列单元格的值
 						var cell_data_clst_lst=result[i-1][column_last.data];//前一个合并列上一行对应的单元格的值
 						if(cell_data_clst!=cell_data_clst_lst){
@@ -74,10 +75,10 @@ onmessage =function(event){
 						var rowspan=parseInt(td_merge.rowspan);
 						//alert($(td_merge).html())
 						td_merge.rowspan=rowspan+1;
-						
+						//trs[i][j_merge].rowspan=rowspan+1;
 					}else{
 						if(index>=0){
-							ele_ids[index]="td_"+i+"_"+rowsGroup[index];
+							ele_ids[j]="td_"+i+"_"+rowsGroup[j];
 						}						
 					}
 					
@@ -89,8 +90,8 @@ onmessage =function(event){
 							ele_ids.push("td_"+i+"_"+rowsGroup[j]);
 						}
 					}
-					if(index>=0){
-						ele_ids[index]="td_"+i+"_"+rowsGroup[index];
+					if(index>0){
+						ele_ids[j]="td_"+i+"_"+rowsGroup[j];
 					}
 				}							
 			}
