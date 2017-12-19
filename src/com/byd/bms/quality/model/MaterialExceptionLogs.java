@@ -44,6 +44,26 @@ public class MaterialExceptionLogs {
     public int creator_id;
     
     public String order_no;
+    
+    public String factory;
+    
+    public String getFactory() {
+		return factory;
+	}
+
+	public void setFactory(String factory) {
+		this.factory = factory;
+	}
+
+	public String getWorkshop() {
+		return workshop;
+	}
+
+	public void setWorkshop(String workshop) {
+		this.workshop = workshop;
+	}
+
+	public String workshop;
 
 	public String getOrder_no() {
 		return order_no;

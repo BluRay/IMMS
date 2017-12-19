@@ -1237,13 +1237,13 @@ public class QualityController extends BaseController {
 		mv.setViewName("quality/materialExceptionLogs");
 		return mv;
 	}
-	@RequestMapping("/getmaterialExceptionLogsList")
+	@RequestMapping("/getMaterialExceptionLogsList")
 	@ResponseBody
-	public ModelMap getmaterialExceptionLogsList() {
+	public ModelMap getMaterialExceptionLogsList() {
 		Map conditionMap = new HashMap();
 		String bustypeId = request.getParameter("bustypeId");
-		String workshopId = request.getParameter("workshopId");
-		String factoryId = request.getParameter("factoryId");
+		String workshop = request.getParameter("workshop");
+		String factory = request.getParameter("factory");
 		String material = request.getParameter("material");
 		String orderNo = request.getParameter("orderNo");
 		String bugLevel = request.getParameter("bugLevel");
@@ -1252,8 +1252,8 @@ public class QualityController extends BaseController {
 		// 封装查询条件
 		conditionMap.put("bustypeId", bustypeId);
 		conditionMap.put("orderNo", orderNo);
-		conditionMap.put("workshopId", workshopId);
-		conditionMap.put("factoryId", factoryId);
+		conditionMap.put("workshop", workshop);
+		conditionMap.put("factory", factory);
 		conditionMap.put("material", material);
 		conditionMap.put("bugLevel", bugLevel);
 		conditionMap.put("occurDateStart", occurDateStart);
@@ -1280,8 +1280,10 @@ public class QualityController extends BaseController {
 		String curTime = df.format(new Date());
 		MaterialExceptionLogs logs = new MaterialExceptionLogs();
 		logs.setOccur_date(request.getParameter("occurDate"));
-		logs.setFactory_id(Integer.valueOf(request.getParameter("factroy_id")));
-		logs.setWorkshop_id(Integer.valueOf(request.getParameter("workshop")));
+		logs.setFactory_id(Integer.valueOf(request.getParameter("factory_id")));
+		logs.setFactory(request.getParameter("factory"));
+		logs.setWorkshop_id(Integer.valueOf(request.getParameter("workshop_id")));
+		logs.setWorkshop(request.getParameter("workshop"));
 		logs.setBus_type_id(Integer.valueOf(request.getParameter("bus_type")));
 		logs.setBug_level(request.getParameter("bugLevel"));
 		logs.setDescription(request.getParameter("description"));
@@ -1321,8 +1323,10 @@ public class QualityController extends BaseController {
 		MaterialExceptionLogs logs = new MaterialExceptionLogs();
 		logs.setId(Integer.valueOf(request.getParameter("id")));
 		logs.setOccur_date(request.getParameter("occurDate"));
-		logs.setFactory_id(Integer.valueOf(request.getParameter("factroy_id")));
-		logs.setWorkshop_id(Integer.valueOf(request.getParameter("workshop")));
+		logs.setFactory_id(Integer.valueOf(request.getParameter("factory_id")));
+		logs.setFactory(request.getParameter("factory"));
+		logs.setWorkshop_id(Integer.valueOf(request.getParameter("workshop_id")));
+		logs.setWorkshop(request.getParameter("workshop"));
 		logs.setBus_type_id(Integer.valueOf(request.getParameter("bus_type")));
 		logs.setBug_level(request.getParameter("bugLevel"));
 		logs.setDescription(request.getParameter("description"));
@@ -1576,11 +1580,36 @@ public class QualityController extends BaseController {
 	
 	@RequestMapping("addQualityAbnormalRecord")
 	@ResponseBody
-	public ModelMap addQualityAbnormalRecord(){
+	public ModelMap addQualityAbnormalRecord(@RequestParam(value="file",required = false) MultipartFile file){
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String curTime = df.format(new Date());
 		String user_name=(String) session.getAttribute("user_name");
 		Map<String,Object> condMap=new HashMap<String,Object>();
+        String bpath = "docs/upload/qcStandard/";
+		
+		// 把上传的文件放到指定的路径下
+		String path = request.getSession().getServletContext().getRealPath(bpath);
+
+		// 写到指定的路径中
+		File pathfile = new File(path);
+		// 如果指定的路径没有就创建
+		if (!pathfile.exists()) {
+			pathfile.mkdirs();
+		}
+		String afile_db ="";
+		if (file!=null && file.getSize() != 0) {
+			afile_db = "qcAfile_"
+					+ curTime.replace("-", "").replace(":", "").replace(" ", "")
+					+ file.getOriginalFilename().substring(file.getOriginalFilename().indexOf("."),
+							file.getOriginalFilename().length());
+			try {
+				FileUtils.copyInputStreamToFile(file.getInputStream(), new File(pathfile, afile_db));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			condMap.put("problem_photo_path", bpath+ afile_db);
+		}
+		
 		condMap.put("bus_type", request.getParameter("bus_type"));
 		condMap.put("factory", request.getParameter("factory"));
 		condMap.put("test_node_id", request.getParameter("test_node_id"));
@@ -1593,17 +1622,10 @@ public class QualityController extends BaseController {
 		condMap.put("bug_type",request.getParameter("bug_type"));
 		condMap.put("bug_desc", request.getParameter("bug_desc"));
 		condMap.put("level",request.getParameter("level"));
+		condMap.put("resp_unit", request.getParameter("resp_unit"));
 		condMap.put("remark", request.getParameter("remark"));
 		condMap.put("editor", user_name);
 		condMap.put("edit_date", curTime);
-//		String flag=request.getParameter("flag");
-//		if(flag.equals("1")){
-//			Map<String, Object> map = qualityService.checkBusNumber(condMap);
-//			if(map==null){
-//				initModel(false,"车号在该订单下不存在",null);
-//				return mv.getModelMap();
-//			}
-//		}
 		try{
 			qualityService.insertQualityAbnormalRecord(condMap);
 			initModel(true,"保存成功！",null);
@@ -1769,8 +1791,7 @@ public class QualityController extends BaseController {
 		queryMap.put("length", -1);
 		Map<String,Object> factoryMap=baseDataService.getFactoryList(queryMap);
 		List factorydata=(List) factoryMap.get("data");
-		Map<String,Object> workshopMap=baseDataService.getWorkshopList(queryMap);
-		List workshopdata=(List) workshopMap.get("data");
+		List workshopdata=new ArrayList<>();
 		Map<String,Object> busTypeMap=baseDataService.getBusTypeList(queryMap);
 		List bustypedata=(List) busTypeMap.get("data");
         Map<String,Object> orderMap=orderService.getOrderListPage(queryMap);
@@ -1797,6 +1818,8 @@ public class QualityController extends BaseController {
 					if(ipmfactory.equals(entity.getFactoryName())){
 						infomap.put("factory", data[2].toString().trim());
 						infomap.put("factory_id",entity.getId());
+						Map<String,Object> workshopMap=qualityService.getWorkshopByFactoryId(entity.getId()+"");
+						workshopdata=(List) workshopMap.get("data");
 						break;
 					}
 				}
@@ -1812,10 +1835,10 @@ public class QualityController extends BaseController {
 			}else{
 				String ipmworkshop=data[3].toString().trim();
 				for(Object workshop : workshopdata){
-					BmsBaseWorkshop entity=(BmsBaseWorkshop)workshop;
-					if(ipmworkshop.equals(entity.getWorkshopName())){
+					Map entity=(Map)workshop;
+					if(entity.get("name")!=null && ipmworkshop.equals(entity.get("name").toString())){
 						infomap.put("workshop", data[3].toString().trim());
-						infomap.put("workshop_id",entity.getId());
+						infomap.put("workshop_id",entity.get("id"));
 						break;
 					}
 				}
@@ -1841,7 +1864,7 @@ public class QualityController extends BaseController {
 				}
 			}
 			if(data[5] != null && !data[5].toString().trim().equals("")){
-			    String ipmbustype=data[5].toString().trim();
+				String ipmbustype=data[5].toString().trim();
 				for(Object bustype : bustypedata){
 				 BmsBaseBusType entity=(BmsBaseBusType )bustype;
 					if(ipmbustype.equals(entity.getBusTypeCode())){
@@ -1854,7 +1877,10 @@ public class QualityController extends BaseController {
 					infomap.put("bus_type", data[5].toString().trim());
 					errorMessage+="车型不存在;";
 				}
+			}else{
+				errorMessage+="车型不能为空;";
 			}
+			
 			if(data[6] == null){
 				errorMessage="异常描述不能为空";
 			}else if(data[6].toString().trim().equals("")){
@@ -1872,7 +1898,9 @@ public class QualityController extends BaseController {
 			infomap.put("verifer", data[14] == null ? null : data[14].toString().trim());
 			infomap.put("expc_finish_date", data[15] == null ? null : data[15].toString().trim());
 			infomap.put("memo", data[16] == null ? null : data[16].toString().trim());
-			infomap.put("error", errorMessage);
+			if(!errorMessage.equals("")){
+				infomap.put("error", errorMessage);
+			}
 			addList.add(infomap);
 		}
 		initModel(true,"",addList);
@@ -1913,5 +1941,16 @@ public class QualityController extends BaseController {
 			initModel(false,"保存失败！"+e.getMessage(),null);
 		}
 		return mv.getModelMap();
+	}
+	
+	@RequestMapping("/getWorkshopByFactoryId")
+	@ResponseBody
+	public ModelMap getWorkshopByFactoryId(){
+		String factory_id=request.getParameter("factory_id");
+		Map<String, Object> result = qualityService.getWorkshopByFactoryId(factory_id);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(result);
+		model = mv.getModelMap();
+		return model;
 	}
 }

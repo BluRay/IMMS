@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.ui.ModelMap;
 
 import com.byd.bms.quality.model.BmsBaseQCStdRecord;
@@ -112,6 +113,8 @@ public interface IQualityService {
   	public int insertQualityStdImplementInfo(Map<String,Object> conMap);
   	
   	public int saveMaterialExceptionLogsByBatch(Map<String, Object> conMap);
+  	
+  	public Map<String, Object> getWorkshopByFactoryId(String factory_id);
   	//======================== tj end=================================//
 	
 	

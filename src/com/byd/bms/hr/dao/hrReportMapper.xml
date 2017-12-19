@@ -968,9 +968,34 @@
 		( SELECT a.staff_number,a.staff_name,a.workhour_type workHoursType,
 		group_concat('\"',substr(a.work_date,9,10),'\":\"',CONCAT(a.sum_participation,'\";') order by work_date separator '') AS participationStr 
 		FROM 
-		(select '计件' workhour_type,pp.staff_number,pp.staff_name,sum(pp.bus_count) sum_participation,pp.work_date 
+		(select '计件' workhour_type,pp.staff_number,pp.staff_name,
+		(case salary_model when '辅助人力' then
+		 ( case workshop when '自制件' then
+		      (select sum(quantity) from BMS_PD_WORKSHOP_SUPPLY s left join BMS_BASE_FACTORY f on f.id=s.factory_id and f.factory_name=#{factory}
+		      where receive_workshop='部件' and s.supply_workshop=pp.workshop and supply_date like CONCAT(#{work_date},'%') and f.factory_name=#{factory})
+		    when '部件' then
+		      (select sum(offline_real_qty) from BMS_PD_PARTS_PLAN_FINISH pf
+				left join BMS_BASE_FACTORY f ON pf.factory_id=f.id
+				left join BMS_BASE_KEY k on k.value=pf.parts_id and k.key_code='BASE_PARTS'
+				where  k.key_name='喷砂' and prod_date like CONCAT(#{work_date},'%') and f.factory_name=#{factory})
+		    when '焊装' then
+		      (select count(1) from BMS_PLAN_BUS b left join BMS_BASE_FACTORY f on f.id=b.factory_id 
+		       and f.factory_name=#{factory} where left(welding_offline_date,10) like CONCAT(#{work_date},'%'))
+		    when '涂装' then
+		      (select count(1) from BMS_PLAN_BUS b left join BMS_BASE_FACTORY f on f.id=b.factory_id 
+		       where f.factory_name=#{factory} and left(painting_offline_date,10) like CONCAT(#{work_date},'%'))
+		    when '底盘' then
+		      (select count(1) from BMS_PLAN_BUS b left join BMS_BASE_FACTORY f on f.id=b.factory_id 
+		       where f.factory_name=#{factory} and left(chassis_offline_date,10) like CONCAT(#{work_date},'%'))
+		    when '总装' then
+		      (select count(1) from BMS_PLAN_BUS b left join BMS_BASE_FACTORY f on f.id=b.factory_id 
+		       where f.factory_name=#{factory} and left(assembly_offline_date,10) like CONCAT(#{work_date},'%'))
+		    end
+		 )
+		else sum(pp.bus_count) end) sum_participation,
+		(case LENGTH(pp.work_date) when 7 then concat(pp.work_date,'-01') else pp.work_date end ) work_date
 		from BMS_HR_PIECE_SALARY pp
-		where pp.work_date like CONCAT(#{work_date},'%') and FIND_IN_SET(pp.status,'1,3') and pp.distribution>0
+		where pp.work_date like CONCAT(#{work_date},'%') and FIND_IN_SET(pp.status,'1,3') and pp.ppay>0
 		<if test="factory!='全部'">
 			AND pp.factory = #{factory}
 		</if>
@@ -1067,7 +1092,7 @@
 		FROM 
 		(select '计件' workhour_type,pp.staff_number,pp.staff_name,sum(pp.bus_count) sum_participation,pp.work_date 
 		from BMS_HR_PIECE_SALARY pp
-		where pp.work_date like CONCAT(#{work_date},'%') and FIND_IN_SET(pp.status,'1,3') and pp.distribution>0
+		where pp.work_date like CONCAT(#{work_date},'%') and FIND_IN_SET(pp.status,'1,3') and pp.ppay>0
 		<if test="factory!='全部'">
 			AND pp.factory = #{factory}
 		</if>

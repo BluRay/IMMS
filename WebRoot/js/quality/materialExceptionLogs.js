@@ -20,7 +20,7 @@ $(document).ready(function(){
 		getOrderNoSelect("#new_orderNo","#orderId",setBusType);
 		getOrderNoSelect("#edit_orderNo","#orderId");
 		getFactorySelect("quality/materialExceptionLogs",'',"#search_factory","全部",'id');
-		getWorkshopSelect("quality/materialExceptionLogs",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
+		//getWorkshopSelect("quality/materialExceptionLogs",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
 		$('#new_bphoto,#new_fphoto,#edit_bphoto,#edit_fphoto').ace_file_input({
 			no_file:'请选择要上传的文件...',
 			btn_choose:'选择文件',
@@ -41,9 +41,9 @@ $(document).ready(function(){
 			droppable:false,
 			onchange:null,
 			thumbnail:false, //| true | large
-			allowExt: ['xlsx','xls'],
+			//allowExt: ['xlsx','xls'],
 		}).on('file.error.ace', function(event, info) {
-			alert("Please Choose xls File!");
+			alert("请上传正确的文件!");
 	    });
 		ajaxQuery();
 	}
@@ -53,21 +53,32 @@ $(document).ready(function(){
 		return false;
 	});
 	$('#search_factory').change(function(){ 
-		getWorkshopSelect("quality/materialExceptionLogs",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
+		//getWorkshopSelect("quality/materialExceptionLogs",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
+		if($(this).val()!=''){
+			getWorkshop($(this).val(),$("#search_workshop"));
+		}
 	});
 	$('#new_factory').change(function(){ 
-		getWorkshopSelect("quality/materialExceptionLogs",$("#new_factory :selected").text(),"","#new_workshop",null,"id");
+		//getWorkshopSelect("quality/materialExceptionLogs",$("#new_factory :selected").text(),"","#new_workshop",null,"id");
+		if($(this).val()!=''){
+			getWorkshop($(this).val(),$("#new_workshop"));
+		}
 	});
 	$('#edit_factory').change(function(){ 
-		getWorkshopSelect("quality/materialExceptionLogs",$("#edit_factory :selected").text(),"","#edit_workshop",null,"id");
+		//getWorkshopSelect("quality/materialExceptionLogs",$("#edit_factory :selected").text(),"","#edit_workshop",null,"id");
+		if($(this).val()!=''){
+			getWorkshop($(this).val(),$("#edit_workshop"));
+		}
 	});
 	
 	
 	$("#btnAdd").on('click', function(e) {
 		getBusType("#new_bus_type");
-		getFactorySelect("quality/materialExceptionLogs",'',"#new_factory",null,'id');
-		getWorkshopSelect("quality/materialExceptionLogs",$("#new_factory :selected").text(),"","#new_workshop",null,"id");
-		
+		getFactorySelect("quality/materialExceptionLogs",'',"#new_factory","全部",'id');
+		//getWorkshopSelect("quality/materialExceptionLogs",$("#new_factory :selected").text(),"","#new_workshop",null,"id");
+//		if($("#new_factory").val()!=''){
+//			getWorkshop($(this).val(),$("#new_workshop"));
+//		}
 		e.preventDefault();
 		$("#dialog-add").removeClass('hide').dialog({
 			resizable: false,
@@ -132,6 +143,8 @@ $(document).ready(function(){
 							var data={};
 							data.material = $(tds).eq(0).html();
 							data.occur_date = $(tds).eq(1).html();
+							data.factory = $(tds).eq(2).html();
+							data.workshop = $(tds).eq(3).html();
 							data.factory_id = $(tds).eq(17).children().eq(1).val();
 							data.workshop_id = $(tds).eq(17).children().eq(2).val();
 							data.order_id = $(tds).eq(17).children().eq(3).val();
@@ -162,13 +175,13 @@ $(document).ready(function(){
 						            if(response.success){
 						            	$( "#dialog-import" ).dialog("close");
 						            	$.gritter.add({
-											title: 'Message：',
+											title: '系统提示：',
 											text: "<h5>保存成功</h5>",
 											class_name: 'gritter-info'
 										});
 						            }else{
 						            	$.gritter.add({
-											title: 'Message：',
+											title: '系统提示：',
 											text: "<h5>保存失败</h5>",
 											class_name: 'gritter-info'
 										});
@@ -200,7 +213,7 @@ $(document).ready(function(){
 					}
 					var datalist=response.data;
 					var columns=[
-			            {"title":"物料名称","width":"100","class":"center","data":"material","defaultContent": ""},
+			            {"title":"物料名称","class":"center","data":"material","defaultContent": ""},
 			            {"title":"发生日期","width":"80","class":"center","data":"occur_date","defaultContent": ""},
 			            {"title":"发生工厂","width":"75","class":"center","data": "factory","defaultContent": ""},
 			            {"title":"发生车间","width":"70","class":"center","data":"workshop","defaultContent": ""},
@@ -217,8 +230,9 @@ $(document).ready(function(){
 			            {"title":"验证人","width":"70","class":"center","data": "verifer","defaultContent": ""},
 			            {"title":"计划完成日期","width":"100","class":"center","data":"expc_finish_date","defaultContent": ""},
 			            {"title":"备注","class":"center","data": "memo","defaultContent": ""},
-			            {"title":"","class":"center","data": "error","defaultContent": "","render":function(data,type,row){
-			            	 return "<label>"+data+"</label><input type='hidden' value='"+row.factory_id+"' class='factory_id'/>"+
+			            {"title":"数据校验结果","class":"center","data": "error","defaultContent": "","render":function(data,type,row){
+			            	var error=(data!=undefined ? data : '');
+			            	return "<label>"+error+"</label><input type='hidden' value='"+row.factory_id+"' class='factory_id'/>"+
 			            	 "<input type='hidden' value='"+row.workshop_id+"' class='workshop_id'/>"+
 			            	 "<input type='hidden' value='"+row.order_id+"' class='order_id'/>"+
                              "<input type='hidden' value='"+row.bus_type_id+"' class='bus_type_id'/>";
@@ -272,8 +286,10 @@ function showExceptionLogs(id){
 	clear();
 	getBusType("#edit_bus_type");
 	getFactorySelect("quality/materialExceptionLogs",'',"#edit_factory",null,'id');
-	getWorkshopSelect("quality/materialExceptionLogs",$("#edit_factory :selected").text(),"","#edit_workshop",null,"id");
-	
+	//getWorkshopSelect("quality/materialExceptionLogs",$("#edit_factory :selected").text(),"","#edit_workshop",null,"id");
+	if($("#edit_factory").val()!=''){
+		getWorkshop($("#edit_factory").val(),$("#edit_workshop"));
+	}
 	$.ajax({
 		url: "showMaterialExceptionLogs",
 		dataType: "json",
@@ -294,7 +310,8 @@ function showExceptionLogs(id){
 			$("#edit_respUnit").val(response.data.resp_unit);
 			$("#edit_respPerson").val(response.data.resp_person);
 			$("#edit_factory").val(response.data.factory_id);
-			$("#edit_workshop option[value='"+response.data.workshop_id+"']").attr("selected",true);
+			//$("#edit_workshop option[value='"+response.data.workshop_id+"']").attr("selected",true);
+			$("#edit_workshop").find("option:contains('"+response.data.workshop+"')").attr("selected",true);
 			$("#edit_verifier").val(response.data.verifier);
 			$("#edit_verifyResult option[value='"+response.data.verify_result+"']").attr("selected",true);
 			$("#edit_bugLevel option[value='"+response.data.verify_result+"']").attr("selected",true);
@@ -339,8 +356,10 @@ function showExceptionLogs(id){
 function editExceptionLogs(id){
 	getBusType("#edit_bus_type");
 	getFactorySelect("quality/materialExceptionLogs",'',"#edit_factory",null,'id');
-	getWorkshopSelect("quality/materialExceptionLogs",$("#edit_factory :selected").text(),"","#edit_workshop",null,"id");
-
+	//getWorkshopSelect("quality/materialExceptionLogs",$("#edit_factory :selected").text(),"","#edit_workshop",null,"id");
+	if($("#edit_factory").val()!=''){
+		getWorkshop($("#edit_factory").val(),$("#edit_workshop"));
+	}
 	$(".div-dialog input").prop("disabled",false);  
     $(".div-dialog select").prop("disabled",false); 
     $(".div-dialog textarea").prop("disabled",false); 
@@ -364,7 +383,8 @@ function editExceptionLogs(id){
 			$("#edit_respUnit").val(response.data.resp_unit);
 			$("#edit_respPerson").val(response.data.resp_person);
 			$("#edit_factory").val(response.data.factory_id);
-			$("#edit_workshop option[value='"+response.data.workshop_id+"']").attr("selected",true);
+			//$("#edit_workshop option[value='"+response.data.workshop_id+"']").attr("selected",true);
+			$("#edit_workshop").find("option:contains('"+response.data.workshop+"')").attr("selected",true);
 			$("#edit_verifier").val(response.data.verifier);
 			$("#edit_verifyResult option[value='"+response.data.verify_result+"']").attr("selected",true);
 			$("#edit_memo").val(response.data.memo);
@@ -392,7 +412,9 @@ function editExceptionLogs(id){
 				buttons: [{
 							text: "关闭",
 							"class" : "btn btn-minier",
-							click: function() {$( this ).dialog( "close" );} 
+							click: function() {
+								clear();
+								$( this ).dialog( "close" );} 
 						},{
 							text: "保存",
 							id:"btn_ok",
@@ -438,14 +460,16 @@ function btnEditConfirm(id){
 	    	"id":id,
 	    	"occurDate" : $("#edit_occurDate").val(),
 	    	"bus_type" : $("#edit_bus_type").val(),
-			"factroy_id":$("#edit_factory").val(),
+			"factory_id":$("#edit_factory").val(),
+			"factory":$("#edit_factory :selected").text(),
 			"material" : $("#edit_material").val(),
 			"orderNo" : $("#edit_orderNo").val(),
 			"description" : $("#edit_description").val(),
 			"tmpMeasures" : $("#edit_tmpMeasures").val(),
 			"faultReason" : $("#edit_faultReason").val(),
 			"impMeasures" : $("#edit_impMeasures").val(),
-			"workshop" : $('#edit_workshop').val(),
+			"workshop_id" : $('#edit_workshop').val(),
+			"workshop" : $('#edit_workshop :selected').text(),
 			"bugLevel" : $("#edit_bugLevel").val(),
 			"expcFinishDate" : $("#edit_expcFinishDate").val(),
 			"respUnit" : $("#edit_respUnit").val(),
@@ -457,6 +481,7 @@ function btnEditConfirm(id){
 		async: false,
 	    success:function (response) {
 	    	if (response.success) {
+	    		clear();
 		    	$.gritter.add({
 					title: '系统提示：',
 					text: '<h5>编辑成功！</h5>',
@@ -505,7 +530,8 @@ function btnNewConfirm(){
 	    data: {
 	    	"occurDate" : $("#new_occurDate").val(),
 	    	"bus_type" : $("#new_bus_type").val(),
-			"factroy_id":$("#new_factory").val(),
+			"factory_id":$("#new_factory").val(),
+			"factory":$("#new_factory :selected").text(),
 			"material" : $("#new_material").val(),
 			"orderNo" : $("#new_orderNo").val(),
 			"description" : $("#new_description").val(),
@@ -514,7 +540,8 @@ function btnNewConfirm(){
 			"tmpMeasures" : $("#new_tmpMeasures").val(),
 			"faultReason" : $("#new_faultReason").val(),
 			"impMeasures" : $("#new_impMeasures").val(),
-			"workshop" : $('#new_workshop').val(),
+			"workshop_id" : $('#new_workshop').val(),
+			"workshop" : $('#new_workshop :selected').text(),
 			"bugLevel" : $("#new_bugLevel").val(),
 			"expcFinishDate" : $("#new_expcFinishDate").val(),
 			"respUnit" : $("#new_respUnit").val(),
@@ -602,8 +629,8 @@ function ajaxQuery(){
 			var param ={
 				"draw":1,
 				"orderColumn":"id",
-				"factoryId" : $("#search_factory").val(),
-				"workshopId" : $("#search_workshop").val(),
+				"factory" : $("#search_factory :selected").text(),
+				"workshop" : $("#search_workshop :selected").text(),
 				"bustypeId" : $("#search_bustype").val(),
 				"material" : $("#search_material").val(),
 				"orderNo" : $("#search_orderno").val(),
@@ -617,7 +644,7 @@ function ajaxQuery(){
 
             $.ajax({
                 type: "post",
-                url: "getmaterialExceptionLogsList",
+                url: "getMaterialExceptionLogsList",
                 cache: false,  //禁用缓存
                 data: param,  //传入组装的参数
                 dataType: "json",
@@ -637,18 +664,20 @@ function ajaxQuery(){
             });
 		},
 		columns: [
-		            {"title":"工厂",width:'80',"class":"center","data":"factory_name","defaultContent": ""},
-		            {"title":"车间",width:'75',"class":"center","data":"workshop_name","defaultContent": ""},
+		            {"title":"工厂",width:'80',"class":"center","data":"factory","defaultContent": ""},
+		            {"title":"车间",width:'75',"class":"center","data":"workshop","defaultContent": ""},
 		            {"title":"车型",width:'80',"class":"center","data":"bus_type_code","defaultContent": ""},
 		            {"title":"订单",width:'100',"class":"center","data":"order_name","defaultContent": ""},
 		            {"title":"物料名称",width:'80',"class":"center","data":"material","defaultContent": ""},
 		            {"title":"缺陷等级",width:'70',"class":"center","data":"bug_level","defaultContent": ""},
 		            {"title":"责任单位",width:'80',"class":"center","data":"resp_unit","defaultContent": ""},
 		            {"title":"责任人",width:'80',"class":"center","data":"resp_person","defaultContent": ""},
-		            {"title":"预计完成时间",width:'100',"class":"center","data":"expc_finish_date","defaultContent": ""},
-		            {"title":"验证结果",width:'80',"class":"center","data":"verify_result","defaultContent": ""},
-		            {"title":"验证人",width:'60',"class":"center","data":"verifier","defaultContent": ""},
+//		            {"title":"预计完成时间",width:'100',"class":"center","data":"expc_finish_date","defaultContent": ""},
+//		            {"title":"验证结果",width:'80',"class":"center","data":"verify_result","defaultContent": ""},
+//		            {"title":"验证人",width:'60',"class":"center","data":"verifier","defaultContent": ""},
 		            {"title":"发生日期",width:'120',"class":"center","data":"occur_date","defaultContent": ""},
+		            {"title":"录入人",width:'120',"class":"center","data":"username","defaultContent": ""},
+		            {"title":"录入日期",width:'120',"class":"center","data":"creat_date","defaultContent": ""},
 		            {"title":"操作",width:'80',"class":"center","data":null,"defaultContent": "",
 		            	"render": function ( data, type, row ) {
 		            		return "<i class=\"glyphicon glyphicon-search bigger-130 showbus\" title=\"查看\" onclick='showExceptionLogs(" 
@@ -660,7 +689,25 @@ function ajaxQuery(){
 		          ],
 	});
 }
-function clear(){
+function getWorkshop(factory_id,element){
+	$.ajax({
+		url: "getWorkshopByFactoryId",
+		dataType: "json",
+		data: {"factory_id":factory_id},
+		async: false,
+		error: function () {},
+		success: function (response) {
+			$(element).empty();
+			var strs = "<option value=''>全部</option>";
+		    $.each(response.data, function(index, value) {
+                strs += "<option value=" + value.id + ">" + value.name + "</option>";
+		    });
+		    $(element).append(strs);
+		}
+	});
+}
+function clear(){ 
+	$(".ace-file-name").attr("data-title","");
 	$("#edit_material").val("");
 	$("#edit_orderNo").val("");
 	$("#edit_occurDate").val("");

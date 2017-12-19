@@ -208,7 +208,7 @@
 							<input name="edit_bphoto" type="file"  id="edit_bphoto" />
 							</div>
 						</td>
-						<td><a target="blank" id="bphoto">查看</a></td>
+						<td>&nbsp;&nbsp;&nbsp;&nbsp;<a target="blank" id="bphoto"> 查看</a></td>
 					</tr>
 					<tr style="height:36px">
 					    <td align="right">&nbsp;临时措施：</td>
@@ -233,7 +233,7 @@
 						<td ><select class="input-medium" id="edit_bugLevel" style="width:150px"><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="S">S</option></select></td>
 					    <td align="right" style="width:180px">*预计完成日期：</td>
 						<td style="width:150px">
-						<input type="text" class="input-medium" id="edit_expcFinishDate" name="new_expcFinishDate" onClick="WdatePicker({el:'new_expcFinishDate',dateFmt:'yyyy-MM-dd'});" style="width:150px"/>
+						<input type="text" class="input-medium" id="edit_expcFinishDate" name="new_expcFinishDate" onClick="WdatePicker({el:'edit_expcFinishDate',dateFmt:'yyyy-MM-dd'});" style="width:150px"/>
 						</td>
 					</tr>
 					<tr style="height:36px">
@@ -249,7 +249,7 @@
 						<td colspan=2>
 							<input name="edit_fphoto" type="file" style="300px;" id="edit_fphoto" />
 						</td>
-						<td><a target="blank" id="fphoto">查看</a></td>
+						<td>&nbsp;&nbsp;&nbsp;&nbsp;<a target="blank" id="fphoto"> 查看</a></td>
 					</tr>
 					<tr style="height:36px">
 					    <td align="right">&nbsp;备注：</td>

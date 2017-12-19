@@ -545,7 +545,7 @@ function updateBusFollow(e,task_id,task_detail_id,order_no,factory,workshop,zzj_
 	$.ajax({
 		url: "updateBusNumberFollow",
 		dataType: "json",
-		type: "get",
+		type: "post",
 		data: {
 				"task_id" : task_id,
 				"task_detail_id":task_detail_id,

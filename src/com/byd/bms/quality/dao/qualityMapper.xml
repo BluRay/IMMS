@@ -785,17 +785,17 @@
 	</select>
 	
 	<select id="getMaterialExceptionLogsList" parameterType="Map" resultType="Map">
-		select t.*,f.factory_name, s.workshop_name,CONCAT(o.order_no,' ',o.order_name,ty.bus_type_code,'  ',o.order_qty,' ','台') as order_name,
-		o.order_no,ty.bus_type_code from BMS_QM_MATERIAL_EXCEPTION_LOGS t
-		LEFT JOIN BMS_BASE_FACTORY f on f.id=t.factory_id
+		select t.*,CONCAT(o.order_no,' ',o.order_name,ty.bus_type_code,'  ',o.order_qty,' ','台') as order_name,
+		o.order_no,ty.bus_type_code,u.username from BMS_QM_MATERIAL_EXCEPTION_LOGS t
+<!-- 		LEFT JOIN BMS_BASE_FACTORY f on f.id=t.factory_id -->
 	    LEFT JOIN BMS_BASE_BUS_TYPE ty on ty.id=t.bus_type_id
-	    LEFT JOIN BMS_BASE_WORKSHOP s on s.id=t.workshop_id
+        LEFT JOIN BMS_BASE_USER u on u.id=t.creater_id    <!-- 	    LEFT JOIN BMS_BASE_WORKSHOP s on s.id=t.workshop_id -->
 	    LEFT JOIN BMS_OR_ORDER o on o.id=t.order_id where 1=1 
-		<if test="factoryId!=null and factoryId!=''">
-			and t.factory_id=#{factoryId}
+		<if test="factory!=null and factory!='全部'">
+			and t.factory=#{factory}
 		</if>
-		<if test="workshopId!=null and  workshopId!=''">
-			and t.workshop_id=#{workshopId}
+		<if test="workshop!=null and workshop!='全部' and workshop!=''">
+			and t.workshop=#{workshop}
 		</if>
 		<if test="bustypeId!=null and bustypeId!=''">
 			and t.bus_type_id=#{bustypeId}
@@ -816,18 +816,18 @@
 			<![CDATA[and t.occur_date < #{occurDateEnd}]]>
 		</if>
 		order by creat_date desc
-		<if test="start!=null">
+		<if test="start!=null and length!=-1">
 			limit #{start},#{length}
 		</if>
 	</select>
 	<select id="getMaterialExceptionLogsCount" parameterType="Map" resultType="int">
 		select COUNT(1) from BMS_QM_MATERIAL_EXCEPTION_LOGS t 
            LEFT JOIN BMS_OR_ORDER o on o.id=t.order_id where 1=1 
-		<if test="factoryId!=null and factoryId!=''">
-			and t.factory_id=#{factoryId}
+		<if test="factory!=null and factory!='全部'">
+			and t.factory=#{factory}
 		</if>
-		<if test="workshopId!=null and  workshopId!=''">
-			and t.workshop_id=#{workshopId}
+		<if test="workshop!=null and  workshop!='全部' and workshop!=''">
+			and t.workshop=#{workshop}
 		</if>
 		<if test="bustypeId!=null and bustypeId!=''">
 			and t.bus_type_id=#{bustypeId}
@@ -855,19 +855,19 @@
 			LAST_INSERT_ID()
 		</selectKey>
 		insert into BMS_QM_MATERIAL_EXCEPTION_LOGS 
-		(occur_date,factory_id,workshop_id,bus_type_id,order_id,material,bug_level,
+		(occur_date,factory_id,factory,workshop_id,workshop,bus_type_id,order_id,material,bug_level,
 		description,bphoto,tmp_measures,fault_reason,imp_measure,resp_unit,resp_person,
 		expc_finish_date,verifier,verify_result,fphoto,memo,creater_id,creat_date)
 		values(
-		#{occur_date},#{factory_id},#{workshop_id},#{bus_type_id},#{order_id},#{material},
+		#{occur_date},#{factory_id},#{factory},#{workshop_id},#{workshop},#{bus_type_id},#{order_id},#{material},
 		#{bug_level},#{description},#{bphoto},#{tmp_measures},#{fault_reason},#{imp_measure},
 		#{resp_unit},#{resp_person},#{expc_finish_date},#{verifier},#{verify_result},#{fphoto},
 		#{memo},#{creator_id},#{creat_date}
 		)
 	</insert>
 	<update id="updateMaterialExceptionLogs" parameterType="com.byd.bms.quality.model.MaterialExceptionLogs">
-		update BMS_QM_MATERIAL_EXCEPTION_LOGS set
-		occur_date=#{occur_date},factory_id=#{factory_id},workshop_id=#{workshop_id},
+		update BMS_QM_MATERIAL_EXCEPTION_LOGS set occur_date=#{occur_date},
+		factory_id=#{factory_id},factory=#{factory},workshop_id=#{workshop_id},workshop=#{workshop},
 		bus_type_id=#{bus_type_id},order_id=#{order_id},material=#{material},bug_level=#{bug_level},
 		
 		<if test="description!=null and description!=''">
@@ -1191,9 +1191,9 @@
 			LAST_INSERT_ID()
 		</selectKey>
 		insert into BMS_QM_QUALITY_ABNORMAL_RECORD (factory,test_node_id,test_node,bus_type,order_id,bus_number,bug_type,bug_desc,problem_desc,level,
-		iqc,solution,remark,deleted,editor,edit_date) values
-		(#{factory},#{test_node_id},#{test_node},#{bus_type},#{order_id},#{bus_number},#{bug_type},#{bug_desc},#{problem_desc},#{level},#{iqc},
-		#{solution},#{remark},'0',#{editor},#{edit_date})
+		resp_unit,problem_photo_path,iqc,solution,remark,deleted,editor,edit_date) values
+		(#{factory},#{test_node_id},#{test_node},#{bus_type},#{order_id},#{bus_number},#{bug_type},#{bug_desc},#{problem_desc},#{level},
+		#{resp_unit},#{problem_photo_path},#{iqc},#{solution},#{remark},'0',#{editor},#{edit_date})
      </insert>
      <update id="deleteQualityAbnormalRecord" parameterType="java.util.List">
 		update BMS_QM_QUALITY_ABNORMAL_RECORD set deleted='1' where id in
@@ -1279,14 +1279,19 @@
 			LAST_INSERT_ID()
 		</selectKey>
 		insert into BMS_QM_MATERIAL_EXCEPTION_LOGS 
-		(occur_date,factory_id,workshop_id,bus_type_id,order_id,material,bug_level,description,tmp_measures,fault_reason,
+		(occur_date,factory_id,factory,workshop_id,workshop,bus_type_id,order_id,material,bug_level,description,tmp_measures,fault_reason,
 		imp_measure,resp_unit,resp_person,expc_finish_date,verify_result,verifier,memo,creater_id,creat_date) 
 		values
 		<foreach collection="list" item="detail" index="index" separator=",">
-			(#{detail.occur_date},#{detail.factory_id},#{detail.workshop_id},#{detail.bus_type_id},#{detail.order_id},
-			#{detail.material},#{detail.bug_level},#{detail.description},#{detail.tmp_measures},#{detail.fault_reason},
+			(#{detail.occur_date},#{detail.factory_id},#{detail.factory},#{detail.workshop_id},#{detail.workshop},#{detail.bus_type_id},
+			#{detail.order_id},#{detail.material},#{detail.bug_level},#{detail.description},#{detail.tmp_measures},#{detail.fault_reason},
 			#{detail.imp_measure},#{detail.resp_unit},#{detail.resp_person},#{detail.expc_finish_date},#{detail.verify_result},
 			#{detail.verifer},#{detail.memo},#{creator_id},#{edit_date})
 		</foreach>		
 	</insert>
+	<select id="getWorkshopByFactoryId" parameterType="String" resultType="Map">
+	     select * from BMS_BASE_ORG where
+		 parent_id in (select id from BMS_BASE_ORG o 
+		where o.foreign_id=#{factory_id} and org_type='1' and deleted='0') and deleted='0'
+    </select>
 </mapper>

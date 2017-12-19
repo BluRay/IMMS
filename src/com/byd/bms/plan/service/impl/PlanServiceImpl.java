@@ -611,13 +611,19 @@ public class PlanServiceImpl implements IPlanService {
 				}
 			}
 		}else{
-			int check = planDao.checkBingingVin(queryMap);
-			if(check != 0){
-				//此电机号已经绑定了
-				return -2;
-			}else{
+			if(update_val==""){
+				//解除绑定
 				planDao.bingingVin(queryMap);
+			}else {
+				int check = planDao.checkBingingVin(queryMap);
+				if(check != 0){
+					//此电机号已经绑定了
+					return -2;
+				}else{
+					planDao.bingingVin(queryMap);
+				}
 			}
+			
 		}
 		return 0;
 	}

@@ -57,7 +57,9 @@ $(document).ready(function(){
 		if($(this).val()==''){
 			return false;
 		}
+		//订单选项弹出层没隐藏之前,不触发事件
 		if($("#order_no_td .typeahead").css("display")=="block"){
+			//alert("不触发事件");
 			return false;
 		}
 		$.ajax({
@@ -110,6 +112,17 @@ $(document).ready(function(){
 	
 	$("#btnAdd").on('click', function(e) {
 		clear();
+		$('#file').ace_file_input({
+			no_file:'请选择要上传的文件...',
+			btn_choose:'选择文件',
+			btn_change:'重新选择',
+			droppable:false,
+			onchange:null,
+			thumbnail:false, //| true | large
+			//allowExt: ['xlsx','xls'],
+		}).on('file.error.ace', function(event, info) {
+			alert("Please Choose xls File!");
+	    });
 		getFactorySelect("quality/qualityAbnormalRecord",'',"#new_factory",null,'id');
 		getWorkshopSelect("quality/qualityAbnormalRecord",$("#new_factory :selected").text(),"","#new_workshop",null,"id");
 		getOrderNoSelect("#new_order_no","#orderId");
@@ -141,6 +154,7 @@ $(document).ready(function(){
 						"class" : "btn btn-info btn-minier",
 						click: function() {
 							btnNewConfirm('1');
+							clear();
 						} 
 					}
 				]
@@ -153,171 +167,6 @@ $(document).ready(function(){
 		ajaxDelete();
 	});
 });
-
-function showProblemImprove(id){
-	$(".div-dialog input").prop("disabled",true);  
-    $(".div-dialog select").prop("disabled",true);  
-    $.ajax({
-		url: "showProblemImprove",
-		dataType: "json",
-		data: {"id":id},
-		async: false,
-		error: function () {alertError();},
-		success: function (response) {
-			$("#edit_fault_description").val(response.data.fault_description);
-			$("#edit_factory").val(response.data.factory_id);
-			getWorkshopSelect("quality/processFault",$("#edit_factory :selected").text(),"","#edit_workshop",null,"id");
-			$("#edit_workshop").val(response.data.response_workshop);
-			$("#edit_bus_type").find("option:contains('"+response.data.bus_type+"')").attr("selected",true);
-			$("#edit_vin").val(response.data.vin);
-			$("#edit_license_number").val(response.data.license_number);
-			$("#edit_fault_mils").val(response.data.fault_mils);
-			$("#edit_fault_phenomenon").val(response.data.fault_phenomenon);
-			$("#edit_fault_level_id").val(response.data.fault_level_id);
-			$("#edit_fault_reason").val(response.data.fault_reason);
-			$("#edit_risk_evaluate").val(response.data.risk_evaluate);
-			$("#edit_keystone_attention").val(response.data.keystone_attention);
-			$("#edit_resolve_method").val(response.data.resolve_method);
-			$("#edit_resolve_date").val(response.data.resolve_date);
-			$("#edit_memo").val(response.data.memo);
-		}
-    });
-    
-    $("#dialog-edit").removeClass('hide').dialog({
-		resizable: false,
-		title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 查看问题改善</h4></div>',
-		title_html: true,
-		width:'550px',
-		modal: true,
-		buttons: [{
-				text: "关闭",
-				"class" : "btn btn-minier",
-				click: function() {$( this ).dialog( "close" );} 
-			}
-		]
-	});
-}
-
-function editProblemImprove(id){
-	$(".div-dialog input").prop("disabled",false);  
-    $(".div-dialog select").prop("disabled",false);  
-
-    $.ajax({
-		url: "showProblemImprove",
-		dataType: "json",
-		data: {"id":id},
-		async: false,
-		error: function () {},
-		success: function (response) {
-			$("#edit_fault_description").val(response.data.fault_description);
-			$("#edit_factory").val(response.data.factory_id);
-
-			getWorkshopSelect("quality/processFault",$("#edit_factory :selected").text(),"","#edit_workshop",null,"id");
-			$("#edit_workshop").val(response.data.response_workshop);
-			//$("#edit_workshop").find("option:contains('"+response.data.response_workshop+"')").attr("selected",true);
-			$("#edit_bus_type").find("option:contains('"+response.data.bus_type+"')").attr("selected",true);
-			$("#edit_vin").val(response.data.vin);
-			$("#edit_license_number").val(response.data.license_number);
-			$("#edit_fault_mils").val(response.data.fault_mils);
-			$("#edit_fault_phenomenon").val(response.data.fault_phenomenon);
-			$("#edit_resolve_method").val(response.data.resolve_method);
-			$("#edit_resolve_date").val(response.data.resolve_date);
-			$("#edit_memo").val(response.data.memo);
-		}
-    });
-    
-    $("#dialog-edit").removeClass('hide').dialog({
-		resizable: false,
-		title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 编辑问题改善</h4></div>',
-		title_html: true,
-		width:'550px',
-		modal: true,
-		buttons: [{
-					text: "关闭",
-					"class" : "btn btn-minier",
-					click: function() {
-						$( this ).dialog( "close" );
-					} 
-				},{
-					text: "保存",
-					id:"btn_ok",
-					"class" : "btn btn-success btn-minier",
-					click: function() {
-						btnEditConfirm(id);
-					} 
-				}
-			]
-	});
-}
-
-function btnEditConfirm(id){
-	var vinTest = /^[A-Z0-9]{17}$/;
-	if($("#edit_fault_description").val()==''){
-		alert("请输入问题描述！");$("#edit_fault_description").focus();return false;
-	}
-	if($("#edit_vin").val()==''){
-		alert("请输入VIN号！");$("#edit_vin").focus();return false;
-	}
-	if(!vinTest.test($("#edit_vin").val())){
-		alert("请输入长度为17位，只包含大写字母和数字的VIN号！");
-		$("#edit_vin").focus();
-		return false;
-	}
-	if($("#edit_license_number").val()==''){
-		alert("请输入车牌号码！");$("#edit_license_number").focus();return false;
-	}
-	if($("#edit_fault_mils").val()==''){
-		alert("请输入行驶里程！");$("#edit_fault_mils").focus();return false;
-	}
-	var is_closed = 0;
-	if ($("#edit_is_closed").get(0).checked) {
-		is_closed = 1;
-	}
-	
-	$('#form_edit').ajaxSubmit({
-		url: "editProblemImprove",
-		dataType : "json",
-		type : "post",
-	    data: {
-	    	"edit_id":id,
-	    	"edit_fault_description":$("#edit_fault_description").val(),
-	    	"edit_factory":$("#edit_factory").val(),
-	    	"edit_workshop":$("#edit_workshop").val(),
-	    	"edit_bus_type":$("#edit_bus_type").val(),
-	    	"edit_vin":$("#edit_vin").val(),
-	    	"edit_license_number":$("#edit_license_number").val(),
-	    	"edit_fault_mils":$("#edit_fault_mils").val(),
-	    	"edit_fault_phenomenon":$("#edit_fault_phenomenon").val(),
-	    	"edit_fault_level_id":$("#edit_fault_level_id").val(),
-	    	"edit_fault_reason":$("#edit_fault_reason").val(),
-	    	"edit_risk_evaluate":$("#edit_risk_evaluate").val(),
-	    	"edit_keystone_attention":$("#edit_keystone_attention").val(),
-	    	"edit_resolve_method":$("#edit_resolve_method").val(),
-	    	"edit_resolve_date":$("#edit_resolve_date").val(),
-	    	"edit_memo":$("#edit_memo").val(),
-	    	"edit_is_closed":is_closed
-	    },
-		async: false,
-	    success:function (response) {
-	    	if (response.success) {
-		    	$.gritter.add({
-					title: '系统提示：',
-					text: '<h5>编辑成功！</h5>',
-					class_name: 'gritter-info'
-				});
-	    		$( "#dialog-edit" ).dialog( "close" ); 
-	    		ajaxQuery();
-	    	} else {
-		    	$.gritter.add({
-					title: '系统提示：',
-					text: '<h5>编辑失败！</h5>',
-					class_name: 'gritter-info'
-				});
-	    	}
-	    }
-	});
-	
-}
 
 function btnNewConfirm(flag){
 	if($("#new_order_no").val()==''){
@@ -338,12 +187,8 @@ function btnNewConfirm(flag){
 	if($("#new_bug_desc").val()==''){
 		alert("请选择故障描述！");$("#new_bug_desc").focus();return false;
 	}
-//	var workshop=$("#new_workshop :selected").text();
-//	var checkFlag="0"; // 四大车间需要验证车号
-//	if(checkMap.hasOwnProperty(workshop)){
-//		checkFlag="1";
-//	}
-	$.ajax({
+
+	$('#addForm').ajaxSubmit({
 		url: "addQualityAbnormalRecord",
 		dataType : "json",
 		type : "post",
@@ -361,11 +206,13 @@ function btnNewConfirm(flag){
 	    	"remark":$("#new_remark").val(),
 	    	"bug_type":$("#new_bug_type").val(),
 	    	"bug_desc":$("#new_bug_desc").val(),
-	    //	"flag":checkFlag
+	    	"resp_unit":$("#new_resp_unit").val(),
 	    },
 		async: false,
 	    success:function (response) {
+	    	
 	    	if (response.success) {
+	    		alert("inner return="+response.success+";flag="+flag);
 		    	$.gritter.add({
 					title: '系统提示：',
 					text: '<h5>新增成功！</h5>',
@@ -452,11 +299,19 @@ function ajaxQuery(){
 	                },"defaultContent": ""},
 		            {"title":"车号",width:'150',"class":"center","data":"bus_number","defaultContent": ""},
 		            {"title":"工厂",width:'80',"class":"center","data":"factory","defaultContent": ""},
-		            {"title":"检验节点",width:'60',"class":"center","data":"test_node","defaultContent": ""},
+		            {"title":"检验节点",width:'80',"class":"center","data":"test_node","defaultContent": ""},
 		            {"title":"订单",width:'80',"class":"center","data":"order_no","defaultContent": ""},
-		            //{"title":"车间",width:'90',"class":"center","data":"workshop","defaultContent": ""},
 		            {"title":"问题描述",width:'110',"class":"center","data":"problem_desc","render": function ( data, type, row ) {
-					    return data.length>50 ? '<div title=\''+data+'\'>'+data.substring(0,50)+'...</div>' : data;
+					    return data.length>10 ? '<div title=\''+data+'\'>'+data.substring(0,10)+'...</div>' : data;
+					},"defaultContent": ""},
+		            {"title":"责任单位",width:'90',"class":"center","data":"resp_unit","defaultContent": ""},
+					{"title":"故障图片",width:'80',"class":"center","data":"problem_photo_path","render": function ( data, type, row ) {
+						var result="";
+						var path=$("#urlPath").val();
+						if(data != null && data!=''){
+							result="<a href='"+path+""+data+"' target='_blank'>查看</a>";
+						}
+						return result;
 					},"defaultContent": ""},
 		            {"title":"缺陷等级",width:'80',"class":"center","data":"level","defaultContent": ""},
 		            {"title":"处理方式",width:'100',"class":"center","data":"solution","render": function ( data, type, row ) {
@@ -628,4 +483,5 @@ function clear(){
     $("#new_remark").val("");
     $("#new_bug_desc").empty();
     $("#new_level").empty();
+    $("#new_resp_unit").val("");
 }

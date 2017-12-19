@@ -610,5 +610,12 @@ public class QualityServiceImpl implements IQualityService {
 	public int saveMaterialExceptionLogsByBatch(Map<String, Object> conMap) {
 		return qualityDao.saveMaterialExceptionLogsByBatch(conMap);
 	}
+	@Override
+	public Map<String, Object> getWorkshopByFactoryId(String factory_id) {
+		Map<String, Object> result=new HashMap<String,Object>();
+		List<Map<String,Object>> datalist= qualityDao.getWorkshopByFactoryId(factory_id);
+		result.put("data", datalist);
+		return result;
+	}
 		
 }

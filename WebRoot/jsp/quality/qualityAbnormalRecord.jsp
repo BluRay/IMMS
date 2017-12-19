@@ -81,7 +81,8 @@
 			</div><!-- /.main-content -->
 			
 			<div id="dialog-add" class="hide" style="align:center;width:800px;height:500px">
-				<form id="form_add" class="">
+				<input type="hidden" id="urlPath" value="<%=request.getContextPath()%>/">
+				<form id="addForm" class="form-horizontal" method="post" enctype="multipart/form-data" action="addQualityAbnormalRecord">
 					<table>
 					<tr style="height:40px">
 						<td align="right" style="width:100px">* 订单编号：</td>
@@ -89,34 +90,40 @@
 							<input type="text" class="input-medium" id="new_order_no" style="width:150px"/>
 							<input type='hidden' id="new_order_id">
 						</td>
-						<td align="right" style="width:100px">* 车型：</td><td style="width:150px"><select id="new_bus_type" class="input-small" style="width:150px"></select></td>
+						<td align="right" style="width:100px">* 车型：</td><td style="width:150px"><select id="new_bus_type" name="bus_type" class="input-small" style="width:150px"></select></td>
 					</tr>
 					<tr style="height:40px">
 						<td align="right" style="width:100px">* 工厂：</td>
 						<td style="width:150px">
 							<select id="new_factory" class="form-control" style="width:150px"></select>
 							<input type='hidden' id="default_factory" value=${factory_id }></td>
-						<td align="right" style="width:100px">* 检验节点：</td><td style="width:150px"><select id="new_test_node" class="input-small" style="width:150px"></select></td>
+						<td align="right" style="width:100px">* 检验节点：</td><td style="width:150px"><select id="new_test_node" name="test_node_id" class="input-small" style="width:150px"></select></td>
 					</tr>
 					<tr style="height:40px">
-						<td align="right" style="width:100px">车号：</td><td colspan=3 id="bus_number_td"><input type="text" class="input-medium" id="new_busnumber" style="width:400px"/></td>
+						<td align="right" style="width:100px">车号：</td><td colspan=3 id="bus_number_td"><input type="text" class="input-medium" id="new_busnumber" name="bus_number" style="width:400px"/></td>
 					</tr>
 					<tr style="height:40px">
-						<td align="right" style="width:100px">问题描述：</td><td colspan=3><textarea class="input-medium" id="new_problem_desc" style="width:400px"></textarea></td>
+						<td align="right" style="width:100px">问题描述：</td><td colspan=3><textarea class="input-medium" id="new_problem_desc" name="problem_desc" style="width:400px"></textarea></td>
 					</tr>
 					<tr style="height:40px">
-						<td align="right" style="width:100px">故障类型：</td><td style="width:150px"><select class="form-control" id="new_bug_type" style="width:150px"></select></td>
-						<td align="right" style="width:100px">故障描述：</td><td style="width:150px"><select class="form-control" id="new_bug_desc" style="width:150px"></select></td>
+						<td align="right" style="width:100px">故障图片：</td><td colspan=3><input class="maintain" type="file" name="file" id="file" style="width:210px"/></td>
 					</tr>
 					<tr style="height:40px">
-						<td align="right" style="width:100px">缺陷等级：</td><td style="width:150px"><select class="form-control" id="new_level" style="width:150px"></select></td>
-						<td align="right" style="width:100px">检验员：</td><td style="width:150px"><input type="text" class="input-medium" id="new_iqc" style="width:150px"/></td>
+						<td align="right" style="width:100px">责任单位：</td><td colspan=3><input class="input-medium" id="new_resp_unit" name="resp_unit" style="width:400px"></input></td>
 					</tr>
 					<tr style="height:40px">
-						<td align="right" style="width:100px">处理方式：</td><td colspan=3><input type="text" class="input-medium" id="new_solution" style="width:400px"/></td>
+						<td align="right" style="width:100px">故障类型：</td><td style="width:150px"><select class="form-control" id="new_bug_type" name="bug_type" style="width:150px"></select></td>
+						<td align="right" style="width:100px">故障描述：</td><td style="width:150px"><select class="form-control" id="new_bug_desc" name="bug_desc" style="width:150px"></select></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">缺陷等级：</td><td style="width:150px"><select class="form-control" id="new_level" name="level" style="width:150px"></select></td>
+						<td align="right" style="width:100px">检验员：</td><td style="width:150px"><input type="text" class="input-medium" id="new_iqc" name="iqc" style="width:150px"/></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">处理方式：</td><td colspan=3><input type="text" class="input-medium" id="new_solution" name="solution" style="width:400px"/></td>
 					</tr>
 				    <tr style="height:40px">
-						<td align="right" style="width:100px">备注：</td><td colspan=3><textarea class="input-medium" id="new_remark" style="width:400px"></textarea></td>
+						<td align="right" style="width:100px">备注：</td><td colspan=3><textarea class="input-medium" id="new_remark" name="remark" style="width:400px"></textarea></td>
 					</tr>
 					</table>
 				</form>
@@ -194,9 +201,11 @@
 	<script src="../assets/js/dataTables.fixedColumns.min.js"></script>
 	<script src="../assets/js/dataTables.rowGroup.js"></script>
 	<script src="../assets/js/dataTables.rowGroup.min.js"></script>
+	<script src="../assets/js/jquery.gritter.min.js"></script>
 	<script src="../assets/js/ace/elements.onpage-help.js"></script>
 	<script src="../assets/js/ace/ace.onpage-help.js"></script>
 	<script src="../assets/js/bootstrap3-typeahead.js"></script>
+	<script src="../assets/js/ace/elements.fileinput.js"></script>
 	<script src="../js/jquery.form.js"></script>
 	<script src="../assets/js/jszip.min.js"></script>
 	<script src="../assets/js/dataTables.buttons.js"></script>

@@ -158,6 +158,8 @@ public interface IQualityDao {
 	public int deleteStandardImplementInfo(Map<String, Object> conditionMap);
 	
 	public int saveMaterialExceptionLogsByBatch(Map<String, Object> map);
+	
+	public List<Map<String, Object>> getWorkshopByFactoryId(@Param(value="factory_id")String factory_id);
 	//======================== tj end=================================//
 
 	public List<Map<String, String>> getFaultLibList(Map<String, Object> conditionMap);	

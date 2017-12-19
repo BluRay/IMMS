@@ -193,7 +193,12 @@ $(document).ready(function () {
 		if(confirm("是否确定修改？")){
 			var vin = $(this).attr("vin")
 			var update_val=$(this).val();
-			ajaxUpdateVinMotor(vin,update_val,"left_motor",e);
+			if(update_val.length>9){
+				alert("电机号长度不能超过9位！");
+				$(this).val($(this).attr("old_val"))
+			}else{
+				ajaxUpdateVinMotor(vin,update_val,"left_motor",e);
+			}
 		}else{
 			$(this).val($(this).attr("old_val"))
 		}
@@ -202,7 +207,12 @@ $(document).ready(function () {
 		if(confirm("是否确定修改？")){
 			var vin = $(this).attr("vin")
 			var update_val=$(this).val();
-			ajaxUpdateVinMotor(vin,update_val,"right_motor",e);
+			if(update_val.length>9){
+				alert("电机号长度不能超过9位！");
+				$(this).val($(this).attr("old_val"))
+			}else{
+				ajaxUpdateVinMotor(vin,update_val,"right_motor",e);
+			}
 		}else{
 			$(this).val($(this).attr("old_val"))
 		}
