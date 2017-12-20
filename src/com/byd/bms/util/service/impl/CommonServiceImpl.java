@@ -444,9 +444,9 @@ public class CommonServiceImpl implements ICommonService {
 	 */
 	@Override
 	@DataSource("dataSourceSlave")
-	public void getIndexExceptionData(String factory, ModelMap model) {
+	public void getIndexExceptionData(Map<String,Object> condMap, ModelMap model) {
 		List<Map<String,Object>> datalist=new ArrayList<Map<String,Object>>();
-		datalist=commonDao.queryIndexExceptionData(factory);
+		datalist=commonDao.queryIndexExceptionData(condMap);
 		model.put("data", datalist);
 	}
 	/**

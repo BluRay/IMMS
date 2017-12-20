@@ -486,9 +486,11 @@ public class QualityController extends BaseController {
 		model=new ModelMap();
 		String bus_number=request.getParameter("bus_number");
 		String test_node=request.getParameter("test_node");
+		String test_node_id=request.getParameter("test_node_id");
 		Map<String,Object> condMap=new HashMap<String,Object>();
 		condMap.put("bus_number", bus_number);
 		condMap.put("test_node", test_node);
+		condMap.put("test_node_id", test_node_id);
 		condMap.put("order_id", request.getParameter("order_id"));
 		condMap.put("order_config_id", request.getParameter("order_config_id"));
 		qualityService.getPrdRcdOrderTpl(condMap,model);

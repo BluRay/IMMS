@@ -96,7 +96,7 @@ public interface ICommonService {
 	 * @param factory_id
 	 * @param model
 	 */
-	void getIndexExceptionData(String factory, ModelMap model);
+	void getIndexExceptionData(Map<String,Object> condMap, ModelMap model);
 	/**
 	 * @author xiong.jianwu
 	 * @param model

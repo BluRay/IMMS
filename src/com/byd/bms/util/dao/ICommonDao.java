@@ -77,7 +77,7 @@ public interface ICommonDao {
 	
 	List<Map<String, Object>> queryIndexOutputData_Factory(@Param("actYear")String actYear);
 
-	List<Map<String, Object>> queryIndexExceptionData(@Param("factory") String factory);
+	List<Map<String, Object>> queryIndexExceptionData(Map<String, Object> condMap);
 	
 	String getStaffNameByNumber(String staff_number);
 

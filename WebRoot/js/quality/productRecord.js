@@ -150,8 +150,8 @@ $(document).ready(function(){
 			$("#order_config").css("display","");
 			$("#order_config_span").css("display","none");
 		}else{
-			$("#order").val("").attr("order_id","");
-			$("#order_config").val("");
+			//$("#order").val("").attr("order_id","");
+			//$("#order_config").val("");
 			$("#td_bus_lable").show();
 			$("#td_bus").show();
 			$("#td_customer_lable").hide();
@@ -383,7 +383,8 @@ function ajaxGetTplDetail(){
 			"bus_number":$("#bus_number").val(),		
 			"order_id":$("#order").attr("order_id"),
 			"order_config_id":$("#order_config").val(),
-			"test_node":$("#check_node :selected").text()
+			"test_node":$("#check_node :selected").text(),
+			"test_node_id":$("#check_node").val()
 		},
 		success:function(response){
 			$(".divLoading").hide();

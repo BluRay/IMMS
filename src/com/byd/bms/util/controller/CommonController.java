@@ -460,7 +460,13 @@ public class CommonController extends BaseController {
 	public ModelMap getIndexExceptionData(){
 		model.clear();
 		String factory=request.getParameter("factory");
-		commonService.getIndexExceptionData(factory,model);
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		String query_date = df.format(new Date());
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("factory", factory);
+		condMap.put("query_date", query_date);
+		
+		commonService.getIndexExceptionData(condMap,model);
 		return model;
 	}
 	

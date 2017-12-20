@@ -121,7 +121,7 @@ $(document).ready(function(){
 			thumbnail:false, //| true | large
 			//allowExt: ['xlsx','xls'],
 		}).on('file.error.ace', function(event, info) {
-			alert("Please Choose xls File!");
+			alert("请选择Excel文件!");
 	    });
 		getFactorySelect("quality/qualityAbnormalRecord",'',"#new_factory",null,'id');
 		getWorkshopSelect("quality/qualityAbnormalRecord",$("#new_factory :selected").text(),"","#new_workshop",null,"id");
@@ -212,7 +212,7 @@ function btnNewConfirm(flag){
 	    success:function (response) {
 	    	
 	    	if (response.success) {
-	    		alert("inner return="+response.success+";flag="+flag);
+	    		
 		    	$.gritter.add({
 					title: '系统提示：',
 					text: '<h5>新增成功！</h5>',
@@ -345,7 +345,7 @@ function getBusType(){
 		dataType: "json",
 		data: {},
 		async: false,
-		error: function () {alertError();},
+		error: function () {},
 		success: function (response) {
 			var strs = "";
 		    $.each(response.data, function(index, value) {
@@ -364,7 +364,7 @@ function getBugType(){
 		dataType: "json",
 		data: {},
 		async: false,
-		error: function () {alertError();},
+		error: function () {},
 		success: function (response) {
 			var strs = "<option value=''>全部</option>";
 			var map = {};

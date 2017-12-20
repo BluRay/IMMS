@@ -408,20 +408,22 @@
 		FROM BMS_PLAN_STOPLINE st
 		LEFT JOIN BMS_BASE_FACTORY f on f.id=st.factory_id
 		LEFT JOIN BMS_BASE_WORKSHOP w on st.workshop_id=w.id
-		WHERE st.end_time&lt;=0 and f.factory_name=#{factory}
+		WHERE st.end_time&lt;=0 and f.factory_name=#{factory} and st.start_time >=#{query_date}
 		UNION ALL
 		SELECT concat(e.factory,e.workshop,'车间',e.line,'车号为：',e.bus_number,'车辆因',k.key_name,'发生异常，异常从',e.start_time,'开始，',
 		case when e.pfinish_time>0 then concat('预计',e.pfinish_time,'恢复，') else '' end, '异常详细原因：',e.detailed_reasons) message
 		FROM BMS_PD_PRODUCTION_EXCEPTION e
 		LEFT JOIN BMS_BASE_KEY k on k.id=e.reason_type_id
-		WHERE e.status='0' and e.factory=#{factory}
+		WHERE e.status='0' and e.factory=#{factory} and e.start_time >=#{query_date}
 	</select>
 
 	<select id="queryIndexStaffCountData" parameterType="String" resultType="Map">
+		select * from (
 		select count(s.staff_number)staff_count,s.plant_org
 		from BMS_HR_STAFF s
 		where s.status='在职' and s.salary_type='计件'
-		group by s.plant_org
+		group by s.plant_org )tmp 
+		order by tmp.staff_count
 	</select>
 	
 	<select id="queryIndexStaffCountData_Factory" parameterType="String" resultType="Map">
