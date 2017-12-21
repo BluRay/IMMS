@@ -227,9 +227,9 @@ function ajaxQuery(){
 		
 		},
 		columns: [
-            {"title":"工号","width":"60","class":"center","data":"staff_number","defaultContent": ""},
-            {"title":"姓名","width":"70","class":"center","data":"name","defaultContent": ""},
-            {"title":"出勤天数","width":"65","class":"center","data":"attendance_days","defaultContent": ""},
+            {"title":"工号","width":"50","class":"center","data":"staff_number","defaultContent": ""},
+            {"title":"姓名","width":"50","class":"center","data":"name","defaultContent": ""},
+            {"title":"出勤天数","width":"60","class":"center","data":"attendance_days","defaultContent": ""},
             {"title":"总出勤","width":"50","class":"center","data":"attendance_hours","defaultContent": ""},
             {"title":"1","class":"center","data":"D1","defaultContent": ""},
             {"title":"2","class":"center","data":"D2","defaultContent": ""},

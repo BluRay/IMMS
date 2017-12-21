@@ -16,7 +16,13 @@ var line_selects_data;
 var parts_list;
 var parts_update_list=new Array();//非车间上下线工序提交该零部件信息
 var bus;
- 
+
+function setQRData(str){
+	$("#vinText").val(str);
+	ajaxValidate();
+    ajaxGetPartsList();
+}
+
 $(document).ready(function () {	
 	initPage();
 	
@@ -33,6 +39,10 @@ $(document).ready(function () {
             return false;
         }  
     });
+    
+    $("#btn_scan").click(function(){
+    	yspCheckIn.qrCode();
+    })
     
     $("#btn_clear").click(function(){
     	resetPage();

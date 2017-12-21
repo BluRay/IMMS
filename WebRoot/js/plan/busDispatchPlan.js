@@ -227,15 +227,15 @@ function ajaxQuery(){
 		            		}}, 
 		            {"title":"操作","class":"center","data": null,"id":"staff_number",
 		            	"render": function ( data, type, row ) {
-		                    return "<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"编辑\" onclick='edit(" + row['id'] + 
-		                    ")' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;";
+		                    return "<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"编辑\" onclick='edit(" + row['id'] + "," + row['order_id']
+		                    + ")' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;";
 		                },
 		            }
 		          ],
 	});
 }
 
-function edit(id){
+function edit(id,order_id){
 	$("#dialog-edit").removeClass('hide').dialog({
 		resizable: false,
 		title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 编辑发车计划</h4></div>',
@@ -252,7 +252,7 @@ function edit(id){
 					id:"btn_ok",
 					"class" : "btn btn-success btn-minier",
 					click: function() {
-						btnEditConfirm(id);
+						btnEditConfirm(id,order_id);
 					} 
 				}
 			]
@@ -298,7 +298,7 @@ function edit(id){
 	
 }
 
-function btnEditConfirm(id){
+function btnEditConfirm(id,order_id){
 	var mailTo=$("#edit_mail_addr").val();
 	if($("#edit_order_no").val()==""){
 		alert("请输入订单号！");
@@ -330,6 +330,7 @@ function btnEditConfirm(id){
 		dataType: "json",
 		data: {
 			"id" : id,
+			"order_id":order_id,
 			"factory_id" : $('#edit_factory').val(),
 			"order_no" : $('#edit_order_no').val(),
 			"plan_dispatch_qty" : $('#edit_plan_num').val(),

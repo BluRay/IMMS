@@ -744,34 +744,42 @@
 		where b.bus_number=#{bus_number} and f.factory_name=#{factory}
 		<if test="workshop=='焊装' ">
 			and b.welding_online_date is not null and
-			welding_online_date !=''
+			welding_online_date !='' 
+			and welding_online_date like concat(#{work_date},'%')
 		</if>
 		<if test="workshop=='玻璃钢' ">
 			and welding_offline_date is not null and
-			welding_offline_date !=''
+			welding_offline_date !='' 
+			and welding_offline_date like concat(#{work_date},'%')
 		</if>
 		<if test="workshop=='涂装' ">
 			and painting_online_date is not null and
 			painting_online_date !=''
+			and welding_offline_date like concat(#{work_date},'%')
 		</if>
 		<if test="workshop=='底盘' ">
 			and chassis_online_date is not null and
 			chassis_online_date !=''
+			and chassis_online_date like concat(#{work_date},'%')
 		</if>
 		<if test="workshop=='总装' ">
 			and assembly_online_date is not null and
 			assembly_online_date !=''
+			and assembly_online_date like concat(#{work_date},'%')
 		</if>
 		<if test="workshop=='调试区' ">
 			and debugarea_online_date is not null and
 			debugarea_online_date !=''
+			and debugarea_online_date like concat(#{work_date},'%')
 		</if>
 		<if test="workshop=='检测线' ">
 			and testline_online_date is not null and
 			testline_online_date !=''
+			and testline_online_date like concat(#{work_date},'%')
 		</if>
 		<if test="workshop=='成品库' ">
 			and warehousing_date is not null and warehousing_date !=''
+			and warehousing_date like concat(#{work_date},'%')
 		</if>
 	</select>
 	

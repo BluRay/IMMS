@@ -484,7 +484,7 @@ public class ProductionServiceImpl implements IProductionService {
 			int c=productionDao.queryBusWorkshopOnline(condMap);
 			if(c==0){
 				model.put("success", false);
-				model.put("message", condMap.get("bus_number")+"未在"+condMap.get("workshop")+"车间上线！");
+				model.put("message", condMap.get("bus_number")+"未于"+condMap.get("work_date")+"在"+condMap.get("workshop")+"车间上线！");
 				return;
 			}
 		}

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.byd.bms.util.HttpUtil;
 import com.byd.bms.util.MD5Util;
 import com.byd.bms.util.model.BmsBaseUser;
 import com.byd.bms.util.service.ILoginService;
@@ -28,7 +29,13 @@ public class LoginController extends BaseController{
 	
 	@RequestMapping("/")  
     public ModelAndView index(){ 
-		mv.setViewName("index");
+		String requestHeader = request.getHeader("user-agent");
+		if(HttpUtil.isMobileDevice(requestHeader)){
+			mv.setViewName("home_mobile");
+		}else{
+			mv.setViewName("index");
+		}
+
         return mv;  
     }
 	@RequestMapping("/loginPage")  
@@ -88,7 +95,10 @@ public class LoginController extends BaseController{
 	@RequestMapping("/index")  
     public ModelAndView index1(){ 
 		String user_type = session.getAttribute("user_type").toString();
-		if(user_type.equals("1")){
+		String requestHeader = request.getHeader("user-agent");
+		if(HttpUtil.isMobileDevice(requestHeader)){
+			mv.setViewName("home_mobile");
+		}else if(user_type.equals("1")){
 			mv.setViewName("index");
 		}else{
 			mv.setViewName("index2");

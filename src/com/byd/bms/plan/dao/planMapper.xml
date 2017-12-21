@@ -1206,7 +1206,10 @@
 		LEFT OUTER JOIN BMS_BASE_FACTORY F ON P.factory_id = F.id
 		LEFT OUTER JOIN BMS_OR_ORDER O ON P.order_id = O.id
 		LEFT OUTER JOIN BMS_BASE_BUS_TYPE T ON O.bus_type_id = T.id
-		WHERE P.status = #{status}
+		WHERE 1=1  
+		<if test="status !=null and status !=''">
+			AND P.status = #{status}
+		</if>
 		<if test="id !=null and id !=''">
 			AND P.id = #{id}
 		</if>
@@ -1265,7 +1268,7 @@
 	
 	<update id="editDispatchPlan" parameterType="com.byd.bms.plan.model.PlanBusDispatchPlan">
 		UPDATE BMS_PLAN_BUS_DISPATCH_PLAN
-		SET factory_id=#{factory_id}, order_id=(SELECT id FROM BMS_OR_ORDER WHERE order_no = #{order_no}), plan_dispatch_qty=#{plan_dispatch_qty}, dispatch_date=#{dispatch_date}, customer_number_flag=#{customer_number_flag}, 
+		SET factory_id=#{factory_id}, order_id=#{order_id}, plan_dispatch_qty=#{plan_dispatch_qty}, dispatch_date=#{dispatch_date}, customer_number_flag=#{customer_number_flag}, 
 		email_addrs=#{email_addrs}, creater_id=#{creater_id}, creatdate=#{creatdate}
 		WHERE id=#{id};
 	</update>

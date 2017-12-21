@@ -777,6 +777,7 @@ public class PlanController extends BaseController{
 		planBusDispatchPlan.setId(Integer.parseInt(request.getParameter("id")));
 		planBusDispatchPlan.setFactory_id(Integer.parseInt(request.getParameter("factory_id")));
 		planBusDispatchPlan.setOrder_no(request.getParameter("order_no"));
+		planBusDispatchPlan.setOrder_id(Integer.valueOf(request.getParameter("order_id")));
 		planBusDispatchPlan.setPlan_dispatch_qty(Integer.parseInt(request.getParameter("plan_dispatch_qty")));
 		planBusDispatchPlan.setDispatch_date(request.getParameter("dispatch_date"));
 		planBusDispatchPlan.setCustomer_number_flag(request.getParameter("customer_number_flag"));

@@ -1,17 +1,14 @@
 <!DOCTYPE html>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <html lang="zh-CN">
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <meta charset="utf-8" />
 <title>BMS</title>
 <meta name="description" content="Common Buttons &amp; Icons" />
-<meta name="viewport"
-	content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 <link rel="stylesheet" href="../css/bootstrap.3.2.css">
-<link rel="stylesheet"
-	href="../assets/css/fixedColumns.bootstrap.min.css" />
+<link rel="stylesheet" href="../assets/css/fixedColumns.bootstrap.min.css" />
 <link rel="stylesheet" href="../css/bootstrap-table.css">
 <link rel="stylesheet" href="../css/bootstrap-editable.css">
 <link rel="stylesheet" href="../assets/css/jquery.gritter.css" />
@@ -76,7 +73,7 @@ label {
 								<!-- <input id="vinText"  type="text" class="input-medium" style="width:100%;height:30px;"/> -->
 								<span class="input-icon input-icon-right" style="width: 100%;">
 										<input id="vinText" type="text" class="input-medium" style="width:100%;height:30px;">
-										
+										<i id="btn_scan" class="ace-icon fa fa-barcode green bigger-160" style="cursor:pointer"></i>
 								</span>
 							</div>
 						</div>

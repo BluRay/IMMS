@@ -35,6 +35,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter{
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 		// 获得请求路径的uri
+		
 		String uri = request.getRequestURI();
 		String accessURL = uri.substring(uri.indexOf("/", 1)+1,uri.length()); 
 		String loginName = request.getHeader("BMS_USER_ID");
@@ -139,4 +140,5 @@ public class LoginInterceptor extends HandlerInterceptorAdapter{
 		response.sendRedirect(request.getContextPath() + "/loginPage?last_url="+accessURL);
 		return false;
 	}
+	
 }
