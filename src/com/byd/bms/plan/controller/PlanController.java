@@ -968,10 +968,18 @@ public class PlanController extends BaseController{
 		condMap.put("draw", draw);
 		condMap.put("start", start);
 		condMap.put("length", length);
-		condMap.put("factory_id", request.getParameter("factory_id"));
-		condMap.put("order_no", request.getParameter("order_no"));
-		condMap.put("bus_vin", request.getParameter("bus_vin"));
-		condMap.put("bus_number", request.getParameter("bus_number"));
+		String testVin = request.getParameter("testVin");
+		if("1".equals(testVin)){
+			condMap.put("testVin", testVin);
+			condMap.put("factory_id", request.getParameter("factory_id"));
+			condMap.put("bus_vin", request.getParameter("bus_vin"));
+			condMap.put("bus_number", request.getParameter("bus_number"));
+		}else{
+			condMap.put("factory_id", request.getParameter("factory_id"));
+			condMap.put("order_no", request.getParameter("order_no"));
+			condMap.put("bus_vin", request.getParameter("bus_vin"));
+			condMap.put("bus_number", request.getParameter("bus_number"));
+		}
 		
 		Map<String,Object> list = planService.getPlanVinList(condMap);
 		mv.clear();
@@ -1001,6 +1009,27 @@ public class PlanController extends BaseController{
 		model = mv.getModelMap();
 		return model;
 	}
+	
+	@RequestMapping("/getGenerateVinTest")
+	@ResponseBody
+	public ModelMap getGenerateVinTest(){
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String staff_number = request.getSession().getAttribute("staff_number") + "";
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("vin_factory_id", request.getParameter("vin_factory_id"));
+		condMap.put("vinCount", request.getParameter("vinCount"));
+		condMap.put("year", request.getParameter("year"));
+		condMap.put("vin_prefix", request.getParameter("vin_prefix"));
+		condMap.put("WMI_extension", request.getParameter("WMI_extension"));
+		condMap.put("curTime", curTime);
+		condMap.put("staff_number", staff_number);
+		Map<String,Object> list = planService.getGenerateVinTest(condMap);
+		initModel(true,null,list);
+		model = mv.getModelMap();
+		return model;
+	}
+	
 	
 	@RequestMapping("/getVinPrefix")
 	@ResponseBody

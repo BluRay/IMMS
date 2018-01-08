@@ -87,7 +87,8 @@ function ajaxQuery(){
 		            {"title":"技改单号","class":"center","data":"tech_order_no","defaultContent": ""},
 		            {"title":"技改单日期","class":"center","data":"tech_date","defaultContent": ""},
 		            {"title":"订单","class":"center","data":"order_no","defaultContent": ""},
-		            {"title":"工厂","class":"center","data":"factory","defaultContent": ""},
+		            {"title":"技改工厂","class":"center","data":"factory","defaultContent": ""},
+		            {"title":"生产工厂","class":"center","data":"prod_factory","defaultContent": ""},
 		            {"title":"单车总工时","class":"center","data":"single_time_total","defaultContent": ""},
 		            {"title":"操作","class":"center","data": null,"id":"staff_number",
 		            	"render": function ( data, type, row ) {

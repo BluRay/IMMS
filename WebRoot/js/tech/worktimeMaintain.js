@@ -255,7 +255,8 @@ function ajaxQuery(){
 		            {"title":"切换方式",width:'100',"class":"center","data":"switch_mode","defaultContent": ""},
 		            {"title":"切换节点",width:'100',"class":"center","data":"switch_node","defaultContent": ""},
 		            {"title":"订单",width:'200',"class":"center","data":"order_desc","defaultContent": ""},
-		            {"title":"工厂",width:'100',"class":"center","data":"factory","defaultContent": ""},
+		            {"title":"技改工厂",width:'100',"class":"center","data":"factory","defaultContent": ""},
+		            {"title":"生产工厂",width:'100',"class":"center","data":"prod_factory","defaultContent": ""},
 		            {"title":"车间",width:'100',"class":"center","data":"workshop","defaultContent": "",
 		            	"render": function ( data, type, row ) {
 		            		return $("#search_workshop :selected").text();

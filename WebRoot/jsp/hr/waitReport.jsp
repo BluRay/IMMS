@@ -89,7 +89,7 @@
 					</form>
 					<div class="row">
 						<div class="col-xs-12" style="width: calc(100vw + 20px)">
-							<table id="tableResult" class="table table-striped table-bordered table-hover" style="font-size: 12px;">
+							<table id="tableResult" class="table table-striped table-bordered table-hover" style="font-size: 12px;table-layout: fixed;">
 							</table>
 						</div>
 					</div>

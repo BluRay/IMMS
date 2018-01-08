@@ -43,42 +43,50 @@
 					<%-- <jsp:include page="settings.jsp" flush="true"/> --%>
 					<!-- /section:settings.box -->
 					<div class="page-content-area">
-							<div class="row" style="margin-top:20px;">
+							<div class="row" style="margin-top:5px;">
 								<div class="col-xs-12">
 									<div class="col-xs-6">
-										<img id="scan" class="img " src="images/scan.png" style="width:100%;height:100%;" onclick="javascript: return pageForward('execution');">							
+										<img id="scan" class="img " src="images/scan.png" style="width:90%;height:90%;" onclick="javascript: return pageForward('execution');">							
 									</div>
 									<div class="col-xs-6">
-										<img id="scan" class="img " src="images/prdRcd.png" style="width:100%;height:100%;" onclick="javascript: return pageForward('prdRcd');">
+										<img id="scan" class="img " src="images/prdRcd.png" style="width:90%;height:90%;" onclick="javascript: return pageForward('prdRcd');">
 									</div>
+									<!-- <div class="col-xs-4">
+										<img id="scan" class="img " src="images/keyparts.png" style="width:100%;height:100%;" onclick="javascript: return pageForward('tech_follow');">	
+									</div> -->
 								</div>
 							</div>			
-							<div class="row" style="margin-top:20px;">
+							<div class="row" style="margin-top:5px;">
 								<div class="col-xs-12">
 									<div class="col-xs-6" style="text-align:center">
-										<label>
+										<label style='font-size:12px;'>
 										生产扫描
 										</label>
 									</div>
 									<div class="col-xs-6" style="text-align:center">
-										<label>
+										<label style='font-size:12px;'>
 										成品记录表
 										</label>
 									</div>
+									<!-- <div class="col-xs-4" style="text-align:center">
+										<label style='font-size:12px;'>
+										技改跟进
+										</label>
+									</div> -->
 								</div>
 							</div>		
 							
-							<div class="row" style="margin-top:20px;">
+							<div class="row" style="margin-top:5px;">
 								<div class="col-xs-12">
 									<div class="col-xs-6">
-										<img id="scan" class="img " src="images/keyparts.png" style="width:100%;height:100%;" onclick="javascript: return pageForward('tech_follow');">							
+										<img id="scan" class="img " src="images/ecn-mobile.png" style="width:90%;height:90%;" onclick="javascript: return pageForward('tech_follow');">							
 									</div>
 									<div class="col-xs-6">
-										<img id="scan" class="img " src="images/exception.png" style="width:100%;height:100%;" onclick="javascript: return pageForward('exception');">
+										<img id="scan" class="img " src="images/exception.png" style="width:90%;height:90%;" onclick="javascript: return pageForward('exception');">
 									</div>
 								</div>
 							</div>			
-							<div class="row" style="margin-top:20px;">
+							<div class="row" style="margin-top:5px;">
 								<div class="col-xs-12">
 									<div class="col-xs-6" style="text-align:center">
 										<label>
@@ -92,6 +100,31 @@
 									</div>
 								</div>
 							</div>		
+							
+							<div class="row" style="margin-top:5px;">
+								<div class="col-xs-12">
+									<div class="col-xs-6">
+										<img id="scan" class="img " src="images/report-mobile.png" style="width:90%;height:90%;" onclick="javascript: return pageForward('report');">							
+									</div>
+									<div class="col-xs-6">
+										<img id="scan" class="img " src="images/flow-mobile.png" style="width:90%;height:90%;" onclick="javascript: return pageForward('flow');">
+									</div>
+								</div>
+							</div>			
+							<div class="row" style="margin-top:5px;">
+								<div class="col-xs-12">
+									<div class="col-xs-6" style="text-align:center">
+										<label>
+										报表
+										</label>
+									</div>
+									<div class="col-xs-6" style="text-align:center">
+										<label>
+										流程处理
+										</label>
+									</div>
+								</div>
+							</div>	
 					</div>
 			</div><!-- /.main-content -->
 
@@ -115,6 +148,12 @@
 			}
 			if(flag=='tech_follow'){
 				url="/BMS/tech/techFollowMobile"
+			}
+			if(flag=='report'){
+				url="/BMS/report/reportIndexMobile"
+			}			
+			if(flag=='flow'){
+				url="/BMS/flow/flowHomeMobile"
 			}
 			window.location=url
 		}

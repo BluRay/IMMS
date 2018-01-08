@@ -516,7 +516,54 @@ public class PlanServiceImpl implements IPlanService {
 				planVIN.setVin(verifyVin(vin));
 				planVIN.setFactory_id(Integer.valueOf(queryMap.get("factory_id").toString()));
 				planVIN.setOrder_no(queryMap.get("order_no").toString());
+				planVIN.setSource("0");
 				planVIN.setCreator_id(Integer.valueOf(queryMap.get("staff_number").toString()));
+				planVIN.setCreat_date(queryMap.get("curTime").toString());
+				planDao.insertPlanVin(planVIN);
+				vinCount--;
+				vin_num++;	//生成VIN号数量
+			}
+		}
+		result.put("message", "操作成功！共生成" + vin_num + "个VIN号");
+		result.put("success", true);
+		return result;
+	}
+	
+	@Override
+	@Transactional
+	public Map<String, Object> getGenerateVinTest(Map<String, Object> queryMap) {
+		Map<String, Object> result = new HashMap<String,Object>();
+		int vinCount = Integer.valueOf(queryMap.get("vinCount").toString());
+		//获取VIN前8位
+		String vin_prefix = queryMap.get("vin_prefix").toString();
+		int  genVinCount = vinCount;
+		String factory_prefix = planDao.GetFactoryVinPrefix(Integer.valueOf(queryMap.get("vin_factory_id").toString()));
+		String year = queryMap.get("year").toString();
+		String WMI_extension = queryMap.get("WMI_extension")!=null?queryMap.get("WMI_extension").toString().trim():"";
+		//获取当前年份最大的VIN流水号
+		int vin_count = 0; int vin_num = 0;
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("year_code", vinYearMap.get(year));
+		condMap.put("vin_prefix", vin_prefix);
+		condMap.put("WMI_extension", WMI_extension);
+		vin_count = planDao.getVinCountByYear(condMap);
+		for(int i=0;i<genVinCount;i++){
+			if (vinCount >0){
+				vin_count++;
+				String vin_count_str = "";
+				if(WMI_extension.trim() == ""){
+					vin_count_str = String.format("%06d", vin_count);
+				}else{
+					vin_count_str = WMI_extension + String.format("%03d", vin_count);
+				}
+				String vin = vin_prefix + "-" + vinYearMap.get(year) + factory_prefix + vin_count_str;
+				logger.info("---->vin = " + vin);
+				logger.info("---->verifyVin " + i + " = " + verifyVin(vin));
+				PlanVIN planVIN = new PlanVIN();
+				planVIN.setVin(verifyVin(vin));
+				planVIN.setFactory_id(Integer.valueOf(queryMap.get("vin_factory_id").toString()));
+				planVIN.setCreator_id(Integer.valueOf(queryMap.get("staff_number").toString()));
+				planVIN.setSource("1");
 				planVIN.setCreat_date(queryMap.get("curTime").toString());
 				planDao.insertPlanVin(planVIN);
 				vinCount--;

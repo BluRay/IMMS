@@ -61,12 +61,13 @@
 							<td><input id="search_bus_vin" placeholder="请输入VIN号..." style="height: 30px;width:150px" type="text"></td>
 							<td>&nbsp;车号：</td>
 							<td><input id="search_bus_number" placeholder="请输入车号..." style="height: 30px;width:150px" type="text"></td>
-							<td></td>
+							<td style="padding-left: 5px;">试制VIN：<input id="testVin"   name=""  type="checkbox"  value="1"  /></td>
 							<td></td>
 							<td>
 								<input id="btnQuery" type="button" class="btn btn-sm btn-primary" value="查询" style="margin-left: 2px;"></input>
 								<input id="btnGenVin" type="button" class="btn btn-sm btn-success" value="生成VIN号" style="margin-left: 2px;"></input>
 								<input id="btnImport" type="button" class="btn btn-sm btn-danger" value="导入" style="margin-left: 2px;"></input>
+								<input id="btnGenVin_test" type="button" class="btn btn-sm btn-info" value="生成试制车VIN" style="margin-left: 2px;"></input>
 								<!-- <input id="btnPrint" type="button" class="btn btn-sm btn-info" value="打印VIN号" style="margin-left: 2px;"></input>	 -->
 							</td>
 							<td></td>
@@ -134,6 +135,39 @@
 						</form>
 					</div>
 					
+					<div id="dialog-new-test" class="hide" style="align:center;width:700px;height:500px">
+						<form>
+						<table>
+						<tr style="height:40px">
+							<td width="75px"></td>
+							<td align="right" style="width:100px">VIN前8位：</td><td style="width:150px"><input type="text"  id="new_vinPrefix_test" placeholder="VIN前8位..." class="input-medium" /></td>
+							<td></td>
+						</tr>
+						<tr style="height:40px">
+							<td width="75px"></td>
+							<td align="right" style="width:100px">WMI扩展位：</td><td style="width:150px"><input type="text"  id="new_WMI_extension_test" placeholder="WMI_extension..." class="input-medium" /></td>
+							<td></td>
+						</tr>						
+						<tr style="height:40px">
+							<td width="75px"></td>
+							<td align="right" style="width:100px">生产年份：</td><td style="width:150px"><input type="text" id="new_year_test" placeholder="生产年份..." class="input-medium" onClick="WdatePicker({el:'new_year_test',dateFmt:'yyyy'});"/></td>
+							<td></td>
+						</tr>
+						<tr style="height:40px">
+							<td></td>
+							<td align="right" style="width:100px">VIN号工厂：</td><td style="width:150px"><select id="vin_factory_test" class="form-control" style="width:150px"></select></td>
+							<td></td>
+						</tr>
+						<tr style="height:40px">
+							<td></td>
+							<td align="right" style="width:100px">生成数量：</td><td style="width:150px"><input style="height: 30px;" type="text" class="input-medium revise" placeholder="生成数量..." id="new_vinCount_test" /></td>
+							<td></td>
+						</tr>
+						
+						</table>
+						</form>
+					</div>
+					
 			</div>
 
 			<!-- 脚 -->
@@ -169,7 +203,8 @@
 	<script type="text/javascript" src="../assets/js/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="../assets/js/bootstrap3-typeahead.js"></script>
 	<script type="text/javascript" src="../js/jquery.form.js"></script>
-	
+	<script src="../assets/js/jquery.dataTables.min.js"></script>
+	<script src="../assets/js/jquery.dataTables.bootstrap.js"></script>
 	<script type="text/javascript" src="../js/datePicker/WdatePicker.js"></script>
 	<script type="text/javascript" src="../js/common.js"></script>
 	<script type="text/javascript" src="../js/plan/generateVin.js"></script>

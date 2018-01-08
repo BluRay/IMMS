@@ -1,88 +1,85 @@
-<%@ page contentType="text/html;charset=UTF-8"%>
+
+<!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
-<meta http-equiv="Pragma" content="no-cache"/>
-<meta http-equiv="Expires" content="0"/>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<html lang="zh-CN">
 	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta charset="utf-8" />
 		<title>流程实例</title>
-		<link rel="stylesheet" href="${ctx}/snaker/css/style.css" type="text/css" media="all" />
-		<script src="${ctx}/snaker/js/jquery-1.8.3.min.js" type="text/javascript"></script>
-		<script src="${ctx}/snaker/js/table.js" type="text/javascript"></script>
+		<meta name="description" content="Common Buttons &amp; Icons" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+		<link rel="stylesheet" href="../assets/css/jquery-ui.min.css" />
+		<link rel="stylesheet" href="../assets/css/jquery-ui.custom.min.css" />
+	    <link rel="stylesheet" href="${ctx}/snaker/css/style.css" type="text/css" media="all" />
 	</head>
+	<body class="no-skin" style="font-family: 'Microsoft YaHei';">
+		<!-- 头 -->
+		<jsp:include page="../top.jsp" flush="true"/>
+		<!-- 身 -->
+		<div class="main-container" id="main-container">
+			<!-- 左边菜单 -->
+			<jsp:include page="../left.jsp" flush="true"/>
+			<!-- 主体 -->
+			<div class="main-content">			
+			<!-- 路径和搜索框 -->
+			<div class="breadcrumbs" id="breadcrumbs">
+					<ul class="breadcrumb">
+						<li><i class="ace-icon fa fa-home home-icon"></i><a href="/BMS/index">首页</a></li>
+						<li><a href="#">流程管理</a></li>
+						<li class="active">流程实例</li>
+					</ul><!-- /.breadcrumb -->
 
-	<body>
-	<form id="mainForm" action="${ctx}/snaker/order" method="get">
-		<input type="hidden" name="pageNo" id="pageNo" value="${page.pageNo}"/>
-		<table width="100%" border="0" align="center" cellpadding="0"
-				class="table_all_border" cellspacing="0" style="margin-bottom: 0px;border-bottom: 0px">
-			<tr>
-				<td class="td_table_top" align="center">
-					流程实例
-				</td>
-			</tr>
-		</table>
-		<table class="table_all" align="center" border="0" cellpadding="0"
-			cellspacing="0" style="margin-top: 0px">
-			<tr>
-				<td align=center width=15% class="td_list_1" nowrap>
-					流程名称
-				</td>
-				<td align=center width=15% class="td_list_1" nowrap>
-					实例编号
-				</td>
-				<td align=center width=15% class="td_list_1" nowrap>
-					实例启动时间
-				</td>
-				<td align=center width=15% class="td_list_1" nowrap>
-					实例结束时间
-				</td>
-				<td align=center width=10% class="td_list_1" nowrap>
-					期望完成时间
-				</td>
-				<td align=center width=10% class="td_list_1" nowrap>
-					实例创建人
-				</td>
-				<td align=center width=10% class="td_list_1" nowrap>
-					实例状态
-				</td>
-				<td align=center width=10% class="td_list_1" nowrap>
-					操作
-				</td>				
-			</tr>
-			<c:forEach items="${page.result}" var="item">
-				<tr>
-					<td class="td_list_2" align=left nowrap>
-						${item.processName}&nbsp;
-					</td>
-					<td class="td_list_2" align=left nowrap>
-						${item.orderNo}&nbsp;
-					</td>
-					<td class="td_list_2" align=left nowrap>
-						${item.createTime}&nbsp;
-					</td>
-					<td class="td_list_2" align=left nowrap>
-						${item.endTime}&nbsp;
-					</td>
-					<td class="td_list_2" align=left nowrap>
-						${item.expireTime}&nbsp;
-					</td>
-					<td class="td_list_2" align=left nowrap>
-						${item.creator}&nbsp;
-					</td>
-					<td class="td_list_2" align=left nowrap>
-						${item.orderState == 0 ? '已结束' : '运行中'}&nbsp;
-					</td>
-					<td class="td_list_2" align=left nowrap>
-						<a href="${ctx}/snaker/process/display?processId=${item.processId }&orderId=${item.id} " class="btnPict" title="查看流程图">查看流程图</a>
-						<a href="${ctx}/snaker/flow/all?processId=${item.processId }&orderId=${item.id}&type=cc " class="btnView" title="查看">查看</a>
-					</td>
-				</tr>
-			</c:forEach>
-		</table>
-	</form>
+					<!-- #section:basics/content.searchbox -->
+					<div class="nav-search" id="nav-search">
+						<form class="form-search">
+							<span class="input-icon">
+								<input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" /><i class="ace-icon fa fa-search nav-search-icon"></i>
+							</span>
+						</form>
+					</div><!-- /.nav-search -->
+				</div>
+				
+			<div class="page-content">
+					<div class="page-content-area">
+					     <div class="well">
+							<table>
+								<tr>
+									<td>&nbsp;流程名称：</td>
+								    <td>
+									   <input type="text" class="input_240" id="displayName" name="displayName" value=""/>
+								    </td>	
+									<td>
+								        <input id="btnQuery" type="button" class="btn btn-sm btn-primary" value="查询" style="margin-left: 10px;"></input>
+									</td>
+								</tr>
+							</table>	
+						</div>
+
+                        <table id="tableData" class="table table-striped table-bordered table-hover" style="overflow-x:auto;font-size: 12px;">
+					    </table>
+						
+					</div>
+			</div><!-- /.main-content -->
+			<!-- 脚 -->
+			<%-- <jsp:include page="footer.jsp" flush="true"/> --%>
+			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse"><i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i></a>
+		</div><!-- /.main-container -->
+	</div>
 	</body>
+	<script src="../assets/js/fuelux/fuelux.tree.min.js"></script>
+	<script src="../assets/js/jquery-ui.min.js"></script>
+	<script src="../assets/js/jquery.ui.touch-punch.min.js"></script>
+	<script src="../assets/js/jquery.dataTables.min.js"></script>
+	<script src="../assets/js/jquery.dataTables.bootstrap.js"></script>
+	<script src="../assets/js/bootstrap3-typeahead.js"></script>
+	<script src="../js/jquery.form.js"></script>
+	<script src="../js/datePicker/WdatePicker.js"></script>
+	<script src="../js/common.js"></script>
+	<script src="../assets/js/bootstrap3-typeahead.js"></script>
+	<script src="../js/jsrender.min.js"></script>
+	<script src="${ctx}/snaker/js/table.js" type="text/javascript"></script>
+	<script src="${ctx}/js/flow/order.js" type="text/javascript" ></script>
 </html>

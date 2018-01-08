@@ -75,7 +75,15 @@ function ajaxQuery(){
 	    {"title":"小班组","class":"center","data":"team","defaultContent":""},
 	    {"title":"等待日期","class":"center","data":"work_date","defaultContent": ""},
 	  	{"title":"等待原因","class":"center","data": "wait_reason","defaultContent": ""},	
-	  	{"title":"详细原因","class":"center","data":"detail_reason","defaultContent": ""},
+	  	{"title":"详细原因","width":"150","class":"center","data":"detail_reason","defaultContent": "","render":function(data, type, row ){
+        	var html="";
+        	if(data.length>50){
+        		html="<i title='"+data+"' style='font-style: normal'>"+data.substring(1,50)+"...</i>"
+        	}else{
+        		html=data;
+        	}
+        	return html;
+        }},
 	  	{"title":"单价","class":"center","data": "hour_price","defaultContent": ""},	
 	  	{"title":"工号","class":"center","data":"staff_number","defaultContent": ""},
 	  	{"title":"姓名","class":"center","data":"staff_name","defaultContent": ""},

@@ -530,5 +530,22 @@ public class ReportServiceImpl implements IReportService {
 		result.put("data", datalist);
 		return result;
 	}
+	
+	public void getFactoryYieldData_Mobile(Map<String, Object> cdMap, ModelMap model){
+		List<Map<String, Object>> datalist = reportDao.getFactoryYieldData_Mobile(cdMap);
+		model.put("data", datalist);
+	}
+	/**
+	 * @author xiong.jianwu
+	 * 获取订单生产进度报表数据
+	 * @param condMap
+	 * @param model
+	 */
+	@Override
+	public void getOrderProcessData(Map<String, Object> condMap, ModelMap model) {
+		List<Map<String, Object>> datalist = reportDao.queryOrderProcessData(condMap);
+		model.put("data", datalist);
+		datalist=null;
+	}
 
 }

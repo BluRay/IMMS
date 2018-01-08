@@ -51,4 +51,12 @@ public interface IReportService {
 	 */
 	void getStaffUseRateData(Map<String, Object> cdMap, ModelMap model);
 	
+	public void getFactoryYieldData_Mobile(Map<String, Object> cdMap, ModelMap model);
+	/**
+	 * @author xiong.jianwu
+	 * 获取订单生产进度报表数据
+	 * @param condMap
+	 * @param model
+	 */
+	void getOrderProcessData(Map<String, Object> condMap, ModelMap model);
 }

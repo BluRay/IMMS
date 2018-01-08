@@ -4,7 +4,7 @@ $(document).ready(function () {
 	
 	function initPage(){
 		getBusNumberSelect('#nav-search-input');
-		getFactorySelect("",'',"#search_factory",null,'id');
+		getFactorySelect("",'',"#search_factory","全部",'id');
 		getOrderNoSelect("#search_order_no","#orderId");
 		var d = new Date();
 		var vYear = d.getFullYear();
@@ -37,7 +37,7 @@ $(document).ready(function () {
 function ajaxQuery(){
 	$table.bootstrapTable('refresh', {url: 'taskAssignPage/getTaskList'});
 }
-function ajaxEdit(task_id,task_detail_id,task_content,tech_order_no,switch_mode,switch_node,tech_date,time_list,status_list,single_time_total,time_total,order_no,mod_factory){
+function ajaxEdit(task_id,task_detail_id,task_content,tech_order_no,switch_mode,switch_node,tech_date,time_list,status_list,single_time_total,time_total,order_no,mod_factory,sc_factory){
 	$("#task_assess").clearForm();
 	$("#switch_node").prop("disabled",true);
 	//$("[name=switch_mode]").removeAttr("disabled");
@@ -58,7 +58,7 @@ function ajaxEdit(task_id,task_detail_id,task_content,tech_order_no,switch_mode,
 		var prod_factory_id=tech_detail.prod_factory_id;
 		var prod_factory=tech_detail.prod_factory;
 		var tech_factory=tech_detail.tech_factory;
-		addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id,prod_factory,tech_factory,order_no,mod_factory);		
+		addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id,prod_factory,tech_factory,order_no,mod_factory,sc_factory);		
 	});		
 	var mode_index=0;
 	//节点前切换
@@ -141,7 +141,7 @@ function asessTechTask(time_list,status_list,single_time_total,time_total){
 				}
 			});		
 			var obj={};
-			obj.tech_task_id=tech_task_id;
+			obj.tech_task_id=tech_task_id;		
 			obj.factory_list=factory;
 			obj.factory_id=factory_id
 			obj.order_no=order_no;
@@ -152,7 +152,7 @@ function asessTechTask(time_list,status_list,single_time_total,time_total){
 			obj.node_list=node_list;
 			obj.tech_factory_id=tech_factory_id;
 			obj.tech_factory=tech_factory;
-
+			obj.prod_factory=factory;
 			obj.time_list=(time_list == "undefined")?'':time_list;
 			obj.status_list=(status_list == "undefined")?'':status_list;
 			obj.single_time_total=(single_time_total == "undefined")?'':single_time_total;
@@ -198,7 +198,7 @@ function getTechList(task_id){
 	});
 	return tech_list;
 }
-function addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id,prod_factory,tech_factory,mod_order_no,mod_factory){
+function addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id,prod_factory,tech_factory,mod_order_no,mod_factory,sc_factory){
 	follow_detail=follow_detail||"";
 	var is_follow=false;
 	$.each(follow_detail.split(";"),function(i,follow){
@@ -236,10 +236,10 @@ function addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id
 	//var is_factory = false;
 	//if(prod_factory.substring(0,prod_factory.indexOf("_")) == mod_factory)is_factory = true;
 	//console.log(is_factory);
-	addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factory_id,prod_factory,tech_factory,is_edit,mod_factory);
+	addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factory_id,prod_factory,tech_factory,is_edit,mod_factory,sc_factory);
 	
 }
-function addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factory_id,prod_factory,tech_factory,is_edit,mod_factory){
+function addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factory_id,prod_factory,tech_factory,is_edit,mod_factory,sc_factory){
 	var factory_disable_obj={};
 	follow_detail=follow_detail||"";
 	$.each(follow_detail.split(";"),function(i,follow){
@@ -284,7 +284,7 @@ function addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factor
 				checked="";
 			}
 			console.log(i + tech_factory_arr[i] + "-->tech_factory = " + tech_factory + ";mod_factory = " + mod_factory);
-			if(tech_factory_arr[i] == mod_factory){
+			if(tech_factory_arr[i] == mod_factory && prod_factory==sc_factory){
 			//if(prod_factory == mod_factory){
 				var facotory_div=$("<div style='margin-top:10px'><b>生产工厂：</b><span factory_id='"+(prod_factory_id||factory_id)+"'>"+(prod_factory||factory)+"</span></div>");
 				var ckbox=$("<input style=\"height:15px\" name=\"new_tecn_flag\""+
@@ -376,7 +376,13 @@ function initTable() {
 	        	return {css: {"padding-left": "3px", "padding-right": "2px","font-size":"13px"}};
 	        	}
             },{
-            	field: 'factory',title: '&nbsp;&nbsp;&nbsp;工厂&nbsp;&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
+            	field: 'factory',title: '&nbsp;&nbsp;&nbsp;技改工厂&nbsp;&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
+                sortable: false,visible: true,footerFormatter: totalTextFormatter,
+                cellStyle:function cellStyle(value, row, index, field) {
+	        	return {css: {"padding-left": "3px", "padding-right": "2px","font-size":"13px"}};
+	        	}
+            },{
+            	field: 'prod_factory',title: '&nbsp;&nbsp;&nbsp;生产工厂&nbsp;&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
                 sortable: false,visible: true,footerFormatter: totalTextFormatter,
                 cellStyle:function cellStyle(value, row, index, field) {
 	        	return {css: {"padding-left": "3px", "padding-right": "2px","font-size":"13px"}};
@@ -404,7 +410,8 @@ function initTable() {
     	        		//task_id,task_detail_id,task_content,tech_order_no,switch_mode,switch_node,tech_date
     	        		return "<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"分配\" onclick='ajaxEdit(\"" + 
     	        		row['id'] + "\",\"" + row['task_detail_id'] + "\",\"" + row['task_content'].replace(/\r/ig, "").replace(/\n/ig,"") + "\",\"" + row['tech_order_no'] + "\",\"" + 
-    	        		row['switch_mode'] + "\",\"" + row['switch_node'] + "\",\"" + row['tech_date'] + "\",\"" + row['time_list'] + "\",\"" + row['status_list'] + "\",\"" + row['single_time_total'] + "\",\"" + row['time_total'] + "\",\"" + row['order_no'] + "\",\"" + row['factory'] + "\")' style='color:blue;cursor: pointer;'></i>";
+    	        		row['switch_mode'] + "\",\"" + row['switch_node'] + "\",\"" + row['tech_date'] + "\",\"" + row['time_list'] + "\",\"" + row['status_list'] + "\",\"" + row['single_time_total'] + "\",\"" + row['time_total'] 
+    	        		+ "\",\"" + row['order_no'] + "\",\"" + row['factory'] +"\",\""+row['prod_factory']+ "\")' style='color:blue;cursor: pointer;'></i>";
     	        	}
     	        }
             }

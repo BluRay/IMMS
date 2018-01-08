@@ -220,6 +220,19 @@ public class TechServiceImpl implements ITechService {
 				node_list=Arrays.asList(nodes.split(","));
 				conditionMap.put("node_list", node_list);
 				List<Map<String,Object>> followList=new ArrayList<Map<String,Object>>();
+								
+				//插入技改明细
+				////techDao.insertTechTaskDetail(conditionMap);		
+				//插入-更新 技改明细
+				String d_id = conditionMap.get("task_detail_id").toString();
+				//int id = techDao.getTechTaskDetailId(conditionMap);
+				if(d_id.equals("0")){
+					techDao.insertTechTaskDetail(conditionMap);	
+					d_id=conditionMap.get("id")+"";
+				}else{
+					conditionMap.put("id", d_id);
+					techDao.updateTechTaskDetail(conditionMap);	
+				}
 				
 				//查询需要技改的车辆信息
 				if("全部切换".equals(switch_mode)){
@@ -234,17 +247,6 @@ public class TechServiceImpl implements ITechService {
 				//往技改跟进表中（BMS_TECH_TASK_FOLLOW）插入查询到的技改车辆信息
 				if(followList.size()>0){
 					techDao.insertTechFollowBus(followList);
-				}
-				//插入技改明细
-				////techDao.insertTechTaskDetail(conditionMap);		
-				//插入-更新 技改明细
-				String d_id = (String) conditionMap.get("task_detail_id");
-				//int id = techDao.getTechTaskDetailId(conditionMap);
-				if(d_id.equals("0")){
-					techDao.insertTechTaskDetail(conditionMap);	
-				}else{
-					conditionMap.put("id", d_id);
-					techDao.updateTechTaskDetail(conditionMap);	
 				}
 			}	
 		}		
@@ -645,8 +647,8 @@ public class TechServiceImpl implements ITechService {
 	public void updateBusNumberFollow(String task_id, String task_detail_id, String order_no, String factory,String workshop, String bus_number,String zzj_num,String bj_num) {
 		
 		Map<String,Object> conditionMap=new HashMap<String,Object>();
-		conditionMap.put("task_id", task_id);
-		//conditionMap.put("task_detail_id", task_detail_id);
+		conditionMap.put("tech_task_id", task_id);
+		conditionMap.put("task_detail_id", task_detail_id);
 		conditionMap.put("order_no", order_no);
 		conditionMap.put("factory", factory);
 		conditionMap.put("workshop", workshop);
@@ -657,8 +659,8 @@ public class TechServiceImpl implements ITechService {
 		for (int i = 0; i < jsonArray.size(); i++) {
 			//System.out.println("-->" + i + jsonArray.getString(i).toString());		
 			Map<String, Object> map = new HashMap<String,Object>(); 
-			map.put("task_id", task_id);
-			//map.put("task_detail_id", task_detail_id);
+			map.put("tech_task_id", task_id);
+			map.put("task_detail_id", task_detail_id);
 			map.put("order_no", order_no);
 			map.put("factory", factory);
 			map.put("workshop", workshop);
@@ -666,13 +668,14 @@ public class TechServiceImpl implements ITechService {
 			add_list.add(map);
 		}
 		if(add_list.size() >0 ){
-			techDao.addBusFollow(add_list);
+			//techDao.addBusFollow(add_list);
+			techDao.insertTechFollowBus(add_list);
 		}
 
 		//重新计算总工时
 		String time_list = techDao.getTaskTimeList(conditionMap);
 		String[] time_list_arr = {};
-		if(time_list != null)time_list_arr = time_list.split(",");
+		if(!StringUtils.isEmpty(time_list))time_list_arr = time_list.split(",");
 		float total = 0;
 		
 		String tech_list_str = "";
@@ -692,7 +695,7 @@ public class TechServiceImpl implements ITechService {
 				String time = time_list_arr[i];
 				String time_workshop = time.substring(0, time.indexOf(":"));
 				if(time_workshop.equals("部件")){
-					total += Float.valueOf(zzj_num) * Float.valueOf(time.substring(time.indexOf(":")+1, time.length()));
+					total += Float.valueOf(bj_num) * Float.valueOf(time.substring(time.indexOf(":")+1, time.length()));
 				}
 			}
 		}

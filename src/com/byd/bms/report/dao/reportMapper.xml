@@ -778,4 +778,115 @@
 	<select id="queryStaffUseList" parameterType="Map" resultType="Map" statementType="CALLABLE">
 		call P_StaffUseRate(#{factory},#{factory_id},#{start_date},#{end_date})
 	</select>
+	
+	<select id="getFactoryYieldData_Mobile" parameterType="Map" resultType="Map">
+			select ifnull(a.plan_qty,0) plan_qty,ifnull(b.finished_qty,0) finished_qty,
+			case when a.key_name is null then b.key_name else a.key_name end as 'workshop' 
+			from 
+				(select sum(p.plan_qty) plan_qty,k.key_name
+				from BMS_PLAN_PRODUCTION_PLAN p
+				left join BMS_BASE_KEY k on p.plan_code_value=k.value and k.key_code='PLAN_CODE'
+				where 1=1 
+				<if test="factory !=null and factory !='' ">
+					and p.factory_id = #{factory} 
+				</if>
+				<if test="start_date !=null and start_date !=''">
+					and p.plan_date >= #{start_date} 
+				</if>
+				<if test="end_date !=null and end_date !=''">
+					and p.plan_date &lt;= #{end_date} 
+				</if>
+				and k.key_name in('自制下线','部件下线','焊装上线','涂装上线','底盘上线','总装下线')
+				group by k.key_name)  a
+				right join
+				(
+				
+					select sum(s.quantity) finished_qty,'自制件(下)' key_name
+					from BMS_PD_WORKSHOP_SUPPLY s 
+					where s.supply_workshop='自制件' and s.receive_workshop='部件' 
+					<if test="start_date !=null and start_date !=''">
+						and s.supply_date>=#{start_date} 
+					</if>
+					<if test="end_date !=null and end_date !=''">
+						and s.supply_date &lt;=#{end_date} 
+					</if>					
+					<if test="factory !=null and factory !=''">
+						and s.factory_id = #{factory} 
+					</if>
+					union
+					select sum(f.offline_real_qty) finished_qty,'部件(下)' key_name
+					from BMS_PD_PARTS_PLAN_FINISH f
+					left join BMS_BASE_KEY p1 on p1.value=f.parts_id AND p1.key_code ='BASE_PARTS' and p1.key_name='喷砂' 
+					where 1=1
+					<if test="start_date !=null and start_date !=''">
+						and f.prod_date >= #{start_date} 
+					</if>
+					<if test="end_date !=null and end_date !=''">
+						and f.prod_date &lt;= #{end_date} 
+					</if>	
+					<if test="factory !=null and factory !=''">
+						and f.factory_id=#{factory}  
+					</if>
+						union
+						select count(b.id) finished_qty,'焊装(上)' key_name 
+						from BMS_PLAN_BUS b
+						where 1=1
+						<if test="factory !=null and factory !=''">
+						and b.factory_id=#{factory} 
+						</if>
+						 and b.welding_online_date_report >= #{start_date} 
+						 and b.welding_online_date_report &lt;=#{end_date} 
+						union
+						select count(b.id) finished_qty,'涂装(上)' key_name 
+						from BMS_PLAN_BUS b
+						where 1=1 
+						<if test="factory !=null and factory !=''">
+						 and	b.factory_id=#{factory} 
+						</if>
+						and b.painting_online_date_report >= #{start_date} 
+						and b.painting_online_date_report &lt;=#{end_date} 
+						union
+						select count(b.id) finished_qty,'底盘(上)' key_name
+						from BMS_PLAN_BUS b
+						where 1=1
+						<if test="factory !=null and factory !=''">
+						 and	b.factory_id=#{factory} 
+						</if>
+						and b.chassis_online_date_report >=#{start_date} 
+						and b.chassis_online_date_report &lt;=#{end_date} 
+						union
+						select count(b.id) finished_qty,'总装(下)' key_name
+						from BMS_PLAN_BUS b
+						where 1=1
+						<if test="factory !=null and factory !=''">
+						 and b.factory_id=#{factory} 
+						</if>
+							and b.assembly_offline_date_report >=#{start_date} 
+						 	and b.assembly_offline_date_report &lt;=#{end_date} 
+						) b  on b.key_name=a.key_name
+	</select>
+	
+	<select id="queryOrderProcessData" parameterType="Map" resultType="Map">
+		select concat(o.order_no,' ',o.order_name,ifnull(t.bus_type_code,''),' ',(
+		select sum(fo1.production_qty) from BMS_OR_FACTORY_ORDER fo1 where fo1.order_id=fo.order_id and fo1.factory_id=fo.factory_id  ),'台') order_desc,
+		group_concat('{"factory_name":"',f.factory_name,'","production_qty":"',fo.production_qty,'","inprocess_num":"',
+		(select count(b.bus_number) from BMS_PLAN_BUS b 
+		where b.factory_order_id=fo.id and b.welding_online_date>0 and b.assembly_offline_date&lt;=0),'","finished_num":"',
+		(select count(b.bus_number) from BMS_PLAN_BUS b 
+		where b.factory_order_id=fo.id and  b.assembly_offline_date>0),'"}' ) as factory_rate_list
+		from  BMS_OR_FACTORY_ORDER fo
+		left join BMS_OR_ORDER o on fo.order_id=o.id 
+		left join BMS_BASE_BUS_TYPE t on t.id=o.bus_type_id
+		left join BMS_BASE_FACTORY f on f.id=fo.factory_id
+		where  o.productive_year=#{prod_year}
+		<if test="factory_id!='all' ">
+			 and fo.factory_id=#{factory_id} 
+		</if>
+		<if test="status !=null and status !=''">
+			and fo.status =#{status}
+		</if>
+		group by o.id
+		order by o.edit_date desc
+	</select>
+	
 </mapper>

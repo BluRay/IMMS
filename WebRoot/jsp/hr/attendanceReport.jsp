@@ -73,6 +73,12 @@
 									<option value='计件' >计件</option>
 									<option value='计时'>计时</option>
 								</select>
+							</td>	
+							<td style="width: 120px;">
+								<select id="reportCount" style="height:30px;width:100px"  class="input-medium">
+									<option value='workgroup'>班组</option>
+									<option value='workshop' >车间/科室</option>									
+								</select>
 							</td>				
 							
 							<td>
@@ -106,6 +112,68 @@
 										<th style="text-align:center;" rowspan=2>工厂/部门</th>
 										<th style="text-align:center;" rowspan=2>车间/科室</th>
 										<th style="text-align:center;" rowspan=2>班组</th>
+										<th style="text-align:center;"colspan=2 >直接人力（计件）</th>
+										<th style="text-align:center;"colspan=2>短期工</th>
+										<th style="text-align:center;" colspan=5>人数差异原因分类</th>
+										<th style="text-align:center;" rowspan=2>总计<br/>（实际在岗人数）</th>
+										<th style="text-align:center;" colspan=16>外出支援人数</th>
+										<th style="text-align:center;" colspan=16>被支援人数</th>										
+									</tr>
+									<tr>
+										<th style="text-align:center;">应到人数</th>
+										<th style="text-align:center;">实到人数</th>
+										<th style="text-align:center;">应到人数</th>
+										<th style="text-align:center;">实到人数</th>
+										<th style="text-align:center;">请假</th>
+										<th style="text-align:center;">放假</th>
+										<th style="text-align:center;">旷工</th>
+										<th style="text-align:center;">出差</th>
+										<th style="text-align:center;">外出支援</th>
+
+										<th style="text-align:center;">长沙</th>
+										<th style="text-align:center;">南京</th>
+										<th style="text-align:center;">杭州</th>
+										<th style="text-align:center;">大连</th>
+										<th style="text-align:center;">青岛</th>
+										<th style="text-align:center;">承德</th>
+										<th style="text-align:center;">武汉</th>
+										<th style="text-align:center;">汕尾</th>
+										<th style="text-align:center;">太原</th>
+										<th style="text-align:center;">深圳</th>
+										<th style="text-align:center;">西安</th>
+										<th style="text-align:center;">宁波</th>
+										<th style="text-align:center;">银川</th>
+										<th style="text-align:center;">天津</th>
+										<th style="text-align:center;">其他</th>
+										<th style="text-align:center;">备注</th>
+										<th style="text-align:center;">长沙</th>
+										<th style="text-align:center;">南京</th>
+										<th style="text-align:center;">杭州</th>
+										<th style="text-align:center;">大连</th>
+										<th style="text-align:center;">青岛</th>
+										<th style="text-align:center;">承德</th>
+										<th style="text-align:center;">武汉</th>
+										<th style="text-align:center;">汕尾</th>
+										<th style="text-align:center;">太原</th>
+										<th style="text-align:center;">深圳</th>
+										<th style="text-align:center;">西安</th>
+										<th style="text-align:center;">宁波</th>
+										<th style="text-align:center;">银川</th>
+										<th style="text-align:center;">天津</th>
+										<th style="text-align:center;">其他</th>
+										<th style="text-align:center;">备注</th>
+									</tr>
+								</thead>
+								<tbody>	
+								</tbody>
+							</table>
+							
+							<table id="attendanceTable_total" style="table-layout: fixed;display:none;font-size:12px;text-align:center;width: 3500px;max-width:3500px;" class="table table-bordered table-striped" >
+								<thead>
+									<tr id="">
+										<th style="text-align:center;" rowspan=2>工厂/部门</th>
+										<th style="text-align:center;" rowspan=2>车间/科室</th>
+										<!-- <th style="text-align:center;" rowspan=2>班组</th> -->
 										<th style="text-align:center;"colspan=2 >直接人力（计件）</th>
 										<th style="text-align:center;"colspan=2>短期工</th>
 										<th style="text-align:center;" colspan=5>人数差异原因分类</th>
@@ -251,7 +319,7 @@
 		<script src="../assets/js/buttons.html5.js"></script>
 		<script src="../assets/js/jquery.gritter.min.js"></script>
 		<script src="../js/common.js"></script>
-		<script src="../js/hr/attendanceUpload.js"></script>
+		<script src="../js/hr/attendanceReport2.js"></script>
 </body>
 
 </html>

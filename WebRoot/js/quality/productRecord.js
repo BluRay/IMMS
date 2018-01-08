@@ -380,7 +380,8 @@ function ajaxGetTplDetail(){
 		type:"post",
 		dataType:"json",
 		data:{
-			"bus_number":$("#bus_number").val(),		
+			"bus_number":$("#bus_number").val(),	
+			"customer_no":$("#customer_number").val(),
 			"order_id":$("#order").attr("order_id"),
 			"order_config_id":$("#order_config").val(),
 			"test_node":$("#check_node :selected").text(),

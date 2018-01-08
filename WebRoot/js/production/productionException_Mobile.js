@@ -1,6 +1,15 @@
 $(document).ready(function () {	
 	initPage();
 	
+	function setQRData(str){
+		$("#vinText").val(str);
+		if($('#vinText').attr("disabled") == "disabled")
+            return false;
+		if(jQuery.trim($('#vinText').val()) != ""){
+            ajaxValidate();
+        }
+	}
+	
 	$("#btn_clear").click(function(){
     	resetPage();
     })
@@ -9,6 +18,10 @@ $(document).ready(function () {
     	ajaxEnter();
     });
 	
+	$("#btn_scan").click(function(){
+    	yspCheckIn.qrCode();
+    })
+    
 	$("#exec_factory").change(function(){
 		$("#exec_workshop").empty();
 		if($("#exec_factory").val() !=''){

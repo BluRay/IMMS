@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.byd.bms.flow.dao.IFlowDao">
+    <select id="getHistoryTaskList" parameterType="Map" resultType="Map">
+	    select o.process_Id,t.order_Id,t.id as id,t.id as task_Id,p.display_Name as process_Name,
+        p.instance_Url,o.parent_Id,o.creator,o.create_Time as order_Create_Time,
+        o.expire_Time as order_Expire_Time,o.order_No,o.variable as order_Variable,
+        t.display_Name as task_Name,t.task_Type,t.perform_Type,t.operator,t.action_Url,
+        t.create_Time as task_Create_Time,t.finish_Time as task_End_Time,
+        u.username apply_username,u.department  
+	    from wf_hist_task t 
+	    left join wf_hist_order o on t.order_id = o.id  
+	    left join wf_hist_task_actor ta on ta.task_id=t.id  
+	    left join wf_process p on p.id = o.process_id 
+	    left join BMS_BASE_USER u on o.creator = u.id  
+	    where 1=1 and ta.actor_Id=#{userId}  
+	    <if test="startDate !=null and startDate !='' ">
+	        <![CDATA[and t.create_Time>=#{startDate}]]>
+	    </if>
+	    <if test="endDate !=null and endDate !='' ">
+	        <![CDATA[and t.create_Time<=#{endDate}]]>
+	    </if>
+	    order by t.create_Time desc 
+	    <if test="start !=null and length !='-1' ">
+			LIMIT #{start} ,#{length} 
+		</if>
+	</select>
+	<select id="getHistoryTaskCount" parameterType="Map" resultType="int">
+	    select count(1) from wf_hist_task t 
+	    left join wf_hist_order o on t.order_id = o.id 
+	    left join wf_hist_task_actor ta on ta.task_id=t.id  
+	    left join wf_process p on p.id = o.process_id  
+	    where 1=1 and ta.actor_Id=#{userId} 
+	    <if test="startDate !=null and startDate !='' ">
+	        <![CDATA[and t.create_Time>=#{startDate}]]>
+	    </if>
+	    <if test="endDate !=null and endDate !='' ">
+	        <![CDATA[and t.create_Time<=#{endDate}]]>
+	    </if>
+	</select>
+    <!--主办[taskType=0]、协办[taskType=1]任务查询  -->
+	<select id="getCurrentTaskList" parameterType="Map" resultType="Map">
+	    select o.process_Id,t.order_Id,t.id as id,t.id as task_Id,p.display_Name as process_Name,
+        p.instance_Url,o.parent_Id,o.creator,o.create_Time as order_Create_Time,
+        o.expire_Time as order_Expire_Time, o.order_No,t.display_Name as task_Name,
+        t.task_Type,t.perform_Type,t.operator,t.action_Url,t.create_Time as task_Create_Time,
+        t.finish_Time as task_End_Time,u.username apply_username,u.department
+<!--         ,t.expire_Time as task_Expire_Time,t.variable as task_Variable   -->
+    from wf_task t  
+    left join wf_order o on t.order_id = o.id  
+    left join wf_task_actor ta on ta.task_id=t.id  
+    left join wf_process p on p.id = o.process_id 
+    left join BMS_BASE_USER u on u.id = o.creator
+    where 1=1 and ta.actor_Id=#{userId} and t.task_Type =#{taskType}  
+    order by t.create_Time desc 
+	    <if test="start !=null and length !='-1' ">
+			LIMIT #{start} ,#{length} 
+		</if>
+	</select>
+	<!--主办[taskType=0]、协办[taskType=1]任务记录条数 -->
+	<select id="getCurrentTaskCount" parameterType="Map" resultType="int">
+	    select count(1) from
+         ( select 1 from wf_task t  
+        left join wf_order o on t.order_id = o.id  
+        left join wf_task_actor ta on ta.task_id=t.id  
+        left join wf_process p on p.id = o.process_id  
+        where 1=1 and ta.actor_Id=#{userId} and t.task_Type = #{taskType} ) c 
+	</select>
+	 <!--抄送任务查询  -->
+	<select id="getCCTaskList" parameterType="Map" resultType="Map">
+	    select id,process_Id,order_State,priority,creator,create_Time,
+            end_Time,parent_Id,expire_Time,order_No,variable from
+        ( select
+            id,process_Id,order_State,priority,cc.creator,cc.create_Time,
+            end_Time,parent_Id,expire_Time,order_No,variable
+        from wf_cc_order cc  
+        left join wf_hist_order o on cc.order_id = o.id  
+        where 1=1 and cc.actor_Id=#{userId}
+            and cc.status =#{status} ) c 
+        order by create_Time desc 
+	    <if test="start !=null and length !='-1' ">
+			LIMIT #{start} ,#{length} 
+		</if>
+	</select>
+	<!--抄送任务记录条数 -->
+	<select id="getCCTaskCount" parameterType="Map" resultType="int">
+	    select count(1) from ( select 1 from wf_cc_order cc  
+        left join wf_hist_order o on cc.order_id = o.id  
+        where 1=1 and cc.actor_Id=#{userId} and cc.status =#{status} ) c  
+	</select>
+	<!--流程查询  -->
+	<select id="getProcessList" parameterType="Map" resultType="Map">
+	    select id,name, display_Name,type,instance_Url,state,content,version,
+        create_Time,creator from wf_process where 1=1 order by name asc  
+        <if test="start !=null and length !='-1' ">
+			LIMIT #{start} ,#{length} 
+		</if>
+	</select>
+	<!--流程记录条数 -->
+	<select id="getProcessCount" parameterType="Map" resultType="int">
+	    select count(1) from wf_process where 1=1 
+	</select>
+	<!--流程实例查询  -->
+	<select id="getProcessInstanceList" parameterType="Map" resultType="Map">
+	    select o.id,o.process_Id,o.order_State,o.priority,o.creator,o.create_Time,
+        o.end_Time,o.parent_Id,o.expire_Time,o.order_No,o.variable,p.display_Name 
+    from wf_hist_order o left join wf_process p on p.id = o.process_id  
+    where 1=1  
+    order by o.create_Time desc 
+        <if test="start !=null and length !='-1' ">
+			LIMIT #{start} ,#{length} 
+		</if>
+	</select>
+	<!--流程实例记录条数 -->
+	<select id="getProcessInstanceCount" parameterType="Map" resultType="int">
+	    select count(1) from
+        (select 1 from wf_hist_order o left join wf_process p on p.id = o.process_id  
+        where 1=1 ) c 
+	</select>
+	<!--流程实例查询By orderId  -->
+	<select id="getOrderInstanceByOrderId" parameterType="String" resultType="Map">
+	    select t.order_Id,t.task_Name,t.display_Name,task_Type,perform_Type,task_State,a.operator,
+        create_Time,finish_Time, expire_Time,parent_Task_Id,a.result,a.description 
+    from wf_hist_task t left join BMS_FLOW_APPROVAL a on t.order_id=a.order_id and t.id=a.task_id
+     where 1=1  and t.order_Id =#{orderId} 
+    order by finish_Time desc 
+	</select>
+	<!-- 添加审核记录信息 -->
+	<insert id="addMaterialPurchase" useGeneratedKeys="true" parameterType="Map">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		<![CDATA[
+			insert into BMS_FLOW_MATERIAL_PURCHASE(apply_date,applier,department,apply_type,cost_center,apply_kind,material_code,
+			material_name,specification,quantity,techcical_require,require_date,useage_place,apply_reason,file,remark,order_id,
+			accountant,purchase_leader,editor,edit_date) values(#{apply_date},#{applier},#{department},#{apply_type},#{cost_center},
+			#{apply_kind},#{material_code},#{material_name},#{specification},#{quantity},#{techcical_require},#{require_date},
+			#{useage_place},#{apply_reason},#{file},#{remark},#{order_id},#{accountant},#{purchase_leader},#{editor},#{edit_date})
+		]]>
+	</insert>
+	<!--流程实例查询  -->
+	<select id="getGroupListByGroupName" parameterType="Map" resultType="Map">
+	    select g.id group_id,g.group_name,u.id user_id,u.username from BMS_FLOW_APPROVAL_GROUP g 
+        left join BMS_FLOW_APPROVAL_GROUP_USER  t on g.id = t.group_id and g.use_flag='0' 
+        left join BMS_BASE_USER u on u.id=t.user_id
+        where 1=1  and g.group_name=#{group_name} and g.process_name=#{process_name}
+        <if test="org_id !=null and org_id !='' ">
+			and t.org_id=#{org_id} 
+		</if>
+	</select>
+	
+	<select id="findApprovalInfoByFlow" parameterType="String" resultType="Map">
+	    select * from BMS_FLOW_APPROVAL where order_id = #{orderId}
+	    <if test="taskName !=null and taskName !='' ">
+			and task_name = #{taskName} 
+		</if> 
+		order by operate_time
+	</select>
+	<select id="getMaterialPurchaseByOrderId" parameterType="String" resultType="Map">
+	    select * from BMS_FLOW_MATERIAL_PURCHASE where order_id = #{orderId} order by edit_date
+	</select>
+	<!-- 添加审核记录信息 -->
+	<insert id="addApproval" useGeneratedKeys="true" parameterType="Map">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		<![CDATA[
+			insert into BMS_FLOW_APPROVAL(operator,operate_time,result,description,order_id,task_id,
+			task_name,display_name,content) values(#{operator},#{operateTime},#{result},
+			#{description},#{orderId},#{taskId},#{taskName},#{displayName},#{content})
+		]]>
+	</insert>
+	<!-- 更新采购申请-->
+	<update id="updateMaterialPurchase"  parameterType="Map">
+		update BMS_FLOW_MATERIAL_PURCHASE set 
+		<if test="type !=null and type =='apply' ">
+		apply_type=#{apply_type},cost_center=#{cost_center},apply_kind=#{apply_kind},
+		material_code=#{material_code},material_name=#{material_name},specification=#{specification},
+		quantity=#{quantity},techcical_require=#{techcical_require},require_date=#{require_date},
+		useage_place=#{useage_place},apply_reason=#{apply_reason},file=#{file},remark=#{remark}  
+		</if>
+		<if test="type !=null and type =='developer' ">
+		urgent_item=#{urgent_item},vendor_type=#{vendor_type},vendor_name=#{vendor_name},
+		price=#{price},amount=#{amount}
+		</if>
+		where order_id=#{order_id}
+	</update>
+	<!-- 基础数据班组名称修改，更细组织架构班组的名称 -->
+	<update id="updateOrgDataName" parameterType="Map">
+		update BMS_BASE_ORG set name=#{name} where
+		 foreign_id=#{id} and org_type in ('3','4') and deleted='0'
+	</update>
+	
+</mapper>

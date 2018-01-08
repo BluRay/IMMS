@@ -22,6 +22,8 @@
 		<result property="workgroup_org" column="workgroup_org" />
 		<result property="team_org" column="team_org" />
 		<result property="pwd_modified" column="pwd_modified" />
+		<result property="division" column="division" />
+		<result property="division_id" column="division_id" />
 	</resultMap>
 
 	<select id="getUser" parameterType="String" resultMap="userMap">

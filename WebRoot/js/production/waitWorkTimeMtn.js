@@ -17,7 +17,7 @@ $(document).ready(function() {
 			mouseWheelLock: true,
 			alwaysVisible : true
 		});
-		getKeysSelect("WAIT_HOUR_TYPE", "", $("#search_wait_hour_type"),"全部","");
+		getKeysSelect("WAIT_HOUR_TYPE", "", $("#search_wait_hour_type"),"请选择","");
 		$("#select_start_date").val("");
 		$("#select_finish_date").val("");
 	}
@@ -249,7 +249,7 @@ $(document).ready(function() {
 			},
 			columns: [
 			          {"title":"","width":"30","class":"center","data":"","defaultContent": "","render":function(data,type,row){
-			            	return "<input name='exp_radio' value='"+row.reason_type+"' type='radio'>";
+			            	return "<input name='exp_radio' value='"+(row.reason_type+"("+row.detailed_reason+")")+"' type='radio'>";
 			            }},
 			            {"title":"生产订单","class":"center","data":"order_list","defaultContent": ""},
 			            {"title":"线别","class":"center","data":"line","defaultContent": ""},
@@ -271,6 +271,7 @@ $(document).ready(function() {
 		var workgroup="";
 		var team="";
 		var staffNumlist="";
+		var type=$("#search_wait_hour_type :selected").text();
 		
 		var wait_date=$("#wait_date").val();
 		var dutyUnit=$("#duty_unit").val();
@@ -318,11 +319,14 @@ $(document).ready(function() {
 			alert("请填写责任部门！");
 			return false;
 		}
+		else if(type=="请选择"){
+			alert("请选择等待类别！");
+			return false;
+		}
 		else{
 			var standard_price=ajaxGetStandardPrice();
 			if(standard_price==0){
-				saveFlag=false;
-				var type=$("#search_wait_hour_type :selected").text();
+				saveFlag=false;				
 				alert("未维护【"+type+"】等待工时单价！");
 				return false;
 			}		

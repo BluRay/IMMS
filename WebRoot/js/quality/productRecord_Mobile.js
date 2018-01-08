@@ -6,6 +6,15 @@ var workgroup_list=[];
 $(document).ready(function(){
 	initPage();
 	
+	$("#btn_scan").click(function(){
+    	yspCheckIn.qrCode();
+    })
+    
+	$("#test_photo").click(function(){
+    	yspCheckIn.openCamera();
+    })
+	
+	
 	$('#fuelux-wizard-container').ace_wizard({
 		//step: 2 //optional argument. wizard will jump to step "2" at first
 		//buttons: '.wizard-actions:eq(0)'
@@ -59,6 +68,8 @@ $(document).ready(function(){
 		
 	}).on('stepclick', function(e){
 	});	
+
+    
 	
 	//输入回车，发ajax进行校验；成功则显示并更新车辆信息
     $('#bus_number').bind('keydown', function(event) {
@@ -67,7 +78,7 @@ $(document).ready(function(){
         if (event.keyCode == "13"){	
             if(jQuery.trim($('#bus_number').val()) != ""){
                 ajaxValidate();
-                //输入有效车号以后，如何选择了检验节点则更新检验项目和标准
+                //输入有效车号以后，如果选择了检验节点则更新检验项目和标准
                 if($("#check_node").val().trim().length>0){
                 	ajaxGetStandard();
                 }
@@ -309,7 +320,7 @@ function ajaxSave(){
 	var detail_list_submit=[];
 	var test_result=$("#test_result").val();
 	var result=$("#result").val();
-	var fault_id=$("#test_result").attr("fault_id");
+	var fault_id=$("#test_result").attr("fault_id")||0;
 	var test_card_template_detail_id=$('input:radio[name="check_strd"]:checked').attr("tpl_detail_id");
 	var test_card_template_head_id=standard_default.test_card_template_id/*$('input:radio[name="check_strd"]:checked').attr("tpl_head_id");*/
 	var order_id=$("#bus_number").attr("order_id");
@@ -318,8 +329,11 @@ function ajaxSave(){
 	var tester=$("#tester").val();
 	var workshop_id=$("#workshop").val();
 	var workgroup_id=$("#workgroup").val();
+	var test_image_str=$("#test_image_str").val()
 
-	
+	if(fault_id==null||fault_id==""){
+		fault_id=0;
+	}
 	if(order_id==null||order_id==""){
 		fadeMessageAlert(null,'请输入有效车号！','gritter-error');
 		return false;
@@ -340,15 +354,21 @@ function ajaxSave(){
 		fadeMessageAlert(null,'请输入检验结果！','gritter-error');
 		return false;
 	}
-	if((workshop_id==null||workshop_id=="")&&test_result.trim().length>0){
+	if((workshop_id==null||workshop_id=="")){
 		workshop_id=0;
-		fadeMessageAlert(null,'请选择责任车间！','gritter-error');
-		return false;
+		if(test_result.trim().length>0){
+			fadeMessageAlert(null,'请选择责任车间！','gritter-error');
+			return false;
+		}
+		
 	}
-	if((workgroup_id==null||workgroup_id=="")&&test_result.trim().length>0){
+	if((workgroup_id==null||workgroup_id=="")){
 		workgroup_id=0;
-		fadeMessageAlert(null,'请选择责任班组！','gritter-error');
-		return false;
+		if(test_result.trim().length>0){
+			fadeMessageAlert(null,'请选择责任班组！','gritter-error');
+			return false;
+		}
+		
 	}
 	
 	
@@ -370,7 +390,7 @@ function ajaxSave(){
 	obj.tester=tester;
 	obj.workshop_id=workshop_id;
 	obj.workgroup_id=workgroup_id;
-
+	obj.test_image_str=test_image_str;
 	
 	detail_list_submit.push(obj);
 	
@@ -399,4 +419,24 @@ function ajaxSave(){
 			
 		}
 	})	
+}
+
+function setQRData(str){
+	$("#bus_number").val(str);
+	if($('#bus_number').attr("disabled") == "disabled")
+        return false;
+	if(jQuery.trim($('#bus_number').val()) != ""){
+		ajaxValidate();
+		//输入有效车号以后，如果选择了检验节点则更新检验项目和标准
+        if($("#check_node").val().trim().length>0){
+        	ajaxGetStandard();
+        }
+    }
+}	
+
+function setImageData(str){
+		//alert(str)
+		document.getElementById("test_image").src="data:image/png;base64,"+str;
+		document.getElementById("test_image").style.display="";
+		document.getElementById("test_image_str").value=str;
 }

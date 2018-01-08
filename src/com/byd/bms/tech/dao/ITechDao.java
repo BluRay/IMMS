@@ -34,7 +34,7 @@ public interface ITechDao {
 	public int insertTechFollowBus(List<Map<String, Object>> followList);
 	public int getTechTaskDetailId(Map<String, Object> conditionMap);
 	public int updateTechTaskDetail(Map<String, Object> conditionMap);
-	public void insertTechTaskDetail(Map<String, Object> conditionMap);
+	public int insertTechTaskDetail(Map<String, Object> conditionMap);
 	public int deleteTechFollowPre(Map<String, Object> conditionMap);
 	public void updateTechTaskInfo(Map<String, Object> cdmap);
 	public List<Map<String,String>> queryTaskBaseInfo(Map<String, Object> conditionMap);	

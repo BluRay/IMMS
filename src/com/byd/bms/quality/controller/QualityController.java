@@ -487,8 +487,10 @@ public class QualityController extends BaseController {
 		String bus_number=request.getParameter("bus_number");
 		String test_node=request.getParameter("test_node");
 		String test_node_id=request.getParameter("test_node_id");
+		String customer_no=request.getParameter("customer_no");
 		Map<String,Object> condMap=new HashMap<String,Object>();
 		condMap.put("bus_number", bus_number);
+		condMap.put("customer_no", customer_no);
 		condMap.put("test_node", test_node);
 		condMap.put("test_node_id", test_node_id);
 		condMap.put("order_id", request.getParameter("order_id"));

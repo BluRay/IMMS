@@ -138,7 +138,7 @@ function getTechBusNum(order_no,factory,tech_date,switch_mode,switch_node,node_l
 		return data_list;
 }
 
-function ajaxEdit(task_id,task_detail_id,task_content,tech_order_no,switch_mode,switch_node,tech_date,mod_order_no,mod_factory){
+function ajaxEdit(task_id,task_detail_id,task_content,tech_order_no,switch_mode,switch_node,tech_date,mod_order_no,mod_factory,sc_factory){
 	is_assign = 0;
 	$("#new_accordion").html("");// 清空之前的div
 	
@@ -167,7 +167,7 @@ function ajaxEdit(task_id,task_detail_id,task_content,tech_order_no,switch_mode,
 		var prod_factory_id=tech_detail.prod_factory_id;
 		var prod_factory=tech_detail.prod_factory;
 		var cur_task_detail_id = tech_detail.task_detail_id;
-		addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id,prod_factory,task_id,cur_task_detail_id,mod_order_no,mod_factory);
+		addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id,prod_factory,task_id,cur_task_detail_id,mod_order_no,mod_factory,sc_factory);
 		//console.log("follow_detail = " + follow_detail);
 		$.each(follow_detail.split(";"),function(i,follow){
 			//alert(follow.split("||")[1]);
@@ -272,7 +272,7 @@ function assignTechTask(){
 			});		
 			var obj={};
 			obj.tech_task_id=tech_task_id;
-			obj.task_detail_id = (task_detail_id==undefined)?"":task_detail_id;
+			obj.task_detail_id = (task_detail_id==undefined)?"0":task_detail_id;
 			obj.factory_list=factory;
 			obj.factory_id=factory_id;
 			obj.order_no=order_no;
@@ -331,7 +331,7 @@ function getTechList(task_id){
 	return tech_list;
 }
 
-function addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id,prod_factory,task_id,task_detail_id,mod_order_no,mod_factory){
+function addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id,prod_factory,task_id,task_detail_id,mod_order_no,mod_factory,sc_factory){
 	follow_detail=follow_detail||"";
 	var is_follow=false;
 	$.each(follow_detail.split(";"),function(i,follow){
@@ -376,11 +376,11 @@ function addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id
 	if(order_no == mod_order_no)is_edit = true;
 	
 	$(tabContent).appendTo($("#new_accordion"));
-	addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factory_id,prod_factory,order_no,task_id,task_detail_id,is_edit,mod_factory);
+	addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factory_id,prod_factory,order_no,task_id,task_detail_id,is_edit,mod_factory,sc_factory);
 	getFuzzyOrder("#order_"+taskNum);
 }
 
-function addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factory_id,prod_factory,order_no,task_id,task_detail_id,is_edit,mod_factory){
+function addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factory_id,prod_factory,order_no,task_id,task_detail_id,is_edit,mod_factory,sc_factory){
 	var factory_select_options=$("#search_factory").html().replace("全部","请选择");
 	//alert(factory_select_options)	
 	var factory_disable_obj={};
@@ -412,7 +412,7 @@ function addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factor
 		var content=$("<div id=\"tech_factory_"+taskNum+"\" class=\"tech_factory\"/>");
 		$.each(tech_detail_arr,function(i,tech_detail){
 			var factory_id=tech_detail.split("||")[0].split("_")[0];
-			var factory=tech_detail.split("||")[0].split("_")[1];
+			var factory=tech_detail.split("||")[0].split("_")[1]; 
 			var tech_info=tech_detail.split("||")[1];
 			var tech_obj=new Array();
 			$.each(tech_info.split(","),function(i,data){
@@ -432,7 +432,7 @@ function addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factor
 			}
 			//prod_factory_id=prod_factory_id||factory_id;
 			//prod_factory=prod_factory||factory;
-			if(prod_factory == mod_factory){
+			if(sc_factory == prod_factory){
 				var facotory_div=$("<div style='margin-top:10px'><b>生产工厂：</b><span factory_id='"+(prod_factory_id||factory_id)+"'>"+(prod_factory||factory)+"</span></div>");
 				var ckbox=$("<input style=\"height:15px\" name=\"new_tecn_flag\""+
 						" class=\"input-medium\" disabled=\"disabled\" type=\"checkbox\""+checked+" "+factory_disable_obj[prod_factory]+">");
@@ -442,11 +442,11 @@ function addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factor
 				var tr_body= "";
 				if(is_edit){
 					tr_body=$("<tr height='31px'><td>"+(tech_obj['自制件']||'')+"</td><td>"+(tech_obj['部件']||'')+"</td><td>"+
-							"<a onClick='getBusFollow(this,"+prod_factory_id+","+task_id+","+task_detail_id+",\""+order_no+"\",\""+factory+"\",\"焊装\","+(tech_obj['自制件']||'\"\"')+","+(tech_obj['部件']||'\"\"')+");'>" + (tech_obj['焊装']||'0')+
-							"</a></td><td><a onClick='getBusFollow(this,"+prod_factory_id+","+task_id+","+task_detail_id+",\""+order_no+"\",\""+factory+"\",\"涂装\","+(tech_obj['自制件']||'\"\"')+","+(tech_obj['部件']||'\"\"')+");'>"+(tech_obj['涂装']||'0')+"</a></td><td>"+
-							"<a onClick='getBusFollow(this,"+prod_factory_id+","+task_id+","+task_detail_id+",\""+order_no+"\",\""+factory+"\",\"底盘\","+(tech_obj['自制件']||'\"\"')+","+(tech_obj['部件']||'\"\"')+");'>" + (tech_obj['底盘']||'0')+"</a></td><td>"+
-							"<a onClick='getBusFollow(this,"+prod_factory_id+","+task_id+","+task_detail_id+",\""+order_no+"\",\""+factory+"\",\"总装\","+(tech_obj['自制件']||'\"\"')+","+(tech_obj['部件']||'\"\"')+");'>" + (tech_obj['总装']||'0')+"</a></td><td>"+
-							"<a onClick='getBusFollow(this,"+prod_factory_id+","+task_id+","+task_detail_id+",\""+order_no+"\",\""+factory+"\",\"检测线\","+(tech_obj['自制件']||'\"\"')+","+(tech_obj['部件']||'\"\"')+");'>" + (tech_obj['检测线']||'0')+"</a></td></tr>");
+							"<a onClick='getBusFollow(this,"+prod_factory_id+","+task_id+","+task_detail_id+",\""+order_no+"\",\""+prod_factory+"\",\"焊装\","+(tech_obj['自制件']||'\"\"')+","+(tech_obj['部件']||'\"\"')+");'>" + (tech_obj['焊装']||'0')+
+							"</a></td><td><a onClick='getBusFollow(this,"+prod_factory_id+","+task_id+","+task_detail_id+",\""+order_no+"\",\""+prod_factory+"\",\"涂装\","+(tech_obj['自制件']||'\"\"')+","+(tech_obj['部件']||'\"\"')+");'>"+(tech_obj['涂装']||'0')+"</a></td><td>"+
+							"<a onClick='getBusFollow(this,"+prod_factory_id+","+task_id+","+task_detail_id+",\""+order_no+"\",\""+prod_factory+"\",\"底盘\","+(tech_obj['自制件']||'\"\"')+","+(tech_obj['部件']||'\"\"')+");'>" + (tech_obj['底盘']||'0')+"</a></td><td>"+
+							"<a onClick='getBusFollow(this,"+prod_factory_id+","+task_id+","+task_detail_id+",\""+order_no+"\",\""+prod_factory+"\",\"总装\","+(tech_obj['自制件']||'\"\"')+","+(tech_obj['部件']||'\"\"')+");'>" + (tech_obj['总装']||'0')+"</a></td><td>"+
+							"<a onClick='getBusFollow(this,"+prod_factory_id+","+task_id+","+task_detail_id+",\""+order_no+"\",\""+prod_factory+"\",\"检测线\","+(tech_obj['自制件']||'\"\"')+","+(tech_obj['部件']||'\"\"')+");'>" + (tech_obj['检测线']||'0')+"</a></td></tr>");
 				}else{
 					tr_body=$("<tr height='31px'><td>"+(tech_obj['自制件']||'')+"</td><td>"+(tech_obj['部件']||'')+"</td><td>"+
 							(tech_obj['焊装']||'0')+"</td><td>"+(tech_obj['涂装']||'0')+"</td><td>"+
@@ -482,6 +482,7 @@ function getBusFollow(e,factory_id,task_id,task_detail_id,order_no,factory,works
 		data: {
 				"factory_id" : factory_id,
 				"task_id":task_id,
+				"task_detail_id":task_detail_id,
 				"order_no":order_no,
 				"factory":factory,
 				"workshop":workshop
@@ -731,7 +732,13 @@ function initTable() {
 	        	return {css: {"padding-left": "3px", "padding-right": "2px","font-size":"13px"}};
 	        	}
             },{
-            	field: 'factory',title: '&nbsp;&nbsp;&nbsp;工厂&nbsp;&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
+            	field: 'factory',title: '&nbsp;&nbsp;&nbsp;技改工厂&nbsp;&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
+                sortable: false,visible: true,footerFormatter: totalTextFormatter,
+                cellStyle:function cellStyle(value, row, index, field) {
+	        	return {css: {"padding-left": "3px", "padding-right": "2px","font-size":"13px"}};
+	        	}
+            },{
+            	field: 'prod_factory',title: '&nbsp;&nbsp;&nbsp;生产工厂&nbsp;&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
                 sortable: false,visible: true,footerFormatter: totalTextFormatter,
                 cellStyle:function cellStyle(value, row, index, field) {
 	        	return {css: {"padding-left": "3px", "padding-right": "2px","font-size":"13px"}};
@@ -759,7 +766,7 @@ function initTable() {
 	        		//task_id,task_detail_id,task_content,tech_order_no,switch_mode,switch_node,tech_date
 	        		return "<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"分配\" onclick='ajaxEdit(\"" + 
 	        		row['id'] + "\",\"" + row['task_detail_id'] + "\",\"" + row['task_content'].replace(/\r/ig, "").replace(/\n/ig,"") + "\",\"" + row['tech_order_no'] + "\",\"" + 
-	        		row['switch_mode'] + "\",\"" + row['switch_node'] + "\",\"" + row['tech_date'] + "\",\"" + row['order_no'] + "\",\"" + row['factory'] + "\")' style='color:blue;cursor: pointer;'></i>";
+	        		row['switch_mode'] + "\",\"" + row['switch_node'] + "\",\"" + row['tech_date'] + "\",\"" + row['order_no'] + "\",\"" + row['factory'] +"\",\""+row['prod_factory']+ "\")' style='color:blue;cursor: pointer;'></i>";
     	        	//}
     	        }
             }

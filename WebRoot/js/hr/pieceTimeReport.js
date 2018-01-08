@@ -766,7 +766,7 @@ function exportExcelTableHtml(){
 	
 	
 	//导出后清除表格
-	//document.body.removeChild(table);
+	document.body.removeChild(table);
 	worker.terminate();
 	$(".divLoading").hide();	
 	}

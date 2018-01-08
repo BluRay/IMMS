@@ -96,7 +96,7 @@ function ajaxQuery(){
 			conditions:JSON.stringify(conditions)
 		},
 		success:function(response){
-			var tableId=report_type=="计件"?"#attendanceTable":"#attendanceTable_hour"
+			//var tableId=report_type=="计件"?"#attendanceTable":"#attendanceTable_hour"
 			$(tableId).find("tbody").html("");
 			if(report_type=="计件"){
 				$.each(response.data,function(index,value){

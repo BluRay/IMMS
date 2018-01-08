@@ -1031,8 +1031,8 @@ function getLastDayOfMonth(dateString) {
 	}
 	var d_list=dateString.split("-");
 	var y=d_list[0];
-	var m=Number(d_list[1])+1;
-	var l_date=new Date(y+"/"+m+"/"+"0");
+	var m=Number(d_list[1]);
+	var l_date=new Date(y,m,0);
 	l_y = l_date.getFullYear()
 	l_m = l_date.getMonth() + 1
 	l_d = l_date.getDate()

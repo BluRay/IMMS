@@ -2,7 +2,12 @@ var chart1;
 var chart2;
 var chart3;
 var colors=[  '#a8ef9d','#24CBE5','#629b58', '#058DC7', '#FF9655','#50B432', '#FFF263','#ED561B', '#DDDF00', '#6AF9C4'];
-$(document).ready(function() {				
+$(document).ready(function() {
+	
+	/*if(window.location.href.indexOf("10.23.1.77:8080")>=0){
+		window.history.pushState({},0,"10.23.1.77/BMS/index");
+		window.open("http://10.23.1.77/BMS/index",'self'); 
+	}*/
 			//初始化页面
 			initPage();
 			
@@ -160,7 +165,7 @@ $(document).ready(function() {
 					enabled:false
 				},
 				xAxis : {
-					categories : [ '未开始', '在制', '已完成','交车' ]
+					categories : [ '未开始', '生产中', '下线数','交车数' ]
 				},
 				yAxis : {
 					title:{
@@ -179,14 +184,14 @@ $(document).ready(function() {
 		                	inside:true
 		                }
 		            },
-		            pie: {
+		            /*pie: {
 		                dataLabels: {
 		                    enabled: true,
 		                    allowOverlap: true,
 		                	inside:true,
 		                	distance: 5
 		                }
-		            }
+		            }*/
 		        },
 				labels : {
 					/*items : [ {
@@ -202,7 +207,7 @@ $(document).ready(function() {
 				series : [ {
 					type : 'bar',
 					data : bar_series
-				}, {
+				}, /*{
 					type : 'pie',
 					center:['80%','40%'],
 					size:'75%',
@@ -213,7 +218,7 @@ $(document).ready(function() {
 		               inside:true
 		            },
 					data : pie_series
-				} ],
+				} */],
 				 responsive: {
 					 rules:[{
 			                condition: {

@@ -1,224 +1,139 @@
-<%@ page contentType="text/html;charset=UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<c:set var="ctx" value="${pageContext.request.contextPath}"/>
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
+<!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<html lang="zh-CN">
 	<head>
-		<title>我的任务</title>
-		<link rel="stylesheet" href="${ctx}/snaker/css/style.css" type="text/css" media="all" />
-		<script src="${ctx}/snaker/jquery-1.8.3.min.js" type="text/javascript"></script>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta charset="utf-8" />
+		<title>代办任务</title>
+		<meta name="description" content="Common Buttons &amp; Icons" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 	</head>
+	<body class="no-skin" style="font-family: 'Microsoft YaHei';">
+		<!-- 头 -->
+		<jsp:include page="../top.jsp" flush="true"/>
+		<!-- 身 -->
+		<div class="main-container" id="main-container">
+			<!-- 左边菜单 -->
+			<jsp:include page="../left.jsp" flush="true"/>
+			<!-- 主体 -->
+			<div class="main-content">			
+			<!-- 路径和搜索框 -->
+			<div class="breadcrumbs" id="breadcrumbs">
+					<ul class="breadcrumb">
+						<li><i class="ace-icon fa fa-home home-icon"></i><a href="/BMS/index">首页</a></li>
+						<li><a href="#">流程管理</a></li>
+						<li class="active">代办任务</li>
+					</ul><!-- /.breadcrumb -->
 
-	<body>
-	<form id="mainForm" action="${ctx}/snaker/task/active" method="get">
-		<table width="100%" border="0" align="center" cellpadding="0"
-				class="table_all_border" cellspacing="0" style="border-bottom: 0px; margin-bottom: 0px">
-			<tr>
-				<td class="td_table_top" align="left">
-					待办任务<font color="red">[共:${majorTotal }项]&nbsp;&nbsp;<a href="${ctx}/snaker/task/active/more?taskType=0">更多...</a></font>
-				</td>
-			</tr>
-		</table>
-
-		<table class="table_all" align="center" border="0" cellpadding="0"
-			cellspacing="0" style="margin-top: 0px">
-			<tr>
-				<td align=center width=15% class="td_list_1" nowrap>
-					流程名称
-				</td>
-				<td align=center width=20% class="td_list_1" nowrap>
-					流程编号
-				</td>
-				<td align=center width=15% class="td_list_1" nowrap>
-					流程启动时间
-				</td>
-				<td align=center width=15% class="td_list_1" nowrap>
-					任务名称
-				</td>
-				<td align=center width=15% class="td_list_1" nowrap>
-					任务创建时间
-				</td>
+					<!-- #section:basics/content.searchbox -->
+					<div class="nav-search" id="nav-search">
+						<form class="form-search">
+							<span class="input-icon">
+								<input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" onkeydown="EnterPress()" autocomplete="off" /><i class="ace-icon fa fa-search nav-search-icon"></i>
+							</span>
+						</form>
+					</div><!-- /.nav-search -->
+				</div>
 				
-				<td align=center width=10% class="td_list_1" nowrap>
-					操作
-				</td>				
-			</tr>
-			<c:forEach items="${majorWorks}" var="item">
-				<tr>
-					<td class="td_list_2" align=left nowrap>
-						${item.processName}&nbsp;
-					</td>
-					<td class="td_list_2" align=left nowrap>
-						${item.orderNo}&nbsp;
-					</td>
-					<td class="td_list_2" align=left nowrap>
-						${item.orderCreateTime}&nbsp;
-					</td>
-					<td class="td_list_2" align=left nowrap>
-						${item.taskName}&nbsp;
-					</td>
-					<td class="td_list_2" align=left nowrap>
-						${item.taskCreateTime}&nbsp;
-					</td>
-					<td class="td_list_2" align=left nowrap>
-						<a href="${ctx}/snaker/process/display?processId=${item.processId }&orderId=${item.orderId} " class="btnPict" title="查看流程图">查看流程图</a>
-						<a href="${ctx}${empty item.instanceUrl ? item.actionUrl : item.instanceUrl }?processId=${item.processId }&taskId=${item.taskId}&orderId=${item.orderId} " class="btnEdit" title="处理">处理</a>
-					</td>
-				</tr>
-			</c:forEach>
-			<c:if test="${majorTotal < 5 }">
-			<c:forEach begin="0" end="${4 - fn:length(majorWorks)}">
-				<tr>
-					<td class="td_list_2" align=left nowrap>&nbsp;</td>
-					<td class="td_list_2" align=left nowrap>&nbsp;</td>
-					<td class="td_list_2" align=left nowrap>&nbsp;</td>
-					<td class="td_list_2" align=left nowrap>&nbsp;</td>
-					<td class="td_list_2" align=left nowrap>&nbsp;</td>
-					<td class="td_list_2" align=left nowrap>&nbsp;</td>
-				</tr>
-			</c:forEach>
-			</c:if>
-		</table>
-		
-		<table width="100%" border="0" align="center" cellpadding="0"
-				class="table_all_border" cellspacing="0" style="border-bottom: 0px; margin-bottom: 0px">
-			<tr>
-				<td class="td_table_top" align="left">
-					协办任务<font color="red">[共:${aidantTotal }项]&nbsp;&nbsp;<a href="${ctx}/snaker/task/active/more?taskType=1">更多...</a></font>
-				</td>
-			</tr>
-		</table>
+			<div class="page-content">
+					<!-- /section:settings.box -->
+					<div class="page-content-area">
+					
+<!-- 					<div class="well"> -->
+<!-- 						<table> -->
+<!-- 							<tr> -->
+<!-- 								<td>车号/VIN号：</td> -->
+<!-- 								<td><input id="search_busnumber" placeholder="请输入车号/VIN号..." style="height: 30px;width:200px" type="text"> -->
+<!-- 								<input id="order_id"   type="hidden"> -->
+<!-- 								<input id="order_config_id"   type="hidden"> -->
+<!-- 								</td> -->
+<!-- 								<td><input id="btnQuery" type="button" class="btn btn-sm btn-success" value="查询" style="margin-left: 2px;"></td> -->
+<!-- 								<td></td> -->
+<!-- 							</tr> -->
+<!-- 						</table> -->
+<!-- 					</div> -->
+					
+					<div class="tabtable">
+					    <input type="hidden" id="urlPath" value="<%=request.getContextPath()%>">
+<!-- 						<ul class="nav nav-tabs" id="myTab"> -->
+<!-- 							<li id="div1" class="active"><a data-toggle="tab" href="#div_1">主办任务</a></li> -->
+<!-- 							<li id="div2"><a data-toggle="tab" href="#div_2">协办任务</a></li> -->
+<!-- 							<li id="div3"><a data-toggle="tab" href="#div_3">抄送任务</a></li> -->
+<!-- 						</ul> -->
+						
+<!-- 						<div class="tab-content" id="tab-content"> -->
+<!-- 							<div id="div_1" class="tab-pane fade in active" style="overflow:auto;height:450px"> -->
+								<table id="table01" style="text-align:center;font-size:12px;" class="table table-bordered">
+									<thead>
+									    <tr>
+									        <th style="text-align:center;">序号 </th>
+									        <th style="text-align:center;">流程名称 </th>
+									        <th style="text-align:center;">拟稿人</th>
+									        <th style="text-align:center;">拟稿人科室</th>
+									        <th style="text-align:center;">申请时间</th>
+									        <th style="text-align:center;">任务节点</th>
+									        <th style="text-align:center;">任务到达时间 </th>
+<!-- 									        <td>操作 </td> -->
+									    </tr>
+									</thead>
+									<tbody>
+									</tbody>
+								</table>
+<!-- 							</div> -->
+							
+<!-- 							<div id="div_2" class="tab-pane fade" style="overflow:auto;height:450px"> -->
+<!-- 								<table id="table02" style="text-align:center;font-size:12px" class="table table-bordered"> -->
+<!-- 									<thead> -->
+<!-- 									    <tr> -->
+<!-- 									        <td>序号 </td> -->
+<!-- 									        <td>流程名称 </td> -->
+<!-- 									        <td>流程编号</td> -->
+<!-- 									        <td>流程启动时间</td> -->
+<!-- 									        <td>任务名称</td> -->
+<!-- 									        <td>任务创建时间 </td> -->
+<!-- 									        <td>操作 </td> -->
+<!-- 									    </tr> -->
+<!-- 									</thead> -->
+<!-- 									<tbody> -->
+<!-- 									</tbody> -->
+<!-- 								</table> -->
+<!-- 							</div> -->
+							
+<!-- 							<div id="div_3" class="tab-pane fade" style="overflow:auto;height:450px"> overflow:auto -->
+<!-- 								<table id="table03" class="table table-bordered" style="text-align:center;font-size: 12px;"> -->
+<!-- 									<thead> -->
+<!-- 									    <tr> -->
+<!-- 									        <td>序号 </td> -->
+<!-- 									        <td>流程名称 </td> -->
+<!-- 									        <td>流程编号</td> -->
+<!-- 									        <td>流程启动时间</td> -->
+<!-- 									        <td>任务名称</td> -->
+<!-- 									        <td>任务创建时间 </td> -->
+<!-- 									        <td>操作 </td> -->
+<!-- 									    </tr> -->
+<!-- 									</thead> -->
+<!-- 									<tbody> -->
+<!-- 									</tbody> -->
+<!-- 								</table> -->
+<!-- 							</div> -->
+<!-- 						</div>				 -->
+					</div>
+				</div>
+			</div><!-- /.main-content -->
 
-		<table class="table_all" align="center" border="0" cellpadding="0"
-			cellspacing="0" style="margin-top: 0px">
-			<tr>
-				<td align=center width=15% class="td_list_1" nowrap>
-					流程名称
-				</td>
-				<td align=center width=20% class="td_list_1" nowrap>
-					流程编号
-				</td>
-				<td align=center width=15% class="td_list_1" nowrap>
-					流程启动时间
-				</td>
-				<td align=center width=15% class="td_list_1" nowrap>
-					任务名称
-				</td>
-				<td align=center width=15% class="td_list_1" nowrap>
-					任务创建时间
-				</td>
-				
-				<td align=center width=10% class="td_list_1" nowrap>
-					操作
-				</td>				
-			</tr>
-			<c:forEach items="${aidantWorks}" var="item">
-				<tr>
-					<td class="td_list_2" align=left nowrap>
-						${item.processName}&nbsp;
-					</td>
-					<td class="td_list_2" align=left nowrap>
-						${item.orderNo}&nbsp;
-					</td>
-					<td class="td_list_2" align=left nowrap>
-						${item.orderCreateTime}&nbsp;
-					</td>
-					<td class="td_list_2" align=left nowrap>
-						${item.taskName}&nbsp;
-					</td>
-					<td class="td_list_2" align=left nowrap>
-						${item.taskCreateTime}&nbsp;
-					</td>
-					<td class="td_list_2" align=left nowrap>
-						<a href="${ctx}/snaker/process/display?processId=${item.processId }&orderId=${item.orderId} " class="btnPict" title="查看流程图">查看流程图</a>
-						<a href="${ctx}${empty item.instanceUrl ? item.actionUrl : item.instanceUrl }?processId=${item.processId }&taskId=${item.taskId}&orderId=${item.orderId} " class="btnEdit" title="处理">处理</a>
-					</td>
-				</tr>
-			</c:forEach>
-			<c:if test="${aidantTotal < 3 }">
-			<c:forEach begin="0" end="${2 - fn:length(aidantWorks)}">
-				<tr>
-					<td class="td_list_2" align=left nowrap>&nbsp;</td>
-					<td class="td_list_2" align=left nowrap>&nbsp;</td>
-					<td class="td_list_2" align=left nowrap>&nbsp;</td>
-					<td class="td_list_2" align=left nowrap>&nbsp;</td>
-					<td class="td_list_2" align=left nowrap>&nbsp;</td>
-					<td class="td_list_2" align=left nowrap>&nbsp;</td>
-				</tr>
-			</c:forEach>
-			</c:if>
-		</table>
-		
-		<table width="100%" border="0" align="center" cellpadding="0"
-				class="table_all_border" cellspacing="0" style="border-bottom: 0px; margin-bottom: 0px">
-			<tr>
-				<td class="td_table_top" align="left">
-					抄送任务<font color="red">[共:${ccorderTotal }项]&nbsp;&nbsp;<a href="${ctx}/snaker/task/active/ccmore">更多...</a></font>
-				</td>
-			</tr>
-		</table>
-
-		<table class="table_all" align="center" border="0" cellpadding="0"
-			cellspacing="0" style="margin-top: 0px">
-			<tr>
-				<td align=center width=15% class="td_list_1" nowrap>
-					流程名称
-				</td>
-				<td align=center width=20% class="td_list_1" nowrap>
-					流程编号
-				</td>
-				<td align=center width=15% class="td_list_1" nowrap>
-					启动时间
-				</td>
-				<td align=center width=10% class="td_list_1" nowrap>
-					实例创建人
-				</td>
-				<td align=center width=10% class="td_list_1" nowrap>
-					实例状态
-				</td>
-				<td align=center width=10% class="td_list_1" nowrap>
-					操作
-				</td>				
-			</tr>
-			<c:forEach items="${ccorderWorks}" var="item">
-				<tr>
-					<td class="td_list_2" align=left nowrap>
-						${item.processName}&nbsp;
-					</td>
-					<td class="td_list_2" align=left nowrap>
-						${item.orderNo}&nbsp;
-					</td>
-					<td class="td_list_2" align=left nowrap>
-						${item.createTime}&nbsp;
-					</td>
-					<td class="td_list_2" align=left nowrap>
-						${item.creator}&nbsp;
-					</td>
-					<td class="td_list_2" align=left nowrap>
-						${item.orderState == 0 ? '已结束' : '运行中'}&nbsp;
-					</td>
-					<td class="td_list_2" align=left nowrap>
-						<a href="${ctx}/snaker/process/display?processId=${item.processId }&orderId=${item.id} " class="btnPict" title="查看流程图">查看流程图</a>
-						<a href="${ctx}${empty item.instanceUrl ? item.actionUrl : item.instanceUrl }?processId=${item.processId }&orderId=${item.id}&type=cc " class="btnView" title="查看">查看</a>
-						<a href="${ctx}/snaker/ccread?id=${item.id}&url=/snaker/task/active " class="btnRead" title="关闭">关闭</a>
-					</td>
-				</tr>
-			</c:forEach>
-			<c:if test="${ccorderTotal < 3 }">
-			<c:forEach begin="0" end="${2 - fn:length(ccorderWorks)}">
-				<tr>
-					<td class="td_list_2" align=left nowrap>&nbsp;</td>
-					<td class="td_list_2" align=left nowrap>&nbsp;</td>
-					<td class="td_list_2" align=left nowrap>&nbsp;</td>
-					<td class="td_list_2" align=left nowrap>&nbsp;</td>
-					<td class="td_list_2" align=left nowrap>&nbsp;</td>
-					<td class="td_list_2" align=left nowrap>&nbsp;</td>
-				</tr>
-			</c:forEach>
-			</c:if>
-		</table>
-	</form>
+			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse"><i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i></a>
+		</div><!-- /.main-container -->
+	</div>
 	</body>
+	<script src="../assets/js/jquery-ui.min.js"></script>
+	<script src="../assets/js/jquery.ui.touch-punch.min.js"></script>
+	<script src="../assets/js/jquery.dataTables.min.js"></script>
+	<script src="../assets/js/jquery.dataTables.bootstrap.js"></script>
+	<script src="../assets/js/bootstrap3-typeahead.js"></script>
+	<script type="text/javascript" src="../js/jquery.form.js"></script>
+	<script type="text/javascript" src="../js/datePicker/WdatePicker.js"></script>
+	<script type="text/javascript" src="../js/common.js"></script>
+	<script type="text/javascript" src="../assets/js/bootstrap3-typeahead.js"></script>
+	<script type="text/javascript" src="../js/jsrender.min.js"></script>
+	<script type="text/javascript" src="../js/flow/activeTask.js"></script>
 </html>

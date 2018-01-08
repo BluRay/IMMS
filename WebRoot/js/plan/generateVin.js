@@ -1,3 +1,4 @@
+var testVin=0;
 $(document).ready(function () {	
 	initPage();
 	function initPage(){
@@ -30,6 +31,7 @@ $(document).ready(function () {
 			},
 			success : function(response) {
 				getSelects(response.data,"","#vin_factory",null, "id");	
+				getSelects(response.data,"","#vin_factory_test",null, "id");	
 			}
 		});
 	}
@@ -146,6 +148,32 @@ $(document).ready(function () {
 		
 	});
 	
+	
+	$("#btnGenVin_test").click (function () {
+		$("#dialog-new-test").removeClass('hide').dialog({
+			resizable: false,
+			title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-flag green"></i> 生成试制车VIN号</h4></div>',
+			title_html: true,
+			width:'550px',
+			modal: true,
+			buttons: [{
+						text: "取消",
+						"class" : "btn btn-minier",
+						click: function() {$( this ).dialog( "close" );} 
+					},
+					{
+						text: "生成",
+						id:"btnAddConfirm_test",
+						"class" : "btn btn-success btn-minier",
+						click: function() {
+							btnAddConfirm_test();
+						} 
+					}
+				]
+		});
+		
+	});
+	
 	function btnAddConfirm(){
 		//TODO 权限校验
 		if($("#new_vinPrefix").val()==""){
@@ -173,6 +201,51 @@ $(document).ready(function () {
 				"year":$('#new_year').val(),
 				"vin_prefix":$('#new_vinPrefix').val(),
 				"WMI_extension":$('#new_WMI_extension').val()
+			},
+			async : false,
+			error : function(response) {},
+			success : function(response) {
+				$.gritter.add({
+					title: '系统提示：',
+					text: '<h5>'+response.data.message+'</h5>',
+					class_name: 'gritter-info'
+				});
+				$("#dialog-new").dialog("close");
+				ajaxQuery();
+			}
+		});
+		
+	}
+	
+	function btnAddConfirm_test(){
+		//TODO 权限校验
+		if($("#new_vinPrefix_test").val()==""){
+			alert('请先维护VIN前8位规则！');
+			return false;
+		}
+		if($("#new_vinCount_test").val()==""){
+			alert('生成数量不能为空！');
+			return false;
+		}
+		if($("#new_year_test").val()==""){
+			alert('生产年份不能为空！');
+			return false;
+		}
+		if(isNaN($("#new_vinCount_test").val())){
+			alert('生成数量须为数字！');
+			return false;
+		}
+		$("#btnAddConfirm_test").attr("disabled","disabled");
+		
+		$.ajax({
+			url : "getGenerateVinTest",
+			dataType : "json",
+			data : {
+	    		"vin_factory_id": $('#vin_factory_test').val(),
+				"vinCount":$('#new_vinCount_test').val(),
+				"year":$('#new_year_test').val(),
+				"vin_prefix":$('#new_vinPrefix_test').val(),
+				"WMI_extension":$('#new_WMI_extension_test').val()
 			},
 			async : false,
 			error : function(response) {},
@@ -273,6 +346,11 @@ function ajaxUpdateVinMotor(vin,update_val,update,e){
 }
 
 function ajaxQuery(){
+	testVin = 0;
+	if ($('#testVin').is(':checked') ==true || $('#testVin').is(':checked')=='true') {
+		testVin = 1;
+	}
+	
 	$table.bootstrapTable('refresh', {url: 'showPlanVinList'});
 }
 
@@ -292,6 +370,7 @@ function initTable() {
         	params["order_no"] = $("#search_order_no").val(); 
         	params["bus_vin"] = $("#search_bus_vin").val(); 
         	params["bus_number"] = $("#search_bus_number").val();
+        	params["testVin"] = testVin;
         	return params;
         },
         columns: [

@@ -30,24 +30,26 @@ function ajaxQuery(){
 	$table.bootstrapTable('refresh', {url: 'searchTaskList'});
 }
 
-function getTaskAllSelectedBusNum(order_no,factory,taskid,bus_num_start,bus_num_end,workshop){
+function getTaskAllSelectedBusNum(order_no,factory,taskid,bus_num_start,bus_num_end,workshop,task_detail_id,prod_factory){
 	$("#selectBusNumber_orderId_view").val(order_no);
 	$("#selectBusNumber_factoryId_view").val(factory);
 	$("#selectBusNumber_workshop_view").val(workshop);
 	$("#selectBusNumber_taskId_view").val(taskid);
+	$("#selectBusNumber_taskDetailId_view").val(task_detail_id);
 	var bus_num_start = $("#bus_num_start_view").val()||'';
 	var bus_num_end = $("#bus_num_end_view").val()||'';	
-	ajaxShowBusNumber(order_no,taskid,bus_num_start,bus_num_end,factory,workshop);
+	ajaxShowBusNumber(order_no,taskid,bus_num_start,bus_num_end,factory,workshop,task_detail_id,prod_factory);
 }
-function ajaxShowBusNumber(order_no,tech_task_id,bus_num_s,bus_num_e,factory,workshop){
+function ajaxShowBusNumber(order_no,tech_task_id,bus_num_s,bus_num_e,factory,workshop,task_detail_id,prod_factory){
 	$.ajax({
 		url: "getTaskBusNumber",
 		dataType: "json",
 		type: "get",
 		data: {
 				"order_no" : order_no,
-				"factory":factory,
+				"factory":prod_factory,
 				"tech_task_id" : tech_task_id,
+				"task_detail_id":task_detail_id,
 				"bus_num_start" : bus_num_s||'',
 				"bus_num_end" : bus_num_e||'',
 				"workshop":workshop,
@@ -235,6 +237,12 @@ function initTable() {
 			    	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
 			    	}
 			},{
+				field: 'prod_factory',title: '生产<br/>工厂',align: 'center',width:'80',valign: 'middle',align: 'center',
+			    sortable: false,visible: true,footerFormatter: totalTextFormatter,
+			    cellStyle:function cellStyle(value, row, index, field) {
+			    	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
+			    	}
+			},{
 				field: 'workshop',title: '车间',align: 'center',width:'60',valign: 'middle',align: 'center',
 			    sortable: false,visible: true,footerFormatter: totalTextFormatter,
 			    cellStyle:function cellStyle(value, row, index, field) {
@@ -272,7 +280,7 @@ function initTable() {
 			    	},
 			    	formatter:function(value,row,index){
 			        	return "<i name=\"edit\" class=\"fa fa-search\" style=\"cursor: pointer;text-align: center;\" onclick=\"getTaskAllSelectedBusNum('"
-			        	+row.order_no+"','"+row.factory+"','"+row.id+"',null,null,'"+row.workshop+"')\">";
+			        	+row.order_no+"','"+row.factory+"','"+row.id+"',null,null,'"+row.workshop+"','"+row.task_detail_id+"','"+row.prod_factory+"')\">";
 			        }
 			},{
 				field: '',title: '成本是否<br/>可转移',align: 'center',width:'70',valign: 'middle',align: 'center',

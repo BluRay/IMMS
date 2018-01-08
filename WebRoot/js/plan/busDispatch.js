@@ -69,11 +69,11 @@ $(document).ready(function () {
 		$.each(trs,function(index,tr){
 			tr_count ++;
 			var number3c=$(tr).find("td").eq("4").find("input").val();
-			if(number3c.trim().length==0){
+			/*if(number3c.trim().length==0){
 				alert("请输入3C编号！");
 				doDispatch=false;
 				return false;
-			}
+			}*/
 		})
 		if(tr_count == 0)doDispatch=false;
 		if(doDispatch){

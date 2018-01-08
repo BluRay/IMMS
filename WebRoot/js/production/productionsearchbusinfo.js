@@ -61,7 +61,7 @@ $(document).ready(function () {
 	
 	$("#btnQuery").click (function () {
 		if($("#search_busnumber").val()==""){
-			alert("请输入车号或VIN号！");
+			alert("请输入车号、VIN号或电机号！");
 			return false;
 		}
 		if(cur_tab == "01")ajaxQuery();

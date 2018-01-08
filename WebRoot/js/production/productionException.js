@@ -50,6 +50,12 @@ $(document).ready(function () {
 			$("#btnSubmit").removeAttr("disabled");
 			return false;
 		}
+		if($("#detailed_reasons").val().trim().length==0){
+			alert("请输入详细原因！");
+			$("#btnSubmit").removeAttr("disabled");
+			return false;
+		}
+		
 		
 		var busNoStr = busNoArray.join("|");;
 		var trs=$("#dispatchDetail tbody").find("tr");

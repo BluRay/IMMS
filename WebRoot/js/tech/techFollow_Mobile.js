@@ -5,6 +5,18 @@ $(document).ready(function(){
 	getFactorySelect("tech/followingUpPage","","#exec_factory",null,"id");
 	 $("#exec_factory").attr("disabled",true)
 	$('#bus_number').focus();
+	 
+	function setQRData(str){
+		$("#bus_number").val(str);
+		if($('#bus_number').attr("disabled") == "disabled")
+            return false;
+		if(jQuery.trim($('#bus_number').val()) != ""){
+			 ajaxGetTechTaskList();
+        }
+	}
+	$("#btn_scan").click(function(){
+    	yspCheckIn.qrCode();
+    })
 	//输入回车，发ajax进行校验；成功则显示并更新车辆信息
     $('#bus_number').bind('keydown', function(event) {
        if($(this).attr("disabled") == "disabled")

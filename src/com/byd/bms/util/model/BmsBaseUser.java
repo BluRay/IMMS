@@ -31,6 +31,8 @@ public class BmsBaseUser {
 	private String modify_time;
 	private String login_count;
 	private String last_login_time;
+	private String division; // 部门
+	private String division_id;
 	
 	//add by wuxiao
 	private String pwd_modified;
@@ -197,5 +199,16 @@ public class BmsBaseUser {
 	public void setUser_type(String user_type) {
 		this.user_type = user_type;
 	}
-	
+	public String getDivision() {
+		return division;
+	}
+	public void setDivision(String division) {
+		this.division = division;
+	}
+	public String getDivision_id() {
+		return division_id;
+	}
+	public void setDivision_id(String division_id) {
+		this.division_id = division_id;
+	}
 }

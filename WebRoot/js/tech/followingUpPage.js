@@ -130,7 +130,8 @@ function ajaxQuery() {
 		            {"title":"切换方式","class":"center","data":"switch_mode","defaultContent": ""},
 		            {"title":"切换节点","class":"center","data":"switch_node","defaultContent": ""},
 		            {"title":"订单","class":"center","data":"order_no","defaultContent": ""},
-		            {"title":"工厂","class":"center","data":"factory","defaultContent": ""},
+		            {"title":"技改工厂","class":"center","data":"factory","defaultContent": ""},
+		            {"title":"生产工厂","class":"center","data":"prod_factory","defaultContent": ""},
 		            {"title":"车间","class":"center","data":"ws","defaultContent": ""},
 		            {"title":"技改台数","class":"center","data":"total","defaultContent": ""},
 		            {"title":"工时","class":"center","data":"time_list","defaultContent": "",
@@ -167,9 +168,9 @@ function ajaxQuery() {
 				            				return "-";
 				            			}else{
 				            				if (row.ws == "自制件" || row.ws == "部件") {
-					            				return "<i name='edit' class=\"fa fa-pencil\" rel=\"tooltip\"  title='修改'style=\"cursor: pointer;text-align: center;\" onclick='showSelectBusNumberModal1(\"" + row.factory + "\",\"" + row.ws + "\",\"" + row.order_no + "\"," + row.tech_task_id + "," + row.total + "," + row.task_detail_id + ");' ></i>";
+					            				return "<i name='edit' class=\"fa fa-pencil\" rel=\"tooltip\"  title='修改'style=\"cursor: pointer;text-align: center;\" onclick='showSelectBusNumberModal1(\"" + row.prod_factory + "\",\"" + row.ws + "\",\"" + row.order_no + "\"," + row.tech_task_id + "," + row.total + "," + row.task_detail_id + ");' ></i>";
 					    					} else {
-					    						return "<i name='edit' class=\"fa fa-pencil\" rel=\"tooltip\"  title='修改'style=\"cursor: pointer;text-align: center;\" onclick='showSelectBusNumberModal(\"" + row.factory + "\",\"" + row.ws + "\",\"" + row.order_no + "\"," + row.tech_task_id + "," + row.task_detail_id + ");' ></i>";
+					    						return "<i name='edit' class=\"fa fa-pencil\" rel=\"tooltip\"  title='修改'style=\"cursor: pointer;text-align: center;\" onclick='showSelectBusNumberModal(\"" + row.prod_factory + "\",\"" + row.ws + "\",\"" + row.order_no + "\"," + row.tech_task_id + "," + row.task_detail_id + ");' ></i>";
 					    					}
 				            			}
 			            			}else{
@@ -187,9 +188,9 @@ function ajaxQuery() {
 		            			return "-";
 		            		}else{
 		            			if (row.ws == "自制件" || row.ws == "部件") {
-		            				return "<i name='edit' class=\"fa fa-search\" rel=\"tooltip\"  title='查看'style=\"cursor: pointer;text-align: center;\" onclick='showSelectBusNumberModal_view1(\"" + row.factory + "\",\"" + row.ws + "\",\"" + row.order_no + "\"," + row.tech_task_id + ");' ></i>";
+		            				return "<i name='edit' class=\"fa fa-search\" rel=\"tooltip\"  title='查看'style=\"cursor: pointer;text-align: center;\" onclick='showSelectBusNumberModal_view1(\"" + row.prod_factory + "\",\"" + row.ws + "\",\"" + row.order_no + "\"," + row.tech_task_id + ");' ></i>";
 		    					} else {
-		    						return "<i name='edit' class=\"fa fa-search\" rel=\"tooltip\"  title='查看'style=\"cursor: pointer;text-align: center;\" onclick='showSelectBusNumberModal_view(\"" + row.factory + "\",\"" + row.ws + "\",\"" + row.order_no + "\"," + row.tech_task_id + ");' ></i>";
+		    						return "<i name='edit' class=\"fa fa-search\" rel=\"tooltip\"  title='查看'style=\"cursor: pointer;text-align: center;\" onclick='showSelectBusNumberModal_view(\"" + row.prod_factory + "\",\"" + row.ws + "\",\"" + row.order_no + "\"," + row.tech_task_id + ");' ></i>";
 		    					}
 		            		}
 		            	}
@@ -208,7 +209,7 @@ function showSelectBusNumberModal(factory, workshop, order_no, tech_task_id, tas
 	$('#bus_num_end').val("");
 	$(".checkall").removeAttr("checked");
 	$('#task_detail_id').val(task_detail_id);
-	ajaxQueryDetail($("#selectBusNumber_table_tbody"), factory, workshop, order_no, tech_task_id, null);
+	ajaxQueryDetail($("#selectBusNumber_table_tbody"), factory, workshop, order_no, tech_task_id, null,task_detail_id);
 	$("#selectBusNumberModal").removeClass('hide').dialog({
 		resizable: false,
 		title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 技改确认</h4></div>',
@@ -241,7 +242,7 @@ function showSelectBusNumberModal1(factory, workshop, order_no, tech_task_id, to
 	$('#total_num1').val(total_num);
 	$('#follow_num').val("");
 	$('#task_detail_id1').val(task_detail_id);
-	ajaxQueryDetail1($("#selectBusNumber_table_tbody1"), factory, workshop, order_no, tech_task_id);
+	ajaxQueryDetail1($("#selectBusNumber_table_tbody1"), factory, workshop, order_no, tech_task_id,task_detail_id);
 	$("#selectBusNumberModal1").removeClass('hide').dialog({
 		resizable: false,
 		title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 技改确认</h4></div>',
@@ -258,7 +259,7 @@ function showSelectBusNumberModal1(factory, workshop, order_no, tech_task_id, to
 	});
 }
 
-function ajaxQueryDetail(tbody, factory, workshop, order_no, tech_task_id, view) {
+function ajaxQueryDetail(tbody, factory, workshop, order_no, tech_task_id, view,task_detail_id) {
 	$.ajax({
 		url : "getFollowingUpDetailList",
 		dataType : "json",
@@ -268,6 +269,7 @@ function ajaxQueryDetail(tbody, factory, workshop, order_no, tech_task_id, view)
 			"workshop" : workshop,
 			"order_no" : order_no,
 			"tech_task_id" : tech_task_id,
+			"tech_task_detail_id" :task_detail_id,
 			"bus_num_start" : "view" != view ? $('#bus_num_start').val() : $('#bus_num_start_view').val(),
 			"bus_num_end" : "view" != view ? $('#bus_num_end').val() : $('#bus_num_end_view').val(),
 			"view" : view
@@ -297,7 +299,7 @@ function ajaxQueryDetail(tbody, factory, workshop, order_no, tech_task_id, view)
 	});
 }
 
-function ajaxQueryDetail1(tbody, factory, workshop, order_no, tech_task_id) {
+function ajaxQueryDetail1(tbody, factory, workshop, order_no, tech_task_id,task_detail_id) {
 	$.ajax({
 		url : "getFollowingUpDetailList1",
 		dataType : "json",
@@ -306,7 +308,8 @@ function ajaxQueryDetail1(tbody, factory, workshop, order_no, tech_task_id) {
 			"factory" : factory,
 			"workshop" : workshop,
 			"order_no" : order_no,
-			"tech_task_id" : tech_task_id
+			"tech_task_id" : tech_task_id,
+			"tech_task_detail_id":task_detail_id
 		},
 		error : function(response) {
 			alert(response.message)
@@ -432,14 +435,14 @@ function ajaxEdit1() {
 	
 }
 
-function showSelectBusNumberModal_view(factory, workshop, order_no, tech_task_id) {
+function showSelectBusNumberModal_view(factory, workshop, order_no, tech_task_id,tech_task_detail_id) {
 	$('#select_tech_task_id_view').val(tech_task_id);
 	$('#select_factory_view').val(factory);
 	$('#select_workshop_view').val(workshop);
 	$('#select_order_no_view').val(order_no);
 	$('#bus_num_start_view').val("");
 	$('#bus_num_end_view').val("");
-	ajaxQueryDetail($("#selectBusNumber_table_tbody_view"), factory, workshop, order_no, tech_task_id, "view");
+	ajaxQueryDetail($("#selectBusNumber_table_tbody_view"), factory, workshop, order_no, tech_task_id, "view",tech_task_detail_id);
 
 	$("#selectBusNumberModal_view").removeClass('hide').dialog({
 		resizable: false,
@@ -457,13 +460,13 @@ function showSelectBusNumberModal_view(factory, workshop, order_no, tech_task_id
 	});
 }
 
-function showSelectBusNumberModal_view1(factory, workshop, order_no, tech_task_id) {
+function showSelectBusNumberModal_view1(factory, workshop, order_no, tech_task_id,tech_task_detail_id) {
 	$('#select_tech_task_id_view1').val(tech_task_id);
 	$('#select_factory_view1').val(factory);
 	$('#select_workshop_view1').val(workshop);
 	$('#select_order_no_view1').val(order_no);
 
-	ajaxQueryDetail1($("#selectBusNumber_table_tbody_view1"), factory, workshop, order_no, tech_task_id);
+	ajaxQueryDetail1($("#selectBusNumber_table_tbody_view1"), factory, workshop, order_no, tech_task_id,tech_task_detail_id);
 
 	$("#selectBusNumberModal_view1").removeClass('hide').dialog({
 		resizable: false,

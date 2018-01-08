@@ -42,8 +42,8 @@
 					<div class="well">
 						<table>
 							<tr>
-								<td>车号/VIN号：</td>
-								<td><input id="search_busnumber" placeholder="请输入车号/VIN号..." style="height: 30px;width:200px" type="text">
+								<td>车号/VIN号/电机号：</td>
+								<td><input id="search_busnumber" placeholder="请输入车号/VIN号/电机号..." style="height: 30px;width:200px" type="text">
 								<input id="order_id"   type="hidden">
 								<input id="order_config_id"   type="hidden">
 								</td>

@@ -552,6 +552,7 @@ public class ReportController extends BaseController {
 		return mv;
 	}
 	
+	
 	/**
 	 * @author xiong.jianwu
 	 * 获取人员利用率报表数据
@@ -576,4 +577,87 @@ public class ReportController extends BaseController {
 		
 		return model;
 	}
+	
+	/**
+	 * @author tan.haiwen
+	 * 报表首页（移动端）
+	 */
+	@RequestMapping("/reportIndexMobile")
+	public ModelAndView techFollowMobile(){
+		mv.setViewName("report/reportIndex_Mobile");
+        return mv; 
+	}
+	
+	/**
+	 * @author tan.haiwen
+	 * 工厂产量报表（移动端）
+	 */
+	@RequestMapping("/factoryYield_Mobile")
+	public ModelAndView factoryYield(){
+		mv.setViewName("report/factoryYield_Mobile");
+        return mv; 
+	}
+	
+	/**
+	 * @author tan.haiwen
+	 * 获取工厂产量报表数据（移动端）
+	 */
+	@RequestMapping("/getFactoryYieldData_Mobile")
+	@ResponseBody
+	public ModelMap getFactoryYieldData(){
+		model.clear();
+		
+		String factory=request.getParameter("factory");
+		String start_date=request.getParameter("start_date");
+		String end_date=request.getParameter("end_date");
+		
+		Map<String,Object> cdMap=new HashMap<String,Object>();
+		cdMap.put("factory", factory);
+		cdMap.put("start_date", start_date);	
+		cdMap.put("end_date", end_date);		
+		
+		reportService.getFactoryYieldData_Mobile(cdMap,model);
+		
+		return model;
+	}
+	/**
+	 * @author tan.haiwen
+	 * 人员利用率报表（移动端）
+	 */
+	@RequestMapping("/staffUseRate_Mobile")
+	public ModelAndView staffUseRate_Mobile(){
+		mv.setViewName("report/staffUseRate_Mobile");
+		return mv;
+	}
+	
+	/**
+	 * @author xiong.jianwu
+	 * 订单进度报表（移动端）
+	 */
+	@RequestMapping("/orderProcessReport")
+	public ModelAndView orderProcessReport(){
+		mv.setViewName("report/orderProcess_Mobile");
+        return mv; 
+	}
+	/**
+	 * @author xiong.jianwu
+	 * 订单进度报表数据抓取
+	 * @return
+	 */
+	@RequestMapping("/getOrderProcessData")
+	@ResponseBody
+	public ModelMap getOrderProcessData(){
+		model.clear();
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("factory_id", request.getParameter("factory_id"));
+		condMap.put("status", request.getParameter("status"));
+		condMap.put("prod_year", request.getParameter("prod_year"));
+		
+		reportService.getOrderProcessData(condMap,model);
+		
+		condMap=null;
+		return model;
+		
+	}
+	
 }

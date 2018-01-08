@@ -233,7 +233,7 @@
      	left join BMS_BASE_BUS_TYPE t on t.id=h.bus_type_id
      	left join BMS_OR_ORDER o on o.id=h.order_id
      	where h.tplType='1' 
-     	<if test="bus_number !=null and bus_number !=''">
+     	<if test="bus_number !=null and bus_number !='' ">
      		and b.bus_number=#{bus_number} 
      	</if>
      	<if test="order_id !=null and order_id !=''">
@@ -310,12 +310,12 @@
 		</selectKey>
 		insert into BMS_QM_TEST_CARD 
 		(bus_number,factory_id,test_node_id,test_node,order_id,order_config_id,result,test_card_template_head_id,test_card_template_detail_id,fault_id,
-		test_result,result_judge,rework,tester,workshop_id,workgroup_id,editor_id,edit_date,test_date,memo)
+		test_result,result_judge,rework,tester,workshop_id,workgroup_id,editor_id,edit_date,test_date,memo,test_image)
 		values
 		<foreach collection="detail_list" item="detail" index="index" separator=",">
 			(#{detail.bus_number},#{detail.factory_id},#{detail.test_node_id},#{detail.test_node},#{detail.order_id},#{detail.order_config_id},#{detail.result},#{detail.test_card_template_head_id},
 			#{detail.test_card_template_detail_id},#{detail.fault_id},#{detail.test_result},#{detail.result_judge},#{detail.rework},#{detail.tester},
-			#{detail.workshop_id},#{detail.workgroup_id},#{editor_id},#{edit_date},#{detail.test_date},#{detail.memo})
+			#{detail.workshop_id},#{detail.workgroup_id},#{editor_id},#{edit_date},#{detail.test_date},#{detail.memo},#{detail.test_image_str})
 		</foreach>	
      </insert>
      
@@ -377,6 +377,9 @@
 		<if test="test_node_id !=null and test_node_id !=''">
 			and c.test_node_id=#{test_node_id}
 		</if>
+		<if test="test_node !=null and test_node !=''">
+			and c.test_node=#{test_node}
+		</if>
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no=#{order_no}
 		</if>
@@ -389,6 +392,9 @@
 		<if test="bus_number !=null and bus_number !=''">
 			and c.bus_number like concat('%',#{bus_number},'%')
 		</if>
+		<if test="customer_no !=null and customer_no !=''">
+			and c.bus_number like concat('%',#{customer_no},'%')
+		</if>
 		<if test="result !=null and result !=''">
 			and FIND_IN_SET(c.result,#{result}) 
 		</if>
@@ -400,7 +406,7 @@
      
      <select id="queryProductRecordDetail" parameterType="Map" resultType="Map">
      	select d.test_item,d.test_standard,d.test_standard_no,d.test_request,d.is_null, c.bus_number,c.factory_id,c.test_node_id,c.test_node,c.order_id,c.order_config_id,
-		c.result,c.test_card_template_head_id,c.test_card_template_detail_id,c.fault_id,c.test_result,c.result_judge,c.rework,c.tester,c.workshop_id,c.workgroup_id,c.memo,
+		c.result,c.test_card_template_head_id,c.test_card_template_detail_id,c.fault_id,c.test_result,c.result_judge,c.rework,c.tester,c.workshop_id,c.workgroup_id,c.memo,cast(c.test_image as char) test_image,
 		d.id,d.test_card_template_id, w.workshop_name workshop,g.workgroup_name workgroup
 		from BMS_QM_TEST_CARD_TEMPLATE_HEADER h 
 		left join BMS_QM_TEST_CARD_TEMPLATE_DETAILS d on d.test_card_template_id=h.id

@@ -17,6 +17,11 @@ $(document).ready(function(){
 		}
 
     	$(".fixed-table-body-columns").css("top","35px");
+    	ajaxQuery();
+	});
+	
+	$(document).on("change","#search_factory",function(){
+		ajaxQuery();
 	});
 	
 	//查询
@@ -34,6 +39,8 @@ function  initPage(){
 	$("#end_date").val(formatDate(now));
 	
 	getFactorySelect("report/staffUseRate",'',"#search_factory",null,'id');
+	
+	ajaxQuery();
 }
 
 function ajaxQuery(){

@@ -51,9 +51,9 @@ label {
 			</div>
 
 			<div class="page-content"
-				style="position:fixed;top:38px;bottom:10px;width:100%;overflow-y:auto;padding-left: 0px;padding-right:12px;">
+				style="padding-bottom:30px;width:100%;overflow-y:auto;padding-left: 0px;padding-right:12px;">
 
-					<div class="no-steps-container" style="height:90%" >
+					<div class="no-steps-container"  >
 						<div style="display: none" id="fuelux-wizard-container" data-target="#step-container">
 								<ul class="wizard-steps">
 									<li data-target="#step1" class="active">
@@ -81,6 +81,7 @@ label {
 											<div class="col-xs-9">
 												<span class="input-icon input-icon-right" style="width: 100%;">
 														<input id="bus_number" type="text" class="input-medium" style="width:100%;height:30px;">													
+														<i id="btn_scan" class="ace-icon fa fa-barcode green bigger-160" style="cursor:pointer"></i>
 												</span>
 											</div>
 										</div>
@@ -225,6 +226,21 @@ label {
 												<textarea style="width:100%" class="input-xlarge" id="test_result" rows="2"></textarea>
 											</div>
 										</div>
+										
+										<div class="form-group has-info">
+											<label class="col-xs-3 control-label no-padding-right">检验图片:</label>
+											<div class="col-xs-9" >
+												<i id="test_photo" class="ace-icon fa fa-camera green bigger-160" style="cursor:pointer;padding-top: 5px;"></i>												
+											</div>
+										</div>
+										<div class="form-group has-info">
+											<label class="col-xs-3 control-label no-padding-right"></label>
+											<div class="col-xs-9" >
+												<img id="test_image" style='display:none' width='100%' height='100%'/>
+												<input type="hidden" id="test_image_str" />
+											</div>
+										</div>
+																					
 										
 										<div class="form-group has-info" id="fault_type_div">
 											<label class="col-xs-3 control-label no-padding-right">缺陷类别:</label>

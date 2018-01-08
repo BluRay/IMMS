@@ -1,119 +1,162 @@
-<%@ page contentType="text/html;charset=UTF-8"%>
+
+<!-- <!DOCTYPE html> -->
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html lang="en">
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<html lang="zh-CN">
 	<head>
-		<title>流程状态</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta charset="utf-8" />
+		<title>历史任务</title>
+		<meta name="description" content="Common Buttons &amp; Icons" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+		<link rel="stylesheet" href="../assets/css/jquery-ui.min.css" />
+		<link rel="stylesheet" href="../assets/css/jquery-ui.custom.min.css" />
+<!-- 		<link rel="stylesheet" href="../assets/css/jquery.gritter.css" /> -->
 		<link rel="stylesheet" href="${ctx}/snaker/css/style.css" type="text/css" media="all" />
-		<link rel="stylesheet" href="${ctx}/snaker/css/snaker.css" type="text/css" media="all" />
-		<script src="${ctx}/snaker/raphael-min.js" type="text/javascript"></script>
-		<script src="${ctx}/snaker/jquery-ui-1.8.4.custom/js/jquery.min.js" type="text/javascript"></script>
-		<script src="${ctx}/snaker/jquery-ui-1.8.4.custom/js/jquery-ui.min.js" type="text/javascript"></script>
-		<script src="${ctx}/snaker/snaker.designer.js" type="text/javascript"></script>
-		<script src="${ctx}/snaker/snaker.model.js" type="text/javascript"></script>
-		<script src="${ctx}/snaker/snaker.editors.js" type="text/javascript"></script>
+<%-- 		<link rel="stylesheet" href="${ctx}/snaker/css/snaker.css" type="text/css" media="all" /> --%>
+	</head>
+	<body class="no-skin" style="font-family: 'Microsoft YaHei';">
+		<!-- 头 -->
+		<jsp:include page="../top.jsp" flush="true"/>
+		<!-- 身 -->
+		<div class="main-container" id="main-container">
+			<!-- 左边菜单 -->
+			<jsp:include page="../left.jsp" flush="true"/>
+			<!-- 主体 -->
+			<div class="main-content">			
+			<!-- 路径和搜索框 -->
+			<div class="breadcrumbs" id="breadcrumbs">
+				<ul class="breadcrumb">
+					<li><i class="ace-icon fa fa-home home-icon"></i><a href="/BMS/index">首页</a></li>
+					<li>流程管理</li>
+					<li class="active">流程实例</li>
+				</ul><!-- /.breadcrumb -->
 
-<script type="text/javascript">
-    function addTaskActor(taskName) {
-        var url = '${ctx}/snaker/task/actor/add?orderId=${order.id}&taskName=' + taskName;
-        var returnValue = window.showModalDialog(url,window,'dialogWidth:1000px;dialogHeight:600px');
-        if(returnValue) {
-            $('#currentActorDIV').append(',' + returnValue);
-        }
-    }
-	function display(process, active) {
-		/** view*/
-		$('#snakerflow').snakerflow($.extend(true,{
-			basePath : "${ctx}/snaker/",
-            ctxPath : "${ctx}",
-            orderId : "${order.id}",
-			restore : eval("(" + process + ")")
-			,
-			editable : false
-			},eval("(" + active + ")")
-		));
-	}
-</script>
-</head>
-	<body>
-		<table width="98%" border="0" align="center" cellpadding="0"
-				class="table_all_border" cellspacing="0" style="margin-bottom: 0px;border-bottom: 0px">
-			<tr>
-				<td class="td_table_top" align="center">
-					流程状态
-				</td>
-			</tr>
+				<!-- #section:basics/content.searchbox -->
+				<div class="nav-search" id="nav-search">
+					<form class="form-search">
+						<span class="input-icon">
+							<input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" /><i class="ace-icon fa fa-search nav-search-icon"></i>
+						</span>
+					</form>
+				</div><!-- /.nav-search -->
+			</div>	
+			<div class="page-content">
+				<div class="page-content-area">
+				<table class="table table-striped table-bordered table-hover" style="overflow-x:auto;font-size: 12px;">
+			    <tr style="text-align:center;font-weight:bold">
+					<td align="center" colspan=2>
+						流程信息
+					</td>
+				</tr>
+				<tr>
+					<td align="left" class="td_list_2" style="font-weight: bold">
+						流程名称：<font color="red">${order.processName }</font>&nbsp;&nbsp;
+						流程编号：<font color="red">${order.orderNo }</font>&nbsp;&nbsp;
+						流程创建时间：<font color="red">${order.createTime }</font>
+					</td>
+			        <td align="right" style="padding-right:20px">
+			            <a href="" onclick="history.back()">打印</a>&nbsp;
+						<a href="" onclick="history.back()">返回</a>
+					</td>
+			    </tr>
 		</table>
-		<table class="table_all" align="center" border="0" cellpadding="0"
-			cellspacing="0" style="margin-top: 0px" width="98%">
-			<tr>
-				<td align="left" class="td_list_2" colspan="4" style="font-weight: bold">
-					流程名称：<font color="red">${order.processName }</font>&nbsp;&nbsp;
-					流程编号：<font color="red">${order.orderNo }</font>&nbsp;&nbsp;
-					流程创建时间：<font color="red">${order.createTime }</font>
-				</td>
-			</tr>
-			<tr>
-				<td align=center width=30% class="td_list_1" nowrap>
+		<table class="table table-striped table-bordered table-hover" style="overflow-x:auto;font-size: 12px;">
+			<thead>
+			   <tr style="text-align:center;font-weight:bold">
+				<td>
 					任务名称
 				</td>
-				<td align=center width=30% class="td_list_1" nowrap>
-					任务创建时间
+				<td>
+					完成时间
 				</td>
-				<td align=center width=20% class="td_list_1" nowrap>
-					任务完成时间
+				<td>
+					审批结果
 				</td>
-				<td align=center width=20% class="td_list_1" nowrap>
+				<td>
+					审批意见
+				</td>
+				<td>
 					任务处理人
 				</td>
 			</tr>
+			</thead>
 			<c:forEach items="${tasks}" var="item">
-				<tr>
-					<td class="td_list_2" align=left nowrap>
-						${item.displayName}&nbsp;
+				<tr style="text-align:center;">
+					<td>
+						${item.display_Name}&nbsp;
 					</td>
-					<td class="td_list_2" align=left nowrap>
-						${item.createTime}&nbsp;
+					<td>
+						${item.finish_Time}&nbsp;
 					</td>
-					<td class="td_list_2" align=left nowrap>
-						${item.finishTime}&nbsp;
+					<td>
+						${item.result=='0' ? '同意' : (item.result=='1' ? '驳回' :'' )}&nbsp;
 					</td>
-					<td class="td_list_2" align=left nowrap>
+					<td>
+						${item.description }&nbsp;
+					</td>
+					<td>
 						${item.operator }&nbsp;
 					</td>
 				</tr>
 			</c:forEach>
 		</table>
-		<table align="center" border="0" cellpadding="0" cellspacing="0">
-			<tr>
-				<td align="left">
-					<input type='button' class='button_70px' value='返回' onclick="history.back()"/>
-				</td>
-			</tr>
-		</table>
-		<table class="properties_all" align="center" border="1" cellpadding="0" cellspacing="0" style="margin-top: 0px">
-			<div id="snakerflow" style="border: 1px solid #d2dde2; margin-top:10px; margin-left:10px; width:98%;">
+		
+<!-- 		<table class="properties_all" align="center" border="1" cellpadding="0" cellspacing="0" style="margin-top: 0px"> -->
+<!-- 			<div id="snakerflow" style="border: 1px solid #d2dde2; margin-top:10px; margin-left:10px; width:98%;"> -->
+<!-- 			</div> -->
+<!-- 		</table> -->
+		
+				</div>
+			</div><!-- /.main-content -->
+			
 			</div>
-		</table>
-		<script type="text/javascript">
-		$.ajax({
-				type:'GET',
-				url:"${ctx}/snaker/process/json",
-				data:"processId=${processId}&orderId=${order.id}",
-				async: false,
-				globle:false,
-				error: function(){
-					alert('数据处理错误！');
-					return false;
-				},
-				success: function(data){
-					data = eval("("+data+")");
-					display(data.process, data.active);
-				}
-			});
-		</script>
+			<!-- 脚 -->
+			<%-- <jsp:include page="footer.jsp" flush="true"/> --%>
+			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse"><i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i></a>
+		</div><!-- /.main-container -->
+	</div>
 	</body>
+    <script src="../../assets/js/jquery-ui.min.js"></script>
+	<script src="../../js/jsrender.min.js"></script>
+	<script src="../../js/common.js"></script>
+	<script src="../../js/browser.js"></script>
+	<script src="${ctx}/assets/js/jquery-ui.min.js"></script>
+	<script src="${ctx}/assets/js/jquery.ui.touch-punch.min.js"></script>
+	<script src="${ctx}/assets/js/jquery.dataTables.min.js"></script>
+	<script src="${ctx}/assets/js/jquery.dataTables.bootstrap.js"></script>
+<!--     <script src="../../assets/js/ace-elements.min.js"></script> -->
+    <script src="${ctx}/snaker/raphael-min.js" type="text/javascript"></script>
+	<script src="${ctx}/snaker/snaker.designer.js" type="text/javascript"></script>
+	<script src="${ctx}/snaker/snaker.model.js" type="text/javascript"></script>
+<%-- 	<script src="${ctx}/js/flow/processView.js" type="text/javascript" ></script> --%>
+	<script type="text/javascript">
+	    var data=JSON.parse('${tasks}');//eval("${tasks}"); //eval('${tasks}');
+		if($.fn.dataTable.isDataTable("#tableData")){
+			$('#tableData').DataTable().destroy();
+			$('#tableData').empty();
+		}
+		$("#tableData").dataTable({
+			serverSide: true,paiging:true,ordering:false,searching: false,bAutoWidth:false,
+			destroy: true,sScrollX:true,orderMulti:false,
+			pagingType:"full_numbers",
+			lengthChange:false,
+			orderMulti:false,
+			
+			data:data,
+			columns: [
+	          	{"title":"任务名称 ","class":"center","data":"display_Name","defaultContent": ""},
+	            {"title":"完成时间 ","class":"center","data":"end_Time","defaultContent": ""},
+	            {"title":"期望完成时间","class":"center","data":"expire_Time","defaultContent": ""},
+	            {"title":"流程创建人 ","class":"center","data":"create_Time","defaultContent": ""},
+	            {"title":"审批结果","class":"center","data":"create_Time","defaultContent": "","render":function(data,type,row){
+	            	var result=(data==0 ? '同意' : '不同意');
+	            	return result;
+	            }},
+	            {"title":"操作人 ","class":"center","data":"operator","defaultContent": ""},
+	        ],
+		});
+	</script>
 </html>

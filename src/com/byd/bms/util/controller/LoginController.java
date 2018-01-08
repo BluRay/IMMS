@@ -59,9 +59,14 @@ public class LoginController extends BaseController{
 			session.setAttribute("display_name", user.getDisplay_name());
 			session.setAttribute("user_id", user.getId());
 			session.setAttribute("user_type", user.getUser_type());
+			session.setAttribute("admin", user.getAdmin());
 			session.setAttribute("staff_number", user.getStaff_number());
 			session.setAttribute("factory", user.getFactory());
 			session.setAttribute("factory_id", user.getFactory_id());
+			session.setAttribute("department", user.getDepartment());
+			session.setAttribute("department_id", user.getDepartment_id());
+			session.setAttribute("division", user.getDivision());
+			session.setAttribute("division_id", user.getDivision_id());
 			session.setAttribute("bmsuser", user);
 			model.addAttribute("user", user);
 			

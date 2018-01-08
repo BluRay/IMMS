@@ -99,7 +99,7 @@
 							</div>
 							<div class="row" >
 								<div class="col-xs-12"  id="tableReusltDiv" style="padding-right:0px;">
-									<table id="tableResult" class="table table-striped table-bordered table-hover" style="font-size: 12px;">
+									<table id="tableResult" class="table table-striped table-bordered table-hover" style="font-size: 12px;table-layout: fixed;">
 									</table>
 								</div>
 							</div>
@@ -151,7 +151,7 @@
 						<div class = "div-dialog">
 							<form id="form_edit">
 								<table id="tableDataDetail" class="table table-striped table-bordered table-hover dataTable no-footer"
-							            style="font-size: 12px;" role="grid" aria-describedby="tableDataDetail_info">
+							            style="font-size: 12px;table-layout: fixed;" role="grid" aria-describedby="tableDataDetail_info">
 								</table>
 							</form>
 						</div>

@@ -384,7 +384,7 @@
 		group by fo.order_id,fo.factory_id
 	</select>
 	
-		<insert id="savePartsOnOffRecord" parameterType="Map" useGeneratedKeys="true" keyProperty="id">
+	<insert id="savePartsOnOffRecord" parameterType="Map" useGeneratedKeys="true" keyProperty="id">
 		<selectKey resultType="int" keyProperty="id" order="AFTER">
 			SELECT
 			LAST_INSERT_ID()
@@ -499,7 +499,8 @@
 		LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id = t.id
 		LEFT JOIN BMS_BASE_FACTORY f ON b.factory_id = f.id
 		LEFT JOIN BMS_OR_ORDER_CONFIG c ON b.order_config_id = c.id
-		WHERE b.bus_number = #{bus_number} OR b.vin = #{bus_number}
+		WHERE b.bus_number = #{bus_number} OR b.vin = #{bus_number} OR b.left_motor_number=#{bus_number}
+		OR b.right_motor_number=#{bus_number}
 	</select>
 	<select id="getProductionSearchScan" parameterType="String" resultType="Map">
 		SELECT s.id,s.bus_number,s.factory_name,s.workshop_name,s.line_name,s.process_name,s.scan_time,
@@ -510,7 +511,8 @@
 		bus_number =
 		(SELECT b.bus_number FROM BMS_PLAN_BUS b WHERE
 		b.bus_number = #{bus_number}
-		OR b.vin = #{bus_number})
+		OR b.vin = #{bus_number} OR b.left_motor_number=#{bus_number}
+		OR b.right_motor_number=#{bus_number})
 	</select>
 	<select id="getNamePlateInfo" parameterType="String" resultType="Map">
 		select t.bus_type_code,t.brand,t.vehicle_model,t.motor_model,t.chassis_model,t.motor_power,t.max_weight,t.battery_model,
@@ -519,7 +521,7 @@
 		FROM BMS_PLAN_BUS b
 		LEFT JOIN BMS_OR_ORDER o ON b.order_id = o.id
 		LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id = t.id
-		WHERE b.bus_number = #{bus_number} OR b.vin = #{bus_number}
+		WHERE b.bus_number = #{bus_number} OR b.vin = #{bus_number} OR b.left_motor_number = #{bus_number} OR b.right_motor_number = #{bus_number}
 	</select>	
 	<select id="getProductionSearchException" parameterType="String" resultType="Map">
 		SELECT
@@ -529,7 +531,7 @@
 		LEFT JOIN BMS_BASE_KEY y ON e.duty_department_id = y.value AND y.key_code =  'EXCEPTION_RESPONSIBILITY_DEPARTMENT'
 		WHERE e.bus_number =
 		(SELECT b.bus_number FROM BMS_PLAN_BUS b WHERE b.bus_number =
-		#{bus_number} OR b.vin = #{bus_number})
+		#{bus_number} OR b.vin = #{bus_number} OR b.left_motor_number = #{bus_number} OR b.right_motor_number = #{bus_number})
 	</select>
 	<select id="getCertificationInfo" parameterType="String" resultType="Map">
 		select t.bus_type_code,t.brand,t.vehicle_model,oc.tire_type,t.motor_model,t.chassis_model,t.motor_power,
@@ -545,24 +547,27 @@
 		LEFT JOIN BMS_BASE_BUS_TYPE t ON t.id=o.bus_type_id and
 		t.bus_type_code=substr(b.bus_number,1,LOCATE('-',b.bus_number)-1)
 		WHERE b.bus_number = #{bus_number} OR b.vin = #{bus_number}
+		OR b.left_motor_number = #{bus_number} OR b.right_motor_number = #{bus_number}
 	</select>
 	<select id="getEcnTasksByBusNumber" parameterType="String" resultType="Map">
 		SELECT F.bus_number,T.task_content,T.tech_order_no,F.factory,F.workshop,U.display_name,F.confirmor_date FROM BMS_TECH_TASK_FOLLOW F
 		LEFT OUTER JOIN BMS_BASE_USER U ON F.confirmor_id = U.staff_number
 		LEFT OUTER JOIN BMS_TECH_TASK T ON F.tech_task_id = T.id
 		WHERE (F.bus_number = #{bus_number} OR 
-		F.bus_number = (SELECT B.bus_number FROM BMS_PLAN_BUS B WHERE B.VIN = #{bus_number}))
+		F.bus_number = (SELECT B.bus_number FROM BMS_PLAN_BUS B WHERE B.VIN = #{bus_number}
+		or B.left_motor_number = #{bus_number} or B.right_motor_number = #{bus_number}))
 	</select>
 	<select id="getQmTestCardList" parameterType="String" resultType="Map">
 		SELECT T.bus_number,T.test_node,T.test_result,T.result_judge,T.rework,T.tester,T.test_date,D.test_standard FROM BMS_QM_TEST_CARD T
 		LEFT JOIN BMS_QM_TEST_CARD_TEMPLATE_DETAILS D ON T.test_card_template_detail_id = D.id
-		WHERE (T.bus_number = #{bus_number} OR T.bus_number = (SELECT B.bus_number FROM BMS_PLAN_BUS B WHERE B.VIN = #{bus_number}))
-		ORDER BY T.test_node DESC
+		WHERE (T.bus_number = #{bus_number} OR T.bus_number = (SELECT B.bus_number FROM BMS_PLAN_BUS B WHERE B.VIN = #{bus_number}
+		OR B.left_motor_number = #{bus_number} OR B.right_motor_number = #{bus_number})) ORDER BY T.test_node DESC
 	</select>	
 	<select id="getKeyPartsList" parameterType="String" resultType="Map">
 		SELECT P.process_number,P.process_name,P.parts_no,P.parts_name,P.batch,U.display_name,P.edit_date FROM BMS_QM_KEY_PARTS P 
 		LEFT OUTER JOIN BMS_BASE_USER U ON P.editor_id = U.id
-		WHERE (P.bus_number = #{bus_number} OR P.bus_number = (SELECT B.bus_number FROM BMS_PLAN_BUS B WHERE B.VIN = #{bus_number}))
+		WHERE (P.bus_number = #{bus_number} OR P.bus_number = (SELECT B.bus_number FROM BMS_PLAN_BUS B WHERE B.VIN = #{bus_number}
+		OR B.left_motor_number = #{bus_number} OR B.right_motor_number = #{bus_number}))
 	</select>	
 	
 	
@@ -737,7 +742,7 @@
 		</if>
 	</select>
 	
-		<select id="queryBusWorkshopOnline" parameterType="Map" resultType="int">
+	<select id="queryBusWorkshopOnline" parameterType="Map" resultType="int">
 		select count(b.id)
 		from BMS_PLAN_BUS b
 		left join BMS_BASE_FACTORY f on b.factory_id=f.id
@@ -745,41 +750,41 @@
 		<if test="workshop=='焊装' ">
 			and b.welding_online_date is not null and
 			welding_online_date !='' 
-			and welding_online_date like concat(#{work_date},'%')
+			<!-- and welding_online_date like concat(#{work_date},'%') -->
 		</if>
 		<if test="workshop=='玻璃钢' ">
 			and welding_offline_date is not null and
 			welding_offline_date !='' 
-			and welding_offline_date like concat(#{work_date},'%')
+			<!-- and welding_offline_date like concat(#{work_date},'%') -->
 		</if>
 		<if test="workshop=='涂装' ">
 			and painting_online_date is not null and
 			painting_online_date !=''
-			and welding_offline_date like concat(#{work_date},'%')
+			<!-- and welding_offline_date like concat(#{work_date},'%') -->
 		</if>
 		<if test="workshop=='底盘' ">
 			and chassis_online_date is not null and
 			chassis_online_date !=''
-			and chassis_online_date like concat(#{work_date},'%')
+			<!-- and chassis_online_date like concat(#{work_date},'%') -->
 		</if>
 		<if test="workshop=='总装' ">
 			and assembly_online_date is not null and
 			assembly_online_date !=''
-			and assembly_online_date like concat(#{work_date},'%')
+			<!-- and assembly_online_date like concat(#{work_date},'%') -->
 		</if>
 		<if test="workshop=='调试区' ">
 			and debugarea_online_date is not null and
 			debugarea_online_date !=''
-			and debugarea_online_date like concat(#{work_date},'%')
+			<!-- and debugarea_online_date like concat(#{work_date},'%') -->
 		</if>
 		<if test="workshop=='检测线' ">
 			and testline_online_date is not null and
 			testline_online_date !=''
-			and testline_online_date like concat(#{work_date},'%')
+			<!-- and testline_online_date like concat(#{work_date},'%') -->
 		</if>
 		<if test="workshop=='成品库' ">
 			and warehousing_date is not null and warehousing_date !=''
-			and warehousing_date like concat(#{work_date},'%')
+			<!-- and warehousing_date like concat(#{work_date},'%') -->
 		</if>
 	</select>
 	

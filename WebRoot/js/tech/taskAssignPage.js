@@ -138,7 +138,7 @@ function getTechBusNum(order_no,factory,tech_date,switch_mode,switch_node,node_l
 		return data_list;
 }
 
-function ajaxEdit(task_id,task_detail_id,task_content,tech_order_no,switch_mode,switch_node,tech_date,order_no){
+function ajaxEdit(task_id,task_detail_id,task_content,tech_order_no,switch_mode,switch_node,tech_date,order_no,sc_factory){
 	is_assign = 0;
 	$("#new_accordion").html("");// 清空之前的div
 	
@@ -167,7 +167,7 @@ function ajaxEdit(task_id,task_detail_id,task_content,tech_order_no,switch_mode,
 		var prod_factory_id=tech_detail.prod_factory_id;
 		var prod_factory=tech_detail.prod_factory;
 		var task_detail_id_list = tech_detail.task_detail_id_list;
-		addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id,prod_factory,order_no,task_detail_id_list);
+		addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id,prod_factory,order_no,task_detail_id_list,sc_factory);
 		//console.log("follow_detail = " + follow_detail);
 		$.each(follow_detail.split(";"),function(i,follow){
 			//alert(follow.split("||")[1]);
@@ -260,7 +260,7 @@ function assignTechTask(){
 	//console.log('---->factory_cboxs = ',factory_cboxs);
 	$.each(factory_cboxs,function(i,cbox){
 		var factory=$(cbox).parent("div").find("span").html();
-		var factory_id=$(cbox).parent("div").find("span").prop("factory_id");
+		var factory_id=$(cbox).parent("div").find("span").attr("factory_id");
 		//console.log('---->conditions factory= ' + factory + " ,factory_id = " + factory_id);
 		var tech_factory=$(cbox).parent("div").find(".tech_factory :selected").text();
 		var tech_factory_id=$(cbox).parent("div").find(".tech_factory").val();
@@ -282,7 +282,7 @@ function assignTechTask(){
 			});		
 			var obj={};
 			obj.tech_task_id=tech_task_id;
-			obj.task_detail_id = d_id;
+			obj.task_detail_id =$("#dialog-assessModal").data("task_detail_id")=="undefined"?"0":$("#dialog-assessModal").data("task_detail_id");
 			obj.factory_list=factory;
 			obj.factory_id=factory_id;
 			obj.order_no=order_no;
@@ -293,6 +293,7 @@ function assignTechTask(){
 			obj.node_list=node_list;
 			obj.tech_factory_id=tech_factory_id;
 			obj.tech_factory=tech_factory;
+			obj.prod_factory=factory;
 			conditions.push(obj);
 		}
 	});
@@ -342,7 +343,7 @@ function getTechList(task_id){
 	return tech_list;
 }
 
-function addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id,prod_factory,mod_order_no,task_detail_id_list){
+function addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id,prod_factory,mod_order_no,task_detail_id_list,sc_factory){
 	follow_detail=follow_detail||"";
 	var is_follow=false;
 	$.each(follow_detail.split(";"),function(i,follow){
@@ -386,11 +387,11 @@ function addTechDetail(order_desc,tech_detail_list,follow_detail,prod_factory_id
 	$(tabContent).appendTo($("#new_accordion"));
 	var is_edit = false;
 	if(order_no == mod_order_no)is_edit = true;
-	addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factory_id,prod_factory,is_edit,task_detail_id_list);
+	addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factory_id,prod_factory,is_edit,task_detail_id_list,sc_factory);
 	getFuzzyOrder("#order_"+taskNum);
 }
 
-function addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factory_id,prod_factory,is_edit,task_detail_id_list){
+function addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factory_id,prod_factory,is_edit,task_detail_id_list,sc_factory){
 	var factory_select_options=$("#search_factory").html().replace("全部","请选择");
 	//alert(factory_select_options)	
 	var factory_disable_obj={};
@@ -457,6 +458,8 @@ function addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factor
 			
 			//prod_factory_id=prod_factory_id||factory_id;
 			//prod_factory=prod_factory||factory;
+			if( prod_factory==sc_factory){
+			
 			var facotory_div=$("<div style='margin-top:10px'><b>生产工厂：</b><span factory_id='"+(prod_factory_id||factory_id)+"'>"+(prod_factory||factory)+"</span></div>");
 			var ckbox=$("<input style=\"height:15px\" name=\"new_tecn_flag\""+
 					" class=\"input-medium\" "+disabled+" type=\"checkbox\""+checked+" "+factory_disable_obj[prod_factory]+">");
@@ -473,6 +476,7 @@ function addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factor
 			$(content).append(facotory_div);
 			$(content).append(tech_table);
 			$(facotory_div).find(".tech_factory").val(factory_id);
+			}
 		})
 		$(taskElement).append(content);
 		
@@ -635,7 +639,14 @@ function initTable() {
 	        	return {css: {"padding-left": "3px", "padding-right": "2px","font-size":"13px"}};
 	        	}
             },{
-            	field: 'factory',title: '&nbsp;&nbsp;&nbsp;工厂&nbsp;&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
+            	field: 'factory',title: '&nbsp;&nbsp;&nbsp;技改工厂&nbsp;&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
+                sortable: false,visible: true,footerFormatter: totalTextFormatter,
+                cellStyle:function cellStyle(value, row, index, field) {
+	        	return {css: {"padding-left": "3px", "padding-right": "2px","font-size":"13px"}};
+	        	}
+            },
+            {
+            	field: 'prod_factory',title: '&nbsp;&nbsp;&nbsp;生产工厂&nbsp;&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
                 sortable: false,visible: true,footerFormatter: totalTextFormatter,
                 cellStyle:function cellStyle(value, row, index, field) {
 	        	return {css: {"padding-left": "3px", "padding-right": "2px","font-size":"13px"}};
@@ -663,7 +674,7 @@ function initTable() {
 	        		//task_id,task_detail_id,task_content,tech_order_no,switch_mode,switch_node,tech_date
 	        		return "<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"分配\" onclick='ajaxEdit(\"" + 
 	        		row['id'] + "\",\"" + row['task_detail_id'] + "\",\"" + row['task_content'].replace(/\r/ig, "").replace(/\n/ig,"").replace(/[\',\"]/g,"") + "\",\"" + row['tech_order_no'] + "\",\"" + 
-	        		row['switch_mode'] + "\",\"" + row['switch_node'] + "\",\"" + row['tech_date'] + "\",\"" + row['order_no'] + "\")' style='color:blue;cursor: pointer;'></i>";
+	        		row['switch_mode'] + "\",\"" + row['switch_node'] + "\",\"" + row['tech_date'] + "\",\"" + row['order_no'] +"\",\""+row['prod_factory']+ "\")' style='color:blue;cursor: pointer;'></i>";
     	        	//}
     	        }
             }

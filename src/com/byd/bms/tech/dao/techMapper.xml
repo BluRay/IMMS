@@ -11,33 +11,33 @@
 		concat(d.order_no,' ',o.order_name,bt.bus_type_code,' ',o.order_qty,'台') order_desc,
 		(SELECT group_concat(tmp.workshop,':',tmp.follow_num) AS follow_num
 		FROM(
-		SELECT  tf.tech_task_id,tf.order_no,tf.factory,tf.workshop,count(tf.bus_number) follow_num
+		SELECT  tf.tech_task_id,tf.task_detail_id,tf.order_no,tf.factory,tf.workshop,count(tf.bus_number) follow_num
 		FROM BMS_TECH_TASK_FOLLOW tf 
 		WHERE  tf.confirmor_id>0	
 		<if test="order_no !=null and order_no !=''">
 			and tf.order_no=#{order_no}
 		</if>
-		<if test="factory !=null and factory !='全部'">
+		<!-- <if test="factory !=null and factory !='全部'">
 			and tf.factory=#{factory}
-		</if>
+		</if> -->
 		<if test="workshop !=null and workshop !='全部'">
 			and tf.workshop=#{workshop}
 		</if>	
-		group by tf.tech_task_id,tf.order_no,tf.factory,tf.workshop
+		group by tf.tech_task_id,tf.task_detail_id,tf.order_no,tf.factory,tf.workshop
 		UNION ALL
-		SELECT tfp.tech_task_id,tfp.order_no,tfp.factory,tfp.workshop,sum(tfp.follow_num) follow_num 
+		SELECT tfp.tech_task_id,tfp.task_detail_id,tfp.order_no,tfp.factory,tfp.workshop,sum(tfp.follow_num) follow_num 
 		FROM BMS_TECH_TASK_FOLLOW_PRE tfp WHERE tfp.confirmor_id>0 
 		<if test="order_no !=null and order_no !=''">
 			and tfp.order_no=#{order_no}
 		</if>
-		<if test="factory !=null and factory !='全部'">
+		<!-- <if test="factory !=null and factory !='全部'">
 			and tfp.factory=#{factory}
-		</if>
+		</if> -->
 		<if test="workshop !=null and workshop !=''">
 			and tfp.workshop=#{workshop}
 		</if>
-		group by tfp.tech_task_id,tfp.order_no,tfp.factory,tfp.workshop) tmp 
-		WHERE tmp.tech_task_id=t.id and tmp.factory=d.factory and tmp.order_no=d.order_no limit 1) follow_num,
+		group by tfp.tech_task_id,tfp.task_detail_id,tfp.order_no,tfp.factory,tfp.workshop) tmp 
+		WHERE tmp.tech_task_id=t.id and tmp.task_detail_id=d.id) follow_num,
 		(SELECT group_concat(tmp.workshop,':',tmp.ready_hour_total separator ',') ready_hour_list
 		FROM(
 		SELECT h.ecn_task_detail_id tech_task_id,h.factory,h.workshop,ifnull(sum(h.work_hour),0)ready_hour_total
@@ -165,9 +165,9 @@
 		<if test="order_no !=null and order_no !=''">
 			and tf.order_no=#{order_no}
 		</if>
-		<if test="factory !=null and factory !='全部'">
+		<!-- <if test="factory !=null and factory !='全部'">
 			and tf.factory=#{factory}
-		</if>
+		</if> -->
 		<if test="workshop !=null and workshop !=''">
 			and tf.workshop=#{workshop}
 		</if>	
@@ -178,9 +178,9 @@
 		<if test="order_no !=null and order_no !=''">
 			and tfp.order_no=#{order_no}
 		</if>
-		<if test="factory !=null and factory !='全部'">
+		<!-- <if test="factory !=null and factory !='全部'">
 			and tfp.factory=#{factory}
-		</if>
+		</if> -->
 		<if test="workshop !=null and workshop !=''">
 			and tfp.workshop=#{workshop}
 		</if>
@@ -519,35 +519,35 @@
 	</select>
 	
 	<select id="queryTechBusList_All" parameterType="Map" resultType="Map">
-		SELECT #{tech_task_id} tech_task_id,b.bus_number,o.order_no,f.factory_name factory,'焊装' workshop
+		SELECT #{tech_task_id} tech_task_id,#{id} task_detail_id,b.bus_number,o.order_no,f.factory_name factory,'焊装' workshop
 		FROM BMS_PLAN_BUS b
 		LEFT JOIN BMS_OR_ORDER o on b.order_id=o.id
 		LEFT JOIN BMS_BASE_FACTORY f on f.id=b.factory_id
 		WHERE substring(b.welding_online_date,1,10)&lt;#{tech_date} and (b.dispatch_date is null OR b.dispatch_date ='') and b.welding_online_date is not null and b.welding_online_date !=''
 		and o.order_no=#{order_no} 	and f.factory_name in (#{factory_list})
 		union all
-		SELECT #{tech_task_id} tech_task_id,b.bus_number,o.order_no,f.factory_name factory,'涂装' workshop
+		SELECT #{tech_task_id} tech_task_id,#{id} task_detail_id,b.bus_number,o.order_no,f.factory_name factory,'涂装' workshop
 		FROM BMS_PLAN_BUS b
 		LEFT JOIN BMS_OR_ORDER o on b.order_id=o.id
 		LEFT JOIN BMS_BASE_FACTORY f on f.id=b.factory_id
 		WHERE substring(b.painting_online_date,1,10)&lt;#{tech_date} and (b.dispatch_date is null OR b.dispatch_date ='') and b.painting_online_date is not null and b.painting_online_date !=''
 		and o.order_no=#{order_no} and f.factory_name in (#{factory_list})
 		union all
-		SELECT #{tech_task_id} tech_task_id,b.bus_number,o.order_no,f.factory_name factory,'底盘' workshop
+		SELECT #{tech_task_id} tech_task_id,#{id} task_detail_id,b.bus_number,o.order_no,f.factory_name factory,'底盘' workshop
 		FROM BMS_PLAN_BUS b
 		LEFT JOIN BMS_OR_ORDER o on b.order_id=o.id
 		LEFT JOIN BMS_BASE_FACTORY f on f.id=b.factory_id
 		WHERE substring(b.chassis_online_date,1,10)&lt;#{tech_date} and (b.dispatch_date is null OR b.dispatch_date ='') and b.chassis_online_date is not null and b.chassis_online_date !=''
 		and o.order_no=#{order_no} and f.factory_name in (#{factory_list})
 		union all
-		SELECT #{tech_task_id} tech_task_id,b.bus_number,o.order_no,f.factory_name factory,'总装' workshop
+		SELECT #{tech_task_id} tech_task_id,#{id} task_detail_id,b.bus_number,o.order_no,f.factory_name factory,'总装' workshop
 		FROM BMS_PLAN_BUS b
 		LEFT JOIN BMS_OR_ORDER o on b.order_id=o.id
 		LEFT JOIN BMS_BASE_FACTORY f on f.id=b.factory_id
 		WHERE substring(b.assembly_online_date,1,10)&lt;#{tech_date} and (b.dispatch_date is null OR b.dispatch_date ='') and b.assembly_online_date is not null and b.assembly_online_date !=''
 		and o.order_no=#{order_no} and f.factory_name in (#{factory_list})
 		union all
-		SELECT #{tech_task_id} tech_task_id,b.bus_number,o.order_no,f.factory_name factory,'检测线' workshop
+		SELECT #{tech_task_id} tech_task_id,#{id} task_detail_id,b.bus_number,o.order_no,f.factory_name factory,'检测线' workshop
 		FROM BMS_PLAN_BUS b
 		LEFT JOIN BMS_OR_ORDER o on b.order_id=o.id
 		LEFT JOIN BMS_BASE_FACTORY f on f.id=b.factory_id
@@ -558,35 +558,35 @@
 	<select id="queryTechBusList_After" parameterType="Map" resultType="Map">
 		SELECT tmp.*
 		FROM(
-		SELECT #{tech_task_id} tech_task_id,b.bus_number,o.order_no,f.factory_name factory, '焊装' workshop
+		SELECT #{tech_task_id} tech_task_id,#{id} task_detail_id,b.bus_number,o.order_no,f.factory_name factory, '焊装' workshop
 		FROM BMS_PLAN_BUS b
 		LEFT JOIN BMS_OR_ORDER o on b.order_id=o.id
 		LEFT JOIN BMS_BASE_FACTORY f on f.id=b.factory_id
 		WHERE substring(b.welding_online_date,1,10)&lt;#{tech_date} and (b.dispatch_date is null OR b.dispatch_date ='') and b.welding_online_date is not null and b.welding_online_date !=''
 		and o.order_no=#{order_no} and f.factory_name in (#{factory_list})
 		union all
-		SELECT #{tech_task_id} tech_task_id,b.bus_number,o.order_no,f.factory_name factory,'涂装' workshop
+		SELECT #{tech_task_id} tech_task_id,#{id} task_detail_id,b.bus_number,o.order_no,f.factory_name factory,'涂装' workshop
 		FROM BMS_PLAN_BUS b
 		LEFT JOIN BMS_OR_ORDER o on b.order_id=o.id
 		LEFT JOIN BMS_BASE_FACTORY f on f.id=b.factory_id
 		WHERE substring(b.painting_online_date,1,10)&lt;#{tech_date} and (b.dispatch_date is null OR b.dispatch_date ='') and b.painting_online_date is not null and b.painting_online_date !=''
 		and o.order_no=#{order_no} and f.factory_name in (#{factory_list})
 		union all
-		SELECT #{tech_task_id} tech_task_id,b.bus_number,o.order_no,f.factory_name factory,'底盘' workshop
+		SELECT #{tech_task_id} tech_task_id,#{id} task_detail_id,b.bus_number,o.order_no,f.factory_name factory,'底盘' workshop
 		FROM BMS_PLAN_BUS b
 		LEFT JOIN BMS_OR_ORDER o on b.order_id=o.id
 		LEFT JOIN BMS_BASE_FACTORY f on f.id=b.factory_id
 		WHERE substring(b.chassis_online_date,1,10)&lt;#{tech_date} and (b.dispatch_date is null OR b.dispatch_date ='') and b.chassis_online_date is not null and b.chassis_online_date !=''
 		and o.order_no=#{order_no} and f.factory_name in (#{factory_list})
 		union all
-		SELECT  #{tech_task_id} tech_task_id,b.bus_number,o.order_no,f.factory_name factory,'总装' workshop
+		SELECT  #{tech_task_id} tech_task_id,#{id} task_detail_id,b.bus_number,o.order_no,f.factory_name factory,'总装' workshop
 		FROM BMS_PLAN_BUS b
 		LEFT JOIN BMS_OR_ORDER o on b.order_id=o.id
 		LEFT JOIN BMS_BASE_FACTORY f on f.id=b.factory_id
 		WHERE substring(b.assembly_online_date,1,10)&lt;#{tech_date} and (b.dispatch_date is null OR b.dispatch_date ='') and b.assembly_online_date is not null and b.assembly_online_date !=''
 		and o.order_no=#{order_no} and f.factory_name in (#{factory_list})
 		union all
-		SELECT  #{tech_task_id} tech_task_id,b.bus_number,o.order_no,f.factory_name factory,'检测线' workshop
+		SELECT  #{tech_task_id} tech_task_id,#{id} task_detail_id,b.bus_number,o.order_no,f.factory_name factory,'检测线' workshop
 		FROM BMS_PLAN_BUS b
 		LEFT JOIN BMS_OR_ORDER o on b.order_id=o.id
 		LEFT JOIN BMS_BASE_FACTORY f on f.id=b.factory_id
@@ -605,7 +605,7 @@
 		FROM(
 		<foreach collection="node_list" item="item" index="index" separator=" union all ">
 			<if test="item=='焊装'">			
-			SELECT #{tech_task_id} tech_task_id,b.bus_number,o.order_no,f.factory_name factory, '焊装' workshop
+			SELECT #{tech_task_id} tech_task_id,#{id} task_detail_id,b.bus_number,o.order_no,f.factory_name factory, '焊装' workshop
 			FROM BMS_PLAN_BUS b
 			LEFT JOIN BMS_OR_ORDER o on b.order_id=o.id
 			LEFT JOIN BMS_BASE_FACTORY f on f.id=b.factory_id
@@ -626,7 +626,7 @@
 			</if>
 			
 			<if test="item=='涂装'">			
-			SELECT #{tech_task_id} tech_task_id,b.bus_number,o.order_no,f.factory_name factory, '涂装' workshop
+			SELECT #{tech_task_id} tech_task_id,#{id} task_detail_id,b.bus_number,o.order_no,f.factory_name factory, '涂装' workshop
 			FROM BMS_PLAN_BUS b
 			LEFT JOIN BMS_OR_ORDER o on b.order_id=o.id
 			LEFT JOIN BMS_BASE_FACTORY f on f.id=b.factory_id
@@ -648,7 +648,7 @@
 			</if>
 			
 			<if test="item=='底盘'">			
-			SELECT #{tech_task_id} tech_task_id,b.bus_number,o.order_no,f.factory_name factory, '底盘' workshop
+			SELECT #{tech_task_id} tech_task_id,#{id} task_detail_id,b.bus_number,o.order_no,f.factory_name factory, '底盘' workshop
 			FROM BMS_PLAN_BUS b
 			LEFT JOIN BMS_OR_ORDER o on b.order_id=o.id
 			LEFT JOIN BMS_BASE_FACTORY f on f.id=b.factory_id
@@ -670,7 +670,7 @@
 			</if>
 			
 			<if test="item=='总装'">			
-			SELECT #{tech_task_id} tech_task_id,b.bus_number,o.order_no,f.factory_name factory, '总装' workshop
+			SELECT #{tech_task_id} tech_task_id,#{id} task_detail_id,b.bus_number,o.order_no,f.factory_name factory, '总装' workshop
 			FROM BMS_PLAN_BUS b
 			LEFT JOIN BMS_OR_ORDER o on b.order_id=o.id
 			LEFT JOIN BMS_BASE_FACTORY f on f.id=b.factory_id
@@ -692,7 +692,7 @@
 			</if>
 			
 			<if test="item=='检测线'">			
-			SELECT #{tech_task_id} tech_task_id,b.bus_number,o.order_no,f.factory_name factory, '检测线' workshop
+			SELECT #{tech_task_id} tech_task_id,#{id} task_detail_id,b.bus_number,o.order_no,f.factory_name factory, '检测线' workshop
 			FROM BMS_PLAN_BUS b
 			LEFT JOIN BMS_OR_ORDER o on b.order_id=o.id
 			LEFT JOIN BMS_BASE_FACTORY f on f.id=b.factory_id
@@ -724,33 +724,42 @@
 		insert into BMS_TECH_TASK_FOLLOW (tech_task_id,bus_number,order_no,factory,workshop,task_detail_id)
 		values
 		<foreach collection="list" item="item" index="index" separator="," >  
-        (#{item.tech_task_id},#{item.bus_number},#{item.order_no},#{item.factory},#{item.workshop},
-        (SELECT d.id FROM BMS_TECH_TASK_DETAIL d WHERE d.tech_task_id = #{item.tech_task_id} AND d.order_no = #{item.order_no} AND d.factory = #{item.factory}))  
+        (#{item.tech_task_id},#{item.bus_number},#{item.order_no},#{item.factory},#{item.workshop},#{item.task_detail_id})
+        <!-- (SELECT d.id FROM BMS_TECH_TASK_DETAIL d WHERE d.tech_task_id = #{item.tech_task_id} AND d.order_no = #{item.order_no} AND d.factory = #{item.factory}))   -->
     	</foreach> 
 	</insert>
 	
 	<select id="getTechTaskDetailId" parameterType="Map" resultType="int">
-		SELECT IFNULL(SUM(id)+0,0) AS id FROM BMS_TECH_TASK_DETAIL WHERE tech_task_id=#{tech_task_id} AND order_no = #{order_no} AND factory = #{tech_factory}
+		SELECT IFNULL(SUM(id)+0,0) AS id FROM BMS_TECH_TASK_DETAIL 
+		WHERE tech_task_id=#{tech_task_id} AND order_no = #{order_no} 
+		AND factory = #{tech_factory} and prod_factory=#{prod_factory}
 	</select>
 	<update id="updateTechTaskDetail" parameterType="Map">
 	UPDATE BMS_TECH_TASK_DETAIL
 	SET tech_task_id=#{tech_task_id}, order_no=#{order_no}, factory_id=#{tech_factory_id}, factory=#{tech_factory}, prod_factory_id=#{factory_id}, 
-	prod_factory=#{factory_list}, tech_list=#{tech_list}, time_list=#{time_list}, status_list=#{status_list}, single_time_total=#{single_time_total}, time_total=#{time_total}
+	prod_factory=#{prod_factory}, tech_list=#{tech_list}, time_list=#{time_list}, status_list=#{status_list}, single_time_total=#{single_time_total}, time_total=#{time_total}
 	WHERE id=#{id}
 	</update>
 	
 	<insert id="insertTechTaskDetail" useGeneratedKeys="true" parameterType="Map">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">  
+        SELECT  
+        LAST_INSERT_ID()  
+    	</selectKey>
 		insert into BMS_TECH_TASK_DETAIL (tech_task_id,order_no,factory,factory_id,prod_factory,prod_factory_id,tech_list,time_list,status_list,single_time_total,time_total)
 		values (#{tech_task_id},#{order_no},#{tech_factory},#{tech_factory_id},#{factory_list},#{factory_id},#{tech_list},#{time_list},#{status_list},#{single_time_total},#{time_total})  
 	</insert>
 	<update id="deleteTechFollowPre" parameterType="Map">
-	DELETE FROM BMS_TECH_TASK_FOLLOW_PRE WHERE tech_task_id =#{tech_task_id}
-	AND order_no = #{order_no} AND factory = #{tech_factory}
+	DELETE FROM BMS_TECH_TASK_FOLLOW_PRE 
+	WHERE tech_task_id =#{tech_task_id} and task_detail_id=#{task_detail_id}
+	<!-- 
+	AND order_no = #{order_no} AND factory = #{prod_factory} -->
 	</update>
 	
 	<update id="deleteTechFollowBus" parameterType="Map">
 		delete from BMS_TECH_TASK_FOLLOW where tech_task_id=#{tech_task_id}
-		<!--and (confirmor_id is null or confirmor_id=0)  -->
+		and task_detail_id=#{task_detail_id}
+		and (confirmor_id is null or confirmor_id=0) 
 		<!-- <if test="order_no !=null and order_no !=''">
 			and order_no=#{order_no}
 		</if>
@@ -886,6 +895,7 @@
 	AND F.factory = #{factory} AND F.workshop = #{workshop}
 	LEFT JOIN BMS_BASE_USER U ON F.confirmor_id = U.staff_number
 	WHERE B.factory_id=#{factory_id} AND B.order_id=(SELECT O.id FROM BMS_OR_ORDER O WHERE O.order_no = #{order_no})
+	order by cast(reverse(substr(reverse(B.bus_number),1,instr(reverse(B.bus_number),'-')-1)) as signed)
 	</select>
 	
 	<insert id="saveWorkHourInfo" parameterType="list">
@@ -1345,7 +1355,7 @@
 	</select>
 	
 	<update id="deleteBusFollow" parameterType="Map">
-	DELETE FROM BMS_TECH_TASK_FOLLOW WHERE tech_task_id = #{task_id}
+	DELETE FROM BMS_TECH_TASK_FOLLOW WHERE tech_task_id = #{tech_task_id} and task_detail_id=#{task_detail_id}
 	AND order_no = #{order_no} AND factory = #{factory} AND workshop = #{workshop} AND confirmor_id IS NULL
 	</update>
 	<insert id="addBusFollow" useGeneratedKeys="true" parameterType="List">
@@ -1355,13 +1365,13 @@
 		</selectKey>
 		<foreach collection="list" index="index" item="item" separator=";">
 			INSERT INTO BMS_TECH_TASK_FOLLOW
-			(tech_task_id, bus_number, order_no, factory, workshop)
-			VALUES(#{item.task_id},#{item.bus_number},#{item.order_no},#{item.factory},#{item.workshop})
+			(tech_task_id, task_detail_id,bus_number, order_no, factory, workshop)
+			VALUES(#{item.task_id},#{item.task_detail_id},#{item.bus_number},#{item.order_no},#{item.factory},#{item.workshop})
 		</foreach>
 	</insert>
 	<select id="getTaskTechList" parameterType="Map" resultType="Map">
 		SELECT F.workshop,count(F.bus_number) AS follow_num FROM BMS_TECH_TASK_FOLLOW F 
-		WHERE F.tech_task_id = #{task_id} AND F.factory=#{factory} AND F.order_no = #{order_no}
+		WHERE F.tech_task_id = #{tech_task_id} AND F.factory=#{factory} AND F.order_no = #{order_no}
 		GROUP BY F.workshop
 		ORDER BY LOCATE(workshop,'自制件,部件,焊装,涂装,底盘,总装,检测线')
 	</select>
@@ -1369,7 +1379,7 @@
 		UPDATE BMS_TECH_TASK_DETAIL SET tech_list = #{tech_list},time_total = #{time_total} WHERE id = #{task_detail_id}
 	</update>
 	<select id="getTaskTimeList" parameterType="Map" resultType="String">
-		SELECT time_list FROM BMS_TECH_TASK_DETAIL WHERE tech_task_id = #{task_id} AND factory=#{factory} LIMIT 1
+		SELECT time_list FROM BMS_TECH_TASK_DETAIL WHERE tech_task_id = #{tech_task_id} AND factory=#{factory} LIMIT 1
 	</select>
 	
 	<!--新增变更物料清单 -->
@@ -1541,8 +1551,8 @@
 	
 	<!--技改跟进-查询 -->
 	<select id="queryTechFollowingUpList" parameterType="Map" resultType="Map">
-		SELECT * FROM
-(
+<!-- 		SELECT * FROM
+( -->
 SELECT
 d.id as task_detail_id,
 d.status_list,
@@ -1554,6 +1564,7 @@ t.switch_mode,
 t.switch_node,d.time_list,
 d.tech_task_id,
 d.factory,
+d.prod_factory,
 d.order_no,
 k.key_name AS tech_order_type_name,
 substring_index(substring_index(substring_index(d.tech_list,',', b.help_topic_id + 1), ',', -1),':',1) as ws,
@@ -1565,14 +1576,42 @@ BMS_TECH_TASK_DETAIL AS d
 join mysql.help_topic b ON b.help_topic_id &lt;  (LENGTH(d.tech_list) - LENGTH(REPLACE(d.tech_list, ',', '')) + 1)
 LEFT JOIN BMS_TECH_TASK AS t ON d.tech_task_id = t.id
 LEFT JOIN BMS_TECH_TASK_FOLLOW_PRE f ON d.id = f.task_detail_id and substring_index(substring_index(substring_index(d.tech_list,',', b.help_topic_id + 1), ',', -1),':',1) = f.workshop
-LEFT JOIN BMS_TECH_TASK_FOLLOW f1 ON f1.factory = d.factory AND f1.order_no = d.order_no AND f1.tech_task_id = d.tech_task_id and substring_index(substring_index(substring_index(d.tech_list,',', b.help_topic_id + 1), ',', -1),':',1) = f1.workshop
+LEFT JOIN BMS_TECH_TASK_FOLLOW f1 ON f1.task_detail_id=d.id and f1.factory = d.prod_factory AND f1.order_no = d.order_no AND f1.tech_task_id = d.tech_task_id and substring_index(substring_index(substring_index(d.tech_list,',', b.help_topic_id + 1), ',', -1),':',1) = f1.workshop
 LEFT JOIN BMS_BASE_KEY k ON t.tech_order_type = k.id
 WHERE d.factory = #{factory} 
+<if test="order_no !=null and order_no !=''">
+	and d.order_no = #{order_no}
+</if>
+<if test="task_content !=null and task_content !=''">
+	and t.task_content like (concat('%',#{task_content},'%'))
+</if>
+<if test="tech_order_no !=null and tech_order_no !=''">
+	and t.tech_order_no like (concat('%',#{tech_order_no},'%'))
+</if>
+<if test="tech_date_start !=null and tech_date_start !=''">
+	and t.tech_date>=#{tech_date_start} 
+</if>
+<if test="tech_date_end !=null and tech_date_end !=''">
+	and t.tech_date&lt;=#{tech_date_end} 
+</if>
+<if test="status=='已完成'">
+	<if test="workshop !=null and workshop !=''">
+		and instr(d.status_list,#{workshop})>0
+	</if>
+</if>
+<if test="status=='未完成'">
+	<if test="workshop !=null and workshop !=''">
+		and instr(d.status_list,#{workshop})&lt;0
+	</if>
+</if>
 <if test="workshop !=null and workshop !=''">
 AND substring_index(substring_index(substring_index(d.tech_list,',', b.help_topic_id + 1), ',', -1),':',1) = #{workshop}
 </if>
-GROUP BY d.tech_task_id,d.order_no,d.factory,ws
-) AS tmp 
+GROUP BY d.tech_task_id,d.order_no,d.factory,d.prod_factory,ws
+<if test="start !=null">
+	LIMIT #{start} ,#{length} 
+</if>
+<!-- ) AS tmp 
 where 1=1
 		<if test="order_no !=null and order_no !=''">
 			and tmp.order_no = #{order_no}
@@ -1601,15 +1640,17 @@ where 1=1
 		</if>
 		<if test="start !=null">
 			LIMIT #{start} ,#{length} 
-		</if>	
+		</if>	 -->
 	</select>
 	
 	<!--技改跟进-查询totalcount -->
 	<select id="queryTechFollowingUpListTotalCount" parameterType="Map" resultType="int">
-		SELECT count(*) FROM
-(
+<!-- 		SELECT count(*) FROM
+( -->
 SELECT
-d.id as task_detail_id,
+count(distinct id)
+from( select d.id
+<!-- d.id as task_detail_id,
 d.status_list,
 t.task_content,
 t.tech_order_type,
@@ -1622,17 +1663,44 @@ d.factory,
 d.order_no,
 substring_index(substring_index(substring_index(d.tech_list,',', b.help_topic_id + 1), ',', -1),':',1) as ws,
 substring_index(substring_index(substring_index(d.tech_list,',', b.help_topic_id + 1), ',', -1),':',-1) AS total,
-IF(substring_index(substring_index(substring_index(d.tech_list,',', b.help_topic_id + 1), ',', -1),':',1) = '自制件' or substring_index(substring_index(substring_index(d.tech_list,',', b.help_topic_id + 1), ',', -1),':',1) = '部件',IFNULL(sum(f.follow_num),0),count(f1.confirmor_id) ) as complete
-FROM
-BMS_TECH_TASK_DETAIL AS d
+IF(substring_index(substring_index(substring_index(d.tech_list,',', b.help_topic_id + 1), ',', -1),':',1) = '自制件' or substring_index(substring_index(substring_index(d.tech_list,',', b.help_topic_id + 1), ',', -1),':',1) = '部件',IFNULL(sum(f.follow_num),0),count(f1.confirmor_id) ) as complete -->
+FROM BMS_TECH_TASK_DETAIL AS d
 join mysql.help_topic b ON b.help_topic_id &lt;  (LENGTH(d.tech_list) - LENGTH(REPLACE(d.tech_list, ',', '')) + 1)
 LEFT JOIN BMS_TECH_TASK AS t ON d.tech_task_id = t.id
 LEFT JOIN BMS_TECH_TASK_FOLLOW_PRE f ON d.id = f.task_detail_id and substring_index(substring_index(substring_index(d.tech_list,',', b.help_topic_id + 1), ',', -1),':',1) = f.workshop
 LEFT JOIN BMS_TECH_TASK_FOLLOW f1 ON d.id = f1.task_detail_id and substring_index(substring_index(substring_index(d.tech_list,',', b.help_topic_id + 1), ',', -1),':',1) = f1.workshop
-WHERE d.factory = #{factory} AND substring_index(substring_index(substring_index(d.tech_list,',', b.help_topic_id + 1), ',', -1),':',1) = #{workshop}
-GROUP BY d.tech_task_id,d.order_no,d.factory,ws
-) AS tmp 
-where 1=1
+WHERE d.factory = #{factory} 
+<if test="order_no !=null and order_no !=''">
+	and d.order_no = #{order_no}
+</if>
+<if test="task_content !=null and task_content !=''">
+	and t.task_content like (concat('%',#{task_content},'%'))
+</if>
+<if test="tech_order_no !=null and tech_order_no !=''">
+	and t.tech_order_no like (concat('%',#{tech_order_no},'%'))
+</if>
+<if test="tech_date_start !=null and tech_date_start !=''">
+	and t.tech_date>=#{tech_date_start} 
+</if>
+<if test="tech_date_end !=null and tech_date_end !=''">
+	and t.tech_date&lt;=#{tech_date_end} 
+</if>
+<if test="status=='已完成'">
+	<if test="workshop !=null and workshop !=''">
+		and instr(d.status_list,#{workshop})>0
+	</if>
+</if>
+<if test="status=='未完成'">
+	<if test="workshop !=null and workshop !=''">
+		and instr(d.status_list,#{workshop})&lt;0
+	</if>
+</if>
+<if test="workshop !=null and workshop !=''">
+	AND substring_index(substring_index(substring_index(d.tech_list,',', b.help_topic_id + 1), ',', -1),':',1) = #{workshop}
+</if>
+GROUP BY d.tech_task_id,d.order_no,d.factory,d.prod_factory,substring_index(substring_index(substring_index(d.tech_list,',', b.help_topic_id + 1), ',', -1),':',1)
+ ) AS tmp 
+<!--where 1=1
 		<if test="order_no !=null and order_no !=''">
 			and tmp.order_no = #{order_no}
 		</if>
@@ -1657,7 +1725,7 @@ where 1=1
 			<if test="workshop !=null and workshop !=''">
 				and instr(tmp.status_list,#{workshop})&lt;0
 			</if>
-		</if>
+		</if> -->
 	</select>
 	
 	<!--技改跟进明细列表 -->
@@ -1677,6 +1745,7 @@ LEFT JOIN BMS_BASE_USER AS u ON u.staff_number = f.confirmor_id
 
 		WHERE 1=1
 		and f.tech_task_id = #{tech_task_id}
+		<!-- and f.task_detail_id=#{tech_task_detail_id} -->
 		and f.order_no = #{order_no}
 		and f.factory = #{factory}
 		and f.workshop = #{workshop}
@@ -1703,6 +1772,7 @@ LEFT JOIN BMS_BASE_USER AS u ON u.id = f.confirmor_id
 
 		WHERE 1=1
 		and f.tech_task_id = #{tech_task_id}
+		<!-- and f.task_detail_id=#{tech_task_detail_id} -->
 		and f.order_no = #{order_no}
 		and f.factory = #{factory}
 		and f.workshop = #{workshop}

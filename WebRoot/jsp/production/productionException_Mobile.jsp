@@ -56,7 +56,7 @@ label {
 								<!-- <input id="vinText"  type="text" class="input-medium" style="width:100%;height:30px;"/> -->
 								<span class="input-icon input-icon-right" style="width: 100%;">
 										<input id="vinText" type="text" class="input-medium" style="width:100%;height:30px;">
-										
+										<i id="btn_scan" class="ace-icon fa fa-barcode green bigger-160" style="cursor:pointer"></i>
 								</span>
 							</div>
 						</div>

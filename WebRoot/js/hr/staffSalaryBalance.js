@@ -126,6 +126,10 @@ function initPage(){
 	var cur_date=new Date();
 	var c_year=cur_date.getFullYear();
 	var c_month=cur_date.getMonth();
+	if(c_month==0){
+		c_year--;
+		c_month=12;
+	}
 	$("#month").val(c_year+"-"+(c_month<10?("0"+c_month):c_month));
 	
 

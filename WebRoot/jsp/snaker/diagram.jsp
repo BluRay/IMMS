@@ -25,6 +25,7 @@
     }
 	function display(process, active) {
 		/** view*/
+		alert(process);
 		$('#snakerflow').snakerflow($.extend(true,{
 			basePath : "${ctx}/snaker/",
             ctxPath : "${ctx}",
@@ -34,18 +35,20 @@
 			editable : false
 			},eval("(" + active + ")")
 		));
+		$("svg").attr("width",1100);
+		$("svg").attr("height",240);
 	}
 </script>
 </head>
 	<body>
-		<table class="properties_all" align="center" border="1" cellpadding="0" cellspacing="0" style="margin-top: 0px">
-			<div id="snakerflow" style="border: 1px solid #d2dde2; margin-top:10px; margin-left:10px; margin-bottom:10px; width:98%;">
+<!-- 		//<table class="properties_all" align="center" border="1" cellpadding="0" cellspacing="0" style="margin-top: 0px"> -->
+			<div id="snakerflow" style="border: 0px solid #d2dde2; margin-top:10px; margin-left:10px; margin-bottom:10px; width:98%;height:98%;">
 			</div>
-		</table>
+<!-- 		</table> -->
 		<script type="text/javascript">
 		$.ajax({
 				type:'GET',
-				url:"${ctx}/snaker/process/json",
+				url:"${ctx}/process/json",
 				data:"processId=${processId}&orderId=${orderId}",
 				async: false,
 				globle:false,

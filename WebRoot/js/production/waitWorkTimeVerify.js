@@ -198,7 +198,16 @@ function ajaxQuery(){
             {"title":"等待日期","class":"center","data":"","width":"80px","defaultContent": ""},
             {"title":"等待类别","class":"center","data":"","defaultContent": ""},
             {"title":"等待原因","class":"center","data": "","defaultContent": ""},
-            {"title":"详细原因","class":"center","data":"detail_reason","defaultContent":""},
+            {"title":"详细原因","width":"100","class":"center","data":"detail_reason","defaultContent":"","render":function(data, type, row ){
+            	var html="";
+            	if(data.length>20){
+            		html="<i title='"+data+"' style='font-style: normal'>"+(data.substring(1,20)+"...")+"</i>"
+            	}else{
+            		html=data;
+            	}
+            	
+            	return html;
+            }},
             {"title":"工号","class":"center","data":"staff_number","defaultContent": ""},	
             {"title":"姓名","class":"center","data":"staff_name","defaultContent":""},
             {"title":"岗位","class":"center","data":"job","defaultContent": ""},
@@ -272,7 +281,13 @@ function generateTb(swhlist){
 			$(detailReasonId).attr("rowspan",rowspan+1);
 		}else{
 			detailReasonId="#drs_"+index;
-			$("<td class=\"center\" id='drs_"+index+"' rowspan=1/>").html(swh.detail_reason).appendTo(tr);
+			var detail_reason="";
+        	if(swh.detail_reason.length>50){
+        		detail_reason="<i title='"+swh.detail_reason+"' style='font-style: normal'>"+(swh.detail_reason.substring(1,50)+"...")+"</i>"
+        	}else{
+        		detail_reason=swh.detail_reason;
+        	}
+			$("<td class=\"center\" id='drs_"+index+"' rowspan=1/>").html(detail_reason).appendTo(tr);
 		}
 		
 		$("<td class=\"center\" />").html(swh.staff_number).appendTo(tr);

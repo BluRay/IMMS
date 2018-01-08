@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.ui.ModelMap;
 @Repository(value="reportDao")
 public interface IReportDao {
 
@@ -43,4 +44,8 @@ public interface IReportDao {
 	public List<Map<String,Object>> getStandardHumanReportData(Map<String,Object> conditionMap);
 
 	List<Map<String, Object>> queryStaffUseList(Map<String, Object> cdMap);
+	
+	public List<Map<String, Object>> getFactoryYieldData_Mobile(Map<String, Object> cdMap);
+
+	List<Map<String, Object>> queryOrderProcessData(Map<String, Object> condMap);
 }

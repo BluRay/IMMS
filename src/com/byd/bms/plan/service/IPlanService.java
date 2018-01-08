@@ -38,6 +38,7 @@ public interface IPlanService {
 	public int confirmException(ProductionException exception);
 	public Map<String,Object> getPlanVinList(Map<String,Object> queryMap);
 	public Map<String,Object> getGenerateVin(Map<String,Object> queryMap);
+	public Map<String,Object> getGenerateVinTest(Map<String,Object> queryMap);
 	public Map<String,Object> getVinPrefix(Map<String,Object> queryMap);
 	public int checkFactoryOrder(Map<String,Object> queryMap);
 	public List<String> selectBusByMotorVin(Map<String,Object> queryMap); 			//根据VIN/左右电机查询车号，校验是否重复绑定

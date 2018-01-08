@@ -691,6 +691,7 @@ public class TechController extends BaseController{
 		conditionMap.put("workshop", request.getParameter("workshop"));
 		conditionMap.put("order_no", request.getParameter("order_no"));
 		conditionMap.put("tech_task_id", request.getParameter("tech_task_id"));
+		conditionMap.put("tech_task_detail_id", request.getParameter("tech_task_detail_id"));
 		if ("view".equals(request.getParameter("view"))) {
 			conditionMap.put("view", request.getParameter("view"));
 		}
@@ -715,6 +716,7 @@ public class TechController extends BaseController{
 		conditionMap.put("workshop", request.getParameter("workshop"));
 		conditionMap.put("order_no", request.getParameter("order_no"));
 		conditionMap.put("tech_task_id", request.getParameter("tech_task_id"));
+		conditionMap.put("tech_task_detail_id", request.getParameter("tech_task_detail_id"));
 		
 		List<Map<String, Object>> list = techService.getFollowingUpDetailList1(conditionMap);		
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -886,6 +888,7 @@ public class TechController extends BaseController{
 		conditionMap.put("task_id", request.getParameter("task_id"));
 		conditionMap.put("order_no", request.getParameter("order_no"));
 		conditionMap.put("factory", request.getParameter("factory"));
+		conditionMap.put("task_detail_id", request.getParameter("task_detail_id"));
 		conditionMap.put("workshop", request.getParameter("workshop"));
 		List<Map<String,String>> datalist = techService.queryBusNumberFollowList(conditionMap);
 		Map<String, Object> result = new HashMap<String,Object>();
