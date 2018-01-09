@@ -23,6 +23,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -341,14 +343,14 @@ public class MaterialPurchaseController extends BaseController{
 			return "flow/materialPurchase/applyView";
 		}
     }
-	@RequestMapping(value = "approvalMobile")
+	@RequestMapping(value = "approvalMobile",method=RequestMethod.GET)
     public String approvalMobile(Model model, String processId, String orderId, String taskId, 
-    		String taskName,String displayName) {
+    		String taskName,String displayName) throws UnsupportedEncodingException {
 		model.addAttribute("processId", processId);
 		model.addAttribute("orderId", orderId);
 		model.addAttribute("taskId", taskId);
 		model.addAttribute("taskName", taskName);
-		model.addAttribute("displayName", displayName);
+		model.addAttribute("displayName",   java.net.URLDecoder.decode(displayName,"UTF-8"));
         if(StringUtils.isNotEmpty(taskId)) {
         	// 查询拟稿人节点信息
         	model.addAllAttributes(facets.flowData(orderId, "apply"));

@@ -53,16 +53,16 @@ label {
 						<div class="widget-toolbar no-border">
 							<ul class="nav nav-tabs" id="myTab2">
 								<li class="active">
-									<a data-toggle="tab" href="#home2">待办</a>
+									<a data-toggle="tab" href="#home2">待办任务</a>
 								</li>
 
-								<li>
-									<a data-toggle="tab" href="#profile2">已办</a>
-								</li>
+<!-- 								<li> -->
+<!-- 									<a data-toggle="tab" href="#profile2">已办</a> -->
+<!-- 								</li> -->
 
-								<li id="apply">
-									<a data-toggle="tab" href="#info2">申请</a>
-								</li>
+<!-- 								<li id="apply"> -->
+<!-- 									<a data-toggle="tab" href="#info2">申请</a> -->
+<!-- 								</li> -->
 							</ul>
 						</div>
 					</div>
@@ -72,15 +72,16 @@ label {
 							<div class="tab-content padding-4">
 								<div id="home2" class="tab-pane in active">
 									<!-- #section:custom/scrollbar.horizontal -->
-									<div class="scrollable-horizontal scrollable" data-size="200">
-										<div style="width:800px;height:500px;border-radius:10px;">
+									<div class="scrollable-horizontal" data-size="600">
+										<div style="width:100%;" align="center">
+										    <p></p>
 										    <div class="table">  
 										        <div class="table-tr" id="tr0">  
-										            <div class="table-th">流程名称</div>  
-										            <div class="table-th">拟稿人</div>  
-										            <div class="table-th">拟稿人科室</div>
-										            <div class="table-th">申请时间</div> 
-										            <div class="table-th">节点名称</div>  
+										            <div class="table-th" style="background-color:#eef4f9">流程名称</div>  
+										            <div class="table-th" style="background-color:#eef4f9">拟稿人</div>  
+										            <div class="table-th" style="background-color:#eef4f9">拟稿人科室</div>
+										            <div class="table-th" style="background-color:#eef4f9">申请时间</div> 
+										            <div class="table-th" style="background-color:#eef4f9">节点名称</div>  
 										        </div>  
 										    </div>  
 										</div>
@@ -99,8 +100,12 @@ label {
 								</div>
 
 								<div id="info2" class="tab-pane">
-									<div class="scrollable" data-size="1" id="applyDiv" data-position="left">
-									  Lorem ipsum dolor
+									<div class="scrollable" data-size="300" data-position="">
+									<div style="" align="center" id="applyDiv">
+<!-- 									  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque commodo massa sed ipsum porttitor facilisis. Nullam interdum massa vel nisl fringilla sed viverra erat tincidunt. Phasellus in ipsum velit. Maecenas id erat vel sem convallis blandit. Nunc aliquam enim ut arcu aliquet adipiscing. Fusce dignissim volutpat justo non consectetur. -->
+<!--                                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque commodo massa sed ipsum porttitor facilisis. Nullam interdum massa vel nisl fringilla sed viverra erat tincidunt. Phasellus in ipsum velit. Maecenas id erat vel sem convallis blandit. Nunc aliquam enim ut arcu aliquet adipiscing. Fusce dignissim volutpat justo non consectetur. -->
+<!--                                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque commodo massa sed ipsum porttitor facilisis. Nullam interdum massa vel nisl fringilla sed viverra erat tincidunt. Phasellus in ipsum velit. Maecenas id erat vel sem convallis blandit. Nunc aliquam enim ut arcu aliquet adipiscing. Fusce dignissim volutpat justo non consectetur. -->
+									</div>
 									</div>
 								</div>
 							</div>
@@ -139,12 +144,13 @@ label {
 					});
 				});
 				$('.scrollable-horizontal').each(function () {
+	
 					var $this = $(this);
 					$(this).ace_scroll(
 					  {
 						horizontal: true,
 						styleClass: 'scroll-top',//show the scrollbars on top(default is bottom)
-						size: $this.data('size') || 500,
+						size: $this.data('size') || 100,
 						mouseWheelLock: true
 					  }
 					).css({'padding-top': 12});

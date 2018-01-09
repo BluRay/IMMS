@@ -26,7 +26,6 @@ import com.byd.bms.quality.model.QualityTargetBean;
 import com.byd.bms.quality.model.StdFaultLibBean;
 import com.byd.bms.util.DataSource;
 @Service
-@DataSource("dataSourceMaster")
 public class QualityServiceImpl implements IQualityService {
 	@Resource(name="qualityDao")
 	private IQualityDao qualityDao;
@@ -308,8 +307,7 @@ public class QualityServiceImpl implements IQualityService {
 	}
 	
 	@Override
-	public void getProductRecordDetail(Map<String, Object> condMap,
-			ModelMap model) {
+	public void getProductRecordDetail(Map<String, Object> condMap,ModelMap model) {
 		model.put("data",qualityDao.queryProductRecordDetail(condMap));
 	}
 	
@@ -338,8 +336,7 @@ public class QualityServiceImpl implements IQualityService {
 	
 	//========================tj start=================================//
 	@Override
-	public Map<String, Object> getKeyPartsTraceList(
-			Map<String, Object> conditionMap) {
+	public Map<String, Object> getKeyPartsTraceList(Map<String, Object> conditionMap) {
 		int totalCount=0;
 		List datalist=qualityDao.getKeyPartsTraceList(conditionMap);
 		totalCount=qualityDao.getKeyPartsTraceCount(conditionMap);
@@ -366,8 +363,7 @@ public class QualityServiceImpl implements IQualityService {
 	}
 	
 	@Override
-	public Map<String, Object> getBusNumberDetailList(
-			Map<String, Object> conditionMap) {
+	public Map<String, Object> getBusNumberDetailList(Map<String, Object> conditionMap) {
 		List datalist=qualityDao.getBusNumberDetailList(conditionMap);
 		Map<String, Object> result=new HashMap<String,Object>();
 		result.put("data", datalist);
@@ -375,8 +371,7 @@ public class QualityServiceImpl implements IQualityService {
 	}
 	
 	@Override
-	public Map<String, Object> getMaterialExceptionLogsList(
-			Map<String, Object> conditionMap) {
+	public Map<String, Object> getMaterialExceptionLogsList(Map<String, Object> conditionMap) {
 		int totalCount=0;
 		List datalist=qualityDao.getMaterialExceptionLogsList(conditionMap);
 		totalCount=qualityDao.getMaterialExceptionLogsCount(conditionMap);
@@ -388,8 +383,7 @@ public class QualityServiceImpl implements IQualityService {
 		return result;
 	}
 	@Override
-	public int saveMaterialExceptionLogs(
-			MaterialExceptionLogs materialExceptionLogs) {
+	public int saveMaterialExceptionLogs(MaterialExceptionLogs materialExceptionLogs) {
 		String orderNo=materialExceptionLogs.getOrder_no();
 		Map<String, Object> conditionMap=new HashMap<String, Object> ();
 		conditionMap.put("orderNo", orderNo);
@@ -409,8 +403,7 @@ public class QualityServiceImpl implements IQualityService {
 		return logs;
 	}
 	@Override
-	public int updateMaterialExceptionLogs(
-			MaterialExceptionLogs materialExceptionLogs) {
+	public int updateMaterialExceptionLogs(MaterialExceptionLogs materialExceptionLogs) {
 		String orderNo=materialExceptionLogs.getOrder_no();
 		Map<String, Object> conditionMap=new HashMap<String, Object> ();
 		conditionMap.put("orderNo", orderNo);
@@ -419,7 +412,7 @@ public class QualityServiceImpl implements IQualityService {
 		materialExceptionLogs.setOrder_id(orderId);
 		return qualityDao.updateMaterialExceptionLogs(materialExceptionLogs);
 	}
-	
+
 	public int insertStdRecord(BmsBaseQCStdRecord stdRecord) {
 		return qualityDao.insertStdRecord(stdRecord);
 	}
@@ -432,9 +425,8 @@ public class QualityServiceImpl implements IQualityService {
 		}
 		return map;
 	}
-
-	public Map<String, Object> getStdRecordList(
-			Map<String, Object> conditionMap) {
+	
+	public Map<String, Object> getStdRecordList(Map<String, Object> conditionMap) {
 		int totalCount=0;
 		List<Map<String, Object>> datalist=qualityDao.getStdRecordList(conditionMap);
 		totalCount=qualityDao.getStdRecordCount(conditionMap);
@@ -445,7 +437,7 @@ public class QualityServiceImpl implements IQualityService {
 		result.put("data", datalist);
 		return result;
 	}
-
+	
 	public int getStdRecordCount(Map<String, Object> conditionMap) {
         return qualityDao.getStdRecordCount(conditionMap);
 	}
@@ -555,6 +547,16 @@ public class QualityServiceImpl implements IQualityService {
 	public int updateProblemImprove(ProblemImproveBean problemImprove) {
 		return qualityDao.updateProblemImprove(problemImprove);
 	}
+	
+	@Override
+	@DataSource("dataSourceTestingLineCS")
+	public int getTestingDate() {
+		Map<String,Object> conMap=new HashMap<String,Object>();
+		int result = qualityDao.getTestingDate(conMap);
+		System.out.println("-->getTestingDate dataSourceTestingLineCS : " + result);
+		return result;
+	}
+	
 	@Override
 	public Map<String, Object> getQualityAbnormalRecordList(
 			Map<String, Object> conMap) {

@@ -1957,4 +1957,11 @@ public class QualityController extends BaseController {
 		model = mv.getModelMap();
 		return model;
 	}
+	
+	@RequestMapping("/getTestingDate")
+	@ResponseBody
+	public ModelMap getTestingDate() {
+		qualityService.getTestingDate();
+		return model;
+	}
 }

@@ -1,5 +1,10 @@
 $(document).ready(function(){
 	initPage();
+	var bread_height=$("#breadcrumbs").height();
+	var form_height=$(".page-content-area").eq(0).height();
+	height=window.innerHeight-bread_height-form_height-38;
+	//alert(height)
+	$("#row").css("height",height);
 	
 	$(document).on("change","#search_index",function(){
 		var now = new Date(); 				//当前日期

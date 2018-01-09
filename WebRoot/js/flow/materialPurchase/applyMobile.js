@@ -1,20 +1,28 @@
 
 $(document).ready(function(){
 	initPage();
-	
+	$("#breadcrumbs").resize(function() {
+		//ajaxQuery();
+	});
 	function initPage(){
 		getBusNumberSelect('#nav-search-input');
 		getKeysSelect("MATERIAL_PURCHASE_APPLY_TYPE", "物料采购申请类别", "#apply_type","请选择","keyName");
-		
+		getKeysSelect("MATERIAL_PURCHASE_TYPE", "物料采购项目类别", "#apply_kind","请选择","keyName");
 		var d = new Date(); 
 	    var s = d.getFullYear().toString() + '-'+addzero(d.getMonth() + 1)+"-"+addzero(d.getDate());
 	    $("#apply_date").val(s);
 	    getGroupListByGroupName("采购项目负责人",$("#purchase_leader"));
 	    getOperator("科长审批组",$("#departmentId").val(),$("#apply_leader"),"select");// 测试时用
 	    getOperator("经理/厂长审批组",$("#divisionId").val(),$("#departmentManager"),"text");
-	    getKeysSelect("MATERIAL_PURCHASE_TYPE", "物料采购项目类别", "#apply_kind","请选择","keyName");
 	}
 
+	$('#nav-search-input').bind('keydown', function(event) {
+		if (event.keyCode == "13") {
+			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+			return false;
+		}
+	})
+	
 	$("#btnQuery").click (function () {
 		ajaxQuery();
 	});
@@ -49,7 +57,7 @@ $(document).ready(function(){
 				"useage_place" : $("#useage_place").val(),
 				"quantity" : $("#quantity").val(),
 				"require_date" :$("#require_date").val(),
-				"apply.operator" : $("#userId").val(),
+				"apply.operator" : $("#applier").val(),
 				"accountant.operator" : $("#accountant").val(),
 				"purchaseBoss.operator" : $("#purchase_leader").val(),
 				"applyLeader.operator" : $("#apply_leader").val(),
@@ -73,6 +81,38 @@ $(document).ready(function(){
 				}
 //			}
 		})
+	});
+	$('#simple-colorpicker-1').ace_colorpicker({pull_right:true}).on('change', function(){
+		var color_class = $(this).find('option:selected').data('class');
+		var new_class = 'widget-box';
+		if(color_class != 'default')  new_class += ' widget-color-'+color_class;
+		$(this).closest('.widget-box').attr('class', new_class);
+	});
+
+
+	// scrollables
+	$('.scrollable').each(function () {
+		var $this = $(this);
+		$(this).ace_scroll({
+			size: $this.data('size') || 100,
+			//styleClass: 'scroll-left scroll-margin scroll-thin scroll-dark scroll-light no-track scroll-visible'
+		});
+	});
+	$('.scrollable-horizontal').each(function () {
+
+		var $this = $(this);
+		$(this).ace_scroll(
+		  {
+			horizontal: true,
+			styleClass: 'scroll-top',//show the scrollbars on top(default is bottom)
+			size: $this.data('size') || 100,
+			mouseWheelLock: true
+		  }
+		).css({'padding-top': 12});
+	});
+	
+	$(window).on('resize.scroll_reset', function() {
+		$('.scrollable-horizontal').ace_scroll('reset');
 	});
 });
 function addzero(v) {

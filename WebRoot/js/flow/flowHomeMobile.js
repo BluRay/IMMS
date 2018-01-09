@@ -19,7 +19,7 @@ $(document).ready(function () {
 	        success: function (result) {
 	        	var str="";
 	        	$.each(result.data,function(index,value){
-	         	   str+="<div style='text-align:center;cursor:pointer;height:45px;width:280px;margin:20px;padding-top:5px;border:1px solid #ffffff;background-color:#ddddff;border-radius:10px; line-height:35px'" +
+	         	   str+="<div style='cursor: pointer;text-align:center;height:35px;width:230px;margin:10px;padding-top:5px;border:1px solid #ffffff;background-color:#ddddff;border-radius:10px; line-height:35px'" +
 	         	   		"onclick=openWin('"+value.instance_Url+"','"+value.id+"','"+value.name+"')>"+value.display_Name+"</div>"
 	            });
 	            $("#applyDiv").html(str);
@@ -30,7 +30,7 @@ $(document).ready(function () {
 });
 function openWin(url,processId,processName){
 	var param="?processId="+processId+"&processName="+processName;
-	var path=$("#urlPath").val()+url.substring(1)+"Mobile"+param;
+	var path=$("#urlPath").val()+"/"+url.substring(1)+"Mobile"+param;
 	window.location.href=path;
 }
 

@@ -53,7 +53,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<div class="widget-body">
 						<div class="widget-main padding-12 no-padding-left no-padding-right">
                                 <div class="tab-pane">
-									<div class="scrollable" data-size="200">
+									<div class="scrollable" data-size="380">
 										<div class="tab-content no-border padding-24">
 										
 										<div id="faq-tab-1" class="tab-pane fade in active">

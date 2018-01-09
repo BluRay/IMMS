@@ -208,7 +208,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     			success: function (response) {
     				if(response.success){
     					alert("审批成功");
-    					var url="/BMS/task/active";
+    					var url="/BMS/flow/flowHomeMobile";
     					window.open(url,"_parent");     
     				}else{
     					alert("审批失败");

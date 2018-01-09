@@ -63,7 +63,7 @@ label {
 									</select>
 								</td>
 								<td>
-									<input type="text" id="prod_year" onclick="WdatePicker({el:'prod_year',dateFmt:'yyyy',enableKeyboard:false});" class="input-small" style="height: 30px;width:60px"/>
+									<input type="text" id="prod_year" onclick="WdatePicker({el:'prod_year',dateFmt:'yyyy',enableKeyboard:false,onpicked:function(){drawFactoryOrderChart();}});" class="inpnut-small" style="height: 30px;width:60px"/>
 								</td>								
 							</tr>						
 							</table>

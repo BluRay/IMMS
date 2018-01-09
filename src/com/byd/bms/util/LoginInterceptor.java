@@ -120,7 +120,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter{
 			// WEB服务器IP配置需要从配置文件读取，如果WEB服务器是APACHE,IHS之类的，有多个服务器，IP可以用逗号隔开，
 			// 如果是直接从F5进行的负载，则配置文件写F5的地址即可，后续如果WEB服务器IP地址变化了，需要修改配置文件的IP
 			// 如果是单节点没有负载则不需要做这个判断
-			if ("10.23.1.18,10.23.1.74".indexOf(remoteAddr) != -1)
+			if ("10.23.1.77".indexOf(remoteAddr) != -1)
 				ipOK = true;
 			
 			if(ipOK){

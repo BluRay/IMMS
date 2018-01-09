@@ -489,6 +489,10 @@
 		where id=#{id}
 	</update>
 	
+	<select id="getTestingDate" parameterType="Map" resultType="int">
+		select count(*) from ac_car_info
+	</select>
+	
 	<select id="getQualityTargetList" parameterType="Map" resultType="Map">
 		select
 		p.id,p.factory_id,f.factory_name,p.workshop_id,w.workshop_name,p.target_type

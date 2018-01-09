@@ -6,10 +6,20 @@ $(document).ready(function () {
 	height=window.innerHeight-bread_height-form_height-38;
 	//alert(height)
 	$("#order_process").css("height",height);
+	
+	
+	$(document).on("change","#factory",function(e){
+		drawFactoryOrderChart();
+	})
+	
+	$(document).on("change","#status",function(e){
+		drawFactoryOrderChart();
+	})
+	
 })
 
 function initPage(){
-	$("#prod_year").val(new Date().getFullYear()-1);
+	$("#prod_year").val(new Date().getFullYear());
 	getFactorySelect("report/orderProcessReport",null,"#factory","全部","id")
 	
 	drawFactoryOrderChart();
@@ -44,7 +54,11 @@ function drawFactoryOrderChart(){
 					var div_order_desc=$("<div class=\"row\"/>").html("<label class=\"col-xs-12 \" style=\"text-align:center;font-weight:bold\">"+forder.order_desc+"</label>");
 					$(div_factory_order).append(div_order_desc);
 					var rate_order=forder.order_rate;
-					var factory_rate_list=JSON.parse("["+forder.factory_rate_list+"]");				
+					var factory_rate_list=[];
+					if(forder.factory_rate_list){
+						factory_rate_list=JSON.parse("["+forder.factory_rate_list+"]");
+					}
+									
 					
 					var div_rate_f=$("<div class=\"row\">");
 					var div_left=$("<div class=\"col-xs-12 \" >");
@@ -55,14 +69,26 @@ function drawFactoryOrderChart(){
 						var finished_num=parseInt(obj.finished_num);
 						var unstart_num=production_qty-inporcess_num-finished_num;
 						
-						var inprocess_rate=(parseInt(obj.inprocess_num)/parseInt(obj.production_qty)*100).toFixed(1);
-						var finished_rate=(parseInt(obj.finished_num)/parseInt(obj.production_qty)*100).toFixed(1);
+						var inprocess_rate=parseInt((parseInt(obj.inprocess_num)/parseInt(obj.production_qty)*100).toFixed(0))
+						var finished_rate=parseInt((parseInt(obj.finished_num)/parseInt(obj.production_qty)*100).toFixed(0))
 						var unstart_rate=100-inprocess_rate-finished_rate;
+						var rate_arr=[unstart_rate,inprocess_rate,finished_rate]						
+						var max_rate=Math.max.apply(null, rate_arr)
+						var max_index=rate_arr.indexOf(max_rate);
 						
-						var rate_f_html="<div class='row' style='height:30px;margin-right: 10px;'><label class='col-xs-3 control-label no-padding-right'>"+obj.factory_name+"：</label>"+
-						"<div class='progress'><div class='progress-bar progress-bar-grey' style='width:"+unstart_rate+"%;'>"+unstart_num+"</div>"+
-						"<div class='progress-bar progress-bar-warning' style='width:"+inprocess_rate+"%;'>"+inporcess_num+"</div>"+
-						"<div class='progress-bar progress-bar-success' style='width:"+finished_rate+"%;'>"+finished_num+"</div></div>";
+						$.each(rate_arr,function(i,rate){
+							if(rate>0&&rate<10){
+								//alert(rate)
+								rate_arr[max_index]=rate_arr[max_index]-10+rate;
+								rate_arr[i]=10;
+							}
+						})
+						
+						
+						var rate_f_html="<div class='row' style='height:30px;margin-right: 5px;'><label class='col-xs-3 control-label no-padding-right'>"+obj.factory_name+"：</label>"+
+						"<div class='progress'><div class='progress-bar progress-bar-grey' style='width:"+rate_arr[0]+"%;'>"+unstart_num+"</div>"+
+						"<div class='progress-bar progress-bar-warning' style='width:"+rate_arr[1]+"%;'>"+inporcess_num+"</div>"+
+						"<div class='progress-bar progress-bar-success' style='width:"+rate_arr[2]+"%;'>"+finished_num+"</div></div>";
 					
 						$(div_left).append($(rate_f_html));								
 					})

@@ -104,6 +104,8 @@ public interface IQualityDao {
 	public ProblemImproveBean showProblemImproveInfo(int id);
 	public int updateProblemImprove(ProblemImproveBean problemImprove);
 	
+	public int getTestingDate(Map<String, Object> conditionMap);
+	
 	//======================== yk end=================================//
 		
 		

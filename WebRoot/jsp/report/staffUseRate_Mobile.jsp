@@ -65,10 +65,10 @@ label {
 						</table>
 					</form>	
 					
-					<div class="row">
+					<div class="row" style="height:350px;overflow-y:auto;font-size: 12px;">
 						<div class="col-xs-12" style="width:100%;">				
 								
-							<div id="faq-list-1" class="panel-group accordion-style1 accordion-style2" style="height:350px;overflow-y:auto;font-size: 12px;">
+							<div id="faq-list-1" class="panel-group accordion-style1 accordion-style2" >
 <!-- 											<div class="panel panel-default">
 												<div class="panel-heading">
 													<a href="#faq-1-1" data-parent="#faq-list-1" data-toggle="collapse" class="accordion-toggle collapsed">

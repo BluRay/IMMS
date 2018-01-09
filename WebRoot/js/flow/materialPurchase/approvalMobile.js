@@ -76,15 +76,15 @@ function ajaxQuery(){
 	    	var result=response.data[0];
 	    	newDiv=$("<div class='panel panel-default' style='font-size:16px;height:30px;margin-bottom:5px;margin-top:5px;margin-left:-25px;margin-right:-10px'><div class='panel-heading'><a href='#' data-parent='#faq-list-1' data-toggle='collapse' class='accordion-toggle collapsed' style='color:#f00;font-weight:blod'>审批节点信息</div></div>");
 	    	$("#faq-list-1").prepend(newDiv);
-	    	newDiv=$("<div style='margin-left:20px;margin-top:10px;margin-top:10px'>&nbsp;&nbsp;总金额： "+result.amount+"</div>");
+	    	newDiv=$("<div style='margin-left:20px;margin-top:10px;margin-top:10px'>&nbsp;&nbsp;总金额： "+(result.amount!=undefined ? result.urgent_item : '')+"</div>");
 	    	$("#faq-list-1").prepend(newDiv);
-	    	newDiv=$("<div style='margin-left:20px;margin-top:10px;margin-top:10px'>&nbsp;&nbsp;单价： "+result.price+"</div>");
+	    	newDiv=$("<div style='margin-left:20px;margin-top:10px;margin-top:10px'>&nbsp;&nbsp;单价： "+(result.price!=undefined ? result.urgent_item : '')+"</div>");
 	    	$("#faq-list-1").prepend(newDiv);
-	    	newDiv=$("<div style='margin-left:20px;margin-top:10px;margin-top:10px'>&nbsp;&nbsp;供应商名称： "+result.vendor_name+"</div>");
+	    	newDiv=$("<div style='margin-left:20px;margin-top:10px;margin-top:10px'>&nbsp;&nbsp;供应商名称： "+(result.vendor_name!=undefined ? result.urgent_item : '')+"</div>");
 	    	$("#faq-list-1").prepend(newDiv);
-	    	newDiv=$("<div style='margin-left:20px;margin-top:10px;margin-top:10px'>&nbsp;&nbsp;供应商类别： "+result.vendor_type+"</div>");
+	    	newDiv=$("<div style='margin-left:20px;margin-top:10px;margin-top:10px'>&nbsp;&nbsp;供应商类别： "+(result.vendor_type!=undefined ? result.urgent_item : '')+"</div>");
 	    	$("#faq-list-1").prepend(newDiv);
-	    	newDiv=$("<div style='margin-left:20px;margin-top:10px;margin-top:10px'>&nbsp;&nbsp;紧急/特采项目： "+result.urgent_item+"</div>");
+	    	newDiv=$("<div style='margin-left:20px;margin-top:10px;margin-top:10px'>&nbsp;&nbsp;紧急/特采项目： "+(result.urgent_item!=undefined ? result.urgent_item : '')+"</div>");
 	    	$("#faq-list-1").prepend(newDiv);
 	    	newDiv=$("<div class='panel panel-default' style='font-size:16px;height:30px;margin-left:-25px;margin-right:-10px'><div class='panel-heading'><a href='#' data-parent='#faq-list-1' data-toggle='collapse' class='accordion-toggle collapsed' style='color:#f00'>资源开发工程师</div></div>");
 	    	$("#faq-list-1").prepend(newDiv);
@@ -144,6 +144,8 @@ function save(result){
 		success: function (response) {
 			if(response.success){
 				alert("审批成功"); 
+				var url="BMS/flow/flowHomeMobile";
+				window.open(url,"_parent");
 			}else{
 				alert("审批失败");
 			}

@@ -49,58 +49,284 @@ label {
 		<%-- <jsp:include page="../left.jsp" flush="true" /> --%>
 		<!-- 主体 -->
 		<div class="main-content">
+		    <div class="breadcrumbs breadcrumbs-fixed" id="breadcrumbs">
+				<ul class="breadcrumb" style="font-size:14px;">
+				<li><a href="/BMS/index_mobile"><i class="ace-icon fa fa-home home-icon bigger-160"></i>BMS</a></li>
+					<li><a href="#">流程申请</a></li>
+				</ul>
+			</div>
 			<div class="col-sm-6 widget-container-col">
 				<div class="widget-box transparent">
-					<div class="widget-header">
-						<h4 class="widget-title lighter">流程申请</h4>
-					</div>
                     <input type="hidden" id="urlPath" value="<%=request.getContextPath()%>">
 					<div class="widget-body">
 						<div class="widget-main padding-12 no-padding-left no-padding-right">
                                 <div id="info2" class="tab-pane">
-									<div class="scrollable" data-size="400">
+                                    <div class="panel-heading" style="margin-left:10px;margin-right:-30px;margin-top:-20px">
+										<a href="#faq-1-2" data-parent="#faq-list-1" class="accordion-toggle collapsed">
+											<i class="ace-icon fa pull-right"  data-icon-show="ace-icon fa"></i>
+                                                        <i class="ace-icon fa bigger-130">基本信息</i>
+										</a>
+									</div>
+									<div class="scrollable" data-size="310">
 										<div class="tab-content no-border padding-24" id="tab-content">
 										
-										<div id="faq-tab-1" class="tab-pane fade in active">
+										<div id="faq-tab-1" class="tab-pane fade in active" style="margin-top:-30px">
 
        										<div id="faq-list-1" class="panel-group accordion-style1 accordion-style2">
 												
 												<div class="panel panel-default">
-													<div class="panel-heading">
-														<a href="#faq-1-2-${status.index}" id="div-${item['task_name'] }" data-parent="#faq-list-1" data-toggle="collapse" class="accordion-toggle collapsed">
-															<i class="ace-icon fa fa-chevron-left pull-right"  data-icon-show="ace-icon fa fa-chevron-left"></i>
-
-															<i class="ace-icon fa fa-user bigger-130">基本信息</i>
-															
-														</a>
-													</div>
-                                                    <div class="panel-collapse collapse" id="faq-1-2-${status.index}">
+													<div class=""><!-- panel-collapse collapse -->
 														<div class="panel-body">
-															<div id="faq-list-nested-1" class="panel-group accordion-style1 accordion-style2">
-																<div class="panel panel-default">
-																	<div class="panel-heading">
-																			<i class="ace-icon fa smaller-80 middle" data-icon-hide="ace-icon fa" data-icon-show="ace-icon fa"></i>&nbsp;
-									                                                                                                    申请人:  
+															<div class="panel-group accordion-style1 accordion-style2" style="margin-top:-10px">
+																<div class="panel panel-default" >
+																	<div class="panel-heading" style="margin:3px">
+																		<i class="ace-icon fa smaller-80 middle" data-icon-hide="ace-icon fa" data-icon-show="ace-icon fa"></i>
+									                                    <font style="color:red;">*</font>申请人:  
 																	</div>
 																</div>
 
-																<div class="panel panel-default" style="height:2px">
+																<div class="panel panel-default">
 																	<div class="panel-heading">	
 																	<input value="${userName}" id="applier" style="width:120px" class="col-sm-10" type="text">																	
 																	</div>
 												                </div>
                                                             </div>
-                                                            <div id="faq-list-nested-1" class="panel-group accordion-style1 accordion-style2">
+<!--                                                             <br/> -->
+                                                            <div class="panel-group accordion-style1 accordion-style2" style="margin-top:-12px">
 																<div class="panel panel-default">
-																	<div class="panel-heading">
-																			<i class="ace-icon fa smaller-80 middle" data-icon-hide="ace-icon fa" data-icon-show="ace-icon fa"></i>&nbsp;
-									                                                                                                    申请部门:  
+																	<div class="panel-heading" style="margin:2px">
+																			<i class="ace-icon fa smaller-80 middle" data-icon-hide="ace-icon fa" data-icon-show="ace-icon fa"></i>
+									                                        <font style="color:red;">*</font>申请部门:  
 																	</div>
 																</div>
 
-																<div class="panel panel-default" style="height:2px">
+																<div class="panel panel-default" style="">
 																	<div class="panel-heading">	
 																	<input id="department" value="${department }" style="width:120px" class="col-sm-10" type="text">			
+																	</div>
+												                </div>
+                                                            </div>
+                                                            <div class="panel-group accordion-style1 accordion-style2" style="margin-top:-12px">
+																<div class="panel panel-default">
+																	<div class="panel-heading">
+																			<i class="ace-icon fa smaller-80 middle" data-icon-hide="ace-icon fa" data-icon-show="ace-icon fa"></i>&nbsp;
+									                                        <font style="color:red;">*</font> 申请日期:  
+																	</div>
+																</div>
+
+																<div class="panel panel-default" style="">
+																	<div class="panel-heading">	
+																	<input id="apply_date" style="width:120px" class="col-sm-10" type="text">			
+																	</div>
+												                </div>
+                                                            </div>
+                                                            <div class="panel-group accordion-style1 accordion-style2" style="margin-top:-12px">
+																<div class="panel panel-default">
+																	<div class="panel-heading">
+																			<i class="ace-icon fa smaller-80 middle" data-icon-hide="ace-icon fa" data-icon-show="ace-icon fa"></i>
+									                                        <font style="color:red;">*</font> 申请类型:  
+																	</div>
+																</div>
+
+																<div class="panel panel-default" style="">
+																	<div class="panel-heading">	
+																	    <select id="apply_type" style="width:120px"></select>			
+																	</div>
+												                </div>
+                                                            </div>
+                                                            <div class="panel-group accordion-style1 accordion-style2" style="margin-top:-12px">
+																<div class="panel panel-default">
+																	<div class="panel-heading">
+																			<i class="ace-icon fa smaller-80 middle" data-icon-hide="ace-icon fa" data-icon-show="ace-icon fa"></i>
+									                                        <font style="color:red;">*</font>采购项目:  
+																	</div>
+																</div>
+
+																<div class="panel panel-default">
+																	<div class="panel-heading">	
+																	    <select id="apply_kind" style="width:120px"></select>		
+																	</div>
+												                </div>
+                                                            </div>
+                                                            <div class="panel-group accordion-style1 accordion-style2" style="margin-top:-12px">
+																<div class="panel panel-default">
+																	<div class="panel-heading">
+																			<i class="ace-icon fa smaller-80 middle" data-icon-hide="ace-icon fa" data-icon-show="ace-icon fa"></i>
+									                                        <font style="color:red;">*</font>成本中心:  
+																	</div>
+																</div>
+
+																<div class="panel panel-default">
+																	<div class="panel-heading">	
+																	<input id="cost_center" style="width:120px" class="col-sm-10" type="text">			
+																	</div>
+												                </div>
+                                                            </div>
+                                                            <div class="panel-group accordion-style1 accordion-style2" style="margin-top:-12px">
+																<div class="panel panel-default">
+																	<div class="panel-heading">
+																			<i class="ace-icon fa smaller-80 middle" data-icon-hide="ace-icon fa" data-icon-show="ace-icon fa"></i>
+									                                        <font style="color:red;">*</font>成本会计:  
+																	</div>
+																</div>
+
+																<div class="panel panel-default">
+																	<div class="panel-heading">	
+																	    <select id="accountant" style="width:120px"></select>			
+																	</div>
+												                </div>
+                                                            </div>
+                                                            <div class="panel-group accordion-style1 accordion-style2" style="margin-top:-12px">
+																<div class="panel panel-default">
+																	<div class="panel-heading">
+																			<i class="ace-icon fa smaller-80 middle" data-icon-hide="ace-icon fa" data-icon-show="ace-icon fa"></i>
+									                                        <font style="color:red;">*</font>采购项目负责人:  
+																	</div>
+																</div>
+
+																<div class="panel panel-default">
+																	<div class="panel-heading">	
+																	    <select id="purchase_leader" style="width:120px"></select>			
+																	</div>
+												                </div>
+                                                            </div>
+                                                            <div class="panel-group accordion-style1 accordion-style2" style="margin-top:-12px">
+																<div class="panel panel-default">
+																	<div class="panel-heading">
+																			<i class="ace-icon fa smaller-80 middle" data-icon-hide="ace-icon fa" data-icon-show="ace-icon fa"></i>
+									                                        <font style="color:red;">*</font>物料编号:  
+																	</div>
+																</div>
+
+																<div class="panel panel-default">
+																	<div class="panel-heading">	
+																	<input id="material_code" style="width:120px" class="col-sm-10" type="text">			
+																	</div>
+												                </div>
+                                                            </div>
+                                                            <div class="panel-group accordion-style1 accordion-style2" style="margin-top:-12px">
+																<div class="panel panel-default">
+																	<div class="panel-heading">
+																			<i class="ace-icon fa smaller-80 middle" data-icon-hide="ace-icon fa" data-icon-show="ace-icon fa"></i>
+									                                        <font style="color:red;">*</font>物料名称:  
+																	</div>
+																</div>
+
+																<div class="panel panel-default">
+																	<div class="panel-heading">	
+																	<input id="material_name" style="width:120px" class="col-sm-10" type="text">			
+																	</div>
+												                </div>
+                                                            </div>
+                                                            <div class="panel-group accordion-style1 accordion-style2" style="margin-top:-12px">
+																<div class="panel panel-default">
+																	<div class="panel-heading">
+																			<i class="ace-icon fa smaller-80 middle" data-icon-hide="ace-icon fa" data-icon-show="ace-icon fa"></i>
+									                                        <font style="color:red;">*</font>规格/型号:  
+																	</div>
+																</div>
+
+																<div class="panel panel-default">
+																	<div class="panel-heading">	
+																	<input id="specification" style="width:120px" class="col-sm-10" type="text">			
+																	</div>
+												                </div>
+                                                            </div>
+                                                            <div class="panel-group accordion-style1 accordion-style2" style="margin-top:-12px">
+																<div class="panel panel-default">
+																	<div class="panel-heading">
+																			<i class="ace-icon fa smaller-80 middle" data-icon-hide="ace-icon fa" data-icon-show="ace-icon fa"></i>
+									                                        <font style="color:red;">*</font>使用地区:  
+																	</div>
+																</div>
+
+																<div class="panel panel-default">
+																	<div class="panel-heading">	
+																	<input id="useage_place" style="width:120px" class="col-sm-10" type="text">			
+																	</div>
+												                </div>
+                                                            </div>
+                                                            <div class="panel-group accordion-style1 accordion-style2" style="margin-top:-12px">
+																<div class="panel panel-default">
+																	<div class="panel-heading">
+																			<i class="ace-icon fa smaller-80 middle" data-icon-hide="ace-icon fa" data-icon-show="ace-icon fa"></i>
+									                                        <font style="color:red;">*</font>需求数量:  
+																	</div>
+																</div>
+
+																<div class="panel panel-default">
+																	<div class="panel-heading">	
+																	<input id="quantity" style="width:120px" class="col-sm-10" type="text">			
+																	</div>
+												                </div>
+                                                            </div>
+                                                            <div class="panel-group accordion-style1 accordion-style2" style="margin-top:-12px">
+																<div class="panel panel-default">
+																	<div class="panel-heading">
+																			<i class="ace-icon fa smaller-80 middle" data-icon-hide="ace-icon fa" data-icon-show="ace-icon fa"></i>
+									                                        <font style="color:red;">*</font>要求到位时间:  
+																	</div>
+																</div>
+
+																<div class="panel panel-default">
+																	<div class="panel-heading">	
+																	<input id="require_date" style="width:120px" class="col-sm-10" type="text">			
+																	</div>
+												                </div>
+                                                            </div>
+                                                            <div class="panel-group accordion-style1 accordion-style2" style="margin-top:-12px">
+																<div class="panel panel-default">
+																	<div class="panel-heading">
+																			<i class="ace-icon fa smaller-80 middle" data-icon-hide="ace-icon fa" data-icon-show="ace-icon fa"></i>
+									                                                                                                    技术要求:  
+																	</div>
+																</div>
+
+																<div class="panel panel-default">
+																	<div class="panel-heading">	
+																	<input id="techcical_require" style="width:120px" class="col-sm-10" type="text">			
+																	</div>
+												                </div>
+                                                            </div>
+                                                            <div class="panel-group accordion-style1 accordion-style2" style="margin-top:-12px">
+																<div class="panel panel-default">
+																	<div class="panel-heading">
+																			<i class="ace-icon fa smaller-80 middle" data-icon-hide="ace-icon fa" data-icon-show="ace-icon fa"></i>
+									                                        <font style="color:red;">*</font>申请理由:  
+																	</div>
+																</div>
+
+																<div class="panel panel-default">
+																	<div class="panel-heading">	
+																	<input id="apply_reason" style="width:120px" class="col-sm-10" type="text">			
+																	</div>
+												                </div>
+                                                            </div>
+                                                            <div class="panel-group accordion-style1 accordion-style2" style="margin-top:-12px">
+																<div class="panel panel-default">
+																	<div class="panel-heading">
+																			<i class="ace-icon fa smaller-80 middle" data-icon-hide="ace-icon fa" data-icon-show="ace-icon fa"></i>
+									                                        <font style="color:red;">*</font>附件:  
+																	</div>
+																</div>
+
+																<div class="panel panel-default">
+																	<div class="panel-heading">	
+																	<input id="apply_date" style="width:120px" class="col-sm-10" type="text">			
+																	</div>
+												                </div>
+                                                            </div>
+                                                            <div class="panel-group accordion-style1 accordion-style2" style="margin-top:-12px">
+																<div class="panel panel-default">
+																	<div class="panel-heading">
+																			<i class="ace-icon fa smaller-80 middle" data-icon-hide="ace-icon fa" data-icon-show="ace-icon fa"></i>
+									                                                                                                    备注:  
+																	</div>
+																</div>
+
+																<div class="panel panel-default">
+																	<div class="panel-heading">	
+																	<input id="remark" style="width:120px" class="col-sm-10" type="text">			
 																	</div>
 												                </div>
                                                             </div>
@@ -112,6 +338,26 @@ label {
 										</div>
 									</div>
 									</div>
+									<div id="faq-tab-2" class="table tab-pane in active" style="margin-top:20px" data-size="100">  
+									    <br>
+								        <div class="table-tr" style="margin-top:5px">  
+								            <div class="table-td form-group" style="margin-top:5px">
+								                <div style=" float:left">&nbsp;审批意见:</div>
+								                <div  style=" float:left">
+								                <textarea style="width:260px;height:30px" id="description" name="description"></textarea>
+								                </div>
+								            </div>  
+								        </div> 
+								       
+								        <div class="table-tr">  
+								            <div class="table-td" style="float:right;margin-right:10px">
+								                <input type="button" class="btn btn-sm btn-info" id="btnAgree" value="提交">
+													&nbsp;&nbsp;
+												<input type="button" class="btn btn-sm btn-info" name="reback" value="取消"
+													onclick="history.back()">
+							                </div>  
+								        </div> 
+								    </div>
 								</div>
                                 <input type="hidden" name="processId" id="processId" value="${processId }" />
 								<input type="hidden" name="orderId" id="orderId" value="${orderId }" />

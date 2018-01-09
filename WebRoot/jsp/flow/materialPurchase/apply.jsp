@@ -43,7 +43,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				            <td>&nbsp;申请人工号：</td>
 							<td>
 							    <input value="${staffNumber}" placeholder="" style="width:120px" class="col-sm-10" type="text">
-							    <input value="${userId}" type="hidden">
+							    <input value="${userId}" id="userId" type="hidden">
 							</td>
 							<td>&nbsp;申请人姓名：</td>
 							<td><input value="${userName}" id="applier" style="width:120px" class="col-sm-10" type="text"></td>

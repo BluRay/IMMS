@@ -28,6 +28,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.*;
 
 /**
@@ -280,11 +282,12 @@ public class FlowController extends BaseController{
 		return mv;
 	}
     /**
+     * @throws UnsupportedEncodingException 
      * 
      */
     @RequestMapping(value = "allMobile")
     public ModelAndView allMobile(Model model, String processId, String orderId,
-    		String taskId) {
+    		String taskId) throws UnsupportedEncodingException {
 		model.addAttribute("processId", processId);
 		model.addAttribute("orderId", orderId);
 		model.addAttribute("taskId", taskId);
@@ -301,8 +304,8 @@ public class FlowController extends BaseController{
         if(StringUtils.isNotEmpty(taskId)) {
         	task=facets.getEngine().query().getTask(taskId);
             model.addAttribute("task", task);
-            model.addAttribute("taskName", task.getTaskName());
-            model.addAttribute("displayName", task.getDisplayName());
+            model.addAttribute("taskName", URLEncoder.encode(task.getTaskName(),"UTF-8"));
+            model.addAttribute("displayName", URLEncoder.encode(task.getDisplayName(),"UTF-8"));
         }
         List<TaskModel> models = process.getModel().getModels(TaskModel.class);
         for(TaskModel object : models) {

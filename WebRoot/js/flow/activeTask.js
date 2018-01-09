@@ -142,7 +142,7 @@ function ajaxQuery(){
 	    		var path=url+(value.instance_Url=='' ? value.action_Url : value.instance_Url );
 	    		var tr = $("<tr height='30px' id= '"+value.id+"'/>");
     			$("<td style=\"text-align:center;padding:3px\" />").html(index + 1).appendTo(tr);
-    			$("<td style=\"text-align:center;padding:3px\" />").html('<a href='+path+'?processId='+value.process_Id+'&taskId='+value.task_Id+'&orderId='+value.order_Id+'&type=mobile" title="处理">'+value.process_Name+'</a>').appendTo(tr);
+    			$("<td style=\"text-align:center;padding:3px\" />").html('<a href='+path+'?processId='+value.process_Id+'&taskId='+value.task_Id+'&orderId='+value.order_Id+' title=处理>'+value.process_Name+'</a>').appendTo(tr);
     			$("<td style=\"text-align:center;padding:3px\" />").html(value.apply_username).appendTo(tr);
     			$("<td style=\"text-align:center;padding:3px\" />").html(value.department).appendTo(tr);
     			$("<td style=\"text-align:center;padding:3px\" />").html(value.order_Create_Time).appendTo(tr);

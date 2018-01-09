@@ -114,9 +114,9 @@ public class FlowService implements IFlowService{
             Map<String,Object> approvalMap=new HashMap<String,Object>();
             approvalMap.put("orderId", order.getId());
             approvalMap.put("operator", map.get("user_name"));
-            approvalMap.put("operate_time", map.get("edit_date"));
-            approvalMap.put("task_name", "apply");
-            approvalMap.put("display_name", "拟稿人");
+            approvalMap.put("operateTime", map.get("edit_date"));
+            approvalMap.put("taskName", "apply");
+            approvalMap.put("displayName", "拟稿人");
             flowDao.addApproval(approvalMap);
         } else {
             facets.execute(taskId, userId, map);    

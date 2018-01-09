@@ -94,7 +94,7 @@ label {
 			});
 			function openWin(url,processId,processName){
 				var param="?processId="+processId+"&processName="+processName;
-				var path=$("#urlPath").val()+url.substring(1)+param;
+				var path=$("#urlPath").val()+url.substring(1)+"Mobile"+param;
 				window.location.href=path;
 			}
 		</script>

@@ -71,6 +71,8 @@ public interface IQualityService {
 	public ProblemImproveBean showProblemImproveInfo(int id);
 	public int updateProblemImprove(ProblemImproveBean problemImprove);
 	
+	public int getTestingDate();
+	
 	//======================== yk end=================================//
 			
 			
