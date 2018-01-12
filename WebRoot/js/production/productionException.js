@@ -16,6 +16,7 @@ $(document).ready(function () {
 			$("#exec_onoff").show();
 		}		
 		getFactorySelect();
+		getOrderNoSelect("#order","",null,null,"#exec_factory");
 	};
 
 	$('#nav-search-input').bind('keydown', function(event) {
@@ -66,6 +67,7 @@ $(document).ready(function () {
 			bus.bus_number=$(tr).data("busNo");
 			bus.order_no=$(tr).data("orderNo");
 			bus.order_desc=$(tr).data("orderDesc");
+			bus.order_id=$("#order").attr("order_id")||0;
 			busList.push(bus);
 
 		});
@@ -146,6 +148,9 @@ $(document).ready(function () {
                 		$("#infoOrder").html(bus.order_desc||"");
                 		$("#infoStatus").html(bus.status=='0'?'正常':(bus.status=='1'?'冻结':''));
                 		$("#btnSubmit").removeAttr("disabled");
+                		
+                		$("#order").val(bus.order_no||"").attr("order_id",bus.order_id||"0");
+                		
                         
                         //alert($('#vinText').attr("value"));
                         if(busNoArray.indexOf($('#vinText').val()) < 0){
@@ -158,6 +163,7 @@ $(document).ready(function () {
 							$("<td />").html("<i name='edit' class=\"fa fa-times\" style=\"cursor: pointer\" ></i>").appendTo(tr);
 							$(tr).data("busNo",$('#vinText').val());
 							$(tr).data("orderNo",bus.order_no);
+							
 							$(tr).data("orderDesc",bus.order_desc);
 							$("#dispatchDetail tbody").append(tr);
 							busNoArray.push($('#vinText').val());
@@ -245,6 +251,12 @@ $(document).ready(function () {
 		if($("#exec_workshop").val() !=''){
 			getAllLineSelect();
 			getAllProcessSelect();
+		}
+		
+		if($("#exec_workshop :selected").text()=='自制件'||$("#exec_workshop :selected").text()=='部件'){
+			$("#order").attr("order_id",0).attr("disabled",false);
+		}else{
+			$("#order").attr("disabled",true);
 		}
 	});
 	

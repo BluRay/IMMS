@@ -64,7 +64,7 @@ $(document).ready(function () {
 		if($('#exec_workshop :selected').text()=='底盘'||$('#exec_workshop :selected').text()=='检测线'){
 
 			$.each(parts_list,function(i,parts){
-				if(parts.process==$("#exec_processname").val()&&(parts.parts_name=='VIN编码'||parts.parts_name=='左电机号'||parts.parts_name=='右电机号')){
+				if(parts.process==$("#exec_processname").val()&&(parts.parts_name=='VIN编码'||parts.parts_name=='左电机号'||parts.parts_name=='右电机号'||parts.parts_name.indexOf('动力电池包')>=0)){
 					if(parts.batch==undefined||parts.batch.trim().length==0){
 						enterflag=false;
 						alert(plan_node+"扫描前，请将零部件信息录入完整！");

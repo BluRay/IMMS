@@ -947,8 +947,8 @@ public class PlanServiceImpl implements IPlanService {
 						conditionMap5.put("factory_id", detailList.get(i)[0]);
 						conditionMap5.put("order_no", order_list.get(n));
 						conditionMap5.put("month", month);
-						total_month = planDao.getPlanSearchTotalRealZzjQty(conditionMap4);
-						total_order = planDao.getPlanSearchTotalRealZzjQty(conditionMap5);
+						total_month = planDao.getPlanSearchTotalRealZzjQty(conditionMap5);
+						total_order = planDao.getPlanSearchTotalRealZzjQty(conditionMap4);
 					}else{
 						total_month = planDao.getPlanSearchTotalRealQty(conditionMap2);
 						total_order = planDao.getPlanSearchTotalRealQty(conditionMap3);

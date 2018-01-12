@@ -28,6 +28,7 @@ public class ProductionException {
 	private String close_date;
 	private String memo;
 	private String duty_department;
+	private int order_id;
 	public int getId() {
 		return id;
 	}
@@ -189,6 +190,12 @@ public class ProductionException {
 	}
 	public void setEditor_name(String editor_name) {
 		this.editor_name = editor_name;
+	}
+	public int getOrder_id() {
+		return order_id;
+	}
+	public void setOrder_id(int order_id) {
+		this.order_id = order_id;
 	}
 	
 }

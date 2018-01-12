@@ -980,7 +980,7 @@
 				where  k.key_name='喷砂' and prod_date like CONCAT(#{work_date},'%') and f.factory_name=#{factory})
 		    when '焊装' then
 		      (select count(1) from BMS_PLAN_BUS b left join BMS_BASE_FACTORY f on f.id=b.factory_id 
-		       and f.factory_name=#{factory} where left(welding_offline_date,10) like CONCAT(#{work_date},'%'))
+		       where f.factory_name=#{factory} and left(welding_offline_date,10) like CONCAT(#{work_date},'%'))
 		    when '涂装' then
 		      (select count(1) from BMS_PLAN_BUS b left join BMS_BASE_FACTORY f on f.id=b.factory_id 
 		       where f.factory_name=#{factory} and left(painting_offline_date,10) like CONCAT(#{work_date},'%'))

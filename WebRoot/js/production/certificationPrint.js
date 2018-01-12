@@ -103,22 +103,17 @@ function ajaxQuery(){
 	$("#checkall").attr("checked",false);
 	
 		$("#tableResult").DataTable({
-			columnDefs: [{
-	            "searchable": false,
-	            "orderable": false,
-	            "targets": 0
-	        }],
 			serverSide: true,
-	/*		fixedColumns:   {
-	            leftColumns: 1,
-	            rightColumns:1
-	        },*/
 			paiging:true,
 			ordering:false,
 			searching: false,
 			bAutoWidth:false,
-			destroy: true,
-			sScrollY: $(window).height()-255,
+			fixedColumns:   {
+	            leftColumns: 2,
+	            rightColumns:0
+	        },
+	        destroy: true,
+			sScrollY: $(window).height()-250,
 			scrollX: true,
 			pageLength: 20,
 			pagingType:"full_numbers",
@@ -165,7 +160,10 @@ function ajaxQuery(){
 	                    //console.log(returnData);
 	                    //调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
 	                    //此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
-	                    callback(returnData);
+	                    callback(returnData); 
+	                    var head_width=$(".dataTables_scrollHead").width();
+	                    //alert(head_width)
+	                    $(".dataTables_scrollHead").css("width",head_width-5);
 	                }
 	            });
 			

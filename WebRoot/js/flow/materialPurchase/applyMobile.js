@@ -15,13 +15,6 @@ $(document).ready(function(){
 	    getOperator("科长审批组",$("#departmentId").val(),$("#apply_leader"),"select");// 测试时用
 	    getOperator("经理/厂长审批组",$("#divisionId").val(),$("#departmentManager"),"text");
 	}
-
-	$('#nav-search-input').bind('keydown', function(event) {
-		if (event.keyCode == "13") {
-			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
-			return false;
-		}
-	})
 	
 	$("#btnQuery").click (function () {
 		ajaxQuery();
@@ -73,7 +66,7 @@ $(document).ready(function(){
 			success: function (response) {
 					if(response.success){
 						alert("提交成功");
-    					var url="/BMS/task/active";
+    					var url="../flow/flowHomeMobile";
     					window.open(url,"_parent");
     				}else{
     					alert("提交失败");

@@ -64,7 +64,10 @@
 										style="display: none">
 										<option value="上线">上线</option>
 										<option value="下线">下线</option>
-									</select> <input class="btn btn-sm btn-primary" disabled="disabled"
+									</select> 
+									<label><b>订单：</b></label>
+									<input type="text" id="order"class="input-medium" style="height:30px;" disabled="disabled">
+									<input class="btn btn-sm btn-primary" disabled="disabled"
 										id="btnSubmit" value="确定" type="button"> <input
 										class="btn btn-sm" id="reset" value="清空" type="button">
 									<input id="currentNode" name="currentNode" value="485"

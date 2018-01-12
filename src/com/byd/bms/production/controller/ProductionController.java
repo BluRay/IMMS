@@ -351,6 +351,7 @@ public class ProductionController extends BaseController {
 			//logger.info("---->bus_numberArray = " + bus_numberArray[i] + " ");
 			JSONObject bus=(JSONObject) it.next();
 			String cur_bus_number = bus.getString("bus_number");
+			int order_id = bus.getInt("order_id");
 			ProductionException exception = new ProductionException();
 			exception.setFactory(request.getParameter("factory"));
 			exception.setWorkshop(request.getParameter("workshop"));
@@ -364,6 +365,8 @@ public class ProductionController extends BaseController {
 			exception.setDetailed_reasons(request.getParameter("detailed_reasons"));
 			exception.setEditor_id(userid);
 			exception.setEdit_date(curTime);
+			exception.setOrder_id(order_id);
+			
 			exceptionList.add(exception);
 		}	
 		productionService.createProductionException(exceptionList,model);

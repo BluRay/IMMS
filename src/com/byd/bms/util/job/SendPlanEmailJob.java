@@ -179,6 +179,10 @@ public class SendPlanEmailJob  implements Job {
 		m_rk.put("plan", 0);
 		m_rk.put("real", 0);
 		m_rk.put("undone", 0);
+		Map<String,Integer> m_fc=new HashMap<String,Integer>();
+		m_fc.put("plan", 0);
+		m_fc.put("real", 0);
+		m_fc.put("undone", 0);
 		
 		//订单计划达成表格封装
 		TableTable tableX = emailSender.new TableTable();
@@ -256,7 +260,11 @@ public class SendPlanEmailJob  implements Job {
 				m_rk.put("real", Integer.valueOf(String.valueOf(m1.get("real_qty")))+m_rk.get("real"));
 				m_rk.put("undone", m_rk.get("plan")-m_rk.get("real"));
 			}
-						
+			if(m1.get("key_name").equals("发车")){
+				m_fc.put("plan", Integer.valueOf(String.valueOf(m1.get("total_plan_qty")))+m_fc.get("plan"));
+				m_fc.put("real", Integer.valueOf(String.valueOf(m1.get("real_qty")))+m_fc.get("real"));
+				m_fc.put("undone", m_fc.get("plan")-m_fc.get("real"));
+			}			
 			
 			
 			if(m1.get("key_name").endsWith("下线")){
@@ -304,6 +312,7 @@ public class SendPlanEmailJob  implements Job {
 		theadW.add(tableW.new TdTd("总装上线"));
 		theadW.add(tableW.new TdTd("总装下线"));
 		theadW.add(tableW.new TdTd("入库"));
+		theadW.add(tableW.new TdTd("发车"));
 		tableW.setThead(theadW);
 		
 		List<TdTd> tr_plan = new ArrayList<TdTd>();
@@ -319,6 +328,7 @@ public class SendPlanEmailJob  implements Job {
 		tr_plan.add(tableW.new TdTd(m_zzon.get("plan").toString()));
 		tr_plan.add(tableW.new TdTd(m_zzoff.get("plan").toString()));
 		tr_plan.add(tableW.new TdTd(m_rk.get("plan").toString()));
+		tr_plan.add(tableW.new TdTd(m_fc.get("plan").toString()));
 		tbodyW.add(tr_plan);
 		
 		List<TdTd> tr_real = new ArrayList<TdTd>();
@@ -334,6 +344,7 @@ public class SendPlanEmailJob  implements Job {
 		tr_real.add(tableW.new TdTd(m_zzon.get("real").toString()));
 		tr_real.add(tableW.new TdTd(m_zzoff.get("real").toString()));
 		tr_real.add(tableW.new TdTd(m_rk.get("real").toString()));
+		tr_real.add(tableW.new TdTd(m_fc.get("real").toString()));
 		tbodyW.add(tr_real);
 		
 		List<TdTd> tr_rate = new ArrayList<TdTd>();
@@ -403,6 +414,14 @@ public class SendPlanEmailJob  implements Job {
 			rate_rk=Integer.parseInt(m_rk.get("real").toString())*100/Integer.parseInt(m_rk.get("plan").toString())+"%";
 		}
 		tr_rate.add(tableW.new TdTd(rate_rk));
+		/*tbodyW.add(tr_rate);*/
+		
+		String rate_fc="-";
+		if(Integer.parseInt(m_fc.get("plan").toString())>0){
+			rate_fc=Integer.parseInt(m_fc.get("real").toString())*100/Integer.parseInt(m_fc.get("plan").toString())+"%";
+		}
+		tr_rate.add(tableW.new TdTd(rate_fc));
+		
 		tbodyW.add(tr_rate);
 		
 		List<TdTd> tr_undone = new ArrayList<TdTd>();
@@ -418,6 +437,7 @@ public class SendPlanEmailJob  implements Job {
 		tr_undone.add(tableW.new TdTd(m_zzon.get("undone").toString()));
 		tr_undone.add(tableW.new TdTd(m_zzoff.get("undone").toString()));
 		tr_undone.add(tableW.new TdTd(m_rk.get("undone").toString()));
+		tr_undone.add(tableW.new TdTd(m_fc.get("undone").toString()));
 		tbodyW.add(tr_undone);
 		
 		tableW.setTbody(tbodyW);

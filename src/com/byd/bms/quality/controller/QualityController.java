@@ -1958,6 +1958,12 @@ public class QualityController extends BaseController {
 		return model;
 	}
 	
+	@RequestMapping("/testingDate")
+	public ModelAndView testingDate(){ 		//检测数据查询
+		mv.setViewName("quality/testingDate");
+        return mv;  
+    }
+	
 	@RequestMapping("/getTestingDate")
 	@ResponseBody
 	public ModelMap getTestingDate() {

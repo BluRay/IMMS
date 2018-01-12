@@ -145,7 +145,7 @@
 						</tr>
 						<tr style="height:40px">
 							<td width="75px"></td>
-							<td align="right" style="width:100px">WMI扩展位：</td><td style="width:150px"><input type="text"  id="new_WMI_extension_test" placeholder="WMI_extension..." class="input-medium" /></td>
+							<td align="right" style="width:100px">WMI扩展位：</td><td style="width:150px"><input type="text"  id="new_WMI_extension_test" disabled="disabled" placeholder="WMI_extension..." class="input-medium" /></td>
 							<td></td>
 						</tr>						
 						<tr style="height:40px">

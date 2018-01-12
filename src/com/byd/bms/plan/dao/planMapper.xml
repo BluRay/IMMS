@@ -538,6 +538,7 @@
 		<if test="bus_number!=null and bus_number!=''">
 			and b.bus_number = #{bus_number}
 		</if>
+		order by v.creat_date desc
 		<if test="start !=null">
 			LIMIT #{start} ,#{length} 
 		</if>	
@@ -562,6 +563,7 @@
 		<if test="testVin!=null and testVin!=''">
 			and v.source = '1' 
 		</if>
+		order by v.creat_date desc
 	</select>
 	
 	<select id="getFactoryOrderInfo" parameterType="Map" resultType="int">
@@ -1100,6 +1102,31 @@
 			and o.order_no like concat(#{order_no},'%')
 		</if>
 		group by fo.order_id
+		
+		union all
+		select '发车' key_name,dp.order_id,o.order_no,tmp.real_qty,tmp.total_qty,sum(dp.plan_dispatch_qty) production_qty,concat(o.order_no,' ',o.order_name,t.bus_type_code,' ',sum(fo.production_qty),'台') order_desc 
+		,tmp.total_done_qty ,fo.status
+		from BMS_PLAN_BUS_DISPATCH_PLAN dp
+		left join BMS_OR_FACTORY_ORDER fo on dp.order_id=fo.order_id and dp.factory_id=fo.factory_id
+		left join BMS_OR_ORDER o on o.id=dp.order_id 
+		left join BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id 
+		left join 
+		(select count(distinct b1.bus_number) real_qty,count(distinct b.bus_number) total_qty,b.order_id,count(distinct b2.bus_number) total_done_qty
+		from BMS_PLAN_BUS b 
+		left join BMS_PLAN_BUS b1 on b.id=b1.id 
+		<if test="start_date !=null and start_date !=''">
+			and b1.dispatch_date > CONCAT(date_sub(#{start_date},interval 1 day),' 17:30:00')
+		</if>
+		<if test="end_date !=null and end_date !=''">
+			and b1.dispatch_date &lt;=concat(#{end_date},' 17:30:00')
+		</if>		
+		LEFT JOIN BMS_PLAN_BUS b2 ON b.id=b2.id AND b2.dispatch_date != ''
+		where b.dispatch_date != '' and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=dp.order_id
+		where dp.factory_id=#{factory_id} and fo.status in ('1','0')
+		<if test="order_no !=null and order_no !=''">
+			and o.order_no like concat(#{order_no},'%')
+		</if>
+		group by dp.order_id
 		) record  
 		left join 
 		(
@@ -1464,9 +1491,9 @@
 		union all
 		select e.detailed_reasons
 		from BMS_PD_PRODUCTION_EXCEPTION e
-		left join BMS_PLAN_BUS b on b.bus_number=e.bus_number 
+		<!-- left join BMS_PLAN_BUS b on b.bus_number=e.bus_number  -->
 		where e.factory=#{factory} <!-- and e.start_time like concat(#{date_start},'%') --> 
 		and (e.finish_time&lt;=0 or e.finish_time>=#{date_start})
-		and b.order_id=#{order_id} and e.workshop=#{workshop_name}
+		and e.order_id=#{order_id} and e.workshop=#{workshop_name}
 	</select>
 </mapper>

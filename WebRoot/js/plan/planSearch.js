@@ -70,6 +70,8 @@ $(document).ready(function () {
 });
 
 function getSearch(){
+	var workshop = $('#search_workshop').find("option:selected").text();
+	if(workshop == '自制件')workshop='自制';
 	$.ajax({
 	    url: "showPlanSearch",
 	    dataType: "json",
@@ -77,7 +79,7 @@ function getSearch(){
 	    data: {
 	    	"factory_id": $('#search_factory').val(),
 	    	"order_no": $('#search_order_no').val().trim(),
-	    	"workshop": $('#search_workshop').find("option:selected").text(),
+	    	"workshop": workshop,
 	    	"start_date": $('#start_date').val(),
 	    	"end_date": $('#end_date').val(),
 	    },
@@ -199,17 +201,17 @@ function getSearch(){
     		$("#tr_doneRate").find("td").eq("10").html(tplan_zzoff==0?"-":(Math.round(treal_zzoff/tplan_zzoff * 10000) / 100.00 + "%"));
     		$("#tr_doneRate").find("td").eq("11").html(tplan_rk==0?"-":(Math.round(treal_rk/tplan_rk * 10000) / 100.00 + "%"));
     		
-    		$("#tr_undone").find("td").eq("1").html((treal_zzj-tplan_zzj)<0?"<span style='color:red'>"+(treal_zzj-tplan_zzj):(treal_zzj-tplan_zzj));
-    		$("#tr_undone").find("td").eq("2").html((treal_bjoff-tplan_bjoff)<0?"<span style='color:red'>"+(treal_bjoff-tplan_bjoff):(treal_bjoff-tplan_bjoff));
-    		$("#tr_undone").find("td").eq("3").html((treal_hzon-tplan_hzon)<0?"<span style='color:red'>"+(treal_hzon-tplan_hzon):(treal_hzon-tplan_hzon));
-    		$("#tr_undone").find("td").eq("4").html((treal_hzoff-tplan_hzoff)<0?"<span style='color:red'>"+(treal_hzoff-tplan_hzoff):(treal_hzoff-tplan_hzoff));
-    		$("#tr_undone").find("td").eq("5").html((treal_tzon-tplan_tzon)<0?"<span style='color:red'>"+(treal_tzon-tplan_tzon):(treal_tzon-tplan_tzon));
-    		$("#tr_undone").find("td").eq("6").html((treal_tzoff-tplan_tzoff)<0?"<span style='color:red'>"+(treal_tzoff-tplan_tzoff):(treal_tzoff-tplan_tzoff));
-    		$("#tr_undone").find("td").eq("7").html((treal_dpon-tplan_dpon)<0?"<span style='color:red'>"+(treal_dpon-tplan_dpon):(treal_dpon-tplan_dpon));
-    		$("#tr_undone").find("td").eq("8").html((treal_dpoff-tplan_dpoff)<0?"<span style='color:red'>"+(treal_dpoff-tplan_dpoff):(treal_dpoff-tplan_dpoff));
-    		$("#tr_undone").find("td").eq("9").html((treal_zzon-tplan_zzon)<0?"<span style='color:red'>"+(treal_zzon-tplan_zzon):(treal_zzon-tplan_zzon));
-    		$("#tr_undone").find("td").eq("10").html((treal_zzoff-tplan_zzoff)<0?"<span style='color:red'>"+(treal_zzoff-tplan_zzoff):(treal_zzoff-tplan_zzoff));
-    		$("#tr_undone").find("td").eq("11").html((treal_rk-tplan_rk)<0?"<span style='color:red'>"+(treal_rk-tplan_rk):(treal_rk-tplan_rk));
+    		$("#tr_undone").find("td").eq("1").html((treal_zzj-tplan_zzj)<0?"<span style='color:red'>"+(tplan_zzj-treal_zzj):(treal_zzj-tplan_zzj));
+    		$("#tr_undone").find("td").eq("2").html((treal_bjoff-tplan_bjoff)<0?"<span style='color:red'>"+(tplan_bjoff-treal_bjoff):(treal_bjoff-tplan_bjoff));
+    		$("#tr_undone").find("td").eq("3").html((treal_hzon-tplan_hzon)<0?"<span style='color:red'>"+(tplan_hzon-treal_hzon):(treal_hzon-tplan_hzon));
+    		$("#tr_undone").find("td").eq("4").html((treal_hzoff-tplan_hzoff)<0?"<span style='color:red'>"+(tplan_hzoff-treal_hzoff):(treal_hzoff-tplan_hzoff));
+    		$("#tr_undone").find("td").eq("5").html((treal_tzon-tplan_tzon)<0?"<span style='color:red'>"+(tplan_tzon-treal_tzon):(treal_tzon-tplan_tzon));
+    		$("#tr_undone").find("td").eq("6").html((treal_tzoff-tplan_tzoff)<0?"<span style='color:red'>"+(tplan_tzoff-treal_tzoff):(treal_tzoff-tplan_tzoff));
+    		$("#tr_undone").find("td").eq("7").html((treal_dpon-tplan_dpon)<0?"<span style='color:red'>"+(tplan_dpon-treal_dpon):(treal_dpon-tplan_dpon));
+    		$("#tr_undone").find("td").eq("8").html((treal_dpoff-tplan_dpoff)<0?"<span style='color:red'>"+(tplan_dpoff-treal_dpoff):(treal_dpoff-tplan_dpoff));
+    		$("#tr_undone").find("td").eq("9").html((treal_zzon-tplan_zzon)<0?"<span style='color:red'>"+(tplan_zzon-treal_zzon):(treal_zzon-tplan_zzon));
+    		$("#tr_undone").find("td").eq("10").html((treal_zzoff-tplan_zzoff)<0?"<span style='color:red'>"+(tplan_zzoff-treal_zzoff):(treal_zzoff-tplan_zzoff));
+    		$("#tr_undone").find("td").eq("11").html((treal_rk-tplan_rk)<0?"<span style='color:red'>"+(tplan_rk-treal_rk):(treal_rk-tplan_rk));
 
 	    	
 	    }

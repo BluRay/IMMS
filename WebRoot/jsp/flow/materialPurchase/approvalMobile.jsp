@@ -70,11 +70,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 															</a>
 														</div>
 	                                                    <div class="panel-collapse collapse" id="faq-1-2-${status.index}">
-															<div class="panel-body">
+															<div class="panel-body" style="margin:-10px">
 																<div id="faq-list-nested-1" class="panel-group accordion-style1 accordion-style2">
 																	<div class="panel panel-default">
 																		<div class="panel-heading">
-																			<a href="#faq-list-1-sub-1" data-parent="#faq-list-nested-1" data-toggle="collapse" class="accordion-toggle collapsed">
+																			<a href="#faq-list-1-sub-1" data-parent="#faq-list-nested-1" data-toggle="collapse" class="accordion-toggle collapsed" style="margin-bottom:-20px">
 																				<i class="ace-icon fa smaller-80 middle" data-icon-hide="ace-icon fa" data-icon-show="ace-icon fa"></i>&nbsp;
 										                                                                                                       审批意见:  ${item['description'] }
 																			</a>
@@ -91,10 +91,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									</div>
 <!-- 									<div class="scrollable" data-size="100"> -->
 <!-- 										<div class="tab-content no-border padding-24"> -->
-										    <div id="faq-tab-2" class="table tab-pane in active" style="margin-top:20px" data-size="100">  
+										    <div id="faq-tab-2" class="table tab-pane in active" style="margin-top:10px" data-size="100">  
 											    <br>
 										        <div class="table-tr" style="margin-top:5px">  
-										            <div class="table-td form-group" style="margin-top:5px">
+										            <div class="table-td form-group" style="margin-top:0px">
 										                <div style=" float:left">&nbsp;审批意见:</div>
 										                <div  style=" float:left">
 										                <textarea style="width:260px;height:60px" id="description" name="description"></textarea>

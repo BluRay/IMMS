@@ -145,8 +145,8 @@ function ajaxQuery(){
 		            {"title":"座位数","class":"center","data":"bus_seats","defaultContent": ""},
 		            {"title":"额定载客人数","class":"center","data": "passenger_num","defaultContent": ""},
 		            {"title":"轮胎规格","class":"center","data":"tire_type","defaultContent": ""},		            
-		            {"title":"电池容量","class":"center","data":"battery_capacity","defaultContent": ""},		            
-		            {"title":"额定电压","class":"center","data": "rated_voltage","defaultContent": ""},		            
+		            //{"title":"电池容量","class":"center","data":"battery_capacity","defaultContent": ""},		            
+		            //{"title":"额定电压","class":"center","data": "rated_voltage","defaultContent": ""},		            
 		            {"title":"弹簧片数","class":"center","data":"spring_num","defaultContent": ""},
 		            {"title":"底盘生产日期","class":"center","data":"dp_production_date","defaultContent": ""},
 		            {"title":"底盘资质地","class":"center","data":"dp_zzd","defaultContent": ""},
@@ -203,8 +203,8 @@ function showEditPage(row){
 	$("#bus_seats").val(row.bus_seats);
 	$("#passenger_num").val(row.passenger_num);
 	$("#tire_type").val(row.tire_type);
-	$("#battery_capacity").val(row.battery_capacity);
-	$("#rated_voltage").val(row.rated_voltage);
+	//$("#battery_capacity").val(row.battery_capacity);
+	//$("#rated_voltage").val(row.rated_voltage);
 	$("#spring_num").val(row.spring_num);
 	$("#dp_production_date").val(row.dp_production_date);
 	$("#dp_zzd").val(row.dp_zzd);
@@ -265,8 +265,8 @@ function ajaxAdd(){
 			bus_seats:$("#bus_seats").val(),
 			passenger_num:$("#passenger_num").val(),
 			tire_type:$("#tire_type").val(),
-			battery_capacity:$("#battery_capacity").val(),
-			rated_voltage:$("#rated_voltage").val(),
+			battery_capacity:"",		//$("#battery_capacity").val(),
+			rated_voltage:"",			//$("#rated_voltage").val(),
 			spring_num:$("#spring_num").val(),
 			dp_production_date:$("#dp_production_date").val(),
 			dp_zzd:$("#dp_zzd").val(),
@@ -305,8 +305,8 @@ function ajaxEdit(bus_number){
 			bus_seats:$("#bus_seats").val(),
 			passenger_num:$("#passenger_num").val(),
 			tire_type:$("#tire_type").val(),
-			battery_capacity:$("#battery_capacity").val(),
-			rated_voltage:$("#rated_voltage").val(),
+			battery_capacity:"",		//$("#battery_capacity").val(),
+			rated_voltage:"",			//$("#rated_voltage").val(),
 			spring_num:$("#spring_num").val(),
 			dp_production_date:$("#dp_production_date").val(),
 			dp_zzd:$("#dp_zzd").val(),

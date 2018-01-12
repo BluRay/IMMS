@@ -96,6 +96,15 @@ $(document).ready(function () {
 		});
 	});
 	
+	$('#vin_factory_test').change(function(){
+		var vin_factory_test = $("#vin_factory_test").val();
+		if(vin_factory_test=='39'){
+			$('#new_WMI_extension_test').val('038');
+		}else{
+			$('#new_WMI_extension_test').val('');
+		}
+	});
+	
 	$("#btnGenVin").click (function () {
 		if($("#search_factory").val()==""){
 			alert("请选择工厂！");
@@ -255,7 +264,10 @@ $(document).ready(function () {
 					text: '<h5>'+response.data.message+'</h5>',
 					class_name: 'gritter-info'
 				});
-				$("#dialog-new").dialog("close");
+				$("#dialog-new-test").dialog("close");
+				
+				$("#testVin").prop("checked",'true');//全选
+				$("#search_factory").val($('#vin_factory_test').val());
 				ajaxQuery();
 			}
 		});

@@ -110,7 +110,7 @@
 							<input type="text"  class="input-medium" style="width:100%" placeholder="轮胎规格..." id="tire_type" />
 						</div>
 					</div>
-					
+					<!--
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="battery_capacity" style="width:21%">&nbsp;电池容量：</label>
 						<div class="col-sm-3">
@@ -120,7 +120,7 @@
 						<div class="col-sm-3">
 							<input type="text"  class="input-medium" style="width:100%" placeholder="额定电压..." id="rated_voltage" />
 						</div>
-					</div>
+					</div>  -->
 					<div class="form-group">						
 						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="spring_num" style="width:21%">&nbsp;弹簧片数：</label>
 						<div class="col-sm-3">
