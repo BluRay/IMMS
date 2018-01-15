@@ -80,7 +80,7 @@
         <!-- 连接池最小空闲 -->
         <property name="minIdle" value="0" />
         <!-- 获取连接最大等待时间 -->
-        <property name="maxWait" value="60000" />
+        <property name="maxWait" value="20000" />
     </bean> 
     <bean id="dataSource" class="com.byd.bms.util.DynamicDataSource">
     	<!-- 这里可以指定默认的数据源 -->

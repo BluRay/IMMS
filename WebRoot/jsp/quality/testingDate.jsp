@@ -47,20 +47,22 @@
 							<tr>
 								<td>工厂：</td>
 								<td><select id="search_factory" class="input-small" style="height: 30px;width:100px"></select></td>
-								<td>&nbsp;车型：</td>
-								<td><select id="search_bustype" class="input-small" style="height: 30px;width:80px"></select></td>
 								<td>&nbsp;订单：</td>
 								<td><input id="search_order_no" placeholder="请输入订单编号..." style="height: 30px;width:110px" type="text"></td>
-								<td>&nbsp;发车时间：</td>
-								<td><input id="start_date" placeholder="开始时间..." style="height: 30px;width:125px" type="text" onClick="WdatePicker({el:'start_date',dateFmt:'yyyy-MM-dd'});"> - <input id="end_date" placeholder="结束时间..." style="height: 30px;width:125px" type="text" onClick="WdatePicker({el:'end_date',dateFmt:'yyyy-MM-dd'});"></td>
+								<td>&nbsp;VIN/车号：</td>
+								<td><input id="search_busNum" placeholder="请输入VIN/车号..." style="height: 30px;width:120px" type="text"></td>
+								<td>&nbsp;起始车号：</td>
+								<td><input id="start_busNum" placeholder="开始车号..." style="height: 30px;width:80px" type="text"> - <input id="end_busNum" placeholder="结束车号..." style="height: 30px;width:80px" type="text"></td>
 								<td>
 									<input id="btnQuery" type="button" class="btn btn-sm btn-success" value="查询" style="margin-left: 2px;">
-									<input id="btnAdd" type="button" class="btn btn-sm btn-info" value="增加" style="margin-left: 2px;">
 								</td>
 								<td></td>
 							</tr>
 						</table>
 					</div>
+					
+					<table id="tableData" class="table table-striped table-bordered table-hover" style="font-size: 12px;">
+					</table>
 					
 					</div>
 			</div><!-- /.main-content -->
@@ -75,12 +77,10 @@
 	<script src="../assets/js/jquery-ui.min.js"></script>
 	<script src="../assets/js/jquery.ui.touch-punch.min.js"></script>
 	<script src="../assets/js/jquery.gritter.min.js"></script>
-
 	<script src="../assets/js/jquery.dataTables.min.js"></script>
 	<script src="../assets/js/jquery.dataTables.bootstrap.js"></script>
 	<script src="../assets/js/dataTables.fixedColumns.min.js"></script>
 	<script src="../assets/js/bootstrap3-typeahead.js"></script>
-	<script type="text/javascript" src="../js/datePicker/WdatePicker.js"></script>
 	<script type="text/javascript" src="../js/common.js"></script>
-	<script type="text/javascript" src="../js/plan/busDispatchPlan.js"></script>
+	<script type="text/javascript" src="../js/quality/testingDate.js"></script>
 </html>

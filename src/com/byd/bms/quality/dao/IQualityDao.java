@@ -105,6 +105,8 @@ public interface IQualityDao {
 	public int updateProblemImprove(ProblemImproveBean problemImprove);
 	
 	public int getTestingDate(Map<String, Object> conditionMap);
+	public List<Map<String,String>> getTestingBusList(Map<String, Object> conditionMap);
+	public Map<String,Object> getBusTestingDate(Map<String, Object> conditionMap);
 	
 	//======================== yk end=================================//
 		

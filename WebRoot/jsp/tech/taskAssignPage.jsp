@@ -121,7 +121,7 @@
 							<ul class="nav nav-tabs" id="new_tab" role="tablist">
 								<li class="active"><a href="#new_task1" data-toggle="tab"
 								style="font-size: 14px; color: #333">订单1</a></li>
-								<li><i id="add_tech_detail" class="glyphicon glyphicon-plus bigger-130" style="cursor: pointer; padding-top: 5px;padding-left:5px;color: blue;"></i></li>							
+								<!-- <li><i id="add_tech_detail" class="glyphicon glyphicon-plus bigger-130" style="cursor: pointer; padding-top: 5px;padding-left:5px;color: blue;"></i></li>	-->						
 							</ul>
 							</div>
 							<div class="tab-content" id="new_accordion">

@@ -153,7 +153,7 @@ function ajaxEdit(task_id,task_detail_id,task_content,tech_order_no,switch_mode,
 		}
 	});
 	
-	$("#new_tab").html("<li><i id=\"add_tech_detail\" class=\"glyphicon glyphicon-plus bigger-130\" style=\"cursor: pointer;  padding-top: 5px;padding-left:5px; color: blue;\"></i></li>");
+	$("#new_tab").html("<li><i id=\"add_tech_detail\" class=\"glyphicon glyphicon-plus bigger-130\" style=\"cursor: pointer;display:none;  padding-top: 5px;padding-left:5px; color: blue;\"></i></li>");
 	var is_follow=false;
 	var tech_list=getTechList(task_id);
 	if(tech_list.length==0){
@@ -323,7 +323,7 @@ function assignTechTask(){
 }
 
 $("body").on("click","#add_tech_detail",function(e){
-	addTechDetail();
+	////addTechDetail();
 });
 
 //根据技改任务ID查询技改实施范围信息

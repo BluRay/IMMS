@@ -558,8 +558,22 @@ public class QualityServiceImpl implements IQualityService {
 	}
 	
 	@Override
-	public Map<String, Object> getQualityAbnormalRecordList(
-			Map<String, Object> conMap) {
+	public List<Map<String,String>> getTestingBusList(Map<String, Object> conditionMap){
+		List<Map<String, String>> buslist=new ArrayList<Map<String, String>>();
+		buslist = qualityDao.getTestingBusList(conditionMap);		
+		return buslist;
+	}
+	
+	@Override
+	@DataSource("dataSourceTestingLineCS")
+	public Map<String, Object> getBusTestingDate(Map<String, Object> conditionMap){
+		Map<String, Object> result=new HashMap<String,Object>();
+		result = qualityDao.getBusTestingDate(conditionMap);		
+		return result;
+	}
+	
+	@Override
+	public Map<String, Object> getQualityAbnormalRecordList(Map<String, Object> conMap) {
 		Map<String, Object> result=new HashMap<String,Object>();
 		int totalCount= qualityDao.getQualityAbnormalRecordCount(conMap);
 		List<Map<String,Object>> datalist= qualityDao.getQualityAbnormalRecordList(conMap);

@@ -9,7 +9,6 @@
 		<result property="bugType" column="bug_type" />
 		<result property="bug" column="bug" />
 		<result property="faultLevel" column="serious_level" />
-		<result property="faultType" column="fault_type" />
 		<result property="workshop" column="workshop_name" />
 		<result property="workgroup" column="workgroup_name" />
 		<result property="editorId" column="editor_id" />
@@ -491,6 +490,25 @@
 	
 	<select id="getTestingDate" parameterType="Map" resultType="int">
 		select count(*) from ac_car_info
+	</select>
+	<select id="getTestingBusList" parameterType="Map" resultType="Map">
+		SELECT B.vin,B.bus_number,RIGHT(B.bus_number,4) FROM BMS_PLAN_BUS B WHERE B.factory_id = #{factory_id} 
+		<if test="order_no !=null and order_no !=''">
+		AND B.order_id = (SELECT O.id FROM BMS_OR_ORDER O WHERE O.order_no = #{order_no})
+		</if>
+		<if test="bus_number !=null and bus_number !=''">
+		AND B.bus_number = #{bus_number}
+		</if>
+		<if test="start_busNum !=null and start_busNum !=''">
+		AND RIGHT(B.bus_number,4)+0 >= #{start_busNum}
+		</if>
+		<if test="end_busNum !=null and end_busNum !=''">
+		<![CDATA[ AND RIGHT(B.bus_number,4)+0 <= #{end_busNum} ]]>
+		</if>
+	</select>
+	<select id="getBusTestingDate" parameterType="Map" resultType="Map">
+		SELECT TOP 1 I.* FROM AC_CAR_INFO I WHERE I.VIN = #{vin}
+		ORDER BY I.VID DESC
 	</select>
 	
 	<select id="getQualityTargetList" parameterType="Map" resultType="Map">

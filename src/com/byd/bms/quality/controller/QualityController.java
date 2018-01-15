@@ -11,9 +11,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.ServletContext;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +25,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.ContextLoader;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.byd.bms.order.service.IOrderService;
 import com.byd.bms.quality.service.IQualityService;
 import com.byd.bms.quality.model.BmsBaseQCStdRecord;
@@ -38,9 +35,7 @@ import com.byd.bms.quality.model.QualityTargetBean;
 import com.byd.bms.quality.model.StdFaultLibBean;
 import com.byd.bms.setting.model.BmsBaseBusType;
 import com.byd.bms.setting.model.BmsBaseFactory;
-import com.byd.bms.setting.model.BmsBaseWorkshop;
 import com.byd.bms.setting.service.IBaseDataService;
-import com.byd.bms.setting.service.ISettingService;
 import com.byd.bms.util.ExcelModel;
 import com.byd.bms.util.ExcelTool;
 import com.byd.bms.util.controller.BaseController;
@@ -1963,6 +1958,46 @@ public class QualityController extends BaseController {
 		mv.setViewName("quality/testingDate");
         return mv;  
     }
+	
+	@RequestMapping("/getTestingDateList")
+	@ResponseBody
+	public ModelMap getTestingDateList() {
+		String factory_id=request.getParameter("factory_id");
+		String order_no=request.getParameter("order_no");
+		String bus_number=request.getParameter("bus_number");
+		String start_busNum=request.getParameter("start_busNum");
+		String end_busNum=request.getParameter("end_busNum");
+		logger.info("-->getTestingDateList factory_id = " + factory_id + ";order_no = " + order_no + ";bus_number = " + bus_number);
+		
+		Map<String,Object> condMap = new HashMap<String,Object>();
+		condMap.put("factory_id", factory_id);
+		condMap.put("order_no", order_no);
+		condMap.put("bus_number", bus_number);
+		condMap.put("start_busNum", start_busNum);
+		condMap.put("end_busNum", end_busNum);
+		
+		List<Map<String, String>> buslist=new ArrayList<Map<String, String>>();
+		buslist = qualityService.getTestingBusList(condMap);
+
+		List<Map<String,Object>> datalist = new ArrayList<Map<String, Object>>();
+		
+		for(int i=0;i<buslist.size();i++) {
+			logger.info("-->getTestingBusList bus_number : " + buslist.get(i).get("vin"));
+			Map<String,Object> condMap2 = new HashMap<String,Object>();
+			condMap2.put("vin", buslist.get(i).get("vin"));
+			Map<String, Object> testingInfo =new HashMap<String,Object>();
+			testingInfo = qualityService.getBusTestingDate(condMap2);
+			logger.info("-->FACTORY_TYPE = " + testingInfo.get("FACTORY_TYPE") + ";LICENSE_NO = " + testingInfo.get("LICENSE_NO") + ";ENGINE_NO = " + testingInfo.get("ENGINE_NO"));
+		}
+		
+		Map<String,Object> result = new HashMap<String,Object>();
+		result.put("draw", (request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1);
+		//result.put("recordsTotal", totalCount);
+		//result.put("recordsFiltered", totalCount);
+		//result.put("data", datalist);
+		model.addAllAttributes(result);
+		return model;
+	}
 	
 	@RequestMapping("/getTestingDate")
 	@ResponseBody
