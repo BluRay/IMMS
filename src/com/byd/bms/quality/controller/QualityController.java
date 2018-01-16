@@ -1980,21 +1980,34 @@ public class QualityController extends BaseController {
 		buslist = qualityService.getTestingBusList(condMap);
 
 		List<Map<String,Object>> datalist = new ArrayList<Map<String, Object>>();
-		
+		int totalCount = 0;
 		for(int i=0;i<buslist.size();i++) {
 			logger.info("-->getTestingBusList bus_number : " + buslist.get(i).get("vin"));
 			Map<String,Object> condMap2 = new HashMap<String,Object>();
 			condMap2.put("vin", buslist.get(i).get("vin"));
 			Map<String, Object> testingInfo =new HashMap<String,Object>();
-			testingInfo = qualityService.getBusTestingDate(condMap2);
-			logger.info("-->FACTORY_TYPE = " + testingInfo.get("FACTORY_TYPE") + ";LICENSE_NO = " + testingInfo.get("LICENSE_NO") + ";ENGINE_NO = " + testingInfo.get("ENGINE_NO"));
+			if(factory_id.equals("16")) {	//长沙工厂
+				testingInfo = qualityService.getBusTestingDateCS(condMap2);
+			}
+			// TODO 其他工厂	
+			
+			
+			if(testingInfo != null) {
+				logger.info("-->FACTORY_TYPE = " + testingInfo.get("FACTORY_TYPE") + ";LICENSE_NO = " + testingInfo.get("LICENSE_NO") + ";ENGINE_NO = " + testingInfo.get("ENGINE_NO"));
+				//写入本地数据库
+				
+				//封装返回结果
+				totalCount++;
+				datalist.add(testingInfo);
+			}
+			
 		}
 		
 		Map<String,Object> result = new HashMap<String,Object>();
 		result.put("draw", (request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1);
-		//result.put("recordsTotal", totalCount);
-		//result.put("recordsFiltered", totalCount);
-		//result.put("data", datalist);
+		result.put("recordsTotal", totalCount);
+		result.put("recordsFiltered", totalCount);
+		result.put("data", datalist);
 		model.addAllAttributes(result);
 		return model;
 	}

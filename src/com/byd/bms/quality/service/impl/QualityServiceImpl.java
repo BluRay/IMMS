@@ -566,7 +566,7 @@ public class QualityServiceImpl implements IQualityService {
 	
 	@Override
 	@DataSource("dataSourceTestingLineCS")
-	public Map<String, Object> getBusTestingDate(Map<String, Object> conditionMap){
+	public Map<String, Object> getBusTestingDateCS(Map<String, Object> conditionMap){
 		Map<String, Object> result=new HashMap<String,Object>();
 		result = qualityDao.getBusTestingDate(conditionMap);		
 		return result;

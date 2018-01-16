@@ -33,7 +33,7 @@ function ajaxQuery(){
 	$("#btnQuery").attr("disabled","disabled");
 	$("#btnQuery").val("查询中,请稍候...");
 	$("#tableData").dataTable({
-		serverSide: true,paiging:true,ordering:false,searching: false,bAutoWidth:false,
+		serverSide: true,paiging:false,ordering:false,searching: false,bAutoWidth:false,
 		destroy: true,sScrollY: table_height,scrollX: "100%",orderMulti:false,
 		pageLength: 25,pagingType:"full_numbers",lengthChange:false,
 		language: {

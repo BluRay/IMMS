@@ -73,7 +73,7 @@ public interface IQualityService {
 	
 	public int getTestingDate();
 	public List<Map<String,String>> getTestingBusList(Map<String, Object> conditionMap);
-	public Map<String, Object> getBusTestingDate(Map<String, Object> conditionMap);
+	public Map<String, Object> getBusTestingDateCS(Map<String, Object> conditionMap);
 	
 	//======================== yk end=================================//
 			
