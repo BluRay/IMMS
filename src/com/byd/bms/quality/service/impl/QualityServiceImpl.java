@@ -558,10 +558,35 @@ public class QualityServiceImpl implements IQualityService {
 	}
 	
 	@Override
+	@DataSource("dataSourceTestingLineJCX")
+	public int insertJcxBusInfo(Map<String, Object> conditionMap) {
+		return qualityDao.insertJcxBusInfo(conditionMap);
+	}
+	
+	@Override
+	@DataSource("dataSourceTestingLineJCX")
+	public int updateJcxBusInfo(Map<String, Object> conditionMap) {
+		return qualityDao.updateJcxBusInfo(conditionMap);
+	}
+	
+	@Override
+	@DataSource("dataSourceTestingLineJCX")
+	public int checkJcxBusInfoId(Map<String, Object> conditionMap) {
+		return qualityDao.checkJcxBusInfoId(conditionMap);
+	}
+	
+	@Override
 	public List<Map<String,String>> getTestingBusList(Map<String, Object> conditionMap){
 		List<Map<String, String>> buslist=new ArrayList<Map<String, String>>();
 		buslist = qualityDao.getTestingBusList(conditionMap);		
 		return buslist;
+	}
+	
+	@Override
+	public int getTestingBusListCount(Map<String, Object> conditionMap){
+		int count = 0;
+		count = qualityDao.getTestingBusListCount(conditionMap);		
+		return count;
 	}
 	
 	@Override

@@ -1959,6 +1959,9 @@ public class QualityController extends BaseController {
         return mv;  
     }
 	
+	/**
+	 * 查询检测线数据 制程品质->检测数据查询->查询
+	 */
 	@RequestMapping("/getTestingDateList")
 	@ResponseBody
 	public ModelMap getTestingDateList() {
@@ -1967,48 +1970,84 @@ public class QualityController extends BaseController {
 		String bus_number=request.getParameter("bus_number");
 		String start_busNum=request.getParameter("start_busNum");
 		String end_busNum=request.getParameter("end_busNum");
-		logger.info("-->getTestingDateList factory_id = " + factory_id + ";order_no = " + order_no + ";bus_number = " + bus_number);
-		
+		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
+		int start=(request.getParameter("start")!=null)?Integer.parseInt(request.getParameter("start")):0;		//分页数据起始数
+		int length=(request.getParameter("length")!=null)?Integer.parseInt(request.getParameter("length")):500;	//每一页数据条数
 		Map<String,Object> condMap = new HashMap<String,Object>();
 		condMap.put("factory_id", factory_id);
 		condMap.put("order_no", order_no);
 		condMap.put("bus_number", bus_number);
 		condMap.put("start_busNum", start_busNum);
 		condMap.put("end_busNum", end_busNum);
-		
+		condMap.put("draw", draw);
+		condMap.put("start", start);
+		condMap.put("length", length);
 		List<Map<String, String>> buslist=new ArrayList<Map<String, String>>();
 		buslist = qualityService.getTestingBusList(condMap);
 
 		List<Map<String,Object>> datalist = new ArrayList<Map<String, Object>>();
-		int totalCount = 0;
+		int total = qualityService.getTestingBusListCount(condMap);
 		for(int i=0;i<buslist.size();i++) {
-			logger.info("-->getTestingBusList bus_number : " + buslist.get(i).get("vin"));
 			Map<String,Object> condMap2 = new HashMap<String,Object>();
 			condMap2.put("vin", buslist.get(i).get("vin"));
 			Map<String, Object> testingInfo =new HashMap<String,Object>();
-			if(factory_id.equals("16")) {	//长沙工厂
+			if(factory_id.equals("16")) {		//长沙工厂
 				testingInfo = qualityService.getBusTestingDateCS(condMap2);
 			}
 			// TODO 其他工厂	
 			
 			
 			if(testingInfo != null) {
-				logger.info("-->FACTORY_TYPE = " + testingInfo.get("FACTORY_TYPE") + ";LICENSE_NO = " + testingInfo.get("LICENSE_NO") + ";ENGINE_NO = " + testingInfo.get("ENGINE_NO"));
-				//写入本地数据库
-				
-				//封装返回结果
-				totalCount++;
+				testingInfo.put("bus_number", buslist.get(i).get("bus_number"));
+				datalist.add(testingInfo);
+			}else{
+				testingInfo =new HashMap<String,Object>();
+				testingInfo.put("bus_number", buslist.get(i).get("bus_number"));
+				testingInfo.put("VIN", buslist.get(i).get("vin"));
 				datalist.add(testingInfo);
 			}
 			
 		}
-		
 		Map<String,Object> result = new HashMap<String,Object>();
 		result.put("draw", (request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1);
-		result.put("recordsTotal", totalCount);
-		result.put("recordsFiltered", totalCount);
+		result.put("recordsTotal", total);
+		result.put("recordsFiltered", total);
 		result.put("data", datalist);
 		model.addAllAttributes(result);
+		return model;
+	}
+	
+	/**
+	 * 同步检测线数据到本地数据库 制程品质->检测数据查询->同步
+	 */
+	@RequestMapping("/getTestingDateSync")
+	@ResponseBody
+	public ModelMap getTestingDateSync() {
+		String factory_id=request.getParameter("factory_id");
+		String vin= request.getParameter("vin");
+		JSONArray jsonArray=JSONArray.fromObject(vin);
+		for (int i = 0; i < jsonArray.size(); i++) {
+			logger.info(jsonArray.get(i));
+			Map<String,Object> condMap2 = new HashMap<String,Object>();
+			condMap2.put("vin", jsonArray.get(i));
+			Map<String, Object> testingInfo =new HashMap<String,Object>();
+			if(factory_id.equals("16")) {			//长沙工厂
+				testingInfo = qualityService.getBusTestingDateCS(condMap2);
+			}
+			// TODO 其他工厂	
+			
+			if(testingInfo != null) {
+				//判断bms_jcx JCX_BUS_INFO 此车辆信息是否存在，存在则更新，否则新增
+				int check = qualityService.checkJcxBusInfoId(condMap2);
+				if(check == 0) {
+					qualityService.insertJcxBusInfo(testingInfo);
+				}else {
+					qualityService.updateJcxBusInfo(testingInfo);
+				}
+			}
+		}
+		initModel(true,"SUCCESS",null);
+		model = mv.getModelMap();
 		return model;
 	}
 	

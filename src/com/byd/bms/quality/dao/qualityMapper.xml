@@ -491,6 +491,21 @@
 	<select id="getTestingDate" parameterType="Map" resultType="int">
 		select count(*) from ac_car_info
 	</select>
+	<select id="getTestingBusListCount" parameterType="Map" resultType="int">
+		SELECT COUNT(B.vin) FROM BMS_PLAN_BUS B WHERE B.factory_id = #{factory_id} 
+		<if test="order_no !=null and order_no !=''">
+		AND B.order_id = (SELECT O.id FROM BMS_OR_ORDER O WHERE O.order_no = #{order_no})
+		</if>
+		<if test="bus_number !=null and bus_number !=''">
+		AND B.bus_number = #{bus_number}
+		</if>
+		<if test="start_busNum !=null and start_busNum !=''">
+		AND RIGHT(B.bus_number,4)+0 >= #{start_busNum}
+		</if>
+		<if test="end_busNum !=null and end_busNum !=''">
+		<![CDATA[ AND RIGHT(B.bus_number,4)+0 <= #{end_busNum} ]]>
+		</if> 
+	</select>
 	<select id="getTestingBusList" parameterType="Map" resultType="Map">
 		SELECT B.vin,B.bus_number,RIGHT(B.bus_number,4) FROM BMS_PLAN_BUS B WHERE B.factory_id = #{factory_id} 
 		<if test="order_no !=null and order_no !=''">
@@ -504,12 +519,88 @@
 		</if>
 		<if test="end_busNum !=null and end_busNum !=''">
 		<![CDATA[ AND RIGHT(B.bus_number,4)+0 <= #{end_busNum} ]]>
+		</if> 
+		ORDER BY B.bus_number
+		<if test="start !=null">
+			LIMIT #{start} ,#{length} 
 		</if>
 	</select>
 	<select id="getBusTestingDate" parameterType="Map" resultType="Map">
-		SELECT TOP 1 I.* FROM AC_CAR_INFO I WHERE I.VIN = #{vin}
-		ORDER BY I.VID DESC
+		SELECT I.VID,I.VIN,I.LICENSE_NO,I.ENGINE_NO AS 'motor_number',I.FACTORY_TYPE AS 'bus_type',
+		I.LICENSE_TYPE AS 'license_type',I.CAR_TYPE AS 'bus_vehicle_type',I.FUEL_TYPE AS 'fuel_type',
+		I.UNDERPAN_TYPE AS 'chassis_model',I.UNDERPAN_NO AS 'chassis_number',
+		B.CHECK_TYPE AS 'check_type',LEFT(CONVERT(varchar,B.DEBUT_DATE,20),10) AS 'register_date',LEFT(CONVERT(varchar,B.FINISH_DATE,20),10) AS 'manufacture_date',
+		LEFT(CONVERT(varchar,B.CHECK_DATE,20),10) AS 'check_date',B.CHECK_NO AS 'check_number',B.CHECK_TIMES AS 'check_times',
+		B.IF_PASSED AS 'is_passed',B.REMARK AS 'test_results',B.IF_PASSED_AJ AS 'is_passed_aj',
+		C.SPDOMETER_VAL AS 'speed',C.SPDOMETER_ERR AS 'speed_mistake',
+		D.S1_LFT_WGT_VAL AS 's1_lft_wgt_val',D.S1_RGT_WGT_VAL AS 's1_rgt_wgt_val',
+		D.S1_TOT_WGT_VAL AS 's1_tot_wgt_val',D.S2_LFT_WGT_VAL AS 's2_lft_wgt_val',
+		D.S2_RGT_WGT_VAL AS 's2_rgt_wgt_val',D.S2_TOT_WGT_VAL AS 's2_tot_wgt_val',
+		D.WGT_CAL_VAL AS 'wgt_cal_val',D.TOT_WGT_VAL AS 'tot_wgt_val',D.S1_LFT_EFF_FRS_VAL AS 's1_lft_eff_frs_val',
+		D.S1_RGT_EFF_FRS_VAL AS 's1_rgt_eff_frs_val',D.S1_EFF_PEC_VAL AS 's1_eff_pec_val',
+		D.S1_LFT_EQU_FRS_VAL AS 's1_lft_equ_frs_val',D.S1_RGT_EQU_FRS_VAL AS 's1_rgt_equ_frs_val',
+		D.S1_EQU_PEC_VAL AS 's1_equ_pec_val',D.S1_LFT_LAG_FRS_VAL AS 's1_lft_lag_frs_val',
+		D.S1_LFT_LAG_PEC_VAL AS 's1_lft_lag_pec_val',D.S1_RGT_LAG_FRS_VAL AS 's1_rgt_lag_frs_val',
+		D.S1_RGT_LAG_PEC_VAL AS 's1_rgt_lag_pec_val',D.S1_COORD_VAL AS 's1_coord_val',
+		D.S2_LFT_EFF_FRS_VAL AS 's2_lft_eff_frs_val',D.S2_RGT_EFF_FRS_VAL AS 's2_rgt_eff_frs_val',
+		D.S2_EFF_PEC_VAL AS 's2_eff_pec_val',D.S2_LFT_EQU_FRS_VAL AS 's2_lft_equ_frs_val',
+		D.S2_RGT_EQU_FRS_VAL AS 's2_rgt_equ_frs_val',D.S2_EQU_PEC_VAL AS 's2_equ_pec_val',
+		D.S2_LFT_LAG_FRS_VAL AS 's2_lft_lag_frs_val',D.S2_LFT_LAG_PEC_VAL AS 's2_lft_lag_pec_val',
+		D.S2_RGT_LAG_FRS_VAL AS 's2_rgt_lag_frs_val',D.S2_RGT_LAG_PEC_VAL AS 's2_rgt_lag_pec_val',
+		D.S2_COORD_VAL AS 's2_coord_val',D.PARK_LFT_EFF_FRS_VAL AS 'park_lft_eff_frs_val',
+		D.PARK_RGT_EFF_FRS_VAL AS 'park_rgt_eff_frs_val',D.PARK_EFF_PEC_VAL AS 'park_eff_pec_val',
+		D.TOT_EFF_FRS_VAL AS 'tot_eff_frs_val',D.TOT_EFF_PEC_VAL AS 'tot_eff_pec_val',
+		E.LHB_LIGHT_VAL AS 'lhb_light_val',E.RHB_LIGHT_VAL AS 'rhb_light_val',E.LHB_HEIGHT_VAL AS 'lhb_height_val',
+		E.RHB_HEIGHT_VAL AS 'rhb_height_val',E.LHB_LROFF_VAL AS 'lhb_lroff_val',
+		E.LHB_UDOBS_VAL AS 'lhb_udobs_val',E.LDB_LROFF_VAL AS 'ldb_lroff_val',E.LDB_UDOBS_VAL AS 'ldb_udobs_val',
+		E.RHB_LROFF_VAL AS 'rhb_lroff_val',E.RHB_UDOBS_VAL AS 'rhb_udobs_val',E.RDB_LROFF_VAL AS 'rdb_lroff_val',
+		E.RDB_UDOBS_VAL AS 'rdb_udobs_val',F.HORN_SOUND_VAL AS 'horn_level',G.SIDE_SLIDE_VAL AS 'side_slide_val'
+		
+		FROM AC_CAR_INFO I,AC_DATA_BASE B,AC_DATA_SPEED C,AC_DATA_BRAKES D,AC_DATA_LAMP E,AC_DATA_NOISE F,AC_DATA_STEER G
+		WHERE I.VIN = #{vin} AND I.VID = B.VID AND B.TID = (SELECT MAX(TID) FROM AC_DATA_BASE WHERE VID = B.VID)
+		AND C.TID = B.TID AND D.TID = B.TID AND E.TID = B.TID AND F.TID = B.TID AND G.TID = B.TID
 	</select>
+	<select id="checkJcxBusInfoId" parameterType="Map" resultType="int">
+		SELECT COUNT(id) FROM JCX_BUS_INFO WHERE vin = #{vin}
+	</select>
+	<insert id="insertJcxBusInfo" parameterType="Map" useGeneratedKeys="true" keyProperty="id">
+	INSERT INTO JCX_BUS_INFO (
+	bus_number,vin,motor_number,bus_type,license_type,bus_vehicle_type,fuel_type,chassis_number,chassis_model,
+	check_type,register_date,manufacture_date,check_date,check_number,check_times,is_passed,test_results,
+	is_passed_aj,speed,speed_mistake,s1_lft_wgt_val,s1_rgt_wgt_val,s1_tot_wgt_val,s2_lft_wgt_val,s2_rgt_wgt_val,
+	s2_tot_wgt_val,wgt_cal_val,tot_wgt_val,s1_lft_eff_frs_val,s1_rgt_eff_frs_val,s1_eff_pec_val,s1_lft_equ_frs_val,s1_rgt_equ_frs_val,
+	s1_equ_pec_val,s1_lft_lag_frs_val,s1_lft_lag_pec_val,s1_rgt_lag_frs_val,s1_rgt_lag_pec_val,s1_coord_val,s2_lft_eff_frs_val,s2_rgt_eff_frs_val,
+	s2_eff_pec_val,s2_lft_equ_frs_val,s2_rgt_equ_frs_val,s2_equ_pec_val,s2_lft_lag_frs_val,s2_lft_lag_pec_val,s2_rgt_lag_frs_val,s2_rgt_lag_pec_val,
+	s2_coord_val,park_lft_eff_frs_val,park_rgt_eff_frs_val,park_eff_pec_val,tot_eff_frs_val,tot_eff_pec_val)
+	VALUES(
+	#{LICENSE_NO},#{VIN},#{motor_number},#{bus_type},#{license_type},#{bus_vehicle_type},#{fuel_type},#{chassis_number},#{chassis_model},
+	#{check_type},#{register_date},#{manufacture_date},#{check_date},#{check_number},#{check_times},#{is_passed},#{test_results},
+	#{is_passed_aj},#{speed},#{speed_mistake},#{s1_lft_wgt_val},#{s1_rgt_wgt_val},#{s1_tot_wgt_val},#{s2_lft_wgt_val},#{s2_rgt_wgt_val},
+	#{s2_tot_wgt_val},#{wgt_cal_val},#{tot_wgt_val},#{s1_lft_eff_frs_val},#{s1_rgt_eff_frs_val},#{s1_eff_pec_val},#{s1_lft_equ_frs_val},#{s1_rgt_equ_frs_val},
+	#{s1_equ_pec_val},#{s1_lft_lag_frs_val},#{s1_lft_lag_pec_val},#{s1_rgt_lag_frs_val},#{s1_rgt_lag_pec_val},#{s1_coord_val},#{s2_lft_eff_frs_val},#{s2_rgt_eff_frs_val},
+	#{s2_eff_pec_val},#{s2_lft_equ_frs_val},#{s2_rgt_equ_frs_val},#{s2_equ_pec_val},#{s2_lft_lag_frs_val},#{s2_lft_lag_pec_val},#{s2_rgt_lag_frs_val},#{s2_rgt_lag_pec_val},
+	#{s2_coord_val},#{park_lft_eff_frs_val},#{park_rgt_eff_frs_val},#{park_eff_pec_val},#{tot_eff_frs_val},#{tot_eff_pec_val}
+	)
+	</insert>
+	<update id="updateJcxBusInfo" parameterType="Map">
+	UPDATE JCX_BUS_INFO
+	SET motor_number=#{motor_number}, bus_type=#{bus_type}, license_type=#{license_type}, bus_vehicle_type=#{bus_vehicle_type}, 
+	fuel_type=#{fuel_type}, chassis_number=#{chassis_number}, chassis_model=#{chassis_model}, check_type=#{check_type}, 
+	register_date=#{register_date}, manufacture_date=#{manufacture_date}, check_date=#{check_date}, check_number=#{check_number}, 
+	check_times=#{check_times}, is_passed=#{is_passed}, test_results=#{test_results}, is_passed_aj=#{is_passed_aj}, speed=#{speed}, 
+	speed_mistake=#{speed_mistake}, s1_lft_wgt_val=#{s1_lft_wgt_val}, s1_rgt_wgt_val=#{s1_rgt_wgt_val}, s1_tot_wgt_val=#{s1_tot_wgt_val}, 
+	s2_lft_wgt_val=#{s2_lft_wgt_val}, s2_rgt_wgt_val=#{s2_rgt_wgt_val}, s2_tot_wgt_val=#{s2_tot_wgt_val}, wgt_cal_val=#{wgt_cal_val}, 
+	tot_wgt_val=#{tot_wgt_val}, s1_lft_eff_frs_val=#{s1_lft_eff_frs_val}, s1_rgt_eff_frs_val=#{s1_rgt_eff_frs_val}, s1_eff_pec_val=#{s1_eff_pec_val}, 
+	s1_lft_equ_frs_val=#{s1_lft_equ_frs_val}, s1_rgt_equ_frs_val=#{s1_rgt_equ_frs_val}, s1_equ_pec_val=#{s1_equ_pec_val}, 
+	s1_lft_lag_frs_val=#{s1_lft_lag_frs_val}, s1_lft_lag_pec_val=#{s1_lft_lag_pec_val}, s1_rgt_lag_frs_val=#{s1_rgt_lag_frs_val}, 
+	s1_rgt_lag_pec_val=#{s1_rgt_lag_pec_val}, s1_coord_val=#{s1_coord_val}, s2_lft_eff_frs_val=#{s2_lft_eff_frs_val}, 
+	s2_rgt_eff_frs_val=#{s2_rgt_eff_frs_val}, s2_eff_pec_val=#{s2_eff_pec_val}, s2_lft_equ_frs_val=#{s2_lft_equ_frs_val}, 
+	s2_rgt_equ_frs_val=#{s2_rgt_equ_frs_val}, s2_equ_pec_val=#{s2_equ_pec_val}, s2_lft_lag_frs_val=#{s2_lft_lag_frs_val}, 
+	s2_lft_lag_pec_val=#{s2_lft_lag_pec_val}, s2_rgt_lag_frs_val=#{s2_rgt_lag_frs_val}, s2_rgt_lag_pec_val=#{s2_rgt_lag_pec_val}, 
+	s2_coord_val=#{s2_coord_val}, park_lft_eff_frs_val=#{park_lft_eff_frs_val}, park_rgt_eff_frs_val=#{park_rgt_eff_frs_val}, 
+	park_eff_pec_val=#{park_eff_pec_val}, tot_eff_frs_val=#{tot_eff_frs_val}, tot_eff_pec_val=#{tot_eff_pec_val}
+	WHERE vin=#{VIN}
+	</update>
 	
 	<select id="getQualityTargetList" parameterType="Map" resultType="Map">
 		select

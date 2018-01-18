@@ -106,8 +106,11 @@ public interface IQualityDao {
 	
 	public int getTestingDate(Map<String, Object> conditionMap);
 	public List<Map<String,String>> getTestingBusList(Map<String, Object> conditionMap);
+	public int getTestingBusListCount(Map<String, Object> conditionMap);
 	public Map<String,Object> getBusTestingDate(Map<String, Object> conditionMap);
-	
+	public int checkJcxBusInfoId(Map<String, Object> conditionMap);
+	public int insertJcxBusInfo(Map<String, Object> conditionMap);
+	public int updateJcxBusInfo(Map<String, Object> conditionMap);
 	//======================== yk end=================================//
 		
 		

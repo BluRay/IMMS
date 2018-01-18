@@ -65,6 +65,22 @@
         <!-- 获取连接最大等待时间 -->
         <property name="maxWait" value="60000" />
     </bean>    
+    <!-- 配置数据源 检测线 TESTING-LINE -->
+    <bean id="dataSourceTestingLineJCX" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <property name="url" value="${jdbc.url_jcx}" />
+		<property name="username" value="${jdbc.user_jcx}" />
+		<property name="password" value="${jdbc.pwd_jcx}" />
+        <!-- 初始化连接大小 -->
+        <property name="initialSize" value="0" />
+        <!-- 连接池最大使用连接数量 -->
+        <property name="maxActive" value="10" />
+        <!-- 连接池最大空闲 -->
+        <property name="maxIdle" value="10" />
+        <!-- 连接池最小空闲 -->
+        <property name="minIdle" value="0" />
+        <!-- 获取连接最大等待时间 -->
+        <property name="maxWait" value="10000" />
+    </bean> 
     <!-- 配置数据源 长沙检测线 TESTING-LINE-CS -->
     <bean id="dataSourceTestingLineCS" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
         <property name="url" value="${jdbc.url_cs}" />
@@ -81,8 +97,6 @@
         <property name="minIdle" value="0" />
         <!-- 获取连接最大等待时间 -->
         <property name="maxWait" value="10000" />
-        <property name="timeBetweenEvictionRunsMillis" value="30000" />
-		<property name="minEvictableIdleTimeMillis" value="60000" />
     </bean> 
     <bean id="dataSource" class="com.byd.bms.util.DynamicDataSource">
     	<!-- 这里可以指定默认的数据源 -->
@@ -92,6 +106,7 @@
                 <entry key="dataSourceMaster" value-ref="dataSourceMaster"/>
                 <entry key="dataSourceSlave" value-ref="dataSourceSlave"/>
                 <!-- 这里还可以加多个dataSource -->
+                <entry key="dataSourceTestingLineJCX" value-ref="dataSourceTestingLineJCX"/>
                 <entry key="dataSourceTestingLineCS" value-ref="dataSourceTestingLineCS"/>
             </map>
         </property>

@@ -50,18 +50,19 @@
 								<td>&nbsp;订单：</td>
 								<td><input id="search_order_no" placeholder="请输入订单编号..." style="height: 30px;width:110px" type="text"></td>
 								<td>&nbsp;VIN/车号：</td>
-								<td><input id="search_busNum" placeholder="请输入VIN/车号..." style="height: 30px;width:120px" type="text"></td>
+								<td><input id="search_busNum" placeholder="请输入VIN/车号..." style="height: 30px;width:150px" type="text"></td>
 								<td>&nbsp;起始车号：</td>
 								<td><input id="start_busNum" placeholder="开始车号..." style="height: 30px;width:80px" type="text"> - <input id="end_busNum" placeholder="结束车号..." style="height: 30px;width:80px" type="text"></td>
 								<td>
 									<input id="btnQuery" type="button" class="btn btn-sm btn-success" value="查询" style="margin-left: 2px;">
+									<input id="btnSync" type="button" class="btn btn-sm btn-info" value="同步" style="margin-left: 2px;">
 								</td>
 								<td></td>
 							</tr>
 						</table>
 					</div>
 					
-					<table id="tableData" class="table table-striped table-bordered table-hover" style="font-size: 12px;">
+					<table id="tableData" class="table table-striped table-bordered table-hover" style="overflow-x:auto;width:7000px;font-size: 12px;">
 					</table>
 					
 					</div>
