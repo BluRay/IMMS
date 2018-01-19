@@ -907,4 +907,125 @@
 		WHERE id = #{id}
 	</update>
 	
+	<select id="querySupplierCount" parameterType="String" resultType="int">
+		select count(id) from BMS_HR_SUPPLIER where supplier=#{supplier}
+	</select>
+	
+	<select id="querySupplierList" parameterType="String" resultType="Map">
+		select * from BMS_HR_SUPPLIER where 1=1
+		<if test="supplier !=null and supplier !='' ">
+			and supplier like concat('%',#{supplier},'%')
+		</if>
+		<if test="dutyman !=null and dutyman !='' ">
+			and dutyman like concat('%',#{dutyman},'%')
+		</if>
+		<if test="start !=null">
+			LIMIT #{start} ,#{length} 
+		</if>
+	</select>
+	
+	<select id="querySupplierListCount" parameterType="String" resultType="int">
+		select count(id) from BMS_HR_SUPPLIER where 1=1
+		<if test="supplier !=null and supplier !='' ">
+			and supplier like concat('%',#{supplier},'%')
+		</if>
+		<if test="dutyman !=null and dutyman !='' ">
+			and dutyman like concat('%',#{dutyman},'%')
+		</if>
+	</select>
+	
+	<update id="saveOrUpdateSupplier" parameterType="list" >
+		<foreach collection="list" item="detail" index="index" separator=";">
+			<if test="detail.exist_flag=='Y'.toString() ">
+				update BMS_HR_SUPPLIER set dutyman=#{detail.dutyman},telephone=#{detail.telephone},editor=#{detail.editor},edit_date=#{detail.edit_date},note=#{detail.note} 
+				where supplier=#{detail.supplier}
+			</if>
+			<if test="detail.exist_flag== 'N'.toString() ">
+				insert into BMS_HR_SUPPLIER (supplier,dutyman,telephone,editor,edit_date,note) 
+				values(#{detail.supplier},#{detail.dutyman},#{detail.telephone},#{detail.editor},#{detail.edit_date},#{detail.note} )
+			</if>
+			
+		</foreach>
+	</update>
+	
+	<delete id="deleteSupplier" parameterType="String">
+		delete from BMS_HR_SUPPLIER where find_in_set(id,#{ids})>0
+	</delete>
+	
+	<select id="querySupplierPriceCount" parameterType="Map" resultType="int">
+		select count(id) from BMS_HR_SUPPLIER_PRICE 
+		where 1=1 
+		<if test="supplier !=null and supplier !='' ">
+			and supplier=#{supplier}
+		</if>
+		<if test="workshop !=null and workshop !='' ">
+			and workshop=#{workshop}
+		</if>
+		<if test="workgroup !=null and workgroup !='' ">
+			and workgroup=#{workgroup}
+		</if>
+		<if test="team !=null and team !='' ">
+			and team=#{team}
+		</if>
+		
+	</select>
+	
+	<select id="queryStandardWorkgroup" parameterType="Map" resultType="Map">
+		SELECT w.workshop_name workshop,w1.workgroup_name workgroup,w2.workgroup_name team
+		FROM BMS_BASE_STANDARD_WORKGROUP w1
+		LEFT JOIN BMS_BASE_STANDARD_WORKGROUP w2 on w2.parent_id=w1.id
+		LEFT JOIN BMS_BASE_WORKSHOP w on w.id=w1.workshop_id
+		WHERE w.workshop_name=#{workshop} and w.delete_flag='0' 
+		and w1.workgroup_name=#{workgroup} and w2.workgroup_name=#{team}
+	</select>
+	
+	<update id="saveOrUpdateSupplierPrice" parameterType="list" >
+		<foreach collection="list" item="detail" index="index" separator=";">
+			<if test="detail.exist_flag=='Y'.toString() ">
+				update BMS_HR_SUPPLIER_PRICE set price=#{detail.price},editor=#{detail.editor},edit_date=#{detail.edit_date}
+				where supplier=#{detail.supplier} and workshop=#{detail.workshop} and workgroup=#{detail.workgroup} and team=#{detail.team}
+			</if>
+			<if test="detail.exist_flag== 'N'.toString() ">
+				insert into BMS_HR_SUPPLIER_PRICE (supplier,workshop,workgroup,team,price,editor,edit_date) 
+				values(#{detail.supplier},#{detail.workshop},#{detail.workgroup},#{detail.team},#{detail.price},#{detail.editor},#{detail.edit_date})
+			</if>
+			
+		</foreach>
+	</update>
+	
+	<select id="querySupplierPriceList" parameterType="String" resultType="Map">
+		select p.*,s.dutyman,s.telephone from BMS_HR_SUPPLIER_PRICE  p
+		left join BMS_HR_SUPPLIER s on s.supplier=p.supplier
+		where 1=1
+		<if test="supplier !=null and supplier !='' ">
+			and p.supplier like concat('%',#{supplier},'%')
+		</if>
+		<if test="workshop !=null and workshop !='' ">
+			and p.workshop = #{workshop}
+		</if>
+		<if test="workgroup !=null and workgroup !='' ">
+			and p.workgroup = #{workgroup}
+		</if>
+		<if test="start !=null">
+			LIMIT #{start} ,#{length} 
+		</if>
+	</select>
+	
+	<select id="querySupplierPriceListCount" parameterType="String" resultType="int">
+		select count(id) from BMS_HR_SUPPLIER_PRICE where 1=1
+		<if test="supplier !=null and supplier !='' ">
+			and supplier like concat('%',#{supplier},'%')
+		</if>
+		<if test="workshop !=null and workshop !='' ">
+			and workshop = #{workshop}
+		</if>
+		<if test="workgroup !=null and workgroup !='' ">
+			and workgroup = #{workgroup}
+		</if>
+	</select>
+	
+	<delete id="deleteSupplierPrice" parameterType="String">
+		delete from BMS_HR_SUPPLIER_PRICE where find_in_set(id,#{ids})>0
+	</delete>
+	
 </mapper>

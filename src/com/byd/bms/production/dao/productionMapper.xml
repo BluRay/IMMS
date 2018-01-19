@@ -3253,4 +3253,8 @@
 		call P_CACULATE_TMP_SALLARY(#{factory},#{workshop},'','',#{workMonth});
 	</select>
 	
+	<select id="queryPartsBatch" parameterType="String" resultType="int">
+		select count(id) from BMS_QM_KEY_PARTS 
+		where parts_name like '%动力电池包%' and batch=#{batch}
+	</select>
 </mapper>

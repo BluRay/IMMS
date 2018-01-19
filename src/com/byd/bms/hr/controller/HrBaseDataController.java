@@ -1440,4 +1440,327 @@ public class HrBaseDataController extends BaseController {
 	
 	/****************END YangKe**************************************************/
 	
+	/***************XJW Start***************************************************/
+	/**
+	 * 外包计件-供应商导入页面
+	 * @return
+	 */
+	@RequestMapping("/supplierData")
+	public ModelAndView supplierData() {
+		mv.setViewName("hr/supplierData");
+		return mv;
+	}
+	
+	/**
+	 * 外包计件-供应商列表查询
+	 * @return
+	 */
+	@RequestMapping("/getSupplierList")
+	@ResponseBody
+	public ModelMap getSupplierList(){
+		model.clear();
+		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
+		int start=(request.getParameter("offset")!=null)?Integer.parseInt(request.getParameter("offset")):0;		//分页数据起始数
+		int length=(request.getParameter("limit")!=null)?Integer.parseInt(request.getParameter("limit")):20;	//每一页数据条数
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("draw", draw);
+		condMap.put("start", start);
+		condMap.put("length", length);
+		condMap.put("supplier", request.getParameter("supplier"));
+		condMap.put("dutyman", request.getParameter("dutyman"));
+		
+		hrBaseDataService.getSupplierlist(condMap,model);
+		
+		return model;
+	}
+	
+	/**
+	 * 外包计件-供应商excel上传
+	 * @return
+	 */
+	@RequestMapping(value="/uploadSupplierFile",method=RequestMethod.POST)
+	@ResponseBody
+	public ModelMap uploadSupplierFile(@RequestParam(value="file",required=false) MultipartFile file){
+		logger.info("uploading Supplier List .....");
+		String fileName="supplierListTpl.xls";
+		try{
+		ExcelModel excelModel = new ExcelModel();
+		excelModel.setReadSheets(1);
+		excelModel.setStart(1);
+		Map<String, Integer> dataType = new HashMap<String, Integer>();
+		dataType.put("0", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("1", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("2", ExcelModel.CELL_TYPE_CANNULL);
+		dataType.put("3", ExcelModel.CELL_TYPE_CANNULL);
+		excelModel.setDataType(dataType);
+		excelModel.setPath(fileName);
+		File tempfile=new File(fileName);
+		file.transferTo(tempfile);
+		/**
+		 * 读取输入流中的excel文件，并且将数据封装到ExcelModel对象中
+		 */
+		InputStream is = new FileInputStream(tempfile);
+
+		ExcelTool excelTool = new ExcelTool();
+		excelTool.readExcel(is, excelModel);
+
+		List<Map<String, Object>> addList = new ArrayList<Map<String, Object>>();
+		int i=1;
+		int item_no=0;
+		String item="";
+		for (Object[] data : excelModel.getData()) {
+			Map<String, Object> infomap = new HashMap<String, Object>();
+			
+			infomap.put("item_no", i);
+			infomap.put("supplier", data[0] == null ? null : data[0].toString().trim());
+			infomap.put("dutyman", data[1] == null ? null : data[1].toString().trim());
+			infomap.put("telephone", data[2] == null ? null : data[2].toString().trim());
+			infomap.put("note", data[3] == null ? null : data[3].toString().trim());
+			String supplier=data[0] == null ? null : data[0].toString().trim();
+			String dutyman=data[1] == null ? null : data[1].toString().trim();
+			String telephone=data[2] == null ? null : data[2].toString().trim();
+			if(supplier==null||supplier.isEmpty()){
+				throw new Exception("数据错误，第"+i+"行数据“供应商名称”为空！");
+			}
+			if(dutyman==null||dutyman.isEmpty()){
+				throw new Exception("数据错误，第"+i+"行数据“供应商负责人”为空！");
+			}
+			if(telephone==null||telephone.isEmpty()){
+				throw new Exception("数据错误，第"+i+"行数据“联系电话”为空！");
+			}
+			/**
+			 * 查询供应商信息是否已经存在
+			 */
+			
+			int count=hrBaseDataService.querySupplierCount(supplier);
+			if(count>0){
+				infomap.put("exist_flag", "Y");
+			}else{
+				infomap.put("exist_flag", "N");
+			}
+			
+			addList.add(infomap);
+			i++;
+		}
+		initModel(true,"导入成功！",addList);
+		
+		}catch(Exception e){
+			initModel(false,"导入失败！"+e.getMessage(),null);
+		}
+		return mv.getModelMap();
+	}
+	
+	/**
+	 * 外包计件-供应商数据保存
+	 * @return
+	 */
+	@RequestMapping("/saveSupplierData")
+	@ResponseBody
+	public ModelMap saveSupplierData(){
+		model.clear();
+		String supplier_list=request.getParameter("supplier_list");
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String edit_user = String.valueOf(session.getAttribute("staff_number"));
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("supplier_list", supplier_list);
+		condMap.put("editor", edit_user);
+		condMap.put("edit_date", curTime);
+		
+		hrBaseDataService.saveSupplierData(condMap,model);
+		
+		return model;
+	}
+	
+	/**
+	 * 外包计件-供应商数据删除
+	 * @return
+	 */
+	@RequestMapping("/deleteSupplierData")
+	@ResponseBody
+	public ModelMap deleteSupplierData(){
+		model.clear();
+		String ids=request.getParameter("ids");
+		
+		hrBaseDataService.deleteSupplierData(ids,model);
+		return model;
+	}
+	
+	/**
+	 * 外包计件-供应商导入页面
+	 * @return
+	 */
+	@RequestMapping("/supplierPriceData")
+	public ModelAndView supplierPriceData() {
+		mv.setViewName("hr/supplierPriceData");
+		return mv;
+	}
+	
+	/**
+	 * 外包计件-供应商报价excel上传
+	 * @return
+	 */
+	@RequestMapping(value="/uploadSupplierPriceFile",method=RequestMethod.POST)
+	@ResponseBody
+	public ModelMap uploadSupplierPriceFile(@RequestParam(value="file",required=false) MultipartFile file){
+		logger.info("uploading Supplier Price List .....");
+		String fileName="supplierPriceListTpl.xls";
+		try{
+		ExcelModel excelModel = new ExcelModel();
+		excelModel.setReadSheets(1);
+		excelModel.setStart(1);
+		Map<String, Integer> dataType = new HashMap<String, Integer>();
+		dataType.put("0", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("1", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("2", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("3", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("4", ExcelModel.CELL_TYPE_STRING);
+		dataType.put("5", ExcelModel.CELL_TYPE_NUMERIC);
+		excelModel.setDataType(dataType);
+		excelModel.setPath(fileName);
+		File tempfile=new File(fileName);
+		file.transferTo(tempfile);
+		/**
+		 * 读取输入流中的excel文件，并且将数据封装到ExcelModel对象中
+		 */
+		InputStream is = new FileInputStream(tempfile);
+
+		ExcelTool excelTool = new ExcelTool();
+		excelTool.readExcel(is, excelModel);
+
+		List<Map<String, Object>> addList = new ArrayList<Map<String, Object>>();
+		int i=1;
+		int item_no=0;
+		String item="";
+		for (Object[] data : excelModel.getData()) {
+			Map<String, Object> infomap = new HashMap<String, Object>();
+			String supplier=data[0] == null ? null : data[0].toString().trim();
+			String dutyman=data[1] == null ? null : data[1].toString().trim();
+			String workshop=data[2] == null ? null : data[2].toString().trim();
+			String workgroup=data[3] == null ? null : data[3].toString().trim();
+			String team=data[4] == null ? null : data[4].toString().trim();
+			String price=data[5] == null ? null : data[5].toString().trim();
+			
+			infomap.put("item_no", i);
+			infomap.put("supplier", supplier);
+			infomap.put("dutyman", dutyman);
+			infomap.put("workshop", workshop);
+			infomap.put("workgroup", workgroup);
+			infomap.put("team", team);
+			infomap.put("price", price);
+			
+			if(supplier==null||supplier.isEmpty()){
+				throw new Exception("数据错误，第"+i+"行数据“供应商名称”为空！");
+			}
+			if(dutyman==null||dutyman.isEmpty()){
+				throw new Exception("数据错误，第"+i+"行数据“供应商负责人”为空！");
+			}
+			if(workshop==null||workshop.isEmpty()){
+				throw new Exception("数据错误，第"+i+"行数据“车间”为空！");
+			}
+			if(workgroup==null||workgroup.isEmpty()){
+				throw new Exception("数据错误，第"+i+"行数据“班组”为空！");
+			}
+			if(team==null||team.isEmpty()){
+				throw new Exception("数据错误，第"+i+"行数据“小班组”为空！");
+			}
+			
+			/**
+			 * 查询供应商信息是否已经存在
+			 */
+			
+			int c1=hrBaseDataService.querySupplierCount(supplier);
+			if(c1==0){
+				throw new RuntimeException("不存在供应商：“"+supplier+"”！");
+			}
+			/**
+			 * 查询车间、班组信息是否存在
+			 */
+			Map<String, Object> orgMap=hrBaseDataService.getStandardWorkgroup(infomap);			
+			if(orgMap==null){
+				throw new RuntimeException("不存在组织结构：“"+workshop+"-"+workgroup+"-"+team+"”！");
+			}
+			
+			/**
+			 * 查询供应商报价信息是否存在
+			 */
+			int c3=hrBaseDataService.querySupplierPriceCount(infomap);
+			if(c3>0){
+				infomap.put("exist_flag", "Y");
+			}else{
+				infomap.put("exist_flag", "N");
+			}
+			
+			addList.add(infomap);
+			i++;
+		}
+		initModel(true,"导入成功！",addList);
+		
+		}catch(Exception e){
+			initModel(false,"导入失败！"+e.getMessage(),null);
+		}
+		return mv.getModelMap();
+	}
+	
+	/**
+	 * 外包计件-供应商报价数据保存
+	 * @return
+	 */
+	@RequestMapping("/saveSupplierPriceData")
+	@ResponseBody
+	public ModelMap saveSupplierPriceData(){
+		model.clear();
+		String supplier_price_list=request.getParameter("supplier_price_list");
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		String edit_user = String.valueOf(session.getAttribute("staff_number"));
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("supplier_price_list", supplier_price_list);
+		condMap.put("editor", edit_user);
+		condMap.put("edit_date", curTime);
+		
+		hrBaseDataService.saveSupplierPriceData(condMap,model);
+		
+		return model;
+	}
+	
+	/**
+	 * 外包计件-供应商数据删除
+	 * @return
+	 */
+	@RequestMapping("/deleteSupplierPriceData")
+	@ResponseBody
+	public ModelMap deleteSupplierPriceData(){
+		model.clear();
+		String ids=request.getParameter("ids");
+		
+		hrBaseDataService.deleteSupplierPriceData(ids,model);
+		return model;
+	}
+	
+	/**
+	 * 外包计件-供应商列表查询
+	 * @return
+	 */
+	@RequestMapping("/getSupplierPriceList")
+	@ResponseBody
+	public ModelMap getSupplierPriceList(){
+		model.clear();
+		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
+		int start=(request.getParameter("offset")!=null)?Integer.parseInt(request.getParameter("offset")):0;		//分页数据起始数
+		int length=(request.getParameter("limit")!=null)?Integer.parseInt(request.getParameter("limit")):20;	//每一页数据条数
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("draw", draw);
+		condMap.put("start", start);
+		condMap.put("length", length);
+		condMap.put("supplier", request.getParameter("supplier"));
+		condMap.put("workshop", request.getParameter("workshop"));
+		condMap.put("workgroup", request.getParameter("workgroup"));
+		
+		hrBaseDataService.getSupplierPricelist(condMap,model);
+		
+		return model;
+	}
+	
+	/****************XJW End***************************************************/
 }

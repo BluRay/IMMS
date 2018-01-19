@@ -71,7 +71,7 @@
 							<td><select name="" id="search_factory" class="input-small">
 							</select>
 							 	<script id="tmplBusTypeSelect" type="text/x-jsrander">
-                                    <option value='{{:id}}'>{{:name}}</option>
+                                    <option value='{{:id}}'>{{:name}}  ({{:vehicle_model}})</option>
                                 </script>
 							</td>
 							<td><input type="button"
@@ -150,9 +150,9 @@
 							<select name="" disabled="disabled" id="editBusType"
 								class="input-medium busType">
 							</select>
-							<script id="tmplBusTypeSelect" type="text/x-jsrander">
+							<!-- <script id="tmplBusTypeSelect" type="text/x-jsrander">
                                     <option value='{{:id}}'>{{:bus_type_code}}</option>
-                                </script>
+                                </script> -->
 						</div>
 					</div>
 					<div class="form-group">

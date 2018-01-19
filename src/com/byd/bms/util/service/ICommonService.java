@@ -150,4 +150,10 @@ public interface ICommonService {
 	 * @param model
 	 */
 	void getWorkgroupPrice(Map<String, Object> conditionMap, ModelMap model);
+	/**
+	 * @author xiong.jianwu
+	 * @param condMap
+	 * @return
+	 */
+	List<Map<String,Object>> getWorkgroupStandardSelect(Map<String, Object> condMap);
 }

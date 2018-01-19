@@ -249,7 +249,8 @@ function ajaxQuery(){
              [ '显示20行', '显示50行', '显示100行', '全部' ]
          ],
          buttons: [
-       	     {extend:'excelHtml5',title:'data_export',className:'black',text:'<i class=\"fa fa-file-excel-o bigger-130\" tooltip=\"导出excel\"></i>'},
+       	     {extend:'excelHtml5',title:'data_export',exportOptions:{orthogonal:'export'},
+       	      className:'black',text:'<i class=\"fa fa-file-excel-o bigger-130\" tooltip=\"导出excel\"></i>'},
        	     {extend:'pageLength',text:'显示行'}
        	],
 		language: {
@@ -263,7 +264,7 @@ function ajaxQuery(){
 				"draw":1,
 				"order_no":$("#search_order_no").val(),
 				"factory" : $("#search_factory :selected").text(),
-				"bus_type" : $("#search_bustype :selected").text(),
+				"bus_type" : $("#search_bustype").val(),
 				"bus_number" : $("#search_bus_number").val(),
 				"test_node_id" : $("#search_test_node").val(),
 				"iqc" : $("#search_iqc").val()
@@ -298,10 +299,14 @@ function ajaxQuery(){
 	                    return "<input id='id' value='"+data+"' type='hidden' /><input type='checkbox' fid='cb_"+data+"'>";
 	                },"defaultContent": ""},
 		            {"title":"车号",width:'150',"class":"center","data":"bus_number","defaultContent": ""},
+		            {"title":"车型",width:'80',"class":"center","data":"bus_type_code","defaultContent": ""},
 		            {"title":"工厂",width:'80',"class":"center","data":"factory","defaultContent": ""},
 		            {"title":"检验节点",width:'80',"class":"center","data":"test_node","defaultContent": ""},
 		            {"title":"订单",width:'80',"class":"center","data":"order_no","defaultContent": ""},
 		            {"title":"问题描述",width:'110',"class":"center","data":"problem_desc","render": function ( data, type, row ) {
+		            	if(type == 'export' ){
+		            		return data;
+		            	}
 					    return data.length>10 ? '<div title=\''+data+'\'>'+data.substring(0,10)+'...</div>' : data;
 					},"defaultContent": ""},
 		            {"title":"责任单位",width:'90',"class":"center","data":"resp_unit","defaultContent": ""},
@@ -311,14 +316,23 @@ function ajaxQuery(){
 						if(data != null && data!=''){
 							result="<a href='"+path+""+data+"' target='_blank'>查看</a>";
 						}
+						if(type == 'export' ){
+		            		return data;
+		            	}
 						return result;
 					},"defaultContent": ""},
 		            {"title":"缺陷等级",width:'80',"class":"center","data":"level","defaultContent": ""},
 		            {"title":"处理方式",width:'100',"class":"center","data":"solution","render": function ( data, type, row ) {
+		            	if(type == 'export' ){
+		            		return data;
+		            	}
 					    return data.length>8 ? '<div title=\''+data+'\'>'+data.substring(0,8)+'...</div>' : data;
 					},"defaultContent": ""},
 		            {"title":"检验员",width:'80',"class":"center","data":"iqc","defaultContent": ""},
 		            {"title":"备注",width:'60',"class":"center","data":"remark","render": function ( data, type, row ) {
+		            	if(type == 'export' ){
+		            		return data;
+		            	}
 					    return data.length>8 ? '<div title=\''+data+'\'>'+data.substring(0,8)+'...</div>' : data;
 					},"defaultContent": ""},
 		            {"title":"维护人",width:'70',"class":"center","data":"editor","defaultContent": ""},

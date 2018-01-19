@@ -3,6 +3,8 @@ package com.byd.bms.hr.service;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.ui.ModelMap;
+
 public interface IHrBaseDataService {
 	// 组织架构树结构数据List
 	public List<Map<String, Object>> getOrgDataTreeList(Map<String,Object> queryMap);
@@ -55,4 +57,58 @@ public interface IHrBaseDataService {
 	public int addWorkTimePrice(Map<String,Object> conditionMap);
 	public int editWorkTimePrice(Map<String,Object> conditionMap);
 	public Map<String,Object> getWorkTimePrice(Map<String, Object> conditionMap);
+	/**
+	 * @author xiong.jianwu
+	 * @param condMap
+	 * @param model
+	 */
+	public void saveSupplierData(Map<String, Object> condMap, ModelMap model);
+	/**
+	 * @author xiong.jianwu
+	 * @param supplier
+	 * @return
+	 */
+	public int querySupplierCount(String supplier);
+	/**
+	 * @author xiong.jianwu
+	 * @param condMap
+	 * @param model
+	 */
+	public void getSupplierlist(Map<String, Object> condMap, ModelMap model);
+	/**
+	 * @author xiong.jianwu
+	 * @param ids
+	 * @param model
+	 */
+	public void deleteSupplierData(String ids, ModelMap model);
+	/**
+	 * @author xiong.jianwu
+	 * @param infomap
+	 * @return
+	 */
+	public int querySupplierPriceCount(Map<String, Object> infomap);
+	/**
+	 * @author xiong.jianwu
+	 * @param infomap
+	 * @return
+	 */
+	public Map<String, Object> getStandardWorkgroup(Map<String, Object> infomap);
+	/**
+	 * @author xiong.jianwu
+	 * @param condMap
+	 * @param model
+	 */
+	public void saveSupplierPriceData(Map<String, Object> condMap, ModelMap model);
+	/**
+	 * @author xiong.jianwu
+	 * @param condMap
+	 * @param model
+	 */
+	public void getSupplierPricelist(Map<String, Object> condMap, ModelMap model);
+	/**
+	 * @author xiong.jianwu
+	 * @param ids
+	 * @param model
+	 */
+	public void deleteSupplierPriceData(String ids, ModelMap model);
 }

@@ -11,7 +11,7 @@
 		left join BMS_OR_FACTORY_ORDER fo on fo.order_id=o.id
 		left join BMS_BASE_FACTORY f on fo.factory_id=f.id
 		</if>		
-		where o.order_no like CONCAT('%',#{orderNo},'%') 
+		where (o.order_no like CONCAT('%',#{orderNo},'%') or o.order_name like CONCAT('%',#{orderNo},'%') )
 		<if test="busType!=null and  busType!=''">
 			and t.bus_type_code=#{busType}
 		</if>
@@ -61,7 +61,7 @@
 	</select>
 	
 	<select id="queryBusTypeList" parameterType="String" resultType="Map">
-		select id,bus_type_code name,internal_name code from BMS_BASE_BUS_TYPE
+		select id,bus_type_code name,internal_name code,vehicle_model from BMS_BASE_BUS_TYPE
 		group by bus_type_code
 	</select>
 	
@@ -879,5 +879,12 @@
 		where factory=#{factory} and workshop=#{workshop}
 		and workgroup=#{workgroup} and team=#{team}
 		and order_id=#{order_id} and effective_date&lt;=#{workDate})
+	</select>
+	
+	<select id="queryWorkgroupStandardList" parameterType="Map" resultType="Map">
+		SELECT w1.id ,w1.workgroup_name name
+		FROM BMS_BASE_STANDARD_WORKGROUP w1
+		LEFT JOIN BMS_BASE_WORKSHOP w on w.id=w1.workshop_id
+		WHERE w.workshop_name= #{workshop} and w.delete_flag='0' and w1.type='0'
 	</select>
 </mapper>

@@ -184,7 +184,7 @@
 	top: -45px;
 }
 .btn-default {
-	height:35px;
+	/* height:35px; */
 	background-color: transparent;
 	border-color: transparent;
 

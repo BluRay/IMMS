@@ -120,4 +120,7 @@ public interface ICommonDao {
 	List<Map<String, Object>> queryWorkgroupPrice(Map<String, Object> conditionMap);
 	
 	int insertOrderBOM(List<Map<String,Object>> datalist);
+
+	List<Map<String, Object>> queryWorkgroupStandardList(
+			Map<String, Object> condMap);
 }

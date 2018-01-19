@@ -78,6 +78,7 @@ public interface IQualityService {
 	public int checkJcxBusInfoId(Map<String, Object> conditionMap);
 	public int insertJcxBusInfo(Map<String, Object> conditionMap);
 	public int updateJcxBusInfo(Map<String, Object> conditionMap);
+	public Map<String, Object> getTestingDateReport(Map<String,Object> queryMap);
 	//======================== yk end=================================//
 			
 			

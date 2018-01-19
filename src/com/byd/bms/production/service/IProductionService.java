@@ -192,5 +192,7 @@ public interface IProductionService {
 	public int updateTmpOrder(Map<String, Object> cmap);
 	public String caculateTmpSalary(Map<String, Object> conditionMap);
 
+	public void checkPartsBatch(String batch, ModelMap model);
+
 
 }

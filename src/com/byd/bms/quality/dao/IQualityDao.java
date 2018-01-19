@@ -111,6 +111,8 @@ public interface IQualityDao {
 	public int checkJcxBusInfoId(Map<String, Object> conditionMap);
 	public int insertJcxBusInfo(Map<String, Object> conditionMap);
 	public int updateJcxBusInfo(Map<String, Object> conditionMap);
+	public List<Map<String, Object>> getBusTestingDateReport(Map<String, Object> conditionMap);
+	public int getBusTestingDateReportCount(Map<String, Object> conditionMap);
 	//======================== yk end=================================//
 		
 		

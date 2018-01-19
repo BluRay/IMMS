@@ -632,5 +632,12 @@ public class CommonServiceImpl implements ICommonService {
 		datalist=commonDao.queryWorkgroupPrice(conditionMap);
 		model.put("data", datalist);
 	}
+	@Override
+	public List<Map<String, Object>> getWorkgroupStandardSelect(
+			Map<String, Object> condMap) {
+		
+		return commonDao.queryWorkgroupStandardList(condMap);
+	}
+	
 	
 }

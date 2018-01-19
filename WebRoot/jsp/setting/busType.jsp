@@ -73,7 +73,7 @@
 				<form id="" class="form-horizontal">
 					<div class="form-group">
 					    <div style="float:left;width:45%">
-							<label style="float:left;width:30%" class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newOrderName">*&nbsp;车辆型号</label>
+							<label style="float:left;width:30%" class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newOrderName">*&nbsp;车型编号</label>
 							<div style="float:left;width:70%" class="col-sm-8">
 							    <input type="hidden" id="editId" />
 								<input type="text" class="input-medium" id="edit_busTypeCode" />
@@ -103,7 +103,7 @@
 					</div>
 					<div class="form-group">
 					    <div style="float:left;width:45%">
-							<label style="float:left;width:30%" class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newVehicleModel">*&nbsp;车辆类型</label>
+							<label style="float:left;width:30%" class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newVehicleModel">*&nbsp;整车型号</label>
 							<div style="float:left;width:70%" class="col-sm-8">
 								<input type="text" class="input-medium" id="edit_vehicleModel" />
 							</div>
@@ -214,7 +214,7 @@
 				<form id="" class="form-horizontal">
 					<div class="form-group">
 					    <div style="float:left;width:45%">
-							<label style="float:left;width:30%" class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newOrderName">*&nbsp;车辆型号</label>
+							<label style="float:left;width:30%" class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newOrderName">*&nbsp;车型编号</label>
 							<div style="float:left;width:70%" class="col-sm-8">
 								<input type="text" class="input-medium" placeholder="车辆型号..." id="add_busTypeCode" />
 							</div>
@@ -271,7 +271,7 @@
 					</div-->
 					<div class="form-group">
 					    <div style="float:left;width:45%">
-							<label style="float:left;width:30%" class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newVehicleModel">*&nbsp;车辆类型</label>
+							<label style="float:left;width:30%" class="col-sm-3 col-sm-3 control-label no-padding-right no-padding-right" for="newVehicleModel">*&nbsp;整车型号</label>
 							<div style="float:left;width:70%" class="col-sm-8">
 								<input type="text" class="input-medium" placeholder="车辆类型..." id="add_vehicleModel" />
 							</div>

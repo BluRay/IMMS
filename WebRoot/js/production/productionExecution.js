@@ -16,7 +16,8 @@ var status;
 var line_selects_data;
 var parts_list;
 var parts_update_list=new Array();//非车间上下线工序提交该零部件信息
- 
+var batch_validate=[];
+
 $(document).ready(function () {	
 	initPage();
 	
@@ -53,6 +54,7 @@ $(document).ready(function () {
         $("#btnSubmit").attr("disabled","disabled");
         $("#partsListTable tbody").html("");
         $("#configListTable tbody").html("");
+        batch_validate=[];
     }
 	
 	function ajaxEnter(){
@@ -71,7 +73,7 @@ $(document).ready(function () {
 						return false;
 					}
 				}
-
+				
 				if(parts.parts_name=='VIN编码'&&parts.batch!=vin&&parts.process==$("#exec_processname").val()){
 					alert("VIN编码校验失败，请核对该车的VIN编码！");
 					enterflag=false;
@@ -197,7 +199,7 @@ $(document).ready(function () {
 		                else{
 		                	fadeMessageAlert(null,response.message,'gritter-error');
 		                }
-
+		                
 		                setTimeout(function() {
 		                    $("#vinHint").hide().html("未输入车号");
 		                    toggleVinHint(true);
@@ -357,6 +359,24 @@ $(document).ready(function () {
 		var tr=$(e.target).parent("td").parent("tr");
 		var batchInput=$(tr).find(".batch");
 		var parts_index=$(tr).data("parts_index");
+		var parts=parts_list[parts_index];
+		/**
+		 * added by xjw 18/1/17  增加动力电池包零部件批次不能重复的判断逻辑
+		 */
+		if(parts.parts_name.indexOf('动力电池包')>=0){
+			if(batch_validate.indexOf(parts.batch)>=0){
+				alert("批次信息不能重复！");
+				return false;
+			}
+			//数据库判断包含动力电池包的零部件批次是否与该批次信息重复
+			if(checkPartsBatch(parts.batch)){
+				alert("该批次信息已存在，不能重复录入！");
+				return false;
+			}
+			
+			batch_validate.push(parts.batch);
+		}
+		
 		parts_list[parts_index].batch=$(batchInput).val();	
 		//alert(JSON.stringify(parts_list))
 	});
@@ -589,4 +609,23 @@ function checkVinMotor(){
 		alert("校验失败！");
 	}
 	return false;
+}
+
+function checkPartsBatch(batch){
+	var flag=true;
+	$.ajax({
+		url:'checkPartsBatch',
+		dataType : "json",
+		async:false,
+		data:{
+			batch:batch
+		},
+		success:function(response){
+			if(response.isExist){
+				flag=false;
+			}
+		}
+	})
+	
+	return flag;
 }

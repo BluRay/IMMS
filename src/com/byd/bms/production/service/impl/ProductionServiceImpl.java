@@ -1112,8 +1112,20 @@ public class ProductionServiceImpl implements IProductionService {
 		
 	}
 	
+
+	@Override
+	public void checkPartsBatch(String batch, ModelMap model) {
+		model.put("isExsit", false);
+		int qty=productionDao.queryPartsBatch(batch);
+		if(qty>0){
+			model.put("isExsit", true);
+		}
+		
+	}
+	
 	/*****************************xiong jianwu end  *****************************/
 
+	
 
 	/*******************  tangjin start **************************/
 	@Override

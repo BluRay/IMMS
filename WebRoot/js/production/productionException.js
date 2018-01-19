@@ -113,7 +113,11 @@ $(document).ready(function () {
 	
 	function ajaxValidate (){
 		var workshop_name=$('#exec_workshop').find("option:selected").text();
-		
+		if(workshop_name=='自制件'||workshop_name=='部件'){
+			$("#order").attr("order_id",0).attr("disabled",false);
+		}else{
+			$("#order").attr("disabled",true);
+		}
 		$.ajax({
             type: "get",
             dataType: "json",

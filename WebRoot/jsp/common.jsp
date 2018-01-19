@@ -23,4 +23,5 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <!-- ace scripts -->
 <script src="<%=basePath%>/assets/js/ace-elements.min.js"></script>
 <script src="<%=basePath%>/assets/js/ace.min.js"></script>
+
 </head>

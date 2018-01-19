@@ -1954,8 +1954,14 @@ public class QualityController extends BaseController {
 	}
 	
 	@RequestMapping("/testingDate")
-	public ModelAndView testingDate(){ 		//检测数据查询
+	public ModelAndView testingDate(){ 				//检测数据查询
 		mv.setViewName("quality/testingDate");
+        return mv;  
+    }
+	
+	@RequestMapping("/testingDateReport")
+	public ModelAndView testingDateReport(){ 		//检测数据报表（已同步到本地数据库数据）
+		mv.setViewName("quality/testingDateReport");
         return mv;  
     }
 	
@@ -2027,7 +2033,6 @@ public class QualityController extends BaseController {
 		String vin= request.getParameter("vin");
 		JSONArray jsonArray=JSONArray.fromObject(vin);
 		for (int i = 0; i < jsonArray.size(); i++) {
-			logger.info(jsonArray.get(i));
 			Map<String,Object> condMap2 = new HashMap<String,Object>();
 			condMap2.put("vin", jsonArray.get(i));
 			Map<String, Object> testingInfo =new HashMap<String,Object>();
@@ -2036,6 +2041,7 @@ public class QualityController extends BaseController {
 			}
 			// TODO 其他工厂	
 			
+			testingInfo.put("factory_id", factory_id);
 			if(testingInfo != null) {
 				//判断bms_jcx JCX_BUS_INFO 此车辆信息是否存在，存在则更新，否则新增
 				int check = qualityService.checkJcxBusInfoId(condMap2);
@@ -2047,6 +2053,30 @@ public class QualityController extends BaseController {
 			}
 		}
 		initModel(true,"SUCCESS",null);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/getTestingDateListReport")
+	@ResponseBody
+	public ModelMap getTestingDateListReport() {
+		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
+		int start=(request.getParameter("offset")!=null)?Integer.parseInt(request.getParameter("offset")):0;		//分页数据起始数
+		int length=(request.getParameter("limit")!=null)?Integer.parseInt(request.getParameter("limit")):500;	//每一页数据条数
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("draw", draw);
+		condMap.put("start", start);
+		condMap.put("length", length);
+		condMap.put("factory_id", request.getParameter("factory_id"));
+		condMap.put("bus_type", request.getParameter("bus_type"));
+		condMap.put("order_id", request.getParameter("order_id"));
+		condMap.put("vin", request.getParameter("vin"));
+		condMap.put("start_busNum", request.getParameter("start_busNum"));
+		condMap.put("end_busNum", request.getParameter("end_busNum"));
+		
+		Map<String,Object> list = qualityService.getTestingDateReport(condMap);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(list);
 		model = mv.getModelMap();
 		return model;
 	}

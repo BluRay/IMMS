@@ -67,4 +67,27 @@ public interface IHrBaseDataDao {
 	public int editWorkTimePrice(Map<String,Object> conditionMap);
 	public List<Map<String,Object>> getWorkTimePrice(Map<String, Object> cMap);
 	public int getWorkTimePriceCount(Map<String, Object> cMap);
+
+	public void saveOrUpdateSupplier(List supplier_list);
+
+	public int querySupplierCount(@Param(value="supplier") String supplier);
+
+	public List<Map<String, Object>> querySupplierList( Map<String, Object> condMap);
+
+	public int querySupplierListCount(Map<String, Object> condMap);
+
+	public void deleteSupplier(@Param(value="ids") String ids);
+
+	public int querySupplierPriceCount(Map<String, Object> infomap);
+	
+	public Map<String,Object> queryStandardWorkgroup(Map<String, Object> infomap);
+
+	public void saveOrUpdateSupplierPrice(List supplier_price_list);
+
+	public List<Map<String, Object>> querySupplierPriceList(
+			Map<String, Object> condMap);
+
+	public int querySupplierPriceListCount(Map<String, Object> condMap);
+
+	public void deleteSupplierPrice(@Param(value="ids")String ids);
 }

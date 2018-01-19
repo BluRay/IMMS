@@ -172,6 +172,7 @@ $(document).ready(function () {
 			var root = $('.nav-list');
 			var li = $('<li  class="" />');
 			var a = $('<a href=\"/BMS/'+value.path+'\" ></a>');
+			
 			if (value.path.substring(0,4) =="http"){
 				a = $('<a href=\"'+value.path+'<%=staff_number%>\" ></a>');
 			}
@@ -264,6 +265,7 @@ function traverseTree(node,parentli,two){
 	$.each(node.list, function (index, value) {
 		var li = $('<li  class="" />');
 		var a = $('<a href=\"/BMS/'+value.path+'\" ></a>');
+		//var a = $('<a href="javascript:addTabs({id:\'' + value.id + '\',title:\'' + value.name + '\',close: \'true\',url: \'/BMS/' + value.path + '\'});" ></a>');
 		//console.log("value:" , value);
 		if(value.list.length>0){
 			a.addClass('dropdown-toggle');
@@ -324,20 +326,20 @@ function traverseTree(node,parentli,two){
 
 				<div class="sidebar-shortcuts" id="sidebar-shortcuts">
 					<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
-						<button class="btn btn-success">
+						<button id="index_report_bt" class="btn btn-success">
 							<i class="ace-icon fa fa-signal"></i>
 						</button>
 
-						<button class="btn btn-info">
+						<button id="index_pencil_bt"  class="btn btn-info">
 							<i class="ace-icon fa fa-pencil"></i>
 						</button>
 
 						<!-- #section:basics/sidebar.layout.shortcuts -->
-						<button class="btn btn-warning">
+						<button id="index_users_bt"  class="btn btn-warning">
 							<i class="ace-icon fa fa-users"></i>
 						</button>
 
-						<button class="btn btn-danger">
+						<button id="index_cogs_bt"  class="btn btn-danger">
 							<i class="ace-icon fa fa-cogs"></i>
 						</button>
 

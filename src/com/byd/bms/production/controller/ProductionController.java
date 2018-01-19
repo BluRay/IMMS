@@ -1110,6 +1110,17 @@ public class ProductionController extends BaseController {
 		productionService.getWorkshopPrdQty(condMap,model);
 		return model;
 	}
+	
+	@RequestMapping("/checkPartsBatch")
+	@ResponseBody
+	public ModelMap checkPartsBatch(){
+		model.clear();
+		String batch=request.getParameter("batch");
+		
+		productionService.checkPartsBatch(batch,model);
+		
+		return model;
+	}
 	/****************************  xiongjianwu ***************************/
 	
 	@RequestMapping("/productionsearchbusinfo")

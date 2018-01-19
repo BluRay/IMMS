@@ -319,6 +319,24 @@ public class CommonController extends BaseController {
 	}
 	
 	/**
+	 * added by xjw for 查询车间下标准班组下拉列表(BMS_BASE_STANDARD_WORKGROUP表获取)
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/getWorkgroupStandardSelect")
+	@ResponseBody
+	public ModelMap getWorkgroupStandardSelect(){
+
+		String workshop = request.getParameter("workshop");
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("workshop", workshop);
+		model=new ModelMap();
+		model.put("data", commonService.getWorkgroupStandardSelect(condMap));
+
+		return model;
+	}
+	
+	/**
 	 * added by xjw for 查询小班组下拉列表(ORG表获取)
 	 * 
 	 * @return

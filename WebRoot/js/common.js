@@ -342,6 +342,30 @@ function getWorkshopSelect(url,factory,selectval,selectId,selectType,valName,org
 		}
 	});
 }
+
+/**
+ * 标准车间选择getWorkshopStandardSelect拉列表
+ * selectval:选中的值
+ * selectId:下拉框组件id
+ * selectType:下拉框组件类型：==全部==、==请选择==、== ==
+ * valName:option value值:id/name
+ */
+
+function getWorkshopStandardSelect(selectval,selectId,selectType,valName){
+	$.ajax({
+		url : "/BMS/common/getWorkshopSelect_Key",
+		dataType : "json",
+		data : {},
+		async : false,
+		error : function(response) {
+			alert(response.message)
+		},
+		success : function(response) {
+			getSelects(response.data,selectval,selectId,selectType, valName);	
+		}
+	});
+}
+
 /**
  * 班组选择下拉列表
  * selectval:选中的值
@@ -364,6 +388,30 @@ function getWorkgroupSelect(factory,workshop,selectval,selectId,selectType,valNa
 		}
 	});
 }
+
+/**
+ * 标准班组选择下拉列表
+ * selectval:选中的值
+ * selectId:下拉框组件id
+ * selectType:下拉框组件类型：==全部==、==请选择==、== ==
+ * valName:option value值:id/name
+ */
+
+function getWorkgroupStandardSelect(workshop,selectval,selectId,selectType,valName){
+	$.ajax({
+		url : "/BMS/common/getWorkgroupStandardSelect",
+		dataType : "json",
+		data : {"workshop":workshop},
+		async : false,
+		error : function(response) {
+			alert(response.message)
+		},
+		success : function(response) {
+			getSelects(response.data,selectval,selectId,selectType, valName);	
+		}
+	});
+}
+
 /**
  * 小班组选择下拉列表
  * selectval:选中的值

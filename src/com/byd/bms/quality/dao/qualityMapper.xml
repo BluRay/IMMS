@@ -565,7 +565,7 @@
 	</select>
 	<insert id="insertJcxBusInfo" parameterType="Map" useGeneratedKeys="true" keyProperty="id">
 	INSERT INTO JCX_BUS_INFO (
-	bus_number,vin,motor_number,bus_type,license_type,bus_vehicle_type,fuel_type,chassis_number,chassis_model,
+	bus_number,vin,factory_id,motor_number,bus_type,license_type,bus_vehicle_type,fuel_type,chassis_number,chassis_model,
 	check_type,register_date,manufacture_date,check_date,check_number,check_times,is_passed,test_results,
 	is_passed_aj,speed,speed_mistake,s1_lft_wgt_val,s1_rgt_wgt_val,s1_tot_wgt_val,s2_lft_wgt_val,s2_rgt_wgt_val,
 	s2_tot_wgt_val,wgt_cal_val,tot_wgt_val,s1_lft_eff_frs_val,s1_rgt_eff_frs_val,s1_eff_pec_val,s1_lft_equ_frs_val,s1_rgt_equ_frs_val,
@@ -573,7 +573,7 @@
 	s2_eff_pec_val,s2_lft_equ_frs_val,s2_rgt_equ_frs_val,s2_equ_pec_val,s2_lft_lag_frs_val,s2_lft_lag_pec_val,s2_rgt_lag_frs_val,s2_rgt_lag_pec_val,
 	s2_coord_val,park_lft_eff_frs_val,park_rgt_eff_frs_val,park_eff_pec_val,tot_eff_frs_val,tot_eff_pec_val)
 	VALUES(
-	#{LICENSE_NO},#{VIN},#{motor_number},#{bus_type},#{license_type},#{bus_vehicle_type},#{fuel_type},#{chassis_number},#{chassis_model},
+	#{LICENSE_NO},#{VIN},#{factory_id},#{motor_number},#{bus_type},#{license_type},#{bus_vehicle_type},#{fuel_type},#{chassis_number},#{chassis_model},
 	#{check_type},#{register_date},#{manufacture_date},#{check_date},#{check_number},#{check_times},#{is_passed},#{test_results},
 	#{is_passed_aj},#{speed},#{speed_mistake},#{s1_lft_wgt_val},#{s1_rgt_wgt_val},#{s1_tot_wgt_val},#{s2_lft_wgt_val},#{s2_rgt_wgt_val},
 	#{s2_tot_wgt_val},#{wgt_cal_val},#{tot_wgt_val},#{s1_lft_eff_frs_val},#{s1_rgt_eff_frs_val},#{s1_eff_pec_val},#{s1_lft_equ_frs_val},#{s1_rgt_equ_frs_val},
@@ -584,7 +584,7 @@
 	</insert>
 	<update id="updateJcxBusInfo" parameterType="Map">
 	UPDATE JCX_BUS_INFO
-	SET motor_number=#{motor_number}, bus_type=#{bus_type}, license_type=#{license_type}, bus_vehicle_type=#{bus_vehicle_type}, 
+	SET motor_number=#{motor_number},factory_id=#{factory_id}, bus_type=#{bus_type}, license_type=#{license_type}, bus_vehicle_type=#{bus_vehicle_type}, 
 	fuel_type=#{fuel_type}, chassis_number=#{chassis_number}, chassis_model=#{chassis_model}, check_type=#{check_type}, 
 	register_date=#{register_date}, manufacture_date=#{manufacture_date}, check_date=#{check_date}, check_number=#{check_number}, 
 	check_times=#{check_times}, is_passed=#{is_passed}, test_results=#{test_results}, is_passed_aj=#{is_passed_aj}, speed=#{speed}, 
@@ -601,6 +601,56 @@
 	park_eff_pec_val=#{park_eff_pec_val}, tot_eff_frs_val=#{tot_eff_frs_val}, tot_eff_pec_val=#{tot_eff_pec_val}
 	WHERE vin=#{VIN}
 	</update>
+	
+	<select id="getBusTestingDateReport" parameterType="Map" resultType="Map">
+		SELECT I.* FROM JCX_BUS_INFO I 
+		LEFT OUTER JOIN bms.BMS_PLAN_BUS B ON I.vin = B.vin
+		WHERE 1=1 
+		<if test="factory_id !=null and factory_id !=''">
+		AND I.factory_id=#{factory_id}
+		</if>
+		<if test="vin !=null and vin !=''">
+		AND (I.vin=#{vin} OR I.bus_number=#{vin})
+		</if>
+		<if test="bus_type !=null and bus_type !=''">
+		AND I.bus_type=#{bus_type}
+		</if>
+		<if test="order_id !=null and order_id !=''">
+		AND B.order_id=#{order_id}
+		</if>
+		<if test="start_busNum !=null and start_busNum !=''">
+		AND RIGHT(I.bus_number,4)+0 >= #{start_busNum}
+		</if>
+		<if test="end_busNum !=null and end_busNum !=''">
+		<![CDATA[ AND RIGHT(I.bus_number,4)+0 <= #{end_busNum} ]]>
+		</if> 
+		<if test="start !=null">
+			LIMIT #{start} ,#{length} 
+		</if>
+	</select>
+	<select id="getBusTestingDateReportCount" parameterType="Map" resultType="int">
+		SELECT COUNT(I.id) FROM JCX_BUS_INFO I
+		LEFT OUTER JOIN bms.BMS_PLAN_BUS B ON I.vin = B.vin
+		WHERE 1=1 
+		<if test="factory_id !=null and factory_id !=''">
+		AND I.factory_id=#{factory_id}
+		</if>
+		<if test="vin !=null and vin !=''">
+		AND (I.vin=#{vin} OR I.bus_number=#{vin})
+		</if>
+		<if test="bus_type !=null and bus_type !=''">
+		AND I.bus_type=#{bus_type}
+		</if>
+		<if test="order_id !=null and order_id !=''">
+		AND B.order_id=#{order_id}
+		</if>
+		<if test="start_busNum !=null and start_busNum !=''">
+		AND RIGHT(I.bus_number,4)+0 >= #{start_busNum}
+		</if>
+		<if test="end_busNum !=null and end_busNum !=''">
+		<![CDATA[ AND RIGHT(I.bus_number,4)+0 <= #{end_busNum} ]]>
+		</if> 
+	</select>
 	
 	<select id="getQualityTargetList" parameterType="Map" resultType="Map">
 		select
@@ -1257,15 +1307,17 @@
 		</if>
 	 </select>
      <select id="getQualityAbnormalRecordList" parameterType="Map" resultType="Map">
-		SELECT p.*,o.order_no FROM BMS_QM_QUALITY_ABNORMAL_RECORD p
-		left join BMS_OR_ORDER o on o.id=p.order_id WHERE deleted='0'
+		SELECT p.*,o.order_no,t.bus_type_code FROM BMS_QM_QUALITY_ABNORMAL_RECORD p
+		left join BMS_OR_ORDER o on o.id=p.order_id 
+		left join BMS_BASE_BUS_TYPE t on t.id=p.bus_type
+		WHERE deleted='0'
 		<if test="factory!=null and factory!='全部'">
 			and p.factory = #{factory}
 		</if>
 		<if test="test_node_id!=null and test_node_id!='' and test_node_id!='全部'">
 			and p.test_node_id = #{test_node_id}
 		</if>
-		<if test="bus_type!=null and bus_type!='全部'">
+		<if test="bus_type!=null and bus_type!=''">
 			and p.bus_type = #{bus_type}
 		</if>
 		<if test="bus_number!=null and bus_number!=''">

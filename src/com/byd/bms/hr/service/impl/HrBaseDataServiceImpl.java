@@ -2,19 +2,27 @@ package com.byd.bms.hr.service.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.ModelMap;
 
 import com.byd.bms.hr.dao.IHrBaseDataDao;
 import com.byd.bms.hr.service.IHrBaseDataService;
 import com.byd.bms.setting.dao.IBaseDataDao;
 @Service
 public class HrBaseDataServiceImpl implements IHrBaseDataService {
+	private static Logger logger = Logger.getLogger(HrBaseDataServiceImpl.class);
+	
 	@Resource(name="hrBaseDataDao")
 	private IHrBaseDataDao hrBaseDataDao;
 	public List<Map<String, Object>> getOrgDataTreeList(Map<String, Object> queryMap) {
@@ -286,4 +294,174 @@ public class HrBaseDataServiceImpl implements IHrBaseDataService {
 		result.put("rows", datalist);
 		return result;
 	}
+	
+	/**
+	 * @author xiong.jianwu
+	 * 保存供应商清单
+	 */
+	@Override
+	@Transactional
+	public void saveSupplierData(Map<String, Object> condMap, ModelMap model) {
+		
+		try{
+			String list_str=condMap.get("supplier_list").toString();
+			List supplier_list=new ArrayList();
+			
+			JSONArray jsa=JSONArray.fromObject(list_str);
+			Iterator it= jsa.iterator();
+			
+			while(it.hasNext()){
+				JSONObject jso=(JSONObject)it.next();
+				Map<String,Object> m=(Map<String, Object>) jso.toBean(jso, Map.class);
+				m.put("editor", condMap.get("editor"));
+				m.put("edit_date", condMap.get("edit_date"));
+				supplier_list.add(m);
+			}
+			
+			hrBaseDataDao.saveOrUpdateSupplier(supplier_list);
+			model.put("success", true);
+			model.put("message", "保存成功！");
+		}catch(Exception e){
+			model.put("success", false);
+			model.put("message", "保存失败！");
+			logger.error("供应商信息保存失败："+condMap.get("supplier_list"));
+			throw new RuntimeException(e);
+		}
+		
+		
+	}
+	/**
+	 * @author xiong.jianwu
+	 * 查询供应商数量
+	 */
+	@Override
+	public int querySupplierCount(String supplier) {
+		int c=0;
+		c=hrBaseDataDao.querySupplierCount(supplier);
+		
+		return c;
+	}
+	/**
+	 * @author xiong.jianwu
+	 * 查询供应商列表
+	 */
+	@Override
+	public void getSupplierlist(Map<String, Object> condMap, ModelMap model) {		
+		int totalCount=0;
+		List<Map<String,Object>> datalist = hrBaseDataDao.querySupplierList(condMap);
+		totalCount=hrBaseDataDao.querySupplierListCount(condMap);
+		
+		model.put("draw", condMap.get("draw"));
+		model.put("recordsTotal", totalCount);
+		model.put("recordsFiltered", totalCount);
+		model.put("data", datalist);
+
+	}
+	/**
+	 * @author xiong.jianwu
+	 * 删除供应商信息
+	 */
+	@Override
+	public void deleteSupplierData(String ids, ModelMap model) {
+		try{
+			hrBaseDataDao.deleteSupplier(ids);
+			model.put("success", true);
+			model.put("message", "删除成功！");
+		}catch(Exception e){
+			model.put("success", false);
+			model.put("message", "删除失败！");
+			logger.error("供应商信息删除失败："+e.getMessage());
+			throw new RuntimeException(e);
+		}
+		
+	}
+	/**
+	 * @author xiong.jianwu
+	 * 查询供应商报价信息是否存在
+	 */
+	@Override
+	public int querySupplierPriceCount(Map<String, Object> infomap) {
+		int c=0;
+		c=hrBaseDataDao.querySupplierPriceCount(infomap);
+		
+		return c;
+	}
+	/**
+	 * @author xiong.jianwu
+	 * 查询车间班组是否存在
+	 */
+	@Override
+	public Map<String, Object> getStandardWorkgroup(Map<String, Object> infomap) {
+		
+		return hrBaseDataDao.queryStandardWorkgroup(infomap);
+	}
+	/**
+	 * @author xiong.jianwu
+	 * 保存供应商报价信息
+	 */
+	@Override
+	public void saveSupplierPriceData(Map<String, Object> condMap,
+			ModelMap model) {
+		try{
+			String list_str=condMap.get("supplier_price_list").toString();
+			List supplier_price_list=new ArrayList();
+			
+			JSONArray jsa=JSONArray.fromObject(list_str);
+			Iterator it= jsa.iterator();
+			
+			while(it.hasNext()){
+				JSONObject jso=(JSONObject)it.next();
+				Map<String,Object> m=(Map<String, Object>) jso.toBean(jso, Map.class);
+				m.put("editor", condMap.get("editor"));
+				m.put("edit_date", condMap.get("edit_date"));
+				supplier_price_list.add(m);
+			}
+			
+			hrBaseDataDao.saveOrUpdateSupplierPrice(supplier_price_list);
+			model.put("success", true);
+			model.put("message", "保存成功！");
+		}catch(Exception e){
+			model.put("success", false);
+			model.put("message", "保存失败！");
+			logger.error("供应商报价信息保存失败："+condMap.get("supplier_price_list"));
+			throw new RuntimeException(e);
+		}
+		
+	}
+	/**
+	 * @author xiong.jianwu
+	 * 查询供应商报价信息列表
+	 */
+	@Override
+	public void getSupplierPricelist(Map<String, Object> condMap, ModelMap model) {
+		int totalCount=0;
+		List<Map<String,Object>> datalist = hrBaseDataDao.querySupplierPriceList(condMap);
+		totalCount=hrBaseDataDao.querySupplierPriceListCount(condMap);
+		
+		model.put("draw", condMap.get("draw"));
+		model.put("recordsTotal", totalCount);
+		model.put("recordsFiltered", totalCount);
+		model.put("data", datalist);
+		
+	}
+	/**
+	 * @author xiong.jianwu
+	 * 删除供应商报价信息
+	 */
+	@Override
+	public void deleteSupplierPriceData(String ids, ModelMap model) {
+		try{
+			hrBaseDataDao.deleteSupplierPrice(ids);
+			model.put("success", true);
+			model.put("message", "删除成功！");
+		}catch(Exception e){
+			model.put("success", false);
+			model.put("message", "删除失败！");
+			logger.error("供应商信息删除失败："+e.getMessage());
+			throw new RuntimeException(e);
+		}
+	}
+	
+	
+	
 }

@@ -5,16 +5,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import javax.annotation.Resource;
-
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
-
 import com.byd.bms.order.dao.IOrderDao;
 import com.byd.bms.quality.dao.IQualityDao;
 import com.byd.bms.quality.service.IQualityService;
@@ -594,6 +590,18 @@ public class QualityServiceImpl implements IQualityService {
 	public Map<String, Object> getBusTestingDateCS(Map<String, Object> conditionMap){
 		Map<String, Object> result=new HashMap<String,Object>();
 		result = qualityDao.getBusTestingDate(conditionMap);		
+		return result;
+	}
+	
+	@Override
+	@DataSource("dataSourceTestingLineJCX")
+	public Map<String, Object> getTestingDateReport(Map<String,Object> queryMap){
+		int totalCount=0;
+		List<Map<String, Object>> datalist = qualityDao.getBusTestingDateReport(queryMap);
+		totalCount = qualityDao.getBusTestingDateReportCount(queryMap);
+		Map<String, Object> result = new HashMap<String,Object>();
+		result.put("total", totalCount);
+		result.put("rows", datalist);
 		return result;
 	}
 	

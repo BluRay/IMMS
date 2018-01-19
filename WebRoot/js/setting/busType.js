@@ -111,7 +111,7 @@ function ajaxQuery(){
             {"title":"品牌","class":"center","data":"brand","defaultContent": ""},
             {"title":"制造商","class":"center","data":"manufacturer","defaultContent": ""},
             //{"title":"车辆类型","class":"center","data": "busVehicleTypeId","defaultContent": ""},
-            {"title":"车辆型号","class":"center","data":"vehicleModel","defaultContent": ""},		            
+            {"title":"整车型号","class":"center","data":"vehicleModel","defaultContent": ""},		            
             {"title":"底盘型号","class":"center","data":"chassisModel","defaultContent": ""},		            
             {"title":"车辆长度","class":"center","data": "vehicleLength","defaultContent": ""},
             {"title":"轴距","class":"center","data":"wheelbase","defaultContent": ""},

@@ -225,5 +225,7 @@ public interface IProductionDao {
 	public int updateTmpOrder(Map<String, Object> cmap);
 	public String caculateTmpSalary(Map<String, Object> conditionMap);
 
+	int queryPartsBatch(@Param(value="batch") String batch);
+
 
 }
