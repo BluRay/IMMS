@@ -87,10 +87,10 @@ function ajaxQuery(){
 	
 	var tb=$("#tableResult").DataTable({
 		serverSide: true,
-		fixedColumns:   {
+/*		fixedColumns:   {
             leftColumns: 2,
             //rightColumns:2
-        },
+        },*/
         rowsGroup:[0],
 		dom: 'Bfrtip',
 	    buttons: [
@@ -104,7 +104,7 @@ function ajaxQuery(){
 		searching: false,
 		bAutoWidth:false,
 		destroy: true,
-		sScrollY: $(window).height()-220,
+		sScrollY: $(window).height()-110,
 		scrollX: true,
 		pagingType:"full_numbers",
 		lengthChange:true,

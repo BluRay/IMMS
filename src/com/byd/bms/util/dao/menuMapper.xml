@@ -11,10 +11,11 @@
 		<result property="priority" column="priority" />
 		<result property="isPermission" column="isPermission" />
 		<result property="isDeleted" column="isDeleted" />
+		<result property="type" column="type" />
 	</resultMap>
 
 	<select id="getMenu" parameterType="String" resultMap="menuMap">
-		SELECT m.id,m.name,m.icon,m.parent,m.priority,m.isDeleted,f.function_url AS path
+		SELECT m.id,m.name,m.icon,m.parent,m.priority,m.isDeleted,f.function_url AS path,f.type 
 		FROM BMS_BASE_MODEL m
 		LEFT OUTER JOIN BMS_BASE_FUNCTION f ON m.id = f.model_id
 		WHERE isDeleted='0'  AND

@@ -507,6 +507,9 @@ public class OrderController extends BaseController{
 		condMap.put("sort", request.getParameter("sort"));
 		condMap.put("order", request.getParameter("order"));
 		condMap.put("draw", draw);
+		condMap.put("review_status", request.getParameter("review_status"));
+		condMap.put("img_output", request.getParameter("img_output"));
+		
 		
 		model=orderService.getOrderQueryData(condMap);
 

@@ -252,7 +252,7 @@ function showTable(report_type){
 			searching: false,
 			bAutoWidth:false,
 			destroy: true,
-			sScrollY: $(window).height()-250,
+			sScrollY: $(window).height()-140,
 			scrollX: true,
 			info:false,
 			orderMulti:false,

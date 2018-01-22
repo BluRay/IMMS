@@ -53,11 +53,11 @@
 							<tr>
 								<td>订单编号：</td>
 								<td>
-									<input type="text" style="height: 30px;" class="input-medium revise" placeholder="请输入订单编号..." value="" id="search_order_no" />
+									<input type="text" style="height: 30px;width:120px;" class="input-medium revise" placeholder="请输入订单编号..." value="" id="search_order_no" />
 								</td>
 								<td>订单状态：</td>
 								<td>
-									<select name="" id="search_status" class="input-small">
+									<select name="" id="search_status" class="input-small" style="width:80px;">
 										<option value="">全部</option>
 										<option value="0">未开始</option>
 										<option value="1">生产中</option>
@@ -67,12 +67,26 @@
 								<td>生产年份：</td>
 								<td>
 									<!-- <select name="" id="search_productive_year" class="input-small"></select> -->
-										<input class="input-small"  style="height: 30px;" id="search_productive_year" onclick="WdatePicker({el:'search_productive_year',dateFmt:'yyyy'});" type="text">
+										<input class="input-small"  style="height: 30px;width:60px;" id="search_productive_year" onclick="WdatePicker({el:'search_productive_year',dateFmt:'yyyy'});" type="text">
 								</td>
 								<td>生产工厂：</td>
 								<td>
 									<select name="" id="search_factory" class="input-small"></select>
 								</td>
+								<td>评审状态：</td>
+								<td><select name="" id="search_review_status" class="input-small" style="width:80px;">
+										<option value="">全部</option>
+										<option value="0">未评审</option>
+										<option value="1">评审中</option>
+										<option value="2">已评审</option>
+									</select>
+								</td>
+								<td>图纸：</td>
+								<td><select name="" id="search_img_status" class="input-small" style="width:80px;">
+										<option value="">全部</option>
+										<option value="已输出">已输出</option>
+										<option value="未输出">未输出</option>
+									</select></td>
 								<td>
 									<input type="button" class="btn btn-sm btn-primary btnQuery" id="btnQuery" value="查询" style="margin-left: 2px;"></input>
 								</td>

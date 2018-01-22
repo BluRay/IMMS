@@ -12,6 +12,7 @@ public class BmsBaseMenu {
 	private int parent;
 	private int priority;
 	private int isPermission;
+	private String type;
 	public String getIcon() {
 		return icon;
 	}
@@ -60,6 +61,12 @@ public class BmsBaseMenu {
 	}
 	public void setParent(int parent) {
 		this.parent = parent;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
 	}
 	
 }

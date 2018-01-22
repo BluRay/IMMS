@@ -128,7 +128,9 @@ function ajaxQuery(){
 				"order_no":$("#search_order_no").val(),
 				"factory":getAllFromOptions("#search_factory","val"),
 				"actYear":$("#search_productive_year").val(),
-				"status":$("#search_status").val()
+				"status":$("#search_status").val(),
+				"review_status":$("#search_review_status").val(),
+				"img_output":$("#search_img_status").val()
 			};
             param.length = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
             param.start = data.start;//开始的记录序号

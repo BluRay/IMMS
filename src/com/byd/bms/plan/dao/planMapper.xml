@@ -1486,14 +1486,14 @@
 		left join BMS_BASE_WORKSHOP w on s.workshop_id=w.id
 		where s.factory_id=#{factory_id} 
 		<!-- and s.start_time like concat(#{date_start},'%')  -->
-		and (s.end_time&lt;=0 or s.end_time>=#{date_start})
+		and (s.end_time&lt;=0 or s.start_time>=#{date_start})
 		and find_in_set(s.order_list,#{order_no})>0 and w.workshop_name=#{workshop_name}
 		union all
 		select e.detailed_reasons
 		from BMS_PD_PRODUCTION_EXCEPTION e
 		<!-- left join BMS_PLAN_BUS b on b.bus_number=e.bus_number  -->
 		where e.factory=#{factory} <!-- and e.start_time like concat(#{date_start},'%') --> 
-		and (e.finish_time&lt;=0 or e.finish_time>=#{date_start})
+		and (e.finish_time&lt;=0 or e.start_time>=#{date_start})
 		and e.order_id=#{order_id} and e.workshop=#{workshop_name}
 	</select>
 </mapper>

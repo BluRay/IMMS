@@ -427,13 +427,15 @@
 		(SELECT COUNT(b.id) FROM BMS_PLAN_BUS b WHERE b.assembly_offline_date >0 AND b.order_id = o.id AND b.order_config_id=c.id AND b.factory_id = fo.factory_id) as assembly_offline_count,
 		(SELECT COUNT(b.id) FROM BMS_PLAN_BUS b WHERE b.warehousing_date>0 AND b.order_id = o.id AND b.order_config_id=c.id AND b.factory_id = fo.factory_id) as warehousing_count,
 		(SELECT COUNT(b.id) FROM BMS_PLAN_BUS b WHERE b.dispatch_date>0 AND b.order_id = o.id AND b.order_config_id=c.id AND b.factory_id = fo.factory_id) as dispatch_count,
-		(select review_status from BMS_OR_ORDER_REVIEW_RESULTS r where fo.factory_id=r.factory_id and fo.order_id=r.order_id) as review_result
+		<!-- (select review_status from BMS_OR_ORDER_REVIEW_RESULTS r where fo.factory_id=r.factory_id and fo.order_id=r.order_id) as review_result -->
+		r.review_status,r.drawingexport_date
 		from BMS_OR_ORDER o
 		left join BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id
 		left join BMS_OR_FACTORY_ORDER fo on fo.order_id=o.id
 		left join BMS_BASE_FACTORY f on fo.factory_id=f.id
 		left join BMS_OR_ORDER_CONFIG c on c.order_id=o.id
 		left join BMS_OR_FACTORY_ORDER_CONFIG fc on fc.order_id=o.id and fc.factory_id=fo.factory_id and fc.order_config_id=c.id
+		left join BMS_OR_ORDER_REVIEW_RESULTS r on  fo.factory_id=r.factory_id and fo.id=r.order_id
 		where 1=1
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no=#{order_no}
@@ -447,6 +449,22 @@
 		<if test="status !=null and status !=''">
 			and fo.status=#{status}
 		</if>
+		<if test="review_status =='0' ">
+			and (r.review_status is  null or r.review_status ='0') 
+		</if>
+		<if test="review_status =='1' ">
+			and r.review_status='1'
+		</if>
+		<if test="review_status =='2' ">
+			and r.review_status='2'
+		</if>
+		<if test="img_output =='已输出'">
+			and r.drawingexport_date>0
+		</if>
+		<if test="img_output =='未输出'">
+			and (r.drawingexport_date is null or r.drawingexport_date='')
+		</if>
+		
 		 order by o.id desc,fo.factory_id
 		<if test="start !=null and length !='-1'">
 			limit #{start},#{length}
@@ -461,6 +479,7 @@
 <!-- 		left join BMS_BASE_FACTORY f on fo.factory_id=f.id -->
 		left join BMS_OR_FACTORY_ORDER_CONFIG fc on fc.order_id=o.id and fc.factory_id=fo.factory_id
 		left join BMS_OR_ORDER_CONFIG c on fc.order_config_id=c.id
+		left join BMS_OR_ORDER_REVIEW_RESULTS r on  fo.factory_id=r.factory_id and fo.id=r.order_id
 		where 1=1
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no=#{order_no}
@@ -474,6 +493,22 @@
 		<if test="status !=null and status !=''">
 			and fo.status=#{status}
 		</if>
+		<if test="review_status =='0' ">
+			and (r.review_status is  null or r.review_status ='0') 
+		</if>
+		<if test="review_status =='1' ">
+			and r.review_status='1'
+		</if>
+		<if test="review_status =='2' ">
+			and r.review_status='2'
+		</if>
+		<if test="img_output =='已输出'">
+			and r.drawingexport_date>0
+		</if>
+		<if test="img_output =='未输出'">
+			and (r.drawingexport_date is null or r.drawingexport_date='')
+		</if>
+		
 	</select>
 	
 	<select id="queryOrderConfigTotalQty" parameterType="String" resultType="int">

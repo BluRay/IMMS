@@ -55,18 +55,22 @@
 								<td><input id="search_order_no" placeholder="请输入订单编号..." style="height: 30px;width:110px" type="text"></td>
 								<td>&nbsp;VIN/车号：</td>
 								<td><input id="search_busNum" placeholder="请输入VIN/车号..." style="height: 30px;width:150px" type="text"></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>检测日期：</td>
+								<td colspan=3><input id="date_start" placeholder="开始时间..." style="height: 30px;width:115px" type="text" onClick="WdatePicker({el:'date_start',dateFmt:'yyyy-MM-dd'});"> - <input id="date_end" placeholder="结束时间..." style="height: 30px;width:115px" type="text" onClick="WdatePicker({el:'date_end',dateFmt:'yyyy-MM-dd'});"></td>
 								<td>&nbsp;起始车号：</td>
 								<td><input id="start_busNum" placeholder="开始车号..." style="height: 30px;width:80px" type="text"> - <input id="end_busNum" placeholder="结束车号..." style="height: 30px;width:80px" type="text"></td>
 								<td>
 									<input id="btnQuery" type="button" class="btn btn-sm btn-success" value="查询" style="margin-left: 2px;">
 								</td>
-								<td></td>
 							</tr>
 						</table>
 					</div>
 					
 					<div id="toolbar"></div>
-					<table  style="font-weight:normal;width:1500px;" id="table" data-toolbar="#toolbar" data-search="false" data-show-refresh="true"
+					<table  style="font-weight:normal;" id="table" data-toolbar="#toolbar" data-search="false" data-show-refresh="true"
 				           data-show-toggle="false" data-show-columns="true" data-show-export="true" data-detail-view="false"
 				           data-detail-formatter="detailFormatter" data-minimum-count-columns="2" data-show-pagination-switch="true"
 				           data-pagination="true" data-id-field="id" data-page-list="[50, 100, 200, 500, ALL]"
@@ -90,7 +94,7 @@
 			position: absolute;
 			margin-top: 102px;
 			right: 20px;
-			top: -79px;
+			top: -49px;
 		}
 		.btn-default {
 			color: #333;

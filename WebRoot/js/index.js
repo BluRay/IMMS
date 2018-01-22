@@ -112,7 +112,7 @@ $(document).ready(function() {
 	});
 	
 	$('.page-content').ace_scroll({
-		size: $(window).height()*0.85
+		size: $(window).height()*0.90
     });
 	
 	}

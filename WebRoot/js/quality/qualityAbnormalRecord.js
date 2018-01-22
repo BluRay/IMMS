@@ -312,9 +312,9 @@ function ajaxQuery(){
 		            {"title":"责任单位",width:'90',"class":"center","data":"resp_unit","defaultContent": ""},
 					{"title":"故障图片",width:'80',"class":"center","data":"problem_photo_path","render": function ( data, type, row ) {
 						var result="";
-						var path=$("#urlPath").val();
+						//var path=$("#urlPath").val();
 						if(data != null && data!=''){
-							result="<a href='"+path+""+data+"' target='_blank'>查看</a>";
+							result="<a href='"+data+"' target='_blank'>查看</a>";
 						}
 						if(type == 'export' ){
 		            		return data;

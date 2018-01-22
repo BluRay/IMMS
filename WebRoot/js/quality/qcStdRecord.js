@@ -381,11 +381,11 @@ function openDialogDisplay(factory,id){
 			var val=$('#urlPath').val();
 			if(response.stdRecord.bfile_path!=null){
 				$('#bfile_path_submit').text("查看");
-				$('#bfile_path_submit').attr("href",val+response.stdRecord.bfile_path);
+				$('#bfile_path_submit').attr("href",response.stdRecord.bfile_path);
 			}else{
 				$('#bfile_path_submit').text("");
 			}
-			$('#afile_path_submit').attr("href",val+response.stdRecord.afile_path);
+			$('#afile_path_submit').attr("href",response.stdRecord.afile_path);
            
 			
 			$("#busnumber_submit").val(response.stdRecord.implement_bus_number);
@@ -446,12 +446,12 @@ function show(id){
 			var val=$('#urlPath').val();
 			if(response.stdRecord.bfile_path!=null){
 				$('#bfile_path_show').text("查看");
-				$('#bfile_path_show').attr("href",val+response.stdRecord.bfile_path);
+				$('#bfile_path_show').attr("href",response.stdRecord.bfile_path);
 			}else{
 				$('#bfile_path').text("");
 			}
 			
-			$('#afile_path_show').attr("href",val+response.stdRecord.afile_path);
+			$('#afile_path_show').attr("href",response.stdRecord.afile_path);
 			$("#memo_show").val(response.stdRecord.memo);
 		}
 	})
@@ -520,12 +520,12 @@ function edit(id){
 			var val=$('#urlPath').val();
 			if(response.stdRecord.bfile_path!=null){
 				$('#bfile_path_show').text("查看");
-				$('#bfile_path_show').attr("href",val+response.stdRecord.bfile_path);
+				$('#bfile_path_show').attr("href",response.stdRecord.bfile_path);
 			}else{
 				$('#bfile_path').text("");
 			}
 			
-			$('#afile_path_show').attr("href",val+response.stdRecord.afile_path);
+			$('#afile_path_show').attr("href",response.stdRecord.afile_path);
 			$("#memo_show").val(response.stdRecord.memo);
 		}
 	})

@@ -1420,43 +1420,51 @@ public class QualityController extends BaseController {
 		int editor_id =(int) request.getSession().getAttribute("user_id");
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String edit_date = df.format(new Date());
-		String bpath = "docs/upload/qcStandard/";
-		
-		// 把上传的文件放到指定的路径下
-		String path = request.getSession().getServletContext().getRealPath(bpath);
-
-		// 写到指定的路径中
-		File file = new File(path);
-		// 如果指定的路径没有就创建
-		if (!file.exists()) {
-			file.mkdirs();
+//		String bpath = "docs/upload/qcStandard/";
+//		
+//		// 把上传的文件放到指定的路径下
+//		String path = request.getSession().getServletContext().getRealPath(bpath);
+//
+//		// 写到指定的路径中
+//		File file = new File(path);
+//		// 如果指定的路径没有就创建
+//		if (!file.exists()) {
+//			file.mkdirs();
+//		}
+//		String afile_db ="";
+//		if (afile != null) {
+//			afile_db = "qcAfile_"
+//					+ edit_date.replace("-", "").replace(":", "").replace(" ", "")
+//					+ afile.getOriginalFilename().substring(afile.getOriginalFilename().indexOf("."),
+//							afile.getOriginalFilename().length());
+//			try {
+//				FileUtils.copyInputStreamToFile(afile.getInputStream(), new File(file, afile_db));
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//			
+//			stdRecord.setAfilePath(bpath+ afile_db);
+//		}
+//		String bfile_db= "";
+//		if (bfile.getSize() != 0) {
+//			bfile_db= "qcBfile_"
+//					+ edit_date.replace("-", "").replace(":", "").replace(" ", "")
+//					+ bfile.getOriginalFilename().substring(bfile.getOriginalFilename().indexOf("."),
+//							bfile.getOriginalFilename().length());
+//			try {
+//				FileUtils.copyInputStreamToFile(bfile.getInputStream(), new File(file, bfile_db));
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//			stdRecord.setBfilePath(bpath+ bfile_db);
+//		}
+		if(afile != null){
+			String apath = saveFileMethod(afile);
+			stdRecord.setAfilePath(apath);
 		}
-		String afile_db ="";
-		if (afile != null) {
-			afile_db = "qcAfile_"
-					+ edit_date.replace("-", "").replace(":", "").replace(" ", "")
-					+ afile.getOriginalFilename().substring(afile.getOriginalFilename().indexOf("."),
-							afile.getOriginalFilename().length());
-			try {
-				FileUtils.copyInputStreamToFile(afile.getInputStream(), new File(file, afile_db));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-			stdRecord.setAfilePath(bpath+ afile_db);
-		}
-		String bfile_db= "";
-		if (bfile.getSize() != 0) {
-			bfile_db= "qcBfile_"
-					+ edit_date.replace("-", "").replace(":", "").replace(" ", "")
-					+ bfile.getOriginalFilename().substring(bfile.getOriginalFilename().indexOf("."),
-							bfile.getOriginalFilename().length());
-			try {
-				FileUtils.copyInputStreamToFile(bfile.getInputStream(), new File(file, bfile_db));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			stdRecord.setBfilePath(bpath+ bfile_db);
+		if(bfile != null){
+			String bpath = saveFileMethod(bfile);
+			stdRecord.setBfilePath(bpath);
 		}
 		stdRecord.setEditorId(editor_id);
 		stdRecord.setEditDate(edit_date);
@@ -1584,31 +1592,34 @@ public class QualityController extends BaseController {
 		String curTime = df.format(new Date());
 		String user_name=(String) session.getAttribute("user_name");
 		Map<String,Object> condMap=new HashMap<String,Object>();
-        String bpath = "docs/upload/qcStandard/";
-		
-		// 把上传的文件放到指定的路径下
-		String path = request.getSession().getServletContext().getRealPath(bpath);
-
-		// 写到指定的路径中
-		File pathfile = new File(path);
-		// 如果指定的路径没有就创建
-		if (!pathfile.exists()) {
-			pathfile.mkdirs();
+//        String bpath = "docs/upload/qcStandard/";
+//		
+//		// 把上传的文件放到指定的路径下
+//		String path = request.getSession().getServletContext().getRealPath(bpath);
+//
+//		// 写到指定的路径中
+//		File pathfile = new File(path);
+//		// 如果指定的路径没有就创建
+//		if (!pathfile.exists()) {
+//			pathfile.mkdirs();
+//		}
+//		String afile_db ="";
+//		if (file!=null && file.getSize() != 0) {
+//			afile_db = "qcAfile_"
+//					+ curTime.replace("-", "").replace(":", "").replace(" ", "")
+//					+ file.getOriginalFilename().substring(file.getOriginalFilename().indexOf("."),
+//							file.getOriginalFilename().length());
+//			try {
+//				FileUtils.copyInputStreamToFile(file.getInputStream(), new File(pathfile, afile_db));
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//			condMap.put("problem_photo_path", bpath+ afile_db);
+//		}
+		if(file != null){
+			String bpath = saveFileMethod(file);
+			condMap.put("problem_photo_path", bpath);
 		}
-		String afile_db ="";
-		if (file!=null && file.getSize() != 0) {
-			afile_db = "qcAfile_"
-					+ curTime.replace("-", "").replace(":", "").replace(" ", "")
-					+ file.getOriginalFilename().substring(file.getOriginalFilename().indexOf("."),
-							file.getOriginalFilename().length());
-			try {
-				FileUtils.copyInputStreamToFile(file.getInputStream(), new File(pathfile, afile_db));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			condMap.put("problem_photo_path", bpath+ afile_db);
-		}
-		
 		condMap.put("bus_type", request.getParameter("bus_type"));
 		condMap.put("factory", request.getParameter("factory"));
 		condMap.put("test_node_id", request.getParameter("test_node_id"));
@@ -1666,55 +1677,63 @@ public class QualityController extends BaseController {
 	@ResponseBody
 	public ModelAndView updateStdRecord(BmsBaseQCStdRecord stdRecord,@RequestParam("afile") MultipartFile afile,
 			@RequestParam("bfile") MultipartFile bfile) {
-		int editor_id =(int) request.getSession().getAttribute("user_id");
-		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		String edit_date = df.format(new Date());
-		String bpath = "docs/upload/qcStandard/";
+//		int editor_id =(int) request.getSession().getAttribute("user_id");
+//		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//		String edit_date = df.format(new Date());
+//		String bpath = "docs/upload/qcStandard/";
 		
-		// 把上传的文件放到指定的路径下
-		String path = request.getSession().getServletContext().getRealPath(bpath);
-
-		// 写到指定的路径中
-		File file = new File(path);
-		// 如果指定的路径没有就创建
-		if (!file.exists()) {
-			file.mkdirs();
+//		// 把上传的文件放到指定的路径下
+//		String path = request.getSession().getServletContext().getRealPath(bpath);
+//
+//		// 写到指定的路径中
+//		File file = new File(path);
+//		// 如果指定的路径没有就创建
+//		if (!file.exists()) {
+//			file.mkdirs();
+//		}
+//		String afile_db ="";
+		if(afile != null){
+			String apath = saveFileMethod(afile);
+			stdRecord.setAfilePath(apath);
 		}
-		String afile_db ="";
-		if (afile != null) {
-			if(afile.getOriginalFilename().indexOf(".")>0){
-				afile_db = "qcAfile_"
-						+ edit_date.replace("-", "").replace(":", "").replace(" ", "")
-						+ afile.getOriginalFilename().substring(afile.getOriginalFilename().indexOf("."),
-								afile.getOriginalFilename().length());
-				try {
-					FileUtils.copyInputStreamToFile(afile.getInputStream(), new File(file, afile_db));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				
-				stdRecord.setAfilePath(bpath+ afile_db);
-			}else{
-				stdRecord.setAfilePath(null);
-			}
+		if(bfile != null){
+			String bpath = saveFileMethod(bfile);
+			stdRecord.setBfilePath(bpath);
 		}
-		String bfile_db= "";
-		if (bfile!= null) {
-			if(bfile.getOriginalFilename().indexOf(".")>0){
-				bfile_db= "qcBfile_"
-						+ edit_date.replace("-", "").replace(":", "").replace(" ", "")
-						+ bfile.getOriginalFilename().substring(bfile.getOriginalFilename().indexOf("."),
-								bfile.getOriginalFilename().length());
-				try {
-					FileUtils.copyInputStreamToFile(bfile.getInputStream(), new File(file, bfile_db));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				stdRecord.setBfilePath(bpath+ bfile_db);
-			}else{
-				stdRecord.setBfilePath(null);
-			}
-		}
+//		if (afile != null) {
+//			if(afile.getOriginalFilename().indexOf(".")>0){
+//				afile_db = "qcAfile_"
+//						+ edit_date.replace("-", "").replace(":", "").replace(" ", "")
+//						+ afile.getOriginalFilename().substring(afile.getOriginalFilename().indexOf("."),
+//								afile.getOriginalFilename().length());
+//				try {
+//					FileUtils.copyInputStreamToFile(afile.getInputStream(), new File(file, afile_db));
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				}
+//				
+//				stdRecord.setAfilePath(bpath+ afile_db);
+//			}else{
+//				stdRecord.setAfilePath(null);
+//			}
+//		}
+//		String bfile_db= "";
+//		if (bfile!= null) {
+//			if(bfile.getOriginalFilename().indexOf(".")>0){
+//				bfile_db= "qcBfile_"
+//						+ edit_date.replace("-", "").replace(":", "").replace(" ", "")
+//						+ bfile.getOriginalFilename().substring(bfile.getOriginalFilename().indexOf("."),
+//								bfile.getOriginalFilename().length());
+//				try {
+//					FileUtils.copyInputStreamToFile(bfile.getInputStream(), new File(file, bfile_db));
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				}
+//				stdRecord.setBfilePath(bpath+ bfile_db);
+//			}else{
+//				stdRecord.setBfilePath(null);
+//			}
+//		}
 		qualityService.updateStdRecord(stdRecord);
 		
 		mv.setViewName("redirect:/quality/qcStdRecord");
@@ -2073,6 +2092,8 @@ public class QualityController extends BaseController {
 		condMap.put("vin", request.getParameter("vin"));
 		condMap.put("start_busNum", request.getParameter("start_busNum"));
 		condMap.put("end_busNum", request.getParameter("end_busNum"));
+		condMap.put("date_start", request.getParameter("date_start"));
+		condMap.put("date_end", request.getParameter("date_end"));
 		
 		Map<String,Object> list = qualityService.getTestingDateReport(condMap);
 		mv.clear();

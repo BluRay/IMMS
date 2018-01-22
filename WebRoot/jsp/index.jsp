@@ -39,7 +39,7 @@ String factory=(String)session.getAttribute("factory");
 			<!-- 主体 -->
 			<div class="main-content">			
 			<!-- 路径和搜索框 -->
-			<div class="breadcrumbs breadcrumbs-fixed" id="breadcrumbs">
+<%-- 			<div class="breadcrumbs breadcrumbs-fixed" id="breadcrumbs">
 					<ul class="breadcrumb">
 						<li><i class="ace-icon fa fa-home home-icon"></i><a href="/BMS/index">首页</a></li>
 						<li class="active">
@@ -57,13 +57,13 @@ String factory=(String)session.getAttribute("factory");
 							</span>
 						</form>
 					</div><!-- /.nav-search -->
-				</div>
+				</div> --%>
 				
-			<div class="page-content">
+			<div class="page-content"  >
 					<!-- 设置小部件 -->
 					<%-- <jsp:include page="settings.jsp" flush="true"/> --%>
 					<!-- /section:settings.box -->
-					<div class="page-content-area ">
+					<div class="page-content-area " >
 						<div class="row">
 								<div class="col-xs-12 col-sm-5 widget-container-col ui-sortable" >
 										<!-- #section:custom/widget-box -->
@@ -281,17 +281,21 @@ String factory=(String)session.getAttribute("factory");
 				</div>
 			
 			</div>
+<<<<<<< .mine
+						   		
+						  </div>
+			</div>
+	</div>	
 
 			<!-- 脚 -->
 			<%-- <jsp:include page="footer.jsp" flush="true"/> --%>
 			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse"><i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i></a>
 		</div><!-- /.main-container -->
-	</div>
 	<script src="assets/js/jquery-ui.custom.min.js"></script>
 	<script src="assets/js/jquery.easypiechart.min.js"></script>
 	<script src="js/highcharts.js"></script>
 	<script src="js/common.js"></script>
 	<script src="js/index.js"></script>
-	
+	<jsp:include page="tabPannel.jsp" flush="true"/>
 	</body>
 </html>

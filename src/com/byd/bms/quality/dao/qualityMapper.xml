@@ -571,7 +571,10 @@
 	s2_tot_wgt_val,wgt_cal_val,tot_wgt_val,s1_lft_eff_frs_val,s1_rgt_eff_frs_val,s1_eff_pec_val,s1_lft_equ_frs_val,s1_rgt_equ_frs_val,
 	s1_equ_pec_val,s1_lft_lag_frs_val,s1_lft_lag_pec_val,s1_rgt_lag_frs_val,s1_rgt_lag_pec_val,s1_coord_val,s2_lft_eff_frs_val,s2_rgt_eff_frs_val,
 	s2_eff_pec_val,s2_lft_equ_frs_val,s2_rgt_equ_frs_val,s2_equ_pec_val,s2_lft_lag_frs_val,s2_lft_lag_pec_val,s2_rgt_lag_frs_val,s2_rgt_lag_pec_val,
-	s2_coord_val,park_lft_eff_frs_val,park_rgt_eff_frs_val,park_eff_pec_val,tot_eff_frs_val,tot_eff_pec_val)
+	s2_coord_val,park_lft_eff_frs_val,park_rgt_eff_frs_val,park_eff_pec_val,tot_eff_frs_val,tot_eff_pec_val,
+	lhb_light_val,rhb_light_val,lhb_height_val,rhb_height_val,lhb_lroff_val,lhb_udobs_val,ldb_lroff_val,
+	ldb_udobs_val,rhb_lroff_val,rhb_udobs_val,rdb_lroff_val,rdb_udobs_val,horn_level,side_slide_val
+	)
 	VALUES(
 	#{LICENSE_NO},#{VIN},#{factory_id},#{motor_number},#{bus_type},#{license_type},#{bus_vehicle_type},#{fuel_type},#{chassis_number},#{chassis_model},
 	#{check_type},#{register_date},#{manufacture_date},#{check_date},#{check_number},#{check_times},#{is_passed},#{test_results},
@@ -579,7 +582,9 @@
 	#{s2_tot_wgt_val},#{wgt_cal_val},#{tot_wgt_val},#{s1_lft_eff_frs_val},#{s1_rgt_eff_frs_val},#{s1_eff_pec_val},#{s1_lft_equ_frs_val},#{s1_rgt_equ_frs_val},
 	#{s1_equ_pec_val},#{s1_lft_lag_frs_val},#{s1_lft_lag_pec_val},#{s1_rgt_lag_frs_val},#{s1_rgt_lag_pec_val},#{s1_coord_val},#{s2_lft_eff_frs_val},#{s2_rgt_eff_frs_val},
 	#{s2_eff_pec_val},#{s2_lft_equ_frs_val},#{s2_rgt_equ_frs_val},#{s2_equ_pec_val},#{s2_lft_lag_frs_val},#{s2_lft_lag_pec_val},#{s2_rgt_lag_frs_val},#{s2_rgt_lag_pec_val},
-	#{s2_coord_val},#{park_lft_eff_frs_val},#{park_rgt_eff_frs_val},#{park_eff_pec_val},#{tot_eff_frs_val},#{tot_eff_pec_val}
+	#{s2_coord_val},#{park_lft_eff_frs_val},#{park_rgt_eff_frs_val},#{park_eff_pec_val},#{tot_eff_frs_val},#{tot_eff_pec_val},
+	#{lhb_light_val},#{rhb_light_val},#{lhb_height_val},#{rhb_height_val},#{lhb_lroff_val},#{lhb_udobs_val},#{ldb_lroff_val},
+	#{ldb_udobs_val},#{rhb_lroff_val},#{rhb_udobs_val},#{rdb_lroff_val},#{rdb_udobs_val},#{horn_level},#{side_slide_val}
 	)
 	</insert>
 	<update id="updateJcxBusInfo" parameterType="Map">
@@ -598,7 +603,11 @@
 	s2_rgt_equ_frs_val=#{s2_rgt_equ_frs_val}, s2_equ_pec_val=#{s2_equ_pec_val}, s2_lft_lag_frs_val=#{s2_lft_lag_frs_val}, 
 	s2_lft_lag_pec_val=#{s2_lft_lag_pec_val}, s2_rgt_lag_frs_val=#{s2_rgt_lag_frs_val}, s2_rgt_lag_pec_val=#{s2_rgt_lag_pec_val}, 
 	s2_coord_val=#{s2_coord_val}, park_lft_eff_frs_val=#{park_lft_eff_frs_val}, park_rgt_eff_frs_val=#{park_rgt_eff_frs_val}, 
-	park_eff_pec_val=#{park_eff_pec_val}, tot_eff_frs_val=#{tot_eff_frs_val}, tot_eff_pec_val=#{tot_eff_pec_val}
+	park_eff_pec_val=#{park_eff_pec_val}, tot_eff_frs_val=#{tot_eff_frs_val}, tot_eff_pec_val=#{tot_eff_pec_val},
+	lhb_light_val=#{lhb_light_val},rhb_light_val=#{rhb_light_val},lhb_height_val=#{lhb_height_val},
+	rhb_height_val=#{rhb_height_val},lhb_lroff_val=#{lhb_lroff_val},lhb_udobs_val=#{lhb_udobs_val},ldb_lroff_val=#{ldb_lroff_val},
+	ldb_udobs_val=#{ldb_udobs_val},rhb_lroff_val=#{rhb_lroff_val},rhb_udobs_val=#{rhb_udobs_val},
+	rdb_lroff_val=#{rdb_lroff_val},rdb_udobs_val=#{rdb_udobs_val},horn_level=#{horn_level},side_slide_val=#{side_slide_val}
 	WHERE vin=#{VIN}
 	</update>
 	
@@ -623,6 +632,12 @@
 		</if>
 		<if test="end_busNum !=null and end_busNum !=''">
 		<![CDATA[ AND RIGHT(I.bus_number,4)+0 <= #{end_busNum} ]]>
+		</if> 
+		<if test="date_start !=null and date_start !=''">
+		AND I.register_date >= #{date_start}
+		</if>
+		<if test="end_busNum !=null and end_busNum !=''">
+		<![CDATA[ AND I.register_date <= #{date_end} ]]>
 		</if> 
 		<if test="start !=null">
 			LIMIT #{start} ,#{length} 
@@ -649,6 +664,12 @@
 		</if>
 		<if test="end_busNum !=null and end_busNum !=''">
 		<![CDATA[ AND RIGHT(I.bus_number,4)+0 <= #{end_busNum} ]]>
+		</if> 
+		<if test="date_start !=null and date_start !=''">
+		AND I.register_date >= #{date_start}
+		</if>
+		<if test="end_busNum !=null and end_busNum !=''">
+		<![CDATA[ AND I.register_date <= #{date_end} ]]>
 		</if> 
 	</select>
 	

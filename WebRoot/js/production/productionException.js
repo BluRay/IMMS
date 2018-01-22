@@ -56,6 +56,11 @@ $(document).ready(function () {
 			$("#btnSubmit").removeAttr("disabled");
 			return false;
 		}
+		if($("#start_time").val().trim().length==0){
+			alert("请输入开始时间！");
+			$("#btnSubmit").removeAttr("disabled");
+			return false;
+		}
 		
 		
 		var busNoStr = busNoArray.join("|");;
