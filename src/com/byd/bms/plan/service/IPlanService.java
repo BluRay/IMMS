@@ -33,6 +33,7 @@ public interface IPlanService {
 	public int addPause(List<PlanPause> pauseList);
 	public Map<String,Object> getPauseList(Map<String,Object> queryMap);
 	public int updatePauseInfo(PlanPause pause);
+	public int deletePause(PlanPause pause);
 	public Map<String, Object> getExceptionList(Map<String,Object> queryMap);
 	public int updateExceptionInfo(ProductionException exception);
 	public int confirmException(ProductionException exception);

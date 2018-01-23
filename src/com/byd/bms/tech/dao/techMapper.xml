@@ -895,6 +895,12 @@
 	AND F.factory = #{factory} AND F.workshop = #{workshop}
 	LEFT JOIN BMS_BASE_USER U ON F.confirmor_id = U.staff_number
 	WHERE B.factory_id=#{factory_id} AND B.order_id=(SELECT O.id FROM BMS_OR_ORDER O WHERE O.order_no = #{order_no})
+	<if test="start !=null and start !=''">
+		AND RIGHT(B.bus_number,5)+0 >= #{start}
+	</if>
+	<if test="end !=null and end !=''">
+		<![CDATA[ AND RIGHT(B.bus_number,5)+0 <= #{end} ]]>
+	</if>
 	order by cast(reverse(substr(reverse(B.bus_number),1,instr(reverse(B.bus_number),'-')-1)) as signed)
 	</select>
 	

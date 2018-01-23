@@ -117,6 +117,9 @@ function getSearch(){
     		var tplan_rk=0;
     		var treal_rk=0;
     		
+    		var tplan_fc=0;
+    		var treal_fc=0;
+    		
     		//订单计划达成
     		$.each(response.data,function (index,value) {
     			var tr = $("<tr id= '"+value.id+"'/>");  			
@@ -161,7 +164,9 @@ function getSearch(){
         		tplan_zzoff+=(value.key_name=='总装下线'?parseInt(value.total_plan_qty):0);
         		treal_zzoff+=(value.key_name=='总装下线'?parseInt(value.real_qty):0);
         		tplan_rk+=(value.key_name=='入库'?parseInt(value.total_plan_qty):0);
-        		treal_rk+=(value.key_name=='入库'?parseInt(value.real_qty):0);			
+        		treal_rk+=(value.key_name=='入库'?parseInt(value.real_qty):0);	
+        		tplan_fc+=(value.key_name=='发车'?parseInt(value.total_plan_qty):0);
+        		treal_fc+=(value.key_name=='发车'?parseInt(value.real_qty):0);
     		});
     		
     		//车间计划达成
@@ -176,6 +181,7 @@ function getSearch(){
     		$("#tr_plan").find("td").eq("9").html(tplan_zzon);
     		$("#tr_plan").find("td").eq("10").html(tplan_zzoff);
     		$("#tr_plan").find("td").eq("11").html(tplan_rk);
+    		$("#tr_plan").find("td").eq("12").html(tplan_fc);
     		
     		$("#tr_realDone").find("td").eq("1").html(treal_zzj);
     		$("#tr_realDone").find("td").eq("2").html(treal_bjoff);
@@ -188,6 +194,7 @@ function getSearch(){
     		$("#tr_realDone").find("td").eq("9").html(treal_zzon);
     		$("#tr_realDone").find("td").eq("10").html(treal_zzoff);
     		$("#tr_realDone").find("td").eq("11").html(treal_rk);
+    		$("#tr_realDone").find("td").eq("12").html(treal_fc);
     		
     		$("#tr_doneRate").find("td").eq("1").html(tplan_zzj==0?"-":(Math.round(treal_zzj/tplan_zzj * 10000) / 100.00 + "%"));
     		$("#tr_doneRate").find("td").eq("2").html(tplan_bjoff==0?"-":(Math.round(treal_bjoff/tplan_bjoff * 10000) / 100.00 + "%"));
@@ -200,6 +207,7 @@ function getSearch(){
     		$("#tr_doneRate").find("td").eq("9").html(tplan_zzon==0?"-":(Math.round(treal_zzon/tplan_zzon * 10000) / 100.00 + "%"));
     		$("#tr_doneRate").find("td").eq("10").html(tplan_zzoff==0?"-":(Math.round(treal_zzoff/tplan_zzoff * 10000) / 100.00 + "%"));
     		$("#tr_doneRate").find("td").eq("11").html(tplan_rk==0?"-":(Math.round(treal_rk/tplan_rk * 10000) / 100.00 + "%"));
+    		$("#tr_doneRate").find("td").eq("112").html(tplan_fc==0?"-":(Math.round(treal_fc/tplan_fc * 10000) / 100.00 + "%"));
     		
     		$("#tr_undone").find("td").eq("1").html((treal_zzj-tplan_zzj)<0?"<span style='color:red'>"+(tplan_zzj-treal_zzj):(treal_zzj-tplan_zzj));
     		$("#tr_undone").find("td").eq("2").html((treal_bjoff-tplan_bjoff)<0?"<span style='color:red'>"+(tplan_bjoff-treal_bjoff):(treal_bjoff-tplan_bjoff));
@@ -212,6 +220,7 @@ function getSearch(){
     		$("#tr_undone").find("td").eq("9").html((treal_zzon-tplan_zzon)<0?"<span style='color:red'>"+(tplan_zzon-treal_zzon):(treal_zzon-tplan_zzon));
     		$("#tr_undone").find("td").eq("10").html((treal_zzoff-tplan_zzoff)<0?"<span style='color:red'>"+(tplan_zzoff-treal_zzoff):(treal_zzoff-tplan_zzoff));
     		$("#tr_undone").find("td").eq("11").html((treal_rk-tplan_rk)<0?"<span style='color:red'>"+(tplan_rk-treal_rk):(treal_rk-tplan_rk));
+    		$("#tr_undone").find("td").eq("12").html((treal_fc-tplan_fc)<0?"<span style='color:red'>"+(tplan_fc-treal_fc):(treal_fc-tplan_fc));
 
 	    	
 	    }

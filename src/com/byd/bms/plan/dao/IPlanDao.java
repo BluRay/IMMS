@@ -53,6 +53,7 @@ public interface IPlanDao {
 	public List<PlanPause> getPauseList(Map<String,Object> queryMap);
 	public int getPauseTotalCount(Map<String,Object> queryMap);
 	public int updatePauseInfo(PlanPause pause);
+	public int deletePause(PlanPause pause);
 	public List<ProductionException> getExceptionList(Map<String,Object> queryMap);
 	public int getExceptionCount(Map<String,Object> queryMap);
 	public int updateExceptionInfo(ProductionException exception);

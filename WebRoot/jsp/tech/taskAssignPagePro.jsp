@@ -84,6 +84,15 @@
 				
 				<div id="dialog-busModal" class="hide" style="align:center;width:500px;height:500px">
 					<div>
+					&nbsp;起始车号：<input id="search_busnumber_start" placeholder="开始车号..." style="height: 30px;width:80px" type="text">-
+					<input id="search_busnumber_end" placeholder="结束车号..." style="height: 30px;width:80px" type="text">&nbsp;
+					<input id="btnBusQuery" type="button" class="btn btn-sm btn-success" value="查询" style="margin-left: 2px;"></input>
+					<input id="search_busnumber_factory_id" style="display:none;height: 30px;width:80px" type="text">
+					<input id="search_busnumber_task_id" style="display:none;height: 30px;width:80px" type="text">
+					<input id="search_busnumber_task_detail_id" style="display:none;height: 30px;width:80px" type="text">
+					<input id="search_busnumber_order_no" style="display:none;height: 30px;width:80px" type="text">
+					<input id="search_busnumber_factory" style="display:none;height: 30px;width:80px" type="text">
+					<input id="search_busnumber_workshop" style="display:none;height: 30px;width:80px" type="text">
 						<table id="bus_table" class="table table-striped table-bordered table-hover" style="font-size: 12px;">
 						<thead><tr>
 						<th style="text-align:center;"><input id="checkAll" onclick='selectAll()' type='checkbox'></th>

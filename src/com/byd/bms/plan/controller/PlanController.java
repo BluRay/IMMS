@@ -888,6 +888,22 @@ public class PlanController extends BaseController{
 		return model;
 	}
 	
+	@RequestMapping("/deletePause")
+	@ResponseBody
+	public ModelMap deletePause(){
+		PlanPause pause = new PlanPause();
+		pause.setId(Integer.parseInt(request.getParameter("pause_id")));
+		int result = planService.deletePause(pause);
+		String message= "删除失败！";
+		if(result>0){
+			message = "删除成功！";
+		}
+		initModel(true,String.valueOf(message),null);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	
 	@RequestMapping("/getExceptionList")
 	@ResponseBody
 	public ModelMap getExceptionList(){

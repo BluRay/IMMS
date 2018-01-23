@@ -421,6 +421,13 @@
 		]]>
 	</update>
 	
+	<update id="deletePause" parameterType="com.byd.bms.plan.model.PlanPause">
+		<![CDATA[
+		DELETE FROM BMS_PLAN_STOPLINE 
+		WHERE id=#{id}
+		]]>
+	</update>
+	
 	<select id="getExceptionList" parameterType="Map" resultType="com.byd.bms.production.model.ProductionException">
 		SELECT E.*,K.key_name AS duty_department,u.display_name AS editor_name FROM BMS_PD_PRODUCTION_EXCEPTION E
 		LEFT JOIN BMS_BASE_KEY K ON E.duty_department_id = K.value AND K.key_code='EXCEPTION_RESPONSIBILITY_DEPARTMENT'
@@ -1481,6 +1488,8 @@
 	</select>
 	
 	<select id="getExceptionPauseList" parameterType="Map" resultType="com.byd.bms.production.model.ProductionException">
+		select group_concat(distinct tmp.detailed_reasons separator  ' ') detailed_reasons
+		from(
 		select s.detailed_reason detailed_reasons
 		from BMS_PLAN_STOPLINE s
 		left join BMS_BASE_WORKSHOP w on s.workshop_id=w.id
@@ -1495,5 +1504,6 @@
 		where e.factory=#{factory} <!-- and e.start_time like concat(#{date_start},'%') --> 
 		and (e.finish_time&lt;=0 or e.start_time>=#{date_start})
 		and e.order_id=#{order_id} and e.workshop=#{workshop_name}
+		) tmp 
 	</select>
 </mapper>

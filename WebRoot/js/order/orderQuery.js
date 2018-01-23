@@ -101,7 +101,7 @@ function ajaxQuery(){
 		searching: false,
 		bAutoWidth:false,
 		destroy: true,
-		sScrollY: $(window).height()-250,
+		sScrollY: $(window).height()-140,
 		scrollX: true,
 		/*scrollCollapse: true,*/
 		pageLength: pageSize,
@@ -129,8 +129,8 @@ function ajaxQuery(){
 				"factory":getAllFromOptions("#search_factory","val"),
 				"actYear":$("#search_productive_year").val(),
 				"status":$("#search_status").val(),
-				"review_status":$("#search_review_status").val(),
-				"img_output":$("#search_img_status").val()
+				"review_status":$("#search_review_status").val()+"",
+				"img_output":$("#search_img_status").val()+""
 			};
             param.length = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
             param.start = data.start;//开始的记录序号
@@ -180,7 +180,7 @@ function ajaxShowBusNumber(order_id,factory_id,order_config_id){
 		success: function (response) {
 			var dialog = $( "#dialog-message" ).removeClass('hide').dialog({
 				width:1000,
-				height:500,
+				height:520,
 				modal: true,
 				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i> 车辆明细</h4></div>",
 				title_html: true,
@@ -220,7 +220,7 @@ function ajaxShowOrderBOM(order_id,factory_id,order_config_id){
 		success: function (response) {
 			var dialog = $( "#dialog-message2" ).removeClass('hide').dialog({
 				width:800,
-				height:500,
+				height:520,
 				modal: true,
 				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i> BOM明细</h4></div>",
 				title_html: true,

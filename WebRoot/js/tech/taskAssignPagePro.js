@@ -1,5 +1,6 @@
 var switch_node_arr="焊装,涂装,底盘,总装,检测线,仓库";
-var is_assign = 0;	//已跟进不能重新分配
+var is_assign = 0;	//已跟进不能重新分配;
+
 $(document).ready(function (){
 	initPage();
 	
@@ -38,6 +39,42 @@ $(document).ready(function (){
 		eachSeries(scripts, getScript, initTable);
 		ajaxQuery();
     });
+	
+	$("#btnBusQuery").click(function () {
+		$.ajax({
+			url: "queryBusNumberFollowList",
+			dataType: "json",
+			type: "get",
+			data: {
+					"factory_id" : $("#search_busnumber_factory_id").val(),
+					"task_id":$("#search_busnumber_task_id").val(),
+					"task_detail_id":$("#search_busnumber_task_detail_id").val(),
+					"order_no":$("#search_busnumber_order_no").val(),
+					"factory":$("#search_busnumber_factory").val(),
+					"workshop":$("#search_busnumber_workshop").val(),
+					"start":$("#search_busnumber_start").val(),
+					"end":$("#search_busnumber_end").val()
+			},
+			async: false,
+			error: function () {alert(response.message);},
+			success: function (response) {
+				$("#bus_table tbody").html("");
+				$.each(response.data,function (index,value) {
+					var tr = $("<tr/>");
+					var checkbox_str = "<input class='check_bus' id='check_" + value.bus_number + "'" ;
+					if(value.bus_follow != '') checkbox_str += " checked = 'checked'";
+					if(value.username != '') checkbox_str += " disabled = 'disabled'";
+					checkbox_str += " type='checkbox'>"
+			    	$("<td style=\"text-align:center;\" />").html(checkbox_str).appendTo(tr);
+			    	$("<td style=\"text-align:center;\" />").html(index+1).appendTo(tr);
+			    	$("<td style=\"text-align:center;\" />").html(value.bus_number).appendTo(tr);
+			    	$("<td style=\"text-align:center;\" />").html(value.username).appendTo(tr);
+			    	$("<td style=\"text-align:center;\" />").html(value.confirmor_date).appendTo(tr);
+			    	$("#bus_table tbody").append(tr);
+				});
+			}
+		});
+	});
 	
 	$('input:radio[name="switch_mode"]').change(function(){
 		//console.log("switch_mode = " + $(this).val());
@@ -475,6 +512,13 @@ function addTechFactoryDetail(taskNum,tech_detail_list,follow_detail,prod_factor
 function getBusFollow(e,factory_id,task_id,task_detail_id,order_no,factory,workshop,zzj_num,bj_num){
 	console.log("getBusFollow:" + $(e).text() + ",factory_id=" + factory_id + ",task_id=" + task_id + ",task_detail_id=" + task_detail_id + 
 			",order_no=" + order_no + ",factory=" + factory + ",workshop=" + workshop);
+	$("#search_busnumber_factory_id").val(factory_id);
+	$("#search_busnumber_task_id").val(task_id);
+	$("#search_busnumber_task_detail_id").val(task_detail_id);
+	$("#search_busnumber_order_no").val(order_no);
+	$("#search_busnumber_factory").val(factory);
+	$("#search_busnumber_workshop").val(workshop);
+	
 	$.ajax({
 		url: "queryBusNumberFollowList",
 		dataType: "json",

@@ -281,7 +281,6 @@ String factory=(String)session.getAttribute("factory");
 				</div>
 			
 			</div>
-<<<<<<< .mine
 						   		
 						  </div>
 			</div>

@@ -428,7 +428,7 @@
 		(SELECT COUNT(b.id) FROM BMS_PLAN_BUS b WHERE b.warehousing_date>0 AND b.order_id = o.id AND b.order_config_id=c.id AND b.factory_id = fo.factory_id) as warehousing_count,
 		(SELECT COUNT(b.id) FROM BMS_PLAN_BUS b WHERE b.dispatch_date>0 AND b.order_id = o.id AND b.order_config_id=c.id AND b.factory_id = fo.factory_id) as dispatch_count,
 		<!-- (select review_status from BMS_OR_ORDER_REVIEW_RESULTS r where fo.factory_id=r.factory_id and fo.order_id=r.order_id) as review_result -->
-		r.review_status,r.drawingexport_date
+		r.review_status as review_result,r.drawingexport_date
 		from BMS_OR_ORDER o
 		left join BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id
 		left join BMS_OR_FACTORY_ORDER fo on fo.order_id=o.id
@@ -449,13 +449,13 @@
 		<if test="status !=null and status !=''">
 			and fo.status=#{status}
 		</if>
-		<if test="review_status =='0' ">
+		<if test="review_status =='未评审' ">
 			and (r.review_status is  null or r.review_status ='0') 
 		</if>
-		<if test="review_status =='1' ">
+		<if test="review_status =='评审中' ">
 			and r.review_status='1'
 		</if>
-		<if test="review_status =='2' ">
+		<if test="review_status =='已评审' ">
 			and r.review_status='2'
 		</if>
 		<if test="img_output =='已输出'">
@@ -493,15 +493,15 @@
 		<if test="status !=null and status !=''">
 			and fo.status=#{status}
 		</if>
-		<if test="review_status =='0' ">
+		<if test="review_status =='未评审' ">
 			and (r.review_status is  null or r.review_status ='0') 
 		</if>
-		<if test="review_status =='1' ">
+		<if test="review_status =='评审中' ">
 			and r.review_status='1'
 		</if>
-		<if test="review_status =='2' ">
+		<if test="review_status =='已评审' ">
 			and r.review_status='2'
-		</if>
+		</if>	
 		<if test="img_output =='已输出'">
 			and r.drawingexport_date>0
 		</if>

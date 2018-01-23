@@ -326,7 +326,12 @@ function getPauseMin(start_time,end_time,unit){
 
 function ajaxQuery(){
 	$("#tableData").dataTable({
-		serverSide: true,paiging:true,ordering:false,searching: false,bAutoWidth:false,
+		serverSide: true,
+		fixedColumns:   {
+            leftColumns: 2,
+            rightColumns:1
+        },
+		paiging:true,ordering:false,searching: false,bAutoWidth:false,
 		destroy: true,sScrollY: table_height,sScrollX:true,orderMulti:false,
 		pageLength: 25,pagingType:"full_numbers",lengthChange:false,
 		language: {
@@ -407,11 +412,13 @@ function ajaxQuery(){
 		            {"title":"录入人",width:'60',"class":"center","data":"create_user_name","defaultContent": ""},
 		            {"title":"操作",width:'60',"class":"center","data":null,"defaultContent": "",
 		            	"render": function ( data, type, row ) {
-		            		return "<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"编辑\" onclick='editPause(" + row['id'] + ")' style='color:blue;cursor: pointer;'></i>"
+		            		return "<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"编辑\" onclick='editPause(" + row['id'] + ")' style='color:blue;cursor: pointer;'></i>&nbsp;" +
+		            				"<i class=\"glyphicon glyphicon-trash bigger-130 showbus\" title=\"删除\" onclick='deletePause(" + row['id'] + ")' style='color:red;cursor: pointer;'></i>"
 		            	},
 		            }
 		          ],
 	});
+	
 }
 
 function editPause(pause_id){
@@ -469,6 +476,27 @@ function editPause(pause_id){
 			});
 		}
 	});
+}
+
+function deletePause(pause_id){
+		var result = confirm("确认删除？") ;
+		if(result == true){
+			//确认删除
+			$.ajax({
+				url : "deletePause",
+				dataType : "json",
+				data : {"pause_id":pause_id},
+				async : false,
+				error : function(response) {
+					alert(response.message)
+				},
+				success : function(response) {
+					ajaxQuery();
+					alert(response.message);
+				}
+			});
+			
+		}
 }
 
 function btnEditPauseConfirm(){

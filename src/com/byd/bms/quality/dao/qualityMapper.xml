@@ -628,10 +628,10 @@
 		AND B.order_id=#{order_id}
 		</if>
 		<if test="start_busNum !=null and start_busNum !=''">
-		AND RIGHT(I.bus_number,4)+0 >= #{start_busNum}
+		AND RIGHT(I.bus_number,5)+0 >= #{start_busNum}
 		</if>
 		<if test="end_busNum !=null and end_busNum !=''">
-		<![CDATA[ AND RIGHT(I.bus_number,4)+0 <= #{end_busNum} ]]>
+		<![CDATA[ AND RIGHT(I.bus_number,5)+0 <= #{end_busNum} ]]>
 		</if> 
 		<if test="date_start !=null and date_start !=''">
 		AND I.register_date >= #{date_start}

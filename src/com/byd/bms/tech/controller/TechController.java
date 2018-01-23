@@ -890,6 +890,8 @@ public class TechController extends BaseController{
 		conditionMap.put("factory", request.getParameter("factory"));
 		conditionMap.put("task_detail_id", request.getParameter("task_detail_id"));
 		conditionMap.put("workshop", request.getParameter("workshop"));
+		conditionMap.put("start", request.getParameter("start"));
+		conditionMap.put("end", request.getParameter("end"));
 		List<Map<String,String>> datalist = techService.queryBusNumberFollowList(conditionMap);
 		Map<String, Object> result = new HashMap<String,Object>();
 		result.put("data", datalist);

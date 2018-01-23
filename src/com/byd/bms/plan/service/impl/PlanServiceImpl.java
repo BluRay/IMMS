@@ -430,6 +430,10 @@ public class PlanServiceImpl implements IPlanService {
 	public int updatePauseInfo(PlanPause pause) {
 		return planDao.updatePauseInfo(pause);
 	}
+	
+	public int deletePause(PlanPause pause) {
+		return planDao.deletePause(pause);
+	}
 
 	@Override
 	public Map<String, Object> getExceptionList(Map<String, Object> queryMap) {
