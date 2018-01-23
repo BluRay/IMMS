@@ -1810,12 +1810,15 @@ LEFT JOIN BMS_BASE_USER AS u ON u.id = f.confirmor_id
 	
 	<!-- 技改跟进-修改2 -->
 	<update id="updateWorkshopStatus2" parameterType="List">
-		<foreach collection="list" index="index" item="item"
-			separator=";">
+		<foreach collection="list" index="index" item="item" separator=";">
 			UPDATE BMS_TECH_TASK_DETAIL
 			SET status_list = IF(status_list='' or status_list is null,#{item.workshop},CONCAT(status_list,CONCAT(',',#{item.workshop})))
 			WHERE id = #{item.task_detail_id}
 		</foreach>
+	</update>
+	
+	<update id="updateTechDetailStatus" parameterType="map">
+	UPDATE BMS_TECH_TASK_DETAIL SET status_list = #{status_list} WHERE id =#{task_detail_id}
 	</update>
 <!--  ###################  by wx  end  ###############  -->
 

@@ -342,6 +342,36 @@ public class TechServiceImpl implements ITechService {
 	public List<Map<String, Object>> getFollowingUpDetailList(Map<String, Object> conditionMap) {
 		return techDao.queryFollowingUpDetailList(conditionMap);
 	}
+	
+	@Override
+	@Transactional
+	public int removeFollowingUp(String curTime, String edit_user, String ids, String task_detail_id,String update_status, String workshop,String status_list) {
+		JSONArray jsonArray = JSONArray.fromObject(ids);
+		List<Map<String, Object>> editList = new ArrayList<Map<String, Object>>();
+		for (int i = 0; i < jsonArray.size(); i++) {
+			Map<String, Object> infomap = new HashMap<String, Object>();
+			infomap.put("id", jsonArray.getString(i).toString());
+			infomap.put("confirmor_id", null);
+			infomap.put("confirmor_date", null);
+			infomap.put("task_detail_id", task_detail_id);
+			editList.add(infomap);
+		}
+		techDao.updateFollowingUp(editList);
+		String new_status_list = "";
+		String[] ws = status_list.split(",");
+		for (int i = 0 ; i <ws.length ; i++ ) {
+			if(!(ws[i].equals(workshop))) {
+				new_status_list += ","+ws[i];
+			}
+		}
+		if(!new_status_list.equals(""))new_status_list = new_status_list.substring(1, new_status_list.length());
+		//System.out.println("-->new_status_list = " + new_status_list);
+		Map<String, Object> infomap = new HashMap<String, Object>();
+		infomap.put("task_detail_id", task_detail_id);
+		infomap.put("status_list", new_status_list);
+		techDao.updateTechDetailStatus(infomap);
+		return 0;
+	}
 
 	@Override
 	@Transactional

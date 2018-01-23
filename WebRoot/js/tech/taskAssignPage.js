@@ -241,7 +241,6 @@ function assignTechTask(){
 		alert("已跟进的技改任务不能重新分配！");
 		return false;
 	}
-	
 	var factory_cboxs=$("input[name='new_tecn_flag']");
 	var tech_task_id=$("#dialog-assessModal").data("tech_task_id");
 	var task_detail_id=$("#dialog-assessModal").data("task_detail_id");

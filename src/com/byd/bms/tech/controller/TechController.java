@@ -717,7 +717,6 @@ public class TechController extends BaseController{
 		conditionMap.put("order_no", request.getParameter("order_no"));
 		conditionMap.put("tech_task_id", request.getParameter("tech_task_id"));
 		conditionMap.put("tech_task_detail_id", request.getParameter("tech_task_detail_id"));
-		
 		List<Map<String, Object>> list = techService.getFollowingUpDetailList1(conditionMap);		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("data", list);
@@ -738,6 +737,21 @@ public class TechController extends BaseController{
 		String workshop = request.getParameter("workshop");
 		techService.editFollowingUp(curTime, edit_user, ids, task_detail_id, update_status, workshop);
 		//initModel(true,String.valueOf(result),null);
+		model.put("success", true);
+		return model;
+	}
+	
+	@RequestMapping("/removeFollowingUp")
+	@ResponseBody
+	public ModelMap removeFollowingUp(){
+		String curTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+		String edit_user = request.getSession().getAttribute("staff_number") + "";
+		String ids = request.getParameter("ids");
+		String task_detail_id = request.getParameter("task_detail_id");
+		String update_status = request.getParameter("update_status");
+		String workshop = request.getParameter("workshop");
+		String status_list = request.getParameter("status_list");
+		techService.removeFollowingUp(curTime, edit_user, ids, task_detail_id, update_status, workshop,status_list);
 		model.put("success", true);
 		return model;
 	}

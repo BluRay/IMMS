@@ -156,7 +156,7 @@ function ajaxQuery() {
 		            {"title":"完成台数","class":"center","data":"complete","defaultContent": ""},
 		            {"title":"技改跟进","class":"center","data":"single_time_total","defaultContent": "",
 		            	"render": function ( data, type, row ) {
-		            		if (parseInt(row.total) - parseInt(row.complete) <= 0) {
+		            		if (parseInt(row.total) - parseInt(row.complete) <= -100) {	////0
 		            			return "-";
 		            		}else{
 		            			if(typeof(row.time_list) != "undefined"){
@@ -170,7 +170,7 @@ function ajaxQuery() {
 				            				if (row.ws == "自制件" || row.ws == "部件") {
 					            				return "<i name='edit' class=\"fa fa-pencil\" rel=\"tooltip\"  title='修改'style=\"cursor: pointer;text-align: center;\" onclick='showSelectBusNumberModal1(\"" + row.prod_factory + "\",\"" + row.ws + "\",\"" + row.order_no + "\"," + row.tech_task_id + "," + row.total + "," + row.task_detail_id + ");' ></i>";
 					    					} else {
-					    						return "<i name='edit' class=\"fa fa-pencil\" rel=\"tooltip\"  title='修改'style=\"cursor: pointer;text-align: center;\" onclick='showSelectBusNumberModal(\"" + row.prod_factory + "\",\"" + row.ws + "\",\"" + row.order_no + "\"," + row.tech_task_id + "," + row.task_detail_id + ");' ></i>";
+					    						return "<i name='edit' class=\"fa fa-pencil\" rel=\"tooltip\"  title='修改'style=\"cursor: pointer;text-align: center;\" onclick='showSelectBusNumberModal(\"" + row.prod_factory + "\",\"" + row.ws + "\",\"" + row.order_no + "\"," + row.tech_task_id + "," + row.task_detail_id + ",\""+row.status_list+"\");' ></i>";
 					    					}
 				            			}
 			            			}else{
@@ -200,7 +200,7 @@ function ajaxQuery() {
 	
 }
 
-function showSelectBusNumberModal(factory, workshop, order_no, tech_task_id, task_detail_id) {
+function showSelectBusNumberModal(factory, workshop, order_no, tech_task_id, task_detail_id,status_list) {
 	$('#select_tech_task_id').val(tech_task_id);
 	$('#select_factory').val(factory);
 	$('#select_workshop').val(workshop);
@@ -218,12 +218,20 @@ function showSelectBusNumberModal(factory, workshop, order_no, tech_task_id, tas
 		height:600,
 		modal: true,
 		buttons: [{
-					text: "取消",
+					text: "关闭",
 					"class" : "btn btn-minier",
 					click: function() {$( this ).dialog( "close" );} 
 				},
 				{
-					text: "保存",
+					text: "取消跟进",
+					id:"btn_remove",
+					"class" : "btn btn-warning btn-minier",
+					click: function() {
+						ajaxRemove(status_list);
+					} 
+				},
+				{
+					text: "确认跟进",
 					id:"btn_ok",
 					"class" : "btn btn-success btn-minier",
 					click: function() {
@@ -280,10 +288,12 @@ function ajaxQueryDetail(tbody, factory, workshop, order_no, tech_task_id, view,
 			$.each(response.data, function(index, value) {
 				var tr = $("<tr />");
 				if ("view" != view) {
+					//$("<td style='text-align: center;'/>").html("<input type='checkbox' class='cbox' >").appendTo(tr);
+					
 					if (!value.confirmor) {
 						$("<td style='text-align: center;'/>").html("<input type='checkbox' class='cbox' >").appendTo(tr);
 					} else {
-						$("<td style='text-align: center;'/>").html("").appendTo(tr);
+						$("<td style='text-align: center;'/>").html("<input type='checkbox' checked='checked' class='cbox' >").appendTo(tr);
 					}
 				}
 				$("<td style='text-align: center;'/>").html(index + 1).appendTo(tr);
@@ -351,6 +361,46 @@ function ajaxQueryDetail1(tbody, factory, workshop, order_no, tech_task_id,task_
 					count = 0;
 				}
 			});
+		}
+	});
+	
+}
+
+function ajaxRemove(status_list){
+	var ids = [];
+	$('.cbox').each(function(e) {
+		if ($(this).prop("checked")) {
+			ids.push($(this).closest("tr").data('id'));
+		}
+	});
+	if (ids.length == 0) {
+		alert('至少勾选一个项！');
+		return false;
+	}
+	
+	$.ajax({
+		url : "removeFollowingUp",
+		dataType : "json",
+		type : "post",
+		data : {
+			"ids" : JSON.stringify(ids),
+			"status_list":status_list,
+			"task_detail_id" : $('#task_detail_id').val(),
+			"workshop" : $('#select_workshop').val(),
+			"update_status" : $('.cbox').length == ids.length ? 1 : 0
+		},
+		success : function(response) {
+			if (response.success) {
+				$.gritter.add({
+					title: '系统提示：',
+					text: '<h5>操作成功！</h5>',
+					class_name: 'gritter-info'
+				});
+				$("#selectBusNumberModal").dialog( "close" );
+				ajaxQuery();
+			} else {
+				alert(response.message);
+			}
 		}
 	});
 	
