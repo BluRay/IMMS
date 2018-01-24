@@ -1230,7 +1230,7 @@
 			AND ${workshop} LIKE CONCAT('%',#{month},'%')
 		</if>
 		<if test="month ==''">
-			AND ${workshop} IS NOT NULL
+			AND (${workshop} LIKE '20%')
 		</if>
 	</select>
 	<insert id="addDispatchPlan" useGeneratedKeys="true" keyProperty="id" parameterType="com.byd.bms.plan.model.PlanBusDispatchPlan">

@@ -209,18 +209,18 @@ function getSearch(){
     		$("#tr_doneRate").find("td").eq("11").html(tplan_rk==0?"-":(Math.round(treal_rk/tplan_rk * 10000) / 100.00 + "%"));
     		$("#tr_doneRate").find("td").eq("112").html(tplan_fc==0?"-":(Math.round(treal_fc/tplan_fc * 10000) / 100.00 + "%"));
     		
-    		$("#tr_undone").find("td").eq("1").html((treal_zzj-tplan_zzj)<0?"<span style='color:red'>"+(tplan_zzj-treal_zzj):(treal_zzj-tplan_zzj));
-    		$("#tr_undone").find("td").eq("2").html((treal_bjoff-tplan_bjoff)<0?"<span style='color:red'>"+(tplan_bjoff-treal_bjoff):(treal_bjoff-tplan_bjoff));
-    		$("#tr_undone").find("td").eq("3").html((treal_hzon-tplan_hzon)<0?"<span style='color:red'>"+(tplan_hzon-treal_hzon):(treal_hzon-tplan_hzon));
-    		$("#tr_undone").find("td").eq("4").html((treal_hzoff-tplan_hzoff)<0?"<span style='color:red'>"+(tplan_hzoff-treal_hzoff):(treal_hzoff-tplan_hzoff));
-    		$("#tr_undone").find("td").eq("5").html((treal_tzon-tplan_tzon)<0?"<span style='color:red'>"+(tplan_tzon-treal_tzon):(treal_tzon-tplan_tzon));
-    		$("#tr_undone").find("td").eq("6").html((treal_tzoff-tplan_tzoff)<0?"<span style='color:red'>"+(tplan_tzoff-treal_tzoff):(treal_tzoff-tplan_tzoff));
-    		$("#tr_undone").find("td").eq("7").html((treal_dpon-tplan_dpon)<0?"<span style='color:red'>"+(tplan_dpon-treal_dpon):(treal_dpon-tplan_dpon));
-    		$("#tr_undone").find("td").eq("8").html((treal_dpoff-tplan_dpoff)<0?"<span style='color:red'>"+(tplan_dpoff-treal_dpoff):(treal_dpoff-tplan_dpoff));
-    		$("#tr_undone").find("td").eq("9").html((treal_zzon-tplan_zzon)<0?"<span style='color:red'>"+(tplan_zzon-treal_zzon):(treal_zzon-tplan_zzon));
-    		$("#tr_undone").find("td").eq("10").html((treal_zzoff-tplan_zzoff)<0?"<span style='color:red'>"+(tplan_zzoff-treal_zzoff):(treal_zzoff-tplan_zzoff));
-    		$("#tr_undone").find("td").eq("11").html((treal_rk-tplan_rk)<0?"<span style='color:red'>"+(tplan_rk-treal_rk):(treal_rk-tplan_rk));
-    		$("#tr_undone").find("td").eq("12").html((treal_fc-tplan_fc)<0?"<span style='color:red'>"+(tplan_fc-treal_fc):(treal_fc-tplan_fc));
+    		$("#tr_undone").find("td").eq("1").html((treal_zzj-tplan_zzj)<0?"<span style='color:red'>"+(tplan_zzj-treal_zzj):(tplan_zzj-treal_zzj));
+    		$("#tr_undone").find("td").eq("2").html((treal_bjoff-tplan_bjoff)<0?"<span style='color:red'>"+(tplan_bjoff-treal_bjoff):(tplan_bjoff-treal_bjoff));
+    		$("#tr_undone").find("td").eq("3").html((treal_hzon-tplan_hzon)<0?"<span style='color:red'>"+(tplan_hzon-treal_hzon):(tplan_hzon-treal_hzon));
+    		$("#tr_undone").find("td").eq("4").html((treal_hzoff-tplan_hzoff)<0?"<span style='color:red'>"+(tplan_hzoff-treal_hzoff):(tplan_hzoff-treal_hzoff));
+    		$("#tr_undone").find("td").eq("5").html((treal_tzon-tplan_tzon)<0?"<span style='color:red'>"+(tplan_tzon-treal_tzon):(tplan_tzon-treal_tzon));
+    		$("#tr_undone").find("td").eq("6").html((treal_tzoff-tplan_tzoff)<0?"<span style='color:red'>"+(tplan_tzoff-treal_tzoff):(tplan_tzoff-treal_tzoff));
+    		$("#tr_undone").find("td").eq("7").html((treal_dpon-tplan_dpon)<0?"<span style='color:red'>"+(tplan_dpon-treal_dpon):(tplan_dpon-treal_dpon));
+    		$("#tr_undone").find("td").eq("8").html((treal_dpoff-tplan_dpoff)<0?"<span style='color:red'>"+(tplan_dpoff-treal_dpoff):(tplan_dpoff-treal_dpoff));
+    		$("#tr_undone").find("td").eq("9").html((treal_zzon-tplan_zzon)<0?"<span style='color:red'>"+(tplan_zzon-treal_zzon):(tplan_zzon-treal_zzon));
+    		$("#tr_undone").find("td").eq("10").html((treal_zzoff-tplan_zzoff)<0?"<span style='color:red'>"+(tplan_zzoff-treal_zzoff):(tplan_zzoff-treal_zzoff));
+    		$("#tr_undone").find("td").eq("11").html((treal_rk-tplan_rk)<0?"<span style='color:red'>"+(tplan_rk-treal_rk):(tplan_rk-treal_rk));
+    		$("#tr_undone").find("td").eq("12").html((treal_fc-tplan_fc)<0?"<span style='color:red'>"+(tplan_fc-treal_fc):(tplan_fc-treal_fc));
 
 	    	
 	    }
