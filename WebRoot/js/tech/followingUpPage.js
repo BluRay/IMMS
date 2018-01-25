@@ -260,10 +260,10 @@ function showSelectBusNumberModal1(factory, workshop, order_no, tech_task_id, to
 		modal: true,
 		buttons: [{
 					text: "取消跟进",
-					id:"btn_remove",
+					id:"btn_remove1",
 					"class" : "btn btn-warning btn-minier",
 					click: function() {
-						ajaxRemovePre(status_list);
+						ajaxRemovePre(workshop,task_detail_id,status_list);
 					} 
 				},{
 					text: "取消",
@@ -374,7 +374,7 @@ function ajaxQueryDetail1(tbody, factory, workshop, order_no, tech_task_id,task_
 	
 }
 
-function ajaxRemovePre(status_list){
+function ajaxRemovePre(workshop,task_detail_id,status_list){
 	var ids = [];
 	$('.cbox').each(function(e) {
 		if ($(this).prop("checked")) {
@@ -386,6 +386,30 @@ function ajaxRemovePre(status_list){
 		return false;
 	}
 	
+	$.ajax({
+		url : "removeFollowingUpPre",
+		dataType : "json",
+		type : "post",
+		data : {
+			"ids" : JSON.stringify(ids),
+			"status_list":status_list,
+			"task_detail_id" :task_detail_id,
+			"workshop" : workshop
+		},
+		success : function(response) {
+			if (response.success) {
+				$.gritter.add({
+					title: '系统提示：',
+					text: '<h5>操作成功！</h5>',
+					class_name: 'gritter-info'
+				});
+				$("#selectBusNumberModal1").dialog( "close" );
+				ajaxQuery();
+			} else {
+				alert(response.message);
+			}
+		}
+	});
 	
 }
 

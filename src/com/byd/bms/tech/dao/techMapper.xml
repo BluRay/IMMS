@@ -734,6 +734,9 @@
 		WHERE tech_task_id=#{tech_task_id} AND order_no = #{order_no} 
 		AND factory = #{tech_factory} and prod_factory=#{prod_factory}
 	</select>
+	<select id="getFollowingUpPreNum" parameterType="Map" resultType="int">
+		SELECT ifnull(SUM(p.follow_num),0) as num FROM BMS_TECH_TASK_FOLLOW_PRE p WHERE p.task_detail_id=#{task_detail_id} and p.workshop = #{tech_workshop}
+	</select>
 	<update id="updateTechTaskDetail" parameterType="Map">
 	UPDATE BMS_TECH_TASK_DETAIL
 	SET tech_task_id=#{tech_task_id}, order_no=#{order_no}, factory_id=#{tech_factory_id}, factory=#{tech_factory}, prod_factory_id=#{factory_id}, 

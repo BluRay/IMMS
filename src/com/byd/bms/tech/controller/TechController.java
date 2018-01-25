@@ -766,7 +766,7 @@ public class TechController extends BaseController{
 		String update_status = request.getParameter("update_status");
 		String workshop = request.getParameter("workshop");
 		String status_list = request.getParameter("status_list");
-		techService.removeFollowingUp(curTime, edit_user, ids, task_detail_id, update_status, workshop,status_list);
+		techService.removeFollowingUpPre(curTime, edit_user, ids, task_detail_id, update_status, workshop,status_list);
 		model.put("success", true);
 		return model;
 	}

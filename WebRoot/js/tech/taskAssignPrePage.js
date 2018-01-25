@@ -172,13 +172,29 @@ function asessTechTask(time_list,status_list,single_time_total,time_total){
 			"conditions":JSON.stringify(conditions)
 			},
 		success:function(response){
-			$("#dialog-assessModal").dialog( "close" );
-			$.gritter.add({
-				title: '系统提示：',
-				text: '<h5>分配成功！</h5>',
-				class_name: 'gritter-info'
-			});
-			ajaxQuery();
+			if(response.message=="0"){
+				$("#dialog-assessModal").dialog( "close" );
+				$.gritter.add({
+					title: '系统提示：',
+					text: '<h5>分配成功！</h5>',
+					class_name: 'gritter-info'
+				});
+				ajaxQuery();
+			}else if(response.message == "-1"){
+				$.gritter.add({
+					title: '系统提示：',
+					text: '<h5>自制件数量不能小于已跟进数量！</h5>',
+					class_name: 'gritter-error'
+				});
+			}else if(response.message == "-2"){
+				$.gritter.add({
+					title: '系统提示：',
+					text: '<h5>部件数量不能小于已跟进数量！</h5>',
+					class_name: 'gritter-error'
+				});
+			}
+			
+			
 		    }
 		});
 }

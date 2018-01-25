@@ -13,6 +13,8 @@ public class BmsBaseMenu {
 	private int priority;
 	private int isPermission;
 	private String type;
+	private int favorite_id;
+	
 	public String getIcon() {
 		return icon;
 	}
@@ -67,6 +69,12 @@ public class BmsBaseMenu {
 	}
 	public void setType(String type) {
 		this.type = type;
+	}
+	public int getFavorite_id() {
+		return favorite_id;
+	}
+	public void setFavorite_id(int favorite_id) {
+		this.favorite_id = favorite_id;
 	}
 	
 }

@@ -69,6 +69,45 @@ function ajaxQueryMenu(){
 	    }
 	});
 }
+
+function ajaxAddFavorite(model_id,function_name){
+	$.ajax({
+	    url: "/BMS/addFavorite",
+	    async: false,
+	    dataType: "json",
+		type: "post",
+	    data: {
+	    	"staff_number":'<%=staff_number%>',
+	    	"model_id":model_id,
+	    	"function_name":function_name
+	    },
+	    success:function(response){
+	    	if(!response.success){
+	    		alert(response.message)
+	    	}
+	    }
+	});
+}
+
+function ajaxDelFavorite(model_id,function_name){
+	$.ajax({
+	    url: "/BMS/removeFavorite",
+	    async: false,
+	    dataType: "json",
+		type: "post",
+	    data: {
+	    	"staff_number":'<%=staff_number%>',
+	    	"model_id":model_id,
+	    	"function_name":function_name
+	    },
+	    success:function(response){
+	    	if(!response.success){
+	    		alert(response.message)
+	    	}
+	    }
+	});
+}
+
 function recursiveTree(id,s) {
 	var node = getTreeNode(id,s);
 	var childTreeNodes = queryTreeNode(id,s);
@@ -114,7 +153,8 @@ $(document).ready(function () {
 	        $(e.target).parent("li").find(".fa.fa-heart-o").eq(0).hide();
 	        return false;
 	    }); 
-	
+ 	  
+	//添加收藏
 	  $(document).on('click', ".fa-heart-o",function (e) {
 		  //判断是否已经收藏了4个程序
 		  var fo_list=$("#sidebar-shortcuts-large").find(".btn-default");
@@ -125,10 +165,19 @@ $(document).ready(function () {
 			  //alert(pre_all.length)
 			  var c=fo_btn_list[pre_all.length]
 			 // alert($(e.target).parent("li").find("a").html())
+			  var title=$(e.target).parent("li").find("a").data("title");
+			  var model_id=$(e.target).parent("li").find("a").data("id");
+			  var favorite_id=$(e.target).parent("li").find("a").data("favorite_id");
+			  
 			  $(fo_list).eq(0).addClass(c).removeClass("btn-default")
 			  $(fo_list).eq(0).data("url",$(e.target).parent("li").find("a").data("url"))
 			  $(fo_list).eq(0).data("title",$(e.target).parent("li").find("a").data("title"))
-			  $(fo_list).eq(0).data("id",$(e.target).parent("li").find("a").data("id"))
+			  $(fo_list).eq(0).data("id",$(e.target).parent("li").find("a").data("id"));
+			  $(fo_list).eq(0).attr("title",title);
+			  if(favorite_id==0){
+				  ajaxAddFavorite(model_id,title);
+			  }
+			  
 		  }else{
 			  alert("最多只能收藏4个程序！");
 			  return true;
@@ -136,6 +185,7 @@ $(document).ready(function () {
 	      $(e.target).addClass("fa-heart").removeClass("fa-heart-o")
 	  });
 	  
+	//取消收藏
 	  $(document).on('click', ".fa-heart",function (e) {
 	      $(e.target).addClass("fa-heart-o").removeClass("fa-heart");
 	      var fo_list=$("#sidebar-shortcuts-large").find("button");
@@ -148,7 +198,10 @@ $(document).ready(function () {
 	    	  } 
 	      });
 	      $(fo_cur).removeClass(c).addClass("btn-default");
-	      
+	      ajaxDelFavorite($(fo_cur).data("id"),$(fo_cur).data("title"));
+	      $(e.target).parent("li").find("a").data("favorite_id",0)
+	      $(fo_cur).data("url","");
+	      $(fo_cur).removeAttr("title");
 	  });
 	  
 	  
@@ -346,6 +399,7 @@ function traverseTree(node,parentli,two){
 		$(a).data("url","/BMS/"+value.path)
 		$(a).data("title",value.name);
 		$(a).data("id",value.id)
+		$(a).data("favorite_id",value.favorite_id||0);
 			
 		var li = $('<li  class="" />');
 		

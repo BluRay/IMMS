@@ -12,12 +12,14 @@
 		<result property="isPermission" column="isPermission" />
 		<result property="isDeleted" column="isDeleted" />
 		<result property="type" column="type" />
+		<result property="favorite_id" column="favorite_id" />
 	</resultMap>
 
 	<select id="getMenu" parameterType="String" resultMap="menuMap">
-		SELECT m.id,m.name,m.icon,m.parent,m.priority,m.isDeleted,f.function_url AS path,f.type 
+		SELECT m.id,m.name,m.icon,m.parent,m.priority,m.isDeleted,f.function_url AS path,f.type,ifnull(fo.id,0) favorite_id
 		FROM BMS_BASE_MODEL m
 		LEFT OUTER JOIN BMS_BASE_FUNCTION f ON m.id = f.model_id
+		left join BMS_BASE_USER_FAVORITE fo on fo.model_id=m.id and fo.staff_number=#{staff_number}
 		WHERE isDeleted='0'  AND
 		((find_in_set (m.id,
 		(SELECT group_concat(distinct p.function_id) FROM BMS_BASE_ROLE_PERMISSION p 
@@ -26,4 +28,18 @@
 		ORDER BY m.priority 
 	</select>
 	
+	<select id="getFavorite" parameterType="Map" resultType="Map">
+		select fo.id,fo.model_id,fo.function_name
+		from BMS_BASE_USER_FAVORITE fo
+		where fo.staff_number=#{staff_number} and fo.model_id=#{model_id}
+	</select>
+	
+	<insert id="insertFavorite" parameterType="Map">
+		insert into BMS_BASE_USER_FAVORITE (staff_number,model_id,function_name) 
+		values (#{staff_number},#{model_id},#{function_name})
+	</insert>
+	
+	<delete id="deleteFavorite" parameterType="Map">
+		delete from BMS_BASE_USER_FAVORITE where staff_number=#{staff_number} and model_id=#{model_id}
+	</delete>
 </mapper>

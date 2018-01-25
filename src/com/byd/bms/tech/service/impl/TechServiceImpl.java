@@ -173,10 +173,34 @@ public class TechServiceImpl implements ITechService {
 			String[] time_list_arr = {};
 			if(time_list != null)time_list_arr = time_list.split(",");
 			
+			int id = techDao.getTechTaskDetailId(conditionMap);
+			System.out.println("-->status_list=" + conditionMap.get("status_list").toString());
+			String status_list = conditionMap.get("status_list").toString();
 			for (int i = 0 ; i <tech_list_arr.length ; i++ ) {
 				String tech = tech_list_arr[i];
 				String tech_workshop = tech.substring(0, tech.indexOf(":"));
 				float tech_num = Float.valueOf(tech.substring(tech.indexOf(":")+1,tech.length()));
+				
+				//180125增加校验 分配数量不能小于已跟进的数量
+				Map<String,Object> conditionMap2=new HashMap<String,Object>();
+				if(tech_workshop.equals("自制件")) {
+					//查询已跟进数
+					conditionMap2.put("task_detail_id", id);
+					conditionMap2.put("tech_workshop", tech_workshop);
+					int ass_num = techDao.getFollowingUpPreNum(conditionMap2);
+					if(tech_num < ass_num) {
+						return -1;
+					}
+				}
+				if(tech_workshop.equals("部件")) {
+					//查询已跟进数
+					conditionMap2.put("task_detail_id", id);
+					conditionMap2.put("tech_workshop", tech_workshop);
+					int ass_num = techDao.getFollowingUpPreNum(conditionMap2);
+					if(tech_num < ass_num) {
+						return -2;
+					}
+				}
 
 				for (int j = 0 ; j <time_list_arr.length ; j++ ) {
 					String time = time_list_arr[j];
@@ -192,13 +216,53 @@ public class TechServiceImpl implements ITechService {
 			//删除前段跟进数据
 			//techDao.deleteTechFollowPre(conditionMap);	
 			conditionMap.put("time_total", total);
-			int id = techDao.getTechTaskDetailId(conditionMap);
+			
 			if(id == 0){
 				techDao.insertTechTaskDetail(conditionMap);	
 			}else{
 				conditionMap.put("id", id);
 				techDao.updateTechTaskDetail(conditionMap);	
 			}
+			//更新status_list
+			String new_status_list = "";
+			String[] ws = status_list.split(",");
+			for (int i = 0 ; i <ws.length ; i++ ) {
+				if((!(ws[i].equals("自制件")))&&(!(ws[i].equals("部件")))) {
+					new_status_list += ","+ws[i];
+				}
+			}
+			for (int i = 0 ; i <tech_list_arr.length ; i++ ) {
+				String tech = tech_list_arr[i];
+				String tech_workshop = tech.substring(0, tech.indexOf(":"));
+				float tech_num = Float.valueOf(tech.substring(tech.indexOf(":")+1,tech.length()));
+				
+				Map<String,Object> conditionMap2=new HashMap<String,Object>();
+
+				if(tech_workshop.equals("部件")) {
+					//查询已跟进数
+					conditionMap2.put("task_detail_id", id);
+					conditionMap2.put("tech_workshop", tech_workshop);
+					int ass_num = techDao.getFollowingUpPreNum(conditionMap2);
+					if(tech_num == ass_num) {
+						new_status_list += ",部件";
+					}
+				}
+				if(tech_workshop.equals("自制件")) {
+					//查询已跟进数
+					conditionMap2.put("task_detail_id", id);
+					conditionMap2.put("tech_workshop", tech_workshop);
+					int ass_num = techDao.getFollowingUpPreNum(conditionMap2);
+					if(tech_num == ass_num) {
+						new_status_list += ",自制件";
+					}
+				}
+			}
+			if(!new_status_list.equals(""))new_status_list = new_status_list.substring(1, new_status_list.length());
+			System.out.println("-->new_status_list=" + new_status_list);
+			Map<String, Object> infomap = new HashMap<String, Object>();
+			infomap.put("task_detail_id", id);
+			infomap.put("status_list", new_status_list);
+			techDao.updateTechDetailStatus(infomap);
 		}else{
 			techDao.deleteTechFollowBus(conditionMap);
 			for(Object o:jsa){
@@ -385,6 +449,18 @@ public class TechServiceImpl implements ITechService {
 		}
 		techDao.removeFollowingUpPre(editList);
 		
+		String new_status_list = "";
+		String[] ws = status_list.split(",");
+		for (int i = 0 ; i <ws.length ; i++ ) {
+			if(!(ws[i].equals(workshop))) {
+				new_status_list += ","+ws[i];
+			}
+		}
+		if(!new_status_list.equals(""))new_status_list = new_status_list.substring(1, new_status_list.length());
+		Map<String, Object> infomap = new HashMap<String, Object>();
+		infomap.put("task_detail_id", task_detail_id);
+		infomap.put("status_list", new_status_list);
+		techDao.updateTechDetailStatus(infomap);
 		return 0;
 	}
 
