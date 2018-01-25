@@ -56,6 +56,7 @@ public interface ITechService {
 	
 	public int editFollowingUp(String curTime,String edit_user,String ids,String task_detail_id,String update_status,String workshop);
 	public int removeFollowingUp(String curTime,String edit_user,String ids,String task_detail_id,String update_status,String workshop,String status_list);
+	public int removeFollowingUpPre(String curTime,String edit_user,String ids,String task_detail_id,String update_status,String workshop,String status_list);
 
 	public int editFollowingUp1(String curTime,String edit_user,String tech_task_id,String factory,String workshop,String follow_num,String order_no,String task_detail_id,String update_status);
 	

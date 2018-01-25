@@ -29,6 +29,8 @@ public class ProductionException {
 	private String memo;
 	private String duty_department;
 	private int order_id;
+	private String order_desc;
+	
 	public int getId() {
 		return id;
 	}
@@ -196,6 +198,12 @@ public class ProductionException {
 	}
 	public void setOrder_id(int order_id) {
 		this.order_id = order_id;
+	}
+	public String getOrder_desc() {
+		return order_desc;
+	}
+	public void setOrder_desc(String order_desc) {
+		this.order_desc = order_desc;
 	}
 	
 }

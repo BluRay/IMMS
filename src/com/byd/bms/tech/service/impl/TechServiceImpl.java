@@ -190,7 +190,7 @@ public class TechServiceImpl implements ITechService {
 				
 			}
 			//删除前段跟进数据
-			techDao.deleteTechFollowPre(conditionMap);	
+			//techDao.deleteTechFollowPre(conditionMap);	
 			conditionMap.put("time_total", total);
 			int id = techDao.getTechTaskDetailId(conditionMap);
 			if(id == 0){
@@ -370,6 +370,21 @@ public class TechServiceImpl implements ITechService {
 		infomap.put("task_detail_id", task_detail_id);
 		infomap.put("status_list", new_status_list);
 		techDao.updateTechDetailStatus(infomap);
+		return 0;
+	}
+	
+	@Override
+	@Transactional
+	public int removeFollowingUpPre(String curTime, String edit_user, String ids, String task_detail_id,String update_status, String workshop,String status_list) {
+		JSONArray jsonArray = JSONArray.fromObject(ids);
+		List<Map<String, Object>> editList = new ArrayList<Map<String, Object>>();
+		for (int i = 0; i < jsonArray.size(); i++) {
+			Map<String, Object> infomap = new HashMap<String, Object>();
+			infomap.put("id", jsonArray.getString(i).toString());
+			editList.add(infomap);
+		}
+		techDao.removeFollowingUpPre(editList);
+		
 		return 0;
 	}
 

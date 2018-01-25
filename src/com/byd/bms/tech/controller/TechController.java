@@ -756,6 +756,21 @@ public class TechController extends BaseController{
 		return model;
 	}
 	
+	@RequestMapping("/removeFollowingUpPre")
+	@ResponseBody
+	public ModelMap removeFollowingUpPre(){
+		String curTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+		String edit_user = request.getSession().getAttribute("staff_number") + "";
+		String ids = request.getParameter("ids");
+		String task_detail_id = request.getParameter("task_detail_id");
+		String update_status = request.getParameter("update_status");
+		String workshop = request.getParameter("workshop");
+		String status_list = request.getParameter("status_list");
+		techService.removeFollowingUp(curTime, edit_user, ids, task_detail_id, update_status, workshop,status_list);
+		model.put("success", true);
+		return model;
+	}
+	
 	@RequestMapping("/editFollowingUp1")
 	@ResponseBody
 	public ModelMap editFollowingUp1(){

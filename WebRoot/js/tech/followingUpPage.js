@@ -168,7 +168,7 @@ function ajaxQuery() {
 				            				return "-";
 				            			}else{
 				            				if (row.ws == "自制件" || row.ws == "部件") {
-					            				return "<i name='edit' class=\"fa fa-pencil\" rel=\"tooltip\"  title='修改'style=\"cursor: pointer;text-align: center;\" onclick='showSelectBusNumberModal1(\"" + row.prod_factory + "\",\"" + row.ws + "\",\"" + row.order_no + "\"," + row.tech_task_id + "," + row.total + "," + row.task_detail_id + ");' ></i>";
+					            				return "<i name='edit' class=\"fa fa-pencil\" rel=\"tooltip\"  title='修改'style=\"cursor: pointer;text-align: center;\" onclick='showSelectBusNumberModal1(\"" + row.prod_factory + "\",\"" + row.ws + "\",\"" + row.order_no + "\"," + row.tech_task_id + "," + row.total + "," + row.task_detail_id + ",\""+row.status_list+"\");' ></i>";
 					    					} else {
 					    						return "<i name='edit' class=\"fa fa-pencil\" rel=\"tooltip\"  title='修改'style=\"cursor: pointer;text-align: center;\" onclick='showSelectBusNumberModal(\"" + row.prod_factory + "\",\"" + row.ws + "\",\"" + row.order_no + "\"," + row.tech_task_id + "," + row.task_detail_id + ",\""+row.status_list+"\");' ></i>";
 					    					}
@@ -242,7 +242,7 @@ function showSelectBusNumberModal(factory, workshop, order_no, tech_task_id, tas
 	});
 }
 
-function showSelectBusNumberModal1(factory, workshop, order_no, tech_task_id, total_num, task_detail_id) {
+function showSelectBusNumberModal1(factory, workshop, order_no, tech_task_id, total_num, task_detail_id,status_list) {
 	$('#select_tech_task_id1').val(tech_task_id);
 	$('#select_factory1').val(factory);
 	$('#select_workshop1').val(workshop);
@@ -259,6 +259,13 @@ function showSelectBusNumberModal1(factory, workshop, order_no, tech_task_id, to
 		height:600,
 		modal: true,
 		buttons: [{
+					text: "取消跟进",
+					id:"btn_remove",
+					"class" : "btn btn-warning btn-minier",
+					click: function() {
+						ajaxRemovePre(status_list);
+					} 
+				},{
 					text: "取消",
 					"class" : "btn btn-minier",
 					click: function() {$( this ).dialog( "close" );} 
@@ -347,9 +354,10 @@ function ajaxQueryDetail1(tbody, factory, workshop, order_no, tech_task_id,task_
 				month = value.confirmor_date.split("-")[1];
 				
 				var tr = $("<tr />");
-				$("<td />").html(value.follow_num).appendTo(tr);
-				$("<td />").html(value.confirmor).appendTo(tr);
-				$("<td />").html(value.confirmor_date).appendTo(tr);
+				$("<td style='text-align: center;'/>").html("<input type='checkbox' class='cbox' >").appendTo(tr);
+				$("<td style='text-align: center;'/>").html(value.follow_num).appendTo(tr);
+				$("<td style='text-align: center;'/>").html(value.confirmor).appendTo(tr);
+				$("<td style='text-align: center;'/>").html(value.confirmor_date).appendTo(tr);
 
 				$(tr).data("id", value.id);
 				tbody.append(tr);
@@ -363,6 +371,21 @@ function ajaxQueryDetail1(tbody, factory, workshop, order_no, tech_task_id,task_
 			});
 		}
 	});
+	
+}
+
+function ajaxRemovePre(status_list){
+	var ids = [];
+	$('.cbox').each(function(e) {
+		if ($(this).prop("checked")) {
+			ids.push($(this).closest("tr").data('id'));
+		}
+	});
+	if (ids.length == 0) {
+		alert('至少勾选一个项！');
+		return false;
+	}
+	
 	
 }
 
@@ -455,9 +478,10 @@ function ajaxEdit1() {
 	var complete_num = 0;
 	$("#selectBusNumber_table_tbody1 tr").each(function(e) {
 		if(!($(this).find("td").eq(0).attr("colspan"))){
-			complete_num += parseInt($(this).find("td").eq(0).html());
+			complete_num += parseInt($(this).find("td").eq(1).html());
 		}
 	});
+	console.log("-->complete_num="+complete_num + ";follow_num=" + follow_num + ";total_num=" + total_num);
 	if (complete_num + follow_num > total_num) {
 		alert("产量不能超过技改总台数与已完成台数的差！");
 		$('#follow_num').focus();
@@ -479,6 +503,7 @@ function ajaxEdit1() {
 		success : function(response) {
 			alert("维护成功！");
 			$("#selectBusNumberModal1").dialog( "close" );
+			ajaxQuery();
 			//ajaxQueryDetail1($("#selectBusNumber_table_tbody1"), $('#select_factory1').val(), $('#select_workshop1').val(), $('#select_order_no1').val(), $('#select_tech_task_id1').val());
 		}
 	});

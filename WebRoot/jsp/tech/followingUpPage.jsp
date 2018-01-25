@@ -112,6 +112,7 @@
 						<table id="selectBusNumber_table1" style="table-layout:fixed;font-size:12px" class="table table-bordered table-striped">
 							<thead>
 				                <tr>
+				                	<th style="text-align:center;width:80px"><input type="checkbox" id="selectBusNumber_checkall1" class="checkall"></th>
 				                	<th style="text-align:center;">产量</th>
 				                    <th style="text-align:center;">维护人</th>
 				                    <th style="text-align:center;">维护时间</th>

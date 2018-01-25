@@ -1794,6 +1794,11 @@ LEFT JOIN BMS_BASE_USER AS u ON u.id = f.confirmor_id
 			WHERE id = #{item.id}
 		</foreach>
 	</update>
+	<update id="removeFollowingUpPre" parameterType="List">
+		<foreach collection="list" index="index" item="item" separator=";">
+			DELETE FROM BMS_TECH_TASK_FOLLOW_PRE WHERE id = #{item.id}
+		</foreach>
+	</update>
 	
 	<!-- 技改跟进-修改1 -->
 	<insert id="addFollowingUp1" useGeneratedKeys="true" parameterType="map">
