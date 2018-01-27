@@ -75,21 +75,27 @@ public class AccountController extends BaseController{
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String edit_time = df.format(new Date());
 		
-		BmsBaseUser user = new BmsBaseUser();
-		user.setStaff_number(staff_number);
-		user.setUsername(username);
-		user.setEmail(email);
-		user.setTelephone(telephone);
-		user.setCellphone(cellphone);
-		user.setPassword(MD5Util.getEncryptedPwd(password));
-		user.setDisplay_name(display_name);
-		user.setFactory_id(Integer.valueOf(factory_id));
-		//user.setDepartment_id(Integer.valueOf(department_id));
-		user.setAdmin(admin);
-		user.setCreate_user(edit_user);
-		user.setCreate_time(edit_time);
-		int reuslt = settingService.addUser(user);
-		initModel(true,"success",reuslt);
+		//校验工号是否存在
+		int check = settingService.checkUser(staff_number);
+		if(check == 0) {
+			BmsBaseUser user = new BmsBaseUser();
+			user.setStaff_number(staff_number);
+			user.setUsername(username);
+			user.setEmail(email);
+			user.setTelephone(telephone);
+			user.setCellphone(cellphone);
+			user.setPassword(MD5Util.getEncryptedPwd(password));
+			user.setDisplay_name(display_name);
+			user.setFactory_id(Integer.valueOf(factory_id));
+			//user.setDepartment_id(Integer.valueOf(department_id));
+			user.setAdmin(admin);
+			user.setCreate_user(edit_user);
+			user.setCreate_time(edit_time);
+			int reuslt = settingService.addUser(user);
+			initModel(true,"success",reuslt);
+		}else {
+			initModel(false,"error",-1);
+		}
 		model = mv.getModelMap();
 		return model;
 	}

@@ -20,7 +20,7 @@ public interface ISettingService {
 	public int addRoleFunction(String role_id,String function_id);
 	public int delFunctionPermission(String role_id,String permission_ids);
 	public int addFunctionPermission(String role_id,String permission_id);
-	
+	public int checkUser(String staff_number);
 	public int addUser(BmsBaseUser user);
 	public int editUser(BmsBaseUser user);
 	public int delUser(BmsBaseUser user);

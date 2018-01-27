@@ -55,6 +55,10 @@
 		]]>
 	</insert>
 	
+	<select id="checkUser" parameterType="String" resultType="int">
+		SELECT COUNT(id) FROM BMS_BASE_USER WHERE staff_number = #{staff_number}
+	</select>
+	
 	<insert id="addUser" useGeneratedKeys="true" keyProperty="id" parameterType="com.byd.bms.util.model.BmsBaseUser">
 		<![CDATA[
 		INSERT INTO BMS_BASE_USER(staff_number, card_8H10D, username, email, telephone, cellphone, password, display_name, factory_id, admin, isdelete, create_user, create_time, login_count)

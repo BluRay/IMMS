@@ -74,18 +74,27 @@ $(document).ready(function () {
 							    	"admin" : $("#new_admin").val()
 							    },
 							    success:function(response){
-							    	$.gritter.add({
-										title: '系统提示：',
-										text: '<h5>增加用户成功！</h5>',
-										class_name: 'gritter-info'
-									});
-							    	$("#new_staff_number").val("");
-							    	$("#new_username").val("");
-							    	$("#new_email").val("");
-							    	$("#new_telephone").val("");
-							    	$("#new_cellphone").val("");
-							    	$("#new_username").focus();
-							    	ajaxQuery();
+							    	if(response.success){
+							    		$.gritter.add({
+											title: '系统提示：',
+											text: '<h5>增加用户成功！</h5>',
+											class_name: 'gritter-info'
+										});
+								    	$("#new_staff_number").val("");
+								    	$("#new_username").val("");
+								    	$("#new_email").val("");
+								    	$("#new_telephone").val("");
+								    	$("#new_cellphone").val("");
+								    	$("#new_username").focus();
+								    	ajaxQuery();
+							    	}else{
+							    		$.gritter.add({
+											title: '系统提示：',
+											text: '<h5>此工号系统已经存在，请检查数据！</h5>',
+											class_name: 'gritter-error'
+										});
+							    	}
+							    	
 							    }
 							});
 						} 

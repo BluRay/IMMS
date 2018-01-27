@@ -14,16 +14,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <head>
 <link rel="stylesheet" href="/BMS/assets/css/bootstrap.min.css" />
 <link rel="stylesheet" href="/BMS/assets/css/font-awesome.min.css" />
-<link rel="stylesheet" href="/BMS/assets/css/jquery-ui.min.css" />
 <!-- text fonts -->
-<!-- <link rel="stylesheet" href="/BMS/assets/css/ace-fonts.css" /> -->
+<link rel="stylesheet" href="/BMS/assets/css/ace-fonts.css" />
 <!-- ace styles -->
 <link rel="stylesheet" href="/BMS/assets/css/ace.min.css" id="main-ace-style" />
 <link rel="stylesheet" href="/BMS/assets/css/ace-skins.min.css" />
 <link rel="stylesheet" href="/BMS/assets/css/ace-rtl.min.css" />
-
 <script src="<%=basePath%>/assets/js/jquery.min.js"></script>
-<script src="<%=basePath%>/assets/js/jquery-ui.min.js"></script>
 <script src="<%=basePath%>/assets/js/jquery.mobile.custom.min.js"></script>
 <script src="<%=basePath%>/assets/js/ace-extra.min.js"></script>
 <script src="<%=basePath%>/assets/js/bootstrap.min.js"></script>
@@ -69,45 +66,6 @@ function ajaxQueryMenu(){
 	    }
 	});
 }
-
-function ajaxAddFavorite(model_id,function_name){
-	$.ajax({
-	    url: "/BMS/addFavorite",
-	    async: false,
-	    dataType: "json",
-		type: "post",
-	    data: {
-	    	"staff_number":'<%=staff_number%>',
-	    	"model_id":model_id,
-	    	"function_name":function_name
-	    },
-	    success:function(response){
-	    	if(!response.success){
-	    		alert(response.message)
-	    	}
-	    }
-	});
-}
-
-function ajaxDelFavorite(model_id,function_name){
-	$.ajax({
-	    url: "/BMS/removeFavorite",
-	    async: false,
-	    dataType: "json",
-		type: "post",
-	    data: {
-	    	"staff_number":'<%=staff_number%>',
-	    	"model_id":model_id,
-	    	"function_name":function_name
-	    },
-	    success:function(response){
-	    	if(!response.success){
-	    		alert(response.message)
-	    	}
-	    }
-	});
-}
-
 function recursiveTree(id,s) {
 	var node = getTreeNode(id,s);
 	var childTreeNodes = queryTreeNode(id,s);
@@ -138,73 +96,7 @@ function getTreeNode(id,s) {
 	return tn;
 }
 var menuTree = [];
-var favorite_list=[];
-
 $(document).ready(function () {
-	var fo_btn_list = ['btn-success','btn-info','btn-warning','btn-danger'];
-
-	//收藏夹功能
-	  $(document).on('mouseover', ".submenu.nav-show li",function (e) {
-	        $(e.target).parent("li").find(".fa.fa-heart-o").eq(0).show();
-	        return false;
-	    });
-	
- 	  $(document).on('mouseout', ".submenu.nav-show li",function (e) {
-	        $(e.target).parent("li").find(".fa.fa-heart-o").eq(0).hide();
-	        return false;
-	    }); 
- 	  
-	//添加收藏
-	  $(document).on('click', ".fa-heart-o",function (e) {
-		  //判断是否已经收藏了4个程序
-		  var fo_list=$("#sidebar-shortcuts-large").find(".btn-default");
-		  if(fo_list.length>0){
-			  var crr_fo=$(fo_list).eq(0);
-			 // alert($(crr_fo).attr("id"))
-			  var pre_all=$(crr_fo).prevAll();
-			  //alert(pre_all.length)
-			  var c=fo_btn_list[pre_all.length]
-			 // alert($(e.target).parent("li").find("a").html())
-			  var title=$(e.target).parent("li").find("a").data("title");
-			  var model_id=$(e.target).parent("li").find("a").data("id");
-			  var favorite_id=$(e.target).parent("li").find("a").data("favorite_id");
-			  
-			  $(fo_list).eq(0).addClass(c).removeClass("btn-default")
-			  $(fo_list).eq(0).data("url",$(e.target).parent("li").find("a").data("url"))
-			  $(fo_list).eq(0).data("title",$(e.target).parent("li").find("a").data("title"))
-			  $(fo_list).eq(0).data("id",$(e.target).parent("li").find("a").data("id"));
-			  $(fo_list).eq(0).attr("title",title);
-			  if(favorite_id==0){
-				  ajaxAddFavorite(model_id,title);
-			  }
-			  
-		  }else{
-			  alert("最多只能收藏4个程序！");
-			  return true;
-		  }
-	      $(e.target).addClass("fa-heart").removeClass("fa-heart-o")
-	  });
-	  
-	//取消收藏
-	  $(document).on('click', ".fa-heart",function (e) {
-	      $(e.target).addClass("fa-heart-o").removeClass("fa-heart");
-	      var fo_list=$("#sidebar-shortcuts-large").find("button");
-	      var fo_cur=$(fo_list).eq(0);
-	      var c=fo_btn_list[0]
-	      $.each(fo_list,function(i,fo){
-	    	  if($(fo).data("title")==$(e.target).parent("li").find("a").data("title")){
-	    		  fo_cur=fo;
-	    		  c=fo_btn_list[i];
-	    	  } 
-	      });
-	      $(fo_cur).removeClass(c).addClass("btn-default");
-	      ajaxDelFavorite($(fo_cur).data("id"),$(fo_cur).data("title"));
-	      $(e.target).parent("li").find("a").data("favorite_id",0)
-	      $(fo_cur).data("url","");
-	      $(fo_cur).removeAttr("title");
-	  });
-	  
-	  
 	//收起侧边菜单
 	/* $('.nav-list').find('li').each(function(){
 		$(this).removeClass('active');
@@ -220,22 +112,8 @@ $(document).ready(function () {
 		});
 	});  */
 	
-	//左侧上角四个按钮事件
-	$("#sidebar-shortcuts-large button").click(function(e){
-		var url=$(e.target).data("url");
-		var title=$(e.target).data("title");
-		var id=$(e.target).data("id");
-		
-		var obj = {id:id,title:title,close:'true',url: url,icon:'menu-icon fa fa-signal green'};
-		if(url&&url.length>0){
-			addTabs(obj);
-		}
-		
-	})
-
 	//查询菜单数据
 	ajaxQueryMenu();
-	
 	$.ajax({
 		type:'GET',
 		url:"/BMS/common/getTaskList",
@@ -294,7 +172,6 @@ $(document).ready(function () {
 			var root = $('.nav-list');
 			var li = $('<li  class="" />');
 			var a = $('<a href=\"/BMS/'+value.path+'\" ></a>');
-			
 			if (value.path.substring(0,4) =="http"){
 				a = $('<a href=\"'+value.path+'<%=staff_number%>\" ></a>');
 			}
@@ -330,8 +207,7 @@ $(document).ready(function () {
 	var url = window.location+"";
 	//alert(getRealPath(url));
 	$('.nav-list').find('li').each(function(){
-		
-		if(getRealPath(url)===getRealPath($(this).find("a").eq(0).attr("href"))){
+		if(getRealPath(url)===getRealPath($(this).find("a").eq(0).attr('href'))){
 			//alert(getRealPath($(this).find("a").eq(0).attr('href')));
 			/* $(this).parent().parent().addClass('open');*/
 			//$(this).parent().parent().parent().parent().find('a').eq(0).trigger("click");
@@ -359,14 +235,7 @@ $(document).ready(function () {
 			 $(this).find('a').eq(0).trigger("click"); 
 		}
 	});
-	
-	$.each(favorite_list,function(i,fo){
-		$(fo).css("display","")
-		$(fo).trigger("click")
-	})
-	
 });
-
 function getRealPath(url){
 	var str = '';
 	if (typeof(url) !== "undefined")str = url;
@@ -393,23 +262,14 @@ function getRealPath(url){
 function traverseTree(node,parentli,two){
 	var ul = $('<ul class="submenu" />');
 	$.each(node.list, function (index, value) {
-		var a;
-		a = $('<a href="javascript:addTabs({id:\'' + value.id + '\',title:\'' + value.name + '\',close: \'true\',url: \'/BMS/' + value.path + '\'});" ></a>');
-			//a = $('<a href=\"/BMS/'+value.path+'\" ></a>');
-		$(a).data("url","/BMS/"+value.path)
-		$(a).data("title",value.name);
-		$(a).data("id",value.id)
-		$(a).data("favorite_id",value.favorite_id||0);
-			
 		var li = $('<li  class="" />');
-		
-		//var a = $('<a href="javascript:addTabs({id:\'' + value.id + '\',title:\'' + value.name + '\',close: \'true\',url: \'/BMS/' + value.path + '\'});" ></a>');
+		var a = $('<a href=\"/BMS/'+value.path+'\" ></a>');
 		//console.log("value:" , value);
 		if(value.list.length>0){
 			a.addClass('dropdown-toggle');
 			if(two){
-				/* var i = $('<i class="menu-icon fa fa-caret-right"></i>');
-				i.appendTo(a); */
+				var i = $('<i class="menu-icon fa fa-caret-right"></i>');
+				i.appendTo(a);
 			}else{
 				var i = $('<i class="'+value.icon+'"></i>');
 				i.appendTo(a);
@@ -420,15 +280,14 @@ function traverseTree(node,parentli,two){
 			//console.log("value.icon:" , value.icon);
 			if(value.icon !== '+'){
 				if(two){
-					/* var i1 = $('<i class="menu-icon fa fa-caret-right"></i>');
-					i1.appendTo(a); */
+					var i1 = $('<i class="menu-icon fa fa-caret-right"></i>');
+					i1.appendTo(a);
 				}else{
 					var i1 = $('<i class="'+value.icon+'"></i>');
 					i1.appendTo(a);
 				}
-				
 			}
-
+			
 		} 
 		if(two){
 			//console.log("--two value.icon:" , value.icon);
@@ -440,38 +299,22 @@ function traverseTree(node,parentli,two){
 			}else{
 				a.append('<span><i class="'+value.icon+'" style="margin-right:3px;"></i>'+value.name+'</span>');
 				a.appendTo(li);
-				var shoucang=$('<i id="favorite_'+value.favorite_id+'" class="fa fa-heart-o"  style="color:red;cursor:pointer;display:none;position:absolute;left:25px;top:12px;height:14px;width:14px;line-height: 14px;padding: 0px;font-size:14px;"></i>');
-				shoucang.appendTo(li);	
-				if(value.favorite_id>0){
-					favorite_list.push("#favorite_"+value.favorite_id)
-				}
 			}
 			
 		}else{
 			//console.log("--value.icon:" , value.icon);
 			a.append('&nbsp;&nbsp;&nbsp;'+value.name);
 			a.appendTo(li);
-			var shoucang=$('<i id="favorite_'+value.favorite_id+'" class="fa fa-heart-o"  style="color:red;cursor:pointer;display:none;position:absolute;left:25px;top:12px;height:14px;width:14px;line-height: 14px;padding: 0px;font-size:14px;"></i>');
-			shoucang.appendTo(li);	
-			if(value.favorite_id>0){
-				favorite_list.push("#favorite_"+value.favorite_id)
-			}
 		}
 		//a.appendTo(li);
-		
 		var b1 = $('<b class="arrow"></b>');
 		b1.appendTo(li);
 		//console.log("--li",li);
-		
-		
 		li.appendTo(ul);
 		traverseTree(value,li);//递归
 		ul.appendTo(parentli);
-		
 	});
-	
 }
-
 </script>
 </head>
 <body>
@@ -481,20 +324,20 @@ function traverseTree(node,parentli,two){
 
 				<div class="sidebar-shortcuts" id="sidebar-shortcuts">
 					<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
-						<button id="index_report_bt" class="btn btn-default"  >
+						<button class="btn btn-success">
 							<i class="ace-icon fa fa-signal"></i>
 						</button>
 
-						<button id="index_pencil_bt"  class="btn btn-default">
+						<button class="btn btn-info">
 							<i class="ace-icon fa fa-pencil"></i>
 						</button>
 
 						<!-- #section:basics/sidebar.layout.shortcuts -->
-						<button id="index_users_bt"  class="btn btn-default">
+						<button class="btn btn-warning">
 							<i class="ace-icon fa fa-users"></i>
 						</button>
 
-						<button id="index_cogs_bt"  class="btn btn-default">
+						<button class="btn btn-danger">
 							<i class="ace-icon fa fa-cogs"></i>
 						</button>
 
@@ -522,6 +365,142 @@ function traverseTree(node,parentli,two){
 						<b class="arrow"></b>
 					</li>
 
+					<%-- <li  class="">
+						<a href="#" class="dropdown-toggle">
+							<i class="menu-icon fa fa-desktop"></i>
+							<span class="menu-text"> 界面 &amp; 元素 </span>
+
+							<b class="arrow fa fa-angle-down"></b>
+						</a>
+
+						<b class="arrow"></b>
+
+						<ul class="submenu">
+							<li class="">
+								<a href="/BMS/blank.html">
+									<i class="menu-icon fa fa-caret-right"></i>
+									模板
+								</a>
+
+								<b class="arrow"></b>
+							</li>
+
+							<li class="">
+								<a href="/BMS/elements.html">
+									<i class="menu-icon fa fa-caret-right"></i>
+									元素
+								</a>
+
+								<b class="arrow"></b>
+							</li>
+
+							<li class="">
+								<a href="/BMS/buttons.html">
+									<i class="menu-icon fa fa-caret-right"></i>
+									按钮 &amp; 图标
+								</a>
+
+								<b class="arrow"></b>
+							</li>
+
+							<li class="">
+								<a href="/BMS/treeview.html">
+									<i class="menu-icon fa fa-caret-right"></i>
+									树形菜单
+								</a>
+
+								<b class="arrow"></b>
+							</li>
+
+							<li class="">
+								<a href="/BMS/jqueryui.html">
+									<i class="menu-icon fa fa-caret-right"></i>
+									jQuery UI
+								</a>
+
+								<b class="arrow"></b>
+							</li>
+						</ul>
+					</li>
+
+					<li class="">
+						<a href="#" class="dropdown-toggle">
+							<i class="menu-icon fa fa-list"></i>
+							<span class="menu-text"> 表格 </span>
+
+							<b class="arrow fa fa-angle-down"></b>
+						</a>
+
+						<b class="arrow"></b>
+
+						<ul class="submenu">
+							<li class="">
+								<a href="/BMS/tables.html">
+									<i class="menu-icon fa fa-caret-right"></i>
+									简单 &amp; 动态
+								</a>
+
+								<b class="arrow"></b>
+							</li>
+						</ul>
+					</li>
+
+					<li class="">
+						<a href="#" class="dropdown-toggle">
+							<i class="menu-icon fa fa-pencil-square-o"></i>
+							<span class="menu-text"> 表单 </span>
+
+							<b class="arrow fa fa-angle-down"></b>
+						</a>
+
+						<b class="arrow"></b>
+
+						<ul class="submenu">
+							<li class="">
+								<a href="/BMS/formelements.html">
+									<i class="menu-icon fa fa-caret-right"></i>
+									表单元素
+								</a>
+
+								<b class="arrow"></b>
+							</li>
+
+							<li class="">
+								<a href="/BMS/formwizard.html">
+									<i class="menu-icon fa fa-caret-right"></i>
+									向导 &amp; 校验
+								</a>
+
+								<b class="arrow"></b>
+							</li>
+
+							<li class="">
+								<a href="/BMS/wysiwyg.html">
+									<i class="menu-icon fa fa-caret-right"></i>
+									文本编辑器
+								</a>
+
+								<b class="arrow"></b>
+							</li>
+
+							<li class="">
+								<a href="/BMS/dropzone.html">
+									<i class="menu-icon fa fa-caret-right"></i>
+									拖拽上传文件
+								</a>
+
+								<b class="arrow"></b>
+							</li>
+							<li class="">
+								<a href="/BMS/flow.html">
+									<i class="menu-icon fa fa-caret-right"></i>
+									流程测试
+								</a>
+
+								<b class="arrow"></b>
+							</li>
+						</ul>
+					</li> --%>
 				</ul><!-- /.nav-list -->
 
 				<!-- #section:basics/sidebar.layout.minimize -->
@@ -532,25 +511,10 @@ function traverseTree(node,parentli,two){
 				<script type="text/javascript">
 					try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
 				</script>
-				<div style="display: none;position:absolute;z-index:999;top:50%;left:350%" class="divLoading" >
-             		<span><i class="fa fa-spinner fa-spin fa-4x" style="height:1em;"></i></span>
-         		</div> 
-         		
-         		<div id="dialog-config-scj" class="hide">
-				<div id="config_form" class="form-horizontal">
-					<div class="form-group">
-						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="order">*&nbsp;订单：</label>
-						<div class="col-sm-3">
-							<!-- <p style="width:98%;margin-bottom: 4px;font-size: 14px;margin-top: 4px;"id="order" >D2017003 K7 200台</p> -->
-							<input type="text"  class="input-medium" style="width:100%"  id="order"  placeholder="订单编号.." />
-							<input type="text" style="display:none" id="order_id" />
-						</div>
-					</div>
-				</div>
-				</div>	
-         		
+		<div style="display: none;position:absolute;z-index:999;top:50%;left:350%" class="divLoading" >
+             <span><i class="fa fa-spinner fa-spin fa-4x" style="height:1em;"></i></span>
+         </div> 
 			</div>
 			
 </body>
-
 </html>

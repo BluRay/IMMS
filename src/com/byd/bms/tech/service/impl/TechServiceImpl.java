@@ -174,7 +174,7 @@ public class TechServiceImpl implements ITechService {
 			if(time_list != null)time_list_arr = time_list.split(",");
 			
 			int id = techDao.getTechTaskDetailId(conditionMap);
-			System.out.println("-->status_list=" + conditionMap.get("status_list").toString());
+			//System.out.println("-->status_list=" + conditionMap.get("status_list").toString());
 			String status_list = conditionMap.get("status_list").toString();
 			for (int i = 0 ; i <tech_list_arr.length ; i++ ) {
 				String tech = tech_list_arr[i];
@@ -258,7 +258,7 @@ public class TechServiceImpl implements ITechService {
 				}
 			}
 			if(!new_status_list.equals(""))new_status_list = new_status_list.substring(1, new_status_list.length());
-			System.out.println("-->new_status_list=" + new_status_list);
+			//System.out.println("-->new_status_list=" + new_status_list);
 			Map<String, Object> infomap = new HashMap<String, Object>();
 			infomap.put("task_detail_id", id);
 			infomap.put("status_list", new_status_list);

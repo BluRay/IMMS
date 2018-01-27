@@ -178,6 +178,11 @@ function ajaxShowBusNumber(order_id,factory_id,order_config_id){
 		async: false,
 		error: function () {alertError();},
 		success: function (response) {
+			if(response.success){
+				drawBusInfoTable(response.data)
+			} else {
+				alert(response.message);
+			}
 			var dialog = $( "#dialog-message" ).removeClass('hide').dialog({
 				width:1000,
 				height:520,
@@ -201,11 +206,7 @@ function ajaxShowBusNumber(order_id,factory_id,order_config_id){
 					}
 				]
 			});
-			if(response.success){
-				drawBusInfoTable(response.data)
-			} else {
-				alert(response.message);
-			}
+			
 		}
 	})
 }
@@ -248,7 +249,7 @@ function ajaxShowOrderBOM(order_id,factory_id,order_config_id){
 
 function drawOrderBOMTable(data){
 
-	var t=$("#tableBusNumber2").dataTable({
+	var t=$("#tableBusNumber2").DataTable({
 		paiging:false,
 		showRowNumber:true,
 		ordering:false,
@@ -289,8 +290,11 @@ function drawOrderBOMTable(data){
 }
 
 function drawBusInfoTable(data){
-
-	var t=$("#tableBusNumber").dataTable({
+	if($.fn.dataTable.isDataTable("#tableBusNumber")){	
+		$('#tableBusNumber').DataTable().destroy();
+		$('#tableBusNumber').empty();
+	}
+	var t=$("#tableBusNumber").DataTable({
 		paiging:false,
 		showRowNumber:true,
 		ordering:false,

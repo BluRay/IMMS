@@ -75,6 +75,11 @@ public class SettingServiceImpl implements ISettingService {
 	public int addFunctionPermission(String role_id, String permission_id) {
 		return settingDao.addFunctionPermission(role_id, permission_id);
 	}
+	
+	@Override
+	public int checkUser(String staff_number) {
+		return settingDao.checkUser(staff_number);
+	}
 
 	@Override
 	public int addUser(BmsBaseUser user) {
