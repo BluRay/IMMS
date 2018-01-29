@@ -15,31 +15,34 @@
 </head>
 <body class="no-skin" style="font-family: 'Microsoft YaHei';">
 	<!-- 头 -->
-	<jsp:include page="../top.jsp" flush="true"/>
+	<jsp:include page="../top.jsp" flush="true" />
 	<!-- 身 -->
-		<div class="main-container" id="main-container">
-			<!-- 左边菜单 -->
-			<jsp:include page="../left.jsp" flush="true"/>
-			<!-- 主体 -->
-			<div class="main-content">
+	<div class="main-container" id="main-container">
+		<!-- 左边菜单 -->
+		<jsp:include page="../left.jsp" flush="true" />
+		<!-- 主体 -->
+		<div class="main-content">
 			<!-- 路径和搜索框 -->
-			<div class="breadcrumbs" id="breadcrumbs">
-					<ul class="breadcrumb">
-						<li><i class="ace-icon fa fa-home home-icon"></i><a href="/BMS/index">首页</a></li>
-						<li><a href="#">生产计划</a></li>
-						<li class="active">计划完成</li>
-					</ul><!-- /.breadcrumb -->
+			<div class="main-content-inner">
+			<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+				<ul class="breadcrumb">
+					<li><i class="ace-icon fa fa-home home-icon"></i><a
+						href="/BMS/index">首页</a></li>
+					<li class="active">订单导入</li>
+				</ul>
+				<!-- /.breadcrumb -->
 
-					<!-- #section:basics/content.searchbox -->
-					<div class="nav-search" id="nav-search">
-						<form class="form-search">
+				<div class="nav-search" id="nav-search">
+					<form class="form-search">
 							<span class="input-icon">
-								<input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" onkeydown="EnterPress()" onkeypress="EnterPress(e)" autocomplete="off" /><i class="ace-icon fa fa-search nav-search-icon"></i>
+								<input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" /><i class="ace-icon fa fa-search nav-search-icon"></i>
 							</span>
-						</form>
-					</div><!-- /.nav-search -->
+					</form>
 				</div>
+				<!-- /.nav-search -->
+			</div>
 
+			<div class="page-content">
 				<div id="form" class="well form-search">
 					<table>
 						<tr>
@@ -87,13 +90,13 @@
 						</table>
 					</div>
 				</div>
-		</div><!-- /.main-content -->
-		
-	</div><!-- /.main-container -->
-	<div id="dialog-message" class="hide">
-			<table id="tableBusNumber" style="font-size: 12px;width:2100px;overflow-x:auto" class="table table-bordered table-striped">
-			</table>
-	</div>
+
+
+			</div>
+			<div id="dialog-message" class="hide">
+					<table id="tableBusNumber" style="font-size: 12px;width:2100px;overflow-x:auto" class="table table-bordered table-striped">
+					</table>
+			</div>
 
 			<div id="dialog-order" class="hide">
 				<form id="" class="form-horizontal">
@@ -321,7 +324,10 @@
 					</div>
 				</form>
 			</div>
-		
+		</div>
+	</div>	
+		<!-- /.main-container -->
+	</div>
 	<script src="../js/datePicker/WdatePicker.js"></script>
 	<script src="../assets/js/jquery-ui.min.js"></script>
 	<script src="../assets/js/jquery.gritter.min.js"></script>

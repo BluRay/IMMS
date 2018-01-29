@@ -49,7 +49,7 @@ function ajaxQuery(){
 		searching: false,
 		autoWidth:false,
 		destroy: true,
-		scrollY: $(window).height()-140,
+		scrollY: $(window).height()-245,
 		scrollX: $(window).width(),
 		/*scrollCollapse: true,*/
 		pageLength: 20,
@@ -242,7 +242,7 @@ function ajaxSearch(id){
 			
 			var dialog = $( "#dialog-edit" ).removeClass('hide').dialog({
 				width:950,
-				height:500,
+				height:550,
 				modal: true,
 				title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-gear green"></i> 评审结果</h4></div>',
 				title_html: true,

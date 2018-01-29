@@ -89,7 +89,7 @@ function ajaxQuery(){
 		searching: false,
 		bAutoWidth:false,
 		destroy: true,
-		sScrollY: $(window).height()-140,
+		sScrollY: $(window).height()-250,
 		scrollX: true,
 		/*scrollCollapse: true,*/
 		pageLength: pageSize,
@@ -201,7 +201,7 @@ function showEditPage(row){
 	
 	var dialog = $( "#dialog-config" ).removeClass('hide').dialog({
 		width:900,
-		height:520,
+		height:600,
 		modal: true,
 		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i> 配置导入</h4></div>",
 		title_html: true,
@@ -530,7 +530,7 @@ function showInfoPage(row){
 	
 	var dialog = $( "#dialog-config" ).removeClass('hide').dialog({
 		width:900,
-		height:520,
+		height:600,
 		modal: true,
 		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i> 配置明细</h4></div>",
 		title_html: true,

@@ -74,11 +74,13 @@ function ajaxQuery(){
 		columns: [
 		            {"title":"技改任务","class":"center","data":"task_content","defaultContent": "","render":function(data,type,row){
 		            	var html="";
-		            	var task_content = row.task_content;
-		            	if(row.task_content.length>30){
-		            		html="<i title='"+row.task_content+"' style='font-style: normal'>"+row.task_content.substring(1,30)+"...</i>"
-		            	}else{
-		            		html=data;
+		            	if(typeof(row.task_content) != "undefined"){
+		            		var task_content = row.task_content;
+			            	if(row.task_content.length>30){
+			            		html="<i title='"+row.task_content+"' style='font-style: normal'>"+row.task_content.substring(1,30)+"...</i>"
+			            	}else{
+			            		html=data;
+			            	}
 		            	}
 		            	return html;
 		            	}

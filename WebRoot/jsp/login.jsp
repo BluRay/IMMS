@@ -112,11 +112,11 @@
 
 										<div class="toolbar clearfix">
 											<div style="width:100%;height:25px">
-												<a href="#" data-target="#forgot-box" class="forgot-password-link">
+												<!-- <a href="#" data-target="#forgot-box" class="forgot-password-link">
 													<i class="ace-icon fa fa-arrow-left"></i>
 													忘记密码
-												</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-												<a href="../MozillaFirefox.rar" class="forgot-password-link">FireFox浏览器</a>
+												</a>-->&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+												<a href="../MozillaFirefox.rar" class="forgot-password-link">FireFox浏览器</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 												<a href="../BMS系统操作手册20170822.pptx" class="forgot-password-link">操作手册</a>
 											</div>
 											<div>
