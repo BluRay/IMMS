@@ -57,7 +57,7 @@ function ajaxQuery(){
 		searching: false,
 		bAutoWidth:false,
 		destroy: true,
-		sScrollY: $(window).height()-250,
+		sScrollY: $(window).height()-140,
 		scrollX: "1500px",
 		/*scrollCollapse: true,*/
 		pageLength: pageSize,
@@ -152,7 +152,7 @@ function showEditPage(data){
 			
 			var dialog = $( "#dialog-config" ).removeClass('hide').dialog({
 				width:600,
-				height:400,
+				height:520,
 				modal: true,
 				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i> 配置产地分配</h4></div>",
 				title_html: true,
