@@ -45,6 +45,16 @@ function initTable() {
 		                sortable: false,visible: true,footerFormatter: totalTextFormatter,
 		                cellStyle:function cellStyle(value, row, index, field) {
 			        	return {css: {"padding-left": "3px", "padding-right": "2px","font-size":"12px"}};
+			        	},formatter:function(value, row, index){
+			        		if(typeof(value)=="undefined"){
+			        			return "<p>-</p>";
+			        		}else{
+			        			if(value.length > 20){
+			            			return "<p title="+value.replace(/\r/ig, "").replace(/\n/ig, "")+">" + value.substring(0,20) + "...</p>";
+			            		}else{
+			            			return "<p>" + value + "</p>";
+			            		}
+			        		}
 			        	}
 		            },{
 		            	field: 'tech_order_no',title: '技改单号',align: 'center',width:'150',valign: 'middle',align: 'center',
@@ -117,6 +127,16 @@ function initTable() {
 		                sortable: false,visible: true,footerFormatter: totalTextFormatter,
 		                cellStyle:function cellStyle(value, row, index, field) {
 			        	return {css: {"padding-left": "3px", "padding-right": "2px","font-size":"12px"}};
+			        	},formatter:function(value, row, index){
+			        		if(typeof(value)=="undefined"){
+			        			return "<p>-</p>";
+			        		}else{
+			        			if(value.length > 20){
+			            			return "<p title="+value.replace(/\r/ig, "").replace(/\n/ig, "")+">" + value.substring(0,20) + "...</p>";
+			            		}else{
+			            			return "<p>" + value + "</p>";
+			            		}
+			        		}
 			        	}
 		            },{
 		            	field: 'tech_order_no',title: '技改单号',align: 'center',width:'15%',valign: 'middle',align: 'center',
@@ -197,7 +217,7 @@ function initTable() {
     $(window).resize(function () {
         $table.bootstrapTable('resetView', {height: getHeight()});
     });
-    function getHeight() {return $(window).height()-55;}
+    function getHeight() {return $(window).height()+50;}
     function getWidth() {return $(window).width()-220;}
 }
 //----------END bootstrap initTable ----------

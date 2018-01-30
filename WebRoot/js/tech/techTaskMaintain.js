@@ -185,7 +185,7 @@ function ajaxQuery(){
 		searching: false,
 		bAutoWidth:false,
 		destroy: true,
-		sScrollY: $(window).height()-250,
+		sScrollY: $(window).height()-160,
 		scrollX: "1500px",
 		/*scrollCollapse: true,*/
 		pageLength: 15,
@@ -216,7 +216,6 @@ function ajaxQuery(){
             param.length = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
             param.start = data.start;//开始的记录序号
             param.page = (data.start / data.length)+1;//当前页码
-            console.log("-->tech_date_start = " + $("#search_tech_date_start").val(),param);
             $.ajax({
                 type: "post",
                 url: "techTaskMaintain/getTaskMaintainList",
@@ -271,7 +270,7 @@ function ajaxQuery(){
 		            	return data==null?"":"<a href='#' onclick='window.open(\"" + data + "\")'>查看</a>" },"defaultContent":""
 		            },
 		            {"title":"重复变更","sWidth":"85px","class":"center","data": "repeat_change","defaultContent": ""},
-		            {"title":"技改类型","sWidth":"80px","class":"center","data":"tech_type","render":function(data,type,row){
+		            {"title":"技改类型","sWidth":"85px","class":"center","data":"tech_type","render":function(data,type,row){
 		            	return getKeys(ECN_TYPE, data)
 		            },"defaultContent": ""},
 		            {"title":"维护人","sWidth":"100px","class":"center","data":"display_name","defaultContent":""},
@@ -527,8 +526,6 @@ function ajaxEdit() {
 		return false;
 	}
 	var trs = selectedrows; //getSelectRowDatas("table2");
-	
-	console.log('--trs = ' , trs);
 
 	$('#teckTaskForm_moidfy').ajaxSubmit({
 		url : "techTaskMaintain/editTechTaskMaintain",

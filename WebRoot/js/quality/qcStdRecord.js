@@ -171,7 +171,16 @@ function ajaxQuery(){
 		},
 		columns: [
             {"title":"记录编号","class":"center","data":"record_num","defaultContent": ""},
-            {"title":"适用车型","class":"center","data":"bus_type","defaultContent": ""},
+            {"title":"适用车型","class":"center","data":"bus_type","defaultContent": "","render":function(data, type, row){
+            	var html="";
+            	data=(data==null ? '' : data);
+            	if(data.length>9){
+            		html="<i title='"+data+"' style='font-style: normal'>"+data.substring(1,9)+"...</i>"
+            	}else{
+            		html=data;
+            	}
+            	return html;
+            }},
             {"title":"适用订单","class":"center","data":"order_id","defaultContent": "","render":function(data, type, row){
             	var html=""
                 	data=data.replace(/'/g,"&apos;").replace(/\r/ig, "&nbsp;").replace(/\n/ig, "&nbsp;");

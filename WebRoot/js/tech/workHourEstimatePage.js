@@ -1,6 +1,6 @@
 var pageSize=1;
 var table;
-var table_height = $(window).height()-280;
+var table_height = $(window).height()-180;
 $(document).ready(function(){
 	initPage();
 	

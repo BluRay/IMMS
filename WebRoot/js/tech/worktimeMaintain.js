@@ -1,6 +1,6 @@
 var pageSize=1;
 var table;
-var table_height = $(window).height()-270;
+var table_height = $(window).height()-180;
 var re_f = /^[0-9]+[0-9]*\.?[0|5]?$/;//浮点数正则表达式
 var model_task_detail_id = 0;
 var edit_list=[];

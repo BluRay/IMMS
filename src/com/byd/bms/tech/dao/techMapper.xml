@@ -886,6 +886,9 @@
 		<if test="workshop !=null and workshop !=''">
 			and s.workshop_org=#{workshop}
 		</if>
+		<if test="techworkshop !=null and techworkshop !=''">
+			and h.workshop=#{techworkshop}
+		</if>
 		order by h.status
 		<if test="offset!=null">
 			LIMIT #{offset} ,#{pageSize}

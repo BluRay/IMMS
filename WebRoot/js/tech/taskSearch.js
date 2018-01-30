@@ -139,25 +139,31 @@ function initTable() {
         columns: [
         [
 			{
-				field: 'task_content',title: '技改任务',align: 'center',width:'250',valign: 'middle',align: 'center',
+				field: 'task_content',title: '技改任务',align: 'center',valign: 'middle',align: 'center',
 			    sortable: false,visible: true,footerFormatter: totalTextFormatter,
 			    cellStyle:function cellStyle(value, row, index, field) {
 				return {css: {"padding-left": "3px", "padding-right": "2px","font-size":"12px"}};
-				}
+				},formatter:function(value, row, index){
+	        		if(value.length > 15){
+            			return "<p title="+value.replace(/\r/ig, "").replace(/\n/ig, "")+">" + value.substring(0,15) + "...</p>";
+            		}else{
+            			return "<p>" + value + "</p>";
+            		}
+	        	}
 			},{
-				field: 'tech_order_type',title: '变更单<br/>类型',align: 'center',width:'60',valign: 'middle',align: 'center',
+				field: 'tech_order_type',title: '变更单类型',align: 'center',valign: 'middle',align: 'center',
 			    sortable: false,visible: true,footerFormatter: totalTextFormatter,
 			    cellStyle:function cellStyle(value, row, index, field) {
 			    	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
 			    	}
 			},{
-				field: 'tech_order_no',title: '技改单号',align: 'center',width:'180',valign: 'middle',align: 'center',
+				field: 'tech_order_no',title: '技改单号',align: 'center',valign: 'middle',align: 'center',
 			    sortable: false,visible: true,footerFormatter: totalTextFormatter,
 			    cellStyle:function cellStyle(value, row, index, field) {
 			    	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
 			    	}
 			},{
-				field: 'tech_order_file',title: '变更单<br/>附件',align: 'center',width:'60',valign: 'middle',align: 'center',
+				field: 'tech_order_file',title: '变更单附件',align: 'center',valign: 'middle',align: 'center',
 			    sortable: false,visible: true,footerFormatter: totalTextFormatter,
 			    cellStyle:function cellStyle(value, row, index, field) {
 			    	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
@@ -168,28 +174,28 @@ function initTable() {
 						}	
 			        }
 			},{
-				field: 'tech_date',title: '技改单日期',align: 'center',width:'80',valign: 'middle',align: 'center',
+				field: 'tech_date',title: '技改单日期',align: 'center',valign: 'middle',align: 'center',
 			    sortable: false,visible: true,footerFormatter: totalTextFormatter,
 			    cellStyle:function cellStyle(value, row, index, field) {
 			    	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
 			    	}
 			},{
-				field: 'duty_unit',title: '责任单位',align: 'center',width:'100',valign: 'middle',align: 'center',
+				field: 'duty_unit',title: '责任单位',align: 'center',valign: 'middle',align: 'center',
 			    sortable: false,visible: true,footerFormatter: totalTextFormatter,
 			    cellStyle:function cellStyle(value, row, index, field) {
 			    	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
 			    	}
 			},{
-				field: 'major_change',title: '重大<br/>变更',align: 'center',width:'50',valign: 'middle',align: 'center',
+				field: 'major_change',title: '重大变更',align: 'center',valign: 'middle',align: 'center',
 			    sortable: false,visible: true,footerFormatter: totalTextFormatter,
 			    cellStyle:function cellStyle(value, row, index, field) {
 			    	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
 			    	}
 			},{
-				field: 'custom_change',title: '顾客<br/>变更',align: 'center',width:'50',valign: 'middle',align: 'center',
+				field: 'custom_change',title: '顾客变更',align: 'center',valign: 'middle',align: 'center',
 			    sortable: false,visible: true,footerFormatter: totalTextFormatter
 			},{
-				field: 'custom_change_file',title: '顾客变更<br/>单附件',width:'70',align: 'center',valign: 'middle',align: 'center',
+				field: 'custom_change_file',title: '顾客变更单附件',align: 'center',valign: 'middle',align: 'center',
 			    sortable: false,visible: true,footerFormatter: totalTextFormatter,
 			    cellStyle:function cellStyle(value, row, index, field) {
 			    	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
@@ -200,80 +206,80 @@ function initTable() {
 			    		}	                    	
 			        }	
 			},{
-				field: 'repeat_change',title: '重复<br/>变更',align: 'center',width:'50',valign: 'middle',align: 'center',
+				field: 'repeat_change',title: '重复变更',align: 'center',valign: 'middle',align: 'center',
 			    sortable: false,visible: true,footerFormatter: totalTextFormatter,
 			    cellStyle:function cellStyle(value, row, index, field) {
 			    	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
 			    	}
 			},{
-				field: 'tech_type',title: '技改类型',align: 'center',width:'100',valign: 'middle',align: 'center',
+				field: 'tech_type',title: '技改类型',align: 'center',valign: 'middle',align: 'center',
 			    sortable: false,visible: true,footerFormatter: totalTextFormatter,
 			    cellStyle:function cellStyle(value, row, index, field) {
 			    	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
 			    	}
 			},{
-				field: 'switch_mode',title: '切换方式',align: 'center',width:'80',valign: 'middle',align: 'center',
+				field: 'switch_mode',title: '切换方式',align: 'center',valign: 'middle',align: 'center',
 			    sortable: false,visible: true,footerFormatter: totalTextFormatter,
 			    cellStyle:function cellStyle(value, row, index, field) {
 			    	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
 			    	}
 			},{
-				field: 'switch_node',title: '切换<br/>节点',align: 'center',width:'60',valign: 'middle',align: 'center',
+				field: 'switch_node',title: '切换节点',align: 'center',valign: 'middle',align: 'center',
 			    sortable: false,visible: true,footerFormatter: totalTextFormatter,
 			    cellStyle:function cellStyle(value, row, index, field) {
 			    	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
 			    	}
 			},{
-				field: 'order_desc',title: '订单',align: 'center',width:'150',valign: 'middle',align: 'center',
+				field: 'order_desc',title: '订单',align: 'center',valign: 'middle',align: 'center',
 			    sortable: false,visible: true,footerFormatter: totalTextFormatter,
 			    cellStyle:function cellStyle(value, row, index, field) {
 			    	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
 			    	},
 			  
 			},{
-				field: 'factory',title: '技改<br/>工厂',align: 'center',width:'80',valign: 'middle',align: 'center',
+				field: 'factory',title: '技改工厂',align: 'center',valign: 'middle',align: 'center',
 			    sortable: false,visible: true,footerFormatter: totalTextFormatter,
 			    cellStyle:function cellStyle(value, row, index, field) {
 			    	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
 			    	}
 			},{
-				field: 'prod_factory',title: '生产<br/>工厂',align: 'center',width:'80',valign: 'middle',align: 'center',
+				field: 'prod_factory',title: '生产工厂',align: 'center',valign: 'middle',align: 'center',
 			    sortable: false,visible: true,footerFormatter: totalTextFormatter,
 			    cellStyle:function cellStyle(value, row, index, field) {
 			    	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
 			    	}
 			},{
-				field: 'workshop',title: '车间',align: 'center',width:'60',valign: 'middle',align: 'center',
+				field: 'workshop',title: '车间',align: 'center',valign: 'middle',align: 'center',
 			    sortable: false,visible: true,footerFormatter: totalTextFormatter,
 			    cellStyle:function cellStyle(value, row, index, field) {
 			    	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
 			    	}
 			},{
-				field: 'tech_time',title: '分配<br/>工时',align: 'center',width:'50',valign: 'middle',align: 'center',
+				field: 'tech_time',title: '分配工时',align: 'center',valign: 'middle',align: 'center',
 			    sortable: false,visible: true,footerFormatter: totalTextFormatter,
 			    cellStyle:function cellStyle(value, row, index, field) {
 			    	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
 			    	}
 			},{
-				field: 'tech_num',title: '技改<br/>台数',align: 'center',width:'50',valign: 'middle',align: 'center',
+				field: 'tech_num',title: '技改台数',align: 'center',valign: 'middle',align: 'center',
 			    sortable: false,visible: true,footerFormatter: totalTextFormatter,
 			    cellStyle:function cellStyle(value, row, index, field) {
 			    	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
 			    	}
 			},{
-				field: 'follow_num',title: '完成<br/>台数',align: 'center',width:'60',valign: 'middle',align: 'center',
+				field: 'follow_num',title: '完成台数',align: 'center',valign: 'middle',align: 'center',
 			    sortable: false,visible: true,footerFormatter: totalTextFormatter,
 			    cellStyle:function cellStyle(value, row, index, field) {
 			    	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
 			    	}
 			},{
-				field: 'ready_hour',title: '已录入<br/>工时',align: 'center',width:'60',valign: 'middle',align: 'center',
+				field: 'ready_hour',title: '已录入工时',align: 'center',valign: 'middle',align: 'center',
 			    sortable: false,visible: true,footerFormatter: totalTextFormatter,
 			    cellStyle:function cellStyle(value, row, index, field) {
 			    	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
 			    	}
 			},{            	
-				field: '',title: '车号<br/>信息',align: 'center',width:'60',valign: 'middle',align: 'center',
+				field: '',title: '车号信息',align: 'center',valign: 'middle',align: 'center',
 			    sortable: false,visible: true,footerFormatter: totalTextFormatter,
 			    cellStyle:function cellStyle(value, row, index, field) {
 			    	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
@@ -283,7 +289,7 @@ function initTable() {
 			        	+row.order_no+"','"+row.factory+"','"+row.id+"',null,null,'"+row.workshop+"','"+row.task_detail_id+"','"+row.prod_factory+"')\">";
 			        }
 			},{
-				field: '',title: '成本是否<br/>可转移',align: 'center',width:'70',valign: 'middle',align: 'center',
+				field: '',title: '成本是否可转移',align: 'center',valign: 'middle',align: 'center',
 			    sortable: false,visible: true,footerFormatter: totalTextFormatter,
 			    cellStyle:function cellStyle(value, row, index, field) {
 			    	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};
@@ -304,7 +310,7 @@ function initTable() {
     $(window).resize(function () {
         $table.bootstrapTable('resetView', {height: getHeight()});
     });
-    function getHeight() {return $(window).height()-45;}
+    function getHeight() {return $(window).height()+55;}
     function getWidth() {return $(window).width()-220;}
 }
 //----------END bootstrap initTable ----------

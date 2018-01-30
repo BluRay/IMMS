@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<jsp:include page="../includ.jsp" flush="true"/>
 <html lang="zh-CN">
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -14,42 +15,15 @@
 		<link rel="stylesheet" href="../assets/css/fixedColumns.dataTables.min.css" />
 	</head>
 	<body class="no-skin" style="font-family: 'Microsoft YaHei';">
-		<!-- 头 -->
-		<jsp:include page="../top.jsp" flush="true"/>
-		<!-- 身 -->
-		<div class="main-container" id="main-container">
-			<!-- 左边菜单 -->
-			<jsp:include page="../left.jsp" flush="true"/>
-			<!-- 主体 -->
-			<div class="main-content">			
-			<!-- 路径和搜索框 -->
-			<div class="breadcrumbs" id="breadcrumbs">
-					<ul class="breadcrumb">
-						<li><i class="ace-icon fa fa-home home-icon"></i><a href="/BMS/index">首页</a></li>
-						<li><a href="#">工程变更</a></li>
-						<li class="active">技改工时审核</li>
-					</ul><!-- /.breadcrumb -->
-
-					<!-- #section:basics/content.searchbox -->
-					<div class="nav-search" id="nav-search">
-						<form class="form-search">
-							<span class="input-icon">
-								<input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" /><i class="ace-icon fa fa-search nav-search-icon"></i>
-							</span>
-						</form>
-					</div><!-- /.nav-search -->
-				</div>
-				
-			<div class="page-content">
-					<!-- /section:settings.box -->
-					<div class="page-content-area">
-					
-					<div class="well">
+	<div class="main-container" id="main-container" style="overflow: hidden;">
+			<div class="main-content">
+				<div class="page-content-area">
+					<div id="form" class="well form-search">
 						<table>
 							<tr>
 								<td>工厂：</td>
 								<td><select id="search_factory" class="input-small" style="height: 30px;width:120px"></select></td>
-								<td>&nbsp;车间：</td>
+								<td>&nbsp;技改车间：</td>
 								<td><select id="search_workshop" class="input-small" style="height: 30px;width:110px"></select></td>
 								<td>&nbsp;订单：</td>
 								<td><input id="search_order_no" placeholder="请输入订单编号..." style="height: 30px;width:110px" type="text"></td>
@@ -99,12 +73,14 @@
 				</table>
 				<table class="form-search">
 					<tr>
-					<td width="60px" style="text-align:right">工号：</td>
-					<td width="100px"><input type="text" style="width:100px" class="input-medium" style="margin-bottom: 0px;height:30px" id="edit_cardNumber"/></td>
+					<td width="50px" style="text-align:right">工号：</td>
+					<td width="70px"><input type="text" style="width:70px" class="input-medium" style="margin-bottom: 0px;height:30px" id="edit_cardNumber"/></td>
 					<td width="80px" style="text-align:right">操作月份：</td>
-					<td width="100px"><input type="text" style="width:100px" class="input-medium" style="margin-bottom: 0px;height:30px" id="edit_workDate" onclick="WdatePicker({dateFmt:'yyyy-MM'})"/></td>
+					<td width="80px"><input type="text" style="width:80px" class="input-medium" style="margin-bottom: 0px;height:30px" id="edit_workDate" onclick="WdatePicker({dateFmt:'yyyy-MM'})"/></td>
 					<td width="80px" style="text-align:right">员工车间：</td>
 					<td width="80px" style="text-align:right"><select id="edit_workshop_search"></select></td>
+					<td width="80px" style="text-align:right">技改车间：</td>
+					<td width="80px" style="text-align:right"><select id="edit_tech_workshop_search"></select></td>
 					<td><input type="button" class="btn btn-primary" id="btnSwhQuery" value="查询" style="margin-left: 2px;line-height:0; height:32px"></input></td>
 					<td></td>
 					</tr>								
@@ -158,7 +134,6 @@
 			<%-- <jsp:include page="footer.jsp" flush="true"/> --%>
 			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse"><i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i></a>
 		</div><!-- /.main-container -->
-	</div>
 	</body>
 	<script src="../assets/js/fuelux/fuelux.tree.min.js"></script>
 	<script src="../assets/js/jquery-ui.min.js"></script>

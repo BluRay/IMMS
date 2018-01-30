@@ -1,6 +1,6 @@
 var pageSize=1;
 var table;
-var table_height = $(window).height()-270;
+var table_height = $(window).height()-180;
 var timeConfigCount = 0;
 var cur_tmpOrderId = 0;
 var ready_hour=0;
@@ -48,8 +48,9 @@ $(document).ready(function(){
 		var staffNum=$("#edit_cardNumber").val();
 		var workDate=$("#edit_workDate").val();
 		var workshop=$("#edit_workshop_search").val();
+		var techworkshop=$("#edit_tech_workshop_search").val();
 		var tempOrderId=cur_tmpOrderId;
-		var conditions="{staffNum:'"+staffNum+"',workMonth:'"+workDate+"',ecn_task_detail_id:"+tempOrderId+"',workshop:'"+workshop+"'}";
+		var conditions="{staffNum:'"+staffNum+"',workMonth:'"+workDate+"',ecn_task_detail_id:"+tempOrderId+"',workshop:'"+workshop+"',techworkshop:'"+techworkshop+"'}";
 		if(workDate==''||workDate==null){
 			alert("请选择操作月份！");
 			return false;
@@ -343,7 +344,7 @@ function verifyWorkTime(order_no,tech_order_no,task_content,task_detail_id,facto
 	var totalQty=tech_num;
 	var singleHour=single_hour;
 	
-	var conditions="{ecn_task_detail_id:'"+task_detail_id+"',workMonth:'"+workMonth+"',factory:'"+factory+"',workshop:''}";
+	var conditions="{ecn_task_detail_id:'"+task_detail_id+"',workMonth:'"+workMonth+"',factory:'"+factory+"',workshop:'',techworkshop:''}";
 	console.log("-->tech_order_no = " + tech_order_no);
 	swhlist = ajaxGetStaffWorkHours(conditions);
 	swh_list = swhlist;
@@ -573,6 +574,7 @@ function generateWorkhourTb(swhlist,caculate) {
 
 function queryWorkshopList(){
 	$("#edit_workshop_search").empty();
+	$("#edit_tech_workshop_search").empty();
 	$.ajax({
 		url:"/BMS/common/getWorkshopSelect",
 		dataType : "json",
@@ -585,6 +587,7 @@ function queryWorkshopList(){
 				strs += "<option value=" + value.name + ">" + value.name + "</option>";
 			});
 			$("#edit_workshop_search").append(strs);
+			$("#edit_tech_workshop_search").append(strs);
 		}
 	});
 }

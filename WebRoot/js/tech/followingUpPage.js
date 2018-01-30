@@ -5,7 +5,7 @@ var re_f = /^[0-9]+[0-9]*\.?[0|5]?$/;// 浮点数正则表达式
 var ECN_CHANGE_TYPE = [];
 var pageSize=1;
 var table;
-var table_height = $(window).height()-270;
+var table_height = $(window).height()-185;
 $(document).ready(function(){
 	initPage();
 	
@@ -126,7 +126,7 @@ function ajaxQuery() {
 		            },
 		            {"title":"类型","class":"center","data":"tech_order_type_name","defaultContent": ""},
 		            {"title":"技改单号","class":"center","data":"tech_order_no","defaultContent": ""},
-		            {"title":"技改单日期","class":"center","data":"tech_date","defaultContent": ""},
+		            {"title":"技改日期","class":"center","data":"tech_date","defaultContent": ""},
 		            {"title":"切换方式","class":"center","data":"switch_mode","defaultContent": ""},
 		            {"title":"切换节点","class":"center","data":"switch_node","defaultContent": ""},
 		            {"title":"订单","class":"center","data":"order_no","defaultContent": ""},
@@ -153,8 +153,8 @@ function ajaxQuery() {
 							}
 		            	},
 		            },
-		            {"title":"完成台数","class":"center","data":"complete","defaultContent": ""},
-		            {"title":"技改跟进","class":"center","data":"single_time_total","defaultContent": "",
+		            {"title":"完成数","class":"center","data":"complete","defaultContent": ""},
+		            {"title":"跟进","class":"center","data":"single_time_total","defaultContent": "",
 		            	"render": function ( data, type, row ) {
 		            		if (parseInt(row.total) - parseInt(row.complete) <= -100) {	////0
 		            			return "-";
@@ -182,7 +182,7 @@ function ajaxQuery() {
 		            		}
 		            	},
 		            },
-		            {"title":"已跟进清单","class":"center","data":"single_time_total","defaultContent": "",
+		            {"title":"跟进清单","class":"center","data":"single_time_total","defaultContent": "",
 		            	"render": function ( data, type, row ) {
 		            		if (parseInt(row.complete) <= 0) {
 		            			return "-";

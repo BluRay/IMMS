@@ -144,7 +144,7 @@ function initTable() {
 	}
 	
     $table.bootstrapTable({
-    	height: getHeight()-30,
+    	height: getHeight(),
         url:data_url,
         striped:true,
         paginationVAlign:'bottom',
@@ -173,7 +173,7 @@ function initTable() {
     $(window).resize(function () {
         $table.bootstrapTable('resetView', {height: getHeight()});
     });
-    function getHeight() {return $(window).height()-45;}
+    function getHeight() {return $(window).height()+55;}
     function getWidth() {return $(window).width()-220;}
 }
 //----------END bootstrap initTable ----------

@@ -1491,7 +1491,7 @@
 	</select>
 	
 	<select id="getExceptionPauseList" parameterType="Map" resultType="com.byd.bms.production.model.ProductionException">
-		select group_concat(distinct tmp.detailed_reasons separator  ' ') detailed_reasons
+		select distinct tmp.detailed_reasons
 		from(
 		select s.detailed_reason detailed_reasons
 		from BMS_PLAN_STOPLINE s

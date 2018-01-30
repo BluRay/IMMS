@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<jsp:include page="../includ.jsp" flush="true"/>
 <html lang="zh-CN">
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -12,35 +13,11 @@
 		<link rel="stylesheet" href="../assets/css/jquery.gritter.css" />
 	</head>
 	<body class="no-skin" style="font-family: 'Microsoft YaHei';">
-		<!-- 头 -->
-		<jsp:include page="../top.jsp" flush="true"/>
-		<!-- 身 -->
-		<div class="main-container" id="main-container">
-			<!-- 左边菜单 -->
-			<jsp:include page="../left.jsp" flush="true"/>
-			<!-- 主体 -->
+	<div class="main-container" id="main-container" style="overflow: hidden;">
 			<div class="main-content">			
-			<!-- 路径和搜索框 -->
-			<div class="breadcrumbs" id="breadcrumbs">
-					<ul class="breadcrumb">
-						<li><i class="ace-icon fa fa-home home-icon"></i><a href="/BMS/index">首页</a></li>
-						<li><a href="#">工程变更</a></li>
-						<li class="active">技改跟进</li>
-					</ul><!-- /.breadcrumb -->
-
-					<!-- #section:basics/content.searchbox -->
-					<div class="nav-search" id="nav-search">
-						<form class="form-search">
-							<span class="input-icon">
-								<input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" /><i class="ace-icon fa fa-search nav-search-icon"></i>
-							</span>
-						</form>
-					</div><!-- /.nav-search -->
-				</div>
-				
-			<div class="page-content">
-					<div class="page-content-area">
-					<div class="well">
+			
+				<div class="page-content-area">
+					<div id="form" class="well form-search">
 						<table>
 							<tr>
 								<td>工厂：</td>
@@ -176,8 +153,6 @@
 			    	<input type="hidden" id="select_order_no_view" />
 					
 					</div>
-					
-			</div><!-- /.main-content -->
 
 			<!-- 脚 -->
 			<%-- <jsp:include page="footer.jsp" flush="true"/> --%>

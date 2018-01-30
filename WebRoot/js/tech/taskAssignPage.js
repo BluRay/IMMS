@@ -612,6 +612,12 @@ function initTable() {
                 sortable: true,visible: true,footerFormatter: totalTextFormatter,
                 cellStyle:function cellStyle(value, row, index, field) {
 	        	return {css: {"padding-left": "3px", "padding-right": "2px","font-size":"13px"}};
+	        	},formatter:function(value, row, index){
+	        		if(value.length > 10){
+            			return "<p title="+value.replace(/\r/ig, "").replace(/\n/ig, "")+">" + value.substring(0,10) + "...</p>";
+            		}else{
+            			return "<p>" + value + "</p>";
+            		}
 	        	}
             },{
             	field: 'tech_order_no',title: '&nbsp;&nbsp;&nbsp;技改单编号&nbsp;&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
@@ -689,7 +695,7 @@ function initTable() {
     $(window).resize(function () {
         $table.bootstrapTable('resetView', {height: getHeight()});
     });
-    function getHeight() {return $(window).height()-45;}
+    function getHeight() {return $(window).height()+55;}
     function getWidth() {return $(window).width()-220;}
 }
 //----------END bootstrap initTable ----------

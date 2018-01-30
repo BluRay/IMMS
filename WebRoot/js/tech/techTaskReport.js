@@ -323,7 +323,7 @@ function initTable() {
 	}
 	
     $table.bootstrapTable({
-    	height: getHeight()-30,
+    	height: getHeight()+55,
         url:data_url,
         striped:true,
         paginationVAlign:'bottom',
