@@ -7,26 +7,24 @@ jQuery(function($) {
 	initPage();
 	
 	function initPage() {
-		getBusNumberSelect('#nav-search-input');
+		//getBusNumberSelect('#nav-search-input');
 		getOrderNoSelect("#search_order_no","#orderId");
 		getOrgAuthTree($("#workGroupTree"),'hrBaseData/workgroupPrice',"1,2,3,4",'1',3);
-		$('#workGroupTree').height($(window).height()-200)
+		$('#workGroupTree').height($(window).height()-80)
 		$('#workGroupTree').ace_scroll({
-			size: $(window).height()-200
+			size: $(window).height()-80
 		});
 	}
 
-	$('#nav-search-input').bind('keydown', function(event) {
+/*	$('#nav-search-input').bind('keydown', function(event) {
 		if (event.keyCode == "13") {
 			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
 			return false;
 		}
-	})
+	})*/
 	
-	if($(window).height() * 0.6 > 350){
-		$("#div_tree1").height($(window).height()-105);
-		$("#div_tree2").height($(window).height()-105);
-	}
+	$("#div_tree1").height($(window).height()*0.9+40);
+	$("#div_tree2").height($(window).height()*0.9+40);
 	
 	$("#btnQuery").click(function () {
 		eachSeries(scripts, getScript, initTable);
@@ -212,7 +210,7 @@ function initTable() {
     $(window).resize(function () {
         $table.bootstrapTable('resetView', {height: getHeight()});
     });
-    function getHeight() {return $(window).height()-70;}
+    function getHeight() {return $(window).height()+30;}
     function getWidth() {return $(window).width()-220;}
 }
 //----------END bootstrap initTable ----------

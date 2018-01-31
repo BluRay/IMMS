@@ -1,11 +1,10 @@
-var div_height = $(window).height()-250;
+var div_height = $(window).height()-140;
 var li_flag = "1";
 $(document).ready(function () {	
 	initPage();
 	
 	function initPage(){
 		var factory_default=getQueryString("factory_id");
-		getBusNumberSelect('#nav-search-input');
 		getFactorySelect("plan/planSearch",factory_default,"#search_factory",null,'id');
 		getOrderNoSelect("#search_order_no","#orderId");
 		getWorkshopSelect("plan/planSearch",$("#search_factory :selected").text(),"","#search_workshop",'全部',"id");
@@ -18,13 +17,6 @@ $(document).ready(function () {
 		//$("#messages").css("height",div_height);
 		ajaxQuery();
 	}
-
-	$('#nav-search-input').bind('keydown', function(event) {
-		if (event.keyCode == "13") {
-			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
-			return false;
-		}
-	})
 	
 	$("li").click(function(e){
 		if(this.id == "div1"){

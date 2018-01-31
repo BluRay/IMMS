@@ -2,18 +2,11 @@ var buslist=[];
 $(document).ready(function () {
 	initPage();
 	function initPage(){
-		getBusNumberSelect('#nav-search-input');
 		getFactorySelect("production/certificationPrint","","#search_factory","全部","id")
 		//$("#search_factory").attr("disabled","disabled");
 		getOrderNoSelect("#search_order_no","#orderId");
 	}
 
-	$('#nav-search-input').bind('keydown', function(event) {
-		if (event.keyCode == "13") {
-			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
-			return false;
-		}
-	})
 	
 	$("#btnQuery").click (function () {
 		//alert($("#search_bus_number").val().trim().length);
@@ -113,7 +106,7 @@ function ajaxQuery(){
 	            rightColumns:0
 	        },
 	        destroy: true,
-			sScrollY: $(window).height()-250,
+			sScrollY: $(window).height()-140,
 			scrollX: true,
 			pageLength: 20,
 			pagingType:"full_numbers",
@@ -178,26 +171,26 @@ function ajaxQuery(){
 		        		}
 		            	return check_html;
 			          	 }},
-			            {"title":"车号","class":"center","data":"bus_number","defaultContent": ""},
-			            {"title":"VIN","class":"center","data":"vin","defaultContent": ""},
-			            {"title":"底盘型号","class":"center","data":"chassis_model","defaultContent": ""},
-			            {"title":"整车型号","class":"center","data":"vehicle_model","defaultContent": ""},
-			            {"title":"电机型号","class":"center","data": "motor_model","defaultContent": ""},
-			            {"title":"底盘生产日期","class":"center","data":"dp_production_date","defaultContent": "","render":function(data,type,row){
-			            	return (!data||data.trim().length==0)?"<a href='busInfoMtn?bus_number="+row.bus_number+"'>请维护底盘生产日期</a>":data;
+			            {"title":"车号","class":"center","data":"bus_number","defaultContent": "","width":"150"},
+			            {"title":"VIN","class":"center","data":"vin","defaultContent": "","width":"150"},
+			            {"title":"整车资质地","class":"center","width":"90","data":"zc_zzd","defaultContent": ""},		            
+			            {"title":"底盘资质地","class":"center","width":"90","data": "dp_zzd","defaultContent": ""},
+			            {"title":"底盘型号","class":"center","width":"120","data":"chassis_model","defaultContent": ""},
+			            {"title":"整车型号","class":"center","width":"120","data":"vehicle_model","defaultContent": ""},
+			            {"title":"电机型号","class":"center","width":"90","data": "motor_model","defaultContent": ""},
+			            {"title":"底盘生产日期","class":"center","width":"125","data":"dp_production_date","defaultContent": "","render":function(data,type,row){
+			            	return (!data||data.trim().length==0)?'<a href="javascript:window.parent.addTabs({id:\'车辆信息维护\',title:\'车辆信息维护\',close: \'true\',url: \'/BMS/production/busInfoMtn?bus_number=' + row.bus_number + '\'});">请维护底盘生产日期</a>':data;
 			            }},		            
-			            {"title":"整车生产日期","class":"center","data":"productive_date","defaultContent": "","render":function(data,type,row){
-			            	return (!data||data.trim().length==0)?"<a href='busInfoMtn?bus_number="+row.bus_number+"'>请维护整车生产日期</a>":data;
+			            {"title":"整车生产日期","class":"center","width":"125","data":"productive_date","defaultContent": "","render":function(data,type,row){
+			            	return (!data||data.trim().length==0)?'<a href="javascript:window.parent.addTabs({id:\'车辆信息维护\',title:\'车辆信息维护\',close: \'true\',url: \'/BMS/production/busInfoMtn?bus_number=' + row.bus_number + '\'});">请维护底盘生产日期</a>':data;
 			            }},		            
-			            {"title":"电机号（左/右）","class":"center","data": "motor_number","defaultContent": ""},
-			            {"title":"颜色","class":"center","data":"bus_color","defaultContent": ""},
-			            {"title":"轮胎规格","class":"center","data":"tire_type","defaultContent": ""},
-			            {"title":"座位数","class":"center","data": "bus_seats","defaultContent": ""},
-			            {"title":"核定载<br>客人数","class":"center","data":"passengers","defaultContent": ""},		            
-			            {"title":"弹簧片数","class":"center","data":"spring_num","defaultContent": ""},		            
-			            {"title":"备注项","class":"center","data": "hgz_note","defaultContent": ""},
-			            {"title":"整车<br>资质地","class":"center","data":"zc_zzd","defaultContent": ""},		            
-			            {"title":"底盘<br>资质地","class":"center","data": "dp_zzd","defaultContent": ""}
+			            {"title":"电机号（左/右）","class":"center","width":"130","data": "motor_number","defaultContent": ""},
+			            {"title":"颜色","class":"center","width":"80","data":"bus_color","defaultContent": ""},
+			            {"title":"轮胎规格","class":"center","width":"100","data":"tire_type","defaultContent": ""},
+			            {"title":"座位数","class":"center","width":"60","data": "bus_seats","defaultContent": ""},
+			            {"title":"核定载客人数","class":"center","width":"90","data":"passengers","defaultContent": ""},		            
+			            {"title":"弹簧片数","class":"center","width":"70","data":"spring_num","defaultContent": ""},		            
+			            {"title":"备注项","class":"center","data": "hgz_note","defaultContent": ""}
 			          ]		
 		});
 }

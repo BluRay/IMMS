@@ -1,14 +1,13 @@
 var pageSize=1;
 var table;
 var toolList;
-var table_height = $(window).height()-240;
+var table_height = $(window).height()-140;
 var busNoArray = new Array();
 var planLeft;
 $(document).ready(function () {	
 	initPage();
 	
 	function initPage(){
-		getBusNumberSelect('#nav-search-input');
 		getBusNumberSelect('#busNo');
 		getFactorySelect("plan/busDispatchPlan",'',"#search_factory",null,'id');
 		getOrderNoSelect("#search_order_no","#orderId");
@@ -16,12 +15,6 @@ $(document).ready(function () {
 		ajaxQuery();
 	}
 
-	$('#nav-search-input').bind('keydown', function(event) {
-		if (event.keyCode == "13") {
-			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
-			return false;
-		}
-	})
 	
 	$("#btnQuery").on('click', function(e) {	
 		ajaxQuery();

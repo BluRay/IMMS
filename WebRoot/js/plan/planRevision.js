@@ -1,11 +1,10 @@
 var pageSize=1;
 var table;
-var table_height = $(window).height()-260;
+var table_height = $(window).height()-140;
 $(document).ready(function () {	
 	initPage();
 	
 	function initPage(){
-		getBusNumberSelect('#nav-search-input');
 		$("#btnSave").attr("disabled","disabled");
 		getOrderNoSelect("#search_order_no","#orderId");
 		getFactorySelect("plan/planRevision",'',"#search_factory",null,'id');
@@ -18,13 +17,6 @@ $(document).ready(function () {
 		}
 	};
 
-	$('#nav-search-input').bind('keydown', function(event) {
-		if (event.keyCode == "13") {
-			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
-			return false;
-		}
-	})
-	
 	$("#btnQuery").click (function () {
 		if($('#search_order_no').val() == ""){
 			alert("请输入订单号！");

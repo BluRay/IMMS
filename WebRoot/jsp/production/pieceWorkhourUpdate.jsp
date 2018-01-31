@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<jsp:include page="../includ.jsp" flush="true"/>
 <html lang="zh-CN">
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -20,23 +21,20 @@
 </head>
 <body class="no-skin" style="font-family: 'Microsoft YaHei';">
 	<!-- 头 -->
-	<jsp:include page="../top.jsp" flush="true" />
 	<!-- 身 -->
-	<div class="main-container" id="main-container">
+	<div class="main-container" id="main-container" style="overflow: hidden;">
 		<!-- 左边菜单 -->
-		<jsp:include page="../left.jsp" flush="true" />
 		<!-- 主体 -->
 		<div class="main-content">
 			<!-- 路径和搜索框 -->
-			<div class="main-content-inner">
-				<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+			
+<!-- 				<div class="breadcrumbs ace-save-state" id="breadcrumbs">
 					<ul class="breadcrumb">
 						<li><i class="ace-icon fa fa-home home-icon"></i><a
 							href="/BMS/index">首页</a></li>
 						<li><a href="#">生产执行</a></li>
 						<li><a href="#">计件工时修改</a></li>
 					</ul>
-					<!-- /.breadcrumb -->
 
 					<div class="nav-search" id="nav-search">
 						<form class="form-search">
@@ -45,18 +43,16 @@
 							</span>
 						</form>
 					</div>
-					<!-- /.nav-search -->
 
-				</div>
+				</div> -->
 
-				<div class="page-content">
-					<div class="row">
+					<div class="row" style="margin-left: 0px;">
 						<div id="zztree" class="col-xs-2" style="position: relative; left: 0; float: left; border: 1px solid #ccebf8; overflow: auto;color:#616161">
 							<ul id="workGroupTree" class="ztree" style="padding-left:0px;"></ul>
 						</div>
 						<div class="col-xs-10">
 							<div class="row">
-								<form id="form" class="well form-search " style="margin-left: 12px;">
+								<form id="form" class="well form-search " style="margin-left: 12px;margin-right: 12px;">
 									<table>
 										<tr>					
 										<td style="text-align:right">车号：</td>
@@ -88,18 +84,16 @@
 								</form>
 							</div>
 							<div class="row" >
-								<div class="col-xs-12"  id="tableReusltDiv" style="padding-right:0px;">
-									<table id="tableResult" class="table table-striped table-bordered table-hover" style="table-layout:fixed;word-wrap: break-word;font-size: 12px; width:933px;overflow:auto;">
+								<div class="col-xs-12"  id="tableReusltDiv" style="">
+									<table id="tableResult" class="table table-striped table-bordered table-hover" style="table-layout:fixed;word-wrap: break-word;font-size: 12px;">
 									</table>
 								</div>
 							</div>
 						</div>
 					</div>
-				</div>
 
 			</div>
 			<!-- /.main-container -->
-		</div>
 		</div>
 		<script src="../js/datePicker/WdatePicker.js"></script>
 		<script src="../assets/js/jquery.dataTables.min.js"></script>

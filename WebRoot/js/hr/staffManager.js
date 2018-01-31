@@ -9,26 +9,24 @@ jQuery(function($) {
 	initPage();
 	
 	function initPage() {
-		getBusNumberSelect('#nav-search-input');
+		//getBusNumberSelect('#nav-search-input');
 		getOrgAuthTree($("#workGroupTree"),'hrBaseData/staffManager',"1,2,3,4",'1',3);
 		getOrgInfo();
-		$('#workGroupTree').height($(window).height()-200)
+		$('#workGroupTree').height($(window).height()-80)
 		$('#workGroupTree').ace_scroll({
-			size: $(window).height()-200
+			size: $(window).height()-80
 		});
 	}
 
-	$('#nav-search-input').bind('keydown', function(event) {
+/*	$('#nav-search-input').bind('keydown', function(event) {
 		if (event.keyCode == "13") {
 			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
 			return false;
 		}
-	})
+	})*/
 	
-	if($(window).height() * 0.6 > 350){
-		$("#div_tree1").height($(window).height()-120);
-		$("#div_tree2").height($(window).height()-120);
-	}
+	$("#div_tree1").height($(window).height()*0.9+40);
+	$("#div_tree2").height($(window).height()*0.9+40);
 	
 	$("#btnQuery").click(function () {
 		eachSeries(scripts, getScript, initTable);
@@ -449,7 +447,7 @@ function initTable() {
     $(window).resize(function () {
         $table.bootstrapTable('resetView', {height: getHeight()});
     });
-    function getHeight() {return $(window).height()-103;}
+    function getHeight() {return $(window).height()+100;}
     function getWidth() {return $(window).width()-220;}
 }
 //----------END bootstrap initTable ----------

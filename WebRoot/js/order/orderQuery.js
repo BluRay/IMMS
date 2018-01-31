@@ -10,12 +10,6 @@ $(document).ready(function(){
 		ajaxQuery();
     });
 
-	$('#nav-search-input').bind('keydown', function(event) {
-		if (event.keyCode == "13") {
-			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
-			return false;
-		}
-	})
 
 	//导出功能
 	$(".buttons-excel").click(function(){
@@ -28,7 +22,6 @@ $(document).ready(function(){
 });
 
 function initPage(){
-	getBusNumberSelect('#nav-search-input');
 	var cur_year = new Date().getFullYear();
 	var factory_default=getQueryString("factory_id");
 	$("#search_productive_year").val(cur_year);

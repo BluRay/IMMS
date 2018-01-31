@@ -1,11 +1,10 @@
 var pageSize=1;
 var table;
-var table_height = $(window).height()-260;
+var table_height = $(window).height()-140;
 $(document).ready(function () {	
 	initPage();
 	
 	function initPage(){
-		getBusNumberSelect('#nav-search-input');
 		$("#search_plan_version").val(GetQueryString("version"));
 		getOrderNoSelect("#search_order_no","#orderId");
 		getFactorySelect("plan/planRevision",'',"#search_factory",null,'id');
@@ -19,12 +18,6 @@ $(document).ready(function () {
 		}
 	}
 
-	$('#nav-search-input').bind('keydown', function(event) {
-		if (event.keyCode == "13") {
-			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
-			return false;
-		}
-	})
 	
 	$("#btnQuery").click (function () {
 		if($("#search_plan_version").val() == "" && $("#search_plan_month").val() == ""){

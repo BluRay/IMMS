@@ -1,11 +1,10 @@
-var div_height = $(window).height()-180;
+var div_height = $(window).height()-70;
 var li_flag = "1";
 $(document).ready(function () {	
 	initPage();
 	
 	function initPage(){
 		getBusNumberSelect('#transfer_his_busnumber');
-		getBusNumberSelect('#nav-search-input');
 		getFactorySelect("plan/busTransfer",'',"#transfer_out_factory",null,'id');
 		getFactorySelect("plan/busTransfer",'',"#transfer_in_factory",null,'id');
 		getFactorySelect("plan/busTransfer",'',"#transfer_in_factory2",null,'id');
@@ -19,12 +18,6 @@ $(document).ready(function () {
 		$("#his").css("height",div_height);
 	}
 
-	$('#nav-search-input').bind('keydown', function(event) {
-		if (event.keyCode == "13") {
-			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
-			return false;
-		}
-	})
 	
 	$("li").click(function(e){
 		if(this.id == "div1"){

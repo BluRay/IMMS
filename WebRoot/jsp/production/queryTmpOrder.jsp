@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<jsp:include page="../includ.jsp" flush="true"/>
 <html lang="zh-CN">
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -17,23 +18,20 @@
 </head>
 <body class="no-skin" style="font-family: 'Microsoft YaHei';">
 	<!-- 头 -->
-	<jsp:include page="../top.jsp" flush="true" />
 	<!-- 身 -->
-	<div class="main-container" id="main-container">
+	<div class="main-container" id="main-container" style="overflow: hidden;">
 		<!-- 左边菜单 -->
-		<jsp:include page="../left.jsp" flush="true" />
 		<!-- 主体 -->
 		<div class="main-content">
 			<!-- 路径和搜索框 -->
-			<div class="main-content-inner">
-				<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+			
+<!-- 				<div class="breadcrumbs ace-save-state" id="breadcrumbs">
 					<ul class="breadcrumb">
 						<li><i class="ace-icon fa fa-home home-icon"></i><a
 							href="/BMS/index">首页</a></li>
 						<li><a href="#">生产执行</a></li>
 						<li><a href="#">查询临时派工单</a></li>
 					</ul>
-					<!-- /.breadcrumb -->
 
 					<div class="nav-search" id="nav-search">
 						<form class="form-search">
@@ -42,10 +40,8 @@
 							</span>
 						</form>
 					</div>
-					<!-- /.nav-search -->
-				</div>
+				</div> -->
 
-				<div class="page-content">
 					<form id="form" class="well form-search">
 						<table>
 							<tr>
@@ -90,11 +86,10 @@
 					<div class="row">
 					<div class="col-xs-12" style="width: calc(100vw + 20px)">
 						<table id="tableResult"
-							class="table table-striped table-bordered table-hover" style="font-size: 12px; width:1800px;overflow-x:auto ">
+							class="table table-striped table-bordered table-hover" style="font-size: 12px; width:2000px;overflow-x:auto ">
 						</table>	
 					</div>
 					</div>
-				</div>
 			
 		    <div id="div-dialog" class = "div-dialog" class="hide" >
 				<form id="form_edit">
@@ -120,8 +115,8 @@
 						</li>
 					</ul>
 				</div>
-				<div class="tab-content" id="new_accordion">
-                    <div class="tab-pane" role="tabpanel" style="height:400px" id="baseinfo">
+				<div class="tab-content" id="new_accordion" style="border: 0px;">
+                    <div class="tab-pane" role="tabpanel" style="height:300px" id="baseinfo">
                        <table>
 							<tr style="height:30px;background-color:#f5f5f5"><th colspan=6><h5 style="line-height:30px;">&nbsp;&nbsp;工单内容</h5></th></tr>
 							<tr style="height:30px">
@@ -183,7 +178,7 @@
 							</tr>
 							</table>
                     </div>
-                    <div class="tab-pane" role="tabpanel" style="height:400px" id="productiondetailmtn">
+                    <div class="tab-pane" role="tabpanel" style="height:300px" id="productiondetailmtn">
                         <div class="row" >
 							<div class="col-xs-12"  id="productiondetailmtnResultDiv" style="padding-right:0px;">
 								<table id="productiondetailmtnResult" class="table table-striped table-bordered table-hover" style="table-layout:fixed;font-size: 12px; width:745px;overflow:auto;">
@@ -191,7 +186,7 @@
 							</div>
 						</div>
                     </div>
-                    <div class="tab-pane" role="tabpanel" style="height:400px" id="workhourdetail">
+                    <div class="tab-pane" role="tabpanel" style="height:300px" id="workhourdetail">
                         <div class="row" >
 							<div class="col-xs-12"  id="workhourdetailResultDiv" style="padding-right:0px;">
 								<table id="workhourdetailResult" class="table table-striped table-bordered table-hover" style="table-layout:fixed;font-size: 12px; width:745px;overflow:auto;">
@@ -199,7 +194,7 @@
 							</div>
 						</div>
                     </div>
-                    <div class="tab-pane" role="tabpanel" style="height:400px" id="workhourallot">
+                    <div class="tab-pane" role="tabpanel" style="height:300px" id="workhourallot">
                         <div class="row" >
 							<div class="col-xs-12"  id="workhourallotResultDiv" style="padding-right:0px;">
 								<table id="workhourallotResult" class="table table-striped table-bordered table-hover" style="table-layout:fixed;font-size: 12px; width:745px;overflow:auto;">
@@ -209,9 +204,9 @@
                     </div>
 				</div>
 			</div>
-			</div>
 			<!-- /.main-container -->
 		</div>
+	</div>
 		<script src="../js/datePicker/WdatePicker.js"></script>
 		<script src="../assets/js/jquery-ui.min.js"></script>
 		<script src="../assets/js/jquery.dataTables.min.js"></script>

@@ -3,19 +3,19 @@ var table;
 var dt;
 $(document).ready(function(){
 
-	getBusNumberSelect('#nav-search-input');
+	//getBusNumberSelect('#nav-search-input');
 	ajaxQuery();
 	
 	$(".btnQuery").on("click",function(){
 		ajaxQuery();
 	}); 
 
-	$('#nav-search-input').bind('keydown', function(event) {
+/*	$('#nav-search-input').bind('keydown', function(event) {
 		if (event.keyCode == "13") {
 			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
 			return false;
 		}
-	})
+	})*/
 	
 	$("#btnBulkAdd").click (function () {
 		$(".dt-buttons").css("margin-top","-120px");
@@ -177,7 +177,7 @@ function ajaxQuery(){
 		searching: false,
 		bAutoWidth:false,
 		destroy: true,
-		sScrollY: document.documentElement.clientHeight-250 + 'px',
+		sScrollY: document.documentElement.clientHeight-140 + 'px',
 		scrollX: "100%",
 		scrollCollapse: false,
 		pageLength: 20,

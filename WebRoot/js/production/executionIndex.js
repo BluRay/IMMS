@@ -47,12 +47,12 @@ $(document).ready(
 					
 				}
 
-				$('#nav-search-input').bind('keydown', function(event) {
+/*				$('#nav-search-input').bind('keydown', function(event) {
 					if (event.keyCode == "13") {
 						window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
 						return false;
 					}
-				})
+				})*/
 				
 				$("#search_factory").change(function(){
 					getWorkshopSelect("production/executionindex",$("#search_factory :selected").text(),"","#search_workshop",null,"id")
@@ -76,7 +76,7 @@ $(document).ready(
 				});
 				
 				function initPage(){
-					getBusNumberSelect('#nav-search-input');
+					//getBusNumberSelect('#nav-search-input');
 					workshop_p=getQueryString("workshop")||"";
 					//alert(workshop_p);
 					getFactorySelect("production/executionindex","","#search_factory",null,"id");

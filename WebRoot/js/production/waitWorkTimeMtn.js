@@ -9,11 +9,11 @@ $(document).ready(function() {
     initPage();
 	
 	function initPage() {
-		getBusNumberSelect('#nav-search-input');
+		//getBusNumberSelect('#nav-search-input');
 		getOrgAuthTree($("#workGroupTree"),'production/waitWorkTimeMtn',"1,2,3,4",'1',3);
-		$('#workGroupTree').height($(window).height()-110)
+		$('#workGroupTree').height($(window).height()-20)
 		$('#workGroupTree').ace_scroll({
-			size:$(this).attr('data-size')|| $(window).height()-110,
+			size:$(this).attr('data-size')|| $(window).height()-20,
 			mouseWheelLock: true,
 			alwaysVisible : true
 		});
@@ -22,12 +22,12 @@ $(document).ready(function() {
 		$("#select_finish_date").val("");
 	}
 
-	$('#nav-search-input').bind('keydown', function(event) {
+/*	$('#nav-search-input').bind('keydown', function(event) {
 		if (event.keyCode == "13") {
 			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
 			return false;
 		}
-	})
+	})*/
 	
 	$(document).on("input",".workhour",function(){
 		var workHour=$(this).val();
@@ -99,7 +99,7 @@ $(document).ready(function() {
 				title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 选择停线原因</h4></div>',
 				title_html: true,
 				width:900,
-				height:600,
+				height:520,
 				modal: true,
 				buttons: [{
 							text: "关闭",
@@ -473,7 +473,7 @@ function ajaxQueryTeamStaffDetail(){
 		searching: false,
 		autoWidth:false,
 		paginate:false,
-		sScrollY: document.documentElement.clientHeight-250 + 'px',
+		sScrollY: document.documentElement.clientHeight-140 + 'px',
 		scrollX: "100%",
 		scrollCollapse: false,
 		lengthChange:false,

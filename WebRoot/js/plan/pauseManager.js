@@ -1,27 +1,19 @@
 var lineStr = '';
 var pageSize=1;
 var table;
-var table_height = $(window).height()-270;
+var table_height = $(window).height()-170;
 var orderlist=[];
 var orderDescList=[];
 $(document).ready(function () {	
 	initPage();
 	
 	function initPage(){
-		getBusNumberSelect('#nav-search-input');
 		getFactorySelect("plan/pauseManager",'',"#search_factory","全部",'id');
 		getOrderNoSelect("#search_order_no","#orderId");
 		getWorkshopSelect("plan/pauseManager",$("#search_factory :selected").text(),"","#search_workshop","全部","id");
 		getReasonTypeSelect();
 		getKeysSelect("EXCEPTION_RESPONSIBILITY_DEPARTMENT", "", "#edit_dep_id",null,"value");
 	}
-
-	$('#nav-search-input').bind('keydown', function(event) {
-		if (event.keyCode == "13") {
-			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
-			return false;
-		}
-	})
 	
 	$('#search_factory').change(function(){ 
 		getWorkshopSelect("plan/pauseManager",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
@@ -126,7 +118,8 @@ $(document).ready(function () {
 			resizable: false,
 			title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 增加停线</h4></div>',
 			title_html: true,
-			width:'550px',
+			width:'600',
+			height:'520',
 			modal: true,
 			buttons: [{
 						text: "取消",

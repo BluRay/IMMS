@@ -2,7 +2,7 @@ $(document).ready(function () {
 	initPage();
 	
 	function initPage() {
-		getBusNumberSelect('#nav-search-input');
+		//getBusNumberSelect('#nav-search-input');
 		getFactorySelect("hrBaseData/workTimePrice",'',"#search_factory","全部",'id');
 		getFactorySelect("hrBaseData/workTimePrice",'',"#edit_factory",null,'id');
 		getKeysSelect("HOUR_PRICE", "", "#edit_hour_type",null,"value");
@@ -14,12 +14,12 @@ $(document).ready(function () {
 		ajaxQuery();
     });
 
-	$('#nav-search-input').bind('keydown', function(event) {
+/*	$('#nav-search-input').bind('keydown', function(event) {
 		if (event.keyCode == "13") {
 			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
 			return false;
 		}
-	})
+	})*/
 	
 	$("#btnAdd").on('click', function(e) {
 		getFactorySelect("hrBaseData/workTimePrice",'',"#new_factory",null,'id');
@@ -230,7 +230,7 @@ function initTable() {
     $(window).resize(function () {
         $table.bootstrapTable('resetView', {height: getHeight()});
     });
-    function getHeight() {return $(window).height()-45;}
+    function getHeight() {return $(window).height()+72;}
     function getWidth() {return $(window).width()-220;}
 }
 //----------END bootstrap initTable ----------

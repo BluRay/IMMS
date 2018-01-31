@@ -13,12 +13,12 @@ $(document).ready(function() {
 	
 	initPage();
 
-	$('#nav-search-input').bind('keydown', function(event) {
+/*	$('#nav-search-input').bind('keydown', function(event) {
 		if (event.keyCode == "13") {
 			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
 			return false;
 		}
-	})
+	})*/
 	
 	$("#btnBulkAdd").click (function () {
 		$(".dt-buttons").css("margin-top","-120px");
@@ -48,12 +48,12 @@ $(document).ready(function() {
 })
 
 function initPage() {
-	getBusNumberSelect('#nav-search-input');
+	//getBusNumberSelect('#nav-search-input');
 	getOrgAuthTree($("#workGroupTree"),'production/attendanceIndex',"1,2,3,4",'1',3);
 	
-	$('#workGroupTree').height($(window).height()-110)
+	$('#workGroupTree').height($(window).height()-15)
 	$('#workGroupTree').ace_scroll({
-		size:$(this).attr('data-size')|| $(window).height()-110,
+		size:$(this).attr('data-size')|| $(window).height()-15,
 		mouseWheelLock: true,
 		alwaysVisible : true
 	});
@@ -172,7 +172,7 @@ function ajaxQuery(){
 		searching: false,
 		bAutoWidth:false,
 		destroy: true,
-		sScrollY: document.documentElement.clientHeight-250 + 'px',
+		sScrollY: document.documentElement.clientHeight-145 + 'px',
 		scrollX: "100%",
 		/*scrollCollapse: true,*/
 		pageLength: 30,

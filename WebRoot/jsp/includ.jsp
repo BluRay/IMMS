@@ -19,7 +19,9 @@ String display_name = (String)session.getAttribute("display_name");
 <link rel="stylesheet" href="/BMS/assets/css/ace.min.css" id="main-ace-style" />
 <link rel="stylesheet" href="/BMS/assets/css/ace-skins.min.css" />
 <link rel="stylesheet" href="/BMS/assets/css/ace-rtl.min.css" />
+
 <script src="<%=basePath%>/assets/js/jquery.min.js"></script>
+<script src="<%=basePath%>/assets/js/jquery-ui.min.js"></script>
 <script src="<%=basePath%>/assets/js/jquery.mobile.custom.min.js"></script>
 <script src="<%=basePath%>/assets/js/ace-extra.min.js"></script>
 <script src="<%=basePath%>/assets/js/bootstrap.min.js"></script>

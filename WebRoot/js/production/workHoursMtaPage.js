@@ -1,6 +1,6 @@
 var pageSize=1;
 var table;
-var table_height = $(window).height()-270;
+var table_height = $(window).height()-140;
 var cur_tmpOrderId = 0;
 var re_f = /^[0-9]+[0-9]*\.?[0|5]?$/;//浮点数正则表达式
 var status_arr = {"0" : "已维护","1" : "已完成","2" : "已驳回"};	// 0-已评估、1-已完成、2-已驳回
@@ -12,17 +12,17 @@ $(document).ready(function () {
 	initPage();
 	
 	function initPage(){
-		getBusNumberSelect('#nav-search-input');
+		//getBusNumberSelect('#nav-search-input');
 		getFactorySelect("production/workHoursMtaPage",'',"#q_factory",null,'id');
 		getWorkshopSelect("production/workHoursMtaPage",$("#q_factory :selected").text(),"","#q_workshop",null,"id");
 	}
 
-	$('#nav-search-input').bind('keydown', function(event) {
+/*	$('#nav-search-input').bind('keydown', function(event) {
 		if (event.keyCode == "13") {
 			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
 			return false;
 		}
-	})
+	})*/
 	
 	$("#q_factory").change(function() {
 		getWorkshopSelect("production/workHoursMtaPage",$("#q_factory :selected").text(),"","#q_workshop",null,"id");
@@ -291,6 +291,7 @@ function editWorkTime(id,tmp_order_no,reason_content,total_qty,finished_qty,work
 		title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-flag green"></i> 额外工时修改</h4></div>',
 		title_html: true,
 		width:'820px',
+		height:'520',
 		modal: true,
 		buttons: [{
 					text: "取消",
@@ -320,8 +321,8 @@ function editWorkTime(id,tmp_order_no,reason_content,total_qty,finished_qty,work
 function show(tmp_order_no,id){
 	  
 	var dialog = $("#dialog-show").removeClass('hide').dialog({
-		width:800,
-		height:600,
+		width:900,
+		height:520,
 		modal: true,
 		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i> 临时派工单查看</h4></div>",
 		title_html: true,
@@ -393,7 +394,7 @@ function show(tmp_order_no,id){
         		searching: false,
         		autoWidth:false,
         		paginate:false,
-        		sScrollY: $(window).height()-210,
+        		sScrollY: $(window).height()-140,
         		scrollX: true,
         		scrollCollapse: true,
         		lengthChange:false,
@@ -618,6 +619,7 @@ function addWorkTime(id,tmp_order_no,reason_content,total_qty,finished_qty,workh
 		title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-flag green"></i> 额外工时维护</h4></div>',
 		title_html: true,
 		width:'750px',
+		height:'520',
 		modal: true,
 		buttons: [{
 					text: "取消",

@@ -6,11 +6,11 @@ $(document).ready(function() {
     initPage();
 	
 	function initPage() {
-		getBusNumberSelect('#nav-search-input');
+		//getBusNumberSelect('#nav-search-input');
 		getOrgAuthTree($("#workGroupTree"),'hrBaseData/staffManager',"1,2,3",'',3);
-		$('#workGroupTree').height($(window).height()-200)
+		$('#workGroupTree').height($(window).height()-80)
 		$('#workGroupTree').ace_scroll({
-			size: $(window).height()-200
+			size: $(window).height()-80
 		});
 		getKeysSelect("INTERNAL_BUS_TYPE", "", $("#add_bus_type"),"全部",""); 
 		$('#file').ace_file_input({
@@ -28,16 +28,16 @@ $(document).ready(function() {
 	    });
 	}
 
-	$('#nav-search-input').bind('keydown', function(event) {
+/*	$('#nav-search-input').bind('keydown', function(event) {
 		if (event.keyCode == "13") {
 			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
 			return false;
 		}
-	})
-	if($(window).height() * 0.6 > 350){
-		$("#div_tree1").height($(window).height()-120);
-		$("#div_tree2").height($(window).height()-120);
-	}
+	})*/
+	/*if($(window).height() * 0.6 > 350){*/
+		$("#div_tree1").height($(window).height()*0.9+40);
+		$("#div_tree2").height($(window).height()*0.9+40);
+/*	}*/
 	$("#btnBulkAdd").click (function () {
 		$("#divBulkAdd").show();
 		$(".dt-buttons").css("margin-top","-108px").css("margin-right","50px").find("a").css("border","0px");
@@ -130,7 +130,7 @@ function ajaxQuery(id){
 		searching: false,
 		bAutoWidth:false,
 		destroy: true,
-		sScrollY: document.documentElement.clientHeight-290 + 'px',
+		sScrollY: document.documentElement.clientHeight-185+ 'px',
 		scrollX: "100%",
 		lengthChange:false,
 		orderMulti:false,

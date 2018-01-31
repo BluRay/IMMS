@@ -10,16 +10,16 @@ $(document).ready(function(){
     	ajaxQuery();
     })
 
-	$('#nav-search-input').bind('keydown', function(event) {
+/*	$('#nav-search-input').bind('keydown', function(event) {
 		if (event.keyCode == "13") {
 			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
 			return false;
 		}
-	})
+	})*/
 });
 
 function initPage(){
-	getBusNumberSelect('#nav-search-input');
+	//getBusNumberSelect('#nav-search-input');
 	$("#hr_pecie").addClass("in");
 	var d = new Date(); 
     var s = d.getFullYear().toString() + '-'+addzero(d.getMonth() + 1)+"-"+addzero(d.getDate());
@@ -217,7 +217,7 @@ function showTable(report_type){
 			searching: false,
 			bAutoWidth:false,
 			destroy: true,
-			sScrollY: $(window).height()-250,
+			sScrollY: $(window).height()-140,
 			scrollX: true,
 			info:false,
 			orderMulti:false,

@@ -7,7 +7,6 @@ var cur_year="";
 var dt;
 
 $(document).ready(function(){
-	getBusNumberSelect('#nav-search-input');
 	cur_year = new Date().getFullYear();
 	$("#search_productive_year").val(cur_year)
 	//getFactorySelect();
@@ -27,12 +26,7 @@ $(document).ready(function(){
     }
 	ajaxQuery();
 
-	$('#nav-search-input').bind('keydown', function(event) {
-		if (event.keyCode == "13") {
-			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
-			return false;
-		}
-	})
+
 });
 
 
@@ -371,7 +365,10 @@ function ajaxReview(factoryOrderId,factoryId,flag){
 					});
 				}else{  // 已发起，其他评审节点进入页面url
 					url="/BMS/snaker/flow/all?processId="+processId+"&processName=orderReview&reviewOrderId="+factoryOrderId+"&factoryId="+factoryId+"&flag="+flag; // +"&orderNo="+orderNo+""
+					
 					window.open(url,"_self");
+		/*			var obj ={"id":"internalReview","title":"订单内部评审","close": "true","url": url};
+					addTabs(obj);*/
 				}
 				
 			}else{ // // 评审已发起
@@ -396,6 +393,8 @@ function ajaxReview(factoryOrderId,factoryId,flag){
 						}
 					}
 					window.open(url,"_self");
+/*					var obj ={"id":"internalReview","title":"订单内部评审","close": "true","url": url};
+					addTabs(obj);*/
 				}
 			}
 		}

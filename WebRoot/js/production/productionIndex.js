@@ -10,18 +10,11 @@ $(document).ready(function () {
 	});
 	
 	function initPage(){
-		getBusNumberSelect('#nav-search-input');
 		getFactorySelect("production/index","","#search_factory",null,"id");
 		getWorkshopAuthList();
 		ajaxQuery();
 	}
 
-	$('#nav-search-input').bind('keydown', function(event) {
-		if (event.keyCode == "13") {
-			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
-			return false;
-		}
-	})
 	
 })
 
@@ -57,22 +50,33 @@ $(document).ready(function () {
 	function imgFoward(name,workshop){
 		
 		if(name=='VIN'){
-			window.location.href='/BMS/production/showVinPrint';
+			//window.location.href='/BMS/production/showVinPrint';
+			var obj = {id:"VIN绑定",title:"VIN绑定",close:'true',url: '/BMS/production/showVinPrint',icon:''};
+			window.parent.addTabs(obj);
 		}
 		if(name=='铭牌'){
-			window.location.href='/BMS/production/nameplatePrint';
+			//window.location.href='/BMS/production/nameplatePrint';
+			var obj = {id:"铭牌打印",title:"铭牌打印",close:'true',url: '/BMS/production/nameplatePrint',icon:''};
+			window.parent.addTabs(obj);
 		}
 		if(name=='合格证'){
-			window.location.href='/BMS/production/certificationPrint';
+			//window.location.href='/BMS/production/certificationPrint';
+			var obj = {id:"合格证数据传输",title:"合格证数据传输",close:'true',url: '/BMS/production/certificationPrint',icon:''};
+			window.parent.addTabs(obj);
 		}
 		if(name=='发车'){
-			window.location.href='/BMS/plan/busDispatch';
+			//window.location.href='/BMS/plan/busDispatch';
+			var obj = {id:"发车交接",title:"发车交接",close:'true',url: '/BMS/plan/busDispatch',icon:''};
+			window.parent.addTabs(obj);
 		}
 		if(name=='车身号'){
-			window.location.href='/BMS/production/showBusNoPrint';
+			var obj = {id:"车身号",title:"车身号",close:'true',url: '/BMS/production/showBusNoPrint',icon:''};
+			window.parent.addTabs(obj);
 		}
 		if(name=='在制'){
-			window.location.href="productionsearch?workshop="+workshop+"&factory="+$("#search_factory").val();
+			//window.location.href="productionsearch?workshop="+workshop+"&factory="+$("#search_factory").val();
+			var obj = {id:"生产查询",title:"生产查询",close:'true',url: "/BMS/production/productionsearch?workshop="+workshop+"&factory="+$("#search_factory").val(),icon:''};
+			window.parent.addTabs(obj);
 		}
 		
 	}
@@ -81,8 +85,9 @@ $(document).ready(function () {
 	 *	监控图页面跳转
 	 */
 	function monitorFoward(workshop){
-		window.location.href='monitorBoard?workshop='+workshop+'&factory='+$("#search_factory").val()
+		var url = 'monitorBoard?workshop='+workshop+'&factory='+$("#search_factory").val()
 		+'&factory_name='+$("#search_factory :selected").text();
+		window.open(url);
 	}
 	
 	function ajaxQuery(){

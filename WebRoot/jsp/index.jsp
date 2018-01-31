@@ -57,7 +57,7 @@ String factory=(String)session.getAttribute("factory");
 							</span>
 						</form>
 					</div><!-- /.nav-search -->
-				</div> --%>
+				</div> --%> 
 				
 			<div class="page-content"  >
 					<!-- 设置小部件 -->
@@ -292,6 +292,7 @@ String factory=(String)session.getAttribute("factory");
 		</div><!-- /.main-container -->
 	<script src="assets/js/jquery-ui.custom.min.js"></script>
 	<script src="assets/js/jquery.easypiechart.min.js"></script>
+	<script src="assets/js/bootstrap3-typeahead.js"></script>
 	<script src="js/highcharts.js"></script>
 	<script src="js/common.js"></script>
 	<script src="js/index.js"></script>

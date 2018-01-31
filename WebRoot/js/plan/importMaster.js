@@ -1,23 +1,17 @@
 var pageSize=1;
 var table;
-var table_height = $(window).height()-250;
+var table_height = $(window).height()-140;
 $(document).ready(function () {	
 	initPage();
 	
 	function initPage(){
-		getBusNumberSelect('#nav-search-input');
+
 		$("#file").val("");
 		getOrderNoSelect("#search_order_name","#orderId");
 		getFactorySelect("plan/planRevision",'',"#search_factory",null,'id');
 		ajaxQuery();
 	}
 
-	$('#nav-search-input').bind('keydown', function(event) {
-		if (event.keyCode == "13") {
-			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
-			return false;
-		}
-	})
 	
 	$("#btnBulkAdd").click (function () {
 		$("#divBulkAdd").show();
@@ -38,6 +32,7 @@ $(document).ready(function () {
 			dataType:"json",
 			success:function(response){
 				alert(response.message);
+				$("#divBulkAdd").hide();
 				ajaxQuery();
 				if(response.success){					
 					//window.open("materialAbnormal!index.action","_self");
@@ -98,9 +93,9 @@ function ajaxQuery(){
 		            {"title":"计划月份","class":"center","data":"plan_month","defaultContent": ""},
 		            {"title":"导入人","class":"center","data":"display_name","defaultContent": ""},
 		            {"title":"导入时间","class":"center","data":"create_date","defaultContent": ""},
-		            {"title":"操作","class":"center","data": null,"id":"staff_number",
+		            {"title":"操作","class":"center","data": null,"id":"staff_number", 
 		            	"render": function ( data, type, row ) {
-		                    return "<i class=\"glyphicon glyphicon-search bigger-130 showbus\" title=\"查看详情\" onclick=\"javascript:window.location = ('planPreview?version="+row['version'] + "&plan_month="+row['plan_month'] + "&factory_id=" +$("#search_factory").val()+"')\" style='color:blue;cursor: pointer;'></i>&nbsp;";
+		                    return "<i class=\"glyphicon glyphicon-search bigger-130 showbus\" title=\"查看详情\" onclick=\"javascript:window.parent.addTabs({'id':'计划查询','title':'计划查询','close':'true','url':'/BMS/plan/planPreview?version="+row['version'] + "&plan_month="+row['plan_month'] + "&factory_id=" +$("#search_factory").val()+"'});\" style='color:blue;cursor: pointer;'></i>&nbsp;";
 		                },
 		            }
 		          ],

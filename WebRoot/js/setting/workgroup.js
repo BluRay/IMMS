@@ -1,15 +1,15 @@
 jQuery(function($) {
 
-	getBusNumberSelect('#nav-search-input');
-	$('#nav-search-input').bind('keydown', function(event) {
+	//getBusNumberSelect('#nav-search-input');
+/*	$('#nav-search-input').bind('keydown', function(event) {
 		if (event.keyCode == "13") {
 			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
 			return false;
 		}
-	})
+	})*/
 	//if($(window).height() * 0.6 > 350){
-		$("#div_tree1").height($(window).height() * 0.8);
-		$("#div_tree2").height($(window).height() * 0.8);
+		$("#div_tree1").height($(window).height() * 0.9+40);
+		$("#div_tree2").height($(window).height() * 0.9+40);
 	//}
 	var DataSourceTree = function(options) {
 		this._data 	= options.data;
@@ -395,7 +395,7 @@ function getWorkgroupListById(id,workshopId,nodeLayer){
 		searching: false,
 		bAutoWidth:false,
 		destroy: true,
-		sScrollY: document.documentElement.clientHeight-250 + 'px',
+		sScrollY: document.documentElement.clientHeight-120 + 'px',
 		scrollX: "100%",
 		/*scrollCollapse: true,*/
 //		pageLength: 10,
@@ -441,14 +441,14 @@ function getWorkgroupListById(id,workshopId,nodeLayer){
 		
 		},
 		columns: [
-		          	{"title":"<input type='checkbox' id='selectAll' onclick='selectAll()'/>","class":"center","data":"id","render": function ( data, type, row ) {
+		          	{"title":"<input type='checkbox' id='selectAll' onclick='selectAll()'/>","class":"center","width":"30","data":"id","render": function ( data, type, row ) {
 	                    return "<input id='id' value='"+data+"' type='hidden' /><input type='checkbox' fid='cb_"+data+"'>";
 	                },"defaultContent": ""},
-		            {"title":"班组编号","class":"center","data":"workgroupId","defaultContent": ""},
-		            {"title":"班组名称","class":"center","data":"groupName","defaultContent": ""},
+		            {"title":"班组编号","width":"80","class":"center","data":"workgroupId","defaultContent": ""},
+		            {"title":"班组名称","class":"center","width":"120","data":"groupName","defaultContent": ""},
 		            {"title":"工作内容","class":"center","data":"responsibility","defaultContent": ""},
-		            {"title":"备注","class":"center","data":"memo","defaultContent": ""},
-		            {"title":"编辑","class":"center","data":null,"defaultContent": "<i class=\"ace-icon fa fa-pencil bigger-130 editWorkgroup\" style='color:green;cursor: pointer;'></i>"}
+		            {"title":"备注","class":"center","width":"150","data":"memo","defaultContent": ""},
+		            {"title":"编辑","class":"center","width":"40","data":null,"defaultContent": "<i class=\"ace-icon fa fa-pencil bigger-130 editWorkgroup\" style='color:green;cursor: pointer;'></i>"}
 		          ],
 		
 		

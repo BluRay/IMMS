@@ -20,12 +20,12 @@ $(document).ready(function() {
 		$("#order_no").attr("order_id","");
 	});
 
-	$('#nav-search-input').bind('keydown', function(event) {
+/*	$('#nav-search-input').bind('keydown', function(event) {
 		if (event.keyCode == "13") {
 			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
 			return false;
 		}
-	})
+	})*/
 	
 	$(document).on("keydown",".work_hour",function(event){
 			if (event.keyCode == "13") {								
@@ -920,11 +920,11 @@ $(document).ready(function() {
 });
 
 function initPage() {
-	getBusNumberSelect('#nav-search-input');
+	//getBusNumberSelect('#nav-search-input');
 	getOrgAuthTree($("#workGroupTree"),'production/pieceWorkhourMtn',"1,2,3,4",'1',3);
-	$('#workGroupTree').height($(window).height()-110)
+	$('#workGroupTree').height($(window).height()-20)
 	$('#workGroupTree').ace_scroll({
-		size:$(this).attr('data-size')|| $(window).height()-110,
+		size:$(this).attr('data-size')|| $(window).height()-20,
 		mouseWheelLock: true,
 		alwaysVisible : true
 	});	
@@ -1226,7 +1226,7 @@ function showStaffList(staff_list){
 		searching: false,
 		autoWidth:false,
 		paginate:false,
-		sScrollY: $(window).height()-210,
+		sScrollY: $(window).height()-110,
 		scrollX: true,
 		scrollCollapse: true,
 		lengthChange:false,

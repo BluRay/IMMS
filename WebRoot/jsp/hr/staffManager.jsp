@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<jsp:include page="../includ.jsp" flush="true"/>
 <html lang="zh-CN">
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -16,37 +17,33 @@
 	</head>
 	<body class="no-skin" style="font-family: 'Microsoft YaHei';">
 		<!-- 头 -->
-		<jsp:include page="../top.jsp" flush="true"/>
 		<!-- 身 -->
-		<div class="main-container" id="main-container">
+		<div class="main-container" id="main-container" style="overflow: hidden;">
 			<!-- 左边菜单 -->
-			<jsp:include page="../left.jsp" flush="true"/>
 			<!-- 主体 -->
 			<div class="main-content">			
 			<!-- 路径和搜索框 -->
-			<div class="breadcrumbs" id="breadcrumbs">
+<!-- 			<div class="breadcrumbs" id="breadcrumbs">
 					<ul class="breadcrumb">
 						<li><i class="ace-icon fa fa-home home-icon"></i><a href="/BMS/index">首页</a></li>
 						<li><a href="#">计件工资</a></li>
 						<li class="active">员工库</li>
-					</ul><!-- /.breadcrumb -->
+					</ul>
 
-					<!-- #section:basics/content.searchbox -->
 					<div class="nav-search" id="nav-search">
 						<form class="form-search">
 							<span class="input-icon">
 								<input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" /><i class="ace-icon fa fa-search nav-search-icon"></i>
 							</span>
 						</form>
-					</div><!-- /.nav-search -->
-				</div>
+					</div>
+				</div> -->
 				
-			<div class="page-content">
 				<div class="row">
 					<div class="col-xs-12">
 						<div class="row">
 							<div class="col-sm-3">
-								<div id="div_tree1" class="widget-box widget-color-blue2" style="height:350px;OVERFLOW-X:auto;OVERFLOW-Y:auto;OVERFLOW:auto">
+								<div id="div_tree1" class="widget-box widget-color-blue2" style="height:515px;OVERFLOW-X:auto;OVERFLOW-Y:auto;OVERFLOW:auto">
 									<div class="widget-header">
 										<h4 class="widget-title lighter smaller">组织结构&nbsp;&nbsp;&nbsp;&nbsp;</h4>
 										
@@ -59,7 +56,7 @@
 								</div>
 							</div>
 							<div class="col-sm-9">
-								<div id="div_tree2" class="widget-box widget-color-blue2" style="height:350px;OVERFLOW-X:auto;OVERFLOW-Y:auto;OVERFLOW:auto">
+								<div id="div_tree2" class="widget-box widget-color-blue2" style="height:515px;OVERFLOW-X:auto;OVERFLOW-Y:auto;OVERFLOW:auto">
 									<div class="widget-header">
 										<h4 class="widget-title lighter smaller">员工信息&nbsp;&nbsp;&nbsp;&nbsp;</h4>
 										
@@ -67,8 +64,8 @@
 									<div class="well">
 										<table>
 											<tr>
-												<td>工号/姓名：</td>
-												<td colspan=3><input id="search_staff_number" style="height: 30px;" placeholder="请输入工号/姓名..." class="col-sm-10" type="text"></td>
+												<td>工号/姓名:</td>
+												<td colspan=3><input id="search_staff_number" style="height: 30px;" placeholder="请输入工号/姓名..." class="col-sm-9" type="text"></td>
 												<td align="right">&nbsp;员工级别：</td>
 												<td><input id="search_staff_level" style="height:30px;width:120px" placeholder="如F3" class="col-sm-6" type="text"></td>
 												<td>&nbsp;计资方式：</td>
@@ -78,7 +75,7 @@
 												<td></td><td></td>
 											</tr>
 											<tr>
-												<td>工作地点：</td>
+												<td>工作地点:</td>
 												<td><input id="search_workplace" style="height: 30px;" placeholder="工作地点..." class="col-sm-10" type="text"></td>
 												<td>&nbsp;岗位：</td>
 												<!--
@@ -124,7 +121,6 @@
 						</div>
 					</div>
 				</div>
-			</div><!-- /.main-content -->
 			
 			<div id="dialog-confirm" class="hide" style="width:800px;height:500px">
 				<form>
@@ -182,7 +178,7 @@
 	<style type="text/css">
 	.fixed-table-toolbar .bs-bars, .fixed-table-toolbar .search, .fixed-table-toolbar .columns {
 		position: absolute;
-		margin-top: 102px;
+		margin-top: 100px;
 		right: 12px;
 		top: -99px;
 	}
@@ -198,7 +194,9 @@
 </style>
 	<script src="../assets/js/fuelux/fuelux.tree.min.js"></script>
 	<script src="../assets/js/jquery.ui.touch-punch.min.js"></script>
+	<script src="../assets/js/jquery.dataTables.min.js"></script>
 	<script src="../assets/js/jquery.gritter.min.js"></script>
+	<script src="../assets/js/jquery.dataTables.bootstrap.js"></script>
 	<script type="text/javascript" src="../assets/js/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="../assets/js/bootstrap3-typeahead.js"></script>
 	<script type="text/javascript" src="../js/jquery.form.js"></script>

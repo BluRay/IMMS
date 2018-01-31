@@ -15,10 +15,28 @@
 						   			  				'</div>'+
 						   			  			'</div>'+
 						   			  		'</div>'+
+											'<div class="nav-search" id="nav-search">'+
+												'<form class="form-search">'+
+													'<span><i class="ace-icon fa fa-book blue"></i><a href="../BMS系统操作手册20170822.pptx">《BMS操作手册》</a></span> '+
+													'<span class="input-icon">'+
+														'<input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" /><i class="ace-icon fa fa-search nav-search-icon"></i>'+
+													'</span>'+
+												'</form>'+
+											'</div>'+
 						   			  	'</div>';
 						   			  	
 		$(".page-content-area").html(pageContentDiv); 
 		
+		getBusNumberSelect('#nav-search-input');
+		$('#nav-search-input').bind('keydown', function(event) {
+			if (event.keyCode == "13") {
+				//window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
+				var url = "/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val();
+				var obj ={"id":"车辆信息查询","title":"车辆信息查询","close": "true","url": url};
+				addTabs(obj);
+				return false;
+			}
+		});
 	});
 </script>
 <script src="/BMS/js/bootstrap-tab.js"></script>

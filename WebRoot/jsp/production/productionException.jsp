@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<jsp:include page="../includ.jsp" flush="true"/>
 <html lang="zh-CN">
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -17,40 +18,17 @@
 </head>
 <body class="no-skin" style="font-family: 'Microsoft YaHei';">
 	<!-- 头 -->
-	<jsp:include page="../top.jsp" flush="true" />
 	<!-- 身 -->
-	<div class="main-container" id="main-container">
+	<div class="main-container" id="main-container" style="overflow: hidden;">
 		<!-- 左边菜单 -->
-		<jsp:include page="../left.jsp" flush="true" />
 		<!-- 主体 -->
 		<div class="main-content">
 			<!-- 路径和搜索框 -->
-			<div class="main-content-inner">
-				<div class="breadcrumbs ace-save-state" id="breadcrumbs">
-					<ul class="breadcrumb">
-						<li><i class="ace-icon fa fa-home home-icon"></i><a
-							href="/BMS/index">首页</a></li>
-						<li><a href="#">生产执行</a></li>
-						<li><a href="#">异常登记</a></li>
-					</ul>
-					<!-- /.breadcrumb -->
-
-					<div class="nav-search" id="nav-search">
-						<form class="form-search">
-							<span class="input-icon">
-								<input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" /><i class="ace-icon fa fa-search nav-search-icon"></i>
-							</span>
-						</form>
-					</div>
-					<!-- /.nav-search -->
-				</div>
-
-				<div class="page-content">
 					<div class="row">
 						<div class="col-xs-12">
 							<div>
 								<!-- 内容主体 -->
-								<form id="form" class="well form-search">
+								<form id="form" class="well form-search" style="padding: 5px;">
 									<label><b>车号：</b></label> <input class="input-medium"
 										style="height: 30px;" placeholder="请扫描/输入车号..." id="vinText"
 										type="text"> <input style="display: none"
@@ -160,7 +138,7 @@
 							<div class=" widget-box col-xs-8" style="opacity: 1;padding: 10px;" >
 								<div class="widget-body" style="margin-left: -10px;">
 									<div class="widget-main" style="padding: 6px;">
-										<div style="height: 250px;" class="accordion-inner"
+										<div style="" class="accordion-inner"
 											id="TodayMiddlePlanDiv">
 											<table id="TodayWaxPlanTable2"
 												style="width: 100%; margin-bottom: 0px"
@@ -216,7 +194,6 @@
 							
 						</div>
 					</div>
-				</div>
 
 				<div id="dialog-config" class="hide">
 					<form id="  " class="form-horizontal">
@@ -244,7 +221,6 @@
 					</form>
 				</div>
 
-			</div>
 			<!-- /.main-container -->
 		</div>
 		<script src="../js/datePicker/WdatePicker.js"></script>

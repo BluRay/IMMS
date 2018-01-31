@@ -2,18 +2,11 @@ $(document).ready(function () {
 	initPage();
 	function initPage(){
 		getBusNumberSelect('#search_bus_number');
-		getBusNumberSelect('#nav-search-input');
 		getOrderNoSelect("#search_order_no","#orderId");
 		getFactorySelect("production/printVin",'',"#search_factory","全部",'id');
 //		getFactorySelect("production/printVin",'',"#vin_factory",null,'id');
 	};
 
-	$('#nav-search-input').bind('keydown', function(event) {
-		if (event.keyCode == "13") {
-			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
-			return false;
-		}
-	})
 	
 	$("#btnQuery").click (function () {
 		eachSeries(scripts, getScript, initTable);
@@ -217,7 +210,7 @@ function initTable() {
     $(window).resize(function () {
         $table.bootstrapTable('resetView', {height: getHeight()});
     });
-    function getHeight() {return $(window).height()-45;}
+    function getHeight() {return $(window).height()+40;}
     function getWidth() {return $(window).width()-220;}
 }
 //----------END bootstrap initTable ----------

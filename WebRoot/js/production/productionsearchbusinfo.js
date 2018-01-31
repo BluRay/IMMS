@@ -7,7 +7,6 @@ $(document).ready(function () {
 	
 	function initPage(){
 		getBusNumberSelect('#search_busnumber');
-		getBusNumberSelect('#nav-search-input');
 		cur_tab = "01";
 		if(Request("bus_number")!=""){
 			$("#search_busnumber").val(Request("bus_number"));
@@ -15,12 +14,6 @@ $(document).ready(function () {
 		}
 	}
 
-	$('#nav-search-input').bind('keydown', function(event) {
-		if (event.keyCode == "13") {
-			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
-			return false;
-		}
-	})
 	
 	$("li").on('click',function(e){
 		if(this.id == "div1"){			//基本信息

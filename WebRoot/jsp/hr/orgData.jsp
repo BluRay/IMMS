@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<jsp:include page="../includ.jsp" flush="true"/>
 <html lang="zh-CN">
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -13,31 +14,26 @@
 	</head>
 	<body class="no-skin" style="font-family: 'Microsoft YaHei';">
 		<!-- 头 -->
-		<jsp:include page="../top.jsp" flush="true"/>
 		<!-- 身 -->
-		<div id="div_row" class="main-container" id="main-container">
+		<div id="div_row" class="main-container" id="main-container" style="overflow: hidden;">
 			<!-- 左边菜单 -->
-			<jsp:include page="../left.jsp" flush="true"/>
 			<!-- 主体 -->
-			<div class="main-content">			
-			<!-- 路径和搜索框 -->
-			<div class="breadcrumbs" id="breadcrumbs">
+			
+<!-- 				<div class="breadcrumbs" id="breadcrumbs">
 					<ul class="breadcrumb">
 						<li><i class="ace-icon fa fa-home home-icon"></i><a href="/BMS/index">首页</a></li>
 						<li><a href="#">计件工资</a></li>
 						<li class="active">组织架构</li>
 					</ul>
-
 					<div class="nav-search" id="nav-search">
 						<form class="form-search">
 							<span class="input-icon">
 								<input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" /><i class="ace-icon fa fa-search nav-search-icon"></i>
 							</span>
 						</form>
-					</div><!-- /.nav-search -->
-				</div>
+					</div>
+				</div> -->
 				
-			<div class="page-content">
 					
 					<div class="row">
 						<div class="col-xs-12">
@@ -56,7 +52,7 @@
 									</div>
 								</div>
 								<div class="col-sm-8">
-									<div id="div_tree2" class="widget-box widget-color-green2" style="height:800px;OVERFLOW-X:auto;OVERFLOW-Y:auto;OVERFLOW:auto">
+									<div id="div_tree2" class="widget-box widget-color-green2" style="height:900px;OVERFLOW-X:auto;OVERFLOW-Y:auto;OVERFLOW:auto">
 										<div class="widget-header">
 											<h4 class="widget-title lighter smaller" id="nodeName">&nbsp;</h4>
 											
@@ -78,7 +74,6 @@
 							
 						</div>							
 					</div>
-			</div><!-- /.main-content -->
 			<div id="dialog-confirm" class="hide" style="width:800px;height:600px">
 				<form class="form-horizontal">
 			        <input type="hidden" id="org_type"><input type="hidden" id="parent_id">
@@ -293,7 +288,6 @@
 			<%-- <jsp:include page="footer.jsp" flush="true"/> --%>
 			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse"><i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i></a>
 		</div><!-- /.main-container -->
-	</div>
 		<script src="../assets/js/fuelux/fuelux.tree.min.js"></script>
 		<script src="../assets/js/jquery.dataTables.min.js"></script>
 		<script src="../assets/js/jquery.dataTables.bootstrap.js"></script>

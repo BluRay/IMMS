@@ -9,16 +9,16 @@ $(document).ready(function(){
 		getWorkshopSelect("production/queryTmpOrder",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
 	});
 
-	$('#nav-search-input').bind('keydown', function(event) {
+/*	$('#nav-search-input').bind('keydown', function(event) {
 		if (event.keyCode == "13") {
 			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
 			return false;
 		}
-	})
+	})*/
 });
 
 function initPage(){
-	getBusNumberSelect('#nav-search-input');
+	//getBusNumberSelect('#nav-search-input');
 	//ajaxQuery();
 	getFactorySelect("production/queryTmpOrder","","#search_factory",null,"id")	
 	getWorkshopSelect("production/queryTmpOrder",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
@@ -45,7 +45,7 @@ function ajaxQuery(){
 	        {extend:'pageLength',text:'显示行'}   
 	    ],
 		destroy: true,
-		sScrollY: $(window).height()-250,
+		sScrollY: $(window).height()-140,
 		scrollX: true,
 		pageLength: 20,
 		pagingType:"full_numbers",
@@ -107,29 +107,29 @@ function ajaxQuery(){
 		
 		},
 		columns: [
-            {"title":"派工流水号","class":"center","data":"tmp_order_no","defaultContent": "","render":function(data,type,row){
+            {"title":"派工流水号","class":"center","data":"tmp_order_no","width":"120px","defaultContent": "","render":function(data,type,row){
             	return "<a style=\"cursor:pointer\" onclick=show(\'"+data+"\',\'"+row.id+"\')>"+data+"</a>";
             }},
-            {"title":"接收车间","class":"center","data":"workshop","defaultContent": ""},
-            {"title":"发起人","class":"center","data":"order_launcher","defaultContent": ""},
-            {"title":"申请日期","class":"center","data":"apply_date","defaultContent": ""},
-            {"title":"工单号","class":"center","data": "sap_order","defaultContent": ""},
-            {"title":"额外工时编号","class":"center","data": "NO","defaultContent": ""},
+            {"title":"接收车间","class":"center","width":"80px","data":"workshop","defaultContent": ""},
+            {"title":"发起人","class":"center","width":"70px","data":"order_launcher","defaultContent": ""},
+            {"title":"申请日期","class":"center","width":"120px","data":"apply_date","defaultContent": ""},
+            {"title":"工单号","class":"center","width":"120px","data": "sap_order","defaultContent": ""},
+            {"title":"额外工时编号","class":"center","width":"120px","data": "NO","defaultContent": ""},
             {"title":"作业原因/内容","class":"center","width":"500px","data": "reason_content","defaultContent": ""},
-            {"title":"总数量","class":"center","data":"total_qty","defaultContent": ""},		 
-            {"title":"已完成","class":"center","data": "finished_qty","defaultContent": ""},		  
-            {"title":"工时","class":"center","data": "single_hour","defaultContent": ""},		  
-            {"title":"所需人力","class":"center","data": "labors","defaultContent": ""},		
-            {"title":"总工时","class":"center","data": "total_hours","defaultContent": ""},	
-            {"title":"制作工厂","class":"center","data":"factory","defaultContent": ""},
-            {"title":"制作车间","class":"center","data":"workshop","defaultContent": ""},
-            {"title":"责任单位","class":"center","data":"duty_unit","defaultContent": ""},
-            {"title":"状态","class":"center","data":"workshop","defaultContent": "","render":function(data,type,row){
+            {"title":"总数量","class":"center","width":"60px","data":"total_qty","defaultContent": ""},		 
+            {"title":"已完成","class":"center","width":"60px","data": "finished_qty","defaultContent": ""},		  
+            {"title":"工时","class":"center","width":"70px","data": "single_hour","defaultContent": ""},		  
+            {"title":"所需人力","class":"center","width":"70px","data": "labors","defaultContent": ""},		
+            {"title":"总工时","class":"center","width":"70px","data": "total_hours","defaultContent": ""},	
+            {"title":"制作工厂","class":"center","width":"70px","data":"factory","defaultContent": ""},
+            {"title":"制作车间","class":"center","width":"70px","data":"workshop","defaultContent": ""},
+            {"title":"责任单位","class":"center","width":"100px","data":"duty_unit","defaultContent": ""},
+            {"title":"状态","class":"center","width":"70px","data":"workshop","defaultContent": "","render":function(data,type,row){
             	var status_arr={"0":"已评估","1":"已审核","2":"已驳回"};
         		var stauts=row.status==undefined?"":status_arr[row.status];
         		return stauts;
             }},
-            {"title":"成本是否可转移","class":"center","data":"is_cost_transfer","defaultContent": "","render":function(data,type,row){
+            {"title":"成本是否可转移","class":"center","data":"is_cost_transfer","width":"120px","defaultContent": "","render":function(data,type,row){
             	var arr={"0":"否","1":"是","":""};
         		var str=(data==undefined?"":arr[data]);
         		return str;
@@ -154,7 +154,7 @@ function getExtraWorkHourManager(flag){
 		searching: false,
 		bAutoWidth:false,
 		destroy: true,
-		sScrollY: document.documentElement.clientHeight-300 + 'px',
+		sScrollY: document.documentElement.clientHeight-100 + 'px',
 		scrollX: "100%",
 		lengthChange:false,
 		orderMulti:false,
@@ -209,7 +209,7 @@ function getExtraWorkHourManager(flag){
 		title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 选择额外工时库</h4></div>',
 		title_html: true,
 		width:900,
-		height:600,
+		height:520,
 		modal: true,
 		buttons: [{
 					text: "关闭",
@@ -283,7 +283,7 @@ function show(tmp_order_no,id){
   
 	var dialog = $("#dialog-show").removeClass('hide').dialog({
 		width:800,
-		height:600,
+		height:520,
 		modal: true,
 		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i> 临时派工单查看</h4></div>",
 		title_html: true,
@@ -356,7 +356,7 @@ function show(tmp_order_no,id){
         		searching: false,
         		autoWidth:false,
         		paginate:false,
-        		sScrollY: $(window).height()-210,
+        		sScrollY: $(window).height()-90,
         		scrollX: true,
         		scrollCollapse: true,
         		lengthChange:false,
@@ -393,7 +393,7 @@ function show(tmp_order_no,id){
           		rowsGroup:[0],
           		autoWidth:false,
           		paginate:false,
-          		sScrollY: $(window).height()-250,
+          		sScrollY: $(window).height()-140,
           		scrollX: true,
           		scrollCollapse: true,
           		lengthChange:false,
@@ -426,7 +426,7 @@ function show(tmp_order_no,id){
          		searching: false,
          		autoWidth:false,
          		paginate:false,
-         		sScrollY: $(window).height()-250,
+         		sScrollY: $(window).height()-140,
          		scrollX: true,
          		scrollCollapse: true,
          		lengthChange:false,

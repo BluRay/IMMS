@@ -221,6 +221,23 @@ $(document).ready(function () {
 	});  */
 	
 	//左侧上角四个按钮事件
+	$("#index_report_bt").on("click",function(){
+		var obj = {id:"人员利用率",title:"人员利用率",close:'true',url: '/BMS/report/staffUseRate',icon:'menu-icon fa fa-signal green'};
+		addTabs(obj);
+	}); 
+	$("#index_pencil_bt").on("click",function(){
+		var obj = {id:"bt02",title:"车间计划达成率",close:'true',url: '/BMS/report/workshopRateReport',icon:'menu-icon fa fa-pencil green'};
+		addTabs(obj);
+	}); 
+	$("#index_users_bt").on("click",function(){
+		var obj = {id:"bt03",title:"工厂产量",close:'true',url: '/BMS/report/factoryOutputReport',icon:'menu-icon fa fa-users green'};
+		addTabs(obj);
+	}); 
+	$("#index_cogs_bt").on("click",function(){
+		var obj = {id:"bt04",title:"计划达成",close:'true',url: '/BMS/plan/planSearch',icon:'menu-icon fa fa-cogs green'};
+		addTabs(obj);
+	});
+	
 	$("#sidebar-shortcuts-large button").click(function(e){
 		var url=$(e.target).data("url");
 		var title=$(e.target).data("title");
@@ -256,7 +273,8 @@ $(document).ready(function () {
 				if(item.params!=null && item.params!=undefined){
 					url+=item.params;
 				}
-				str+="<a href="+url+"><div class='clearfix'><span class='pull-left'>"+item.task_type_name+" [ "+item.count+"-"+item.finish_count+" ]</span><span class='pull-right'>"+item.percent+"%</span></div><div class='progress progress-mini'><div style='width:"+item.percent+"%' class='progress-bar'></div></div></a>";
+				//str+="<a href="+url+"><div class='clearfix'><span class='pull-left'>"+item.task_type_name+" [ "+item.count+"-"+item.finish_count+" ]</span><span class='pull-right'>"+item.percent+"%</span></div><div class='progress progress-mini'><div style='width:"+item.percent+"%' class='progress-bar'></div></div></a>";
+				str+="<a href='javascript:addTabs({id:\"内部评审\",title:\"任务处理\",close: \"true\",url: \""+ url + "\"});' ><div class='clearfix'><span class='pull-left'>"+item.task_type_name+" [ "+item.count+"-"+item.finish_count+" ]</span><span class='pull-right'>"+item.percent+"%</span></div><div class='progress progress-mini'><div style='width:"+item.percent+"%' class='progress-bar'></div></div></a>";				
 			});
 			$("#foreach").html(str);
 		}
@@ -394,7 +412,7 @@ function traverseTree(node,parentli,two){
 	var ul = $('<ul class="submenu" />');
 	$.each(node.list, function (index, value) {
 		var a;
-		a = $('<a href="javascript:addTabs({id:\'' + value.id + '\',title:\'' + value.name + '\',close: \'true\',url: \'/BMS/' + value.path + '\'});" ></a>');
+		a = $('<a href="javascript:addTabs({id:\'' + value.name + '\',title:\'' + value.name + '\',close: \'true\',url: \'/BMS/' + value.path + '\'});" ></a>');
 			//a = $('<a href=\"/BMS/'+value.path+'\" ></a>');
 		$(a).data("url","/BMS/"+value.path)
 		$(a).data("title",value.name);

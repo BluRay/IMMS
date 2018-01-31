@@ -2,18 +2,11 @@ $(document).ready(function () {
 	initPage();
 	
 	function initPage(){
-		getBusNumberSelect('#nav-search-input');
 		getFactorySelect("plan/exceptionManager",'',"#search_factory","全部",'id');
 		getWorkshopSelect("plan/exceptionManager",$("#search_factory :selected").text(),"","#search_workshop","全部","id");
 		setSelects();
 	};
 
-	$('#nav-search-input').bind('keydown', function(event) {
-		if (event.keyCode == "13") {
-			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
-			return false;
-		}
-	})
 	
 	$('#search_factory').change(function(){ 
 		getWorkshopSelect("plan/exceptionManager",$("#search_factory :selected").text(),"","#search_workshop","全部","id");
@@ -281,8 +274,6 @@ function initTable() {
         striped:true,
         paginationVAlign:'bottom',
         searchOnEnterKey:true,
-        fixedColumns: false,				//冻结列
-        fixedNumber: 0,		//冻结列数
         queryParams:function(params) {
         	var workshopAll="";
         	$("#workshop option").each(function(){
@@ -437,7 +428,7 @@ function initTable() {
     $(window).resize(function () {
         $table.bootstrapTable('resetView', {height: getHeight()});
     });
-    function getHeight() {return $(window).height()-45;}
+    function getHeight() {return $(window).height()+40;}
     function getWidth() {return $(window).width()-220;}
 }
 //----------END bootstrap initTable ----------

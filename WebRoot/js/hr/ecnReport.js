@@ -3,7 +3,7 @@ $(document).ready(function() {
     initPage();
 	
 	function initPage() {
-		getBusNumberSelect('#nav-search-input');
+		//getBusNumberSelect('#nav-search-input');
 		getFactorySelect("hrReport/ecnReport","","#search_factory",null,"id")	
 		getWorkshopSelect("hrReport/ecnReport",$("#search_factory :selected").text(),"","#search_workshop",null,"id")
 		getWorkgroupSelect($("#search_factory :selected").text(),$("#search_workshop :selected").text(),"","#search_workgroup","全部","id")
@@ -42,12 +42,12 @@ $(document).ready(function() {
 		
 	})
 
-	$('#nav-search-input').bind('keydown', function(event) {
+/*	$('#nav-search-input').bind('keydown', function(event) {
 		if (event.keyCode == "13") {
 			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
 			return false;
 		}
-	})
+	})*/
 	
 	//导出功能
 	$(document).on("click",".buttons-excel",function(){
@@ -147,7 +147,7 @@ function ajaxQuery(){
 		searching: false,
 		bAutoWidth:false,
 		destroy: true,
-		sScrollY: $(window).height()-250,
+		sScrollY: $(window).height()-140,
 		scrollX: true,
 		pageLength: 200,
 		pagingType:"full_numbers",
@@ -250,7 +250,7 @@ function ajaxQuery2(){
 		searching: false,
 		bAutoWidth:false,
 		destroy: true,
-		sScrollY: $(window).height()-250,
+		sScrollY: $(window).height()-140,
 		scrollX: true,
 		pageLength: 20,
 		pagingType:"full_numbers",

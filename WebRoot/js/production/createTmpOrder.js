@@ -16,7 +16,7 @@ $(document).ready(function(){
 		clear();
 		var dialog = $("#dialog-add").removeClass('hide').dialog({
 			width:800,
-			height:580,
+			height:520,
 			modal: true,
 			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i> 创建临时派工单</h4></div>",
 			title_html: true,
@@ -39,12 +39,12 @@ $(document).ready(function(){
 		});
 	})
 
-	$('#nav-search-input').bind('keydown', function(event) {
+/*	$('#nav-search-input').bind('keydown', function(event) {
 		if (event.keyCode == "13") {
 			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
 			return false;
 		}
-	})
+	})*/
 	
 	//点击查询
 	$("#btnQuery").click(function(){
@@ -72,7 +72,7 @@ $(document).ready(function(){
 });
 
 function initPage(){
-	getBusNumberSelect('#nav-search-input');
+	//getBusNumberSelect('#nav-search-input');
 	getFactorySelect("production/createTmpOrder",'',"#new_factory","--请选择--",'id');
 	getWorkshopSelect("production/createTmpOrder",$("#new_factory :selected").text(),"","#new_workshop",null,"id");
 	getFactorySelect("production/createTmpOrder",'',"#edit_factory","--请选择--",'id');
@@ -94,7 +94,7 @@ function ajaxQuery(){
             rightColumns:1
         },
 		destroy: true,
-		sScrollY: $(window).height()-250,
+		sScrollY: $(window).height()-140,
 		scrollX: true,
 		pageLength: 20,
 		pagingType:"full_numbers",
@@ -215,7 +215,7 @@ function showEditPage(row){
 	$("#edit_sap_order").val(row.sap_order!=undefined ?row.sap_order:"");
 	var dialog = $( "#dialog-edit" ).removeClass('hide').dialog({
 		width:800,
-		height:580,
+		height:520,
 		modal: true,
 		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i> 编辑临时派工单</h4></div>",
 		title_html: true,
@@ -596,7 +596,7 @@ function queryExtraWorkHourManager(){
 		title: '<div class="widget-header editDiv"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 选择额外工时库</h4></div>',
 		title_html: true,
 		width:900,
-		height:600,
+		height:520,
 		modal: true,
 		zIndex: 4, 
 		buttons: [{

@@ -5,7 +5,7 @@ $(document).ready(function(){
 	initPage();
 	ajaxQuery();
 	function initPage(){
-		getBusNumberSelect('#nav-search-input');
+		//getBusNumberSelect('#nav-search-input');
 		getBusTypeSelect("","#search_bus_type","全部","id");
 		getOrderNoSelect("#search_order_no","#orderId");
 		getTmpOrderTypeList();
@@ -14,12 +14,12 @@ $(document).ready(function(){
 	$(".btnQuery").on("click",function(){
 		ajaxQuery();
 	}); 
-	$('#nav-search-input').bind('keydown', function(event) {
+/*	$('#nav-search-input').bind('keydown', function(event) {
 		if (event.keyCode == "13") {
 			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
 			return false;
 		}
-	})
+	})*/
 	$("#btnBulkAdd").click (function () {
 		$("#divBulkAdd").show();
 	});
@@ -186,10 +186,10 @@ function ajaxQuery(){
             rightColumns:1
         },
 		destroy: true,
-		sScrollY: $(window).height()-260,
+		sScrollY: $(window).height()-140,
 		scrollX: true,
 		scrollCollapse: true,
-		pageLength: 10,
+		pageLength: 20,
 		pagingType:"full_numbers",
 		lengthChange:false,
 		orderMulti:false,

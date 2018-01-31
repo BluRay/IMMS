@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%String path = request.getContextPath();String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";%>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
+<jsp:include page="../includ.jsp" flush="true"/>
 <html lang="zh-CN">
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -17,31 +18,12 @@
 <link rel="stylesheet" href="<%=basePath%>/snaker/css/snaker.css" type="text/css" media="all" />
 </head>
 <body class="no-skin" style="font-family: 'Microsoft YaHei';">
-	<!-- 头 -->
-	<jsp:include page="../top.jsp" flush="true" />
 	<!-- 身 -->
-	<div class="main-container" id="main-container">
-		<!-- 左边菜单 -->
-		<jsp:include page="../left.jsp" flush="true" />
+	<div class="main-container" id="main-container" style="overflow:hidden; ">
 		<!-- 主体 -->
 		<div class="main-content">
-			<!-- 路径和搜索框 -->
-			<div class="main-content-inner">
-				<div class="breadcrumbs ace-save-state  breadcrumbs-fixed" id="breadcrumbs">
-					<ul class="breadcrumb">
-						<li><i class="ace-icon fa fa-home home-icon"></i><a href="/BMS/index">首页</a></li>
-						<li><a href="#">订单导入</a></li>
-						<li class="active">内部评审</li>
-					</ul>
-					<div class="nav-search" id="nav-search">
-						<form class="form-search">
-							<span class="input-icon"> <input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" /><i class="ace-icon fa fa-search nav-search-icon"></i>
-							</span>
-						</form>
-					</div>
-				</div>
-				<div class="page-content">
-					<table class="table table-striped table-bordered table-hover dataTable no-footer"
+
+				<table class="table table-striped table-bordered table-hover dataTable no-footer"
 			               style="font-size: 14px;" >
 						<tr>
 							<td>订单编号：</td>
@@ -77,8 +59,7 @@
 							</div>
 						</div>
 					</div>
-                </div>
-			</div>
+
 		</div>
 		<!-- /.main-container -->
 	</div>

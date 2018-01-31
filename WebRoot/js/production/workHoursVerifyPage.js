@@ -1,6 +1,6 @@
 var pageSize=1;
 var table;
-var table_height = $(window).height()-270;
+var table_height = $(window).height()-140;
 var status_arr = {"0" : "已评估","1" : "已完成","2" : "已驳回"};
 var wh_status_arr={'1':'已审批','2':'已驳回','3':'已锁定'}
 var cur_tmpOrderId = 0;
@@ -12,17 +12,17 @@ $(document).ready(function () {
 	initPage();
 	
 	function initPage(){
-		getBusNumberSelect('#nav-search-input');
+		//getBusNumberSelect('#nav-search-input');
 		getFactorySelect("production/workHoursVerifyPage",'',"#q_factory",null,'id');
 		getWorkshopSelect("production/workHoursVerifyPage",$("#q_factory :selected").text(),"","#q_workshop",null,"id");
 	}
 
-	$('#nav-search-input').bind('keydown', function(event) {
+/*	$('#nav-search-input').bind('keydown', function(event) {
 		if (event.keyCode == "13") {
 			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
 			return false;
 		}
-	})
+	})*/
 	
 	$("#q_factory").change(function() {
 		getWorkshopSelect("production/workHoursVerifyPage",$("#q_factory :selected").text(),"","#q_workshop",null,"id");
@@ -192,6 +192,7 @@ function verifyWorkTime(id,tmp_order_no,labors,reason_content,single_hour,total_
 		title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-flag green"></i> 工时审核</h4></div>',
 		title_html: true,
 		width:'750px',
+		height:'520',
 		modal: true,
 		buttons: [{
 					text: "取消",

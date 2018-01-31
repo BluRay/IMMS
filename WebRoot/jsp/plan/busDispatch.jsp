@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<jsp:include page="../includ.jsp" flush="true"/>
 <html lang="zh-CN">
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -13,35 +14,12 @@
 	</head>
 	<body class="no-skin" style="font-family: 'Microsoft YaHei';">
 		<!-- 头 -->
-		<jsp:include page="../top.jsp" flush="true"/>
 		<!-- 身 -->
-		<div class="main-container" id="main-container">
+		<div class="main-container" id="main-container" style="overflow: hidden;">
 			<!-- 左边菜单 -->
-			<jsp:include page="../left.jsp" flush="true"/>
 			<!-- 主体 -->
 			<div class="main-content">			
-			<!-- 路径和搜索框 -->
-			<div class="breadcrumbs" id="breadcrumbs">
-					<ul class="breadcrumb">
-						<li><i class="ace-icon fa fa-home home-icon"></i><a href="/BMS/index">首页</a></li>
-						<li><a href="#">生产计划</a></li>
-						<li class="active">发车交接</li>
-					</ul><!-- /.breadcrumb -->
-
-					<!-- #section:basics/content.searchbox -->
-					<div class="nav-search" id="nav-search">
-						<form class="form-search">
-							<span class="input-icon">
-								<input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" /><i class="ace-icon fa fa-search nav-search-icon"></i>
-							</span>
-						</form>
-					</div><!-- /.nav-search -->
-				</div>
 				
-			<div class="page-content">
-					<!-- /section:settings.box -->
-					<div class="page-content-area">
-					
 					<div class="well">
 						<table>
 							<tr>
@@ -109,8 +87,6 @@
 					<table id="tableData" class="table table-striped table-bordered table-hover" style="font-size: 12px;">
 					</table>	
 					
-					</div>
-			</div><!-- /.main-content -->
 			
 			<div id="patchModal" class="hide" style="align:center;width:700px;height:500px">
 			<table class="table" id="toollist" style="text-align: center">

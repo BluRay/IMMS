@@ -34,9 +34,15 @@ var addTabs = function (options) {
 			 $(".tab-content").append(content);
 		 }
 	 }else{
+		 
 		 $(".active").removeClass("active");
 	 }
 	 //激活TAB
+	var oldSrc = $("#" + id).children('iframe ').attr('src');
+	var newSrc = options.url;
+	if(oldSrc !=newSrc){
+		$("#" + id).children('iframe ').attr('src',newSrc);
+	}
 	 $("#tab_" + id).addClass('active');
 	 $("#" + id).addClass("active");
 };

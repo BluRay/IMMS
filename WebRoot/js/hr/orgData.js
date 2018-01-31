@@ -1,16 +1,16 @@
 var foreign_id="";
 jQuery(function($) {
-	getBusNumberSelect('#nav-search-input');
+	//getBusNumberSelect('#nav-search-input');
 
-	$('#nav-search-input').bind('keydown', function(event) {
+/*	$('#nav-search-input').bind('keydown', function(event) {
 		if (event.keyCode == "13") {
 			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
 			return false;
 		}
-	})
+	})*/
 	//if($(window).height() * 0.6 > 350){
-		$("#div_tree1").height($(window).height() * 0.8);
-		$("#div_tree2").height($(window).height() * 0.8);
+		$("#div_tree1").height($(window).height()*0.9+40);
+		$("#div_tree2").height($(window).height()*0.9+40);
 	//}
 	getKeysSelect("ORG_TYPE", "", $("#new_org_type"),"全部","");
 	getKeysSelect("ORG_TYPE", "", $("#edit_org_type"),"全部",""); 
@@ -292,7 +292,7 @@ jQuery(function($) {
 			title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 新增组织架构</h4></div>',
 			title_html: true,
 			width:650,
-			height:570,
+			height:520,
 			modal: true,
 			buttons: [ 
 						{
@@ -461,7 +461,7 @@ jQuery(function($) {
                 	$('#edit_responsibilities').val(response.data[0].responsibilities);
                 	var dialog = $("#dialog-edit").removeClass('hide').dialog({
             			width:650,
-            			height:570,
+            			height:520,
             			modal: true,
             			title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-gear green"></i> 编辑组织架构</h4></div>',
             			title_html: true,
@@ -619,7 +619,7 @@ function getWorkgroupListById(id,org_kind,org_type){
 		searching: false,
 		bAutoWidth:false,
 		destroy: true,
-		sScrollY: document.documentElement.clientHeight-250 + 'px',
+		sScrollY: document.documentElement.clientHeight-120 + 'px',
 		scrollX: "100%",
 		lengthChange:false,
 		orderMulti:false,

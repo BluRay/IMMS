@@ -22,7 +22,7 @@ $(document).ready(function () {
 	initPage();
 	
 	function initPage(){
-		getBusNumberSelect('#nav-search-input');
+		//getBusNumberSelect('#nav-search-input');
 		//alert(location.href.substr(location.href.indexOf("action?")+7,location.href.length));
 		$('#rightlink').attr('href','production!exception.action?' + location.href.substr(location.href.indexOf("action?")+7,location.href.length)); 
 		if($("#exec_type").children('option:selected').val() == "正常"){
@@ -35,12 +35,12 @@ $(document).ready(function () {
 		//alert(getQueryString("factory_name"));
 	};
 
-	$('#nav-search-input').bind('keydown', function(event) {
+/*	$('#nav-search-input').bind('keydown', function(event) {
 		if (event.keyCode == "13") {
 			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
 			return false;
 		}
-	})
+	})*/
 	
 	function resetPage () {
         $("#vinText").removeAttr("disabled");

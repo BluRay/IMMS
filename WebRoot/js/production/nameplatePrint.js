@@ -21,12 +21,6 @@ $(document).ready(function(){
 		}
 		
 	})
-	$('#nav-search-input').bind('keydown', function(event) {
-		if (event.keyCode == "13") {
-			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
-			return false;
-		}
-	})
 
 	//打印
 	$("#btnPrint").click(function(){
@@ -69,7 +63,6 @@ $(document).ready(function(){
 });
 //初始化页面
 function initPage(){
-	getBusNumberSelect('#nav-search-input');
 	getOrderNoSelect("#input_order_no","","","");
 	ajaxQuery();
 	$("#checkall").attr("checked",false);
@@ -98,7 +91,7 @@ function ajaxQuery(){
 			searching: false,
 			bAutoWidth:false,
 			destroy: true,
-			sScrollY: $(window).height()-255,
+			sScrollY: $(window).height()-140,
 			scrollX: true,
 			pageLength: 11,
 			pagingType:"full_numbers",
@@ -159,12 +152,12 @@ function ajaxQuery(){
 			            {"title":"品牌","class":"center","data":"brand","defaultContent": ""},
 			            {"title":"电机型号","class":"center","data":"motor_model","defaultContent": ""},
 			            {"title":"底盘型号","class":"center","data": "chassis_model","defaultContent": ""},
-			            {"title":"电机最<br/>大功率","class":"center","data":"motor_power","defaultContent": ""},		            
-			            {"title":"最大允许<br/>总质量","class":"center","data":"max_weight","defaultContent": ""},		            
+			            {"title":"电机最大功率","class":"center","data":"motor_power","defaultContent": ""},		            
+			            {"title":"最大允许总质量","class":"center","data":"max_weight","defaultContent": ""},		            
 			            {"title":"电池型号","class":"center","data": "battery_model","defaultContent": ""},
 			            {"title":"电池容量","class":"center","data":"battery_capacity","defaultContent": ""},
 			            {"title":"额定电压","class":"center","data":"rated_voltage","defaultContent": ""},
-			            {"title":"整车<br/>生产日期","class":"center","data": "productive_date","defaultContent": ""},
+			            {"title":"整车生产日期","class":"center","data": "productive_date","defaultContent": ""},
 			            {"title":"打印人","class":"center","data":"printer","defaultContent": ""},		            
 			            {"title":"打印日期","class":"center","data":"print_date","defaultContent": ""},		            
 			            {"title":"","class":"center","data": "print_flag","defaultContent": ""}

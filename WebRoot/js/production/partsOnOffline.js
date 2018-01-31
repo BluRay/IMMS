@@ -39,17 +39,17 @@ $(document).ready(function(){
 		ajaxQuery();
 	});
 
-	$('#nav-search-input').bind('keydown', function(event) {
+/*	$('#nav-search-input').bind('keydown', function(event) {
 		if (event.keyCode == "13") {
 			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
 			return false;
 		}
-	})
+	})*/
 	
 });
 
 function initPage(){
-	getBusNumberSelect('#nav-search-input');
+	//getBusNumberSelect('#nav-search-input');
 	getFactorySelect("production/workshopSupply","","#search_factory",null,"id");
 	getOrderNoSelect("#search_order_no","",null,null,"#search_factory");
 	getOrderNoSelect("#order","#order_id",function(obj){
@@ -71,7 +71,7 @@ function ajaxQuery(){
         },
 		 rowsGroup:[0,1,2,3,4],
 		destroy: true,
-		sScrollY: $(window).height()-250,
+		sScrollY: $(window).height()-140,
 		scrollX: true,
 		pageLength: 20,
 		pagingType:"full_numbers",
