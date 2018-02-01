@@ -211,7 +211,10 @@
 		<!-- 左边菜单 -->
 		<!-- 主体 -->
 		<div class="main-content">
-
+					<div class="row">
+						<select style="margin-left: 15px;" id="search_factory" class="myselect">
+						</select>
+					</div>
 					<div class="row">
 					<div class="col-xs-12">
 					<div id="execution"  style="height:480px">

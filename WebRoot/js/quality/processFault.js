@@ -1,6 +1,6 @@
 var pageSize=1;
 var table;
-var table_height = $(window).height()-250;
+var table_height = $(window).height()-140;
 $(document).ready(function(){
 	initPage();
 	$("#breadcrumbs").resize(function() {

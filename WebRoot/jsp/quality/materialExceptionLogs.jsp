@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<jsp:include page="../includ.jsp" flush="true"/>
 <html lang="zh-CN">
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -14,35 +15,10 @@
         <link rel="stylesheet" href="../assets/css/fixedColumns.dataTables.min.css" />
 	</head>
 	<body class="no-skin" style="font-family: 'Microsoft YaHei';">
-		<!-- 头 -->
-		<jsp:include page="../top.jsp" flush="true"/>
-		<!-- 身 -->
-		<div class="main-container" id="main-container">
-			<!-- 左边菜单 -->
-			<jsp:include page="../left.jsp" flush="true"/>
-			<!-- 主体 -->
-			<div class="main-content">			
-			<!-- 路径和搜索框 -->
-			<div class="breadcrumbs" id="breadcrumbs">
-					<ul class="breadcrumb">
-						<li><i class="ace-icon fa fa-home home-icon"></i><a href="/BMS/index">首页</a></li>
-						<li class="active">物料异常记录</li>
-					</ul><!-- /.breadcrumb -->
-
-					<!-- #section:basics/content.searchbox -->
-					<div class="nav-search" id="nav-search">
-						<form class="form-search">
-							<span class="input-icon">
-								<input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" /><i class="ace-icon fa fa-search nav-search-icon"></i>
-							</span>
-						</form>
-					</div><!-- /.nav-search -->
-				</div>
-				
-			<div class="page-content">
-					<div class="page-content-area">
-					
-					<div class="well">
+	<div class="main-container" id="main-container" style="overflow: hidden;">
+			<div class="main-content">
+				<div class="page-content-area">
+					<div id="form" class="well form-search">
 						<table>
 							<tr>
 								<td>工厂</td>
@@ -54,14 +30,14 @@
 								<td>&nbsp;严重等级</td>
 							</tr>
 							<tr>
-								<td style="padding-right:5px"><select id="search_factory" class="form-control" style="width:100px"></select></td>
-								<td style="padding-right:5px"><select id="search_workshop"  class="form-control"  style="width:80px"></select></td>
-								<td style="padding-right:5px"><select id="search_bustype" class="form-control busType" style="width:80px"></select></td>
-								<td><input id="search_orderno" placeholder="订单..." style="width:120px" type="text">&nbsp;</td>
-								<td><input id="search_material" placeholder="物料名称..." style="width:120px" type="text">&nbsp;</td>
+								<td style="padding-right:5px"><select id="search_factory" class="form-control" style="height: 30px;width:100px"></select></td>
+								<td style="padding-right:5px"><select id="search_workshop"  class="form-control"  style="height: 30px;width:80px"></select></td>
+								<td style="padding-right:5px"><select id="search_bustype" class="form-control busType" style="height: 30px;width:80px"></select></td>
+								<td><input id="search_orderno" placeholder="订单..." style="height: 30px;width:120px" type="text">&nbsp;</td>
+								<td><input id="search_material" placeholder="物料名称..." style="height: 30px;width:120px" type="text">&nbsp;</td>
 							    <td>
-								   <input id="search_date_start" placeholder="开始时间..." style="width:90px" type="text" onClick="WdatePicker({el:'search_date_start',dateFmt:'yyyy-MM-dd'});"> -
-								   <input id="search_date_end" placeholder="结束时间..." style="width:90px" type="text" onClick="WdatePicker({el:'search_date_end',dateFmt:'yyyy-MM-dd'});">&nbsp;</td>
+								   <input id="search_date_start" placeholder="开始时间..." style="height: 30px;width:90px" type="text" onClick="WdatePicker({el:'search_date_start',dateFmt:'yyyy-MM-dd'});"> -
+								   <input id="search_date_end" placeholder="结束时间..." style="height: 30px;width:90px" type="text" onClick="WdatePicker({el:'search_date_end',dateFmt:'yyyy-MM-dd'});">&nbsp;</td>
 								<td>
 								<td>
 								    <input type="checkbox" name="search_bugLevel" value="S" />&nbsp;S&nbsp;
@@ -288,7 +264,6 @@
 			<%-- <jsp:include page="footer.jsp" flush="true"/> --%>
 			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse"><i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i></a>
 		</div><!-- /.main-container -->
-	</div>
 	</body>
 	<script src="../assets/js/fuelux/fuelux.tree.min.js"></script>
 	<script src="../assets/js/jquery-ui.min.js"></script>

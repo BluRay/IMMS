@@ -66,7 +66,7 @@ $(document).ready(function () {
 		if($('#exec_workshop :selected').text()=='底盘'||$('#exec_workshop :selected').text()=='检测线'){
 
 			$.each(parts_list,function(i,parts){
-				if(parts.process==$("#exec_processname").val()&&(parts.parts_name=='VIN编码'||parts.parts_name=='左电机号'||parts.parts_name=='右电机号'||parts.parts_name.indexOf('动力电池包')>=0)){
+				if(parts.process==$("#exec_processname").val()&&(parts.parts_name=='VIN编码'||parts.parts_name=='左电机号'||parts.parts_name=='右电机号')){
 					if(parts.batch==undefined||parts.batch.trim().length==0){
 						enterflag=false;
 						alert(plan_node+"扫描前，请将零部件信息录入完整！");
@@ -360,24 +360,29 @@ $(document).ready(function () {
 		var batchInput=$(tr).find(".batch");
 		var parts_index=$(tr).data("parts_index");
 		var parts=parts_list[parts_index];
+		var batch=$(batchInput).val().trim();
 		/**
 		 * added by xjw 18/1/17  增加动力电池包零部件批次不能重复的判断逻辑
 		 */
-		if(parts.parts_name.indexOf('动力电池包')>=0){
-			if(batch_validate.indexOf(parts.batch)>=0){
+		if(parts.parts_name.indexOf('动力电池包')>=0&&(batch!='无'&&batch!='\\'&&batch!='\/')){
+			if(batch_validate.indexOf(batch)>=0){
 				alert("批次信息不能重复！");
+				$(batchInput).val("")
 				return false;
 			}
 			//数据库判断包含动力电池包的零部件批次是否与该批次信息重复
-			if(checkPartsBatch(parts.batch)){
+			var exist_flag=checkPartsBatch(batch);
+		
+			if(exist_flag=="no"){
 				alert("该批次信息已存在，不能重复录入！");
+				$(batchInput).val("")
 				return false;
 			}
 			
-			batch_validate.push(parts.batch);
+			batch_validate.push($(batchInput).val().trim());
 		}
 		
-		parts_list[parts_index].batch=$(batchInput).val();	
+		parts_list[parts_index].batch=$(batchInput).val().trim();	
 		//alert(JSON.stringify(parts_list))
 	});
 	
@@ -612,7 +617,7 @@ function checkVinMotor(){
 }
 
 function checkPartsBatch(batch){
-	var flag=true;
+	var flag="yes";
 	$.ajax({
 		url:'checkPartsBatch',
 		dataType : "json",
@@ -621,8 +626,8 @@ function checkPartsBatch(batch){
 			batch:batch
 		},
 		success:function(response){
-			if(response.isExist){
-				flag=false;
+			if(response.isExsit){
+				flag="no";
 			}
 		}
 	})

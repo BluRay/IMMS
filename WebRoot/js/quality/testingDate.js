@@ -1,7 +1,7 @@
 var pageSize=1;
 var table;
 var sync_list=[];
-var table_height = $(window).height()-240;
+var table_height = $(window).height()-140;
 $(document).ready(function () {	
 	initPage();
 	
