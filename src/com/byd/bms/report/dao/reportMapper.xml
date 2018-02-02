@@ -889,4 +889,62 @@
 		order by o.edit_date desc
 	</select>
 	
+	<select id="queryFactoryRateData" parameterType="Map" resultType="Map">
+		select group_concat(record.key_name,':',record.done_qty,'|',ifnull(p.plan_qty,0)) result,record.factory,
+		sum(record.done_qty)/sum(p.plan_qty) rate,ifnull(sum(record.done_qty),0) total_done_qty,ifnull(sum(p.plan_qty),0) total_plan_qty
+		from(
+		select '自制下线' key_name,sum(s.quantity) done_qty,f.factory_name factory,f.id factory_id
+		from BMS_BASE_FACTORY f 
+		left join BMS_PD_WORKSHOP_SUPPLY s on s.factory_id=f.id
+		where s.supply_workshop='自制件' and s.receive_workshop='部件' and s.supply_date>=#{start_date} and s.supply_date&lt;=#{end_date}
+		group by f.id
+		union all
+		select '部件下线' key_name,sum(pf.offline_real_qty) done_qty,f.factory_name factory,f.id factory_id
+		from BMS_BASE_FACTORY f 
+		left join BMS_PD_PARTS_PLAN_FINISH pf on f.id=pf.factory_id
+		left join BMS_BASE_KEY k on k.value=pf.parts_id AND k.key_code ='BASE_PARTS'
+		where k.key_name='喷砂' and pf.prod_date >=#{start_date} and pf.prod_date&lt;=#{end_date}
+		group by f.id
+		union all
+		select  '焊装上线' key_name, count(distinct b.bus_number) done_qty,f.factory_name factory,f.id factory_id
+				from BMS_BASE_FACTORY f 
+				left join BMS_PLAN_BUS b on b.factory_id=f.id
+				where  b.welding_online_date > CONCAT(date_sub(#{start_date},interval 1 day),' 17:30:00')
+				and b.welding_online_date &lt;=concat(#{end_date},' 17:30:00') 
+				group by f.id
+		union all
+		select  '涂装上线' key_name, count(distinct b.bus_number) done_qty,f.factory_name factory,f.id factory_id
+				from BMS_BASE_FACTORY f 
+				left join BMS_PLAN_BUS b on b.factory_id=f.id
+				where  b.painting_online_date > CONCAT(date_sub(#{start_date},interval 1 day),' 17:30:00')
+				and b.painting_online_date &lt;=concat(#{end_date},' 17:30:00') 
+				group by f.id
+		union all
+		select  '底盘上线' key_name, count(distinct b.bus_number) done_qty,f.factory_name factory,f.id factory_id
+				from BMS_BASE_FACTORY f 
+				left join BMS_PLAN_BUS b on b.factory_id=f.id
+				where  b.chassis_online_date > CONCAT(date_sub(#{start_date},interval 1 day),' 17:30:00')
+				and b.chassis_online_date &lt;=concat(#{end_date},' 17:30:00') 
+				group by f.id
+		union all
+		select  '总装下线' key_name, count(distinct b.bus_number) done_qty,f.factory_name factory,f.id factory_id
+				from BMS_BASE_FACTORY f 
+				left join BMS_PLAN_BUS b on b.factory_id=f.id 
+				and  b.assembly_offline_date > CONCAT(date_sub(#{start_date},interval 1 day),' 17:30:00')
+				and b.assembly_offline_date &lt;=concat(#{end_date},' 17:30:00') 
+				group by f.id
+		) record
+		left join( 
+		select k.key_name,ifnull(sum(fo.plan_qty),0) plan_qty,fo.factory_id
+				from BMS_PLAN_PRODUCTION_PLAN fo 
+				left join BMS_BASE_KEY k on k.value=fo.plan_code_value
+				where fo.plan_date>=#{start_date} and fo.plan_date&lt;=#{end_date} and k.key_code='PLAN_CODE'
+				group by fo.factory_id,k.key_name) p
+		on p.key_name=record.key_name and p.factory_id=record.factory_id
+		where p.plan_qty !=0 or record.done_qty !=0
+		group by record.factory
+		order by sum(record.done_qty)/sum(p.plan_qty)
+		
+	</select> 
+	
 </mapper>

@@ -1,13 +1,13 @@
 var pageSize=1;
 var table;
-var table_height = $(window).height()-145;
+var table_height = $(window).height()-140;
 $(document).ready(function(){
 	initPage();
 	$("#breadcrumbs").resize(function() {
 		//ajaxQuery();
 	});
 	function initPage(){
-		getBusNumberSelect('#nav-search-input');
+		//getBusNumberSelect('#nav-search-input');
 		getBusNumberSelect('#search_busNumber');
 		getFactorySelect("quality/keyPartsTrace",'',"#search_factory","全部",'id');
 		getBusTypeSelect("","#search_bus_type","全部","id");
@@ -16,12 +16,12 @@ $(document).ready(function(){
 		ajaxQuery();
 	}
 
-	$('#nav-search-input').bind('keydown', function(event) {
+/*	$('#nav-search-input').bind('keydown', function(event) {
 		if (event.keyCode == "13") {
 			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
 			return false;
 		}
-	})
+	})*/
 	
 	$("#btnQuery").click (function () {
 		ajaxQuery();
@@ -160,7 +160,7 @@ function showBusNumberDetail(json){
 		lengthChange:false,
 		orderMulti:false,
 		info:false,
-		sScrollY: table_height,sScrollX:true,
+		sScrollY: table_height-120,sScrollX:true,
 		language: {
 			emptyTable:"",					     
 			infoEmpty:"",
@@ -192,8 +192,8 @@ function showBusNumberDetail(json){
         				resizable: false,
         				title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 关键零部件编辑</h4></div>',
         				title_html: true,
-        				width:1200,
-        				height:600,
+        				width:1100,
+        				height:520,
         				modal: true,
         				buttons: [{
         							text: "关闭",
@@ -220,17 +220,17 @@ function showBusNumberDetail(json){
             });
 		},
 		columns: [
-					{"title":"序号","class":"center","data":"id","defaultContent": "","render":function(data,type,row,meta){
+					{"title":"序号","class":"center","width":"30","data":"id","defaultContent": "","render":function(data,type,row,meta){
 						return meta.row + meta.settings._iDisplayStart + 1;
 			        }},
-					{"title":"零部件编号","class":"center","data":"parts_no","defaultContent": ""},
-					{"title":"零部件名称","class":"center","data":"parts_name","defaultContent": ""},
-					{"title":"材料/规格","class":"center","data":"size","defaultContent": ""},
+					{"title":"零部件编号","width":"120","class":"center","data":"parts_no","defaultContent": ""},
+					{"title":"零部件名称","width":"150","class":"center","data":"parts_name","defaultContent": ""},
+					{"title":"材料/规格","width":"90","class":"center","data":"size","defaultContent": ""},
 					{"title":"供应商名称","class":"center","data":"vendor","defaultContent": ""},
 					{"title":"装配车间","class":"center","data":"workshop","defaultContent": ""},
 					{"title":"工序","class":"center","data":"process","defaultContent": ""},
-					{"title":"3C件","class":"center","data":"3C_components","defaultContent": ""},					
-					{"title":"批次","class":"center","data":"batch","defaultContent": "","render":function(data,type,row){
+					{"title":"3C件","width":"40","class":"center","data":"3C_components","defaultContent": ""},					
+					{"title":"批次","width":"120","class":"center","data":"batch","defaultContent": "","render":function(data,type,row){
 						if(row.CCC_components=='是'){
 							return "<input style='border:0;width:100px;text-align:center' disabled='disabled' class='batch' " +
 							" value='"+(data!=undefined ? data : '')+"'/><input type='hidden' class='keypartsId' " +

@@ -6,12 +6,12 @@ $(document).ready(function(){
 		ajaxQuery();
 	}); 
 
-	$('#nav-search-input').bind('keydown', function(event) {
+/*	$('#nav-search-input').bind('keydown', function(event) {
 		if (event.keyCode == "13") {
 			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
 			return false;
 		}
-	})
+	})*/
 	
 	$(document).on("input","#search_order_no,#order",function(){
 		//alert("change");
@@ -40,7 +40,7 @@ $(document).ready(function(){
 		
 		var dialog = $( "#dialog-config" ).removeClass('hide').dialog({
 			width:900,
-			height:550,
+			height:520,
 			modal: true,
 			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i>车型成品记录表模板导入</h4></div>",
 			title_html: true,
@@ -337,7 +337,7 @@ function showEditPage(row){
 	
 	var dialog = $( "#dialog-config" ).removeClass('hide').dialog({
 		width:920,
-		height:550,
+		height:520,
 		modal: true,
 		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i>车型成品记录表模板导入</h4></div>",
 		title_html: true,
@@ -394,7 +394,7 @@ function showInfoPage(row){
 	$("#uploadForm").hide();
 	var dialog = $( "#dialog-config" ).removeClass('hide').dialog({
 		width:920,
-		height:550,
+		height:520,
 		modal: true,
 		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i>车型成品记录表模板查看</h4></div>",
 		title_html: true,

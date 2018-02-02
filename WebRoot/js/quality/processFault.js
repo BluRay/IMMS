@@ -7,12 +7,12 @@ $(document).ready(function(){
 		ajaxQuery();
 	});
 
-	$('#nav-search-input').bind('keydown', function(event) {
+/*	$('#nav-search-input').bind('keydown', function(event) {
 		if (event.keyCode == "13") {
 			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
 			return false;
 		}
-	});
+	});*/
 	
 	$("#btnBulkAdd").click (function () {
 		$("#divBulkAdd").show();
@@ -23,7 +23,7 @@ $(document).ready(function(){
 	});
 	
 	function initPage(){
-		getBusNumberSelect('#nav-search-input');
+		//getBusNumberSelect('#nav-search-input');
 		getFactorySelect("quality/processFault",'',"#search_factory",null,'id');
 		$('#new_report_file,#edit_report_file').ace_file_input({
 			no_file:'请选择要上传的文件...',
@@ -80,6 +80,7 @@ $(document).ready(function(){
 			title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 增加制程异常</h4></div>',
 			title_html: true,
 			width:'600px',
+			height:520,
 			modal: true,
 			buttons: [{
 						text: "取消",
@@ -147,6 +148,7 @@ function showProcessFault(id){
 				title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 查看制程异常</h4></div>',
 				title_html: true,
 				width:'600px',
+				height:520,
 				modal: true,
 				buttons: [{
 							text: "关闭",
@@ -206,6 +208,7 @@ function editProcessFault(id){
 				title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 编辑制程异常</h4></div>',
 				title_html: true,
 				width:'550px',
+				height:520,
 				modal: true,
 				buttons: [{
 							text: "关闭",

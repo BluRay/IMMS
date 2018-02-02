@@ -44,8 +44,8 @@ public interface IReportService {
 	
 	public void getStandardHumanReportData(Map<String, Object> conditionMap,ModelMap model);
 	/**
-	 * @author xiong.jianwu
 	 * 获取工厂人员利用率报表数据
+	 * @author xiong.jianwu
 	 * @param cdMap
 	 * @param model
 	 */
@@ -53,10 +53,17 @@ public interface IReportService {
 	
 	public void getFactoryYieldData_Mobile(Map<String, Object> cdMap, ModelMap model);
 	/**
-	 * @author xiong.jianwu
 	 * 获取订单生产进度报表数据
+	 * @author xiong.jianwu
 	 * @param condMap
 	 * @param model
 	 */
 	void getOrderProcessData(Map<String, Object> condMap, ModelMap model);
+	/**
+	 * 各工厂计划达成率报表数据抓取
+	 * @author xiong.jianwu
+	 * @param condMap
+	 * @param model
+	 */
+	void getFactoryRateData(Map<String, Object> condMap, ModelMap model);
 }

@@ -2,7 +2,7 @@ var testVin=0;
 $(document).ready(function () {	
 	initPage();
 	function initPage(){
-		getBusNumberSelect('#search_bus_number');
+		//getBusNumberSelect('#search_bus_number');
 		$("#divBulkAdd").hide();
 		getOrderNoSelect("#search_order_no","#orderId");
 		getFactorySelect("plan/generateVin",'',"#search_factory","全部",'id');
@@ -122,6 +122,8 @@ $(document).ready(function () {
 				}else{
 					$('#new_vinPrefix').val(response.data.VIN_prefix);
 					$("#new_WMI_extension").val(response.data.WMI_extension);
+					$('#new_year').val(response.data.productive_year);
+					$("#new_area option[keyvalue='"+response.data.value+"']").attr("selected",true);
 				}
 			}
 		});
@@ -462,7 +464,7 @@ function initTable() {
     $(window).resize(function () {
         $table.bootstrapTable('resetView', {height: getHeight()});
     });
-    function getHeight() {return $(window).height()+50;}
+    function getHeight() {return $(window).height()+40;}
     function getWidth() {return $(window).width()-220;}
 }
 //----------END bootstrap initTable ----------

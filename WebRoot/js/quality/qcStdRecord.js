@@ -1,6 +1,6 @@
 
 $(document).ready(function(){
-	getBusNumberSelect('#nav-search-input');
+	//getBusNumberSelect('#nav-search-input');
 	initPage();
 	function initPage(){
 		$("#addForm")[0].reset()
@@ -15,12 +15,12 @@ $(document).ready(function(){
 		var now = new Date(); //当前日期
 		$("#confirm_date_submit").val(formatDate(now));
 	}
-	$('#nav-search-input').bind('keydown', function(event) {
+/*	$('#nav-search-input').bind('keydown', function(event) {
 		if (event.keyCode == "13") {
 			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
 			return false;
 		}
-	})
+	})*/
 	$('#factory').change(function(){ 
 		getWorkshopSelect("quality/qcStdRecord",$("#factory :selected").text(),"","#workshop",null,"id");
 	});
@@ -53,6 +53,7 @@ $(document).ready(function(){
 	    });
 		var dialog = $( "#dialog-add" ).removeClass('hide').dialog({
 			width:650,
+			height:520,
 			modal: true,
 			title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-gear green"></i> 品质标准更新记录新增</h4></div>',
 			title_html: true,
@@ -335,7 +336,7 @@ function openDialogEdit(factory,id){
 	})
 	var dialog = $( "#dialog-factory" ).removeClass('hide').dialog({
 		width:660,
-		height:600,
+		height:520,
 		modal: true,
 		title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-gear green"></i> 工厂反馈编辑</h4></div>',
 		title_html: true,
@@ -404,7 +405,7 @@ function openDialogDisplay(factory,id){
 	})
 	var dialog = $( "#dialog-factory" ).removeClass('hide').dialog({
 		width:660,
-		height:620,
+		height:520,
 		modal: true,
 		title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-gear green"></i> 工厂反馈查看</h4></div>',
 		title_html: true,
@@ -466,7 +467,7 @@ function show(id){
 	})
 	var dialog = $( "#dialog-edit" ).removeClass('hide').dialog({
 		width:620,
-		height:600,
+		height:520,
 		modal: true,
 		title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-gear green"></i> 品质标准更新记录查看</h4></div>',
 		title_html: true,
@@ -540,7 +541,7 @@ function edit(id){
 	})
 	var dialog = $( "#dialog-edit" ).removeClass('hide').dialog({
 		width:620,
-		height:600,
+		height:520,
 		modal: true,
 		title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-gear green"></i> 品质标准更新记录查看</h4></div>',
 		title_html: true,

@@ -13,20 +13,20 @@ $(document).ready(function() {
 	
 	initPage();
 
-	$('#nav-search-input').bind('keydown', function(event) {
+/*	$('#nav-search-input').bind('keydown', function(event) {
 		if (event.keyCode == "13") {
 			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
 			return false;
 		}
-	})
+	})*/
 })
 
 function initPage() {
-	getBusNumberSelect('#nav-search-input');
+	//getBusNumberSelect('#nav-search-input');
 	getOrgAuthTree($("#workGroupTree"),'hrReport/staffAttendance',"1,2,3,4",'1',3);
-	$('#workGroupTree').height($(window).height()-110)
+	$('#workGroupTree').height($(window).height()-15)
 	$('#workGroupTree').ace_scroll({
-		size:$(this).attr('data-size')|| $(window).height()-110,
+		size:$(this).attr('data-size')|| $(window).height()-15,
 		mouseWheelLock: true,
 		alwaysVisible : true
 	});
@@ -113,7 +113,7 @@ function ajaxQuery(){
 		searching: false,
 		bAutoWidth:false,
 		destroy: true,
-		sScrollY: document.documentElement.clientHeight-250 + 'px',
+		sScrollY: document.documentElement.clientHeight-140 + 'px',
 		scrollX: "100%",
 		/*scrollCollapse: true,*/
 		pageLength: 30,
@@ -170,7 +170,7 @@ function ajaxQuery(){
 		columns: [
             {"title":"工号","width":"60","class":"center","data":"staff_number","defaultContent": ""},
             {"title":"姓名","width":"70","class":"center","data":"name","defaultContent": ""},
-            {"title":"出勤天数","width":"65","class":"center","data":"attendance_days","defaultContent": ""},
+            {"title":"天数","width":"45","class":"center","data":"attendance_days","defaultContent": ""},
             {"title":"总出勤","width":"50","class":"center","data":"attendance_hours","defaultContent": ""},
             {"title":"1","class":"center","data":"D1","defaultContent": ""},
             {"title":"2","class":"center","data":"D2","defaultContent": ""},

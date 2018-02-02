@@ -2,12 +2,12 @@ $(document).ready(function(){
 	
 	initPage();
 
-	$('#nav-search-input').bind('keydown', function(event) {
+/*	$('#nav-search-input').bind('keydown', function(event) {
 		if (event.keyCode == "13") {
 			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
 			return false;
 		}
-	});
+	});*/
 	$(document).on("change","#search_index",function(){
 		var now = new Date(); 				//当前日期
 		var nowDayOfWeek = now.getDay(); 	//今天本周的第几天 
@@ -49,7 +49,7 @@ $(document).ready(function(){
 			searching: false,
 			bAutoWidth:false,
 			destroy: true,
-			sScrollY: $(window).height()-220,
+			sScrollY: $(window).height()-140,
 			scrollX: true,
 			pagingType:"full_numbers",
 			lengthChange:true,
@@ -154,7 +154,7 @@ $(document).ready(function(){
 })
 
 function initPage(){
-	getBusNumberSelect('#nav-search-input');
+	//getBusNumberSelect('#nav-search-input');
 	//$("#search_date").val(formatDate());
 	getFactorySelect("report/onlineAndOfflineReport",'',"#search_factory","全部",'id');
 	var now = new Date(); //当前日期

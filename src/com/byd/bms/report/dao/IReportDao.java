@@ -48,4 +48,6 @@ public interface IReportDao {
 	public List<Map<String, Object>> getFactoryYieldData_Mobile(Map<String, Object> cdMap);
 
 	List<Map<String, Object>> queryOrderProcessData(Map<String, Object> condMap);
+
+	List<Map<String, Object>> queryFactoryRateData(Map<String, Object> condMap);
 }

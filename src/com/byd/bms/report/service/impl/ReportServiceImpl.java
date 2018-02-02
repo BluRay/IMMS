@@ -547,5 +547,18 @@ public class ReportServiceImpl implements IReportService {
 		model.put("data", datalist);
 		datalist=null;
 	}
+	/**
+	 * @author xiong.jianwu
+	 * 获取各工厂计划达成率报表数据
+	 * @param condMap
+	 * @param model
+	 */
+	@Override
+	public void getFactoryRateData(Map<String, Object> condMap, ModelMap model) {
+		List<Map<String, Object>> datalist = reportDao.queryFactoryRateData(condMap);
+		model.put("data", datalist);
+		datalist=null;		
+	}
 
+	
 }

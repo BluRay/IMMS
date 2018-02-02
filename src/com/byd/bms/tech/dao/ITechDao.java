@@ -55,6 +55,7 @@ public interface ITechDao {
 	public List<Map<String,Object>> queryTechFollowingUpList(Map<String,Object> conditionMap);
 	public int queryTechFollowingUpListTotalCount(Map<String,Object> conditionMap);
 	public List<Map<String,Object>> queryFollowingUpDetailList(Map<String,Object> conditionMap);
+	public int checkRemoveFollowingRole(String staff_number);
 	public int updateFollowingUp(List<Map<String, Object>> conditionList);
 	public int removeFollowingUpPre(List<Map<String, Object>> conditionList);
 	public int getFollowingUpPreNum(Map<String,Object> conditionMap);

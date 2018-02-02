@@ -123,7 +123,8 @@ function getSearch(){
     				$("<td style=\"text-align:center;\" rowspan=1 id='order_"+value.order_id+"'/>").html(value.order_desc).appendTo(tr);
     			}
     			$("<td style=\"text-align:center;\" />").html(value.key_name).appendTo(tr);
-    			$("<td style=\"text-align:center;\" />").html(value.total_plan_qty).appendTo(tr);
+    			
+    			$("<td style=\"text-align:center;\" />").html((value.key_name=="发车")?value.production_qty:value.total_plan_qty).appendTo(tr);
     			$("<td style=\"text-align:center;\" />").html(value.real_qty).appendTo(tr);
     			var rate_qty = "-";var rate_amend_qty = "-";
     			if(value.total_plan_qty != 0){
@@ -157,7 +158,7 @@ function getSearch(){
         		treal_zzoff+=(value.key_name=='总装下线'?parseInt(value.real_qty):0);
         		tplan_rk+=(value.key_name=='入库'?parseInt(value.total_plan_qty):0);
         		treal_rk+=(value.key_name=='入库'?parseInt(value.real_qty):0);	
-        		tplan_fc+=(value.key_name=='发车'?parseInt(value.total_plan_qty):0);
+        		tplan_fc+=(value.key_name=='发车'?parseInt(value.production_qty):0);
         		treal_fc+=(value.key_name=='发车'?parseInt(value.real_qty):0);
     		});
     		
@@ -199,7 +200,7 @@ function getSearch(){
     		$("#tr_doneRate").find("td").eq("9").html(tplan_zzon==0?"-":(Math.round(treal_zzon/tplan_zzon * 10000) / 100.00 + "%"));
     		$("#tr_doneRate").find("td").eq("10").html(tplan_zzoff==0?"-":(Math.round(treal_zzoff/tplan_zzoff * 10000) / 100.00 + "%"));
     		$("#tr_doneRate").find("td").eq("11").html(tplan_rk==0?"-":(Math.round(treal_rk/tplan_rk * 10000) / 100.00 + "%"));
-    		$("#tr_doneRate").find("td").eq("112").html(tplan_fc==0?"-":(Math.round(treal_fc/tplan_fc * 10000) / 100.00 + "%"));
+    		$("#tr_doneRate").find("td").eq("12").html(tplan_fc==0?"-":(Math.round(treal_fc/tplan_fc * 10000) / 100.00 + "%"));
     		
     		$("#tr_undone").find("td").eq("1").html((treal_zzj-tplan_zzj)<0?"<span style='color:red'>"+(tplan_zzj-treal_zzj):(tplan_zzj-treal_zzj));
     		$("#tr_undone").find("td").eq("2").html((treal_bjoff-tplan_bjoff)<0?"<span style='color:red'>"+(tplan_bjoff-treal_bjoff):(tplan_bjoff-treal_bjoff));

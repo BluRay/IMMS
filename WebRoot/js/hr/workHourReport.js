@@ -5,12 +5,12 @@ $(document).ready(function(){
 		ajaxQuery();
 	});
 
-	$('#nav-search-input').bind('keydown', function(event) {
+/*	$('#nav-search-input').bind('keydown', function(event) {
 		if (event.keyCode == "13") {
 			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
 			return false;
 		}
-	})
+	})*/
 
 	$(document).on("change","#search_factory",function(){
 		var factory=$("#search_factory :selected").text();
@@ -44,7 +44,7 @@ $(document).ready(function(){
 
 
 function initPage(){	
-	getBusNumberSelect('#nav-search-input');
+	//getBusNumberSelect('#nav-search-input');
 	$("#search_form")[0].reset();
 	getFactorySelect("hrReport/workHourReport","","#search_factory",null,"id")	
 	getWorkshopSelect("hrReport/workHourReport",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
@@ -153,7 +153,7 @@ function ajaxQuery(){
 		searching: false,
 		bAutoWidth:false,
 		destroy: true,
-		sScrollY: ($(window).height()-250)+"px",
+		sScrollY: ($(window).height()-140)+"px",
 		scrollX: true,
 		pageLength: 10,
 		pagingType:"full_numbers",

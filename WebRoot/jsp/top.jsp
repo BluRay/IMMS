@@ -336,7 +336,7 @@ String display_name = (String)session.getAttribute("display_name");
 								</li>
 
 								<li>
-									<a href="/BMS/account/userProfilePage">
+									<a href="javascript:addTabs({id:'用户中心',title:'用户中心',close: 'true',url: '/BMS/account/userProfilePage'});" >
 										<i class="ace-icon fa fa-user"></i>
 										用户中心
 									</a>

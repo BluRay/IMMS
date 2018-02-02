@@ -5,12 +5,12 @@ var workgroup_list=[];
 $(document).ready(function(){
 	initPage();
 
-	$('#nav-search-input').bind('keydown', function(event) {
+/*	$('#nav-search-input').bind('keydown', function(event) {
 		if (event.keyCode == "13") {
 			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
 			return false;
 		}
-	})
+	})*/
 	
 	//新增记录
 	$("#btnAdd").click(function(){
@@ -49,8 +49,8 @@ $(document).ready(function(){
 		$("input[name='testResult']").attr("disabled",false);
 		
 		var dialog = $( "#dialog-config" ).removeClass('hide').dialog({
-			width:1300,
-			height:550,
+			width:1100,
+			height:520,
 			modal: true,
 			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i>成品记录表录入</h4></div>",
 			title_html: true,
@@ -193,7 +193,7 @@ function initPage(){
 	$("#order_config").css("display","none");
 	$("#order_config_span").css("display","");
 	
-	getBusNumberSelect('#nav-search-input');
+//	getBusNumberSelect('#nav-search-input');
 	getBusNumberSelect('#search_bus_number');
 	getKeysSelect("CHECK_NODE", "", "#search_node","全部","id");
 	getKeysSelect("CHECK_NODE", "", "#check_node","请选择","id");
@@ -888,8 +888,8 @@ function showInfoPage(row){
 	var detail_list=getProductRecordDetail(row.bus_number,row.test_node,row.factory_id,row.test_card_template_head_id);
 	
 	var dialog = $( "#dialog-config" ).removeClass('hide').dialog({
-		width:1300,
-		height:550,
+		width:1100,
+		height:520,
 		modal: true,
 		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i>成品记录表查看</h4></div>",
 		title_html: true,
@@ -976,8 +976,8 @@ function showEditPage(row){
 		$("#btnShowTpl").attr("disabled",true);
 	}
 	var dialog = $( "#dialog-config" ).removeClass('hide').dialog({
-		width:1300,
-		height:550,
+		width:1100,
+		height:520,
 		modal: true,
 		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i>成品记录表录入</h4></div>",
 		title_html: true,

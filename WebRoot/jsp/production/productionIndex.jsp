@@ -217,7 +217,7 @@
 					</div>
 					<div class="row">
 					<div class="col-xs-12">
-					<div id="execution"  style="height:480px">
+					<div id="execution"  style="height:470px">
                   	<div class="execution" style="margin-left:10px;margin-top:30px">
 	                  <div title="焊装" id="node-welding" class="node-rgl node-welding-text" onclick="executionFoward('焊装')"></div>
 	                  <div title="涂装" id="node-painting" class="node-rgl node-painting-text" onclick="executionFoward('涂装')"></div>

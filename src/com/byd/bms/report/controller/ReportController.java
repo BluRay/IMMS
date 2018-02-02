@@ -660,4 +660,34 @@ public class ReportController extends BaseController {
 		
 	}
 	
+	/**
+	 * @author xiong.jianwu
+	 * 各工厂计划达成率报表
+	 */
+	@RequestMapping("/factoryRateReport")
+	public ModelAndView factoryRateReport(){
+		mv.setViewName("report/factoryRateReport");
+        return mv; 
+	}
+	
+	/**
+	 * @author xiong.jianwu
+	 * 各工厂计划达成率报表数据抓取
+	 * @return
+	 */
+	@RequestMapping("/getFactoryRateData")
+	@ResponseBody
+	public ModelMap getFactoryRateData(){
+		model.clear();
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("start_date", request.getParameter("start_date"));
+		condMap.put("end_date", request.getParameter("end_date"));
+		
+		reportService.getFactoryRateData(condMap,model);
+		
+		condMap=null;
+		return model;
+		
+	}
+	
 }

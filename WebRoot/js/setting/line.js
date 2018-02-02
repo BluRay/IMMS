@@ -10,19 +10,19 @@ $(document).ready(function(){
 	getOrderNoSelect("#search_order_no","#orderId");
 	getFactorySelect();
 	getBusType();*/
-	getBusNumberSelect('#nav-search-input');
+	//getBusNumberSelect('#nav-search-input');
 	ajaxQuery();
 	
 	$(".btnQuery").on("click",function(){
 		ajaxQuery();
 	});
 
-	$('#nav-search-input').bind('keydown', function(event) {
+/*	$('#nav-search-input').bind('keydown', function(event) {
 		if (event.keyCode == "13") {
 			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
 			return false;
 		}
-	})
+	})*/
 	
 	/*$("#btnAdd").on("click",function(){
 		ajaxAdd();
@@ -214,7 +214,7 @@ function ajaxQuery(){
 		searching: false,
 		bAutoWidth:false,
 		destroy: true,
-		sScrollY: document.documentElement.clientHeight-250 + 'px',
+		sScrollY: document.documentElement.clientHeight-140 + 'px',
 		scrollX: "100%",
 		/*scrollCollapse: true,*/
 		pageLength: 10,

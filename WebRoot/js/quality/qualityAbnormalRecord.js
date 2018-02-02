@@ -1,6 +1,6 @@
 var pageSize=1;
 var table;
-var table_height = $(window).height()-290;
+var table_height = $(window).height()-180;
 var checkMap={ '焊装':'焊装', '涂装':'涂装','底盘':'底盘','总装':'总装'};
 $(document).ready(function(){
 	initPage();
@@ -9,16 +9,16 @@ $(document).ready(function(){
 		ajaxQuery();
 	});
 
-	$('#nav-search-input').bind('keydown', function(event) {
+/*	$('#nav-search-input').bind('keydown', function(event) {
 		if (event.keyCode == "13") {
 			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
 			return false;
 		}
-	})
+	})*/
 	
 	function initPage(){
 		clear();
-		getBusNumberSelect('#nav-search-input');
+		//getBusNumberSelect('#nav-search-input');
 		getBusNumberSelect('#search_bus_number');
 		getFactorySelect("quality/qualityAbnormalRecord",'',"#search_factory","全部",'id');
 		getFactorySelect("quality/qualityAbnormalRecord",'',"#new_factory",null,'id');
@@ -134,6 +134,7 @@ $(document).ready(function(){
 			title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 新增品质异常记录</h4></div>',
 			title_html: true,
 			width:'600px',
+			height:520,
 			modal: true,
 			buttons: [{
 						text: "取消",

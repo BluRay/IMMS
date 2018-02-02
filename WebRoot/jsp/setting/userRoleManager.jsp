@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<jsp:include page="../includ.jsp" flush="true"/>
 <html lang="zh-CN">
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -13,32 +14,27 @@
 	</head>
 	<body class="no-skin" style="font-family: 'Microsoft YaHei';">
 		<!-- 头 -->
-		<jsp:include page="../top.jsp" flush="true"/>
 		<!-- 身 -->
-		<div class="main-container" id="main-container">
+		<div class="main-container" id="main-container" style="overflow: hidden;">
 			<!-- 左边菜单 -->
-			<jsp:include page="../left.jsp" flush="true"/>
 			<!-- 主体 -->
-			<div class="main-content">			
-			<!-- 路径和搜索框 -->
-			<div class="breadcrumbs" id="breadcrumbs">
+			<div class="main-content">		
+				
+<!-- 			<div class="breadcrumbs" id="breadcrumbs">
 					<ul class="breadcrumb">
 						<li><i class="ace-icon fa fa-home home-icon"></i><a href="/BMS/index">首页</a></li>
 						<li><a href="#">系统设置</a></li>
 						<li class="active">帐号授权</li>
-					</ul><!-- /.breadcrumb -->
-
-					<!-- #section:basics/content.searchbox -->
+					</ul>
 					<div class="nav-search" id="nav-search">
 						<form class="form-search">
 							<span class="input-icon">
 								<input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" /><i class="ace-icon fa fa-search nav-search-icon"></i>
 							</span>
 						</form>
-					</div><!-- /.nav-search -->
-				</div>
+					</div>
+				</div> -->
 				
-			<div class="page-content">
 				<!-- 设置小部件 -->
 				<div class="row">
 					<div class="col-xs-12">
@@ -87,7 +83,7 @@
 						
 						<div class="row">
 							<div class="col-sm-12">
-								<div id="div_3" class="widget-box widget-color-blue2" style="height:180px">
+								<div id="div_3" class="widget-box widget-color-blue2" style="height:170px">
 									<div class="widget-header">
 										<h4 class="widget-title lighter smaller">数据权限配置 <span id="role_name"></span></h4>
 									</div>
@@ -119,7 +115,6 @@
 					</div>	
 				
 				</div>
-			</div><!-- /.main-content -->
 
 			<!-- 脚 -->
 			<%-- <jsp:include page="footer.jsp" flush="true"/> --%>

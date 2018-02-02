@@ -6,12 +6,12 @@ $(document).ready(function(){
 		ajaxQuery();
 	}); 
 
-	$('#nav-search-input').bind('keydown', function(event) {
+/*	$('#nav-search-input').bind('keydown', function(event) {
 		if (event.keyCode == "13") {
 			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
 			return false;
 		}
-	})
+	})*/
 	$(document).on("input","#search_order_no",function(){
 		//alert("change");
 		$("#search_order_no").attr("order_id","");
@@ -23,7 +23,7 @@ $(document).ready(function(){
 })
 
 function initPage(){
-	getBusNumberSelect('#nav-search-input');
+	//getBusNumberSelect('#nav-search-input');
 	getBusTypeSelect('','#search_bus_type','全部','id');
 	getOrderNoSelect("#search_order_no","#orderId",null,$('#search_bus_type').val());
 	ajaxQuery();
@@ -172,7 +172,7 @@ function showEditPage(row){
 		drawKeyPartsTable("#keyPartsTable");
 		var dialog = $( "#dialog-config" ).removeClass('hide').dialog({
 			width:1100,
-			height:550,
+			height:520,
 			modal: true,
 			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i> 订单关键零部件导入</h4></div>",
 			title_html: true,
@@ -220,7 +220,7 @@ function showInfoPage(row){
 	//show dialog
 	var dialog = $( "#dialog-config-view" ).removeClass('hide').dialog({
 		width:1100,
-		height:550,
+		height:520,
 		modal: true,
 		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i> 订单关键零部件查看</h4></div>",
 		title_html: true,

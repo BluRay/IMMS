@@ -7,14 +7,14 @@ $(document).ready(function(){
 		ajaxQuery();
 	});
 
-	$('#nav-search-input').bind('keydown', function(event) {
+/*	$('#nav-search-input').bind('keydown', function(event) {
 		if (event.keyCode == "13") {
 			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
 			return false;
 		}
-	})
+	})*/
 	function initPage(){
-		getBusNumberSelect('#nav-search-input');
+		//getBusNumberSelect('#nav-search-input');
 		getBusType("#search_bustype");
 		getOrderNoSelect("#search_orderno","#orderId");
 		getOrderNoSelect("#new_orderNo","#orderId",setBusType);
@@ -85,7 +85,7 @@ $(document).ready(function(){
 			title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 增加物料异常记录</h4></div>',
 			title_html: true,
 			width:800,
-			height:600,
+			height:520,
 			modal: true,
 			buttons: [{
 						text: "取消",
@@ -110,8 +110,8 @@ $(document).ready(function(){
 		}
 		$("#importDiv").show();
 		var dialog = $( "#dialog-import" ).removeClass('hide').dialog({
-			width:1200,
-			height:600,
+			width:1100,
+			height:520,
 			modal: true,
 			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i>物料异常记录导入</h4></div>",
 			title_html: true,
@@ -339,7 +339,7 @@ function showExceptionLogs(id){
 				title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 查看物料异常记录</h4></div>',
 				title_html: true,
 				width:800,
-				height:600,
+				height:520,
 				modal: true,
 				buttons: [{
 							text: "关闭",
@@ -407,7 +407,7 @@ function editExceptionLogs(id){
 				title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 编辑制程异常</h4></div>',
 				title_html: true,
 				width:800,
-				height:600,
+				height:520,
 				modal: true,
 				buttons: [{
 							text: "关闭",

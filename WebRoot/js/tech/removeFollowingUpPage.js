@@ -12,9 +12,9 @@ $(document).ready(function(){
 	
 	function initPage(){
 		getBusNumberSelect('#nav-search-input');
-		getFactorySelect("tech/followingUpPage",'',"#search_factory",null,'id');
+		getFactorySelect("tech/removeFollowingUpPage",'',"#search_factory",null,'id');
 		getOrderNoSelect("#search_order_no","#orderId");
-		getWorkshopSelect("tech/followingUpPage",$("#search_factory :selected").text(),"","#search_workshop","全部","id");
+		getWorkshopSelect("tech/removeFollowingUpPage",$("#search_factory :selected").text(),"","#search_workshop","全部","id");
 	}
 
 	$('#nav-search-input').bind('keydown', function(event) {
@@ -25,7 +25,7 @@ $(document).ready(function(){
 	})
 	
 	$('#search_factory').change(function(){ 
-		getWorkshopSelect("tech/followingUpPage",$("#search_factory :selected").text(),"","#search_workshop","全部","id");
+		getWorkshopSelect("tech/removeFollowingUpPage",$("#search_factory :selected").text(),"","#search_workshop","全部","id");
 	})
 	
 	// 技改信息查询
@@ -155,7 +155,7 @@ function ajaxQuery() {
 		            	},
 		            },
 		            {"title":"完成数","class":"center","data":"complete","defaultContent": ""},
-		            {"title":"跟进","class":"center","data":"single_time_total","defaultContent": "",
+		            {"title":"取消跟进","class":"center","data":"single_time_total","defaultContent": "",
 		            	"render": function ( data, type, row ) {
 		            		if (parseInt(row.total) - parseInt(row.complete) <= -100) {	////0
 		            			return "-";
@@ -169,11 +169,11 @@ function ajaxQuery() {
 				            				return "-";
 				            			}else{
 				            				if (row.ws == "自制件" || row.ws == "部件") {
-					            				return "<i name='edit' class=\"fa fa-pencil\" rel=\"tooltip\" title='技改跟进' style=\"cursor: pointer;text-align: center;\" onclick='showSelectBusNumberModal1(\"" + row.prod_factory + "\",\"" + row.ws + "\",\"" + row.order_no + "\"," + row.tech_task_id + "," + row.total + "," + row.task_detail_id + ",\""+row.status_list+"\");' ></i>";
-					            				//+"&nbsp;&nbsp;<i name='remove' class=\"ace-icon glyphicon glyphicon-remove\" rel=\"tooltip\" title='取消跟进' style=\"cursor: pointer;text-align: center;\" onclick='showRemoveBusNumberModal1(\"" + row.prod_factory + "\",\"" + row.ws + "\",\"" + row.order_no + "\"," + row.tech_task_id + "," + row.total + "," + row.task_detail_id + ",\""+row.status_list+"\");' ></i>";
+					            				//return "<i name='edit' class=\"fa fa-pencil\" rel=\"tooltip\" title='技改跟进' style=\"cursor: pointer;text-align: center;\" onclick='showSelectBusNumberModal1(\"" + row.prod_factory + "\",\"" + row.ws + "\",\"" + row.order_no + "\"," + row.tech_task_id + "," + row.total + "," + row.task_detail_id + ",\""+row.status_list+"\");' ></i>";
+				            					return"<i name='remove' class=\"ace-icon glyphicon glyphicon-remove\" rel=\"tooltip\" title='取消跟进' style=\"cursor: pointer;text-align: center;\" onclick='showRemoveBusNumberModal1(\"" + row.prod_factory + "\",\"" + row.ws + "\",\"" + row.order_no + "\"," + row.tech_task_id + "," + row.total + "," + row.task_detail_id + ",\""+row.status_list+"\");' ></i>";
 					    					} else {
-					    						return "<i name='edit' class=\"fa fa-pencil\" rel=\"tooltip\"  title='技改跟进'style=\"cursor: pointer;text-align: center;\" onclick='showSelectBusNumberModal(\"" + row.prod_factory + "\",\"" + row.ws + "\",\"" + row.order_no + "\"," + row.tech_task_id + "," + row.task_detail_id + ",\""+row.status_list+"\");' ></i>";
-					    						//+"&nbsp;&nbsp;<i name='remove' class=\"ace-icon glyphicon glyphicon-remove\" rel=\"tooltip\"  title='取消跟进'style=\"cursor: pointer;text-align: center;\" onclick='showRemoveBusNumberModal(\"" + row.prod_factory + "\",\"" + row.ws + "\",\"" + row.order_no + "\"," + row.tech_task_id + "," + row.task_detail_id + ",\""+row.status_list+"\");' ></i>";
+					    						//return "<i name='edit' class=\"fa fa-pencil\" rel=\"tooltip\"  title='技改跟进'style=\"cursor: pointer;text-align: center;\" onclick='showSelectBusNumberModal(\"" + row.prod_factory + "\",\"" + row.ws + "\",\"" + row.order_no + "\"," + row.tech_task_id + "," + row.task_detail_id + ",\""+row.status_list+"\");' ></i>";
+					    						return "<i name='remove' class=\"ace-icon glyphicon glyphicon-remove\" rel=\"tooltip\"  title='取消跟进'style=\"cursor: pointer;text-align: center;\" onclick='showRemoveBusNumberModal(\"" + row.prod_factory + "\",\"" + row.ws + "\",\"" + row.order_no + "\"," + row.tech_task_id + "," + row.task_detail_id + ",\""+row.status_list+"\");' ></i>";
 					    					}
 				            			}
 			            			}else{
@@ -205,7 +205,8 @@ function ajaxQuery() {
 
 function showRemoveBusNumberModal(factory, workshop, order_no, tech_task_id, task_detail_id,status_list) {
 	//检测是否有取消技改跟进的权限
-	$.ajax({
+	
+	/**$.ajax({
 		url : "checkRemoveFollowingRole",
 		dataType : "json",
 		type : "post",
@@ -216,42 +217,42 @@ function showRemoveBusNumberModal(factory, workshop, order_no, tech_task_id, tas
 				alert("当前用户没有取消技改跟进的权限，请联系系统管理员。");
 				return false;
 			}else{
-				techtype = "1";
-				$('#select_tech_task_id').val(tech_task_id);
-				$('#select_factory').val(factory);
-				$('#select_workshop').val(workshop);
-				$('#select_order_no').val(order_no);
-				$('#bus_num_start').val("");
-				$('#bus_num_end').val("");
-				$(".checkall").removeAttr("checked");
-				$('#task_detail_id').val(task_detail_id);
-				ajaxQueryDetail($("#selectBusNumber_table_tbody"), factory, workshop, order_no, tech_task_id, null,task_detail_id);
-				$("#selectBusNumberModal").removeClass('hide').dialog({
-					resizable: false,
-					title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 技改确认</h4></div>',
-					title_html: true,
-					width:900,
-					height:600,
-					modal: true,
-					buttons: [{
-								text: "关闭",
-								"class" : "btn btn-minier",
-								click: function() {$( this ).dialog( "close" );} 
-							},
-							{
-								text: "取消跟进",
-								id:"btn_remove",
-								"class" : "btn btn-warning btn-minier",
-								click: function() {
-									ajaxRemove(status_list);
-								} 
-							}
-						]
-				});
+				
 			}
 		}
+	});**/
+	techtype = "1";
+	$('#select_tech_task_id').val(tech_task_id);
+	$('#select_factory').val(factory);
+	$('#select_workshop').val(workshop);
+	$('#select_order_no').val(order_no);
+	$('#bus_num_start').val("");
+	$('#bus_num_end').val("");
+	$(".checkall").removeAttr("checked");
+	$('#task_detail_id').val(task_detail_id);
+	ajaxQueryDetail($("#selectBusNumber_table_tbody"), factory, workshop, order_no, tech_task_id, null,task_detail_id);
+	$("#selectBusNumberModal").removeClass('hide').dialog({
+		resizable: false,
+		title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 技改确认</h4></div>',
+		title_html: true,
+		width:900,
+		height:600,
+		modal: true,
+		buttons: [{
+					text: "关闭",
+					"class" : "btn btn-minier",
+					click: function() {$( this ).dialog( "close" );} 
+				},
+				{
+					text: "取消跟进",
+					id:"btn_remove",
+					"class" : "btn btn-warning btn-minier",
+					click: function() {
+						ajaxRemove(status_list);
+					} 
+				}
+			]
 	});
-	
 }
 
 function showSelectBusNumberModal(factory, workshop, order_no, tech_task_id, task_detail_id,status_list) {
@@ -299,7 +300,7 @@ function showSelectBusNumberModal(factory, workshop, order_no, tech_task_id, tas
 
 function showRemoveBusNumberModal1(factory, workshop, order_no, tech_task_id, total_num, task_detail_id,status_list) {
 	//检测是否有取消技改跟进的权限
-	$.ajax({
+	/**$.ajax({
 		url : "checkRemoveFollowingRole",
 		dataType : "json",
 		type : "post",
@@ -310,41 +311,42 @@ function showRemoveBusNumberModal1(factory, workshop, order_no, tech_task_id, to
 				alert("当前用户没有取消技改跟进的权限，请联系系统管理员。");
 				return false;
 			}else{
-				techtype = "1";
-				$('#select_tech_task_id1').val(tech_task_id);
-				$('#select_factory1').val(factory);
-				$('#select_workshop1').val(workshop);
-				$('#select_order_no1').val(order_no);
-				$('#total_num1').val(total_num);
-				$('#follow_num').val("");
-				$('#task_detail_id1').val(task_detail_id);
-				ajaxQueryDetail1($("#selectBusNumber_table_tbody1"), factory, workshop, order_no, tech_task_id,task_detail_id);
-				$("#btn_follow_num_confirm").prop("disabled","disabled");
-				$("#selectBusNumberModal1").removeClass('hide').dialog({
-					resizable: false,
-					title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 取消技改跟进</h4></div>',
-					title_html: true,
-					width:900,
-					height:600,
-					modal: true,
-					buttons: [
-						{
-								text: "取消跟进",
-								id:"btn_remove1",
-								"class" : "btn btn-warning btn-minier",
-								click: function() {
-									ajaxRemovePre(workshop,task_detail_id,status_list);
-								} 
-							},
-							{
-								text: "取消",
-								"class" : "btn btn-minier",
-								click: function() {$( this ).dialog( "close" );} 
-							}
-						]
-				});
+				
 			}
 		}
+	});**/
+	techtype = "1";
+	$('#select_tech_task_id1').val(tech_task_id);
+	$('#select_factory1').val(factory);
+	$('#select_workshop1').val(workshop);
+	$('#select_order_no1').val(order_no);
+	$('#total_num1').val(total_num);
+	$('#follow_num').val("");
+	$('#task_detail_id1').val(task_detail_id);
+	ajaxQueryDetail1($("#selectBusNumber_table_tbody1"), factory, workshop, order_no, tech_task_id,task_detail_id);
+	$("#btn_follow_num_confirm").prop("disabled","disabled");
+	$("#selectBusNumberModal1").removeClass('hide').dialog({
+		resizable: false,
+		title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 取消技改跟进</h4></div>',
+		title_html: true,
+		width:900,
+		height:600,
+		modal: true,
+		buttons: [
+			{
+					text: "取消跟进",
+					id:"btn_remove1",
+					"class" : "btn btn-warning btn-minier",
+					click: function() {
+						ajaxRemovePre(workshop,task_detail_id,status_list);
+					} 
+				},
+				{
+					text: "取消",
+					"class" : "btn btn-minier",
+					click: function() {$( this ).dialog( "close" );} 
+				}
+			]
 	});
 }
 

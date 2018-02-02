@@ -6,16 +6,16 @@ $(document).ready(function(){
 		ajaxQuery();
 	})
 
-	$('#nav-search-input').bind('keydown', function(event) {
+/*	$('#nav-search-input').bind('keydown', function(event) {
 		if (event.keyCode == "13") {
 			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
 			return false;
 		}
-	})
+	})*/
 })
 
 function initPage(){
-	getBusNumberSelect('#nav-search-input');
+	//getBusNumberSelect('#nav-search-input');
 	var factory_default=getQueryString("factory_id");
 	getFactorySelect("",factory_default,"#search_factory","全部","id");
 	var year=new Date().getFullYear();
@@ -72,7 +72,7 @@ function ajaxQuery(){
 		searching: false,
 		bAutoWidth:false,
 		destroy: true,
-		sScrollY: $(window).height()-220,
+		sScrollY: $(window).height()-140,
 		scrollX: true,
 		pagingType:"full_numbers",
 		lengthChange:true,

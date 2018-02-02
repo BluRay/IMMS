@@ -100,6 +100,12 @@ public class TechController extends BaseController{
         return mv;
 	}
 	
+	@RequestMapping("/removeFollowingUpPage")	//取消技改跟进
+	public ModelAndView removeFollowingUpPage(){
+		mv.setViewName("tech/removeFollowingUpPage");
+        return mv;
+	}
+	
 	@RequestMapping("/worktimeMaintain")		//技改工时维护
 	public ModelAndView worktimeMaintain(){
 		mv.setViewName("tech/worktimeMaintain");
@@ -738,6 +744,20 @@ public class TechController extends BaseController{
 		techService.editFollowingUp(curTime, edit_user, ids, task_detail_id, update_status, workshop);
 		//initModel(true,String.valueOf(result),null);
 		model.put("success", true);
+		return model;
+	}
+	
+	/**
+	 * 检测用户是否有取消跟进的权限[人事计件负责人(各工厂人事)]
+	 * @return
+	 */
+	@RequestMapping("/checkRemoveFollowingRole")
+	@ResponseBody
+	public ModelMap checkRemoveFollowingRole(){
+		String edit_user = request.getSession().getAttribute("staff_number") + "";
+		int check = techService.checkRemoveFollowingRole(edit_user);
+		model.clear();
+		model.put("result", String.valueOf(check));
 		return model;
 	}
 	

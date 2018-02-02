@@ -1,21 +1,21 @@
 var pageSize=1;
 var table;
-var table_height = $(window).height()-500;
+var table_height = $(window).height()-390;
 $(document).ready(function(){
 	initPage();
 	
 	function initPage(){
-		getBusNumberSelect('#nav-search-input');
+		//getBusNumberSelect('#nav-search-input');
 		getFactorySelect("report/dpuReport",'',"#search_factory",null,'id');
 		getKeysSelect("CHECK_NODE", "", "#search_test_node_id",null,"id");
 	}
 	
-	$('#nav-search-input').bind('keydown', function(event) {
+/*	$('#nav-search-input').bind('keydown', function(event) {
 		if (event.keyCode == "13") {
 			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
 			return false;
 		}
-	})
+	})*/
 	
 	$("#btnQuery").click (function () {
 		if($("#start_date").val()==""){
