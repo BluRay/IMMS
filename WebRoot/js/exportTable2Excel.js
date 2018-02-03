@@ -138,7 +138,7 @@ var ToExcel_FF = (function() {
     	
         var elDiv = document.getElementById(GridPanel_ID);
         //过滤elDiv内容
-        var elDivStr = $(headDiv).html()+elDiv.innerHTML;
+        var elDivStr = ($(headDiv).html()||"")+elDiv.innerHTML;
         //alert(elDivStr);
         elDivStr = replaceHtml(elDivStr, "<a", ">");
         elDivStr = replaceHtml(elDivStr, "</a", ">");

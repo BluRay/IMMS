@@ -287,7 +287,7 @@ $(document).ready(function () {
 				
 				var node_count = 0;
 				//console.log(value.name);
-				if(value.name === "仓库管理")menuTree.push(node);
+				//if(value.name === "仓库管理")menuTree.push(node);
 				//console.log("node",node);
 				node_count = node.list.length;
 				if(node_count >0 ){
@@ -410,10 +410,14 @@ function getRealPath(url){
 //遍历树生成菜单元素
 function traverseTree(node,parentli,two){
 	var ul = $('<ul class="submenu" />');
-	$.each(node.list, function (index, value) {
+	$.each(node.list, function (index, value) {	
 		var a;
-		a = $('<a href="javascript:addTabs({id:\'' + value.name + '\',title:\'' + value.name + '\',close: \'true\',url: \'/BMS/' + value.path + '\'});" ></a>');
-			//a = $('<a href=\"/BMS/'+value.path+'\" ></a>');
+		if(value.parent!='116'){
+			a = $('<a href="javascript:addTabs({id:\'' + value.name + '\',title:\'' + value.name + '\',close: \'true\',url: \'/BMS/' + value.path + '\'});" ></a>');
+		}else{
+			a = $('<a href=\"'+value.path+<%=staff_number%>+'\" ></a>');
+		}
+		//a = $('<a href=\"/BMS/'+value.path+'\" ></a>');
 		$(a).data("url","/BMS/"+value.path)
 		$(a).data("title",value.name);
 		$(a).data("id",value.id)

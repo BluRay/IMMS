@@ -747,20 +747,6 @@ public class TechController extends BaseController{
 		return model;
 	}
 	
-	/**
-	 * 检测用户是否有取消跟进的权限[人事计件负责人(各工厂人事)]
-	 * @return
-	 */
-	@RequestMapping("/checkRemoveFollowingRole")
-	@ResponseBody
-	public ModelMap checkRemoveFollowingRole(){
-		String edit_user = request.getSession().getAttribute("staff_number") + "";
-		int check = techService.checkRemoveFollowingRole(edit_user);
-		model.clear();
-		model.put("result", String.valueOf(check));
-		return model;
-	}
-	
 	@RequestMapping("/removeFollowingUp")
 	@ResponseBody
 	public ModelMap removeFollowingUp(){

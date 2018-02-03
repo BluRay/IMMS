@@ -893,12 +893,12 @@
 		select group_concat(record.key_name,':',record.done_qty,'|',ifnull(p.plan_qty,0)) result,record.factory,
 		sum(record.done_qty)/sum(p.plan_qty) rate,ifnull(sum(record.done_qty),0) total_done_qty,ifnull(sum(p.plan_qty),0) total_plan_qty
 		from(
-		select '自制下线' key_name,sum(s.quantity) done_qty,f.factory_name factory,f.id factory_id
+		<!-- select '自制下线' key_name,sum(s.quantity) done_qty,f.factory_name factory,f.id factory_id
 		from BMS_BASE_FACTORY f 
 		left join BMS_PD_WORKSHOP_SUPPLY s on s.factory_id=f.id
 		where s.supply_workshop='自制件' and s.receive_workshop='部件' and s.supply_date>=#{start_date} and s.supply_date&lt;=#{end_date}
 		group by f.id
-		union all
+		union all -->
 		select '部件下线' key_name,sum(pf.offline_real_qty) done_qty,f.factory_name factory,f.id factory_id
 		from BMS_BASE_FACTORY f 
 		left join BMS_PD_PARTS_PLAN_FINISH pf on f.id=pf.factory_id

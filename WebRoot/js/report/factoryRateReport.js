@@ -1,4 +1,5 @@
 $(document).ready(function(){
+	
 	ajaxQuery();
 	
 	$('#nav-search-input').bind('keydown', function(event) {
@@ -14,9 +15,7 @@ $(document).ready(function(){
 	
 	//导出功能
 	$(document).on("click",".buttons-excel",function(){
-		//ajaxQuery(0,'all');
-		$("#tableResult tbody").children("tr").children("td:hidden").remove();
-		htmlToExcel("tableResult", "", "","工厂月计划达成","工厂月计划达成");
+		htmlToExcel("tableResult", "", "","工厂计划达成率","工厂计划达成率");
 		return false;
 	});
 })
@@ -105,8 +104,10 @@ function showTable(data_list){
 	var total_r_zz=0;
 	var total_p_rk=0;
 	var total_r_rk=0;
+	var total_rate="-";
 	
 	var tbody= $("<tbody />");
+	var detail=$("<tbody />");
 	
 	$.each(data_list,function(i,data){
 		var list=data.result.split(",");
@@ -125,29 +126,41 @@ function showTable(data_list){
 		$.each(list,function(ii,d){
 			var key=d.split(":")[0];
 			var sj=d.split(":")[1];
-			if(key=="部件上线"){
+			if(key=="部件下线"){
 				r_bj=sj.split("|")[0];
 				p_bj=sj.split("|")[1];
+				total_p_bj+=Number(p_bj);
+				total_r_bj+=Number(r_bj);
 			}
 			if(key=="焊装上线"){
 				r_hz=sj.split("|")[0];
 				p_hz=sj.split("|")[1];
+				total_p_hz+=Number(p_hz);
+				total_r_hz+=Number(r_hz);
 			}
 			if(key=="涂装上线"){
-				r_bj=sj.split("|")[0];
-				p_bj=sj.split("|")[1];
+				r_tz=sj.split("|")[0];
+				p_tz=sj.split("|")[1];
+				total_p_tz+=Number(p_tz);
+				total_r_tz+=Number(r_tz);
 			}
 			if(key=="底盘上线"){
-				r_bj=sj.split("|")[0];
-				p_bj=sj.split("|")[1];
+				r_dp=sj.split("|")[0];
+				p_dp=sj.split("|")[1];
+				total_p_dp+=Number(p_dp);
+				total_r_dp+=Number(r_dp);
 			}
 			if(key=="总装下线"){
-				r_bj=sj.split("|")[0];
-				p_bj=sj.split("|")[1];
+				r_zz=sj.split("|")[0];
+				p_zz=sj.split("|")[1];
+				total_p_zz+=Number(p_zz);
+				total_r_zz+=Number(r_zz);
 			}
 			if(key=="入库"){
-				r_bj=sj.split("|")[0];
-				p_bj=sj.split("|")[1];
+				r_rk=sj.split("|")[0];
+				p_rk=sj.split("|")[1];
+				total_p_rk+=Number(p_rk);
+				total_r_rk+=Number(r_rk);
 			}
 			
 		})
@@ -163,7 +176,7 @@ function showTable(data_list){
 		$("<td />").html(p_rk).appendTo(tr);
 		$("<td />").html(total_p).appendTo(tr);
 		$("<td rowspan=2  />").html(rate).appendTo(tr);
-		$(tbody).append(tr);
+		$(tr).appendTo(detail);
 		
 		var tr1=$("<tr />");
 		$("<td />").html("实际").appendTo(tr1);
@@ -175,13 +188,44 @@ function showTable(data_list){
 		$("<td />").html(r_rk).appendTo(tr1);
 		$("<td />").html(total_r).appendTo(tr1);
 			
-		$(tbody).append(tr1);
+		$(tr1).appendTo(detail);
 	})
-
+	
+	var tr=$("<tr />");
+	$("<td rowspan=2 />").html("合计").appendTo(tr);
+	$("<td />").html("计划").appendTo(tr);
+	$("<td />").html(total_p_bj).appendTo(tr);
+	$("<td />").html(total_p_hz).appendTo(tr);
+	$("<td />").html(total_p_tz).appendTo(tr);
+	$("<td />").html(total_p_dp).appendTo(tr);
+	$("<td />").html(total_p_zz).appendTo(tr);
+	$("<td />").html(total_p_rk).appendTo(tr);
+	var total_hj_p=(total_p_bj+total_p_hz+total_p_tz+total_p_dp+total_p_zz+total_p_rk)
+	var total_hj_r=(total_r_bj+total_r_hz+total_r_tz+total_r_dp+total_r_zz+total_r_rk)
+	if(total_hj_p>0){
+		total_rate=(total_hj_r/total_hj_p*100).toFixed(2)+"%";
+	}
+	$("<td />").html(total_hj_p).appendTo(tr);	
+	
+	$("<td rowspan=2  />").html(total_rate).appendTo(tr);
+	$(tbody).append(tr);
+		
+	var tr1=$("<tr />");
+	$("<td />").html("实际").appendTo(tr1);
+	$("<td />").html(total_r_bj).appendTo(tr1);
+	$("<td />").html(total_r_hz).appendTo(tr1);
+	$("<td />").html(total_r_tz).appendTo(tr1);
+	$("<td />").html(total_r_dp).appendTo(tr1);
+	$("<td />").html(total_r_zz).appendTo(tr1);
+	$("<td />").html(total_r_rk).appendTo(tr1);
+	$("<td />").html(total_hj_r).appendTo(tr1);	
+	$(tbody).append(tr1);
+		
+	$(tbody).append(detail.html());	
 	$("#tableResult").append(tbody);
 	
 	
-	var tb=$("#tableResult").dataTable({
+	/*var tb=$("#tableResult").dataTable({
 		  dom: 'Bfrtip',
 		  buttons: [
 			        {extend:'excelHtml5',enabled:false,title:'data_export',className:'black',text:'<i class=\"fa fa-file-excel-o bigger-130\" tooltip=\"导出excel\"></i>'},
@@ -190,7 +234,7 @@ function showTable(data_list){
 		  paginate:false,	 
 		  paiging:false,
 		  ordering:false,
-		  /*rowsGroup:[9],*/
+		  rowsGroup:[9],
 		  searching: false,
 		  bAutoWidth:false,
 		  destroy: true,
@@ -214,5 +258,5 @@ function showTable(data_list){
 	if($(".dataTables_scrollBody").scrollTop()>0){
 		$(".dataTables_scrollHead").css("width",head_width-20);
 		$(".dataTables_scrollBody").scrollTop(0);
-	}
+	}*/
 }

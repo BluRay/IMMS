@@ -463,11 +463,6 @@ public class TechServiceImpl implements ITechService {
 		techDao.updateTechDetailStatus(infomap);
 		return 0;
 	}
-	
-	@Override
-	public int checkRemoveFollowingRole(String staff_number) {
-		return techDao.checkRemoveFollowingRole(staff_number);
-	}
 
 	@Override
 	@Transactional

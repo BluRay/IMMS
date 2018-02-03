@@ -9,6 +9,7 @@ $(document).ready(function() {
     initPage();
 	
 	function initPage() {
+		compareTime('2018-01-31','2017-12-02');
 		//getBusNumberSelect('#nav-search-input');
 		getOrgAuthTree($("#workGroupTree"),'production/waitWorkTimeMtn',"1,2,3,4",'1',3);
 		$('#workGroupTree').height($(window).height()-20)
@@ -717,11 +718,16 @@ function compareTime(beginTime,endTime){
     	arrEndTime[1] = timearr[1]==undefined?0:timearr[1]; 
     	arrEndTime[2] = timearr[2]==undefined?0:timearr[2]; 
     }
-
-    var allStartDate = new Date(arrStartDate[0], arrStartDate[1], arrStartDate[2], arrStartTime[0], arrStartTime[1], arrStartTime[2]);  
-    var allEndDate = new Date(arrEndDate[0], arrEndDate[1], arrEndDate[2], arrEndTime[0], arrEndTime[1], arrEndTime[2]);   
- 
-    if (allStartDate.getTime() > allEndDate.getTime()) {    
+    var start_date_str=arrStartDate[0]+"/"+arrStartDate[1]+"/"+arrStartDate[2]+" "+arrStartTime[0]+":"+arrStartTime[1]+":"+arrStartTime[2];
+    var end_date_str=arrEndDate[0]+"/"+arrEndDate[1]+"/"+arrEndDate[2]+" "+arrEndTime[0]+":"+arrEndTime[1]+":"+arrEndTime[2];
+    /*var allStartDate = new Date(parseInt(arrStartDate[0],10), parseInt(arrStartDate[1],10), parseInt(arrStartDate[2],10),
+    		parseInt(arrStartTime[0],10), parseInt(arrStartTime[1],10), parseInt(arrStartTime[2],10));  
+    var allEndDate = new Date(parseInt(arrEndDate[0],10), parseInt(arrEndDate[1],10), parseInt(arrEndDate[2],10),
+    		parseInt(arrEndTime[0],10), parseInt(arrEndTime[1],10), arrEndTime[2]);  */ 
+    var allStartDate = new Date(start_date_str);
+    var allEndDate = new Date(end_date_str);
+    if (allStartDate.getTime() > allEndDate.getTime()) { 
+    	//alert(allStartDate+"/"+allEndDate)
         return 1;  
     } else if(allStartDate.getTime() == allEndDate.getTime()){  
     	return 0;

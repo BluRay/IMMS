@@ -162,15 +162,15 @@
 							</div>
 
 							<div class="col-xs-8">
-								<table id="partsListTable" style="width: 1500px; margin-left: -12px;" class="table  table-bordered">
+								<table id="partsListTable" style="width: 1500px; margin-left: -15px;" class="table  table-bordered">
 									<thead>
 										<tr>
-											<td align="left" width="10%">物料编码</td>
+											<td align="left" width="12%">物料编码</td>
 											<td align="left" width="15%">零部件编号</td>
 											<td align="left" width="20%">零部件名称</td>
 											<td align="left" width="15%">材料/规格</td>
 											<td align="left" width="25%">供应商</td>
-											<td align="left" width="15%">批次</td>
+											<td align="left" width="13%">批次</td>
 										</tr>
 									</thead>
 									<tbody>

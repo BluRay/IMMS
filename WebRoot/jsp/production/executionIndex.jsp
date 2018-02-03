@@ -34,17 +34,13 @@
 <body class="no-skin" style="font-family: 'Microsoft YaHei';">
 	<!-- 头 -->
 	<!-- 身 -->
-	<div class="main-container" id="main-container">
+	<div class="main-container" id="main-container" style="overflow: hidden;">
 		<!-- 左边菜单 -->
 		<!-- 主体 -->
 		<div class="main-content">
 			<!-- 路径和搜索框 -->
-			<div class="main-content-inner">
 				<div class="breadcrumbs ace-save-state"  style="height: 45px;" id="breadcrumbs">
 					<ul class="breadcrumb">
-<!-- 						<li><i class="ace-icon fa fa-home home-icon"></i><a
-							href="/BMS/index">首页</a></li>
-						<li><a href="executionindex">车间工序</a></li> -->
 						<li class="active">
 						<select name="" id="search_factory" class="myselect">
 						</select>
@@ -66,7 +62,7 @@
 				 		<canvas id="first_canvas" width=1100 height=80 style="border: solid 0px;"> 
 					
 						</canvas> 
-			</div>
+					</div>
 					</div>
 					</div>
 				</div>

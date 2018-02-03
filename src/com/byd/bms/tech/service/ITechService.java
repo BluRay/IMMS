@@ -54,7 +54,6 @@ public interface ITechService {
 	
 	public List<Map<String,Object>> getFollowingUpDetailList1(Map<String, Object> conditionMap);
 	
-	public int checkRemoveFollowingRole(String staff_number);
 	public int editFollowingUp(String curTime,String edit_user,String ids,String task_detail_id,String update_status,String workshop);
 	public int removeFollowingUp(String curTime,String edit_user,String ids,String task_detail_id,String update_status,String workshop,String status_list);
 	public int removeFollowingUpPre(String curTime,String edit_user,String ids,String task_detail_id,String update_status,String workshop,String status_list);

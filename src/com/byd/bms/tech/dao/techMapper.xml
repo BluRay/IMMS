@@ -1791,10 +1791,6 @@ LEFT JOIN BMS_BASE_USER AS u ON u.id = f.confirmor_id
 		order by f.confirmor_date
 	</select>
 	
-	<select id="checkRemoveFollowingRole" parameterType="String" resultType="int">
-	SELECT COUNT(id) FROM BMS_BASE_USER_ROLE WHERE role_id=14 AND staff_number = #{staff_number}
-	</select>
-	
 	<!-- 技改跟进-修改 -->
 	<update id="updateFollowingUp" parameterType="List">
 		<foreach collection="list" index="index" item="item"
