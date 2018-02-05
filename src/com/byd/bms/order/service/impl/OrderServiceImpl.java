@@ -34,6 +34,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.sun.media.jfxmedia.logging.Logger;
 @Service
 @DataSource("dataSourceMaster")
 public class OrderServiceImpl implements IOrderService {
@@ -424,4 +425,20 @@ public class OrderServiceImpl implements IOrderService {
 		}
     	return result;
     }
+
+	@Override
+	public void editOrderColor(Map<String, Object> condMap, ModelMap model) {
+		try{
+			orderDao.updateOrderColor(condMap);
+			model.put("success", true);
+			model.put("message", "维护成功！");
+		}catch(Exception e){
+			model.put("success", false);
+			model.put("message", "维护失败！");
+			throw e;
+		}
+		
+	}
+    
+    
 }

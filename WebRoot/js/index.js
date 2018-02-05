@@ -4,7 +4,7 @@ var chart3;
 var colors=[  '#a8ef9d','#24CBE5','#629b58', '#058DC7', '#FF9655','#50B432', '#FFF263','#ED561B', '#DDDF00', '#6AF9C4'];
 $(document).ready(function() {
 	
-	/*if(window.location.href.indexOf("10.23.1.77:8080")>=0){
+/*	if(window.location.href.indexOf("10.23.1.77:8080")>=0){
 		window.history.pushState({},0,"10.23.1.77/BMS/index");
 		window.open("http://10.23.1.77/BMS/index",'self'); 
 	}*/

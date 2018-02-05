@@ -30,4 +30,5 @@ public interface IOrderService {
 	public void saveOrderConfigAllot(List detail_list);
 	public ModelMap getOrderQueryData(Map<String, Object> condMap);
 	public void getOrderConfigTotalQty(String order_id, ModelMap model);
+	public void editOrderColor(Map<String, Object> condMap, ModelMap model);
 }

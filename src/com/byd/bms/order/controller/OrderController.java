@@ -543,4 +543,31 @@ public class OrderController extends BaseController{
 		model.put("data", map);
 		return model;
 	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/orderColor")
+	public ModelAndView orderColor(){ 
+		mv.setViewName("order/orderColor");
+        return mv;  
+    } 
+	
+	/**
+	 * 根据订单id更新订单颜色
+	 * @return
+	 */
+	@RequestMapping("/editOrderColor")
+	@ResponseBody
+	public ModelMap editOrderColor(){
+		model.clear();
+		String order_id=request.getParameter("order_id");
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("order_id", order_id);
+		condMap.put("order_color", request.getParameter("order_color"));
+		orderService.editOrderColor(condMap,model);
+		return model;
+	}
+	
 }

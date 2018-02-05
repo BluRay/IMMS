@@ -55,6 +55,8 @@ $(document).ready(function () {
         $("#partsListTable tbody").html("");
         $("#configListTable tbody").html("");
         batch_validate=[];
+        $("#exec_color").html("<option value='暂无'>暂无</option>").css('display',"none");
+        $("#bus_color_td").css("display","none")
     }
 	
 	function ajaxEnter(){
@@ -189,7 +191,8 @@ $(document).ready(function () {
 		                "field_name":field_name,
 		                "order_type":orderType,
 		                "plan_node_name":plan_node,
-		                "parts_list":JSON.stringify(parts_list)
+		                "parts_list":JSON.stringify(parts_list),
+		                "bus_color":$("#exec_color").val()
 		            },
 		            success: function(response){
 		                resetPage();
@@ -268,6 +271,29 @@ $(document).ready(function () {
                 		$("#infoStatus").html(bus.status=='0'?'正常':'冻结');
                 		$("#btnSubmit").removeAttr("disabled");
                     	
+                		//added 2018-02-03 涂装下线工序车辆颜色从订单颜色中选择
+                		if('涂装下线'==plan_node){
+                			$("#bus_color_td").css("display","")
+                			$("#exec_color").css("display","")
+                			var order_color=bus.order_color;
+                			if(order_color.trim().length>0){
+                				$("#exec_color").html("");
+                				color_list=order_color.split(",");
+                				$.each(color_list,function(i,color){
+                					var option="<option value='"+color+"'>"+color+"</option>";
+                					if (bus.bus_color==color){
+                						option="<option value='"+color+"' selected='selected'>"+color+"</option>";
+                					}
+                					
+                					$("#exec_color").append(option)
+                				})
+                			}else{
+                				$("#exec_color").html("<option value='暂无'>暂无</option>");
+                			}
+                			
+                			//$("#exec_color").val(bus.bus_color)
+                		}
+                		
                     	/*if('检测线上线'==plan_node&&(bus.testline_online_date.trim().length==0||!bus.testline_online_date)){
                     		var dialog = $("#dialog-config" ).removeClass('hide').dialog({
                 				width:400,

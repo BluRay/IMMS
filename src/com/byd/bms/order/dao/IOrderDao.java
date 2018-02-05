@@ -38,5 +38,6 @@ public interface IOrderDao {
 	public List queryOrderQueryList(Map<String, Object> condMap);
 	public int queryOrderQueryListCount(Map<String, Object> condMap);
 	public int queryOrderConfigTotalQty(String order_id);
+	public void updateOrderColor(Map<String, Object> condMap);
 	
 }

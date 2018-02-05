@@ -83,7 +83,7 @@
 	
 	<select id="getOrderDetailList" parameterType="Map" resultType="com.byd.bms.order.model.BmsFactoryOrderDetail">
 		select d.id id,d.busnum_start busnum_start,d.busnum_end busnum_end,d.id factory_order_id,(d.busnum_end-d.busnum_start+1) production_qty,d.factory_id factory_id,o.order_no order_no,o.order_name order_name,
-		o.order_code order_code,o.order_type order_type,o.order_area order_area,o.order_qty order_qty,o.productive_year productive_year,t.bus_type_code bus_type_code,o.memo,o.customer,
+		o.order_code order_code,o.order_type order_type,o.order_area order_area,o.order_qty order_qty,o.productive_year productive_year,t.bus_type_code bus_type_code,o.memo,o.customer,o.order_color,
 		(SELECT ifnull(max(cast(reverse(substr(reverse(bus_number),1,instr(reverse(bus_number),'-')-1)) as signed)),0) FROM BMS_PLAN_BUS where order_id=d.order_id and factory_id=d.factory_id and factory_order_id=d.id) maxbusnum,
 		(SELECT ifnull(min(cast(reverse(substr(reverse(bus_number),1,instr(reverse(bus_number),'-')-1)) as signed)),0) FROM BMS_PLAN_BUS where order_id=d.order_id and factory_id=d.factory_id and factory_order_id=d.id) minbusnum,
 		d.order_id order_id,o.delivery_date delivery_date,f.factory_name,d.editor_id editor_id,d.edit_date edit_date,d.bus_number_count bus_number_count,d.bus_number_start bus_number_start
@@ -514,4 +514,9 @@
 	<select id="queryOrderConfigTotalQty" parameterType="String" resultType="int">
 		select ifnull(sum(oc.config_qty),0) from BMS_OR_ORDER_CONFIG oc where oc.order_id=#{order_id}
 	</select>
+	
+	<update id="updateOrderColor" parameterType="Map">
+		update BMS_OR_ORDER set order_color=#{order_color}
+		where id=#{order_id}
+	</update>
 </mapper>

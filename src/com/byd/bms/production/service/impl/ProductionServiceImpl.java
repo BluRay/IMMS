@@ -100,6 +100,11 @@ public class ProductionServiceImpl implements IProductionService {
 			if(lastPlanNode==null){
 				productionDao.saveScanRecord(condMap);
 				productionDao.updateBusProcess(condMap);
+				
+				//added on 2018-02-03 涂装下线更新车辆颜色
+				if("涂装下线".equals(condMap.get("plan_node_name"))){
+					productionDao.updateBusInfo(condMap);
+				}
 			}else{
 				condMap.put("last_process_name", lastPlanNode.get("process_name"));
 				//判断上一个计划节点是否扫描，未扫描则提示先扫描上一个计划节点
@@ -111,6 +116,11 @@ public class ProductionServiceImpl implements IProductionService {
 				}else{
 					productionDao.saveScanRecord(condMap);
 					productionDao.updateBusProcess(condMap);
+					
+					//added on 2018-02-03 涂装下线更新车辆颜色
+					if("涂装下线".equals(condMap.get("plan_node_name"))){
+						productionDao.updateBusInfo(condMap);
+					}
 					rMap.put("success", true);
 					rMap.put("message", "扫描成功！");
 				}

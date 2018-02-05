@@ -221,22 +221,6 @@ $(document).ready(function () {
 	});  */
 	
 	//左侧上角四个按钮事件
-	$("#index_report_bt").on("click",function(){
-		var obj = {id:"人员利用率",title:"人员利用率",close:'true',url: '/BMS/report/staffUseRate',icon:'menu-icon fa fa-signal green'};
-		addTabs(obj);
-	}); 
-	$("#index_pencil_bt").on("click",function(){
-		var obj = {id:"bt02",title:"车间计划达成率",close:'true',url: '/BMS/report/workshopRateReport',icon:'menu-icon fa fa-pencil green'};
-		addTabs(obj);
-	}); 
-	$("#index_users_bt").on("click",function(){
-		var obj = {id:"bt03",title:"工厂产量",close:'true',url: '/BMS/report/factoryOutputReport',icon:'menu-icon fa fa-users green'};
-		addTabs(obj);
-	}); 
-	$("#index_cogs_bt").on("click",function(){
-		var obj = {id:"bt04",title:"计划达成",close:'true',url: '/BMS/plan/planSearch',icon:'menu-icon fa fa-cogs green'};
-		addTabs(obj);
-	});
 	
 	$("#sidebar-shortcuts-large button").click(function(e){
 		var url=$(e.target).data("url");

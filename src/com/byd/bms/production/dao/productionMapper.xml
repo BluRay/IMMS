@@ -25,7 +25,7 @@
 	</select>
 	
 	<select id="queryBusInfo" parameterType="String" resultType="Map">
-		select b.*,f.factory_name,CONCAT(o.order_name,t.bus_type_code,' ',o.order_qty,'台') AS order_desc,o.order_area,o.order_no,
+		select b.*,f.factory_name,CONCAT(o.order_name,t.bus_type_code,' ',o.order_qty,'台') AS order_desc,o.order_area,o.order_no,o.order_color,
 		case b.status when '0' then '正常' else '冻结' end as status,p.factory,p.workshop,p.line,p.process_name,o.order_type,o.bus_type_id
 		from BMS_PLAN_BUS b
 		left join BMS_BASE_FACTORY f on b.factory_id=f.id

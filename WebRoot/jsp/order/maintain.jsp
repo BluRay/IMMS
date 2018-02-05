@@ -307,6 +307,7 @@
 	<script src="../assets/js/jquery.dataTables.bootstrap.js"></script>
 	<script src="../assets/js/dataTables.fixedColumns.min.js"></script>
 	<script src="../assets/js/dataTables.rowGroup.js"></script>
+	<script src="../assets/js/ace-elements.min.js"></script>
 	<script src="../assets/js/ace/elements.onpage-help.js"></script>
 	<script src="../assets/js/ace/ace.onpage-help.js"></script>
 	<script src="../assets/js/bootstrap3-typeahead.js"></script>
@@ -314,6 +315,7 @@
 	<script src="../assets/js/dataTables.buttons.js"></script>
 	<script src="../assets/js/buttons.colVis.js"></script>
     <script src="../assets/js/buttons.html5.js"></script>
+    <script src="../assets/js/bootstrap-tag.min.js"></script>
 	<script src="../js/jsrender.min.js"></script>
 	<script src="../js/common.js"></script>
 	<script src="../js/order/maintain.js"></script>

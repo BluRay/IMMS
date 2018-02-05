@@ -271,6 +271,7 @@ public class ProductionController extends BaseController {
 		String curTime = df.format(new Date());
 		String userid=String.valueOf(session.getAttribute("user_id"));
 		String order_id=request.getParameter("order_id");
+		String bus_color= request.getParameter("bus_color");
 		
 		condMap.put("factory_id", factory_id);
 		condMap.put("factory_name", factory_name);
@@ -285,6 +286,7 @@ public class ProductionController extends BaseController {
 		condMap.put("order_id", order_id);
 		condMap.put("editor_id", userid);
 		condMap.put("edit_date", curTime);
+		condMap.put("bus_color", bus_color);
 		
 		/**
 		 * 关键零部件列表
@@ -304,7 +306,7 @@ public class ProductionController extends BaseController {
 		}
 		
 		model.addAllAttributes(productionService.scan(condMap,parts_list));
-
+		
 		return model;
 	}
 	

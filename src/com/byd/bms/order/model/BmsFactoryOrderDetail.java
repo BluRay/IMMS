@@ -26,6 +26,7 @@ public class BmsFactoryOrderDetail {
 	private String memo;
 	private String order_area;
 	private String customer;
+	private String order_color;
 	
 	public int getId() {
 		return id;
@@ -176,6 +177,12 @@ public class BmsFactoryOrderDetail {
 	}
 	public void setCustomer(String customer) {
 		this.customer = customer;
+	}
+	public String getOrder_color() {
+		return order_color;
+	}
+	public void setOrder_color(String order_color) {
+		this.order_color = order_color;
 	}
 
 }

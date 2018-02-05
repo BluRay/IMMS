@@ -123,6 +123,7 @@
 													<td align="left">&nbsp;监控点</td>
 													<td align="left">&nbsp;监控名</td>
 													<td align="left">&nbsp;操作员</td>
+													<td id="bus_color_td" align="left" style="display:none">&nbsp;颜色</td>
 												</tr>
 												<tr>
 													<td><select disabled="disabled" name="exec_factory"
@@ -144,6 +145,11 @@
 														class="input-small">
 															<option value="<%=session.getAttribute("user_id")%>"><%=session.getAttribute("display_name")%></option>
 													</select></td>
+													<td >
+														<select name="exec_color" id="exec_color" class="input-medium" style="display:none">
+															<option value='暂无'>暂无</option>
+														</select>
+													</td>
 												</tr>
 											</table>
 										</div>
