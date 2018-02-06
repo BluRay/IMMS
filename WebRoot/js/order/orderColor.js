@@ -327,7 +327,19 @@ function ajaxEditConfirm (argument){
 
 function ajaxEdit(order_id){
 	original="";
-
+	var tags=$('#order_color').data('tag')
+	var color_spans=$(".tags").find(".tag");
+	var colors_old=tags.values.join(",");
+	//alert(colors_old)
+	var color_list=colors_old.split(",")
+	for(var i=0;i<color_spans.length;i++){
+		var color=color_list[i];
+		//alert(color)
+		var index=tags.inValues(color)
+		tags.remove(index)
+	}
+	
+	
 	reduce_series_list=new Array();//重置减少分配数量时剩余流水段
 	//查询订单信息
 	$.ajax({
@@ -341,7 +353,7 @@ function ajaxEdit(order_id){
 				$.each(response.data,function(index,value){
 					if(index == 0){
 						//填充订单基本信息
-						var tags=$('#order_color').data('tag')
+						
 						var colors=value.order_color||"";
 						$.each(colors.split(","),function(i,color){
 							if(color.trim().length>0){

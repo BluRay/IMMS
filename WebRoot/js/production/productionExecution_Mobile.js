@@ -181,14 +181,14 @@ function initPage(){
 		if($('#exec_workshop :selected').text()=='底盘'||$('#exec_workshop :selected').text()=='检测线'){
 
 			$.each(parts_list,function(i,parts){
-				if(parts.parts_id !=undefined&&parts.process==$("#exec_processname").val()&&(parts.parts_name=='VIN编码'||parts.parts_name=='左电机号'||parts.parts_name=='右电机号')){
+				if(parts.parts_id !=undefined&&parts.process==$("#exec_processname").val()&&(parts.parts_name=='VIN编码'||parts.parts_name=='VIN码'||parts.parts_name=='左电机号'||parts.parts_name=='右电机号')){
 					if(parts.batch==undefined||parts.batch.trim().length==0){
 						enterflag=false;
 						alert(plan_node+"扫描前，请将VIN编码和左右点击号信息录入完整！");
 						return false;
 					}
 				}
-				if(parts.parts_name=='VIN编码'&&parts.batch!=vin&&parts.process==$("#exec_processname").val()){
+				if((parts.parts_name=='VIN编码'||parts.parts_name=='VIN码') && parts.batch!=vin&&parts.process==$("#exec_processname").val()){
 					alert("VIN编码校验失败，请核对该车的VIN编码！");
 					enterflag=false;
 					return false;

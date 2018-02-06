@@ -123,7 +123,8 @@
 						<label class="col-sm-3 control-label no-padding-right" for="">*&nbsp;颜色</label>
 						<div class="col-sm-9">
 							<input type="text" class="input-large" id="order_color"
-								placeholder="订单颜色" id="edit_customer" />
+								placeholder="" id="edit_customer" />
+							输入一种颜色后按"Enter"键	
 						</div>
 					</div> 
 					<div class="form-group">
