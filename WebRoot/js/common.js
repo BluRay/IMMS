@@ -526,7 +526,7 @@ function getAllFromOptions(elementId,valName){
 
 //自动隐藏的信息提示框
 function fadeMessageAlert(title,message, alertClass) {
-	alertClass=alertClass|| 'gritter-info';
+	alertClass='gritter-success';
 	title=title||'系统提示：';
 	/*$("#messageAlert").removeClass("alert-error alert-success").addClass(
 			alertClass);

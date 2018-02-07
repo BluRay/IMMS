@@ -116,8 +116,8 @@
 													<i class="ace-icon fa fa-arrow-left"></i>
 													忘记密码
 												</a>-->&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-												<a href="../MozillaFirefox.rar" class="forgot-password-link">FireFox浏览器</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-												<a href="../BMS系统操作手册20170822.pptx" class="forgot-password-link">操作手册</a>
+												<a href="../MozillaFirefox.zip" class="forgot-password-link">FireFox浏览器</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+												<a href="../BMS平台操作手册.pptx" class="forgot-password-link">操作手册</a>
 											</div>
 											<div>
 												<!-- <a href="#" data-target="#signup-box" class="user-signup-link">我要注册<i class="ace-icon fa fa-arrow-right"></i>

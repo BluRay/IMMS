@@ -11,6 +11,8 @@ String display_name = (String)session.getAttribute("display_name");
 } */
 %>
 <head>
+<link rel="stylesheet" href="/BMS/assets/css/jquery-ui.min.css" />
+<link rel="stylesheet" href="/BMS/assets/css/jquery.gritter.css" />
 <link rel="stylesheet" href="/BMS/assets/css/bootstrap.min.css" />
 <link rel="stylesheet" href="/BMS/assets/css/font-awesome.min.css" />
 <!-- text fonts -->

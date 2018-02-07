@@ -394,8 +394,10 @@ public class QualityServiceImpl implements IQualityService {
 		Map<String, Object> conditionMap=new HashMap<String, Object> ();
 		conditionMap.put("orderId", logs.getOrder_id());
 		Map<String,Object> map=orderDao.getOrderByNo(conditionMap);
-		String order_no=(String)map.get("order_no");
-		logs.setOrder_no(order_no);
+		if(map!=null && map.get("order_no")!=null){
+			String order_no=(String)map.get("order_no");
+			logs.setOrder_no(order_no);
+		}
 		return logs;
 	}
 	@Override

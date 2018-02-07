@@ -171,6 +171,14 @@ $(document).ready(function () {
 			 }
 		}
 		
+		/**
+		 * 涂装下线必须选择车辆颜色
+		 */
+		if($("#exec_color").val()==""&&plan_node=="涂装下线"){
+			enterflag=false;
+			alert("请选择车辆颜色!")
+		}
+		
 		if(enterflag){
 			 $.ajax({
 		            type: "post",
@@ -276,9 +284,14 @@ $(document).ready(function () {
                 			$("#bus_color_td").css("display","")
                 			$("#exec_color").css("display","")
                 			var order_color=bus.order_color;
-                			if(order_color.trim().length>0){
-                				$("#exec_color").html("");
+                			if(order_color.trim().length>0){     				
                 				color_list=order_color.split(",");
+                				if(color_list.length>1){
+                					$("#exec_color").html("<option value=''>请选择</option>");	
+                				}else{
+                					$("#exec_color").html("");
+                				}
+                				
                 				$.each(color_list,function(i,color){
                 					var option="<option value='"+color+"'>"+color+"</option>";
                 					if (bus.bus_color==color){

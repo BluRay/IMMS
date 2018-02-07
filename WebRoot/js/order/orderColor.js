@@ -119,7 +119,7 @@ function ajaxQuery(){
 		
 		},
 		columns: [
-		            {"title":"订单编号","class":"center","data":"order_no",/*"render": function ( data, type, row ) {
+		            {"title":"订单编号","class":"center","width":"100","data":"order_no",/*"render": function ( data, type, row ) {
 	                    return "<input style='border:0;width:100%;height:100%;background-color:transparent;text-align:center;' value='"+data+"' />";
 	                },*/"defaultContent": ""},
 		            {"title":"订单描述","class":"center","data":"order_name_str","defaultContent": ""},

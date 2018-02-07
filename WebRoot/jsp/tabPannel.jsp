@@ -17,7 +17,7 @@
 						   			  		'</div>'+
 											'<div class="nav-search" id="nav-search">'+
 												'<form class="form-search">'+
-													'<span><i class="ace-icon fa fa-book blue"></i><a href="../BMS系统操作手册20170822.pptx">《BMS操作手册》</a></span> '+
+													'<span><i class="ace-icon fa fa-book blue"></i><a href="../BMS平台操作手册.pptx">《BMS操作手册》</a></span> '+
 													'<span class="input-icon">'+
 														'<input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" /><i class="ace-icon fa fa-search nav-search-icon"></i>'+
 													'</span>'+

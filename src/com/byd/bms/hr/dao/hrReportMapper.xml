@@ -353,8 +353,12 @@
 		(select round(sum(es.real_work_hour),4) from BMS_HR_TECH_SALARY es 
 		where es.factory=#{factory} and es.workshop=#{workshop} 
 		and es.staff_number=st.staff_number and es.work_date like concat(#{month},'%')) ecnwh_total,
-		(select round(sum(r.add-r.deduct),1) from BMS_HR_REWARDS r where r.staff_number=st.staff_number and r.rewards_date like concat(#{month},'%') ) dscore_total,
-		(select sum(r.add-r.deduct)*5 from BMS_HR_REWARDS r where r.staff_number=st.staff_number and r.rewards_date like concat(#{month},'%') ) deduct_pay_total,
+		(select round(sum(r.add-r.deduct),1) from BMS_HR_REWARDS r 
+		where r.staff_number=st.staff_number and r.rewards_factory=#{factory} and r.rewards_workshop=#{workshop}
+		and r.rewards_date like concat(#{month},'%') ) dscore_total,
+		(select sum(r.add-r.deduct)*5 from BMS_HR_REWARDS r 
+		where r.staff_number=st.staff_number and r.rewards_factory=#{factory} and r.rewards_workshop=#{workshop}
+		and r.rewards_date like concat(#{month},'%') ) deduct_pay_total,
 		s.status,a.attendance_days,a.attendance_hours,ss.pre_sale_salary,ss.after_sale_salary,ss.support_salary,ss.hourly_salary,ss.holiday_salary,ss.paid_leave_salary,ss.specical_salary,		
 		<choose>	
 		<when test="workshop=='自制件'">
