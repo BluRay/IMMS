@@ -11,6 +11,7 @@
 		<link rel="stylesheet" href="../assets/css/jquery-ui.min.css" />
 		<link rel="stylesheet" href="../assets/css/jquery-ui.custom.min.css" />
 		<link rel="stylesheet" href="../assets/css/jquery.gritter.css" />
+		<link rel="stylesheet" href="../css/printable.css" type="text/css" media="print">
 		<meta name="description" content="Common Buttons &amp; Icons" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 	</head>
@@ -21,15 +22,14 @@
 					<div id="form" class="well form-search">
 						<table>
 							<tr>
-								<td>工厂：</td>
-								<td><select id="search_factory" class="input-small" style="height: 30px;width:100px"></select></td>
 								<td>车型：</td>
 								<td><select id="search_bus_type" class="input-small" style="height: 30px;width:100px"></select></td>
 								<td>&nbsp;订单：</td>
 								<td><input id="search_order_no" placeholder="请输入订单编号..." style="height: 30px;width:110px" type="text"></td>
 								<td>&nbsp;VIN/车号：</td>
-								<td><input id="search_busNum" placeholder="请输入VIN/车号..." style="height: 30px;width:150px" type="text"></td>
-								<td></td>
+								<td><input id="search_busNum" placeholder="请输入VIN/车号..." style="height: 30px;width:175px" type="text"></td>
+								<td>&nbsp;是否合格：</td>
+								<td><select id="search_isPassed" class="input-small" style="height: 30px;width:100px"><option value="合格">合格</option><option value="不合格">不合格</option></select></td>
 							</tr>
 							<tr>
 								<td>检测日期：</td>

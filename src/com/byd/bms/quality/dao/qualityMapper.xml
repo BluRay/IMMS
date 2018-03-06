@@ -611,6 +611,19 @@
 	WHERE vin=#{VIN}
 	</update>
 	
+	<select id="getProcessFaultReportData" parameterType="Map" resultType="Map">
+	SELECT COUNT(*) AS fault_count,f.factory_name AS plant_org FROM bms_qm_process_problem p
+	LEFT JOIN bms_base_factory f ON p.factory_id = f.id
+	WHERE f.factory_name IS NOT NULL 
+	<if test="start_date !=null and start_date !=''">
+	AND DATE_FORMAT(p.fault_date,'%Y-%m-%d') >= #{start_date}
+	</if>
+	<if test="end_date !=null and end_date !=''">
+	<![CDATA[ AND DATE_FORMAT(p.fault_date,'%Y-%m-%d') <= #{end_date} ]]>
+	</if>
+	GROUP BY f.factory_name
+	</select>
+	
 	<select id="getBusTestingDateReport" parameterType="Map" resultType="Map">
 		SELECT I.* FROM JCX_BUS_INFO I 
 		LEFT OUTER JOIN bms.BMS_PLAN_BUS B ON I.vin = B.vin
@@ -619,7 +632,10 @@
 		AND I.factory_id=#{factory_id}
 		</if>
 		<if test="vin !=null and vin !=''">
-		AND (I.vin=#{vin} OR I.bus_number=#{vin})
+		AND (I.vin LIKE CONCAT('%',#{vin},'%') OR I.bus_number LIKE CONCAT('%',#{vin},'%'))
+		</if>
+		<if test="isPassed !=null and isPassed !=''">
+		AND I.is_passed=#{isPassed}
 		</if>
 		<if test="bus_type !=null and bus_type !=''">
 		AND I.bus_type=#{bus_type}
@@ -651,7 +667,10 @@
 		AND I.factory_id=#{factory_id}
 		</if>
 		<if test="vin !=null and vin !=''">
-		AND (I.vin=#{vin} OR I.bus_number=#{vin})
+		AND (I.vin LIKE CONCAT('%',#{vin},'%') OR I.bus_number LIKE CONCAT('%',#{vin},'%'))
+		</if>
+		<if test="isPassed !=null and isPassed !=''">
+		AND I.is_passed=#{isPassed}
 		</if>
 		<if test="bus_type !=null and bus_type !=''">
 		AND I.bus_type=#{bus_type}
@@ -746,10 +765,12 @@
 	</update>
 	
 	<select id="getProcessFaultList" parameterType="Map" resultType="Map">
-	SELECT p.*,f.factory_name,u.display_name AS editor_name,b.bus_type_code FROM BMS_QM_PROCESS_PROBLEM p
+	SELECT p.*,o.order_no,f.factory_name,f.area,u.display_name AS editor_name,b.bus_type_code FROM BMS_QM_PROCESS_PROBLEM p
 	LEFT JOIN BMS_BASE_FACTORY f ON p.factory_id = f.id
 	LEFT JOIN BMS_BASE_BUS_TYPE b ON p.bus_type = b.id
 	LEFT JOIN BMS_BASE_USER u on p.editor_id=u.id
+    LEFT JOIN BMS_PLAN_BUS s on p.vin = s.vin
+	LEFT JOIN BMS_OR_ORDER o on s.order_id = o.id
 	WHERE 1=1 
 		<if test="factory_id != null and factory_id != 0">
 			AND p.factory_id = #{factory_id}
@@ -770,6 +791,9 @@
 			<![CDATA[ AND p.fault_date <= #{fault_date_end} ]]>
 		</if>
 		ORDER BY edit_date DESC
+		<if test="start !=null">
+			LIMIT ${start} ,${length} 
+		</if>
 	</select>
 	<select id="getProcessFaultCount" parameterType="Map" resultType="int">
 	SELECT COUNT(p.id) FROM BMS_QM_PROCESS_PROBLEM p

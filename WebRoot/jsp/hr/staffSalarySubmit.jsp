@@ -85,7 +85,7 @@
 
 					<div class="row">
 						<div class="col-xs-12" >						
-							<table id="tableResult" class="table table-striped table-bordered table-hover" style="font-size: 12px;overflow-x:auto;width:2600px;table-layout:fixed">
+							<table id="tableResult" class="table table-striped table-bordered table-hover" style="font-size: 12px;overflow-x:auto;width:3000px;table-layout:fixed">
 						</table>
 						</div>
 					</div>

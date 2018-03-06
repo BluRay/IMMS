@@ -64,8 +64,8 @@ function drawKeyPartsTable(tableId,data){
 		            {"title":"供应商名称","class":"center","data": "vendor","defaultContent": ""},
 		            {"title":"装配车间","class":"center","data":"workshop","defaultContent":""},
 		            {"title":"工序","class":"center","data":"process","defaultContent": ""},	
-		            {"title":"3C件","class":"center","data":"ccc","defaultContent": "","width":"6%"},
-		            {"title":"批次","class":"center","data":"cccNo","defaultContent": ""},	
+		            {"title":"备注","class":"center","data":"ccc","defaultContent": "","width":"6%"},
+		            {"title":"追溯信息","class":"center","data":"cccNo","defaultContent": ""},	
 		          ]	
 	});
 }

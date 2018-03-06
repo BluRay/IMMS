@@ -17,6 +17,7 @@ var line_selects_data;
 var parts_list;
 var parts_update_list=new Array();//非车间上下线工序提交该零部件信息
 var batch_validate=[];
+var enterflag=true;
 
 $(document).ready(function () {	
 	initPage();
@@ -60,7 +61,6 @@ $(document).ready(function () {
     }
 	
 	function ajaxEnter(){
-		var enterflag=true;
 		cur_key_name=$("#exec_processname").val();
 		var plan_node=$('#exec_process').find("option:selected").attr("plan_node");
 		var field_name=$('#exec_process').find("option:selected").attr("field_name");
@@ -394,6 +394,7 @@ $(document).ready(function () {
 	
 	
 	$(document).on("change",".batch",function(e){
+		enterflag=true;
 		$(this).focus();
 		var tr=$(e.target).parent("td").parent("tr");
 		var batchInput=$(tr).find(".batch");
@@ -406,7 +407,8 @@ $(document).ready(function () {
 		if(parts.parts_name.indexOf('动力电池包')>=0&&(batch!='无'&&batch!='\\'&&batch!='\/')){
 			if(batch_validate.indexOf(batch)>=0){
 				alert("批次信息不能重复！");
-				$(batchInput).val("")
+				//$(batchInput).val("")
+				enterflag=false;
 				return false;
 			}
 			//数据库判断包含动力电池包的零部件批次是否与该批次信息重复
@@ -414,7 +416,8 @@ $(document).ready(function () {
 		
 			if(exist_flag=="no"){
 				alert("该批次信息已存在，不能重复录入！");
-				$(batchInput).val("")
+				//$(batchInput).val("")
+				enterflag=false;
 				return false;
 			}
 			
@@ -657,6 +660,7 @@ function checkVinMotor(){
 
 function checkPartsBatch(batch){
 	var flag="yes";
+	if(batch.trim().length>0)
 	$.ajax({
 		url:'checkPartsBatch',
 		dataType : "json",

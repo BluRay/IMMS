@@ -5,9 +5,12 @@
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta charset="utf-8" />
-		<title>制程异常</title>
+		<title>售后问题反馈</title>
 		<meta name="description" content="Common Buttons &amp; Icons" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+		<link rel="stylesheet" href="../css/bootstrap-table.css">
+		<link rel="stylesheet" href="../css/bootstrap-editable.css">
+		
 		<link rel="stylesheet" href="../assets/css/jquery-ui.min.css" />
 		<link rel="stylesheet" href="../assets/css/jquery-ui.custom.min.css" />
 		<link rel="stylesheet" href="../assets/css/jquery.gritter.css" />
@@ -22,15 +25,17 @@
 								<td>责任工厂：</td>
 								<td><select id="search_factory" class="form-control" style="width:90px"></select></td>
 								<td>&nbsp;客户：</td>
-								<td><input id="search_customer_name" placeholder="客户..." style="width:80px" type="text"></td>
+								<td><input id="search_customer_name" placeholder="客户..." style="width:115px" type="text"></td>
 								<td>&nbsp;处理结果：</td>
-								<td><select id="search_resolve_result" class="input-small" style="width:70px"><option value="">全部</option><option value="0">已关闭</option><option value="1">处理中</option></select></td>
-								<td>&nbsp;故障现象：</td>
-								<td><input id="search_fault_phenomenon" placeholder="故障现象..." style="width:100px" type="text"></td>
+								<td><select id="search_resolve_result" class="input-small" style="width:90px"><option value="">全部</option><option value="0">已关闭</option><option value="1">处理中</option></select></td>
+							</tr>
+							<tr>
+								<td>故障现象：</td>
+								<td colspan=3><input id="search_fault_phenomenon" placeholder="故障现象..." style="width:250px" type="text"></td>
 								<td>&nbsp;反馈日期：</td>
 								<td colspan=3><input id="search_date_start" placeholder="开始时间..." style="width:90px" type="text" onClick="WdatePicker({el:'search_date_start',dateFmt:'yyyy-MM-dd'});"> - <input id="search_date_end" placeholder="结束时间..." style="width:90px" type="text" onClick="WdatePicker({el:'search_date_end',dateFmt:'yyyy-MM-dd'});"></td>
 								<td><input id="btnQuery" type="button" class="btn btn-sm btn-primary" value="查询" style="margin-left: 2px;"></input><input id="btnAdd" type="button" class="btn btn-sm btn-success" value="新增" style="margin-left: 2px;"></input></td>
-								<td><input id="btnBulkAdd" style="margin-left: 2px;" class="btn btn-sm btn-info" value="批导" type="button"></td>
+								<td><input id="btnBulkAdd" style="margin-left: 2px;" class="btn btn-sm btn-info" value="批导" type="button"></td>								
 							</tr>
 						</table>	
 					</div>
@@ -48,8 +53,13 @@
 						</form>
 					</div>
 					
-					<table id="tableData" class="table table-striped table-bordered table-hover" style="overflow-x:auto;font-size: 12px;">
-					</table>
+					<div id="toolbar"></div>
+					<table  style="font-weight:normal;width:1500px;" id="table" data-toolbar="#toolbar" data-search="false" data-show-refresh="true"
+				           data-show-toggle="false" data-show-columns="true" data-show-export="true" data-detail-view="false"
+				           data-detail-formatter="detailFormatter" data-minimum-count-columns="2" data-show-pagination-switch="true"
+				           data-pagination="true" data-id-field="id" data-page-list="[50, 100, 200, 500, ALL]"
+				           data-show-footer="false" data-side-pagination="server" data-response-handler="responseHandler">
+				    </table>
 					</div>
 			</div><!-- /.main-content -->
 			
@@ -172,13 +182,29 @@
 			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse"><i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i></a>
 		</div><!-- /.main-container -->
 	</body>
+<script>
+	var $table = $('#table'),$remove = $('#remove'),selections = [];
+</script>
+<style type="text/css">
+.fixed-table-toolbar .bs-bars, .fixed-table-toolbar .search, .fixed-table-toolbar .columns {
+	position: absolute;
+	margin-top: 88px;
+	right: 1px;
+	top: -40px;
+}
+.btn-default {
+	color: #333;
+	background-color: #fff;
+	border-color: #ccc;
+	height: 40px;
+	color: #fff;
+	background-color: #333;
+}
+</style>
 	<script src="../assets/js/fuelux/fuelux.tree.min.js"></script>
 	<script src="../assets/js/jquery-ui.min.js"></script>
 	<script src="../assets/js/jquery.ui.touch-punch.min.js"></script>
 	<script src="../assets/js/jquery.gritter.min.js"></script>
-	<script src="../assets/js/jquery.dataTables.min.js"></script>
-	<script src="../assets/js/jquery.dataTables.bootstrap.js"></script>
-	<script src="../assets/js/dataTables.fixedColumns.min.js"></script>
 	<script src="../assets/js/bootstrap3-typeahead.js"></script>
 	<script src="../assets/js/ace/elements.fileinput.js"></script>
 	<script type="text/javascript" src="../js/jquery.form.js"></script>

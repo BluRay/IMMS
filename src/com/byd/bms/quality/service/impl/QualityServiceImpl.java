@@ -5,12 +5,16 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import javax.annotation.Resource;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
+
 import com.byd.bms.order.dao.IOrderDao;
 import com.byd.bms.quality.dao.IQualityDao;
 import com.byd.bms.quality.service.IQualityService;
@@ -496,14 +500,13 @@ public class QualityServiceImpl implements IQualityService {
 		return qualityDao.updateQualityTarget(qualityTarget);
 	}
 	@Override
-	public Map<String, Object> getProcessFaultList(Map<String, Object> conditionMap) {
-		Map<String, Object> result=new HashMap<String,Object>();
-		int totalCount= qualityDao.getProcessFaultCount(conditionMap);
-		List<Map<String,String>> datalist= qualityDao.getProcessFaultList(conditionMap);
-		result.put("draw", conditionMap.get("draw"));
-		result.put("recordsTotal", totalCount);
-		result.put("recordsFiltered", totalCount);
-		result.put("data", datalist);
+	public Map<String, Object> getProcessFaultList(Map<String, Object> queryMap) {	
+		int totalCount=0;
+		List<Map<String,String>> datalist = qualityDao.getProcessFaultList(queryMap);
+		totalCount = qualityDao.getProcessFaultCount(queryMap);
+		Map<String, Object> result = new HashMap<String,Object>();
+		result.put("total", totalCount);
+		result.put("rows", datalist);
 		return result;
 	}
 	@Override
@@ -605,6 +608,13 @@ public class QualityServiceImpl implements IQualityService {
 		result.put("total", totalCount);
 		result.put("rows", datalist);
 		return result;
+	}
+	
+	@Override
+	public List<Map<String, Object>> getProcessFaultReportData(Map<String,Object> queryMap){
+		List<Map<String, Object>> data = new ArrayList<Map<String, Object>>();
+		data = qualityDao.getProcessFaultReportData(queryMap);		
+		return data;
 	}
 	
 	@Override

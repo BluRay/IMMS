@@ -97,7 +97,7 @@ function ajaxQuery(){
 					"search_date_start":$("#search_date_start").val(),
 					"search_date_end":$("#search_date_end").val(),
 					"parts_id":$("#search_parts :selected").attr("keyvalue"),
-					"orderColumn":"factory_id,order_id,parts_id"
+					"orderColumn":"p.factory_id,p.order_id,p.parts_id,p.edit_date desc"
 				};
             param.length = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
             param.start = data.start;//开始的记录序号

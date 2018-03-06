@@ -71,7 +71,7 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="bus_color" style="width:21%">&nbsp;颜       色：</label>
 						<div class="col-sm-3">
-							<input type="text"  class="input-medium" style="width:100%" placeholder="颜色..." id="bus_color" />
+							<input type="text"  class="input-medium" style="width:100%" placeholder="颜色..." id="bus_color" disabled/>
 						</div>
 						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="bus_seats" style="width:21%">&nbsp;座位数：</label>
 						<div class="col-sm-3">

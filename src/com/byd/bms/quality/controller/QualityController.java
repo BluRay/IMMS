@@ -11,7 +11,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.ServletContext;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.ContextLoader;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+
 import com.byd.bms.order.service.IOrderService;
 import com.byd.bms.quality.service.IQualityService;
 import com.byd.bms.quality.model.BmsBaseQCStdRecord;
@@ -780,8 +783,9 @@ public class QualityController extends BaseController {
 	public ModelMap getProcessFaultList(){
 		Map<String, Object> conditionMap = new HashMap<String, Object>();
 		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
-		int start=(request.getParameter("start")!=null)?Integer.parseInt(request.getParameter("start")):0;		//分页数据起始数
-		int length=(request.getParameter("length")!=null)?Integer.parseInt(request.getParameter("length")):500;	//每一页数据条数
+		int start=(request.getParameter("offset")!=null)?Integer.parseInt(request.getParameter("offset")):0;		//分页数据起始数
+		int length=(request.getParameter("limit")!=null)?Integer.parseInt(request.getParameter("limit")):500;	//每一页数据条数
+
 		conditionMap.put("draw", draw);
 		conditionMap.put("start", start);
 		conditionMap.put("length", length);
@@ -1522,6 +1526,29 @@ public class QualityController extends BaseController {
         return mv;  
     }
 	
+	@RequestMapping("/processFaultReport")
+	public ModelAndView processFaultReport(){
+		mv.setViewName("quality/processFaultReport");
+        return mv;  
+    }
+	
+	@RequestMapping("/getProcessProblemReportData")
+	@ResponseBody
+	public ModelMap getProcessFaultReportData(){
+		Map<String, Object> result = new HashMap<String, Object>();
+		Map<String,Object> conditionMap=new HashMap<String,Object>();
+		conditionMap.put("start_date", request.getParameter("start_date"));
+		conditionMap.put("end_date", request.getParameter("end_date"));
+		
+		List<Map<String, Object>> data = new ArrayList<Map<String, Object>>();
+		data = qualityService.getProcessFaultReportData(conditionMap);
+		result.put("series", data);
+		
+		mv.clear();
+		mv.getModelMap().addAllAttributes(result);
+		model = mv.getModelMap();
+		return model;
+	}
 	
 	@SuppressWarnings("rawtypes")
 	@RequestMapping("/getFaultLibList")
@@ -1984,6 +2011,12 @@ public class QualityController extends BaseController {
         return mv;  
     }
 	
+	@RequestMapping("/testingDateReportPrint")		//检测数据报表 打印
+	public ModelAndView testingDateReportPrint(){
+		mv.setViewName("quality/testingDateReportPrint");
+        return mv;
+	}
+	
 	/**
 	 * 查询检测线数据 制程品质->检测数据查询->查询
 	 */
@@ -2090,6 +2123,7 @@ public class QualityController extends BaseController {
 		condMap.put("bus_type", request.getParameter("bus_type"));
 		condMap.put("order_id", request.getParameter("order_id"));
 		condMap.put("vin", request.getParameter("vin"));
+		condMap.put("isPassed", request.getParameter("isPassed"));
 		condMap.put("start_busNum", request.getParameter("start_busNum"));
 		condMap.put("end_busNum", request.getParameter("end_busNum"));
 		condMap.put("date_start", request.getParameter("date_start"));

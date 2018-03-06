@@ -83,7 +83,9 @@ function drawFactoryOrderChart(){
 								rate_arr[i]=10;
 							}
 						})
-						
+						if(unstart_rate<0){
+							rate_arr[max_index]+=unstart_rate;
+						}
 						
 						var rate_f_html="<div class='row' style='height:30px;margin-right: 5px;'><label class='col-xs-3 control-label no-padding-right'>"+obj.factory_name+"：</label>"+
 						"<div class='progress'><div class='progress-bar progress-bar-grey' style='width:"+rate_arr[0]+"%;'>"+unstart_num+"</div>"+

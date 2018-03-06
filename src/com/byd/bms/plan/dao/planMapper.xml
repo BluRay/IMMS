@@ -1119,10 +1119,15 @@
 		group by fo.order_id
 		
 		union all
-		select '发车' key_name,dp.order_id,o.order_no,tmp.real_qty,tmp.total_qty,sum(dp.plan_dispatch_qty) production_qty,concat(o.order_no,' ',o.order_name,t.bus_type_code,' ',o.order_qty,'台') order_desc 
-		,ifnull(tmp.total_done_qty,0) AS 'total_done_qty',fo.status
+		
+		select ttt.key_name,ttt.order_id,ttt.order_no,ttt.real_qty,ttt.total_qty,SUM(ttt.production_qty) AS production_qty,
+		ttt.order_desc,ttt.total_done_qty,ttt.status FROM (
+		select DISTINCT tt.id,tt.key_name,tt.order_id,tt.order_no,tt.real_qty,tt.total_qty,tt.production_qty,
+		tt.order_desc,tt.total_done_qty,tt.status FROM (
+		select '发车' key_name,dp.id,dp.order_id,o.order_no,tmp.real_qty,tmp.total_qty,SUM(dp.plan_dispatch_qty) AS production_qty,concat(o.order_no,' ',o.order_name,t.bus_type_code,' ',o.order_qty,'台') order_desc 
+		,ifnull(tmp.total_done_qty,0) AS 'total_done_qty',dp.status
 		from BMS_PLAN_BUS_DISPATCH_PLAN dp
-		left join BMS_OR_FACTORY_ORDER fo on dp.order_id=fo.order_id and dp.factory_id=fo.factory_id
+		-- left join BMS_OR_FACTORY_ORDER fo on dp.order_id=fo.order_id and dp.factory_id=fo.factory_id
 		left join BMS_OR_ORDER o on o.id=dp.order_id 
 		left join BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id 
 		left join 
@@ -1137,11 +1142,19 @@
 		</if>		
 		LEFT JOIN BMS_PLAN_BUS b2 ON b.id=b2.id AND b2.dispatch_date != ''
 		where b.dispatch_date != '' and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=dp.order_id
-		where dp.factory_id=#{factory_id} and fo.status in ('1','0')
+		where dp.factory_id=#{factory_id}
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no like concat(#{order_no},'%')
 		</if>
+		<if test="start_date !=null and start_date !=''">
+			and dp.dispatch_date >= #{start_date}
+		</if>
+		<if test="end_date !=null and end_date !=''">
+			and dp.dispatch_date &lt;=#{end_date}
+		</if>
 		group by dp.order_id
+		) tt ) ttt
+		
 		) record  
 		left join 
 		(

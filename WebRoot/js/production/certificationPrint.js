@@ -101,10 +101,10 @@ function ajaxQuery(){
 			ordering:false,
 			searching: false,
 			bAutoWidth:false,
-			fixedColumns:   {
+		/*	fixedColumns:   {
 	            leftColumns: 2,
 	            rightColumns:0
-	        },
+	        },*/
 	        destroy: true,
 			sScrollY: $(window).height()-140,
 			scrollX: true,
@@ -197,7 +197,7 @@ function ajaxQuery(){
 
 
 function getCheckedBus(){
-	var arrChk=$("#tableResult tbody input[type='checkbox']:checked");
+	var arrChk=$("#tableResult tbody :checked");
 	//alert(arrChk.length)
 	var checked_buslist=[];
     $(arrChk).each(function(){

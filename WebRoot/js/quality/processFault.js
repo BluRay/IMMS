@@ -41,6 +41,7 @@ $(document).ready(function(){
 	}
 	
 	$("#btnQuery").click (function () {
+		eachSeries(scripts, getScript, initTable);
 		ajaxQuery();
 		return false;
 	});
@@ -426,74 +427,207 @@ function getBusType(){
 	})
 }
 
-function ajaxQuery(){
-	$("#tableData").dataTable({
-		serverSide: true,paiging:true,ordering:false,searching: false,bAutoWidth:false,
-		destroy: true,sScrollY: table_height,sScrollX:true,orderMulti:false,
-		pageLength: 25,pagingType:"full_numbers",lengthChange:false,
-		language: {
-			emptyTable:"抱歉，未查询到数据！",
-			info:"共计 _TOTAL_ 条，当前第 _PAGE_ 页 共 _PAGES_ 页",
-			infoEmpty:"",
-			paginate: { first:"首页",previous: "上一页",next:"下一页",last:"尾页",loadingRecords: "请稍等,加载中..."}
-		},
-		ajax:function (data, callback, settings) {
-			var param ={
-				"draw":1,
-				"orderColumn":"id",
-				"factory_id" : $("#search_factory").val(),
-				"customer_name" : $("#search_customer_name").val(),
-				"status" : $("#search_resolve_result").val(),
-				"fault_phenomenon" : $("#search_fault_phenomenon").val(),
-				"fault_date_start" : $("#search_date_start").val(),
-				"fault_date_end" : $("#search_date_end").val()
-			};
-            param.length = data.length;					//页面显示记录条数，在页面显示每页显示多少项的时候
-            param.start = data.start;					//开始的记录序号
-            param.page = (data.start / data.length)+1;	//当前页码
+var getYearWeek = function (a, b, c) { 
+    var d1 = new Date(a, b-1, c), d2 = new Date(a, 0, 1), 
+    d = Math.round((d1 - d2) / 86400000); 
+    return Math.ceil((d + ((d2.getDay() + 1) - 1)) / 7); 
+};
 
-            $.ajax({
-                type: "post",
-                url: "getProcessFaultList",
-                cache: false,  //禁用缓存
-                data: param,  //传入组装的参数
-                dataType: "json",
-                success: function (result) {
-                    //console.log(result);
-                	//封装返回数据
-                    var returnData = {};
-                    returnData.draw = data.draw;						//这里直接自行返回了draw计数器,应该由后台返回
-                    returnData.recordsTotal = result.recordsTotal;		//返回数据全部记录
-                    returnData.recordsFiltered = result.recordsTotal;	//后台不实现过滤功能，每次查询均视作全部结果
-                    returnData.data = result.data;						//返回的数据列表
-                    //console.log(returnData);
-                    //调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
-                    //此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
-                    callback(returnData);
-                }
-            });
-		},
-		columns: [
-		            {"title":"车型",width:'60',"class":"center","data":"bus_type_code","defaultContent": ""},
-		            {"title":"反馈日期",width:'95',"class":"center","data":"fault_date","defaultContent": ""},
-		            {"title":"故障里程",width:'80',"class":"center","data":"fault_mils","defaultContent": ""},
-		            {"title":"客户",width:'80',"class":"center","data":"customer_name","defaultContent": ""},
-		            {"title":"车牌号码",width:'80',"class":"center","data":"license_number","defaultContent": ""},
-		            {"title":"VIN号",width:'80',"class":"center","data":"vin","defaultContent": ""},
-		            {"title":"故障等级",width:'80',"class":"center","data":"fault_level_id","defaultContent": ""},
-		            {"title":"故障现象",width:'100',"class":"center","data":"fault_phenomenon","defaultContent": ""},
-		            {"title":"责任工厂",width:'80',"class":"center","data":"factory_name","defaultContent": ""},
-		            {"title":"责任车间",width:'80',"class":"center","data":"response_workshop","defaultContent": ""},
-		            {"title":"维护人",width:'60',"class":"center","data":"editor_name","defaultContent": ""},
-		            {"title":"维护时间",width:'150',"class":"center","data":"edit_date","defaultContent": ""},
-		            {"title":"操作",width:'80',"class":"center","data":null,"defaultContent": "",
-		            	"render": function ( data, type, row ) {
-		            		return "<i class=\"glyphicon glyphicon-search bigger-130 showbus\" title=\"查看\" onclick='showProcessFault(" 
-		            		+ row['id'] + ")' style='color:blue;cursor: pointer;'></i>" + 
-		            		"&nbsp;&nbsp;&nbsp;<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"编辑\" onclick='editProcessFault(" 
-		            		+ row['id'] + ")' style='color:blue;cursor: pointer;'></i>"
-		            	},
-		            }
-		          ],
-	});
+function ajaxQuery(){
+	$table.bootstrapTable('refresh', {url: 'getProcessFaultList'});
 }
+
+//----------START bootstrap initTable ----------
+function initTable() {
+    $table.bootstrapTable({
+        height: getHeight(),
+        url:'getProcessFaultList',
+        striped:true,
+        paginationVAlign:'bottom',
+        searchOnEnterKey:true,
+        queryParams:function(params) {		
+        	params["factory_id"] = $("#search_factory").val(); 
+        	params["customer_name"] = $("#search_customer_name").val(); 
+        	params["status"] = $("#search_resolve_result").val(); 
+        	params["fault_phenomenon"] = $("#search_fault_phenomenon").val(); 
+        	params["fault_date_start"] = $("#search_date_start").val(); 
+        	params["fault_date_end"] = $("#search_date_end").val();      	
+        	return params;
+        },
+        columns: [
+        [
+            {
+            	field: 'bus_type_code',title: '车辆型号',align: 'center',valign: 'middle',align: 'center',
+                sortable: false,visible: true,footerFormatter: totalTextFormatter,
+                cellStyle:function cellStyle(value, row, index, field) {
+	        	return {css: {"padding-left": "3px", "padding-right": "2px","font-size":"13px"}};
+	        	}
+            },{
+            	field: 'order_no',title: '订单',align: 'center',valign: 'middle',align: 'center',
+                sortable: false,visible: true,footerFormatter: totalTextFormatter,
+                cellStyle:function cellStyle(value, row, index, field) {
+	        	return {css: {"padding-left": "3px", "padding-right": "2px","font-size":"13px"}};
+	        	}
+            },{
+            	field: 'factory_name',title: '生产工厂',align: 'center',valign: 'middle',align: 'center',
+                sortable: false,visible: true,footerFormatter: totalTextFormatter,
+                cellStyle:function cellStyle(value, row, index, field) {
+	        	return {css: {"padding-left": "3px", "padding-right": "2px","font-size":"13px"}};
+	        	}
+            },{
+            	field: 'area',title: '区域',align: 'center',valign: 'middle',align: 'center',
+                sortable: false,visible: true,footerFormatter: totalTextFormatter,
+                cellStyle:function cellStyle(value, row, index, field) {
+	        	return {css: {"padding-left": "3px", "padding-right": "2px","font-size":"13px"}};
+	        	}
+            },{
+            	field: 'fault_date',title: '反馈日期',align: 'center',valign: 'middle',align: 'center',
+                sortable: false,visible: true,footerFormatter: totalTextFormatter,
+                cellStyle:function cellStyle(value, row, index, field) {
+    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
+    	        	}
+            },{
+            	field: 'fault_date',title: '故障反馈周历',align: 'center',valign: 'middle',align: 'center',
+                sortable: false,visible: true,footerFormatter: totalTextFormatter,
+                cellStyle:function cellStyle(value, row, index, field) {
+    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
+    	        },
+	        	formatter:function(value, row, index){
+	        		//console.log(value.substring(0,4));
+	        		//console.log(value.substring(5,value.length).substring(0,value.substring(5,value.length).indexOf('/')));
+	        		//console.log(value.substring(value.indexOf('/')+1,value.length).substring(value.substring(value.indexOf('/')+1,value.length).indexOf("/")+1));
+	        		return getYearWeek(value.substring(0,4),value.substring(5,value.length).substring(0,value.substring(5,value.length).indexOf('/')),value.substring(value.indexOf('/')+1,value.length).substring(value.substring(value.indexOf('/')+1,value.length).indexOf("/")+1));
+	        	}
+            },{
+            	field: 'fault_mils',title: '故障里程',align: 'center',valign: 'middle',align: 'center',
+                sortable: false,visible: true,footerFormatter: totalTextFormatter,
+                cellStyle:function cellStyle(value, row, index, field) {
+    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
+    	        	}
+            },{
+            	field: 'customer_name',title: '客户',align: 'center',valign: 'middle',align: 'center',
+                sortable: false,visible: true,footerFormatter: totalTextFormatter,
+                cellStyle:function cellStyle(value, row, index, field) {
+    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
+    	        	}
+            },{
+            	field: 'license_number',title: '车牌号码',align: 'center',valign: 'middle',align: 'center',
+                sortable: false,visible: true,footerFormatter: totalTextFormatter,
+                cellStyle:function cellStyle(value, row, index, field) {
+    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
+    	        	}
+            },{
+            	field: 'vin',title: 'VIN号',align: 'center',valign: 'middle',align: 'center',
+                sortable: false,visible: true,footerFormatter: totalTextFormatter,
+                cellStyle:function cellStyle(value, row, index, field) {
+    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
+    	        	}
+            },{
+            	field: 'fault_level_id',title: '故障等级',align: 'center',valign: 'middle',align: 'center',
+                sortable: false,visible: true,footerFormatter: totalTextFormatter,
+                cellStyle:function cellStyle(value, row, index, field) {
+    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
+    	        	}
+            },{
+            	field: 'fault_phenomenon',title: '故障描述',align: 'center',valign: 'middle',align: 'center',
+                sortable: false,visible: true,footerFormatter: totalTextFormatter,
+                cellStyle:function cellStyle(value, row, index, field) {
+    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
+    	        	}
+            },{
+            	field: 'response_workshop',title: '责任车间',align: 'center',valign: 'middle',align: 'center',
+                sortable: false,visible: true,footerFormatter: totalTextFormatter,
+                cellStyle:function cellStyle(value, row, index, field) {
+    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
+    	        	}
+            },{
+            	field: 'editor_name',title: '维护人',align: 'center',valign: 'middle',align: 'center',
+                sortable: false,visible: true,footerFormatter: totalTextFormatter,
+                cellStyle:function cellStyle(value, row, index, field) {
+    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
+    	        	}
+            },{
+            	field: 'edit_date',title: '维护时间',align: 'center',valign: 'middle',align: 'center',
+                sortable: false,visible: true,footerFormatter: totalTextFormatter,
+                cellStyle:function cellStyle(value, row, index, field) {
+    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
+    	        	}
+            }
+        ]
+    ]
+    });
+    $table.on('load-success.bs.table',function(){
+    	$("#btnQuery").removeAttr("disabled");
+    });
+    $table.on('page-change.bs.table',function(){
+    	$("#btnQuery").attr("disabled","disabled");
+    });
+    $(window).resize(function () {
+        $table.bootstrapTable('resetView', {height: getHeight()});
+    });
+    function getHeight() {return $(window).height()+40;}
+    function getWidth() {return $(window).width()-220;}
+}
+//----------END bootstrap initTable ----------
+
+//----------START Bootstrap Script ----------
+var scripts = [
+        '../js/bootstrap-table.js','../js/bootstrap-table-fixed-columns.js',
+        '../js/bootstrap-table-export.js','../js/tableExport.js',
+        '../js/bootstrap-table-editable.js','../js/bootstrap-editable.js'
+    ],
+    eachSeries = function (arr, iterator, callback) {
+    	//console.log("---->arr.length=" + arr.length);
+        callback = callback || function () {};
+        if (!arr.length) {return callback();}
+        var completed = 0;
+        var iterate = function () {
+            iterator(arr[completed], function (err) {
+                if (err) {callback(err);callback = function () {};}
+                else {completed += 1;if (completed >= arr.length) {callback(null);}else {iterate();}}
+            });
+        };
+        iterate();
+    };
+    function getIdSelections() {
+        return $.map($table.bootstrapTable('getSelections'), function (row) {return row.id});
+    }
+    function responseHandler(res) {
+        $.each(res.rows, function (i, row) {row.state = $.inArray(row.id, selections) !== -1;});return res;
+    }
+    function detailFormatter(index, row) {
+        var html = [];
+        $.each(row, function (key, value) {html.push('<p><b>' + key + ':</b> ' + value + '</p>');});
+        return html.join('');
+    }
+    function operateFormatter(value, row, index) {
+        return ['<a class="remove" href="javascript:void(0)" title="Remove">','<i class="glyphicon glyphicon-remove"></i>','</a>'].join('');
+    }
+    window.operateEvents = {
+        'click .like': function (e, value, row, index) {alert('You click like action, row: ' + JSON.stringify(row));},
+        'click .remove': function (e, value, row, index) {ajaxDel(row.id);}
+    };
+    function totalTextFormatter(data) {return 'Total';}
+    function totalNameFormatter(data) {return data.length;}
+    function totalPriceFormatter(data) {
+        var total = 0;
+        $.each(data, function (i, row) {total += +(row.price.substring(1));});
+        return '$' + total;
+    }
+    function getScript(url, callback) {
+        var head = document.getElementsByTagName('head')[0];
+        var script = document.createElement('script');
+        script.src = url;
+        var done = false;
+        script.onload = script.onreadystatechange = function() {
+            if (!done && (!this.readyState ||this.readyState == 'loaded' || this.readyState == 'complete')) {
+                done = true;
+                if (callback)
+                	callback();
+                	script.onload = script.onreadystatechange = null;
+            }
+        };
+        head.appendChild(script);
+        return undefined;
+    }  
+

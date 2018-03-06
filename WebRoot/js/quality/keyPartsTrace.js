@@ -229,8 +229,8 @@ function showBusNumberDetail(json){
 					{"title":"供应商名称","class":"center","data":"vendor","defaultContent": ""},
 					{"title":"装配车间","class":"center","data":"workshop","defaultContent": ""},
 					{"title":"工序","class":"center","data":"process","defaultContent": ""},
-					{"title":"3C件","width":"40","class":"center","data":"3C_components","defaultContent": ""},					
-					{"title":"批次","width":"120","class":"center","data":"batch","defaultContent": "","render":function(data,type,row){
+					{"title":"备注","width":"40","class":"center","data":"3C_components","defaultContent": ""},					
+					{"title":"追溯信息","width":"120","class":"center","data":"batch","defaultContent": "","render":function(data,type,row){
 						if(row.CCC_components=='是'){
 							return "<input style='border:0;width:100px;text-align:center' disabled='disabled' class='batch' " +
 							" value='"+(data!=undefined ? data : '')+"'/><input type='hidden' class='keypartsId' " +

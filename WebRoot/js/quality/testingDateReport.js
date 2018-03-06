@@ -59,6 +59,7 @@ function initTable() {
         	params["bus_type"] = $("#search_bus_type").val(); 
         	params["order_id"] = $("#search_order_no").attr("order_id"); 
         	params["vin"] = $("#search_busNum").val(); 
+        	params["isPassed"] = $("#search_isPassed").val(); 
         	params["start_busNum"] = $("#start_busNum").val(); 
         	params["end_busNum"] = $("#end_busNum").val();    
         	params["date_start"] = $("#date_start").val(); 
@@ -164,6 +165,17 @@ function initTable() {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
     	        	}
             },{
+            	field: 'is_passed',title: '详情',align: 'center',valign: 'middle',align: 'center',
+                sortable: false,visible: true,footerFormatter: totalTextFormatter,
+                cellStyle:function cellStyle(value, row, index, field) {
+    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
+    	        	},
+	        	formatter:function(value, row, index){
+	        		return "<i class=\"glyphicon glyphicon-print bigger-130 showbus\" title=\"打印\" style='color:blue;cursor: pointer;' onclick='window.open(\"testingDateReportPrint?taskid=" + row['id'] + "\")'";
+	        	}
+            }
+            /**
+            ,{
             	field: 'test_results',title: '检测结论',align: 'center',valign: 'middle',align: 'center',
                 sortable: false,visible: true,footerFormatter: totalTextFormatter,
                 cellStyle:function cellStyle(value, row, index, field) {
@@ -481,7 +493,7 @@ function initTable() {
                 cellStyle:function cellStyle(value, row, index, field) {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
     	        	}
-            }
+            }  **/
         ]
     ]
     });

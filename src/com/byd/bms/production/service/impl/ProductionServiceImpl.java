@@ -159,6 +159,11 @@ public class ProductionServiceImpl implements IProductionService {
 			if(partsList.size()>0){
 				productionDao.updateParts(partsList);
 			}		
+			//added on 2018-02-24 涂装下线更新车辆颜色
+			if("涂装下线".equals(condMap.get("plan_node_name"))){
+				productionDao.updateBusInfo(condMap);
+			}
+			
 			rMap.put("success", true);
 			rMap.put("message", "扫描成功！");
 		}
