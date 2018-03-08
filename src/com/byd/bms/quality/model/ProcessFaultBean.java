@@ -18,6 +18,7 @@ public class ProcessFaultBean {
 	private String fault_mils;
 	private String fault_level_id;
 	private String fault_level;
+	private String response_factory;
 	private String response_workshop;
 	private String is_batch;
 	private String fault_reason;
@@ -217,6 +218,12 @@ public class ProcessFaultBean {
 	}
 	public void setEdit_date(String edit_date) {
 		this.edit_date = edit_date;
+	}
+	public String getResponse_factory() {
+		return response_factory;
+	}
+	public void setResponse_factory(String response_factory) {
+		this.response_factory = response_factory;
 	}
 	
 }

@@ -612,16 +612,27 @@
 	</update>
 	
 	<select id="getProcessFaultReportData" parameterType="Map" resultType="Map">
-	SELECT COUNT(*) AS fault_count,f.factory_name AS plant_org FROM bms_qm_process_problem p
-	LEFT JOIN bms_base_factory f ON p.factory_id = f.id
+	SELECT COUNT(*) AS fault_count,f.factory_name AS plant_org FROM BMS_QM_PROCESS_PROBLEM p
+	LEFT JOIN BMS_BASE_FACTORY f ON p.factory_id = f.id
 	WHERE f.factory_name IS NOT NULL 
 	<if test="start_date !=null and start_date !=''">
-	AND DATE_FORMAT(p.fault_date,'%Y-%m-%d') >= #{start_date}
+	AND p.fault_date >= #{start_date}
 	</if>
 	<if test="end_date !=null and end_date !=''">
-	<![CDATA[ AND DATE_FORMAT(p.fault_date,'%Y-%m-%d') <= #{end_date} ]]>
+	<![CDATA[ AND p.fault_date <= #{end_date} ]]>
 	</if>
 	GROUP BY f.factory_name
+	</select>
+	
+	<select id="getFactoryIdByVin" parameterType="Map" resultType="Map">
+	SELECT b.vin,b.factory_id,o.order_no,f.area FROM BMS_PLAN_BUS b
+	LEFT JOIN BMS_BASE_FACTORY f ON b.factory_id = f.id
+	LEFT JOIN  BMS_OR_ORDER o ON b.order_id = o.id
+	WHERE b.vin = #{vin}
+	</select>
+	
+	<select id="getBusTestingInfo" parameterType="Map" resultType="Map">
+	SELECT * FROM jcx_bus_info WHERE vin = #{vin}
 	</select>
 	
 	<select id="getBusTestingDateReport" parameterType="Map" resultType="Map">
@@ -765,30 +776,39 @@
 	</update>
 	
 	<select id="getProcessFaultList" parameterType="Map" resultType="Map">
-	SELECT p.*,o.order_no,f.factory_name,f.area,u.display_name AS editor_name,b.bus_type_code FROM BMS_QM_PROCESS_PROBLEM p
+	SELECT p.*,CONCAT(o.order_no,'  ',o.order_name,b.bus_type_code,'  ',o.order_qty,'台') as order_no,WEEKOFYEAR(fault_date) AS week,f.factory_name,f.area,u.display_name AS editor_name,b.bus_type_code FROM BMS_QM_PROCESS_PROBLEM p
 	LEFT JOIN BMS_BASE_FACTORY f ON p.factory_id = f.id
 	LEFT JOIN BMS_BASE_BUS_TYPE b ON p.bus_type = b.id
 	LEFT JOIN BMS_BASE_USER u on p.editor_id=u.id
-    LEFT JOIN BMS_PLAN_BUS s on p.vin = s.vin
+  	LEFT JOIN BMS_PLAN_BUS s on p.vin = s.vin
 	LEFT JOIN BMS_OR_ORDER o on s.order_id = o.id
 	WHERE 1=1 
+		<if test="bus_type != null and bus_type != ''">
+		AND b.bus_type_code = #{bus_type}
+		</if>
+		<if test="area != null and area != ''">
+		AND f.area = #{area}
+		</if>
+		<if test="week != null and week != ''">
+		AND WEEKOFYEAR(p.fault_date) = #{week}
+		</if>
+		<if test="level != null and level != ''">
+		AND p.fault_level_id = #{level}
+		</if>
+		<if test="fault_mils == '1'">
+		AND fault_mils >= 15000
+		</if>
+		<if test="fault_mils == '2'">
+		<![CDATA[ AND fault_mils < 15000 ]]>
+		</if>
+		<if test="is_batch != null and is_batch != ''">
+		AND p.is_batch = #{is_batch}
+		</if>
 		<if test="factory_id != null and factory_id != 0">
 			AND p.factory_id = #{factory_id}
 		</if>
-		<if test="customer_name != null and customer_name != ''">
-			AND p.customer_name LIKE CONCAT('%',#{customer_name},'%')
-		</if>
-		<if test="status != null and status != ''">
-			AND p.resolve_result = #{status}
-		</if>
 		<if test="fault_phenomenon != null and fault_phenomenon != ''">
 			AND p.fault_phenomenon LIKE CONCAT('%',#{fault_phenomenon},'%')
-		</if>
-		<if test="fault_date_start != null and fault_date_start != ''">
-			AND p.fault_date >= #{fault_date_start}
-		</if>
-		<if test="fault_date_end != null and fault_date_end != ''">
-			<![CDATA[ AND p.fault_date <= #{fault_date_end} ]]>
 		</if>
 		ORDER BY edit_date DESC
 		<if test="start !=null">
@@ -798,24 +818,37 @@
 	<select id="getProcessFaultCount" parameterType="Map" resultType="int">
 	SELECT COUNT(p.id) FROM BMS_QM_PROCESS_PROBLEM p
 	LEFT JOIN BMS_BASE_FACTORY f ON p.factory_id = f.id
-	WHERE 1=1  
+	LEFT JOIN BMS_BASE_BUS_TYPE b ON p.bus_type = b.id
+	LEFT JOIN BMS_BASE_USER u on p.editor_id=u.id
+  	LEFT JOIN BMS_PLAN_BUS s on p.vin = s.vin
+	LEFT JOIN BMS_OR_ORDER o on s.order_id = o.id
+	WHERE 1=1 
+		<if test="bus_type != null and bus_type != ''">
+		AND b.bus_type_code = #{bus_type}
+		</if>
+		<if test="area != null and area != ''">
+		AND f.area = #{area}
+		</if>
+		<if test="week != null and week != ''">
+		AND WEEKOFYEAR(p.fault_date) = #{week}
+		</if>
+		<if test="level != null and level != ''">
+		AND p.fault_level_id = #{level}
+		</if>
+		<if test="fault_mils == '1'">
+		AND fault_mils >= 15000
+		</if>
+		<if test="fault_mils == '2'">
+		<![CDATA[ AND fault_mils < 15000 ]]>
+		</if>
+		<if test="is_batch != null and is_batch != ''">
+		AND p.is_batch = #{is_batch}
+		</if>
 		<if test="factory_id != null and factory_id != 0">
 			AND p.factory_id = #{factory_id}
 		</if>
-		<if test="customer_name != null and customer_name != ''">
-			AND p.customer_name LIKE CONCAT('%',#{customer_name},'%')
-		</if>
-		<if test="status != null and status != 0">
-			AND p.status = #{status}
-		</if>
 		<if test="fault_phenomenon != null and fault_phenomenon != ''">
 			AND p.fault_phenomenon LIKE CONCAT('%',#{fault_phenomenon},'%')
-		</if>
-		<if test="fault_date_start != null and fault_date_start != ''">
-			AND p.fault_date >= #{fault_date_start}
-		</if>
-		<if test="fault_date_end != null and fault_date_end != ''">
-			<![CDATA[ AND p.fault_date <= #{fault_date_end} ]]>
 		</if>
 	</select>
 	
@@ -825,11 +858,11 @@
 		</selectKey>
 		INSERT INTO BMS_QM_PROCESS_PROBLEM 
 		(factory_id, customer_name, vin, order_id, order_describe, customer_bus_number, license_number, 
-		fault_phenomenon, fault_components, fault_date, bus_type, fault_mils, fault_level_id, 
+		fault_phenomenon, fault_components, fault_date, bus_type, fault_mils, fault_level_id, response_factory,
 		response_workshop, is_batch, fault_reason, resolve_method, resolve_date, resolve_result, 
 		memo, report_file_path, punish, compensation, status, editor_id, edit_date)	
 		VALUES(#{factory_id},#{customer_name},#{vin},#{order_id},#{order_describe},#{customer_bus_number},#{license_number},
-		#{fault_phenomenon},#{fault_components},#{fault_date},#{bus_type},#{fault_mils},#{fault_level_id},
+		#{fault_phenomenon},#{fault_components},#{fault_date},#{bus_type},#{fault_mils},#{fault_level_id},#{response_factory},
 		#{response_workshop},#{is_batch},#{fault_reason},#{resolve_method},#{resolve_date},#{resolve_result},
 		#{memo},#{report_file_path},#{punish},#{compensation},#{status},#{editor_id},#{edit_date})
 	</insert>

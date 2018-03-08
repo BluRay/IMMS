@@ -22,18 +22,24 @@
 					<div id="form" class="well form-search">
 						<table>
 							<tr>
-								<td>责任工厂：</td>
+								<td>车辆型号：</td>
+								<td><select id="search_bus_type" class="input-small" style="height: 30px;width:100px"></select></td>
+								<td>生产工厂：</td>
 								<td><select id="search_factory" class="form-control" style="width:90px"></select></td>
-								<td>&nbsp;客户：</td>
-								<td><input id="search_customer_name" placeholder="客户..." style="width:115px" type="text"></td>
-								<td>&nbsp;处理结果：</td>
-								<td><select id="search_resolve_result" class="input-small" style="width:90px"><option value="">全部</option><option value="0">已关闭</option><option value="1">处理中</option></select></td>
+								<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;区域：</td>
+								<td><select id="search_area" class="form-control" style="width:70px"><option value="">全部</option><option value="广深">广深</option><option value="中南">中南</option><option value="东部">东部</option><option value="北方">北方</option></select></td>
+								<td>反馈周历：</td>
+								<td><input id="search_week" placeholder="反馈周历..." style="width:80px" type="text"></td>
+								<td>故障等级：</td>
+								<td><select id="search_level" class="form-control" style="width:70px"><option value="">全部</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select></td>
 							</tr>
 							<tr>
-								<td>故障现象：</td>
-								<td colspan=3><input id="search_fault_phenomenon" placeholder="故障现象..." style="width:250px" type="text"></td>
-								<td>&nbsp;反馈日期：</td>
-								<td colspan=3><input id="search_date_start" placeholder="开始时间..." style="width:90px" type="text" onClick="WdatePicker({el:'search_date_start',dateFmt:'yyyy-MM-dd'});"> - <input id="search_date_end" placeholder="结束时间..." style="width:90px" type="text" onClick="WdatePicker({el:'search_date_end',dateFmt:'yyyy-MM-dd'});"></td>
+								<td>故障描述：</td>
+								<td colspan=3><input id="search_fault_phenomenon" placeholder="故障描述..." style="width:250px" type="text"></td>
+								<td>故障里程：</td>
+								<td><select id="search_mils" class="form-control" style="width:70px"><option value="">全部</option><option value="1">>=15000</option><option value="2">&lt;15000</option></select></td>
+								<td>故障性质：</td>
+								<td><select id="search_is_batch" class="form-control" style="width:80px"><option value="">全部</option><option value="0">非批量</option><option value="1">批量</option></select></td>
 								<td><input id="btnQuery" type="button" class="btn btn-sm btn-primary" value="查询" style="margin-left: 2px;"></input><input id="btnAdd" type="button" class="btn btn-sm btn-success" value="新增" style="margin-left: 2px;"></input></td>
 								<td><input id="btnBulkAdd" style="margin-left: 2px;" class="btn btn-sm btn-info" value="批导" type="button"></td>								
 							</tr>
@@ -68,34 +74,38 @@
 					<table>
 					<tr style="height:40px">
 						<td align="right" style="width:100px">* 车辆型号：</td><td style="width:150px">
-						<select name="" id="new_bus_type" class="input-medium busType">
-							</select>
-							<script id="tmplBusTypeSelect" type="text/x-jsrander">
-                            	<option value='{{:id}}'>{{:name}}</option>
-                            </script>
+						<select id="new_bus_type" class="input-small" style="height: 30px;width:100px"></select>
 						</td>
 						<td align="right" style="width:100px">*故障反馈日期：</td><td style="width:150px"><input type="text" class="input-medium" id="new_fault_date" name="new_fault_date" onClick="WdatePicker({el:'new_fault_date',dateFmt:'yyyy-MM-dd'});" style="width:150px"/></td>
 					</tr>
 					<tr style="height:40px">
 						<td align="right" style="width:100px">* 故障里程：</td><td style="width:150px"><input type="text" class="input-medium" id="new_fault_mils" name="new_fault_mils" style="width:150px" /></td>
+						<td align="right" style="width:100px">责任工厂：</td><td style="width:150px"><select id="new_response_factory" class="input-small" style="width:150px"></select></td>
+						
+						<!--
 						<td align="right" style="width:100px">*客户名称：</td><td style="width:150px"><input type="text" class="input-medium" id="new_customer_name" name="new_customer_name" style="width:150px"/></td>
+						-->
 					</tr>
 					<tr style="height:40px">
 						<td align="right" style="width:100px">* 车牌号码：</td><td style="width:150px"><input type="text" class="input-medium" id="new_license_number" name="new_license_number" style="width:150px" /></td>
 						<td align="right" style="width:100px">*VIN号：</td><td style="width:150px"><input type="text" class="input-medium" id="new_vin" name="new_vin" style="width:150px"/></td>
 					</tr>
 					<tr style="height:40px">
-						<td align="right" style="width:100px">* 故障等级：</td><td style="width:150px"><select class="input-medium" id="new_fault_level_id" style="width:150px"><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="S">S</option></select></td>
-						<td align="right" style="width:100px">*问题性质：</td><td style="width:150px"><select class="input-medium" id="new_is_batch" style="width:150px"><option value="0">非批量</option><option value="1">批量</option></select></td>
+						<td align="right" style="width:100px">* 生产订单：</td><td style="width:150px"><input type="text" class="input-medium" disabled="disabled" id="new_order" name="new_order" style="width:150px" /></td>
+						<td align="right" style="width:100px">*区域：</td><td style="width:150px"><input type="text" class="input-medium" disabled="disabled" id="new_area" name="new_area" style="width:150px"/></td>
 					</tr>
 					<tr style="height:40px">
-						<td align="right" style="width:100px">* 故障现象：</td><td colspan=3><input type="text" class="input-medium" id="new_fault_phenomenon" style="width:400px"/></td>
+						<td align="right" style="width:100px">* 故障等级：</td><td style="width:150px"><select class="input-medium" id="new_fault_level_id" style="width:150px"><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="S">S</option></select></td>
+						<td align="right" style="width:100px">*故障性质：</td><td style="width:150px"><select class="input-medium" id="new_is_batch" style="width:150px"><option value="0">非批量</option><option value="1">批量</option></select></td>
+					</tr>
+					<tr style="height:40px">
+						<td align="right" style="width:100px">* 故障描述：</td><td colspan=3><input type="text" class="input-medium" id="new_fault_phenomenon" style="width:400px"/></td>
 					</tr>
 					<tr style="height:40px">
 						<td align="right" style="width:100px">* 故障原因：</td><td colspan=3><input type="text" class="input-medium" id="new_fault_reason" style="width:400px"/></td>
 					</tr>
 					<tr style="height:40px">
-						<td align="right" style="width:100px">责任工厂：</td><td style="width:150px"><select id="new_factory" class="input-small" style="width:150px"></select></td>
+						<td align="right" style="width:100px">生产工厂：</td><td style="width:150px"><select id="new_factory" class="input-small" style="width:150px"></select></td>
 						<td align="right" style="width:100px">责任车间：</td><td style="width:150px"><select id="new_workshop" class="input-small" style="width:80px"></select></td>
 					</tr>
 					<tr style="height:40px">
@@ -213,4 +223,6 @@
 	<script type="text/javascript" src="../assets/js/bootstrap3-typeahead.js"></script>
 	<script type="text/javascript" src="../js/jsrender.min.js"></script>
 	<script type="text/javascript" src="../js/quality/processFault.js"></script>
+	<script src="/BMS/js/bootstrap-tab.js"></script>
+	
 </html>

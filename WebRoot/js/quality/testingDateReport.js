@@ -34,8 +34,12 @@ $(document).ready(function () {
 	}
 	
 	$("#btnQuery").click(function () {
-		eachSeries(scripts, getScript, initTable);
-		ajaxQuery();
+		if(($("#search_busNum").val()=="")&&($("#search_order_no").val()=="")){
+			alert("请输入订单或车号进行查询！");
+		}else{
+			eachSeries(scripts, getScript, initTable);
+			ajaxQuery();
+		}
     });
 	
 });
@@ -171,7 +175,7 @@ function initTable() {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
     	        	},
 	        	formatter:function(value, row, index){
-	        		return "<i class=\"glyphicon glyphicon-print bigger-130 showbus\" title=\"打印\" style='color:blue;cursor: pointer;' onclick='window.open(\"testingDateReportPrint?taskid=" + row['id'] + "\")'";
+	        		return "<i class=\"glyphicon glyphicon-print bigger-130 showbus\" title=\"打印\" style='color:blue;cursor: pointer;' onclick='window.open(\"testingDateReportPrint?vin=" + row['vin'] + "\")'";
 	        	}
             }
             /**

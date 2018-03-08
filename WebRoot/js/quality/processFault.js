@@ -22,9 +22,26 @@ $(document).ready(function(){
 		$("#divBulkAdd").hide();
 	});
 	
+	$("#new_vin").blur(function(){
+		console.log($("#new_vin").val());
+		$.ajax({
+			url: "getFactoryIdByVin",
+			dataType: "json",
+			data: {"vin":$("#new_vin").val()},
+			async: false,
+			error: function () {alertError();},
+			success: function (response) {
+				$("#new_factory").val(response.data[0].factory_id);
+				$("#new_order").val(response.data[0].order_no);
+				$("#new_area").val(response.data[0].area);
+			}
+		});
+	});
+	
 	function initPage(){
 		//getBusNumberSelect('#nav-search-input');
 		getFactorySelect("quality/processFault",'',"#search_factory",null,'id');
+		getBusType();
 		$('#new_report_file,#edit_report_file').ace_file_input({
 			no_file:'请选择要上传的文件...',
 			btn_choose:'选择文件',
@@ -73,12 +90,14 @@ $(document).ready(function(){
 	$("#btnAdd").on('click', function(e) {
 		getBusType();
 		getFactorySelect("quality/processFault",'',"#new_factory",null,'id');
+		getFactorySelect("quality/processFault",'',"#new_response_factory",null,'id');
 		getWorkshopSelect("quality/processFault",$("#new_factory :selected").text(),"","#new_workshop",null,"id");
-		
+		$("#new_order").val("");
+		$("#new_area").val("");
 		e.preventDefault();
 		$("#dialog-add").removeClass('hide').dialog({
 			resizable: false,
-			title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 增加制程异常</h4></div>',
+			title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 售后问题反馈</h4></div>',
 			title_html: true,
 			width:'600px',
 			height:520,
@@ -99,6 +118,28 @@ $(document).ready(function(){
 				]
 		});
 	});
+	
+	function getBusType(){
+		$("#search_bus_type").empty();
+		$("#new_bus_type").empty();
+		$.ajax({
+			url: "../common/getBusType",
+			dataType: "json",
+			data: {},
+			async: false,
+			error: function () {alertError();},
+			success: function (response) {
+				var strs = "<option value=''>全部</option>";
+				var strs2 = "";
+			    $.each(response.data, function(index, value) {
+			    	strs += "<option value=" + value.code + ">" + value.name + "</option>";
+			    	strs2 += "<option value=" + value.code + ">" + value.name + "</option>";
+			    });
+			    $("#search_bus_type").append(strs);
+			    $("#new_bus_type").append(strs2);
+			}
+		})
+	}
 	
 });
 
@@ -323,25 +364,31 @@ function btnEditConfirm(id){
 
 function btnNewConfirm(){
 	var vinTest = /^[a-zA-Z0-9]{17}$/;
+	var milsVal = "^[0-9]*[1-9][0-9]*$";
 	
 	if($("#new_fault_date").val()==''){
 		alert("请输入故障反馈日期！");
 		$("#new_fault_date").focus();
 		return false;
 	}
+	
+	
 	if($("#new_fault_mils").val()==''){
 		alert("请输入故障里程！");
 		$("#new_fault_mils").focus();
 		return false;
-	}
-	if($("#new_customer_name").val()==''){
-		alert("请输入客户名称！");
-		$("#new_customer_name").focus();
-		return false;
+	}else{
+		 var re  =   new   RegExp(milsVal); 
+	     if($("#new_fault_mils").val().match(re)==null) {
+	    	 alert("故障里程必须为正整数！");
+				$("#new_fault_mils").focus();
+				return false;
+	     }
 	}
 	if($("#new_license_number").val()==''){
-		alert("请输入车牌号码！");
-		$("#new_license_number").focus();
+		alert("请输入车牌号码,没有车牌号请输入'/'");
+		$("#new_license_number").val('/');
+		$("#new_license_number").focus().select();
 		return false;
 	}
 	if($("#new_vin").val()==''){
@@ -381,9 +428,10 @@ function btnNewConfirm(){
 			"fault_phenomenon" : $("#new_fault_phenomenon").val(),
 			"fault_reason" : $("#new_fault_reason").val(),
 			"factory" : $("#new_factory").val(),
+			"response_factory" : $('#new_response_factory').find("option:selected").text(),
 			"workshop" : $('#new_workshop').find("option:selected").text(),
 			"resolve_method" : $("#new_resolve_method").val(),
-			"resolve_dat" : $("#new_resolve_date").val(),
+			"resolve_date" : $("#new_resolve_date").val(),
 			"resolve_result" : $("#new_resolve_result").val(),
 			"punish" : $("#new_punish").val(),
 			"compensation" : $("#new_compensation").val(),
@@ -427,6 +475,12 @@ function getBusType(){
 	})
 }
 
+function showtab(vin){
+	var url = "/BMS/production/productionsearchbusinfo?bus_number=" + vin;
+	var obj ={"id":"车辆信息查询","title":"车辆信息查询","close": "true","url": url};
+	window.parent.addTabs(obj);
+}
+
 var getYearWeek = function (a, b, c) { 
     var d1 = new Date(a, b-1, c), d2 = new Date(a, 0, 1), 
     d = Math.round((d1 - d2) / 86400000); 
@@ -445,13 +499,15 @@ function initTable() {
         striped:true,
         paginationVAlign:'bottom',
         searchOnEnterKey:true,
-        queryParams:function(params) {		
+        queryParams:function(params) {	
+        	params["bus_type"] = $("#search_bus_type").val(); 
         	params["factory_id"] = $("#search_factory").val(); 
-        	params["customer_name"] = $("#search_customer_name").val(); 
-        	params["status"] = $("#search_resolve_result").val(); 
+        	params["area"] = $("#search_area").val(); 
+        	params["week"] = $("#search_week").val(); 
+        	params["level"] = $("#search_level").val(); 
         	params["fault_phenomenon"] = $("#search_fault_phenomenon").val(); 
-        	params["fault_date_start"] = $("#search_date_start").val(); 
-        	params["fault_date_end"] = $("#search_date_end").val();      	
+        	params["fault_mils"] = $("#search_mils").val(); 
+        	params["is_batch"] = $("#search_is_batch").val();      	
         	return params;
         },
         columns: [
@@ -487,7 +543,7 @@ function initTable() {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
     	        	}
             },{
-            	field: 'fault_date',title: '故障反馈周历',align: 'center',valign: 'middle',align: 'center',
+            	field: 'fault_date',title: '反馈周历',align: 'center',valign: 'middle',align: 'center',
                 sortable: false,visible: true,footerFormatter: totalTextFormatter,
                 cellStyle:function cellStyle(value, row, index, field) {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
@@ -496,16 +552,13 @@ function initTable() {
 	        		//console.log(value.substring(0,4));
 	        		//console.log(value.substring(5,value.length).substring(0,value.substring(5,value.length).indexOf('/')));
 	        		//console.log(value.substring(value.indexOf('/')+1,value.length).substring(value.substring(value.indexOf('/')+1,value.length).indexOf("/")+1));
-	        		return getYearWeek(value.substring(0,4),value.substring(5,value.length).substring(0,value.substring(5,value.length).indexOf('/')),value.substring(value.indexOf('/')+1,value.length).substring(value.substring(value.indexOf('/')+1,value.length).indexOf("/")+1));
+	        		var year = value.substring(0,4);
+	        		var month = parseInt(value.substring(5,7),10);
+	        		var day = parseInt(value.substring(8,10),10);
+	        		return "第"+getYearWeek(year,month,day)+"周";
 	        	}
             },{
             	field: 'fault_mils',title: '故障里程',align: 'center',valign: 'middle',align: 'center',
-                sortable: false,visible: true,footerFormatter: totalTextFormatter,
-                cellStyle:function cellStyle(value, row, index, field) {
-    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
-    	        	}
-            },{
-            	field: 'customer_name',title: '客户',align: 'center',valign: 'middle',align: 'center',
                 sortable: false,visible: true,footerFormatter: totalTextFormatter,
                 cellStyle:function cellStyle(value, row, index, field) {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
@@ -521,7 +574,10 @@ function initTable() {
                 sortable: false,visible: true,footerFormatter: totalTextFormatter,
                 cellStyle:function cellStyle(value, row, index, field) {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
-    	        	}
+    	        	},
+	        	formatter:function(value, row, index){
+	        		return "<a onclick='showtab(\""+value+"\")'>"+value+"</a>";
+	        	}
             },{
             	field: 'fault_level_id',title: '故障等级',align: 'center',valign: 'middle',align: 'center',
                 sortable: false,visible: true,footerFormatter: totalTextFormatter,
@@ -530,6 +586,12 @@ function initTable() {
     	        	}
             },{
             	field: 'fault_phenomenon',title: '故障描述',align: 'center',valign: 'middle',align: 'center',
+                sortable: false,visible: true,footerFormatter: totalTextFormatter,
+                cellStyle:function cellStyle(value, row, index, field) {
+    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
+    	        	}
+            },{
+            	field: 'response_factory',title: '责任工厂',align: 'center',valign: 'middle',align: 'center',
                 sortable: false,visible: true,footerFormatter: totalTextFormatter,
                 cellStyle:function cellStyle(value, row, index, field) {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
@@ -552,6 +614,18 @@ function initTable() {
                 cellStyle:function cellStyle(value, row, index, field) {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
     	        	}
+            },{
+            	field: 'edit_date',title: '操作',align: 'center',valign: 'middle',align: 'center',
+                sortable: false,visible: true,footerFormatter: totalTextFormatter,
+                cellStyle:function cellStyle(value, row, index, field) {
+    	        	return {css: {"width":"50px","padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
+    	        },
+	        	formatter:function(value, row, index){
+	        		return "<i class=\"glyphicon glyphicon-search bigger-130 showbus\" title=\"查看\" onclick='showProcessFault(" 
+            		+ row['id'] + ")' style='color:blue;cursor: pointer;'></i>" + 
+            		"&nbsp;&nbsp;&nbsp;<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"编辑\" onclick='editProcessFault(" 
+            		+ row['id'] + ")' style='color:blue;cursor: pointer;'></i>"
+	        	}
             }
         ]
     ]

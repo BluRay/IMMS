@@ -79,7 +79,9 @@ public interface IQualityService {
 	public int insertJcxBusInfo(Map<String, Object> conditionMap);
 	public int updateJcxBusInfo(Map<String, Object> conditionMap);
 	public Map<String, Object> getTestingDateReport(Map<String,Object> queryMap);
+	public Map<String, Object> getTestingInfo(Map<String,Object> queryMap);
 	public List<Map<String, Object>> getProcessFaultReportData(Map<String,Object> queryMap);
+	public List<Map<String, Object>> getFactoryIdByVin(Map<String,Object> queryMap);
 	//======================== yk end=================================//
 			
 			

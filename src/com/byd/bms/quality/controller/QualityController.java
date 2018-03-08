@@ -789,12 +789,14 @@ public class QualityController extends BaseController {
 		conditionMap.put("draw", draw);
 		conditionMap.put("start", start);
 		conditionMap.put("length", length);
+		conditionMap.put("bus_type", request.getParameter("bus_type").toString());
 		conditionMap.put("factory_id", request.getParameter("factory_id").toString());
-		conditionMap.put("customer_name", request.getParameter("customer_name").toString());
-		conditionMap.put("status", request.getParameter("status").toString());
+		conditionMap.put("area", request.getParameter("area").toString());
+		conditionMap.put("week", request.getParameter("week").toString());
+		conditionMap.put("level", request.getParameter("level").toString());
 		conditionMap.put("fault_phenomenon", request.getParameter("fault_phenomenon").toString());
-		conditionMap.put("fault_date_start", request.getParameter("fault_date_start").toString());
-		conditionMap.put("fault_date_end", request.getParameter("fault_date_end").toString());
+		conditionMap.put("fault_mils", request.getParameter("fault_mils").toString());
+		conditionMap.put("is_batch", request.getParameter("is_batch").toString());
 		Map<String, Object> result = qualityService.getProcessFaultList(conditionMap);
 		mv.clear();
 		mv.getModelMap().addAllAttributes(result);
@@ -930,6 +932,8 @@ public class QualityController extends BaseController {
 		int userid=(int) session.getAttribute("user_id");
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String curTime = df.format(new Date());
+		//判断VIN和车牌是否存在，不允许重复录入
+		
 		String filename = saveFileMethod(file);
 		logger.info("-->filename = " + filename);
 		ProcessFaultBean pocessFault = new ProcessFaultBean();
@@ -944,6 +948,7 @@ public class QualityController extends BaseController {
 		pocessFault.setFault_phenomenon(request.getParameter("fault_phenomenon"));
 		pocessFault.setFault_reason(request.getParameter("fault_reason"));
 		pocessFault.setFactory_id(Integer.valueOf(request.getParameter("factory")));
+		pocessFault.setResponse_factory(request.getParameter("response_factory"));
 		pocessFault.setResponse_workshop(request.getParameter("workshop"));
 		pocessFault.setResolve_method(request.getParameter("resolve_method"));
 		pocessFault.setResolve_date(request.getParameter("resolve_date"));
@@ -1550,6 +1555,22 @@ public class QualityController extends BaseController {
 		return model;
 	}
 	
+	@RequestMapping("/getFactoryIdByVin")
+	@ResponseBody
+	public ModelMap getFactoryIdByVin(){
+		Map<String, Object> result = new HashMap<String, Object>();
+		Map<String,Object> conditionMap=new HashMap<String,Object>();
+		conditionMap.put("vin", request.getParameter("vin"));
+		
+		List<Map<String, Object>> data = new ArrayList<Map<String, Object>>();
+		data = qualityService.getFactoryIdByVin(conditionMap);
+		result.put("data", data);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(result);
+		model = mv.getModelMap();
+		return model;
+	}
+	
 	@SuppressWarnings("rawtypes")
 	@RequestMapping("/getFaultLibList")
 	@ResponseBody
@@ -2130,6 +2151,18 @@ public class QualityController extends BaseController {
 		condMap.put("date_end", request.getParameter("date_end"));
 		
 		Map<String,Object> list = qualityService.getTestingDateReport(condMap);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(list);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("/getTestingDateInfo")
+	@ResponseBody
+	public ModelMap getTestingDateInfo() {
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("vin", request.getParameter("vin"));
+		Map<String,Object> list = qualityService.getTestingInfo(condMap);
 		mv.clear();
 		mv.getModelMap().addAllAttributes(list);
 		model = mv.getModelMap();

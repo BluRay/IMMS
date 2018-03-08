@@ -152,9 +152,13 @@ function ajaxQuery(){
 		            {"title":"总成料号","class":"center","data":"sap_materialNo","defaultContent":""},
 		            {"title":"物料描述","class":"center","data":"material","defaultContent": ""},
 		            {"title":"操作","class":"center","data":null,"render":function(data,type,row){
+		            	var edit_str = "<i class=\"ace-icon fa fa-pencil bigger-130 editorder\" title='导入' onclick = 'showEditPage(" + JSON.stringify(row)+ ");' style='color:green;cursor: pointer;'></i>";
+		            	if(typeof(row.config_id) == "undefined"){
+		            		edit_str = "";
+		            	}
+		            	
 		            	return "<i class=\"glyphicon glyphicon-search bigger-130 showbus\" title='查看' onclick = 'showInfoPage(" + JSON.stringify(row)+");' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;&nbsp;"+ 
-		            	"<i class=\"ace-icon fa fa-pencil bigger-130 editorder\" title='导入' onclick = 'showEditPage(" + JSON.stringify(row)+ ");' style='color:green;cursor: pointer;'></i>";
-		            		
+		            	edit_str;
 		            	},
 		            }
 		          ],
@@ -165,6 +169,8 @@ function ajaxQuery(){
 }
 
 function showEditPage(row){
+	console.log("id = " + row.id);
+	console.log("config_qty = " + row.config_qty);
 	var allot_qty=row.allot_qty;
 	//显示订单配置数据
 	$("#order").val(row.order_no).attr("disabled",true).data("total_config_qty",row.total_config_qty||0);

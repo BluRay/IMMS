@@ -108,6 +108,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             			alert("暂未给用户分配【工艺部评审】角色,无法进行评审");
             			return false;
             		}
+            		if($("#configTable").val().length>2000){
+            			alert("【技术协议/配置表】数据内容过长！");
+            			return false;
+            		}
+            		if($("#proximatematter").val().length>1000){
+            			alert("【型材清单】数据内容过长！");
+            			return false;
+            		}
             		$.ajax({
             			url: "/BMS/snaker/flow/process",
             			dataType: "json",

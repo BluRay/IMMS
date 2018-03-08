@@ -231,7 +231,7 @@ function showRemoveBusNumberModal(factory, workshop, order_no, tech_task_id, tas
 					title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 技改确认</h4></div>',
 					title_html: true,
 					width:900,
-					height:600,
+					height:500,
 					modal: true,
 					buttons: [{
 								text: "关闭",
@@ -270,7 +270,7 @@ function showSelectBusNumberModal(factory, workshop, order_no, tech_task_id, tas
 		title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 技改确认</h4></div>',
 		title_html: true,
 		width:900,
-		height:600,
+		height:500,
 		modal: true,
 		buttons: [{
 					text: "关闭",
@@ -325,7 +325,7 @@ function showRemoveBusNumberModal1(factory, workshop, order_no, tech_task_id, to
 					title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 取消技改跟进</h4></div>',
 					title_html: true,
 					width:900,
-					height:600,
+					height:500,
 					modal: true,
 					buttons: [
 						{
@@ -364,7 +364,7 @@ function showSelectBusNumberModal1(factory, workshop, order_no, tech_task_id, to
 		title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 技改确认</h4></div>',
 		title_html: true,
 		width:900,
-		height:600,
+		height:500,
 		modal: true,
 		buttons: [
 			/**{
@@ -666,7 +666,7 @@ function showSelectBusNumberModal_view(factory, workshop, order_no, tech_task_id
 		title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 技改查询</h4></div>',
 		title_html: true,
 		width:900,
-		height:600,
+		height:500,
 		modal: true,
 		buttons: [{
 					text: "取消",
@@ -690,7 +690,7 @@ function showSelectBusNumberModal_view1(factory, workshop, order_no, tech_task_i
 		title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 技改查询</h4></div>',
 		title_html: true,
 		width:900,
-		height:600,
+		height:500,
 		modal: true,
 		buttons: [{
 					text: "取消",
