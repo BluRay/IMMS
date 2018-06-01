@@ -16,7 +16,7 @@ $(document).ready(function () {
 	}
 	
 	$('#search_factory').change(function(){ 
-		getWorkshopSelect("plan/pauseManager",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
+		getWorkshopSelect("plan/pauseManager",$("#search_factory :selected").text(),"","#search_workshop","全部","id");
 	})
 	
 	$("#btnQuery").click (function () {
@@ -345,6 +345,7 @@ function ajaxQuery(){
 		    	"pause_date_end": $('#pause_date_end').val(),
 		    	"resume_date_start": $('#resume_date_start').val(),
 		    	"resume_date_end": $('#resume_date_end').val(),
+		    	"status": $('#search_status').val(),
 				"orderColumn":"id"
 			};
             param.length = data.length;					//页面显示记录条数，在页面显示每页显示多少项的时候

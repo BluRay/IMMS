@@ -13,7 +13,7 @@
     <div class="main" >
     	<div class="div_head">
     		<div id="board_logo"><img id="byd_logo" src="../images/byd_logo.png" alt="BYD AUTO"></img></div>
-    		<div id="board_title">长沙工厂欢迎您 </div>
+    		<div id="board_title">焊装车间欢迎您 </div>
     		<div id="board_time"></div>
     	</div>
     	<div class="board_work" id="production_info">

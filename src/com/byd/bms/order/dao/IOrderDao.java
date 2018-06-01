@@ -38,6 +38,30 @@ public interface IOrderDao {
 	public List queryOrderQueryList(Map<String, Object> condMap);
 	public int queryOrderQueryListCount(Map<String, Object> condMap);
 	public int queryOrderConfigTotalQty(String order_id);
-	public void updateOrderColor(Map<String, Object> condMap);
-	
+	public List getOrderConfigParam(Map<String, Object> conditionMap);
+	public int editOrderConfigParam(Map<String, Object> conditionMap);
+	public int getBusTypeIdByCode(Map<String, Object> condMap);
+	public int getOrderIdByBomNo(String order_no_bom);
+	public int insertOrderByBom(BmsOrder order);
+	public int updateOrderByBom(BmsOrder order);
+	public int getFactoryOrderCountByOrderId(String order_id);
+	public int getOrderQtyById(String order_id);
+	public int getOrderConfigCountByOrderId(String order_id);
+	public int insertOrderConfigByBom(Map<String, String> condMap);
+	public int updateOrderConfigByBom(Map<String, String> condMap);
+	public int deleteOrderConfigByBom(Map<String, Object> condMap);
+	public int getBusCountByVehicle_model(Map<String, Object> condMap);
+	public int getBusCountByOneVehicle_model(Map<String, Object> condMap);
+	public int deleteOrderConfigNoBusNumberl(Map<String, Object> condMap);
+	public int getOrderConfigIdByVehicle_model(Map<String, Object> condMap);
+	public int getOrderConfigIdByVehicleModel(String order_vehicle_model);
+	public int insertOrderConfigDetailByBom(Map<String, Object> condMap);
+	public int updateOrderConfigDetailByBom(Map<String, Object> condMap);
+	public int getOrderConfigDetailIdByVehicleModel(String order_vehicle_model);
+
+	public int getBomPmdIdByBom(Map<String, Object> condMap);
+	public int insertBomPmdIdByBom(Map<String, Object> condMap);
+	public int updateBomPmdIdByBom(Map<String, Object> condMap);
+
+	public List queryOrderConfigByVehicle(String orderVechicleModel);
 }

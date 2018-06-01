@@ -126,6 +126,9 @@
 		</div>
 	</div>
 	
+	<div style="position:absolute;z-index:999;top:50%;left:50%;display: none;" class="divLoading" >
+    	<span><i class="fa fa-spinner fa-spin fa-4x" style="height:1em;"></i></span>
+    </div>
 	<script src="../js/datePicker/WdatePicker.js"></script>
 	<script src="../assets/js/jquery.dataTables.min.js"></script>
 	<script src="../assets/js/jquery-ui.min.js"></script>

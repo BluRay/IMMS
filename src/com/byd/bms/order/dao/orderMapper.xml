@@ -5,7 +5,8 @@
 	<select id="getOrderList" parameterType="Map" resultType="Map">
 		SELECT f.production_qty,f.busnum_start,f.busnum_end,a.area,a.id AS 'factory_id',a.factory_name,f.edit_date,u.display_name as 'user_name',
 		t.bus_type_code,o.*,CONCAT(o.order_name,t.bus_type_code,'  ',o.order_qty,'台') AS 'order_name_str',f.status,a.factory_code,
-		f.bus_number_start,(f.bus_number_start+f.busnum_end-f.busnum_start) bus_number_end
+		f.bus_number_start,(f.bus_number_start+f.busnum_end-f.busnum_start) bus_number_end,
+		(SELECT GROUP_CONCAT(DISTINCT c.color) FROM BMS_OR_ORDER_CONFIG c   WHERE o.id = c.order_id GROUP BY c.color ) as 'order_color' 
 		FROM BMS_OR_ORDER o			
 		LEFT JOIN BMS_OR_FACTORY_ORDER f ON f.order_id = o.id
 		LEFT JOIN BMS_BASE_FACTORY a ON f.factory_id = a.id 
@@ -28,7 +29,7 @@
 			and o.productive_year = #{actYear} 
 		</if>
 		<if test="factory !=null and factory !=''">
-			and find_in_set(f.factory_id ,#{factory} )
+			and (find_in_set(f.factory_id ,#{factory} ) or ISNULL(f.order_id) )
 		</if>
 			ORDER BY o.order_no DESC
 		<if test="start !=null and length !='-1' ">
@@ -62,7 +63,7 @@
 			and o.productive_year = #{actYear} 
 		</if>
 		<if test="factory !=null and factory !=''">
-			and find_in_set(f.factory_id ,#{factory} )
+			and (find_in_set(f.factory_id ,#{factory} ) or ISNULL(f.order_id) )
 		</if>
 	</select>
 	
@@ -83,13 +84,13 @@
 	
 	<select id="getOrderDetailList" parameterType="Map" resultType="com.byd.bms.order.model.BmsFactoryOrderDetail">
 		select d.id id,d.busnum_start busnum_start,d.busnum_end busnum_end,d.id factory_order_id,(d.busnum_end-d.busnum_start+1) production_qty,d.factory_id factory_id,o.order_no order_no,o.order_name order_name,
-		o.order_code order_code,o.order_type order_type,o.order_area order_area,o.order_qty order_qty,o.productive_year productive_year,t.bus_type_code bus_type_code,o.memo,o.customer,o.order_color,
+		o.order_code order_code,o.order_type order_type,o.order_area order_area,o.order_qty order_qty,o.productive_year productive_year,t.bus_type_code bus_type_code,o.memo,o.customer,
 		(SELECT ifnull(max(cast(reverse(substr(reverse(bus_number),1,instr(reverse(bus_number),'-')-1)) as signed)),0) FROM BMS_PLAN_BUS where order_id=d.order_id and factory_id=d.factory_id and factory_order_id=d.id) maxbusnum,
 		(SELECT ifnull(min(cast(reverse(substr(reverse(bus_number),1,instr(reverse(bus_number),'-')-1)) as signed)),0) FROM BMS_PLAN_BUS where order_id=d.order_id and factory_id=d.factory_id and factory_order_id=d.id) minbusnum,
 		d.order_id order_id,o.delivery_date delivery_date,f.factory_name,d.editor_id editor_id,d.edit_date edit_date,d.bus_number_count bus_number_count,d.bus_number_start bus_number_start
-		from BMS_OR_FACTORY_ORDER d
+		from BMS_OR_ORDER o
+		left join BMS_OR_FACTORY_ORDER d  on o.id=d.order_id
 		left join BMS_BASE_FACTORY f on f.id=d.factory_id
-		left join BMS_OR_ORDER o on o.id=d.order_id
 		left join BMS_BASE_BUS_TYPE t on o.bus_type_id = t.id
 		where 1=1
 		<if test="search_order_no!=null">
@@ -105,7 +106,7 @@
 			and find_in_set(d.factory_id ,#{search_factory} )
 		</if>
 		<if test="order_id!=null">
-			and d.order_id = #{order_id} 
+			and o.id = #{order_id} 
 		</if>
 		ORDER BY d.busnum_start
 		<if test="start !=null and length !='-1'">
@@ -154,11 +155,155 @@
  			select max(order_no) from BMS_OR_ORDER where order_no like concat('%',#{year},'%')
  		]]>
 	</select>
+	<select id="getBusTypeIdByCode" parameterType="map" resultType="int">
+	SELECT IFNULL(SUM(id),0) AS id FROM BMS_BASE_BUS_TYPE WHERE bus_type_code =  #{bus_type_code} AND bus_series = #{bus_series}
+	</select>
+	<select id="getOrderIdByBomNo" parameterType="String" resultType="int">
+	SELECT IFNULL(SUM(id),0) AS id FROM BMS_OR_ORDER WHERE order_no_bom = #{order_no_bom}
+	</select>
+	<select id="getOrderConfigCountByOrderId" parameterType="String" resultType="int">
+	SELECT COUNT(*) AS confilCount FROM BMS_OR_ORDER_CONFIG WHERE order_id = #{order_id}
+	</select>
+	
+	<select id="getFactoryOrderCountByOrderId" parameterType="String" resultType="int">
+	SELECT COUNT(*) AS fac_count FROM BMS_OR_FACTORY_ORDER WHERE order_id = #{order_id}
+	</select>
+	<select id="getOrderQtyById" parameterType="String" resultType="int">
+	SELECT order_qty FROM BMS_OR_ORDER WHERE id =  #{order_id}
+	</select>
+	<select id="getBusCountByVehicle_model" parameterType="map" resultType="int">
+	SELECT COUNT(*) AS bus_count FROM BMS_PLAN_BUS WHERE order_config_id IN 
+	(SELECT id FROM BMS_OR_ORDER_CONFIG WHERE order_id = #{order_id} AND order_vehicle_model NOT IN ${order_vehicle_model} )
+	</select>
+	<select id="getBusCountByOneVehicle_model" parameterType="map" resultType="int">
+	SELECT COUNT(*) AS bus_count FROM BMS_PLAN_BUS WHERE order_config_id IN 
+	(SELECT id FROM BMS_OR_ORDER_CONFIG WHERE order_id = #{order_id} AND order_vehicle_model = #{order_vehicle_model} )
+	</select>
+	
+	<select id="getBomPmdIdByBom" parameterType="map" resultType="int">
+	SELECT IFNULL(SUM(id),0) AS id FROM BMS_ZZJ_BOM_PMD_ITEMS 
+	WHERE order_vehicle_model = #{order_vehicle_model} AND rawmat_no = #{rawmat_no}
+	</select>
+	<insert id="insertBomPmdIdByBom" useGeneratedKeys="true" keyProperty="id" parameterType="map">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+		SELECT LAST_INSERT_ID()
+		</selectKey>
+		INSERT INTO BMS_ZZJ_BOM_PMD_ITEMS
+		(order_bus_type_code, order_vehicle_model, parentmat_no, parentmat_desc, childmat_no, childmat_desc,
+		rawmat_no, source, mat_type, specification, unit, loss, 
+		quantity, weight, weight_total, use_workshop, process, crafts_identification, 
+		filling_size_l, filling_size_w, filling_size_h, accuracy_demand, surface_treatment, memo, 
+		crafts_memo, subcontracting_type, process_sequence, process_flow, team, change_escription, 
+		change_subject, change_id, reason, release_date, start_date, end_date)
+		VALUES(#{order_bus_type_code},#{order_vehicle_model},#{parentmat_no},#{parentmat_desc},#{childmat_no},#{childmat_desc},
+		#{rawmat_no},#{source},#{mat_type},#{specification},#{unit},#{loss},
+		#{quantity},#{weight},#{weight_total},#{use_workshop},#{process},#{crafts_identification},
+		#{filling_size_l},#{filling_size_w},#{filling_size_h},#{accuracy_demand},#{surface_treatment},#{memo},
+		#{crafts_memo},#{subcontracting_type},#{process_sequence},#{process_flow},#{team},#{change_escription},
+		#{change_subject},#{change_id},#{reason},#{release_date},#{start_date},#{end_date}
+		)
+	</insert>
+	<update id="updateBomPmdIdByBom" parameterType="map">
+		UPDATE BMS_ZZJ_BOM_PMD_ITEMS SET
+		order_bus_type_code = #{order_bus_type_code},parentmat_no = #{parentmat_no},parentmat_desc = #{parentmat_desc},
+		childmat_no = #{childmat_no}, childmat_desc = #{childmat_desc},
+		source = #{source}, mat_type = #{mat_type}, specification = #{specification}, unit = #{unit}, loss = #{loss}, 
+		quantity = #{quantity}, weight = #{weight}, weight_total = #{weight_total}, use_workshop = #{use_workshop}, 
+		process = #{process}, crafts_identification = #{crafts_identification}, 
+		filling_size_l = #{filling_size_l}, filling_size_w = #{filling_size_w}, filling_size_h = #{filling_size_h}, 
+		accuracy_demand = #{accuracy_demand}, surface_treatment = #{surface_treatment}, memo = #{memo}, 
+		crafts_memo = #{crafts_memo}, subcontracting_type = #{subcontracting_type}, process_sequence = #{process_sequence},
+		process_flow = #{process_flow}, team = #{team}, change_escription = #{change_escription}, 
+		change_subject = #{change_subject}, change_id = #{change_id}, reason = #{reason}, release_date = #{release_date}, 
+		start_date = #{start_date}, end_date = #{end_date}
+		WHERE order_vehicle_model=#{order_vehicle_model} AND rawmat_no = #{rawmat_no}
+	</update>
+	
+	<insert id="insertOrderConfigDetailByBom" useGeneratedKeys="true" keyProperty="id" parameterType="map">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+		SELECT LAST_INSERT_ID()
+		</selectKey>
+		INSERT INTO BMS_OR_ORDER_CONFIG_DETAIL
+		(order_config_id, order_vehicle_model, family_code, 
+		family_name, feature_code, feature_name, supplier_code, supplier_name)
+		VALUES(#{order_config_id},#{order_vehicle_model},#{family_code},
+		#{family_name},#{feature_code},#{feature_name},#{supplier_code},#{supplier_name})
+	</insert>
+	<update id="updateOrderConfigDetailByBom" parameterType="map">
+	UPDATE BMS_OR_ORDER_CONFIG_DETAIL
+	SET order_config_id=#{order_config_id},  family_code=#{family_code}, family_name=#{family_name}, 
+	feature_code=#{feature_code}, feature_name=#{feature_name}, supplier_code=#{supplier_code}, supplier_name=#{supplier_name}
+	WHERE order_vehicle_model=#{order_vehicle_model}
+	</update>
+	
+	<insert id="insertOrderConfigByBom" useGeneratedKeys="true" keyProperty="id" parameterType="map">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+		SELECT LAST_INSERT_ID()
+		</selectKey>
+	INSERT INTO BMS_OR_ORDER_CONFIG
+	(order_id, line_no, order_vehicle_model, sap_materialNo, order_bus_type_code,order_config_name, config_qty, customer, 
+	vin_prefix, vehicle_type, brand, wmi, manufacturer, vehicle_model, 
+	bus_vehicle_type, chassis_model, vehicle_length, wheelbase, power_type, drive_motor, 
+	motor_model, motor_power, battery_model, battery_capacity, rated_voltage, passenger_num, 
+	light_downdip, spring_num, max_speed, max_weight, tire_type, color, 
+	bus_seats, config_source, memo)
+	VALUES(#{order_id},#{line_no},#{order_vehicle_model},#{sap_materialNo},#{order_bus_type_code},#{order_config_name},#{config_qty},#{customer},
+	#{vin_prefix},#{vehicle_type},#{brand},#{wmi},#{manufacturer},#{vehicle_model},
+	'',#{chassis_model},#{vehicle_length},#{wheelbase},#{power_type},#{drive_motor},
+	#{motor_model},#{motor_power},#{battery_model},#{battery_capacity},#{rated_voltage},#{passenger_num},
+	#{light_downdip},#{spring_num},#{max_speed},#{max_weight},#{tire_type},#{color},
+	#{bus_seats},#{config_source},#{memo})
+	</insert>
+	<update id="updateOrderConfigByBom" parameterType="map">
+	UPDATE BMS_OR_ORDER_CONFIG SET sap_materialNo=#{sap_materialNo}, order_bus_type_code=#{order_bus_type_code}, 
+	config_qty=#{config_qty}, customer=#{customer},
+	vin_prefix=#{vin_prefix}, vehicle_type=#{vehicle_type}, brand=#{brand}, wmi=#{wmi}, manufacturer=#{manufacturer},
+	vehicle_model=#{vehicle_model}, 
+	bus_vehicle_type=#{bus_vehicle_type}, chassis_model=#{chassis_model}, vehicle_length=#{vehicle_length}, 
+	wheelbase=#{wheelbase}, power_type=#{power_type}, 
+	drive_motor=#{drive_motor}, motor_model=#{motor_model}, motor_power=#{motor_power}, battery_model=#{battery_model}, 
+	battery_capacity=#{battery_capacity}, rated_voltage=#{rated_voltage}, passenger_num=#{passenger_num}, 
+	light_downdip=#{light_downdip}, spring_num=#{spring_num}, max_speed=#{max_speed}, max_weight=#{max_weight}, 
+	tire_type=#{tire_type}, color=#{color}, bus_seats=#{bus_seats}, config_source='2', memo=#{memo}
+	WHERE order_id=#{order_id} AND order_vehicle_model=#{order_vehicle_model}
+	</update>
+	<delete id="deleteOrderConfigByBom" parameterType="map">
+	DELETE FROM BMS_OR_ORDER_CONFIG WHERE order_id=#{order_id}
+	</delete>
+	<delete id="deleteOrderConfigNoBusNumberl" parameterType="map">
+	DELETE FROM BMS_OR_ORDER_CONFIG WHERE order_id=#{order_id} AND order_vehicle_model NOT IN ${order_vehicle_model}
+	</delete>
+	
+	<insert id="insertOrderByBom" useGeneratedKeys="true" keyProperty="id" parameterType="com.byd.bms.order.model.BmsOrder">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+		SELECT LAST_INSERT_ID()
+		</selectKey>
+		INSERT INTO BMS_OR_ORDER
+		(order_no_bom, order_no, order_area, order_name, order_code, order_type, bus_type_id, bus_type_code,
+		 bus_series, bus_code, vehicle_class, order_qty, productive_year, delivery_date, customer, 
+		 memo, editor_id, edit_date, expect_delivery_date, supply_days, project_background, 
+		 special_requirements, po_approval_date, order_source, synchronised_date)
+		VALUES(#{order_no_bom}, #{order_no}, #{order_area}, #{order_name}, #{order_code}, #{order_type}, #{bus_type_id}, #{bus_type}, 
+		#{bus_series}, #{bus_code}, #{vehicle_class}, #{order_qty}, #{productive_year}, #{delivery_date}, #{customer}, 
+		#{memo}, #{editor_id}, #{edit_date}, #{expect_delivery_date}, #{supply_days}, #{project_background}, 
+		#{special_requirements}, #{po_approval_date}, #{order_source}, #{synchronised_date})
+	</insert>
+	<update id="updateOrderByBom" parameterType="com.byd.bms.order.model.BmsOrder">
+	UPDATE BMS_OR_ORDER
+	SET order_no=#{order_no}, order_area=#{order_area}, order_name=#{order_name},
+	order_code=#{order_code}, order_type=#{order_type}, bus_type_id=#{bus_type_id}, bus_type_code=#{bus_type}, 
+	bus_series=#{bus_series}, bus_code=#{bus_code}, vehicle_class=#{vehicle_class}, order_qty=#{order_qty}, 
+	productive_year=#{productive_year}, delivery_date=#{delivery_date}, customer=#{customer}, memo=#{memo}, 
+	expect_delivery_date=#{expect_delivery_date}, 
+	supply_days=#{supply_days}, project_background=#{project_background}, special_requirements=#{special_requirements}, 
+	po_approval_date=#{po_approval_date}, synchronised_date=#{synchronised_date}
+	WHERE order_no_bom=#{order_no_bom}
+	</update>
 	
 	<insert id="insertOrder" useGeneratedKeys="true" keyProperty="id" parameterType="com.byd.bms.order.model.BmsOrder">
 		<![CDATA[
-			insert into BMS_OR_ORDER(order_no,order_name,order_code,order_type,bus_type_id,order_qty,productive_year,delivery_date,customer,order_area,memo,editor_id,edit_date) 
-			values(#{order_no},#{order_name},#{order_code},#{order_type},#{bus_type_id},#{order_qty},#{productive_year},#{delivery_date},#{customer},#{order_area},#{memo},#{editor_id},#{edit_date})
+			insert into BMS_OR_ORDER(order_no,order_name,order_code,order_type,bus_type_id,bus_type_code,bus_series,order_qty,productive_year,delivery_date,customer,order_area,memo,editor_id,edit_date) 
+			values(#{order_no},#{order_name},#{order_code},#{order_type},#{bus_type_id},#{bus_type_code},#{bus_series},#{order_qty},#{productive_year},#{delivery_date},#{customer},#{order_area},#{memo},#{editor_id},#{edit_date})
 		]]>
 	</insert>
 	
@@ -188,9 +333,8 @@
 	</select>
 	
 	<select id="getOrderConfigList" parameterType="Map" resultType="Map">
-		select o.id,c.id config_id,o.order_no,CONCAT(o.order_name,t.bus_type_code,'  ',o.order_qty,'台') AS order_name_str,
-		o.productive_year,o.delivery_date,c.battery_capacity,c.rated_voltage,c.spring_num,c.tire_type,c.passenger_num,
-		o.order_qty,c.order_config_name,c.sap_materialNo,c.material,c.config_file,c.config_qty,c.customer,c.bus_seats,
+		select o.id,c.id config_id,o.order_no,CONCAT(o.order_name,t.bus_type_code,'  ',o.order_qty,'台') AS order_name_str,o.order_qty,
+		o.productive_year,o.delivery_date,c.*,
 		(select ifnull(sum(fc.product_qty),0) from BMS_OR_FACTORY_ORDER_CONFIG fc where fc.order_config_id=c.id) allot_qty,
 		(select ifnull(sum(oc.config_qty),0) from BMS_OR_ORDER_CONFIG oc where oc.order_id=o.id) total_config_qty
 		from BMS_OR_ORDER o
@@ -239,10 +383,18 @@
 			SELECT
 			LAST_INSERT_ID()
 		</selectKey>
-		insert into BMS_OR_ORDER_CONFIG (order_id,line_no,sap_materialNo,material,order_config_name,customer,config_qty,
-		editor_id,edit_date,battery_capacity,rated_voltage,spring_num,tire_type,passenger_num,bus_seats)
-		values(#{order_id},#{line_no},#{materialNo},#{material},#{config_name},#{customer},#{config_qty},#{editor_id},
-		#{edit_date},#{battery_capacity},#{rated_voltage},#{spring_num},#{tire_type},#{passenger_num},#{bus_seats})
+		insert into BMS_OR_ORDER_CONFIG (order_id,line_no,sap_materialNo,material,order_config_name,customer,config_qty,order_vehicle_model,order_bus_type_code,
+		editor_id,edit_date,
+		vin_prefix,vehicle_type,brand,manufacturer,vehicle_model,bus_vehicle_type,chassis_model,vehicle_length,wheelbase,
+		power_type,drive_motor,motor_model,motor_power,battery_model,battery_capacity,rated_voltage,passenger_num,light_downdip,
+		spring_num,max_speed,max_weight,tire_type,color,bus_seats,memo
+		)
+		values(#{order_id},#{line_no},#{materialNo},#{material},#{config_name},#{customer},#{config_qty},#{order_vehicle_model},#{order_bus_type_code},#{editor_id},#{edit_date},
+		#{vin_prefix},#{vehicle_type},#{brand},#{manufacturer},#{vehicle_model},#{bus_vehicle_type},#{chassis_model},#{vehicle_length},#{wheelbase},
+		#{power_type},#{drive_motor},#{motor_model},#{motor_power},#{battery_model},#{battery_capacity},
+		#{rated_voltage},#{passenger_num},#{light_downdip},#{spring_num},#{max_speed},#{max_weight},#{tire_type},
+		#{color},#{bus_seats},#{memo}
+		)
 	</insert>
 	
 	<update id="updateOrderConfig" parameterType="Map">
@@ -269,24 +421,82 @@
 			<if test="edit_date !=null">
 				edit_date=#{edit_date},
 			</if>
+			<if test="vin_prefix !=null">
+				vin_prefix=#{vin_prefix},
+			</if>
+			<if test="vehicle_type !=null">
+				vehicle_type=#{vehicle_type},
+			</if>
+			<if test="brand !=null">
+				brand=#{brand},
+			</if>
+			<if test="wmi !=null">
+				wmi=#{wmi},
+			</if>
+			<if test="manufacturer !=null">
+				manufacturer=#{manufacturer},
+			</if>
+			<if test="vehicle_model !=null">
+				vehicle_model=#{vehicle_model},
+			</if>
+			<if test="bus_vehicle_type !=null">
+				bus_vehicle_type=#{bus_vehicle_type},
+			</if>
+			<if test="chassis_model !=null">
+				chassis_model=#{chassis_model},
+			</if>
+			<if test="vehicle_length !=null">
+				vehicle_length=#{vehicle_length},
+			</if>
+			<if test="wheelbase !=null">
+				wheelbase=#{wheelbase},
+			</if>
+			<if test="power_type !=null">
+				power_type=#{power_type},
+			</if>
+			<if test="drive_motor !=null">
+				drive_motor=#{drive_motor},
+			</if>
+			<if test="motor_model !=null">
+				motor_model=#{motor_model},
+			</if>
+			<if test="motor_power !=null">
+				motor_power=#{motor_power},
+			</if>
+			<if test="battery_model !=null">
+				battery_model=#{battery_model},
+			</if>
 			<if test="battery_capacity !=null">
 				battery_capacity=#{battery_capacity},
 			</if>
 			<if test="rated_voltage !=null">
 				rated_voltage=#{rated_voltage},
 			</if>
+			<if test="passenger_num !=null">
+				passenger_num=#{passenger_num},
+			</if>
+			<if test="light_downdip !=null">
+				light_downdip=#{light_downdip},
+			</if>
 			<if test="spring_num !=null">
 				spring_num=#{spring_num},
+			</if>
+			<if test="max_speed !=null">
+				max_speed=#{max_speed},
+			</if>
+			<if test="max_weight !=null">
+				max_weight=#{max_weight},
 			</if>
 			<if test="tire_type !=null">
 				tire_type=#{tire_type},
 			</if>
+			<if test="color !=null">
+				color=#{color},
+			</if>
 			<if test="bus_seats !=null">
 				bus_seats=#{bus_seats},
 			</if>
-			<if test="passenger_num !=null">
-				passenger_num=#{passenger_num}
-			</if>
+			editor_id=#{editor_id},edit_date=#{edit_date},
 		</trim>
 		where id=#{config_id}
 	</update>
@@ -301,11 +511,11 @@
 			LAST_INSERT_ID()
 		</selectKey>
 		insert into BMS_OR_ORDER_CONFIG_DETAIL
-		(order_config_id,parts_type,sap_mat,components_no,components_name,size,type,vendor,workshop,notes)
+		(order_config_id,order_vehicle_model,family_code,family_name,feature_code,feature_name,supplier_code,supplier_name,sap_material,workshop,notes)
 		values
 		<foreach collection="detail_list" item="detail" index="index" separator=",">
-			(#{config_id},#{detail.parts_type},#{detail.sap_mat},#{detail.components_no},#{detail.components_name},
-			#{detail.size},#{detail.type},#{detail.vendor},#{detail.workshop},#{detail.notes})
+			(#{config_id},#{detail.order_vehicle_model},#{detail.family_code},#{detail.family_name},#{detail.feature_code},
+			#{detail.feature_name},#{detail.supplier_code},#{detail.supplier_name},#{detail.sap_material},#{detail.workshop},#{detail.notes})
 		</foreach>
 	</insert>
 	
@@ -441,7 +651,7 @@
 			and o.order_no=#{order_no}
 		</if>
 		<if test="factory !=null and factory !=''">
-			and find_in_set(fo.factory_id,#{factory})
+			and (find_in_set(fo.factory_id ,#{factory} ) or ISNULL(fo.order_id) )
 		</if>
 		<if test="actYear !=null and actYear !=''">
 			and o.productive_year=#{actYear}
@@ -485,7 +695,7 @@
 			and o.order_no=#{order_no}
 		</if>
 		<if test="factory !=null and factory !=''">
-			and find_in_set(fo.factory_id,#{factory})
+			and (find_in_set(fo.factory_id ,#{factory} ) or ISNULL(fo.order_id) )
 		</if>
 		<if test="actYear !=null and actYear !=''">
 			and o.productive_year=#{actYear}
@@ -511,12 +721,56 @@
 		
 	</select>
 	
+	<select id="getOrderConfigIdByVehicleModel" parameterType="String" resultType="int">
+		SELECT id FROM BMS_OR_ORDER_CONFIG WHERE order_vehicle_model = #{order_vehicle_model}
+	</select>
+	<select id="getOrderConfigDetailIdByVehicleModel" parameterType="String" resultType="int">
+		SELECT IFNULL(SUM(id),0) AS id FROM BMS_OR_ORDER_CONFIG_DETAIL WHERE order_vehicle_model = #{order_vehicle_model}
+	</select>
+	<select id="getOrderConfigParam" parameterType="Map" resultType="Map">
+		select o.id,c.id config_id,o.order_no,o.order_name,c.*
+		from BMS_OR_ORDER o
+		left join BMS_OR_ORDER_CONFIG c on o.id=c.order_id
+		where 1=1
+		<if test="orderNo !=null and orderNo !=''">
+			and o.order_no=#{orderNo}
+		</if>
+		<if test="order_id!=null">
+			and o.id = #{order_id} 
+		</if>
+		order by o.id,c.id 
+	</select>
+	
+	<update id='editOrderConfigParam' parameterType="Map" >
+		update BMS_OR_ORDER_CONFIG c set
+		c.color = #{color},
+		c.vehicle_model= #{vehicle_model},
+		c.chassis_model= #{chassis_model},
+		c.motor_model= #{motor_model},
+		c.bus_seats= #{bus_seats},
+		c.passenger_num= #{passenger_num},
+		c.spring_num= #{spring_num},
+		c.dp_zzd= #{dp_zzd},
+		c.zc_zzd= #{zc_zzd},
+		c.dpgg_date= #{dpgg_date},
+		c.zcgg_date= #{zcgg_date},
+		c.ccczs_date= #{ccczs_date},
+		c.hgz_note= #{hgz_note},
+		c.tire_type = #{tire_type}
+		where c.order_id = #{order_id}
+	</update>
+
 	<select id="queryOrderConfigTotalQty" parameterType="String" resultType="int">
 		select ifnull(sum(oc.config_qty),0) from BMS_OR_ORDER_CONFIG oc where oc.order_id=#{order_id}
 	</select>
+	<select id="getOrderConfigIdByVehicle_model" parameterType="Map" resultType="int">
+	SELECT IFNULL(SUM(id),0) AS id FROM BMS_OR_ORDER_CONFIG WHERE order_id = #{order_id} 
+	AND order_vehicle_model = #{order_vehicle_model}
+	</select>
 	
-	<update id="updateOrderColor" parameterType="Map">
-		update BMS_OR_ORDER set order_color=#{order_color}
-		where id=#{order_id}
-	</update>
+	<select id="queryOrderConfigByVehicle" parameterType="String" resultType="Map">
+		SELECT F.ID configId,O.ID orderId,O.bus_type_id busTypeId FROM BMS_OR_ORDER_CONFIG F,BMS_OR_ORDER O WHERE F.order_id=O.id 
+		AND  F.order_vehicle_model =#{orderVechicleModel} 
+		
+	</select>
 </mapper>

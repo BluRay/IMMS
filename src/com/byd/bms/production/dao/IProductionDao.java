@@ -14,10 +14,11 @@ public interface IProductionDao {
 	List queryLineProcessList(Map<String, Object> condMap);
 
 	List<Map<String, Object>> queryProcessMonitorList(Map<String, Object> condMap);
+	List<Map<String, Object>> queryProcessMonitor(Map<String, Object> condMap);
 
 	List<Map<String, Object>> queryKeyParts(Map<String, Object> condMap);
 
-	Map<String, Object> queryBusInfo(String bus_number);
+	Map<String, Object> queryBusInfo(Map<String, Object> condMap_bus);
 
 	List<Map<String, Object>> queryOrderConfigList(String order_config_id);
 	
@@ -187,6 +188,7 @@ public interface IProductionDao {
 	public int editCreateTmpOrder(Map<String,Object> map);
 	public int delCreateTmpOrder(@Param("id") String id);
 	public int insertCreateTmpOrder(Map<String,Object> map);
+	public int getOrderIdByOrderNo(String order_no);
 	public List<Map<String,Object>> queryTmpOrderProcedureList(Map<String,Object> map);
 	public List<Map<String,Object>> queryAssignList(Map<String,Object> map);
 	// 派工单查询
@@ -227,5 +229,11 @@ public interface IProductionDao {
 
 	int queryPartsBatch(@Param(value="batch") String batch);
 
+	List<Map<String, Object>> getKeyPartBatchInfo(Map<String, Object> condMap);
 
+	List getBusNumberByMotor(Map conditionMap);
+
+	List<Map<String, String>> queryKeyPartsByBus(Map<String, Object> condMap);
+
+	List<Map<String, Object>> queryKeyPartsJCXByBus(Map<String, Object> condMap);
 }

@@ -157,6 +157,22 @@ public class PlanServiceImpl implements IPlanService {
 	@DataSource("dataSourceSlave")
 	public List<PlanMasterPlan> showPlanMasterList(Map<String, Object> queryMap) {
 		List<PlanMasterPlan> datalist = planDao.getPlanMasterList(queryMap);
+		/**
+		 * 查询订单计划已发布日期，并标注出来：publish_flag
+		 * added by XJW 20180420
+		 */
+		List<Map<String,Object>> publish_list = planDao.getPlanPublishList(queryMap);
+		for(PlanMasterPlan pp:datalist){
+			int order_id=pp.getOrder_id();
+			String publish_dates="";//已发布计划的日期列表
+			for(Map<String,Object> p:publish_list){
+				if(order_id==Integer.parseInt(p.get("order_id").toString())){
+					publish_dates=p.get("publish_dates").toString();
+				}
+			}
+			pp.setPublish_dates(publish_dates);
+		}
+		
 		return datalist;
 	}
 

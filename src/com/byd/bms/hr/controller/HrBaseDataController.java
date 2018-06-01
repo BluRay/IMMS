@@ -7,15 +7,20 @@ import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -35,6 +40,7 @@ import com.byd.bms.setting.service.IBaseDataService;
 import com.byd.bms.util.ExcelModel;
 import com.byd.bms.util.ExcelTool;
 import com.byd.bms.util.controller.BaseController;
+import com.byd.bms.util.service.ICommonService;
 /**
  * HR基础数据Controller
  * @author tangjin 2017-07-12
@@ -48,6 +54,8 @@ public class HrBaseDataController extends BaseController {
 	protected IHrBaseDataService hrBaseDataService;
 	@Autowired
 	protected IBaseDataService baseDataService;
+	@Autowired
+	protected ICommonService commonService;
     private static List orgList;
 	
 	public List getOrgList() {
@@ -1240,6 +1248,14 @@ public class HrBaseDataController extends BaseController {
 				int i = 1;
 				List<Map<String, Object>> queryOrgList = new ArrayList<Map<String,Object>>();
 				List staffNumberList = new ArrayList();
+				
+				//获取标准岗位List
+				List<Map<String, Object>> jobList = hrBaseDataService.getPositionData(new HashMap<String, Object>());
+				String jobString = "";
+				for(Map<String, Object> jopMap:jobList){
+					jobString +=jopMap.get("job_name")+";";
+				}
+				
 				for(Object[] data : excelModel.getData()){
 					++i;
 					if(null != data[0] && StringUtils.isNotBlank(data[0].toString().trim())){
@@ -1288,6 +1304,12 @@ public class HrBaseDataController extends BaseController {
 					}
 					if(null!=data[17] && !"".equals(data[17].toString().trim())){
 						queryOrgMap.put("team_org", data[17]==null?null:data[17].toString());
+					}
+					
+					//校验填写的岗位是否存在
+					if(!StringUtils.isEmpty(data[18].toString().trim())&&jobString.indexOf(data[18].toString())<0){
+						success = false;
+						result = result+"第"+i+"行填写的岗位在标准岗位库不存在！\n";
 					}
 					
 					queryOrgList.add(queryOrgMap);
@@ -1763,4 +1785,243 @@ public class HrBaseDataController extends BaseController {
 	}
 	
 	/****************XJW End***************************************************/
+	
+	@RequestMapping("/importJobUnitPrice")
+	public ModelAndView importPMD(){ 
+		mv.setViewName("hr/importJobUnitPrice");
+        return mv;  
+    } 
+	
+	@RequestMapping(value="/uploadJobUnitPrice",method=RequestMethod.POST)
+	@ResponseBody
+	public ModelMap uploadJobUnitPrice(@RequestParam(value="file",required=false) MultipartFile file){
+		logger.info("uploading.....");
+		String fileName=file.getOriginalFilename();
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		String edit_date = df.format(new Date());
+		String editor=String.valueOf(session.getAttribute("staff_number"));
+		try{
+				ExcelModel excelModel = new ExcelModel();
+				excelModel.setReadSheets(1);
+				excelModel.setStart(1);
+				Map<String, Integer> dataType = new HashMap<String, Integer>();
+				dataType.put("0", ExcelModel.CELL_TYPE_STRING);
+				dataType.put("1", ExcelModel.CELL_TYPE_STRING);
+				dataType.put("2", ExcelModel.CELL_TYPE_NUMERIC);
+				dataType.put("3", ExcelModel.CELL_TYPE_STRING);
+				
+				excelModel.setDataType(dataType);
+				excelModel.setPath(fileName);
+				File tempfile=new File(fileName);
+				file.transferTo(tempfile);
+				/**
+				 * 读取输入流中的excel文件，并且将数据封装到ExcelModel对象中
+				 */
+				InputStream is = new FileInputStream(tempfile);
+		
+				ExcelTool excelTool = new ExcelTool();
+				excelTool.readExcel(is, excelModel);
+				Map<String,Object> queryMap=new HashMap<String,Object>();
+				queryMap.put("length", -1);
+				List<Map<String, String>> allList = new ArrayList<Map<String, String>>();
+				List<Map<String, String>> addList = new ArrayList<Map<String, String>>();
+				List<Map<String, String>> modifyList = new ArrayList<Map<String, String>>();
+				
+				//获取工厂List
+				List<Map<String, Object>> factoryList = commonService.getAllFactorySelect(new HashMap<String, Object>());
+				String factoryString = "";
+				for(Map<String, Object> factoryMap:factoryList){
+					factoryString +=factoryMap.get("name")+";";
+				}
+				
+				//获取标准岗位List
+				List<Map<String, Object>> jobList = hrBaseDataService.getPositionData(new HashMap<String, Object>());
+				String jobString = "";
+				for(Map<String, Object> jopMap:jobList){
+					jobString +=jopMap.get("job_name")+";";
+				}
+				
+				//获取已导入的标准岗位等待工时单价信息
+				List<Map<String, Object>> allJobPriceList = hrBaseDataService.getJopPriceList(new HashMap<String, Object>());
+				List<Map<String, Object>> jopPriceList = new ArrayList<Map<String,Object>>();
+				for(Map<String, Object> priceMap:allJobPriceList){
+					Map<String,Object> map = new HashMap<String, Object>();
+					map.put("factory_name", priceMap.get("factory_name"));
+					map.put("job", priceMap.get("job"));
+					map.put("unit_price", priceMap.get("unit_price"));
+					map.put("effective_date", priceMap.get("effective_date"));
+					
+					jopPriceList.add(map);
+				}
+				
+				int no = 1;
+				for (Object[] data : excelModel.getData()) {
+					int line=2; // 模板从第2行开始是单价数据
+					String errorMessage="";
+					Map<String, String> infomap = new HashMap<String, String>();
+					infomap.put("no",no+"");
+					
+					//用于判断导入的EXCEL数据是否重复
+					List<Map<String, Object>> excelList = new ArrayList<Map<String, Object>>();
+					
+		            if(data[0] != null && !data[0].toString().equals("")){
+						//校验填写的工厂是否存在
+						if(factoryString.indexOf(data[0].toString())>-1){
+							infomap.put("factory_name",data[0].toString().trim());
+						}else{
+							errorMessage+="填写的工厂名称不存在；";
+						}
+		            }else{
+		            	errorMessage="必须填写工厂！";
+		            }
+					
+		            if(data[1] != null && !data[1].toString().equals("")){
+						//校验填写的岗位是否存在
+						if(jobString.indexOf(data[1].toString())>-1){
+							infomap.put("job",data[1].toString().trim());
+						}else{
+							errorMessage+="填写的岗位名称不存在；";
+						}
+		            }else{
+		            	errorMessage="必须填写标准岗位名称！";
+		            }
+		            if(data[2] != null && !data[2].toString().equals("")){
+		            	infomap.put("unit_price",data[2].toString().trim());
+		            }else{
+		            	errorMessage+="必须填写等待工时单价；";
+		            }
+					if(data[3] != null && !data[3].toString().equals("")){
+						if(isValidDate(data[3].toString().trim())){
+							infomap.put("effective_date",data[3].toString().trim());
+						}else{
+							errorMessage+="日期格式必须为yyyy-MM-dd，如(2018-05-05)；";
+						}
+		            }else{
+		            	errorMessage+="必须填写生效日期；";
+		            }
+
+					Map<String, Object> excelMap = new HashMap<String, Object>();
+					excelMap.put("factory_name", data[0].toString().trim());
+					excelMap.put("job", data[1].toString().trim());
+					excelMap.put("unit_price", data[2].toString().trim());
+					excelMap.put("effective_date", data[3].toString().trim());
+					if(excelList.indexOf(excelMap)!=-1 && excelList.indexOf(excelMap)!=(no-1)){
+						//导入数据存在重复
+						errorMessage+="第"+(excelList.indexOf(excelMap)+1)+"行数据与第"+no+"行数据重复；";
+					}
+					excelList.add(excelMap);
+					
+					infomap.put("error", errorMessage);
+					
+					infomap.put("editor",editor);
+					infomap.put("edit_date",edit_date);
+					
+					if(jopPriceList.indexOf(excelMap)!=-1 && jopPriceList.indexOf(excelMap)!=(no-1)){
+						//导入数据与数据库数据重复
+						modifyList.add(infomap);
+					}else{
+						addList.add(infomap);
+					}
+					
+					allList.add(infomap);
+					line++;
+					no++;
+				}
+				Map<String,Object> rtnMap = new HashMap<String, Object>();
+				rtnMap.put("allList", allList);
+				rtnMap.put("addList", addList);
+				rtnMap.put("modifyList", modifyList);
+				initModel(true,"",rtnMap);
+		}catch(Exception e){
+			initModel(false,"模板格式有误："+e.getMessage(),null);
+		}
+		return mv.getModelMap();
+	}
+	
+	@RequestMapping("/saveJobUnitPrice")
+	@ResponseBody
+	public ModelMap saveJobUnitPrice(){
+		model.clear();
+		String addListStr=request.getParameter("addList");
+		String modifyListStr=request.getParameter("modifyList");
+		
+		Map<String,Object> param_map=new HashMap<String,Object>();
+		
+		List<Map<String,Object>> addList=new ArrayList<Map<String,Object>>();
+		List<Map<String,Object>> modifyList=new ArrayList<Map<String,Object>>();
+		
+		if(null!=addListStr&&!addListStr.equals("")){
+			JSONArray add_arr=JSONArray.fromObject(addListStr);
+			Iterator it=add_arr.iterator();
+			
+			while(it.hasNext()){
+				JSONObject jel=(JSONObject) it.next();
+				Map<String,Object> pmd=(Map<String, Object>) JSONObject.toBean(jel, Map.class);
+				addList.add(pmd);
+			}
+		}
+		if(null!=modifyListStr&&!modifyListStr.equals("")){
+			JSONArray modify_arr=JSONArray.fromObject(modifyListStr);
+			Iterator it_m=modify_arr.iterator();
+			
+			while(it_m.hasNext()){
+				JSONObject jel=(JSONObject) it_m.next();
+				Map<String,Object> pmd=(Map<String, Object>) JSONObject.toBean(jel, Map.class);
+				modifyList.add(pmd);
+			}
+		}
+		param_map.put("addList", addList);
+		param_map.put("modifyList", modifyList);
+
+		try{
+			hrBaseDataService.saveJobUnitPrice(param_map);
+			initModel(true,"保存成功！",null);
+		}catch(Exception e){
+			logger.error(e.getMessage());
+			initModel(false,"保存失败！"+e.getMessage(),null);
+		}
+		
+		return mv.getModelMap();
+	}
+	
+	@RequestMapping("/queryJobUnitPrice")
+	@ResponseBody
+	public ModelMap queryJobUnitPrice(){
+		model.clear();
+		String factory_name=request.getParameter("factory_name");
+		String job=request.getParameter("job");
+		String effective_date=request.getParameter("effective_date");
+		
+		Map<String,Object> param_map=new HashMap<String,Object>();
+		param_map.put("factory_name",factory_name);
+		param_map.put("job",job);
+		param_map.put("effective_date",effective_date);
+		
+		try{
+			//需操作的下料明细
+			List<Map<String,Object>> result = hrBaseDataService.getJopPriceList(param_map);
+			initModel(true,"信息查询成功！",result);
+		}catch(Exception e){
+			logger.error(e.getMessage());
+			initModel(false,"信息查询失败！"+e.getMessage(),null);
+		}
+		
+		return mv.getModelMap();
+	}
+	
+	
+	public static boolean isValidDate(String str) {
+	      boolean convertSuccess=true;
+	       SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+	       try {
+	          format.setLenient(false);
+	          format.parse(str);
+	       } catch (ParseException e) {
+	          // e.printStackTrace();
+	    	   // 如果throw java.text.ParseException或者NullPointerException，就说明格式不对
+	           convertSuccess=false;
+	       } 
+	       return convertSuccess;
+	}
+	
 }

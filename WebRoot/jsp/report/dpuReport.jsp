@@ -50,9 +50,9 @@
 								<td>&nbsp;查询维度：</td>
 								<td>
 									<select id="search_index" class="input-small" style="height: 30px;width:60px">
+										<option value="month">月</option>
 										<option value="day">日</option>
 										<option value="week">周</option>
-										<option value="month">月</option>
 										<option value="order">订单</option>
 									</select>
 								</td>

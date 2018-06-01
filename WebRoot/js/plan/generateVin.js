@@ -116,14 +116,16 @@ $(document).ready(function () {
 			async : false,
 			error : function(response) {},
 			success : function(response) {
+				
+				$('#new_year').val(response.data.productive_year);
+				$("#new_area option[keyvalue='"+response.data.order_area+"']").attr("selected",true);
 				if(response.data.VIN_prefix == null){
 					$('#new_vinPrefix').val("没有配置VIN规则");
 					$("#new_WMI_extension").val("");
 				}else{
 					$('#new_vinPrefix').val(response.data.VIN_prefix);
 					$("#new_WMI_extension").val(response.data.WMI_extension);
-					$('#new_year').val(response.data.productive_year);
-					$("#new_area option[keyvalue='"+response.data.value+"']").attr("selected",true);
+					
 				}
 			}
 		});

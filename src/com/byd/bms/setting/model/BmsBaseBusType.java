@@ -4,6 +4,7 @@ public class BmsBaseBusType {
 	private int id;
 	private String busTypeCode;
 	private String internalName; // 车辆内部名称
+	private String busSeries;//车系
 	private String brand; // 品牌
 	private String wmi;
 	private String manufacturer; // 制造商
@@ -239,6 +240,12 @@ public class BmsBaseBusType {
 	}
 	public void setMaxSpeed(String maxSpeed) {
 		this.maxSpeed = maxSpeed;
+	}
+	public String getBusSeries() {
+		return busSeries;
+	}
+	public void setBusSeries(String busSeries) {
+		this.busSeries = busSeries;
 	}
 	
 }

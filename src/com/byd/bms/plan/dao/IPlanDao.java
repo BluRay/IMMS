@@ -114,4 +114,7 @@ public interface IPlanDao {
 	public int getBusDispatchDetailCount(Map<String, Object> conditionMap);
 	public List<ProductionException> getExceptionPauseList(
 			Map<String, Object> conditionMap1);
+	public List<Map<String, Object>> getPlanPublishList( Map<String, Object> queryMap);
+	public List<ProductionException> getExceptionPauseListOnline(
+			Map<String, Object> conditionMap1);
 }

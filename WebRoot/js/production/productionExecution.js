@@ -14,15 +14,19 @@ var order_qty;
 var orderType;
 var status;
 var line_selects_data;
-var parts_list;
+var parts_list=[];
 var parts_update_list=new Array();//非车间上下线工序提交该零部件信息
 var batch_validate=[];
 var enterflag=true;
+var bus={};
+var parts_val_list=[];
 
 $(document).ready(function () {	
 	initPage();
 	
 	function initPage(){
+		enterflag = true;
+		validateflag=false;
 		//getBusNumberSelect('#nav-search-input');
 		//alert(location.href.substr(location.href.indexOf("action?")+7,location.href.length));
 		$('#rightlink').attr('href','production!exception.action?' + location.href.substr(location.href.indexOf("action?")+7,location.href.length)); 
@@ -34,6 +38,13 @@ $(document).ready(function () {
 		getFactorySelect();
 		$('#vinText').focus();
 		//alert(getQueryString("factory_name"));
+		if($("#exec_processname").val()=="检测线下线"){//
+			$("#td_matno").hide();
+			$("#td_batchval").show();
+		}else{
+			$("#td_matno").show();
+			$("#td_batchval").hide();
+		}
 	};
 
 /*	$('#nav-search-input').bind('keydown', function(event) {
@@ -44,6 +55,13 @@ $(document).ready(function () {
 	})*/
 	
 	function resetPage () {
+		if($("#exec_processname").val()=="检测线下线"){//
+			$("#td_matno").hide();
+			$("#td_batchval").show();
+		}else{
+			$("#td_matno").show();
+			$("#td_batchval").hide();
+		}
         $("#vinText").removeAttr("disabled");
         $("#vinText").val("");
        	$('#vinText').data("vin","");
@@ -57,16 +75,17 @@ $(document).ready(function () {
         $("#configListTable tbody").html("");
         batch_validate=[];
         $("#exec_color").html("<option value='暂无'>暂无</option>").css('display',"none");
-        $("#bus_color_td").css("display","none")
+        $("#bus_color_td").css("display","none");
+        enterflag = true;
     }
 	
 	function ajaxEnter(){
+		console.log("ajaxEnter");
 		cur_key_name=$("#exec_processname").val();
 		var plan_node=$('#exec_process').find("option:selected").attr("plan_node");
 		var field_name=$('#exec_process').find("option:selected").attr("field_name");
 		
 		if($('#exec_workshop :selected').text()=='底盘'||$('#exec_workshop :selected').text()=='检测线'){
-
 			$.each(parts_list,function(i,parts){
 				if(parts.process==$("#exec_processname").val()&&(parts.parts_name=='VIN编码'||parts.parts_name=='VIN码'||parts.parts_name=='左电机号'||parts.parts_name=='右电机号')){
 					if(parts.batch==undefined||parts.batch.trim().length==0){
@@ -92,6 +111,7 @@ $(document).ready(function () {
 					return false;
 				}
 			});
+			console.log("enterflag " + enterflag);
 			if(!enterflag){
 				//alert(cur_key_name+"扫描前，请将零部件信息录入完整！");
 				$("#btnSubmit").attr("disabled",false);
@@ -99,10 +119,67 @@ $(document).ready(function () {
 			 }
 		}
 		
+		console.log($("#exec_processname").val());
+		if($("#exec_processname").val() == "检测线下线"){
+			//AddBy:Yangke180319 增加检测线下线校验 关键零部件“动力电池”的批次信息需录入完整才能下线（不能为空，“/”,"无"）
+			$.ajax({
+				 type:"get",
+				 dataType:"json",
+				 async:false,
+				 url:"getKeyPartBatchInfo",
+				 data:{
+					 "bus_number":$('#vinText').val(),
+				 },
+				 success: function(response){
+					 $.each(response.data,function (index,value) {
+						 console.log("batch = " + value.batch);  // \，[，]，-，=，！，@，#，%
+						 if((value.batch == null)||(value.batch == "-")){
+							 console.log("batch null!");
+							 enterflag=false;
+							 alert("底盘关键零部件【" +value.parts_name+"】没有正确录入批次信息，不允许下线！");
+							 $("#btnSubmit").attr("disabled",false);
+							 return false;
+						 }else{
+							 //只能是字母（不区分大小）、数字、-（减号）^[A-Za-z0-9\-]+$
+							 var batchTest = "^[A-Za-z0-9\-]+$";
+							 var re  =   new   RegExp(batchTest); 
+						     if(value.batch.match(re)==null) {
+							 //if(!batchTest.test(value.batch)){
+								 enterflag=false;
+								 alert("底盘关键零部件【" +value.parts_name+"】没有正确录入批次信息，不允许下线！");
+								 $("#btnSubmit").attr("disabled",false);
+								 return false;
+							 }
+						 }
+					 })
+					 
+				 }
+			 });
+			 console.log("batch finish!");
+			 //判断是否二次校验通过
+			 $.each(parts_val_list,function(i,p){
+				 var tr=$("#partsListTable tbody").find("tr").eq(i);
+				 var batch_val=$(tr).children("td").eq(5).find("input").val();
+				 if(p.batch==undefined||p.batch==""||p.batch!=batch_val){
+					 alert("抱歉！批次信息确认没有通过，请再次确认批次信息。");
+					 enterflag=false;
+					 return false;
+				 }
+			 })
+			 
+			 if(!enterflag){
+				$("#btnSubmit").attr("disabled",false);
+				return false;
+			 }
+			 console.log("batch finish!!");	
+			 
+		}
+		 
+		
 		/**
-		 * 增加校验逻辑：总装下线校验VIN与车载终端是否绑定成功
+		 * 增加校验逻辑：检测线上线校验VIN与车载终端是否绑定成功
 		 */
-		if(plan_node.indexOf("下线")>=0&&$('#exec_workshop :selected').text()=='总装'&&order_area=='中国'){
+		if(plan_node.indexOf("上线")>=0&&$('#exec_workshop :selected').text()=='检测线'&&order_area=='中国'&&orderType=='标准订单'){
 			//alert(cur_key_name);
 			var conditions={};
 			conditions.vin=$('#vinText').data("vin");
@@ -157,12 +234,12 @@ $(document).ready(function () {
 		if(plan_node.indexOf("下线")>=0&&$('#exec_workshop :selected').text()=='检测线'){
 			//alert(cur_key_name);
 			$.each(parts_list,function(i,parts){
-				if(parts.parts_id !=undefined&&parts.parts_id!=0){
+				//if(parts.parts_id !=undefined&&parts.parts_id!=0){
 					if(parts.batch==undefined||parts.batch.trim().length==0){
 						enterflag=false;
 						return false;
 					}
-				}
+				//}
 			});
 			if(!enterflag){
 				alert(cur_key_name+"扫描前，请将零部件信息录入完整！");
@@ -178,7 +255,8 @@ $(document).ready(function () {
 			enterflag=false;
 			alert("请选择车辆颜色!")
 		}
-		
+		////enterflag=false;
+		console.log("enterflag = " + enterflag);
 		if(enterflag){
 			 $.ajax({
 		            type: "post",
@@ -223,7 +301,6 @@ $(document).ready(function () {
     }
 	
 	function ajaxValidate (){
-		var plan_node=$('#exec_process').find("option:selected").attr("plan_node");
 		$.ajax({
             type: "post",
             dataType: "json",
@@ -245,7 +322,7 @@ $(document).ready(function () {
                     	fadeMessageAlert(null,response.businfo.bus_number+'不属于'+$("#exec_factory :selected").text()+'！','gritter-error');
                     	return false;
                     }else{                	
-                    	var bus = response.businfo;
+                    	bus = response.businfo;
                     	$('#vinText').data("vin",bus.vin);
                     	$('#vinText').data("order_id",bus.order_id);
                     	$('#vinText').data("order_config_id",bus.order_config_id);
@@ -280,6 +357,7 @@ $(document).ready(function () {
                 		$("#btnSubmit").removeAttr("disabled");
                     	
                 		//added 2018-02-03 涂装下线工序车辆颜色从订单颜色中选择
+                		var plan_node=$('#exec_process').find("option:selected").attr("plan_node");
                 		if('涂装下线'==plan_node){
                 			$("#bus_color_td").css("display","")
                 			$("#exec_color").css("display","")
@@ -338,7 +416,9 @@ $(document).ready(function () {
                     			getAllProcessSelect(bus.order_type);
                     		}
                     		//alert(cur_line);
-                    		if(bus.line !=$("#exec_line option:selected").text()&&bus.workshop==$("#exec_workshop option:selected").text()){
+                    		if(bus.old_line !=$("#exec_line option:selected").text()
+                    				&&bus.old_workshop==$("#exec_workshop option:selected").text()
+                    				&& bus.old_line !=undefined){
                     			fadeMessageAlert(null,'该车辆已在'+bus.line+'扫描，不能跨线扫描！','gritter-error');
                     			//added by xjw 20160513 根据车号查出当前线别锁定线别，不允许跨线扫描,带出相应工序
                         		getSelects(line_selects_data, bus.line, "#exec_line",null,"name"); 
@@ -355,6 +435,7 @@ $(document).ready(function () {
 	}
 	
 	function ajaxGetPartsList(){
+		parts_update_list=[];
 		$.ajax({
             type: "get",
             dataType: "json",
@@ -380,10 +461,14 @@ $(document).ready(function () {
             		$("<td />").html(parts.size).appendTo(tr);
             		$("<td />").html(parts.vendor).appendTo(tr);
             	
-            		if(parts['3C_no'].trim().length>0){
+            		if(parts['batch']!=undefined && parts['batch'].trim().length>0){
+            			$("<td />").html(parts['batch']).appendTo(tr);
+            		}
+            		else if(parts['3C_no']!=undefined && parts['3C_no'].trim().length>0){
             			$("<td />").html(parts['3C_no']).appendTo(tr);
-            		}else{
-            			$("<td />").html("<input class='batch' type='text' placeholder='请输入批次号' style='border:1;background:transparent;text-align:center;width:100%;height:100%;' value='"+(parts.batch||'')+"'>").appendTo(tr);
+            		}
+            		else{
+            			$("<td />").html("<input class='batch' type='text' placeholder='请输入批次号' style='border:1;background:transparent;text-align:center;width:100%;height:100%;' >").appendTo(tr);
             		}
             		$(tr).data("parts_index",index);
             		$("#partsListTable tbody").append(tr);
@@ -392,7 +477,9 @@ $(document).ready(function () {
 		}) 
 	}
 	
-	
+	/**
+	 * 关键零部件批次信息校验
+	 */
 	$(document).on("change",".batch",function(e){
 		enterflag=true;
 		$(this).focus();
@@ -401,13 +488,14 @@ $(document).ready(function () {
 		var parts_index=$(tr).data("parts_index");
 		var parts=parts_list[parts_index];
 		var batch=$(batchInput).val().trim();
+		var plan_node=$('#exec_process').find("option:selected").attr("plan_node");
 		/**
 		 * added by xjw 18/1/17  增加动力电池包零部件批次不能重复的判断逻辑
 		 */
-		if(parts.parts_name.indexOf('动力电池包')>=0&&(batch!='无'&&batch!='\\'&&batch!='\/')){
+		if(parts.parts_name.indexOf('动力电池包')>=0&&(batch!='无'&&batch!='\\'&&batch!='\/')&&"检测线下线"!=plan_node){
 			if(batch_validate.indexOf(batch)>=0){
 				alert("批次信息不能重复！");
-				//$(batchInput).val("")
+				$(batchInput).val("")
 				enterflag=false;
 				return false;
 			}
@@ -416,7 +504,7 @@ $(document).ready(function () {
 		
 			if(exist_flag=="no"){
 				alert("该批次信息已存在，不能重复录入！");
-				//$(batchInput).val("")
+				$(batchInput).val("")
 				enterflag=false;
 				return false;
 			}
@@ -425,8 +513,67 @@ $(document).ready(function () {
 		}
 		
 		parts_list[parts_index].batch=$(batchInput).val().trim();	
+		parts_update_list.push(parts_list[parts_index]);
 		//alert(JSON.stringify(parts_list))
+		
+		
 	});
+	
+	$('body').on('focus', ".batchval",function(event){
+		var tds=$(this).parent("td").siblings();
+		var className=$(this).attr("class");
+		var classHide="."+className+"Hide";
+		//alert(classHide);
+		var placeHolder="请扫描批次"
+		
+		$(this).parent("td").find(classHide).val("");
+		if(!$(this).attr("readonly")){
+			$(this).val("");
+			$(this).css("border","1px solid").attr("placeHolder",placeHolder);
+		}
+		$(this).blur();
+		$(this).parent("td").find(classHide).focus();
+		
+	});
+	
+	$('body').on('keydown', ".batchvalHide",function(event){
+		var tr=$(this).parent("td").parent("tr");
+		if (event.keyCode == "13") {
+			$(this).parent("td").find(".batchval").css("border","0px").val($(this).val());	
+			$(this).parent("td").find(".batchval").trigger("change");
+			$("#batchval_"+($(tr).data("parts_index")+1)).trigger("focus");
+		}
+		
+	});
+	
+	/**
+	 * 检测线下线关键零部件批次信息二次校验
+	 */
+	$(document).on("change",".batchval",function(e){
+		enterflag=true;
+		var parts_name=$(this).parent("td").parent("tr").children().eq(1).html();
+		console.log("批次确认");
+		 /**
+		  * 检测线下线时需对车载终端、ICCID、电池包编号、可充电储能系统编号进行二次校验
+		  * added by XJW 20180425
+		  */
+		var tr = $(this).parent("td").parent("tr");
+		var batch=$(tr).children("td").eq(4).html();
+		if(batch==null||batch==""){
+			$(this).val("")
+			alert("”"+parts_name+"“批次信息未录入，请联系前车间人员录入！")
+			enterflag = false;
+			return false;
+		}
+		if(batch !=$(this).val()){
+			$(this).val("")
+			alert("”"+parts_name+"“批次信息与安装工序扫描录入的批次信息不一致！")
+			enterflag = false;
+			return false;
+		}
+		
+	})	
+	
 	
 	//输入回车，发ajax进行校验；成功则显示并更新车辆信息
     $('#vinText').bind('keydown', function(event) {
@@ -439,8 +586,12 @@ $(document).ready(function () {
         }
         if (event.keyCode == "13"){	
             if(jQuery.trim($('#vinText').val()) != ""){
+            	enterflag = true;
                 ajaxValidate();
-                ajaxGetPartsList();
+                if($("#exec_processname").val()=="检测线下线"){
+                	ajaxGetPartsVal();
+                }else
+                	ajaxGetPartsList();
             }
             return false;
         }
@@ -448,6 +599,30 @@ $(document).ready(function () {
     });
     //输入车号后，切换监控点，当选择的为J01时弹出vin校验
     $("#exec_process").on("change",function(){
+    	enterflag = true;
+    	$("#bus_color_td").css("display","none")
+		$("#exec_color").css("display","none")
+		
+    	$("#exec_processname").val('');
+		var process_code=$("#exec_process :selected").text();
+		var process_name=$(this).find("option:contains('"+process_code+"')").attr("process");
+		$("#exec_processname").val(process_name);
+		
+	  	if($("#exec_processname").val()=="检测线下线"){
+			$("#td_matno").hide();
+			$("#td_batchval").show();
+		}else{
+			$("#td_matno").show();
+			$("#td_batchval").hide();
+		}
+	  	
+		if($("#exec_line").val() !=''&&$("#vinText").data("order_id")!=0){		
+			if($("#exec_processname").val()=="检测线下线"){
+				ajaxGetPartsVal();
+			}else
+				ajaxGetPartsList();
+		}
+		
     	var bus_number=$('#vinText').attr("value");
     	if(bus_number&&bus_number!=''&&$("#exec_process :selected").text()=='J01'){
     		$("#btnSubmit").attr("disabled","disabled");
@@ -455,6 +630,33 @@ $(document).ready(function () {
     	}/*else{
     		$("#btnSubmit").removeAttr("disabled");
     	}*/
+
+    	//added 2018-02-03 涂装下线工序车辆颜色从订单颜色中选择
+		var plan_node=$('#exec_process').find("option:selected").attr("plan_node");
+		if('涂装下线'==plan_node){
+			$("#bus_color_td").css("display","")
+			$("#exec_color").css("display","")
+			var order_color=bus.order_color;
+			if(order_color.trim().length>0){     				
+				color_list=order_color.split(",");
+				if(color_list.length>1){
+					$("#exec_color").html("<option value=''>请选择</option>");	
+				}else{
+					$("#exec_color").html("");
+				}
+				
+				$.each(color_list,function(i,color){
+					var option="<option value='"+color+"'>"+color+"</option>";
+					if (bus.bus_color==color){
+						option="<option value='"+color+"' selected='selected'>"+color+"</option>";
+					}
+					
+					$("#exec_color").append(option)
+				})
+			}else{
+				$("#exec_color").html("<option value='暂无'>暂无</option>");
+			}
+		}
     });
     
     $("#btnSubmit").click(function() {
@@ -503,7 +705,7 @@ $(document).ready(function () {
 		}
 	});
 	
-	$("#exec_process").change(function(){
+/*	$("#exec_process").change(function(){
 		$("#exec_processname").val('');
 		var process_code=$("#exec_process :selected").text();
 		var process_name=$(this).find("option:contains('"+process_code+"')").attr("process");
@@ -511,13 +713,13 @@ $(document).ready(function () {
 		if($("#exec_line").val() !=''&&$("#vinText").data("order_id")!=0){		
 			ajaxGetPartsList();
 		}
-	});
+	});*/
 	
 	function getFactorySelect() {
 		$.ajax({
 			url : "/BMS/common/getFactorySelectAuth",
 			dataType : "json",
-			data : {"function_url":"production/index"},
+			data : {"function_url":"/BMS/production/execution"},
 			async : false,
 			error : function(response) {
 				alert(response.message)
@@ -546,7 +748,9 @@ function getAllWorkshopSelect() {
 		url : "/BMS/common/getWorkshopSelectAuth",
 		dataType : "json",
 		data : {
-				factory:$("#exec_factory :selected").text()
+				factory:$("#exec_factory :selected").text(),
+				org_kind:'1',
+				function_url:'/BMS/production/execution'
 			},
 		async : false,
 		error : function(response) {
@@ -676,4 +880,62 @@ function checkPartsBatch(batch){
 	})
 	
 	return flag;
+}
+
+function getKeyPartsEntered(parts_name){
+	var datalist=[];
+	$.ajax({
+		url:'getKeyPartsByBus',
+		dataType : "json",
+		async:false,
+		data:{
+			bus_number:$("#vinText").val(),
+			parts_name:parts_name
+		},
+		success:function(response){
+			datalist=response.data;
+		}
+	})
+	return datalist;
+}
+
+function ajaxGetPartsVal(){
+
+	$.ajax({
+        type: "get",
+        dataType: "json",
+        url : "getKeyPartsVal",
+        async:false,
+        data: {        	
+            "bus_number": $('#vinText').val()
+        },
+        success: function(response){
+        	$("#partsListTable tbody").html("");
+        	parts_val_list=response.data;
+        	$.each(parts_val_list,function(index,parts){
+        		var tr=$("<tr />");
+        		//$("<td />").html(parts.sap_mat).appendTo(tr);
+        		$("<td />").html(parts.parts_no).appendTo(tr);
+        		$("<td />").html(parts.parts_name).appendTo(tr);
+        		$("<td />").html(parts.size).appendTo(tr);
+        		$("<td />").html(parts.vendor).appendTo(tr);
+        	
+        		if(parts['batch']!=undefined && parts['batch'].trim().length>0){
+        			$("<td />").html(parts['batch']).appendTo(tr);
+        		}
+        		else if(parts['3C_no']!=undefined && parts['3C_no'].trim().length>0){
+        			$("<td />").html(parts['3C_no']).appendTo(tr);
+        		}
+        		else{
+        			$("<td />").html("").appendTo(tr);
+        		}
+        		var str= "<input id='batchval_"+index+"' class='batchval' style='border:0;width:98%;text-align:center;background-color:transparent;' placeholder='请扫描批次' />" +
+        				"<input type='text' class='batchvalHide' style='width:0px;position:absolute;z-index: -1;margin-left: -10px;border: 0px;' />";
+        		
+        		$("<td />").html(str).appendTo(tr);
+        		$(tr).data("parts_index",index);
+        		$("#partsListTable tbody").append(tr);
+        	});
+        }
+	}) 
 }

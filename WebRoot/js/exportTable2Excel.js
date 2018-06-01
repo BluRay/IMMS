@@ -137,9 +137,14 @@ var ToExcel_FF = (function() {
     	var headDiv=$(".dataTables_scrollHeadInner").find("thead");
     	
         var elDiv = document.getElementById(GridPanel_ID);
+
+        var elDivStr ="";
         //过滤elDiv内容
-        var elDivStr = ($(headDiv).html()||"")+elDiv.innerHTML;
-        //alert(elDivStr);
+
+        if(elDiv.innerHTML.indexOf("th")>=0){
+        	elDivStr = elDiv.innerHTML;
+        }else  elDivStr = ($(headDiv).html()||"")+elDiv.innerHTML;
+   
         elDivStr = replaceHtml(elDivStr, "<a", ">");
         elDivStr = replaceHtml(elDivStr, "</a", ">");
         elDivStr = replaceHtml(elDivStr, "<img", ">");

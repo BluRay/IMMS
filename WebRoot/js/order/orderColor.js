@@ -164,7 +164,7 @@ function getFactorySelect() {
 	$.ajax({
 		url : "/BMS/common/getFactorySelectAuth",
 		dataType : "json",
-		data : {"function_url":"order/maintain"},
+		data : {"function_url":"/BMS/order/maintain"},
 		async : false,
 		error : function(response) {
 			alert(response.message)

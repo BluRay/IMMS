@@ -294,11 +294,11 @@
 		<![CDATA[
 		insert into BMS_PLAN_BUS (
 		factory_id,production_plan_id,bus_number,status,order_id,order_config_id,sequence,vin,customer_number,left_motor_number,right_motor_number,
-		bus_color,bus_seats,factory_order_id)
+		bus_color,factory_order_id)
 		VALUES(#{factory_id},#{production_plan_id},
 		(SELECT bus_number FROM BMS_PLAN_BUS_NUMBER WHERE id=#{bus_number_id}),
 		#{status},(SELECT id FROM BMS_OR_ORDER WHERE order_no=#{order_no}),#{order_config_id},#{sequence},#{vin},#{customer_number},
-		#{left_motor_number},#{right_motor_number},#{bus_color},#{bus_seats},#{factory_order_id})
+		#{left_motor_number},#{right_motor_number},#{bus_color},#{factory_order_id})
 		]]>
 	</insert>
 	
@@ -364,6 +364,12 @@
 	<if test="pause_id!=null">
 		AND P.id= #{pause_id}
 	</if>
+	<if test="status == 1 ">
+	 AND P.end_time = ''
+	</if>
+	<if test="status == 2 ">
+	 AND P.end_time != ''
+	</if>
 	order by create_time desc
 	<if test="start !=null">
 		LIMIT #{start} ,#{length} 
@@ -408,6 +414,12 @@
 	</if>
 	<if test="end_time2!='' and ed_time2!=null">
 		AND P.end_time &lt;= #{end_time2}
+	</if>
+	<if test="status == 1 ">
+	 AND P.end_time = ''
+	</if>
+	<if test="status == 2 ">
+	 AND P.end_time != ''
 	</if>
 	</select>
 	
@@ -464,8 +476,9 @@
 		AND E.start_time>=#{start_time}
 		</if>
 		<if test="finish_time !='' and finish_time !=null">
-		AND E.finish_time &lt;= #{finish_time}
+		AND E.process_date &lt;= CONCAT(#{finish_time},' 23:59:59')
 		</if>
+		ORDER BY E.id DESC 
 		<if test="start !=null">
 			LIMIT #{start} ,#{length} 
 		</if>	
@@ -500,7 +513,7 @@
 		AND E.start_time>=#{start_time}
 		</if>
 		<if test="finish_time !='' and finish_time !=null">
-		AND E.finish_time &lt;= #{finish_time}
+		AND E.process_date &lt;= CONCAT(#{finish_time},' 23:59:59')
 		</if>
 	</select>
 	
@@ -586,11 +599,15 @@
 <!-- 		SELECT R.VIN_prefix, R.WMI_extension, R.number_size FROM BMS_BASE_VIN_RULE R
 		WHERE R.bustype_id = (SELECT O.bus_type_id FROM BMS_OR_ORDER O WHERE O.order_no = #{order_no})
 		AND R.area = #{area} -->
-		SELECT R.VIN_prefix, R.WMI_extension, R.number_size,O.order_area,O.productive_year,k.value 
+		<!-- SELECT R.VIN_prefix, R.WMI_extension, R.number_size,O.order_area,O.productive_year,k.value 
 		FROM BMS_BASE_VIN_RULE R
 		INNER JOIN BMS_OR_ORDER O ON O.bus_type_id = R.bustype_id  AND O.order_no = #{order_no} 
 		LEFT JOIN BMS_BASE_KEY k ON k.value = R.area AND k.key_code ='ORDER_AREA'
-		WHERE 1=1
+		WHERE 1=1 -->
+		SELECT c.vin_prefix VIN_prefix,c.WMI_extension,c.number_size,o.order_area,o.productive_year
+		FROM BMS_OR_ORDER_CONFIG c
+		LEFT JOIN BMS_OR_ORDER o on c.order_id=o.id
+		WHERE o.order_no=#{order_no} limit 1
 	</select>
 	
 	<select id="GetFactoryVinPrefix" parameterType="int" resultType="String">
@@ -1516,15 +1533,50 @@
 		left join BMS_BASE_WORKSHOP w on s.workshop_id=w.id
 		where s.factory_id=#{factory_id} 
 		<!-- and s.start_time like concat(#{date_start},'%')  -->
-		and (s.end_time&lt;=0 or s.start_time>=#{date_start})
+		and (s.end_time&lt;=0 or s.end_time is null or substring(s.end_time,1,10)=#{date_start})
+		and substring(s.create_time,1,10)>=DATE_SUB(#{date_start},INTERVAL 15 DAY)
+		and substring(s.create_time,1,10)&lt;=#{date_start}
 		and find_in_set(s.order_list,#{order_no})>0 and w.workshop_name=#{workshop_name}
 		union all
 		select e.detailed_reasons
 		from BMS_PD_PRODUCTION_EXCEPTION e
+		left join BMS_BASE_PROCESS p  on e.process=p.process_name and p.factory=e.factory 
+		and p.workshop=e.workshop
+		left join BMS_BASE_KEY k on k.value=p.plan_node_id and k.key_code='PLAN_CODE'
 		<!-- left join BMS_PLAN_BUS b on b.bus_number=e.bus_number  -->
 		where e.factory=#{factory} <!-- and e.start_time like concat(#{date_start},'%') --> 
-		and (e.finish_time&lt;=0 or e.start_time>=#{date_start})
+		and (e.process_date&lt;=0 or e.process_date is null  or substring(e.process_date,1,10)=#{date_start})
+		and substring(e.edit_date,1,10)>=DATE_SUB(#{date_start},INTERVAL 15 DAY)
+		and substring(e.edit_date,1,10)&lt;=#{date_start}
 		and e.order_id=#{order_id} and e.workshop=#{workshop_name}
+		and (k.key_name not like '%上线' or k.key_name is null)
 		) tmp 
+	</select>
+	
+	<select id="getExceptionPauseListOnline" parameterType="Map" resultType="com.byd.bms.production.model.ProductionException">
+		select distinct tmp.detailed_reasons
+		from ( select e.detailed_reasons
+		from BMS_PD_PRODUCTION_EXCEPTION e
+		left join BMS_BASE_PROCESS p  on e.process=p.process_name and p.factory=e.factory 
+		and p.workshop=e.workshop
+		left join BMS_BASE_KEY k on k.value=p.plan_node_id and k.key_code='PLAN_CODE'
+		where e.factory=#{factory} 
+		and (e.process_date&lt;=0 or e.process_date is null  or substring(e.process_date,1,10)=#{date_start})
+		and substring(e.edit_date,1,10)>=DATE_SUB(#{date_start},INTERVAL 15 DAY)
+		and substring(e.edit_date,1,10)&lt;=#{date_start}
+		and e.order_id=#{order_id} and e.workshop=#{workshop_name}
+		and k.key_name like '%上线'
+		) tmp 
+	</select>
+	
+	<select id="getPlanPublishList" parameterType="Map" resultType="Map">
+		select group_concat(distinct substring(pp.plan_date,-2)) publish_dates,pp.order_id
+		from BMS_PLAN_PRODUCTION_PLAN pp
+		left join BMS_OR_ORDER o on o.id=pp.order_id
+		where pp.factory_id=#{factory_id} and replace(pp.plan_date,'-','') like concat(#{plan_month},'%')
+		<if test="order_no !=null and order_no !='' ">
+			and o.order_no=#{order_no}
+		</if>
+		group by pp.order_id
 	</select>
 </mapper>

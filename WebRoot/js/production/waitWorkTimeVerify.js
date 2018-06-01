@@ -35,6 +35,14 @@ $(document).ready(function() {
 		ajaxQuery();
 	});
 
+	/**
+	 * 工时单价修改
+	 */
+	$(document).on("change",".standard_price",function(e){
+		var swh_index=$(this).attr("swh_index");
+		swhlist[swh_index].hour_price=$(this).val();
+	})
+	
 	// 审核
 	$("#btnVerify").click(function() {
 		var edit_list=getSelectList("verify");
@@ -72,10 +80,11 @@ function getSelectList(flag){
 		//alert(swhids);
 		swhids=swhids.substring(0,swhids.length-1);
 		var swhidlist=swhids.split(",");
-		$.each(swhidlist,function(index,swhlist_index){
+		$.each(swhidlist,function(i,swhlist_index){
 			if(flag=='verify'){
 				var obj=swhlist[swhlist_index];
 				obj.status='1';
+				//obj.hour_price=$("#tableResult tbody").find("tr").eq(index).find(".standard_price").val();
 				obj.wpay=parseFloat(obj.hour_price)*parseFloat(obj.work_hour);
 			}
 			if(flag=='reject'){
@@ -212,7 +221,7 @@ function ajaxQuery(){
             {"title":"姓名","class":"center","data":"staff_name","defaultContent":""},
             {"title":"岗位","class":"center","data":"job","defaultContent": ""},
             {"title":"工时","class":"center","data":"work_hour","defaultContent": ""},
-            {"title":"工时单价","class":"center","data":"work_hour","defaultContent": ""},
+            {"title":"工时单价","class":"center","data":"standard_price","defaultContent": ""},
             {"title":"人员去向","class":"center","data":"whereabouts","width":"120px","defaultContent": ""},
             {"title":"班组","class":"center","data":"","defaultContent": ""},
             {"title":"小班组","class":"center","data":"","defaultContent":""},
@@ -294,7 +303,8 @@ function generateTb(swhlist){
 		$("<td class=\"center\" />").html(swh.staff_name).appendTo(tr);
 		$("<td class=\"center\"/>").html(swh.job).appendTo(tr);
 		$("<td class=\"center\" />").html(swh.work_hour).appendTo(tr);
-		$("<td class=\"center\" />").html(swh.hour_price).appendTo(tr);
+		var html_price="<input type='text' swh_index='"+index+"' class='input-small standard_price' style='width:40px;height:28px;' value='"+swh.hour_price+"'>"
+		$("<td class=\"center\" />").html(html_price).appendTo(tr);
 		$("<td class=\"center\"/>").html(swh.whereabouts).appendTo(tr);
 		$("<td class=\"center\" />").html(swh.workgroup_org).appendTo(tr);
 		$("<td class=\"center\" />").html(swh.team_org).appendTo(tr);

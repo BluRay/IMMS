@@ -39,6 +39,7 @@ $(document).ready(function() {
 			},1000*60*10);
 			
 		$("#search_factory").change(function(){
+			console.log('search_factory');
 			drawFactoryDailyChart();
 			drawFactoryOrderChart();
 			drawFactoryException();
@@ -80,7 +81,7 @@ $(document).ready(function() {
 	function initPage(){
 	var factory_id_default=$("#factory_id_default").val();
 	//alert(factory_id_default)
-	getFactorySelect("index",factory_id_default,"#search_factory",null,"id");
+	getFactorySelect("/BMS/plan/planRevision",factory_id_default,"#search_factory",null,"id");
 	ajaxGetOrderChartData();	
 	drawFactoryOrderChart();
 	drawOutputChart();
@@ -165,7 +166,7 @@ $(document).ready(function() {
 					enabled:false
 				},
 				xAxis : {
-					categories : [ '未开始', '生产中', '下线数','交车数' ]
+					categories : [ '未开始', '生产中', '入库数','交车数' ]
 				},
 				yAxis : {
 					title:{
@@ -243,6 +244,21 @@ function drawOutputChart(){
 		data:{
 		},
 		success:function(response){
+			//-->20180416增加显示汇总信息
+			var str_output = "";
+			var total = 0
+			$.each(response.series,function (index,value) {
+				var ser_count = 0
+				value.data.forEach(function(e){  
+					ser_count += e;
+				})
+				total += ser_count;
+				str_output += value.name + ":" + ser_count + " ";
+				console.log(value.name)
+				
+			})
+			$("#span_1").html("(汇总：" + str_output + " 总数：" + total + ")");
+			
 			series=response.series;
 			factory_data_list=response.factory_data;
 			
@@ -553,10 +569,13 @@ function drawStaffCountChart(){
 		data:{
 		},
 		success:function(response){
+			var total = 0;
 			$.each(response.series,function(i,data){
 				var arr=[data.plant_org,data.staff_count]
 				series.push(arr);
+				total += data.staff_count;
 			})
+			$("#span_2").html("(汇总：" + total + ")");
 			factory_data_list=response.factory_data;
 			
 			chart3=Highcharts.chart("container3",

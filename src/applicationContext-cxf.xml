@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxws="http://cxf.apache.org/jaxws"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd 
+       http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
+       
+    <bean id="orderServiceImpl" class="com.byd.bms.order.service.impl.OrderServiceImpl">  
+    </bean> 
+    <bean id="bomOrderService" class="com.byd.bms.webService.service.impl.BomOrderServiceImpl">  
+    </bean> 
+    <jaxws:server serviceClass="com.byd.bms.order.service.IOrderService" address="/orderService">
+        <jaxws:serviceBean>
+            <ref bean="orderServiceImpl" />
+        </jaxws:serviceBean>
+    </jaxws:server>
+    
+    <bean id="baseBusTypeServiceImpl" class="com.byd.bms.webService.service.impl.BaseBusTypeServiceImpl">  
+    </bean> 
+    <jaxws:server serviceClass="com.byd.bms.webService.service.IBaseBusTypeService" address="/baseBusTypeService">
+        <jaxws:serviceBean>
+            <ref bean="baseBusTypeServiceImpl" />
+        </jaxws:serviceBean>
+    </jaxws:server>
+    
+    <bean id="setKPLServiceImpl" class="com.byd.bms.webService.service.impl.SetKPLServiceImpl">  
+    </bean> 
+    <jaxws:server serviceClass="com.byd.bms.webService.service.ISetKPLService" address="/setKPLService">
+        <jaxws:serviceBean>
+            <ref bean="setKPLServiceImpl" />
+        </jaxws:serviceBean>
+    </jaxws:server>
+    <jaxws:server serviceClass="com.byd.bms.webService.service.IBomOrderService" address="/bomOrderService">
+        <jaxws:serviceBean>
+            <ref bean="bomOrderService" />
+        </jaxws:serviceBean>
+    </jaxws:server>
+        
+</beans>       

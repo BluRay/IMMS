@@ -167,16 +167,17 @@
 									style="padding-left: 0px; margin-top: 10px; margin-bottom: 0px; border-bottom: none">配置信息：</h5>
 							</div>
 
-							<div class="col-xs-8">
-								<table id="partsListTable" style="width: 1500px; margin-left: -15px;" class="table  table-bordered">
+							<div class="col-xs-9">
+								<table id="partsListTable"  class="table  table-bordered">
 									<thead>
 										<tr>
-											<td align="left" width="12%">物料编码</td>
-											<td align="left" width="15%">零部件编号</td>
-											<td align="left" width="20%">零部件名称</td>
-											<td align="left" width="15%">材料/规格</td>
-											<td align="left" width="25%">供应商</td>
-											<td align="left" width="13%">批次</td>
+											<td id="td_matno" align="left" width="10%">物料编码</td>
+											<td align="left" width="14%">零部件编号</td>
+											<td align="left" width="16%">零部件名称</td>
+											<td align="left" width="10%">材料/规格</td>
+											<td align="left" width="21%">供应商</td>
+											<td align="left" width="22%">批次</td>
+											<td id="td_batchval" align="left" width="17%" style="display:none">批次确认</td>
 										</tr>
 									</thead>
 									<tbody>
@@ -185,12 +186,12 @@
 								</table>
 							</div>
 
-							<div class="col-xs-4">
+							<div class="col-xs-3">
 								<table id="configListTable" style="max-width: 110%; width: 107%; margin-left: -12px;" class="table  table-bordered">
 									<thead>
 										<tr>
-											<td align="left" width="30%">零部件类别</td>
-											<td align="left" width="70%">供应商</td>
+											<td align="left" width="35%">零部件类别</td>
+											<td align="left" width="65%">供应商</td>
 										</tr>
 									</thead>
 									<tbody>

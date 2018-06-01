@@ -28,6 +28,8 @@
 					<form id="search_form" class="well form-search">
 						<table style="line-height:1.7">
 						<tr>
+							<td>统计工厂：</td>
+							<td><input id="search_factory" onclick="select_factory();" type="text" style="width:400px" value="全部" /> <i id="btn_factory" class="ace-icon glyphicon glyphicon-th bigger-160 blue" style="color:blue;cursor: pointer;top:5px;"></i> &nbsp;&nbsp;&nbsp;&nbsp;</td>
 							<td style="text-align:right">统计维度：</td>
 							<td>
 								<select id="search_wd" class="input-medium" style="width:120px;">
@@ -59,7 +61,19 @@
 			<%-- <jsp:include page="footer.jsp" flush="true"/> --%>
 		
 		</div><!-- /.main-container -->
+		
+		<div id="dialog-factory" class="hide" style="align:center;width:600px;height:500px">
+			<div id="div_tree2" class="widget-box widget-color-blue2" style="height:320px;OVERFLOW-X:auto;OVERFLOW-Y:auto;OVERFLOW:auto">
+				<div class="widget-body">
+					<div class="widget-main padding-8">
+						<div id="tree2" class="tree"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
 	</body>
+	<script src="../assets/js/fuelux/fuelux.tree.min.js"></script>
 
 	<script src="../js/datePicker/WdatePicker.js"></script>
 	<script src="../assets/js/jquery-ui.min.js"></script>

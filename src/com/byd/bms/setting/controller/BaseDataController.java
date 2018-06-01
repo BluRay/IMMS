@@ -82,7 +82,7 @@ public class BaseDataController extends BaseController {
 	// vin生成规则
 	@RequestMapping("/vinRule")
 	public ModelAndView vinRulePage() {
-		mv.setViewName("setting/vinRule");
+		mv.setViewName("order/vinRule");
 		return mv;
 	}
 	
@@ -685,13 +685,13 @@ public class BaseDataController extends BaseController {
 		int start = Integer.parseInt(request.getParameter("start"));// 分页数据起始数
 		int length = Integer.parseInt(request.getParameter("length"));// 每一页数据条数
 
-		String busTypeId = request.getParameter("busTypeId");// 工厂
+		String order_no = request.getParameter("order_no");// 工厂
 		String area = request.getParameter("area");//
 
 		queryMap.put("draw", draw);
 		queryMap.put("start", start);
 		queryMap.put("length", length);
-		queryMap.put("busTypeId", busTypeId);
+		queryMap.put("order_no", order_no);
 		queryMap.put("area", area);
 		Map<String, Object> result = baseDataService.getVinRuleList(queryMap);
 		model.addAllAttributes(result);
@@ -724,7 +724,7 @@ public class BaseDataController extends BaseController {
 			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String edit_date = df.format(new Date());
             BmsBaseVinRule vinRule = new BmsBaseVinRule();
-            vinRule.setBusTypeId(Integer.parseInt(busTypeId));
+           // vinRule.setBusTypeId(Integer.parseInt(busTypeId));
 			vinRule.setVinPrefix(vinPrefix);
 			vinRule.setWmiExtension(wmiExtension);
 			vinRule.setNumberSize(numberSize);
@@ -754,9 +754,10 @@ public class BaseDataController extends BaseController {
 	@ResponseBody
 	public ModelMap updateVinRule() {
 		try {
-			int id = Integer.parseInt(request.getParameter("id"));
-			
-			String busTypeId = request.getParameter("busTypeId") == null ? "" : request.getParameter("busTypeId");
+			//int id = Integer.parseInt(request.getParameter("id"));			
+			//String busTypeId = request.getParameter("busTypeId") == null ? "" : request.getParameter("busTypeId");
+			String order_no= request.getParameter("order_no");
+			int order_id=Integer.parseInt(request.getParameter("order_id"));
 			String vinPrefix = request.getParameter("vinPrefix") == null ? "" : request.getParameter("vinPrefix");
 			String wmiExtension = request.getParameter("wmiExtension") == null ? "" : request.getParameter("wmiExtension");
 			String numberSize = request.getParameter("numberSize") == null ? "" : request.getParameter("numberSize");
@@ -766,8 +767,10 @@ public class BaseDataController extends BaseController {
 			String edit_date = df.format(new Date());
 
 			BmsBaseVinRule vinRule = new BmsBaseVinRule();
-			vinRule.setId(id);
-			vinRule.setBusTypeId(Integer.parseInt(busTypeId));
+			//vinRule.setId(id);
+			//vinRule.setBusTypeId(Integer.parseInt(busTypeId));
+			vinRule.setOrder_id(order_id);
+			vinRule.setOrder_no(order_no);
 			vinRule.setVinPrefix(vinPrefix);
 			vinRule.setWmiExtension(wmiExtension);
 			vinRule.setNumberSize(numberSize);
@@ -819,23 +822,7 @@ public class BaseDataController extends BaseController {
 
 			busType.setBusTypeCode(request.getParameter("busTypeCode"));
             busType.setInternalName(request.getParameter("internalName"));
-            busType.setBrand(request.getParameter("brand"));
-            busType.setManufacturer(request.getParameter("manufacturer"));
-            busType.setBatteryModel(request.getParameter("batteryModel"));
-            busType.setChassisModel(request.getParameter("chassisModel"));
-            busType.setDriveMotor(request.getParameter("driveMotor"));
-            busType.setLightDowndip(request.getParameter("lightDowndip"));
-            busType.setMaxSpeed(request.getParameter("maxSpeed"));
-            busType.setMaxWeight(request.getParameter("maxWeight"));
-            busType.setMotorModel(request.getParameter("motorModel"));
-            busType.setBatteryCapacity(request.getParameter("batteryCapacity"));
-            busType.setRatedVoltage(request.getParameter("ratedVoltage"));
-            busType.setMotorPower(request.getParameter("motorPower"));
-            busType.setPassengerNum(request.getParameter("passengerNum"));
-            busType.setVehicleLength(request.getParameter("vehicleLength"));
-            busType.setVehicleModel(request.getParameter("vehicleModel"));
-            busType.setWheelbase(request.getParameter("wheelbase"));
-            busType.setPassengers(request.getParameter("passengers"));
+            busType.setBusSeries(request.getParameter("bus_series"));
             busType.setEditDate(edit_date);
             busType.setEditorId(editor_id);
 			int reuslt = baseDataService.addBusType(busType);
@@ -860,23 +847,7 @@ public class BaseDataController extends BaseController {
 			busType.setId(id);
 			busType.setBusTypeCode(request.getParameter("busTypeCode"));
             busType.setInternalName(request.getParameter("internalName"));
-            busType.setBrand(request.getParameter("brand"));
-            busType.setManufacturer(request.getParameter("manufacturer"));
-            busType.setBatteryModel(request.getParameter("batteryModel"));
-            busType.setBatteryCapacity(request.getParameter("batteryCapacity"));
-            busType.setRatedVoltage(request.getParameter("ratedVoltage"));
-            busType.setChassisModel(request.getParameter("chassisModel"));
-            busType.setDriveMotor(request.getParameter("driveMotor"));
-            busType.setLightDowndip(request.getParameter("lightDowndip"));
-            busType.setMaxSpeed(request.getParameter("maxSpeed"));
-            busType.setMaxWeight(request.getParameter("maxWeight"));
-            busType.setMotorModel(request.getParameter("motorModel"));
-            busType.setMotorPower(request.getParameter("motorPower"));
-            busType.setPassengerNum(request.getParameter("passengerNum"));
-            busType.setVehicleLength(request.getParameter("vehicleLength"));
-            busType.setVehicleModel(request.getParameter("vehicleModel"));
-            busType.setWheelbase(request.getParameter("wheelbase"));
-            busType.setPassengers(request.getParameter("passengers"));
+            busType.setBusSeries(request.getParameter("bus_series"));
             busType.setEditDate(edit_date);
             busType.setEditorId(editor_id);
 			baseDataService.updateBusType(busType);

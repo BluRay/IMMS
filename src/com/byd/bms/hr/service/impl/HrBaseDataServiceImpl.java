@@ -461,7 +461,22 @@ public class HrBaseDataServiceImpl implements IHrBaseDataService {
 			throw new RuntimeException(e);
 		}
 	}
-	
-	
-	
+	@Override
+	public List<Map<String,Object>> getJopPriceList(Map<String, Object> infomap){
+		return hrBaseDataDao.getJopPriceList(infomap);
+	}
+	@Override
+	@Transactional
+	public void saveJobUnitPrice(Map<String, Object> condMap){
+		List<Map<String,Object>> addList=(List<Map<String,Object>>)condMap.get("addList");
+		List<Map<String,Object>> modifyList=(List<Map<String,Object>>)condMap.get("modifyList");
+		if(null!=addList&&addList.size()>0){
+			//新增
+			hrBaseDataDao.addJobUnitPrice(addList);
+		}
+		if(null!=modifyList&&modifyList.size()>0){
+			//修改
+			hrBaseDataDao.modifyJobUnitPrice(modifyList);
+		}
+	}
 }

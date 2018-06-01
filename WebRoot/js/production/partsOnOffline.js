@@ -1,3 +1,4 @@
+
 $(document).ready(function(){
 	initPage();
 
@@ -50,15 +51,26 @@ $(document).ready(function(){
 
 function initPage(){
 	//getBusNumberSelect('#nav-search-input');
-	getFactorySelect("production/workshopSupply","","#search_factory",null,"id");
+	getFactorySelect("production/partsOnOffline","","#search_factory","全部","id");
 	getOrderNoSelect("#search_order_no","",null,null,"#search_factory");
 	getOrderNoSelect("#order","#order_id",function(obj){
 		$("#order").attr("order_qty",obj.orderQty);
 	},null,"#factory","copy");
 	getKeysSelect("BASE_PARTS", "", "#search_parts","全部","id");
+	
 }
 
 function ajaxQuery(){
+	var factory_str = "";
+	$("#search_factory option").each(function(){
+		if($(this).val() != '')factory_str += $(this).val() + ",";
+	});
+	factory_str = factory_str.substring(0,factory_str.length-1);
+	//console.log(factory_str);
+	if($("#search_factory").val() != ''){
+		factory_str = $("#search_factory").val();
+	}
+	
 	$("#tableResult").DataTable({
 		serverSide: true,
 		paiging:true,
@@ -92,7 +104,7 @@ function ajaxQuery(){
 		ajax:function (data, callback, settings) {
 			var param ={
 					"draw":1,
-					"factory_id":$("#search_factory").val(),
+					"factory_id":"("+ factory_str + ")",
 					"order_no":$("#search_order_no").val(),
 					"search_date_start":$("#search_date_start").val(),
 					"search_date_end":$("#search_date_end").val(),

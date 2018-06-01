@@ -73,7 +73,7 @@ label {
 								<!-- <input id="vinText"  type="text" class="input-medium" style="width:100%;height:30px;"/> -->
 								<span class="input-icon input-icon-right" style="width: 100%;">
 										<input id="vinText" type="text" class="input-medium" style="width:100%;height:30px;">
-										<i id="btn_scan" class="ace-icon fa fa-barcode green bigger-160" style="cursor:pointer"></i>
+										<i  class="ace-icon fa fa-barcode green bigger-160 btn_scan"  style="cursor:pointer"></i>
 								</span>
 							</div>
 						</div>
@@ -115,6 +115,15 @@ label {
 							</div>
 						</div>
 						
+						<div class="form-group"  id="color_div" style="display:none">
+							<label class="col-xs-3 control-label no-padding-right" style="text-align:right"> 车辆颜色:</label>
+							<div class="col-xs-9">
+								<select id="exec_color" class="input-medium" style="width:40%">
+									<option value='暂无'>暂无</option>
+								</select>
+							</div>
+						</div>
+						
 						<div class="form-group">
 							<label class="col-xs-3 control-label no-padding-right">零部件:</label>
 							<div class="col-xs-9">
@@ -148,9 +157,22 @@ label {
 						<div class="form-group">
 							<label class="col-xs-3 control-label no-padding-right">批次:</label>
 							<div class="col-xs-9">
+							<span class="input-icon input-icon-right" style="width: 100%;">
 								<input id="batch" type="text" class="input-medium" style="width:100%;height:30px;" />
+								<i class="ace-icon fa fa-barcode green bigger-160 btn_scan" style="cursor:pointer"></i>
+							</span>	
 							</div>
 						</div>		
+						
+						<div class="form-group" id="div_batchval">
+							<label class="col-xs-3 control-label no-padding-right">批次确认:</label>
+							<div class="col-xs-9">
+							<span class="input-icon input-icon-right" style="width: 100%;">
+								<input id="batch_val" type="text" placeholder="请扫描批次"  class="input-medium" style="width:100%;height:30px;" readonly/>
+								<i class="ace-icon fa fa-barcode green bigger-160 btn_scan" style="cursor:pointer"></i>
+							</span>	
+							</div>
+						</div>	
 									
 					</form>
 				</div>

@@ -1,16 +1,21 @@
 package com.byd.bms.util;
 
 import java.io.UnsupportedEncodingException;
+import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.util.Arrays;
+
+import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.lang3.StringEscapeUtils;
+
 
 import sun.misc.BASE64Encoder;
 
 public class MD5Util {  
 	  
     private static final String secureKey="19bms";
+	public static final int HASH_INTERATIONS = 1024;
+	public static final int SALT_SIZE = 8;
       
     /** 
      * 验证口令是否合法 
@@ -21,12 +26,30 @@ public class MD5Util {
      * @throws NoSuchAlgorithmException 
      * @throws UnsupportedEncodingException 
      */  
-    public static boolean validPassword(String password, String passwordInDb)throws NoSuchAlgorithmException, UnsupportedEncodingException {  
-        if(getEncryptedPwd(password).equals(passwordInDb)){
+    public static boolean validPassword(String password, String passwordInDb) {  
+/*        if(getEncryptedPwd(password).equals(passwordInDb)){
         	return true;
         }  else{
         	return false;
-        }
+        }*/
+    	try {
+    		String plain = MD5Util.unescapeHtml(password);
+    		byte[] salt;
+			salt = MD5Util.decodeHex(passwordInDb.substring(0,16));
+    		byte[] hashPassword = Digests.sha1(plain.getBytes(), salt, HASH_INTERATIONS);
+    		password = MD5Util.encodeHex(salt)+MD5Util.encodeHex(hashPassword);
+	    	System.out.println("加密密码："+password);
+	    	System.out.println("数据库密码："+passwordInDb);
+	        if(password.equals(passwordInDb)){
+	        	return true;
+	        }  else{
+	        	return false;
+	        }
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
     }  
   
     /** 
@@ -48,4 +71,53 @@ public class MD5Util {
         String encrptedPwd=base64en.encode(md5.digest(sb.toString().getBytes("utf-8")));
 		return encrptedPwd;
     }  
+    
+	/**
+	 * 生成安全的密码，生成随机的16位salt并经过1024次 sha-1 hash
+	 */
+	public static String entryptPassword(String plainPassword) {
+		String plain = MD5Util.unescapeHtml(plainPassword);
+		byte[] salt = Digests.generateSalt(SALT_SIZE);
+		byte[] hashPassword=null;
+		try {
+			hashPassword = Digests.sha1(plain.getBytes(), salt, HASH_INTERATIONS);
+		} catch (GeneralSecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return MD5Util.encodeHex(salt)+MD5Util.encodeHex(hashPassword);
+	}
+    
+	/**
+	 * Hex编码.
+	 */
+	public static String encodeHex(byte[] input) {
+		return new String(Hex.encodeHex(input));
+	}
+
+	/**
+	 * Hex解码.
+	 * @throws Exception 
+	 */
+	public static byte[] decodeHex(String input) throws Exception {
+		try {
+			return Hex.decodeHex(input.toCharArray());
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	/**
+	 * Html 转码.
+	 */
+	public static String escapeHtml(String html) {
+		return StringEscapeUtils.escapeHtml4(html);
+	}
+
+	/**
+	 * Html 解码.
+	 */
+	public static String unescapeHtml(String htmlEscaped) {
+		return StringEscapeUtils.unescapeHtml4(htmlEscaped);
+	}
 }  

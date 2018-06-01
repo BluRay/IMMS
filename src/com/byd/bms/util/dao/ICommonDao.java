@@ -13,6 +13,7 @@ import com.byd.bms.util.model.BmsBaseTask;
 public interface ICommonDao {
 
 	List<Map<String, Object>> queryOrderList(Map<String,Object> condMap);
+	List<Map<String, Object>> queryAllOrderList(Map<String,Object> condMap);
 
 	List<Map<String, Object>> queryFactoryList(Map<String, Object> condMap);
 	
@@ -111,6 +112,7 @@ public interface ICommonDao {
 	
 	public List<Map<String,String>> queryChildOrgList(String parentOrgId);//根据父节点名称查找下一级组织列表
 	public List<Map<String,String>> queryStaffInfo(Map<String, Object> conditionMap);//查询员工信息
+	public int checkFunctionPermission(Map<String, Object> condMap);
 
 	List<Map<String, Object>> queryRoleListAuth(@Param("staff_number")String staff_number);
 	

@@ -277,7 +277,13 @@ public class OrderServiceImpl implements IOrderService {
 				orderDao.deleteConfigDetailById(config_id);
 				orderDao.saveConfigDetails(smap);
 			}
-		}	
+		}
+		
+		//处理订单维护配置参数，将所有配置参数更新为一致
+		List<Map> orderConfigParamList =  getOrderConfigParam(configDetail);
+		if(orderConfigParamList.size()==1){
+			orderDao.editOrderConfigParam(orderConfigParamList.get(0));
+		}
 	}
 	/**
 	 * 分页查询配置分配列表数据
@@ -417,20 +423,210 @@ public class OrderServiceImpl implements IOrderService {
 		}
     	return result;
     }
+	@Override
+	public List<Map> getOrderConfigParam(Map<String, Object> conditionMap) {
+		List<Map> rtnList=new ArrayList();
+		List<Map> datalist=new ArrayList();
+		datalist=orderDao.getOrderConfigParam(conditionMap);
+		Map rtnMap = new HashMap();
+		if(datalist.size()>0){
+			rtnMap = (Map)datalist.get(0);
+		}
+		if(datalist.size()>1){
+			for(int i=1;i<datalist.size();i++){
+				Map map = (Map)datalist.get(i);
+				if(null!=map.get("vehicle_model") && !"".equals(map.get("vehicle_model"))){
+					rtnMap.put("vehicle_model", map.get("vehicle_model"));
+				}
+				if(null!=map.get("chassis_model") && !"".equals(map.get("chassis_model"))){
+					rtnMap.put("chassis_model", map.get("chassis_model"));
+				}
+				if(null!=map.get("motor_model") && !"".equals(map.get("motor_model"))){
+					rtnMap.put("motor_model", map.get("motor_model"));
+				}
+				if(null!=map.get("bus_seats") && !"".equals(map.get("bus_seats"))){
+					rtnMap.put("bus_seats", map.get("bus_seats"));
+				}
+				if(null!=map.get("passenger_num") && !"".equals(map.get("passenger_num"))){
+					rtnMap.put("passenger_num", map.get("passenger_num"));
+				}
+				if(null!=map.get("tire_type") && !"".equals(map.get("tire_type"))){
+					rtnMap.put("tire_type", map.get("tire_type"));
+				}
+				if(null!=map.get("spring_num") && !"".equals(map.get("spring_num"))){
+					rtnMap.put("spring_num", map.get("spring_num"));
+				}
+				if(null!=map.get("dp_zzd") && !"".equals(map.get("dp_zzd"))){
+					rtnMap.put("dp_zzd", map.get("dp_zzd"));
+				}
+				if(null!=map.get("zc_zzd") && !"".equals(map.get("zc_zzd"))){
+					rtnMap.put("zc_zzd", map.get("zc_zzd"));
+				}
+				if(null!=map.get("dpgg_date") && !"".equals(map.get("dpgg_date"))){
+					rtnMap.put("dpgg_date", map.get("dpgg_date"));
+				}
+				if(null!=map.get("zcgg_date") && !"".equals(map.get("zcgg_date"))){
+					rtnMap.put("zcgg_date", map.get("zcgg_date"));
+				}
+				if(null!=map.get("ccczs_date") && !"".equals(map.get("ccczs_date"))){
+					rtnMap.put("ccczs_date", map.get("ccczs_date"));
+				}
+				if(null!=map.get("hgz_note") && !"".equals(map.get("hgz_note"))){
+					rtnMap.put("hgz_note", map.get("hgz_note"));
+				}
+				if(null!=map.get("color") && !"".equals(map.get("color"))){
+					rtnMap.put("color", map.get("color"));
+				}
+			}
+		}
+		rtnList.add(rtnMap);
+		return rtnList;
+	}
+	@Override
+	public void editOrderConfigParam(Map<String,Object> conditionMap){
+		int i=0;
+		i = orderDao.editOrderConfigParam(conditionMap);
+	}
+	@Override
+	public int getBusTypeIdByCode(Map<String, Object> condMap) {
+		return orderDao.getBusTypeIdByCode(condMap);
+	}
+	@Override
+	public int getOrderIdByBomNo(String order_no_bom){
+		return orderDao.getOrderIdByBomNo(order_no_bom);
+	}
+	@Override
+	public int insertOrderByBom(BmsOrder order){
+		return orderDao.insertOrderByBom(order);
+	}
+	@Override
+	public int updateOrderByBom(BmsOrder order){
+		return orderDao.updateOrderByBom(order);
+	}
+	@Override
+	public int getFactoryOrderCountByOrderId(String order_id){
+		return orderDao.getFactoryOrderCountByOrderId(order_id);
+	}
+	@Override
+	public int getOrderQtyById(String order_id){
+		return orderDao.getOrderQtyById(order_id);
+	}
+	@Override
+	public int getOrderConfigIdByVehicleModel(String order_vehicle_model){
+		return orderDao.getOrderConfigIdByVehicleModel(order_vehicle_model);
+	}
+	@Override
+	public int insertOrderConfigDetailByBom(Map<String, Object> condMap){
+		return orderDao.insertOrderConfigDetailByBom(condMap);
+	}
+	@Override
+	public int updateOrderConfigDetailByBom(Map<String, Object> condMap){
+		return orderDao.updateOrderConfigDetailByBom(condMap);
+	}
+	
+	@Override
+	public int getOrderConfigDetailIdByVehicleModel(String order_vehicle_model){
+		return orderDao.getOrderConfigDetailIdByVehicleModel(order_vehicle_model);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public int updateOrderConfigByBom(Map<String, Object> orderConfigMap){
+		List<Map<String, String>> order_config_list = (List<Map<String, String>>) orderConfigMap.get("order_config_list");
+		String order_id = "";
+		if(order_config_list.size()>0){
+			order_id = order_config_list.get(0).get("order_id");
+			int configCount = orderDao.getOrderConfigCountByOrderId(order_id);
+			if(configCount == 0){
+				//新增
+				//lineNo = orderDao.getMaxOrderLineNo(configDetail);
+				for(int i=0;i<order_config_list.size();i++){
+					Map<String, String> order_config = order_config_list.get(i);
+					Map<String, Object> condMap = new HashMap<String,Object>();
+					condMap.put("order_id", order_id);
+					order_config.put("line_no", orderDao.getMaxOrderLineNo(condMap));
+					orderDao.insertOrderConfigByBom(order_config);
+				}
+				
+			}else{
+				//修改
+				//没有分配工厂配置前可以任意修改
+				int fac_count = orderDao.getFactoryOrderCountByOrderId(order_id);
+				if(fac_count == 0){
+					Map<String, Object> condMap = new HashMap<String,Object>();
+					condMap.put("order_id", order_id);
+					orderDao.deleteOrderConfigByBom(condMap);
+					for(int i=0;i<order_config_list.size();i++){
+						Map<String, String> order_config = order_config_list.get(i);
+						order_config.put("line_no", orderDao.getMaxOrderLineNo(condMap));
+						order_config.put("order_config_name", "配置"+(i+1));
+						orderDao.insertOrderConfigByBom(order_config);
+					}
+				}else{
+					//是否存在其他配置
+					String order_vehicle_model_str = "(";
+					for(int i=0;i<order_config_list.size();i++){
+						order_vehicle_model_str += "'" + order_config_list.get(i).get("order_vehicle_model") + "',";
+					}
+					order_vehicle_model_str = order_vehicle_model_str.substring(0, order_vehicle_model_str.length()-1) + ")";
+					System.out.println("-->order_vehicle_model_str = " + order_vehicle_model_str);
+					Map<String, Object> condMap = new HashMap<String,Object>();
+					condMap.put("order_id", order_id);
+					condMap.put("order_vehicle_model", order_vehicle_model_str);
+					int busCount = orderDao.getBusCountByVehicle_model(condMap);
+					if(busCount > 0 ){
+						return -1;		//系统存在其他已产生车号的配置。
+					}else{
+						//删除其他未产生车号的配置
+						orderDao.deleteOrderConfigNoBusNumberl(condMap);
+					}
+					//分配工厂后 数量不能小于 已生成车号数
+					for(int i=0;i<order_config_list.size();i++){
+						Map<String, Object> condMap2 = new HashMap<String,Object>();
+						condMap2.put("order_id", order_id);
+						condMap2.put("order_vehicle_model", order_config_list.get(i).get("order_vehicle_model"));
+						int bus_count = orderDao.getBusCountByOneVehicle_model(condMap2);
+						if(Integer.valueOf(order_config_list.get(i).get("config_qty").toString()) < bus_count ){
+							return -2;		//数量不能小于已生成车号数。
+						}
+					}
+					for(int i=0;i<order_config_list.size();i++){
+						Map<String, String> order_config = order_config_list.get(i);
+						//更新/新增
+						Map<String, Object> condMap3 = new HashMap<String,Object>();
+						condMap3.put("order_id", order_id);
+						condMap3.put("order_vehicle_model", order_config_list.get(i).get("order_vehicle_model"));
+						int config_id = orderDao.getOrderConfigIdByVehicle_model(condMap3);
+						order_config.put("line_no", orderDao.getMaxOrderLineNo(condMap));
+						order_config.put("order_config_name", "配置"+(i+1));
+						if(0==config_id){
+							orderDao.insertOrderConfigByBom(order_config);
+						}else{
+							orderDao.updateOrderConfigByBom(order_config);
+						}
+					}
+				}
+			}
+		}
+		return 0;
+	}
 
 	@Override
-	public void editOrderColor(Map<String, Object> condMap, ModelMap model) {
-		try{
-			orderDao.updateOrderColor(condMap);
-			model.put("success", true);
-			model.put("message", "维护成功！");
-		}catch(Exception e){
-			model.put("success", false);
-			model.put("message", "维护失败！");
-			throw e;
-		}
-		
+	public List queryOrderConfigByVehicle(String orderVechicleModel) {
+		// TODO Auto-generated method stub
+		return orderDao.queryOrderConfigByVehicle(orderVechicleModel);
 	}
-    
-    
+	
+	@Override
+	public int getBomPmdIdByBom(Map<String, Object> condMap){
+		return orderDao.getBomPmdIdByBom(condMap);
+	}
+	@Override
+	public int insertBomPmdIdByBom(Map<String, Object> condMap){
+		return orderDao.insertBomPmdIdByBom(condMap);
+	}
+	@Override
+	public int updateBomPmdIdByBom(Map<String, Object> condMap){
+		return orderDao.updateBomPmdIdByBom(condMap);
+	}
 }

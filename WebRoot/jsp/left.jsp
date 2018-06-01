@@ -5,6 +5,11 @@ String path = request.getContextPath();
 String rqip= request.getRemoteAddr();
 String staff_number = (String)session.getAttribute("staff_number");
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path;
+String loginKey = (String)session.getAttribute("loginKey");
+String login_type = (String)session.getAttribute("login_type");
+if(null ==login_type){
+	login_type="bms";
+}
 /* if(rqip!=request.getServerName()){
 	basePath=rqip+"/";
 } */
@@ -20,6 +25,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <!-- ace styles -->
 <link rel="stylesheet" href="/BMS/assets/css/ace.min.css" id="main-ace-style" />
 <link rel="stylesheet" href="/BMS/assets/css/ace-skins.min.css" />
+<link rel="stylesheet" href="/BMS/css/bootstrap-tab.css" />
 <link rel="stylesheet" href="/BMS/assets/css/ace-rtl.min.css" />
 
 <script src="<%=basePath%>/assets/js/jquery.min.js"></script>
@@ -253,7 +259,7 @@ $(document).ready(function () {
  			$("#task").html("需处理任务数 "+data.count+" 个");
 			var str="";
 			$.each(data.datalist,function(index,item){
-				var url="/BMS/"+item.url;
+				var url=item.url;
 				if(item.params!=null && item.params!=undefined){
 					url+=item.params;
 				}
@@ -295,7 +301,7 @@ $(document).ready(function () {
 		$.each(menuTree, function (index, value) {
 			var root = $('.nav-list');
 			var li = $('<li  class="" />');
-			var a = $('<a href=\"/BMS/'+value.path+'\" ></a>');
+			var a = $('<a href=\"'+value.path+'\" ></a>');
 			
 			if (value.path.substring(0,4) =="http"){
 				a = $('<a href=\"'+value.path+'<%=staff_number%>\" ></a>');
@@ -397,17 +403,17 @@ function traverseTree(node,parentli,two){
 	$.each(node.list, function (index, value) {	
 		var a;
 		if(value.parent!='116'){
-			a = $('<a href="javascript:addTabs({id:\'' + value.name + '\',title:\'' + value.name + '\',close: \'true\',url: \'/BMS/' + value.path + '\'});" ></a>');
+			a = $('<a href="javascript:addTabs({id:\'' + value.name + '\',title:\'' + value.name + '\',close: \'true\',url: \'' + value.path + '?username=<%=staff_number%>&loginKey=<%=loginKey%>&login_type=<%=login_type%>\'});" ></a>');
 		}else{
 			a = $('<a href=\"'+value.path+<%=staff_number%>+'\" ></a>');
 		}
 		//a = $('<a href=\"/BMS/'+value.path+'\" ></a>');
-		$(a).data("url","/BMS/"+value.path)
+		$(a).data("url",value.path)
 		$(a).data("title",value.name);
 		$(a).data("id",value.id)
 		$(a).data("favorite_id",value.favorite_id||0);
 			
-		var li = $('<li  class="" />');
+		var li = $('<li id="li_tab_'+value.name+'" class="" />');
 		
 		//var a = $('<a href="javascript:addTabs({id:\'' + value.id + '\',title:\'' + value.name + '\',close: \'true\',url: \'/BMS/' + value.path + '\'});" ></a>');
 		//console.log("value:" , value);
@@ -520,7 +526,7 @@ function traverseTree(node,parentli,two){
 
 				<ul class="nav nav-list">
 					<li class="">
-						<a href="/BMS/index">
+						<a href="/BMS/">
 							<i class="menu-icon fa fa-home green"></i>
 							<span class="menu-text"> 系统首页 </span>
 						</a>

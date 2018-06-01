@@ -355,8 +355,9 @@
 			}
 			
 			function IsPC() {
+				console.log("-->window width = " + $(window).width());
 			    var userAgentInfo = navigator.userAgent;
-			    //alert(userAgentInfo);
+			    //console.log(userAgentInfo);
 			    var Agents = ["Android", "iPhone",
 			                "SymbianOS", "Windows Phone",
 			                "iPad", "iPod"];
@@ -367,6 +368,8 @@
 			            break;
 			        }
 			    }
+			    //console.log("--flag = " + flag);
+			    //if($(window).width()>1000)flag = true;	//电视机等大屏设备跳转到电脑端页面。
 			    return flag;
 			}
 			

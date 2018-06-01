@@ -52,6 +52,11 @@ public class CommonServiceImpl implements ICommonService {
 		return orderlist;
 	}
 	@Override
+	public List<Map<String, Object>> getAllOrderFuzzySelect(Map<String, Object> condMap) {
+		List<Map<String, Object>> orderlist=commonDao.queryAllOrderList(condMap);
+		return orderlist;
+	}
+	@Override
 	public List<Map<String, Object>> getFactorySelect(Map<String, Object> condMap) {
 		List<Map<String, Object>> factoryList=commonDao.queryFactoryList(condMap);
 		return factoryList;
@@ -104,6 +109,11 @@ public class CommonServiceImpl implements ICommonService {
 		List<Map<String, Object>> workshopList=commonDao.queryWorkshopListAuth(condMap);
 		return workshopList;
 	}
+	@Override
+	public int checkFunctionPermission(Map<String,Object> condMap){
+		return commonDao.checkFunctionPermission(condMap);
+	}
+	
 	@Override
 	public List<Map<String, String>> getAllReasonType() {
 		return commonDao.getAllReasonType();

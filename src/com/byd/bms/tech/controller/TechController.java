@@ -704,6 +704,17 @@ public class TechController extends BaseController{
 		conditionMap.put("bus_num_start", request.getParameter("bus_num_start"));
 		conditionMap.put("bus_num_end", request.getParameter("bus_num_end"));
 		
+		int bus_number_size = 0;
+		if(request.getParameter("bus_number") != null){
+			String bus_number=request.getParameter("bus_number").toString();
+			String[] busNumberList =bus_number.split("\n");
+			bus_number_size = busNumberList.length;
+			if (bus_number.equals(""))bus_number_size=0;
+			conditionMap.put("bus_number", busNumberList);
+		}
+		
+		conditionMap.put("bus_number_size", bus_number_size);
+		
 		List<Map<String, Object>> list = techService.getFollowingUpDetailList(conditionMap);
 		
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -927,6 +938,17 @@ public class TechController extends BaseController{
 		conditionMap.put("workshop", request.getParameter("workshop"));
 		conditionMap.put("start", request.getParameter("start"));
 		conditionMap.put("end", request.getParameter("end"));
+		
+		int bus_number_size = 0;
+		if(request.getParameter("bus_number") != null){
+			String bus_number=request.getParameter("bus_number").toString();
+			String[] busNumberList =bus_number.split("\n");
+			bus_number_size = busNumberList.length;
+			if (bus_number.equals(""))bus_number_size=0;
+			conditionMap.put("bus_number", busNumberList);
+		}
+		conditionMap.put("bus_number_size", bus_number_size);
+		
 		List<Map<String,String>> datalist = techService.queryBusNumberFollowList(conditionMap);
 		Map<String, Object> result = new HashMap<String,Object>();
 		result.put("data", datalist);

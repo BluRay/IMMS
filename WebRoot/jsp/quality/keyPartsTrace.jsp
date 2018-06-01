@@ -134,6 +134,10 @@
 			<%-- <jsp:include page="footer.jsp" flush="true"/> --%>
 			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse"><i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i></a>
 		</div><!-- /.main-container -->
+		
+	<div style="position:absolute;z-index:999;top:50%;left:50%;display: none;" class="divLoading" >
+    	<span><i class="fa fa-spinner fa-spin fa-4x" style="height:1em;"></i></span>
+    </div>
 	</body>
 	<script src="../assets/js/fuelux/fuelux.tree.min.js"></script>
 	<script src="../assets/js/jquery-ui.min.js"></script>

@@ -429,4 +429,15 @@ public class OrderReviewController extends BaseController{
     	return nextOperator;
     	
     }
+    @RequestMapping(value = "getReviewPerson")
+    @ResponseBody
+    public ModelMap getReviewPerson() {
+    	model=new ModelMap();
+		String id=request.getParameter("id");
+        Map<String,Object> result=new HashMap<String,Object>();
+		String reviewPerson=reviewService.getReviewPersonList(id);
+		result.put("reviewPerson", reviewPerson);
+		model.addAllAttributes(result);
+		return model;
+    }
 }

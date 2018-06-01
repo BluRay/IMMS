@@ -483,7 +483,8 @@
 		substring(h.edit_date,1,10) item,h.test_node_id,h.test_node,f.id AS factory_id
 		FROM BMS_QM_QUALITY_ABNORMAL_RECORD h
 		LEFT JOIN BMS_BASE_FACTORY f ON h.factory = f.factory_name
-		WHERE f.id=#{factoryId} AND h.test_node_id=#{test_node_id}
+		WHERE f.id IN ${factoryId} 
+		AND h.test_node_id=#{test_node_id}
 		AND substring(h.edit_date,1,10) >= #{startDate} AND substring(h.edit_date,1,10) <= #{endDate}
 		GROUP BY substring(h.edit_date,1,10)
 		
@@ -492,10 +493,14 @@
 		select max(p.target_value) target_val,p.eend_date,p.factory_id,p.test_node_id
 		from BMS_QM_QUALITY_TARGET_PARAMETER  p
 		left join BMS_BASE_KEY k on p.target_type=k.value 
-		where k.key_name='DPU' and p.factory_id=#{factoryId} and p.test_node_id=#{test_node_id} and p.eend_date=(
+		where k.key_name='DPU' 
+		and p.factory_id IN ${factoryId} 
+		and p.test_node_id=#{test_node_id} and p.eend_date=(
 		select max(p1.eend_date) from  BMS_QM_QUALITY_TARGET_PARAMETER  p1
 		left join BMS_BASE_KEY k on p1.target_type=k.value 
-		where k.key_name='DPU' and p1.factory_id=#{factoryId} and p1.test_node_id=#{test_node_id}
+		where k.key_name='DPU' 
+		and p1.factory_id IN ${factoryId} 
+		and p1.test_node_id=#{test_node_id}
 		)) b on a.factory_id=b.factory_id and a.test_node_id=b.test_node_id		
 		]]>
 		</if>
@@ -508,7 +513,8 @@
 		substring(h.edit_date,1,10) item,h.test_node_id,h.test_node,f.id AS factory_id
 		FROM BMS_QM_QUALITY_ABNORMAL_RECORD h
 		LEFT JOIN BMS_BASE_FACTORY f ON h.factory = f.factory_name
-		WHERE f.id=#{factoryId} AND h.test_node_id=#{test_node_id}
+		WHERE f.id IN ${factoryId} 
+		AND h.test_node_id=#{test_node_id}
 		AND substring(h.edit_date,1,10) >= #{startDate} AND substring(h.edit_date,1,10) <= #{endDate}
 		GROUP BY week(h.edit_date)
 		
@@ -517,10 +523,14 @@
 		select max(p.target_value) target_val,p.eend_date,p.factory_id,p.test_node_id
 		from BMS_QM_QUALITY_TARGET_PARAMETER  p
 		left join BMS_BASE_KEY k on p.target_type=k.value 
-		where k.key_name='DPU' and p.factory_id=#{factoryId} and p.test_node_id=#{test_node_id} and p.eend_date=(
+		where k.key_name='DPU' 
+		and p.factory_id IN ${factoryId} 
+		and p.test_node_id=#{test_node_id} and p.eend_date=(
 		select max(p1.eend_date) from  BMS_QM_QUALITY_TARGET_PARAMETER p1
 		left join BMS_BASE_KEY k on p1.target_type=k.value 
-		where k.key_name='DPU' and p1.factory_id=#{factoryId} and p1.test_node_id=#{test_node_id}
+		where k.key_name='DPU' 
+		and p1.factory_id IN ${factoryId} 
+		and p1.test_node_id=#{test_node_id}
 		)) b on a.factory_id=b.factory_id and a.test_node_id=b.test_node_id	
 		]]>
 		</if>
@@ -534,7 +544,8 @@
 		substring(h.edit_date,1,10) item,h.test_node_id,h.test_node,f.id AS factory_id
 		FROM BMS_QM_QUALITY_ABNORMAL_RECORD h
 		LEFT JOIN BMS_BASE_FACTORY f ON h.factory = f.factory_name
-		WHERE f.id=#{factoryId} AND h.test_node_id=#{test_node_id}
+		WHERE f.id IN ${factoryId} 
+		AND h.test_node_id=#{test_node_id}
 		AND substring(h.edit_date,1,10) >= #{startDate} AND substring(h.edit_date,1,10) <= #{endDate}
 		GROUP BY month(h.edit_date)	
 		
@@ -543,10 +554,14 @@
 		select max(p.target_value) target_val,p.eend_date,p.factory_id,p.test_node_id
 		from BMS_QM_QUALITY_TARGET_PARAMETER  p
 		left join BMS_BASE_KEY k on p.target_type=k.value 
-		where k.key_name='DPU' and p.factory_id=#{factoryId} and p.test_node_id=#{test_node_id} and p.eend_date=(
+		where k.key_name='DPU' 
+		and p.factory_id IN ${factoryId} 
+		and p.test_node_id=#{test_node_id} and p.eend_date=(
 		select max(p1.eend_date) from  BMS_QM_QUALITY_TARGET_PARAMETER  p1
 		left join BMS_BASE_KEY k on p1.target_type=k.value 
-		where k.key_name='DPU' and p1.factory_id=#{factoryId} and p1.test_node_id=#{test_node_id}
+		where k.key_name='DPU' 
+		and p1.factory_id IN ${factoryId} 
+		and p1.test_node_id=#{test_node_id}
 		)) b on a.factory_id=b.factory_id and a.test_node_id=b.test_node_id	
 		]]>
 		</if>
@@ -561,7 +576,8 @@
 		FROM BMS_QM_QUALITY_ABNORMAL_RECORD h
 		LEFT JOIN BMS_BASE_FACTORY f ON h.factory = f.factory_name
 		LEFT JOIN BMS_OR_ORDER o on h.order_id=o.id
-		WHERE f.id=#{factoryId} AND h.test_node_id=#{test_node_id}
+		WHERE f.id IN ${factoryId} 
+		AND h.test_node_id=#{test_node_id}
 		AND substring(h.edit_date,1,10) >= #{startDate} AND substring(h.edit_date,1,10) <= #{endDate}
 		GROUP BY o.order_no	
 		) a
@@ -569,10 +585,14 @@
 		select max(p.target_value) target_val,p.eend_date,p.factory_id,p.test_node_id
 		from BMS_QM_QUALITY_TARGET_PARAMETER  p
 		left join BMS_BASE_KEY k on p.target_type=k.value 
-		where k.key_name='DPU' and p.factory_id=#{factoryId} and p.test_node_id=#{test_node_id} and p.eend_date=(
+		where k.key_name='DPU' 
+		and p.factory_id IN ${factoryId} 
+		and p.test_node_id=#{test_node_id} and p.eend_date=(
 		select max(p1.eend_date) from  BMS_QM_QUALITY_TARGET_PARAMETER  p1
 		left join BMS_BASE_KEY k on p1.target_type=k.value 
-		where k.key_name='DPU' and p1.factory_id=#{factoryId} and p1.test_node_id=#{test_node_id}
+		where k.key_name='DPU' 
+		and p1.factory_id IN ${factoryId} 
+		and p1.test_node_id=#{test_node_id}
 		)) b on a.factory_id=b.factory_id and a.test_node_id=b.test_node_id		
 		]]>
 		</if>
@@ -585,7 +605,7 @@
 	FROM BMS_QM_QUALITY_ABNORMAL_RECORD h
 	LEFT JOIN BMS_BASE_FACTORY f ON f.factory_name=h.factory
 	LEFT JOIN BMS_BASE_KEY k ON k.id = h.test_node_id
-	WHERE h.test_node_id=#{test_node_id} AND f.id=#{factoryId} AND substring(h.edit_date,1,10) >=#{startDate} 
+	WHERE h.test_node_id=#{test_node_id} AND f.id IN ${factoryId} AND substring(h.edit_date,1,10) >=#{startDate} 
 	AND substring(h.edit_date,1,10) <=#{endDate}
 	ORDER BY h.edit_date DESC
 	]]>
@@ -598,7 +618,7 @@
 	SELECT COUNT(h.id) FROM BMS_QM_QUALITY_ABNORMAL_RECORD h
 	LEFT JOIN BMS_BASE_FACTORY f ON f.factory_name=h.factory
 	LEFT JOIN BMS_BASE_KEY k ON k.id = h.test_node_id
-	WHERE h.test_node_id=#{test_node_id} AND f.id=#{factoryId} AND substring(h.edit_date,1,10) >=#{startDate} 
+	WHERE h.test_node_id=#{test_node_id} AND f.id IN ${factoryId} AND substring(h.edit_date,1,10) >=#{startDate} 
 	AND substring(h.edit_date,1,10) <=#{endDate}
 	]]>
 	</select>
@@ -610,7 +630,8 @@
 		select a.*,b.target_val from(		
 		select count(h.bus_number) bus_total, h.factory_id,h.test_node_id,count(h1.bus_number) bus_ok_num,substring(h.edit_date,1,10) item
 		from BMS_QM_TEST_CARD h left join BMS_QM_TEST_CARD h1 on h.id=h1.id and h1.result_judge='合格'
-		where  h.factory_id=#{factoryId} and h.test_node_id=#{test_node_id}
+		where  h.factory_id IN ${factoryId} 
+		and h.test_node_id=#{test_node_id}
 		and substring(h.edit_date,1,10) >=#{startDate}  and substring(h.edit_date,1,10) <=#{endDate}
 		group by substring(h.edit_date,1,10)		
 		) a
@@ -619,10 +640,14 @@
 		select max(p.target_value) target_val,p.eend_date,p.factory_id,p.test_node_id
 		from BMS_QM_QUALITY_TARGET_PARAMETER  p
 		left join BMS_BASE_KEY k on p.target_type=k.value
-		where k.key_name='一次交检合格率' and p.factory_id=#{factoryId} and p.test_node_id=#{test_node_id} and p.eend_date=(
+		where k.key_name='一次交检合格率' 
+		and p.factory_id IN ${factoryId} 
+		and p.test_node_id=#{test_node_id} and p.eend_date=(
 		select max(p1.eend_date) from  BMS_QM_QUALITY_TARGET_PARAMETER  p1
 		left join BMS_BASE_KEY k on p1.target_type=k.value 
-		where k.key_name='一次交检合格率' and p1.factory_id=#{factoryId} and p1.test_node_id=#{test_node_id}
+		where k.key_name='一次交检合格率' 
+		and p1.factory_id IN ${factoryId} 
+		and p1.test_node_id=#{test_node_id}
 		)) b on a.factory_id=b.factory_id and a.test_node_id=b.test_node_id
 		]]>
 		</if>
@@ -631,7 +656,7 @@
 		select a.*,b.target_val from(
 		select count(h.bus_number) bus_total, h.factory_id,h.test_node_id,count(h1.bus_number) bus_ok_num,week(h.edit_date) -week(#{startDate})+1 item
 		from BMS_QM_TEST_CARD h left join BMS_QM_TEST_CARD h1 on h.id=h1.id and h1.result_judge='合格'
-		where  h.factory_id=#{factoryId} and h.test_node_id=#{test_node_id}
+		where  h.factory_id IN ${factoryId} and h.test_node_id=#{test_node_id}
 		and substring(h.edit_date,1,10) >=#{startDate}  and substring(h.edit_date,1,10) <=#{endDate}
 		group by week(h.edit_date) 
 		) a
@@ -640,10 +665,10 @@
 		select max(p.target_value) target_val,p.eend_date,p.factory_id,p.test_node_id
 		from BMS_QM_QUALITY_TARGET_PARAMETER  p
 		left join BMS_BASE_KEY k on p.target_type=k.value 
-		where k.key_name='一次交检合格率' and p.factory_id=#{factoryId} and p.test_node_id=#{test_node_id} and p.eend_date=(
+		where k.key_name='一次交检合格率' and p.factory_id IN ${factoryId} and p.test_node_id=#{test_node_id} and p.eend_date=(
 		select max(p1.eend_date) from  BMS_QM_QUALITY_TARGET_PARAMETER  p1
 		left join BMS_BASE_KEY k on p1.target_type=k.value 
-		where k.key_name='一次交检合格率' and p1.factory_id=#{factoryId} and p1.test_node_id=#{test_node_id}
+		where k.key_name='一次交检合格率' and p1.factory_id IN ${factoryId} and p1.test_node_id=#{test_node_id}
 		)) b on a.factory_id=b.factory_id and a.test_node_id=b.test_node_id
 		]]>
 
@@ -653,7 +678,7 @@
 		select a.*,b.target_val from(
 		select count(h.bus_number) bus_total, h.factory_id,h.test_node_id,count(h1.bus_number) bus_ok_num,month(h.edit_date) item
 		from BMS_QM_TEST_CARD h left join BMS_QM_TEST_CARD h1 on h.id=h1.id and h1.result_judge='合格'
-		where  h.factory_id=#{factoryId} and h.test_node_id=#{test_node_id}
+		where  h.factory_id IN ${factoryId} and h.test_node_id=#{test_node_id}
 		and substring(h.edit_date,1,10) >=#{startDate}  and substring(h.edit_date,1,10) <=#{endDate}
 		group by month(h.edit_date) 
 		) a
@@ -662,10 +687,10 @@
 		select max(p.target_value) target_val,p.eend_date,p.factory_id,p.test_node_id
 		from BMS_QM_QUALITY_TARGET_PARAMETER  p
 		left join BMS_BASE_KEY k on p.target_type=k.value 
-		where k.key_name='一次交检合格率' and p.factory_id=#{factoryId} and p.test_node_id=#{test_node_id} and p.eend_date=(
+		where k.key_name='一次交检合格率' and p.factory_id IN ${factoryId} and p.test_node_id=#{test_node_id} and p.eend_date=(
 		select max(p1.eend_date) from  BMS_QM_QUALITY_TARGET_PARAMETER  p1
 		left join BMS_BASE_KEY k on p1.target_type=k.value 
-		where k.key_name='一次交检合格率' and p1.factory_id=#{factoryId} and p1.test_node_id=#{test_node_id}
+		where k.key_name='一次交检合格率' and p1.factory_id IN ${factoryId} and p1.test_node_id=#{test_node_id}
 		)) b on a.factory_id=b.factory_id and a.test_node_id=b.test_node_id
 		]]>
 		</if>
@@ -675,7 +700,7 @@
 		select count(h.bus_number) bus_total, h.factory_id,h.test_node_id,count(h1.bus_number) bus_ok_num,o.order_no item
 		from BMS_QM_TEST_CARD h left join BMS_QM_TEST_CARD h1 on h.id=h1.id and h1.result_judge='合格'
 		left join BMS_OR_ORDER o on h.order_id=o.id 
-		where  h.factory_id=#{factoryId} and h.test_node_id=#{test_node_id}
+		where  h.factory_id IN ${factoryId} and h.test_node_id=#{test_node_id}
 		and substring(h.edit_date,1,10) >=#{startDate}  and substring(h.edit_date,1,10) <=#{endDate}
 		group by o.order_no
 		) a
@@ -684,10 +709,10 @@
 		select max(p.target_value) target_val,p.eend_date,p.factory_id,p.test_node_id
 		from BMS_QM_QUALITY_TARGET_PARAMETER  p
 		left join BMS_BASE_KEY k on p.target_type=k.value 
-		where k.key_name='一次交检合格率' and p.factory_id=#{factoryId} and p.test_node_id=#{test_node_id} and p.eend_date=(
+		where k.key_name='一次交检合格率' and p.factory_id IN ${factoryId} and p.test_node_id=#{test_node_id} and p.eend_date=(
 		select max(p1.eend_date) from  BMS_QM_QUALITY_TARGET_PARAMETER  p1
 		left join BMS_BASE_KEY k on p1.target_type=k.value 
-		where k.key_name='一次交检合格率' and p1.factory_id=#{factoryId} and p1.test_node_id=#{test_node_id}
+		where k.key_name='一次交检合格率' and p1.factory_id IN ${factoryId} and p1.test_node_id=#{test_node_id}
 		)) b on a.factory_id=b.factory_id and a.test_node_id=b.test_node_id
 		]]>
 		</if>
@@ -700,7 +725,7 @@
 	left join BMS_BASE_USER u on h.editor_id=u.id
 	left join BMS_BASE_FACTORY f on f.id=h.factory_id
 	LEFT JOIN BMS_BASE_KEY k ON k.id = h.test_node_id
-	where h.test_node_id=#{test_node_id} and h.factory_id=#{factoryId} and h.result_judge='合格'
+	where h.test_node_id=#{test_node_id} and h.factory_id IN ${factoryId} and h.result_judge='合格'
 	and substring(h.edit_date,1,10) >=#{startDate}  and substring(h.edit_date,1,10) <=#{endDate}  
 	group by h.bus_number
 	order by h.edit_date desc
@@ -718,7 +743,7 @@
 	left join BMS_BASE_USER u on h.editor_id=u.id
 	left join BMS_BASE_FACTORY f on f.id=h.factory_id
 	LEFT JOIN BMS_BASE_KEY k ON k.id = h.test_node_id
-	where h.test_node_id=#{test_node_id} and h.factory_id=#{factoryId} and h.result_judge='合格'
+	where h.test_node_id=#{test_node_id} and h.factory_id IN ${factoryId} and h.result_judge='合格'
 	and substring(h.edit_date,1,10) >=#{startDate}  and substring(h.edit_date,1,10) <=#{endDate}  
 	group by h.bus_number) a
 	]]>
@@ -730,7 +755,7 @@
 	FROM (
 	SELECT COUNT(h.level) bug_count,h.level,h.test_node AS workshop_name FROM BMS_QM_QUALITY_ABNORMAL_RECORD h
     LEFT JOIN BMS_BASE_FACTORY f ON f.factory_name=h.factory
-	WHERE f.id=#{factoryId} AND substring(h.edit_date,1,10) >=#{startDate} 
+	WHERE f.id IN ${factoryId} AND substring(h.edit_date,1,10) >=#{startDate} 
 	AND substring(h.edit_date,1,10) <=#{endDate} AND h.level is not null AND h.test_node is not null
     GROUP BY h.test_node_id,h.level
     )tmp GROUP BY tmp.level
@@ -740,7 +765,7 @@
 		<![CDATA[
         SELECT COUNT(h.level) bug_count,h.test_node AS workshop_name,h.level AS serious_level,h.bug_desc AS test_result FROM BMS_QM_QUALITY_ABNORMAL_RECORD h
   		LEFT JOIN BMS_BASE_FACTORY f ON f.factory_name=h.factory
-		WHERE f.id=#{factoryId} AND substring(h.edit_date,1,10) >=#{startDate} 
+		WHERE f.id IN ${factoryId} AND substring(h.edit_date,1,10) >=#{startDate} 
 		AND substring(h.edit_date,1,10) <=#{endDate} AND h.level is not null AND h.test_node is not null
  	 	GROUP BY h.test_node_id,h.level
 		]]>
@@ -750,7 +775,7 @@
 		SELECT COUNT(t.bug_count) AS count FROM (
 		SELECT COUNT(h.level) bug_count,h.test_node AS workshop_name,h.level AS serious_level,h.bug_desc AS test_result FROM BMS_QM_QUALITY_ABNORMAL_RECORD h
   		LEFT JOIN BMS_BASE_FACTORY f ON f.factory_name=h.factory
-		WHERE f.id=#{factoryId} AND substring(h.edit_date,1,10) >=#{startDate} 
+		WHERE f.id IN ${factoryId} AND substring(h.edit_date,1,10) >=#{startDate} 
 		AND substring(h.edit_date,1,10) <=#{endDate} AND h.level is not null AND h.test_node is not null
  	 	GROUP BY h.test_node_id,h.level
 		) t
@@ -801,7 +826,7 @@
 				right join
 				(
 				
-					select sum(s.quantity) finished_qty,'自制件(下)' key_name
+					select sum(s.quantity) finished_qty,'自制下线' key_name
 					from BMS_PD_WORKSHOP_SUPPLY s 
 					where s.supply_workshop='自制件' and s.receive_workshop='部件' 
 					<if test="start_date !=null and start_date !=''">
@@ -814,10 +839,10 @@
 						and s.factory_id = #{factory} 
 					</if>
 					union
-					select sum(f.offline_real_qty) finished_qty,'部件(下)' key_name
+					select sum(f.offline_real_qty) finished_qty,'部件下线' key_name
 					from BMS_PD_PARTS_PLAN_FINISH f
 					left join BMS_BASE_KEY p1 on p1.value=f.parts_id AND p1.key_code ='BASE_PARTS' and p1.key_name='喷砂' 
-					where 1=1
+					where p1.value is not null
 					<if test="start_date !=null and start_date !=''">
 						and f.prod_date >= #{start_date} 
 					</if>
@@ -828,7 +853,7 @@
 						and f.factory_id=#{factory}  
 					</if>
 						union
-						select count(b.id) finished_qty,'焊装(上)' key_name 
+						select count(b.id) finished_qty,'焊装上线' key_name 
 						from BMS_PLAN_BUS b
 						where 1=1
 						<if test="factory !=null and factory !=''">
@@ -837,7 +862,7 @@
 						 and b.welding_online_date_report >= #{start_date} 
 						 and b.welding_online_date_report &lt;=#{end_date} 
 						union
-						select count(b.id) finished_qty,'涂装(上)' key_name 
+						select count(b.id) finished_qty,'涂装上线' key_name 
 						from BMS_PLAN_BUS b
 						where 1=1 
 						<if test="factory !=null and factory !=''">
@@ -846,7 +871,7 @@
 						and b.painting_online_date_report >= #{start_date} 
 						and b.painting_online_date_report &lt;=#{end_date} 
 						union
-						select count(b.id) finished_qty,'底盘(上)' key_name
+						select count(b.id) finished_qty,'底盘上线' key_name
 						from BMS_PLAN_BUS b
 						where 1=1
 						<if test="factory !=null and factory !=''">
@@ -855,7 +880,7 @@
 						and b.chassis_online_date_report >=#{start_date} 
 						and b.chassis_online_date_report &lt;=#{end_date} 
 						union
-						select count(b.id) finished_qty,'总装(下)' key_name
+						select count(b.id) finished_qty,'总装下线' key_name
 						from BMS_PLAN_BUS b
 						where 1=1
 						<if test="factory !=null and factory !=''">
@@ -903,33 +928,53 @@
 		from BMS_BASE_FACTORY f 
 		left join BMS_PD_PARTS_PLAN_FINISH pf on f.id=pf.factory_id
 		left join BMS_BASE_KEY k on k.value=pf.parts_id AND k.key_code ='BASE_PARTS'
-		where k.key_name='喷砂' and pf.prod_date >=#{start_date} and pf.prod_date&lt;=#{end_date}
+		where 1=1 
+		<if test="factoryIds != null">
+		AND f.id IN ${factoryIds}
+		</if>
+		AND k.key_name='喷砂' and pf.prod_date >=#{start_date} and pf.prod_date&lt;=#{end_date}
 		group by f.id
 		union all
 		select  '焊装上线' key_name, count(distinct b.bus_number) done_qty,f.factory_name factory,f.id factory_id
 				from BMS_BASE_FACTORY f 
 				left join BMS_PLAN_BUS b on b.factory_id=f.id
-				where  b.welding_online_date > CONCAT(date_sub(#{start_date},interval 1 day),' 17:30:00')
+				where 1=1 
+				<if test="factoryIds != null">
+				AND f.id IN ${factoryIds}
+				</if>
+				AND b.welding_online_date > CONCAT(date_sub(#{start_date},interval 1 day),' 17:30:00')
 				and b.welding_online_date &lt;=concat(#{end_date},' 17:30:00') 
 				group by f.id
 		union all
 		select  '涂装上线' key_name, count(distinct b.bus_number) done_qty,f.factory_name factory,f.id factory_id
 				from BMS_BASE_FACTORY f 
 				left join BMS_PLAN_BUS b on b.factory_id=f.id
-				where  b.painting_online_date > CONCAT(date_sub(#{start_date},interval 1 day),' 17:30:00')
+				where  1=1 
+				<if test="factoryIds != null">
+				AND f.id IN ${factoryIds}
+				</if>
+				AND b.painting_online_date > CONCAT(date_sub(#{start_date},interval 1 day),' 17:30:00')
 				and b.painting_online_date &lt;=concat(#{end_date},' 17:30:00') 
 				group by f.id
 		union all
 		select  '底盘上线' key_name, count(distinct b.bus_number) done_qty,f.factory_name factory,f.id factory_id
 				from BMS_BASE_FACTORY f 
 				left join BMS_PLAN_BUS b on b.factory_id=f.id
-				where  b.chassis_online_date > CONCAT(date_sub(#{start_date},interval 1 day),' 17:30:00')
+				where  1=1 
+				<if test="factoryIds != null">
+				AND f.id IN ${factoryIds}
+				</if>
+				AND  b.chassis_online_date > CONCAT(date_sub(#{start_date},interval 1 day),' 17:30:00')
 				and b.chassis_online_date &lt;=concat(#{end_date},' 17:30:00') 
 				group by f.id
 		union all
 		select  '总装下线' key_name, count(distinct b.bus_number) done_qty,f.factory_name factory,f.id factory_id
 				from BMS_BASE_FACTORY f 
 				left join BMS_PLAN_BUS b on b.factory_id=f.id 
+				where  1=1 
+				<if test="factoryIds != null">
+				AND f.id IN ${factoryIds}
+				</if>
 				and  b.assembly_offline_date > CONCAT(date_sub(#{start_date},interval 1 day),' 17:30:00')
 				and b.assembly_offline_date &lt;=concat(#{end_date},' 17:30:00') 
 				group by f.id
@@ -938,7 +983,11 @@
 		select k.key_name,ifnull(sum(fo.plan_qty),0) plan_qty,fo.factory_id
 				from BMS_PLAN_PRODUCTION_PLAN fo 
 				left join BMS_BASE_KEY k on k.value=fo.plan_code_value
-				where fo.plan_date>=#{start_date} and fo.plan_date&lt;=#{end_date} and k.key_code='PLAN_CODE'
+				where  1=1 
+				<if test="factoryIds != null">
+				AND fo.factory_id IN ${factoryIds}
+				</if>
+				AND fo.plan_date>=#{start_date} and fo.plan_date&lt;=#{end_date} and k.key_code='PLAN_CODE'
 				group by fo.factory_id,k.key_name) p
 		on p.key_name=record.key_name and p.factory_id=record.factory_id
 		where p.plan_qty !=0 or record.done_qty !=0

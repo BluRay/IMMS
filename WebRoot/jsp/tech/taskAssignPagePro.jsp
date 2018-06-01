@@ -61,6 +61,7 @@
 					<div>
 					&nbsp;起始车号：<input id="search_busnumber_start" placeholder="开始车号..." style="height: 30px;width:80px" type="text">-
 					<input id="search_busnumber_end" placeholder="结束车号..." style="height: 30px;width:80px" type="text">&nbsp;
+					<input class="btn btn-sm btn-danger" id="btnBuslist" value="指定车号" style="margin-left: 2px;" type="button">
 					<input id="btnBusQuery" type="button" class="btn btn-sm btn-success" value="查询" style="margin-left: 2px;"></input>
 					<input id="search_busnumber_factory_id" style="display:none;height: 30px;width:80px" type="text">
 					<input id="search_busnumber_task_id" style="display:none;height: 30px;width:80px" type="text">
@@ -172,7 +173,18 @@
 					</form>
 				</div>
 			</div><!-- /.main-content -->
-
+			
+			<div id="dialog-config" class="hide">
+				<form id="  " class="form-horizontal">
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="vin">车号：</label>
+						<div class="col-sm-9">
+							<textarea rows="6" id="search_bus_number" style="width:300px" placeholder="每行输入一个车号后回车！"></textarea>
+						</div>
+					</div>
+				</form>
+			</div>
+			
 			<!-- 脚 -->
 			<%-- <jsp:include page="footer.jsp" flush="true"/> --%>
 			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse"><i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i></a>

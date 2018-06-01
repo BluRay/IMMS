@@ -19,4 +19,5 @@ public interface IReviewDao {
 	public Map<String,Object> getOrderReviewById(String id);
 	public List<Map<String,Object>> getOrderDetailList(Map<String,Object> queryMap);
 	public List<Map<String,Object>> getOrderReviewNodeList(Map<String,Object> condMap);
+	public List<Map<String,String>> getReviewPersonList(String id);
 }

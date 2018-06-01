@@ -130,6 +130,21 @@ function ajaxQuery(){
     			$("<td style=\"text-align:center;padding-left:0px;padding-right:0px;line-height:12px;\" />").html(value.sumQty + stock[index%12]).appendTo(tr);
     			stock[index]+=value.sumQty;
     			$("#tableData tbody").append(tr);
+    			
+    			var dates_arr=[];
+    			$.each(value.publish_dates.split(","),function(i,pd){
+    				pd=Number(pd)
+    				dates_arr.push(pd);	
+    			})
+    			for(var i=1;i<=31;i++){
+    		    	if(value['d'+i]>0 && dates_arr.indexOf(i)<0){
+    					var publish_date=$("#search_plan_month").val().substring(0,4)+"-"+$("#search_plan_month").val().substring(4)+"-"+(i<10?('0'+i):i);
+    					var a_p="<u style='color:blue;cursor:pointer' onclick='fowardPublish(\""+value['order_id']+"\",\""+value['order_no']+"\",\""+
+    					value['factory_id']+"\",\""+publish_date+"\")'>"+value['d'+i]+"</u>";
+    					$(tr).find("td").eq(i+2).html(a_p);
+    				}				
+    			} 		
+    			
     		});
     		
 	    }
@@ -141,4 +156,10 @@ function GetQueryString(name)
      var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
      var r = window.location.search.substr(1).match(reg);
      if(r!=null)return  unescape(r[2]); return null;
+}
+
+function fowardPublish(order_id,order_no,factory_id,publish_date){
+	var url='/BMS/plan/planIssuance?'+
+	'order_id='+order_id+'&order_no='+order_no+'&factory_id='+factory_id+'&publish_date='+publish_date;
+	window.parent.addTabs({id:'计划发布',title:'计划发布',close: 'true',url: url});
 }

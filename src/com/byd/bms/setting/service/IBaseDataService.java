@@ -63,6 +63,8 @@ public interface IBaseDataService {
 		public void updateBusType(BmsBaseBusType busType);
 		public Map<String, Object> getProcessConfigList(Map<String, Object> condMap);
 		public BmsBaseBusType getBusTypeById(Map<String,Object> queryMap);
+		public void deleteBusType(Map<String, Object> condMap);
+		public void updateBusTypeByCode(BmsBaseBusType busType);
 		//VIN生成规则
 		public Map<String, Object> getVinRuleList(Map<String,Object> queryMap);
 		//public int getWorkgroupTotalCount(Map<String,Object> queryMap);

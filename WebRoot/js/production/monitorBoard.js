@@ -12,6 +12,9 @@ $(document).ready(function() {
 	factory_name=getQueryString("factory_name")||"";
 	workshop=getQueryString("workshop")||"";
 	$("#board_title").html(factory_name+"欢迎您");
+	if("welding" == workshop)$("#board_title").html("焊装车间欢迎您");
+	if("assembly" == workshop)$("#board_title").html("总装车间欢迎您");
+	
 	$("#welcome").html(welcome.replace("长沙工厂",factory_name))
 	showClock();
 	ajaxQueryBoardInfo();
@@ -27,12 +30,12 @@ $(document).ready(function() {
 			return;
 		}
 		if($("#page2").css("display")=="none"){
-			$(".main").fadeOut("3000");
-			$("#page2").fadeIn("3000");
+			$(".main").fadeOut("8000");
+			$("#page2").fadeIn("8000");
 			return;
 		}
 		
-	},5000)
+	},10000)
 /*	$(".main").toggle(function(){
 		$(".main").fadeOut(3000);
 		},function(){

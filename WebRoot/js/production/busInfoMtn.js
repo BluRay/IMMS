@@ -4,15 +4,15 @@ $(document).ready(function(){
 	//新增
 	$("#btnAdd").click(function(e){
 		$("#create_form")[0].reset();
-		$("#factory").prop("disabled",false);
-		$("#order").prop("disabled",false);
+		$("#factory_batch").prop("disabled",false);
+		$("#order_batch").prop("disabled",false);
 		$("#specify_order_lable").show();
-		getFactorySelect("production/busInfoMtn","","#factory","请选择","id");
-		getOrderNoSelect("#order","#order_id",null,null,"#factory","copy");
+		getFactorySelect("production/busInfoMtn","","#factory_batch","请选择","id");
+		getOrderNoSelect("#order_batch","#order_id",null,null,"#factory_batch","copy");
 		
-		var dialog = $( "#dialog-config" ).removeClass('hide').dialog({
-			width:750,
-			height:500,
+		var dialog = $( "#dialog-config-batch" ).removeClass('hide').dialog({
+			width:450,
+			height:300,
 			modal: true,
 			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i> 批量编辑</h4></div>",
 			title_html: true,
@@ -39,7 +39,6 @@ $(document).ready(function(){
 	$("#btnQuery").click(function(){
 		ajaxQuery();
 	});
-
 	
 	$("#bus_list").change(function(){
 		if($(this).val().trim().length>0){
@@ -50,6 +49,10 @@ $(document).ready(function(){
 			$("#order").attr("disabled",false);
 		}
 	});
+	
+	$("#order_batch").on("input",function(){
+		$("#order_batch").attr("order_id","")
+	})
 	
 });
 
@@ -236,11 +239,11 @@ function showEditPage(row){
  * 批量编辑
  */
 function ajaxAdd(){
-	if($("#factory").val()==""&&$("#bus_list").val().trim().length==0){
+	if($("#factory_batch").val()==""&&$("#bus_list").val().trim().length==0){
 		alert("请选择生产工厂！");
 		return false;
 	}
-	if(($("#order_id").val()==undefined||$("#order_id").val()=="")&&$("#bus_list").val().trim().length==0){
+	if(($("#order_batch").attr("order_id")==undefined||$("#order_batch").attr("order_id")=="")&&$("#bus_list").val().trim().length==0){
 		alert("请输入有效订单编号！");
 		return false;
 	}
@@ -251,28 +254,15 @@ function ajaxAdd(){
 		url:"updateBusInfo",
 		dataType:"json",
 		data:{
-			factory_id:$("#factory").val(),
-			order_id:$("#order_id").val(),
-			bus_list:$("#bus_list").val().replace(/\n/g,','),
-			bus_color:$("#bus_color").val(),
-			bus_seats:$("#bus_seats").val(),
-			passenger_num:$("#passenger_num").val(),
-			tire_type:$("#tire_type").val(),
-			battery_capacity:"",		//$("#battery_capacity").val(),
-			rated_voltage:"",			//$("#rated_voltage").val(),
-			spring_num:$("#spring_num").val(),
+			factory_id:$("#factory_batch").val(),
+			order_id:$("#order_batch").attr("order_id"),
+			bus_list:$("#bus_list").val().replace(/\n/g,','),			
 			dp_production_date:$("#dp_production_date").val(),
-			dp_zzd:$("#dp_zzd").val(),
-			zc_production_date:$("#zc_production_date").val(),
-			zc_zzd:$("#zc_zzd").val(),
-			hgz_note:$("#hgz_note").val(),
-			ccczs_date:$("#ccczs_date").val(),
-			dpgg_date:$("#dpgg_date").val(),
-			zcgg_date:$("#zcgg_date").val(),
+			zc_production_date:$("#zc_production_date").val()
 		},
 		success:function(response){
 			alert(response.message);
-			$("#dialog-config" ).dialog( "close" ); 
+			$("#dialog-config-batch" ).dialog( "close" ); 
 			$("#bus_list").val("");
 			ajaxQuery();
 		},
@@ -294,21 +284,21 @@ function ajaxEdit(bus_number){
 		dataType:"json",
 		data:{
 			bus_number:bus_number,
-			bus_color:$("#bus_color").val(),
+			/*bus_color:$("#bus_color").val(),
 			bus_seats:$("#bus_seats").val(),
 			passenger_num:$("#passenger_num").val(),
 			tire_type:$("#tire_type").val(),
 			battery_capacity:"",		//$("#battery_capacity").val(),
 			rated_voltage:"",			//$("#rated_voltage").val(),
-			spring_num:$("#spring_num").val(),
+			spring_num:$("#spring_num").val(),*/
 			dp_production_date:$("#dp_production_date").val(),
-			dp_zzd:$("#dp_zzd").val(),
+			/*dp_zzd:$("#dp_zzd").val(),*/
 			zc_production_date:$("#zc_production_date").val(),
-			zc_zzd:$("#zc_zzd").val(),
+			/*zc_zzd:$("#zc_zzd").val(),
 			hgz_note:$("#hgz_note").val(),
 			ccczs_date:$("#ccczs_date").val(),
 			dpgg_date:$("#dpgg_date").val(),
-			zcgg_date:$("#zcgg_date").val(),
+			zcgg_date:$("#zcgg_date").val(),*/
 		},
 		success:function(response){
 			alert(response.message);

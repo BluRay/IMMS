@@ -8,7 +8,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -20,6 +22,7 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.logging.log4j.util.PropertiesUtil;
 import org.apache.poi.util.StringUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +33,7 @@ import com.byd.bms.production.dao.IProductionDao;
 import com.byd.bms.production.model.ProductionException;
 import com.byd.bms.production.service.IProductionService;
 import com.byd.bms.util.DataSource;
+import com.byd.bms.util.PropertyUtil;
 
 /**
  * @author xiong.jianwu
@@ -58,6 +62,16 @@ public class ProductionServiceImpl implements IProductionService {
 		
 		return productionDao.queryProcessMonitorList(condMap);
 	}
+	
+	@Override
+	public List<Map<String, Object>> getProcessMonitor(Map<String, Object> condMap) {	
+		return productionDao.queryProcessMonitor(condMap);
+	}
+	
+	@Override
+	public int getOrderIdByOrderNo(String order_no){
+		return productionDao.getOrderIdByOrderNo(order_no);
+	}
 
 	@Override
 	public List<Map<String, Object>> getKeyParts(Map<String, Object> condMap) {
@@ -69,9 +83,9 @@ public class ProductionServiceImpl implements IProductionService {
 	}
 
 	@Override
-	public Map<String, Object> getBusInfo(String bus_number) {
+	public Map<String, Object> getBusInfo(Map<String, Object> condMap_bus) {
 		Map<String,Object> businfo=new HashMap<String,Object>();
-		businfo=productionDao.queryBusInfo(bus_number);
+		businfo=productionDao.queryBusInfo(condMap_bus);
 
 		return businfo;
 	}
@@ -92,6 +106,7 @@ public class ProductionServiceImpl implements IProductionService {
 	@Override
 	@Transactional
 	public Map<String,Object> scan(Map<String, Object> condMap,List partsList) {
+		List partsUpdateList =new ArrayList();
 		Map<String,Object> rMap=new HashMap<String,Object>();
 		int scan_num_cur=productionDao.queryScanRecord(condMap);//查询当前节点扫描记录
 		if(scan_num_cur<=0){   //当前节点未扫描		
@@ -125,9 +140,20 @@ public class ProductionServiceImpl implements IProductionService {
 					rMap.put("message", "扫描成功！");
 				}
 			}
-			
-			if(partsList.size()>0){
+			Iterator it=partsList.iterator();
+			while(it.hasNext()){
+				Map<String,Object> m=(Map<String, Object>) it.next();
+				if(null!=m.get("parts_id")&&!"".equals(m.get("parts_id"))){
+					partsUpdateList.add(m);
+					it.remove();
+				}
+			}
+			if(partsList.size()>0){				
 				productionDao.saveParts(partsList);
+			}
+			//品质保存了部分数据，之后才在生产执行扫描关键零部件，这个时候需要更新品质未保存的数据
+			if(partsUpdateList.size()>0){				
+				productionDao.updateParts(partsUpdateList);
 			}
 			
 			rMap.put("success", true);
@@ -156,6 +182,19 @@ public class ProductionServiceImpl implements IProductionService {
 			}	
 			
 		}else{  // 当前节点已扫描
+			Iterator it=partsList.iterator();
+			while(it.hasNext()){
+				Map<String,Object> m=(Map<String, Object>) it.next();
+				if(null==m.get("parts_id") || "".equals(m.get("parts_id"))){
+					partsUpdateList.add(m);
+					it.remove();
+				}
+			}
+			if(partsUpdateList.size()>0){				
+				//System.out.println(partsUpdateList.size());
+				productionDao.saveParts(partsUpdateList);
+			}
+			
 			if(partsList.size()>0){
 				productionDao.updateParts(partsList);
 			}		
@@ -378,19 +417,25 @@ public class ProductionServiceImpl implements IProductionService {
 	}
 
 	@Override
-	public void transferDataToHGZSys(List<Map<String, Object>> buslist,ModelMap model) {
+	@Transactional
+	public void transferDataToHGZSys(List<Map<String, Object>> buslist,ModelMap model,String editor) {
 		String JDriver="com.microsoft.sqlserver.jdbc.SQLServerDriver";//SQL数据库引擎
 		//String connectDB="jdbc:sqlserver://10.3.12.134;DatabaseName=HGZ_DATABASE";//数据源
 		//String user="TEST";
 		//String password="byd123456";
 		
 		//正式 服务器IP:10.9.37.139，账户：bms，密码：BMS@2017
-		String connectDB="jdbc:sqlserver://10.9.37.139;DatabaseName=HGZ_DATABASE";//数据源
+		/*String connectDB="jdbc:sqlserver://10.9.37.139;DatabaseName=HGZ_DATABASE";//数据源
 		String user="bms";
-		String password="BMS@2017";
-	
+		String password="BMS@2017";*/
+		String connectDB = PropertyUtil.getProperty("DB_URL_HGZ");
+		String user = PropertyUtil.getProperty("DB_USER_HGZ");
+		String password = PropertyUtil.getProperty("DB_PASSWORD");
+		System.out.println(connectDB);
+		
 		List<Map<String,Object>> updateList=new ArrayList<Map<String,Object>>();
 		List<Map<String,Object>> insertList=new ArrayList<Map<String,Object>>();
+		StringBuffer bus_sb=new StringBuffer();
 		Connection con=null;
 		try
 		{
@@ -408,6 +453,7 @@ public class ProductionServiceImpl implements IProductionService {
 				}else{
 					insertList.add(bus);
 				}
+				bus_sb.append(bus.get("bus_number")).append(",");
 			}
 			for(Map<String,Object>bus:updateList){
 				StringBuffer sb=new StringBuffer("update PRINT_TABLE set ");
@@ -419,6 +465,7 @@ public class ProductionServiceImpl implements IProductionService {
 				sb.append("Ltgg='").append(bus.get("tire_type")).append("',");
 				sb.append("NOTE='").append(bus.get("hgz_note")).append("',");
 				sb.append("SCD='").append(bus.get("zc_zzd")).append("'");
+				sb.append("DGDH='").append(bus.get("order_no")).append("',");
 				sb.append(" where VIN='").append(bus.get("vin")).append("'").append(" and DATATYPE='1'");
 				stmt.addBatch(sb.toString());
 				
@@ -431,12 +478,14 @@ public class ProductionServiceImpl implements IProductionService {
 				sb1.append("Ltgg='").append(bus.get("tire_type")).append("',");
 				sb1.append("NOTE='").append(bus.get("hgz_note")).append("',");
 				sb1.append("SCD='").append(bus.get("dp_zzd")).append("'");
+				sb1.append("DGDH='").append(bus.get("order_no")).append("',");
 				sb1.append(" where VIN='").append(bus.get("vin")).append("'").append(" and DATATYPE='0'");;
 				stmt.addBatch(sb1.toString());
 			}
 			
 			for(Map<String,Object>bus:insertList){
-				StringBuffer sb=new StringBuffer("insert into PRINT_TABLE (VIN,CLXH,FDJH,Leavedate,CLYS,Ltgg,NOTE,SCD,DATATYPE) values(");
+				StringBuffer sb=new StringBuffer("insert into PRINT_TABLE (DGDH,VIN,CLXH,FDJH,Leavedate,CLYS,Ltgg,NOTE,SCD,DATATYPE) values(");
+				sb.append("'").append(bus.get("order_no")).append("',");
 				sb.append("'").append(bus.get("vin")).append("',");
 				sb.append("'").append(bus.get("vehicle_model")).append("',");
 				sb.append("'").append(bus.get("motor_model")).append(" ")
@@ -449,7 +498,8 @@ public class ProductionServiceImpl implements IProductionService {
 				sb.append("'1')");
 				stmt.addBatch(sb.toString());
 				
-				StringBuffer sb1=new StringBuffer("insert into PRINT_TABLE (VIN,CLXH,FDJH,Leavedate,CLYS,Ltgg,NOTE,SCD,DATATYPE) values(");
+				StringBuffer sb1=new StringBuffer("insert into PRINT_TABLE (DGDH,VIN,CLXH,FDJH,Leavedate,CLYS,Ltgg,NOTE,SCD,DATATYPE) values(");
+				sb1.append("'").append(bus.get("order_no")).append("',");
 				sb1.append("'").append(bus.get("vin")).append("',");
 				sb1.append("'").append(bus.get("chassis_model")).append("',");
 				sb1.append("'").append(bus.get("motor_model")).append(" ")
@@ -469,6 +519,16 @@ public class ProductionServiceImpl implements IProductionService {
 			con.close();
 			model.put("success", true);
 			model.put("message", "传输打印成功！");
+			
+			//保存传输人，传输时间
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String edit_date = df.format(new Date());
+			Map<String,Object> condMap = new HashMap<String,Object>();
+			condMap.put("hgz_printer", editor);
+			condMap.put("hgz_print_date", edit_date);
+			condMap.put("bus_list", bus_sb.toString());
+			productionDao.updateBusInfo(condMap);
+			
 		}catch(Exception e)
 		{
 			model.put("success", false);
@@ -1138,9 +1198,26 @@ public class ProductionServiceImpl implements IProductionService {
 		
 	}
 	
+	/**
+	 * 根据thirdparty.properties配置的二次校验零部件关键字和车号查询前工序录入的批次信息
+	 */
+	@Override
+	public void getKeyPartsVal(String bus_number, ModelMap model) {
+		String parts_key=PropertyUtil.getProperty("KEYPARTS_JCX");
+		List<String> parts_list=new ArrayList<String>();
+		for(String parts_name:parts_key.split(",")) {
+			parts_list.add(parts_name);
+		}
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("bus_number", bus_number);
+		condMap.put("parts_list", parts_list);
+		List<Map<String, Object>> datalist=productionDao.queryKeyPartsJCXByBus(condMap);
+		model.put("data", datalist);
+	}
+	
+	
 	/*****************************xiong jianwu end  *****************************/
 
-	
 
 	/*******************  tangjin start **************************/
 	@Override
@@ -1179,6 +1256,11 @@ public class ProductionServiceImpl implements IProductionService {
 	public List<Map<String, String>> getBusNumberByVin(
 			Map<String, Object> conditionMap) {
 		return productionDao.getBusNumberByVin(conditionMap);
+	}
+
+	@Override
+	public List getBusNumberByMotor(Map conditionMap) {
+		return productionDao.getBusNumberByMotor(conditionMap);
 	}
 
 	@Override
@@ -1698,5 +1780,15 @@ public class ProductionServiceImpl implements IProductionService {
 		return productionDao.caculateTmpSalary(conditionMap);
 	}
 
+	@Override
+	public List<Map<String,Object>> getKeyPartBatchInfo(Map<String, Object> conditionMap){
+		return productionDao.getKeyPartBatchInfo(conditionMap);
+	}
+
+	@Override
+	public List<Map<String, String>> getKeyPartsByBus(Map<String, Object> condMap) {
+		return productionDao.queryKeyPartsByBus(condMap);
+	}
+	
 	
 }

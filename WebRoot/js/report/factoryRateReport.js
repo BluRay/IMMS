@@ -1,5 +1,8 @@
+
+var factory_str = "";
+var factory_ids = "0";
 $(document).ready(function(){
-	
+	initPage();
 	ajaxQuery();
 	
 	$('#nav-search-input').bind('keydown', function(event) {
@@ -9,16 +12,143 @@ $(document).ready(function(){
 		}
 	});
 	
+	function initPage(){
+		$("#search_factory").val("全部");
+	}
+	
 	$("#btnQuery").click(function(){
 		ajaxQuery();
 	})
+	
+	
+		
+	
+	$("#btn_factory").click(function(){
+		select_factory();
+	});
 	
 	//导出功能
 	$(document).on("click",".buttons-excel",function(){
 		htmlToExcel("tableResult", "", "","工厂计划达成率","工厂计划达成率");
 		return false;
 	});
+	
+	var DataSourceTree = function(options) {
+		this._data 	= options.data;
+		this._delay = options.delay;
+	}
+	DataSourceTree.prototype.data = function(options, callback) {
+		var self = this;
+		var $data = null;
+		if (!("name" in options) && !("type" in options)) {
+			$data = this._data;
+			callback({data : $data});
+			return;
+		} else if ("type" in options && options.type == "folder") {
+			if ("additionalParameters" in options && "children" in options.additionalParameters)
+				$data = options.additionalParameters.children;
+			else
+				$data = {}
+		}
+		if ($data != null)
+			setTimeout(function() {
+				callback({data : $data});
+			}, parseInt(Math.random() * 500) + 200);
+	};
+	
+	showtree2();
+	
+	function showtree2(){
+		$("#tree2").removeData();
+		$("#tree2").unbind();
+		$.ajax({
+		    url: "../common/getFactorySelect",
+		    dataType: "json",
+			type: "get",async:false,
+		    data: {},
+		    success:function(response){
+		    	var role_str = '{';
+		    	$.each(response.data, function(index, value) {
+		    		role_str += '"role_'+value.id+'" : {"name": "<i class=\'fa fa-users blue\'></i> '+value.name+'","id":"'+value.id+'","factory":"'+value.name+'","type": "item"},'
+		    	});
+		    	role_str = role_str.substring(0,role_str.length-1) + '}';
+		    	var role_data = eval('(' + role_str + ')');
+		    	var treeDataSource = new DataSourceTree({data: role_data});
+		    	$('#tree2').ace_tree({
+		    		dataSource: treeDataSource,
+		    		multiSelect : true,
+		    		cacheItems: true,
+		    		loadingHTML : '<div class="tree-loading"><i class="ace-icon fa fa-refresh fa-spin blue"></i></div>',
+		    		'open-icon' : 'ace-icon tree-minus',
+		    		'close-icon' : 'ace-icon tree-plus',
+		    		'selectable' : true,
+		    		'selected-icon' : 'ace-icon fa fa-check',
+		    		'unselected-icon' : 'ace-icon fa fa-check'
+		    	});
+
+		    } 
+		});
+		$('#tree2')
+		.on('updated', function(e, result) {
+		})
+		.on('selected', function(e,data) {
+			console.log('selected:' + data.info[data.info.length-1].factory);
+			this_role = data.info[data.info.length-1].factory;
+
+		})
+		.on('click', function(e,data) {
+			//console.log(e);
+		})
+		.on('opened', function(e) {
+		})
+		.on('closed', function(e) {
+		});
+	}
 })
+
+function select_factory(){
+		$("#dialog-factory").removeClass('hide').dialog({
+			resizable: false,
+			title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-users green"></i> 选择工厂</h4></div>',
+			title_html: true,
+			width:'600px',
+			height:450,
+			modal: true,
+			buttons: [{
+						text: "取消",
+						"class" : "btn btn-minier",
+						click: function() {$( this ).dialog( "close" );} 
+					},
+					{
+						text: "确定",
+						id:"btn_ok",
+						"class" : "btn btn-success btn-minier",
+						click: function() {
+							btnConfirm();
+						} 
+					}
+				]
+		});
+	}
+	
+	function btnConfirm(){
+		var tree2_items = $('#tree2').tree('selectedItems'); 
+		if(tree2_items.length === 0){
+			$("#search_factory").val("全部");
+			factory_ids = "0";
+		}else{
+			factory_ids = "";factory_str="";
+			$.each(tree2_items, function(index, value) {
+				factory_str += value.factory + ',';
+				factory_ids += value.id + ',';
+			});
+			$("#search_factory").val(factory_str.substring(0,factory_str.length-1));
+			factory_ids = "(" + factory_ids.substring(0,factory_ids.length-1) + ")";
+		}
+		
+		console.log("---->factory_ids = "+ factory_ids )
+		$("#dialog-factory" ).dialog( "close" ); 
+	}
 
 function ajaxQuery(){
 	$(".divLoading").addClass("fade in").show();
@@ -66,7 +196,8 @@ function ajaxQuery(){
          async:false,
          data: {
         	 start_date:start_date,
-        	 end_date:end_date
+        	 end_date:end_date,
+        	 factoryIds : factory_ids
          },  //传入组装的参数
          dataType: "json",
          success: function (response) {

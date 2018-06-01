@@ -30,5 +30,23 @@ public interface IOrderService {
 	public void saveOrderConfigAllot(List detail_list);
 	public ModelMap getOrderQueryData(Map<String, Object> condMap);
 	public void getOrderConfigTotalQty(String order_id, ModelMap model);
-	public void editOrderColor(Map<String, Object> condMap, ModelMap model);
+	public List<Map> getOrderConfigParam(Map<String, Object> conditionMap);
+	public void editOrderConfigParam(Map<String,Object> conditionMap);
+	public int getBusTypeIdByCode(Map<String, Object> condMap);
+	public int getOrderIdByBomNo(String order_no_bom);
+	public int insertOrderByBom(BmsOrder order);
+	public int updateOrderByBom(BmsOrder order);
+	public int getFactoryOrderCountByOrderId(String order_id);
+	public int getOrderQtyById(String order_id);
+	public int updateOrderConfigByBom(Map<String, Object> orderConfigMap);
+	public int getOrderConfigIdByVehicleModel(String order_vehicle_model);
+	
+	public int insertOrderConfigDetailByBom(Map<String, Object> condMap);
+	public int updateOrderConfigDetailByBom(Map<String, Object> condMap);
+	public int getOrderConfigDetailIdByVehicleModel(String order_vehicle_model);
+	public int getBomPmdIdByBom(Map<String, Object> condMap);
+	public int insertBomPmdIdByBom(Map<String, Object> condMap);
+	public int updateBomPmdIdByBom(Map<String, Object> condMap);
+	
+	public List queryOrderConfigByVehicle(String orderVechicleModel);
 }

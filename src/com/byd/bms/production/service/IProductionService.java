@@ -13,10 +13,11 @@ public interface IProductionService {
 	public List getLineProcessList(Map<String,Object> condMap);
 	
 	List<Map<String,Object>> getProcessMonitorSelect(Map<String, Object> condMap);
+	List<Map<String,Object>> getProcessMonitor(Map<String, Object> condMap);
 
 	List<Map<String,Object>>  getKeyParts(Map<String, Object> condMap);
 
-	public Map<String, Object> getBusInfo(String bus_number);
+	public Map<String, Object> getBusInfo(Map<String, Object> condMap_bus);
 
 	public List<Map<String,Object>> getOrderConfigList(String order_config_id);
 
@@ -66,7 +67,7 @@ public interface IProductionService {
 
 	public void getCertificationList(Map<String, Object> conditionMap, ModelMap model);
 
-	public void transferDataToHGZSys(List<Map<String, Object>> buslist, ModelMap model);
+	public void transferDataToHGZSys(List<Map<String, Object>> buslist, ModelMap model, String editor);
 
 	public void getSalaryModel(Map<String, Object> condMap, ModelMap model);
 
@@ -191,8 +192,14 @@ public interface IProductionService {
 	public int saveTmpOrderProcedure(Map<String, Object> cmap);
 	public int updateTmpOrder(Map<String, Object> cmap);
 	public String caculateTmpSalary(Map<String, Object> conditionMap);
-
+	public int getOrderIdByOrderNo(String order_no);
 	public void checkPartsBatch(String batch, ModelMap model);
+	public List<Map<String,Object>> getKeyPartBatchInfo(Map<String, Object> conditionMap);
 
+	public List getBusNumberByMotor(Map conditionMap);
+
+	public List<Map<String, String>> getKeyPartsByBus(Map<String, Object> condMap);
+
+	public void getKeyPartsVal(String bus_number, ModelMap model);
 
 }

@@ -75,13 +75,21 @@ public interface IQualityService {
 	public List<Map<String,String>> getTestingBusList(Map<String, Object> conditionMap);
 	public int getTestingBusListCount(Map<String, Object> conditionMap);
 	public Map<String, Object> getBusTestingDateCS(Map<String, Object> conditionMap);
+	public Map<String, Object> getBusTestingDateWH(Map<String, Object> conditionMap);
 	public int checkJcxBusInfoId(Map<String, Object> conditionMap);
 	public int insertJcxBusInfo(Map<String, Object> conditionMap);
 	public int updateJcxBusInfo(Map<String, Object> conditionMap);
 	public Map<String, Object> getTestingDateReport(Map<String,Object> queryMap);
 	public Map<String, Object> getTestingInfo(Map<String,Object> queryMap);
+	public Map<String, Object> getKeyPartsInfo(Map<String,Object> queryMap);
 	public List<Map<String, Object>> getProcessFaultReportData(Map<String,Object> queryMap);
+	public List<Map<String, Object>> getProcessFaultOrderReportData(Map<String,Object> queryMap);
+	public List<Map<String, Object>> getProcessFaultOrderReportData2(Map<String,Object> queryMap);
+	public List<Map<String, Object>> getOrderFaultReportList(Map<String,Object> queryMap);
 	public List<Map<String, Object>> getFactoryIdByVin(Map<String,Object> queryMap);
+	public List<Map<String, String>> getProcessFaultArea();
+	public int checkOrderNo(String order_no);
+	public int deleteProcessFault(String processFaultId);
 	//======================== yk end=================================//
 			
 			
@@ -132,6 +140,9 @@ public interface IQualityService {
 	
 	
 	public Map<String,Object> getFaultLibList(Map<String, Object> conditionMap);
+	//======================== pengtao add start=================================//
+	public List<Map<String, Object>> queryKeyPartsListByPartsNo(Map<String, Object> condMap);
+	//======================== pengtao add end=================================//
 
 
 

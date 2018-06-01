@@ -9,6 +9,19 @@ $(document).ready(function () {
 		getFactorySelect("plan/planRevision",'',"#search_factory",null,'id');
 		getOrderNoSelect("#search_order_no","#orderId");
 		$("#btnSave").attr("disabled","disabled");
+		
+		if(window.location.href.indexOf("order_no")>0){
+			var factory_id=getQueryString("factory_id");
+			var order_id=getQueryString("order_id");
+			var order_no=getQueryString("order_no");
+			var publish_date=getQueryString("publish_date");
+			$("#search_factory").val(factory_id);
+			$("#search_order_no").val(order_no).attr("order_id",order_id);
+			$('#issuance_date').val(publish_date)
+			ajaxQuery();
+			
+		}	
+		
 	}
 	
 	$("#btnQuery").click (function () {

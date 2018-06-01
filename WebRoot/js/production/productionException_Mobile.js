@@ -101,7 +101,7 @@ function getFactorySelect() {
 	$.ajax({
 		url : "/BMS/common/getFactorySelectAuth",
 		dataType : "json",
-		data : {},
+		data : {function_url:'/BMS/production/exception'},
 		async : false,
 		error : function(response) {
 			alert(response.message)
@@ -121,7 +121,9 @@ $.ajax({
 	url : "/BMS/common/getWorkshopSelectAuth",
 	dataType : "json",
 	data : {
-			factory:$("#exec_factory :selected").text()
+		factory:$("#exec_factory :selected").text(),
+		org_kind:'1',
+		function_url:'/BMS/production/exception'
 		},
 	async : false,
 	error : function(response) {

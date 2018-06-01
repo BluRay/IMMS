@@ -838,6 +838,7 @@ public class PlanController extends BaseController{
 		String resume_date_start = request.getParameter("resume_date_start");
 		String resume_date_end = request.getParameter("resume_date_end");
 		String pause_id = request.getParameter("pause_id");
+		String status = request.getParameter("status");
 		int draw=(request.getParameter("draw")!=null)?Integer.parseInt(request.getParameter("draw")):1;	
 		int start=(request.getParameter("start")!=null)?Integer.parseInt(request.getParameter("start")):0;		//分页数据起始数
 		int length=(request.getParameter("length")!=null)?Integer.parseInt(request.getParameter("length")):500;	//每一页数据条数
@@ -857,6 +858,7 @@ public class PlanController extends BaseController{
 		condMap.put("start_time2", resume_date_start);
 		condMap.put("end_time2", resume_date_end);
 		condMap.put("pause_id", pause_id);
+		condMap.put("status", status);
 		Map<String,Object> list = planService.getPauseList(condMap);
 		//initModel(true,"SUCCESS",list);	
 		mv.clear();

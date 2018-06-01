@@ -55,7 +55,8 @@ $(document).ready(function(){
 	$('#search_factory').change(function(){ 
 		//getWorkshopSelect("quality/materialExceptionLogs",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
 		if($(this).val()!=''){
-			getWorkshop($(this).val(),$("#search_workshop"));
+			//getWorkshop($(this).val(),$("#search_workshop"));
+			getWorkshopSelect("quality/materialExceptionLogs",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
 		}
 	});
 	$('#new_factory').change(function(){ 

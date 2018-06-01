@@ -40,6 +40,12 @@ function ajaxQuery(){
 }
 
 function confirm(exception_id){
+	var role_list=getRoleList();
+	if($.inArray("工厂计划", role_list)==-1){
+		alert("抱歉，您没有异常处理权限！");
+		return false;
+	}
+	
 	getKeysSelect("EXCEPTION_RESPONSIBILITY_DEPARTMENT", "", "#confirm_duty_department",null,"value");
 	getReasonTypeSelect();
 	
@@ -89,7 +95,13 @@ function confirm(exception_id){
 	
 }
 
-function edit(id,factory,workshop,line,process){
+function edit(id,factory,workshop,line,process,editor_name){
+	var user=$("#login_user").val();
+	if(user!=editor_name){
+		alert("抱歉，您无修改此数据的权限！");
+		return false;
+	}
+	
 	getProcessList(factory,workshop,line.replace('线',''),process);
 	getFactorySelect("plan/exceptionManager",'',"#edit_factory",null,'id');
 	getWorkshopSelect("plan/exceptionManager",$("#edit_factory :selected").text(),"","#edit_workshop",null,"id");
@@ -410,7 +422,7 @@ function initTable() {
     	        		return "-";
     	        	}else{
     	        		return "<i class=\"glyphicon glyphicon-edit bigger-130 showbus\" title=\"修改\" onclick='edit(" + row['id'] + 
-	                    ",\""+row['factory']+"\",\""+row['workshop']+"\",\""+row['line']+"\",\""+row['process']+"\")' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;<i class=\"glyphicon glyphicon-ok bigger-130 showbus\" title=\"处理\" onclick='confirm(" + row['id'] + 
+	                    ",\""+row['factory']+"\",\""+row['workshop']+"\",\""+row['line']+"\",\""+row['process']+"\",\""+row['editor_name']+"\")' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;<i class=\"glyphicon glyphicon-ok bigger-130 showbus\" title=\"处理\" onclick='confirm(" + row['id'] + 
 	                    ")' style='color:blue;cursor: pointer;'></i>";
     	        	}
     	        	

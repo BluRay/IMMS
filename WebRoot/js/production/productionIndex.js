@@ -9,7 +9,7 @@ $(document).ready(function () {
 		ajaxQuery();
 	});
 	
-	function initPage(){
+	function initPage(){	
 		getFactorySelect("production/index","","#search_factory",null,"id");
 		getWorkshopAuthList();
 		ajaxQuery();
@@ -34,7 +34,7 @@ $(document).ready(function () {
 		$.ajax({
 			url : "/BMS/common/getWorkshopSelectAuth",
 			dataType : "json",
-			data : {"function_url":'production/index',"factory":$("#search_factory :selected").text()},
+			data : {"function_url":'/BMS/production/index',"factory":$("#search_factory :selected").text()},
 			async : false,
 			error : function(response) {
 				alert(response.message)

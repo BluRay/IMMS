@@ -230,7 +230,7 @@ function ajaxQuery(){
 	var tb=$("#tableResult").DataTable({
 		serverSide: true,
 		fixedColumns:   {
-            leftColumns: 2,
+            leftColumns: 3,
             rightColumns:3
         },
 		dom: 'Bfrtip',

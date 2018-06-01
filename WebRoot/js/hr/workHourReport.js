@@ -363,6 +363,8 @@ function exportExcelTableHtml(){
 		th.html(column.title);
 		$(table_head).append(th);
 	})
+	$(table).append(table_head);
+	
 	var warp = document.createDocumentFragment();//创建文档碎片节点,最后渲染该碎片节点，减少浏览器渲染消耗的资源
 	var data_process={};
 	data_process.result=result;
@@ -433,7 +435,7 @@ function exportExcelTableHtml(){
 	var trs=$(table).find("tbody").find("tr");
 	$.each(trs,function(j,tr){
 		var r=j%5;
-		if(r==4){
+		if(r==0){
 			for(var i=4;i<35;i++){
 				// 由于上下合并3行单元格所以children().eq的指针减3
 				var td=$(tr).children().eq(i-3).text().trim();

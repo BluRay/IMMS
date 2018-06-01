@@ -14,18 +14,18 @@ String factory=(String)session.getAttribute("factory");
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 	<style>	
 			.myselect {
-		border: 0px none;
-		-moz-appearance:none;
-		-webkit-appearance:none;
-		font-size: 100%;
-		margin-bottom: 3px;
-		color: #555;
-		background-color:#f5f5f5;
-		width: 80px;
-		padding: 0px;
-		height:27px;
-		cursor: pointer;
-		margin-left: -8px;
+				border: 0px none;
+				-moz-appearance:none;
+				-webkit-appearance:none;
+				font-size: 100%;
+				margin-bottom: 3px;
+				color: #555;
+				background-color:#f5f5f5;
+				width: 80px;
+				padding: 0px;
+				height:27px;
+				cursor: pointer;
+				margin-left: 10px;
 		}
 	</style>
 	</head>
@@ -37,7 +37,7 @@ String factory=(String)session.getAttribute("factory");
 			<!-- 左边菜单 -->
 			<jsp:include page="left.jsp" flush="true"/>
 			<!-- 主体 -->
-			<div class="main-content">			
+			<div class="main-content" >			
 			<!-- 路径和搜索框 -->
 <%-- 			<div class="breadcrumbs breadcrumbs-fixed" id="breadcrumbs">
 					<ul class="breadcrumb">
@@ -59,7 +59,7 @@ String factory=(String)session.getAttribute("factory");
 					</div><!-- /.nav-search -->
 				</div> --%> 
 				
-			<div class="page-content"  >
+			<div class="page-content"  style="padding-left: 5px;padding-right: 12px;">
 					<!-- 设置小部件 -->
 					<%-- <jsp:include page="settings.jsp" flush="true"/> --%>
 					<!-- /section:settings.box -->
@@ -69,7 +69,11 @@ String factory=(String)session.getAttribute("factory");
 										<!-- #section:custom/widget-box -->
 										<div class="widget-box ui-sortable-handle">
 											<div class="widget-header">
-												<h5 class="widget-title"><a href='#' onclick="reportFoward('plan/planSearch')">工厂日计划达成</a></h5>
+												<h5 class="widget-title"><a href='#' onclick="reportFoward('plan/planSearch')">工厂日计划达成</a>
+												<select id="search_factory" class="myselect">
+												</select>
+												<input id="factory_id_default" type="hidden" value='<%=factory_id%>'>
+												</h5>
 
 												<!-- #section:custom/widget-box.toolbar -->
 												<div class="widget-toolbar">
@@ -214,7 +218,7 @@ String factory=(String)session.getAttribute("factory");
 				<div class="col-xs-12 col-sm-7 widget-container-col ui-sortable" >
 					<div class="widget-box ui-sortable-handle" >
 								<div class="widget-header">
-									<h5 class="widget-title"><a href='#' onclick="reportFoward('report/factoryOutputYear')">产量（总装下线）</a></h5>
+									<h5 class="widget-title"><a href='#' onclick="reportFoward('report/factoryOutputYear')">产量（总装下线）</a><span id="span_1"></span></h5>
 									<div class="widget-toolbar">
 										<a href="#" data-action="fullscreen" class="orange2" >
 											<i class="ace-icon fa fa-expand"></i>
@@ -262,7 +266,7 @@ String factory=(String)session.getAttribute("factory");
 				<div class="col-xs-12 col-sm-7 widget-container-col ui-sortable" >
 					<div class="widget-box ui-sortable-handle" >
 								<div class="widget-header">
-									<h5 class="widget-title">人员分布（事业部）</h5>
+									<h5 class="widget-title">人员分布（事业部）<span id="span_2"></span></h5>
 									<div class="widget-toolbar">
 										<a href="#" data-action="fullscreen" class="orange2" >
 											<i class="ace-icon fa fa-expand"></i>
@@ -297,5 +301,14 @@ String factory=(String)session.getAttribute("factory");
 	<script src="js/common.js"></script>
 	<script src="js/index.js"></script>
 	<jsp:include page="tabPannel.jsp" flush="true"/>
+	<script type="text/javascript">
+	$(document).ready(function() {
+		$("#search_factory").change(function(){
+			drawFactoryDailyChart();
+			drawFactoryOrderChart();
+			drawFactoryException();
+		})
+	});
+	</script>
 	</body>
 </html>

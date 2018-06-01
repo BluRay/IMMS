@@ -11,6 +11,8 @@ $(document).ready(function(){
 		async: false,
 		error: function () {alert(response.message);},
 		success: function (response) {
+			$("#check_date").html(response.rows[0].check_date);
+			$("#check_no").html(response.rows[0].check_no);
 			$("#t_1_1").html(response.rows[0].bus_number);
 			$("#t_1_2").html(response.rows[0].check_type);
 			$("#t_1_3").html(response.rows[0].bus_vehicle_type);
@@ -61,22 +63,38 @@ $(document).ready(function(){
 			$("#t_19_1").html("左：" + response.rows[0].lhb_height_val + "<br/>右：" + response.rows[0].rhb_height_val);
 			$("#t_19_2").html(response.rows[0].lhb_light_val);
 			$("#t_19_3").html(response.rows[0].rhb_light_val);
-			$("#t_19_4").html(response.rows[0].lhb_udobs_val);
-			$("#t_19_5").html(response.rows[0].rhb_udobs_val);
+			$("#t_19_4").html("下" + response.rows[0].lhb_udobs_val + "mm/" + response.rows[0].lhb_udoff_val);
+			$("#t_19_5").html("下" + response.rows[0].rhb_udobs_val + "mm/" + response.rows[0].rhb_udoff_val);
 			$("#t_19_6").html(response.rows[0].lhb_lroff_val);
 			$("#t_19_7").html(response.rows[0].rhb_lroff_val);
+			
+			$("#t_20_1").html(response.rows[0].lhb_light_std);
+			$("#t_20_2").html(response.rows[0].rhb_light_std);
+			$("#t_20_3").html((response.rows[0].lhb_udobs_std==null)?"0.8~0.95":response.rows[0].lhb_udobs_std);
+			$("#t_20_4").html((response.rows[0].rhb_udobs_std==null)?"0.8~0.95":response.rows[0].rhb_udobs_std);
+			$("#t_20_5").html(response.rows[0].lhb_lroff_std);
+			$("#t_20_6").html(response.rows[0].rhb_lroff_std);
+			
+			
 			$("#t_21_1").html((response.rows[0].lhb_light_val>=18000)?"O":"X");
 			$("#t_21_2").html((response.rows[0].rhb_light_val>=18000)?"O":"X");
-			$("#t_21_3").html("");
-			$("#t_21_4").html("");
+			$("#t_21_3").html((response.rows[0].lhb_udoff_jus=="1")?"O":"X");
+			$("#t_21_4").html((response.rows[0].rhb_udoff_jus=="1")?"O":"X");
 			$("#t_21_5").html((response.rows[0].lhb_lroff_val>=-170&&response.rows[0].lhb_lroff_val<=350)?"O":"X");
 			$("#t_21_6").html((response.rows[0].rhb_lroff_val>=-350&&response.rows[0].rhb_lroff_val<=350)?"O":"X");
-			$("#t_23_1").html(response.rows[0].ldb_udobs_val);
-			$("#t_23_2").html(response.rows[0].rdb_udobs_val);
+			
+			$("#t_23_1").html("下" + response.rows[0].ldb_udobs_val + "mm/" + response.rows[0].ldb_udoff_val);
+			$("#t_23_2").html("下" + response.rows[0].rdb_udobs_val + "mm/" + response.rows[0].rdb_udoff_val);
 			$("#t_23_3").html(response.rows[0].ldb_lroff_val);
 			$("#t_23_4").html(response.rows[0].rdb_lroff_val);
-			$("#t_25_1").html("");
-			$("#t_25_2").html("");
+			
+			$("#t_24_1").html((response.rows[0].ldb_udobs_std==null)?"0.6~0.8":response.rows[0].ldb_udobs_std);
+			$("#t_24_2").html((response.rows[0].rdb_udobs_std==null)?"0.6~0.8":response.rows[0].rdb_udobs_std);
+			$("#t_24_3").html((response.rows[0].ldb_lroff_std==null)?"-170~350":response.rows[0].ldb_lroff_std);
+			$("#t_24_4").html((response.rows[0].rdb_lroff_std==null)?"-170~350":response.rows[0].rdb_lroff_std);
+			
+			$("#t_25_1").html((response.rows[0].ldb_udoff_jus=="1")?"O":"X");
+			$("#t_25_2").html((response.rows[0].rdb_udoff_jus=="1")?"O":"X");
 			$("#t_25_3").html((response.rows[0].ldb_lroff_val>=-170&&response.rows[0].ldb_lroff_val<=350)?"O":"X");
 			$("#t_25_4").html((response.rows[0].rdb_lroff_val>=-170&&response.rows[0].rdb_lroff_val<=350)?"O":"X");
 			$("#t_26_1").html(response.rows[0].horn_level);

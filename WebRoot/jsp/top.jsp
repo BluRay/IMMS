@@ -17,6 +17,10 @@ String display_name = (String)session.getAttribute("display_name");
 			//alert("域名访问");
 			$("#a_logout").attr("href","http://websso.byd.com.cn/oam/server/logout?end_url=http://10.23.1.18:8080");
 		}
+		if(window.location.href.indexOf("10.23.1.77:8080")>=0){
+			//alert("域名访问");
+			$("#a_logout").attr("href","http://websso.byd.com.cn/oam/server/logout?end_url=http://10.23.1.77:8080");
+		}
 		
 	})
 </script>	

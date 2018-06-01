@@ -49,6 +49,36 @@ $(document).ready(function(){
 		return false;
 	});
 	
+	$("#btnBuslist").click(function(){
+		var dialog = $( "#dialog-config" ).removeClass('hide').dialog({
+			width:400,
+			height:280,
+			modal: true,
+			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i> 指定车号</h4></div>",
+			title_html: true,
+			buttons: [ 
+				{
+					text: "取消",
+					"class" : "btn btn-minier",
+					click: function() {
+						$( this ).dialog( "close" ); 
+					} 
+				},
+				{
+					text: "确定",
+					"class" : "btn btn-primary btn-minier",
+					click: function() {
+						if($("#search_bus_number").val().trim().length>0){
+							ajaxQueryDetail($("#selectBusNumber_table_tbody"), $('#select_factory').val(), $('#select_workshop').val(), $('#select_order_no').val(), $('#select_tech_task_id').val(), null);
+						}						
+						$("#search_bus_number").val("");
+						$( this ).dialog( "close" ); 
+					} 
+				}
+			]
+		});
+	});
+	
 	// 复选框全选、反选
 	$(".checkall").click(function() {
 		if ($(this).prop("checked")) {
@@ -384,7 +414,7 @@ function showSelectBusNumberModal1(factory, workshop, order_no, tech_task_id, to
 	});
 }
 
-function ajaxQueryDetail(tbody, factory, workshop, order_no, tech_task_id, view,task_detail_id) {
+function ajaxQueryDetail(tbody, factory, workshop, order_no, tech_task_id, view,task_detail_id) {	
 	$.ajax({
 		url : "getFollowingUpDetailList",
 		dataType : "json",
@@ -395,6 +425,7 @@ function ajaxQueryDetail(tbody, factory, workshop, order_no, tech_task_id, view,
 			"order_no" : order_no,
 			"tech_task_id" : tech_task_id,
 			"tech_task_detail_id" :task_detail_id,
+			"bus_number":$('#search_bus_number').val(),
 			"bus_num_start" : "view" != view ? $('#bus_num_start').val() : $('#bus_num_start_view').val(),
 			"bus_num_end" : "view" != view ? $('#bus_num_end').val() : $('#bus_num_end_view').val(),
 			"view" : view

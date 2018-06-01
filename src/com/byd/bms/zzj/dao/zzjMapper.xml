@@ -1,0 +1,1258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.byd.bms.zzj.dao.IZzjDao">
+	
+	<select id="queryPmdHeader" parameterType="Map" resultType="Map">
+		select h.*,
+		(SELECT SUM(f.production_qty) FROM BMS_OR_FACTORY_ORDER f WHERE f.order_id = h.order_id AND f.factory_id= h.factory_id) as 'production_qty'
+		from BMS_ZZJ_PMD_HEAD h 
+		where h.order_id=#{order_id}
+		 and h.factory_name=#{factory_name}  and h.workshop_name=#{workshop_name}  and h.line_name=#{line_name}  
+	</select>
+	<select id="queryPmdItems" parameterType="Map" resultType="Map">
+		select t.*,'修改' as "operation_type" from BMS_ZZJ_PMD_ITEMS t 
+		where t.pmd_head_id=#{pmd_head_id} 
+		<if test="mat_description !=null and mat_description !=''">
+			and t.mat_description like CONCAT('%',#{mat_description},'%') 
+		</if>
+		<if test="zzj_type !=null and zzj_type !=''">
+			and t.zzj_type like CONCAT('%',#{zzj_type},'%')  
+		</if>
+		<if test="use_workshop !=null and use_workshop !=''">
+			and t.use_workshop like CONCAT('%',#{use_workshop},'%')   
+		</if>
+		order by t.zzj_type,t.mat_description 
+	</select>
+	<select id="queryMatList" parameterType="Map" resultType="Map">
+		SELECT d.id,d.no,d.pmd_head_id,d.zzj_type,d.sap_mat,d.mat_description,d.mat_type,h.factory_name,h.workshop_name,
+		h.line_name,case when d.print_date>0 then '已打印' else '未打印' end as print_flag,d.printer,d.print_date,
+		concat(o.order_no,' ',t.bus_type_code,o.order_name,' ',o.order_qty,'台') order_desc
+		FROM BMS_ZZJ_PMD_ITEMS  d
+		LEFT JOIN BMS_ZZJ_PMD_HEAD h ON d.pmd_head_id=h.id
+		LEFT JOIN BMS_OR_ORDER o ON o.id=h.order_id
+		LEFT JOIN BMS_BASE_BUS_TYPE t ON t.id=o.bus_type_id
+		WHERE 1=1
+		<if test="order_no !=null and order_no !=''">
+			AND o.order_no=#{order_no}
+		</if>
+		<if test="factory !=null and factory !=''">
+			AND h.factory_id=#{factory}
+		</if>
+		<if test="zzj_type !=null and zzj_type !=''">
+			AND d.zzj_type=#{zzj_type}
+		</if>
+		<if test="mat_desc !=null and mat_desc !=''">
+			AND d.mat_description like concat('%',#{mat_desc},'%')
+		</if>
+		order by o.order_no desc
+		<if test="start!=null">
+			LIMIT #{start} ,#{length} 
+		</if>
+	</select>
+	
+	<insert id="addPmdHeader" parameterType="Map" useGeneratedKeys="true" keyProperty="id" >
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into BMS_ZZJ_PMD_HEAD (order_id,factory_id,factory_name,workshop_name,line_name,creator,create_date)
+		values (#{order_id},#{factory_id},#{factory_name},#{workshop_name},#{line_name},#{editor_id},#{edit_date})
+	</insert>
+	<select id="queryMatListCount" parameterType="Map" resultType="int">
+		SELECT count(DISTINCT d.id)
+		FROM BMS_ZZJ_PMD_ITEMS  d
+		LEFT JOIN BMS_ZZJ_PMD_HEAD h ON d.pmd_head_id=h.id
+		LEFT JOIN BMS_OR_ORDER o ON o.id=h.order_id
+		WHERE 1=1
+		<if test="order_no !=null and order_no !=''">
+			AND o.order_no=#{order_no}
+		</if>
+		<if test="factory !=null and factory !=''">
+			AND h.factory_id=#{factory}
+		</if>
+		<if test="zzj_type !=null and zzj_type !=''">
+			AND d.zzj_type=#{zzj_type}
+		</if>
+		<if test="mat_desc !=null and mat_desc !=''">
+			AND d.mat_description like concat('%',#{mat_desc},'%')
+		</if>
+	</select>
+	
+	<insert id="addPmdDetails" parameterType="Map" useGeneratedKeys="true" keyProperty="id" >
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into BMS_ZZJ_PMD_ITEMS 
+		(no,pmd_head_id,zzj_type,sap_mat,mat_description,mat_type,specification,unit,loss,quantity,weight,weight_total,use_workshop,use_line,
+		process,assembly_position,crafts_identification,filling_size,accuracy_demand,surface_treatment,memo,crafts_memo,subcontracting_type,process_sequence,
+		process_flow,team,change_escription,change_subject,change_type,change_from,ecn_quantity,editor,edit_date)
+		values
+		<trim >
+		<foreach collection="pmd_list" item="detail" index="index" separator="," >
+				(#{index}+1,#{pmd_head_id},#{detail.zzj_type},#{detail.sap_mat},#{detail.mat_description},#{detail.mat_type},#{detail.specification},
+				#{detail.unit},#{detail.loss},#{detail.quantity},#{detail.weight},#{detail.weight_total},#{detail.use_workshop},#{detail.use_line},
+				#{detail.process},#{detail.assembly_position},#{detail.crafts_identification},#{detail.filling_size},#{detail.accuracy_demand},
+				#{detail.surface_treatment},#{detail.memo},#{detail.crafts_memo},#{detail.subcontracting_type},#{detail.process_sequence},
+				#{detail.process_flow},#{detail.team},#{detail.change_escription},#{detail.change_subject},#{detail.change_type},#{detail.change_from},#{detail.ecn_quantity},#{detail.editor},#{detail.edit_date})
+		</foreach>	
+		</trim>	
+	</insert>
+	
+	<update id="modifyPmdDetails" parameterType="Map">
+		<foreach collection="modify_list"  item="detail"  index="index" separator=";">
+				update BMS_ZZJ_PMD_ITEMS 
+				set sap_mat=#{detail.sap_mat},specification=#{detail.specification},unit=#{detail.unit},loss=#{detail.loss},quantity=#{detail.quantity},weight=#{detail.weight},
+				weight_total=#{detail.weight_total},use_workshop=#{detail.use_workshop},use_line=#{detail.use_line},process=#{detail.process},
+				crafts_identification=#{detail.crafts_identification},filling_size=#{detail.filling_size},accuracy_demand=#{detail.accuracy_demand},
+				surface_treatment=#{detail.surface_treatment},memo=#{detail.memo},crafts_memo=#{detail.crafts_memo},subcontracting_type=#{detail.subcontracting_type},
+				process_sequence=#{detail.process_sequence},process_flow=#{detail.process_flow},team=#{detail.team},change_escription=#{detail.change_escription},
+				change_subject=#{detail.change_subject},change_type=#{detail.change_type},change_from=#{detail.change_from},ecn_quantity=#{detail.ecn_quantity},
+				assembly_position=#{detail.assembly_position},
+				editor=#{detail.editor},edit_date=#{detail.edit_date} 
+				where id=#{detail.id}
+		</foreach>
+	</update>
+	
+	<insert id="addPmdHistoryDetails" parameterType="Map" useGeneratedKeys="true" keyProperty="id" >
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into BMS_ZZJ_PMD_ITEMS_H 
+		(no,pmd_head_id,operation_type,zzj_type,sap_mat,mat_description,mat_type,specification,unit,loss,quantity,weight,weight_total,use_workshop,use_line,
+		process,assembly_position,crafts_identification,filling_size,accuracy_demand,surface_treatment,memo,crafts_memo,subcontracting_type,process_sequence,
+		process_flow,team,change_escription,change_subject,change_type,change_from,ecn_quantity,editor,edit_date)
+		values
+		<foreach collection="pmd_list" item="detail" index="index" separator=",">
+				(#{index}+1,#{detail.pmd_head_id},#{detail.operation_type},#{detail.zzj_type},#{detail.sap_mat},#{detail.mat_description},#{detail.mat_type},#{detail.specification},
+				#{detail.unit},#{detail.loss},#{detail.quantity},#{detail.weight},#{detail.weight_total},#{detail.use_workshop},#{detail.use_line},
+				#{detail.process},#{detail.assembly_position},#{detail.crafts_identification},#{detail.filling_size},#{detail.accuracy_demand},
+				#{detail.surface_treatment},#{detail.memo},#{detail.crafts_memo},#{detail.subcontracting_type},#{detail.process_sequence},
+				#{detail.process_flow},#{detail.team},#{detail.change_escription},#{detail.change_subject},#{detail.change_type},#{detail.change_from},#{detail.ecn_quantity},#{detail.editor},#{detail.edit_date})
+		</foreach>		
+	</insert>
+	
+	<delete id="deletePmdItems" parameterType="Map">
+		<foreach collection="delete_list"  item="detail"  index="index" separator=";">
+			delete from BMS_ZZJ_PMD_ITEMS where 
+			id = #{detail.id} 
+			and pmd_head_id=#{pmd_head_id} 
+			and mat_description=#{detail.mat_description} 
+			and mat_type=#{detail.mat_type} 
+			and assembly_position=#{detail.assembly_position}
+		</foreach>
+	</delete>
+	
+	<select id="queryZzjPlan" parameterType="Map" resultType="Map">
+		select p.*,o.order_no,CONCAT(o.order_name,t.bus_type_code,'  ',o.order_qty,'台') AS 'order_name' ,
+		u.username AS 'username' ,
+		(SELECT SUM(f.production_qty) FROM BMS_OR_FACTORY_ORDER f WHERE f.order_id = p.order_id AND f.factory_id= p.factory_id) as 'production_qty'
+		from BMS_ZZJ_PLAN p 
+		left join BMS_OR_ORDER o	on p.order_id = o.id 
+		LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id = t.id 
+		left join BMS_BASE_USER u on p.editor = u.id
+		where 1=1 
+		<if test="order_id !=null and order_id !=''">
+			and p.order_id=#{order_id} 
+		</if>
+		<if test="factory_name !=null and factory_name !=''">
+			and p.factory_name=#{factory_name}
+		</if>
+		<if test="workshop_name !=null and workshop_name !=''">
+			and p.workshop_name=#{workshop_name}   
+		</if>
+		<if test="line_name !=null and line_name !='' and line_name !='全部' ">
+			and p.line_name=#{line_name}   
+		</if>
+		<if test="batch !=null and batch !='' and batch !='全部' ">
+			and p.batch=#{batch}   
+		</if>
+		order by trim(replace(replace(p.batch,'第',''),'批','')) 
+	</select>
+	
+	<select id="queryFactoryOrderQuantity" parameterType="Map" resultType="Map">
+		SELECT SUM(f.production_qty) as 'production_qty' 
+		FROM BMS_OR_FACTORY_ORDER f 
+		WHERE f.order_id = #{order_id} 
+		AND f.factory_id= #{factory_id} 
+	</select>
+	
+	<insert id="addZzjPlan" parameterType="Map" useGeneratedKeys="true"  keyProperty="id" >
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into BMS_ZZJ_PLAN (order_id,factory_id,factory_name,workshop_name,line_name,batch,quantity,start_date,end_date,memo,editor,edit_date)
+		values (#{order_id},#{factory_id},#{factory_name},#{workshop_name},#{line_name},#{batch},#{quantity},#{start_date},#{end_date},#{memo},#{editor},#{edit_date})
+	</insert>
+	
+	<delete id="deletePlan" parameterType="int">
+		delete from BMS_ZZJ_PLAN where id=#{id}
+	</delete>
+	
+	<update id="editZzjPlan" parameterType="Map">
+		update BMS_ZZJ_PLAN 
+		set quantity=#{quantity},start_date=#{start_date},end_date=#{end_date},memo=#{memo},editor=#{editor},edit_date=#{edit_date},change_reason=#{change_reason}
+		<if test="change_content !=null and change_content !=''">
+			,change_content=#{change_content}   
+		</if>
+		where id=#{id}
+	</update>
+	
+	<insert id="importOutput" parameterType="Map" useGeneratedKeys="true" keyProperty="id" >
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into BMS_ZZJ_OUTPUT 
+		(order_id,factory_id,factory_name,workshop_name,line_name,process,zzj_type,mat_description,batch,product_date,
+		quantity,team,memo,editor,edit_date,finished_flag)
+		values
+		<foreach collection="output_list" item="detail" index="index" separator=",">
+			(#{order_id},#{factory_id},#{factory_name},#{workshop_name},#{line_name},#{detail.process},#{detail.zzj_type},
+			#{detail.mat_description},#{detail.batch},#{detail.product_date},#{detail.quantity},#{detail.team},
+			#{detail.memo},#{editor_id},#{edit_date},#{detail.finished_flag})
+		</foreach>		
+	</insert>
+	
+	<update id="updateMatById" parameterType="Map" >
+		update BMS_ZZJ_PMD_ITEMS 
+		<trim prefix="set" suffixOverrides=",">   
+		<if test="printer !=null and printer !=''">
+			printer=#{printer},
+		</if>
+		<if test="print_date !=null and print_date !=''">
+			print_date=#{print_date}
+		</if>
+		</trim>		
+		where find_in_set(id,#{matIds})
+	</update>
+	
+	<select id="queryZjjTypeList" parameterType="Map" resultType="Map">	
+		SELECT distinct d.zzj_type as name
+		FROM BMS_ZZJ_PMD_ITEMS d
+		LEFT JOIN BMS_ZZJ_PMD_HEAD h ON d.pmd_head_id=h.id
+		LEFT JOIN BMS_OR_ORDER o ON o.id=h.order_id
+		WHERE 1=1
+		<if test="order_no !=null and order_no !=''">
+			and o.order_no=#{order_no}
+		</if>
+		<if test="factory !=null and factory !=''">
+			and h.factory_id=#{factory}
+		</if>
+		 <if test="workshop !=null and workshop !=''">
+			and h.workshop_name=#{workshop}
+		</if>
+		<if test="line !=null and line !=''">
+			and h.line_name=#{line}
+		</if>
+		<if test="mat_desc !=null and mat_desc !=''">
+			and d.mat_description=#{mat_desc}
+		</if>
+	</select>
+	
+	<select id="queryBatchList" parameterType="Map" resultType="Map">	
+		SELECT distinct batch as name
+		FROM BMS_ZZJ_PLAN
+		WHERE 1=1
+		<if test="order_id !=null and order_id !=''">
+			and order_id=#{order_id}
+		</if>
+		<if test="factory !=null and factory !=''">
+			and factory_id=#{factory}
+		</if>
+		
+	</select>
+	
+	<select id="queryMatInfo" parameterType="Map" resultType="Map">
+		SELECT group_concat(distinct i.zzj_type) zzj_type,group_concat(distinct i.specification) specification,
+		group_concat(distinct i.quantity) quantity, group_concat(distinct i.filling_size) filling_size,h.order_id,
+		o.order_no,CONCAT(o.order_name,t.bus_type_code,'  ',o.order_qty,'台') order_desc,
+		(select group_concat(p.batch) from BMS_ZZJ_PLAN p 
+		where p.factory_id=h.factory_id and p.workshop_name=h.workshop_name and p.line_name=h.line_name and h.order_id=p.order_id) batch
+		FROM BMS_ZZJ_PMD_HEAD h
+		LEFT JOIN BMS_OR_ORDER o on o.id=h.order_id
+		LEFT JOIN BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id
+		LEFT JOIN BMS_ZZJ_PMD_ITEMS i on i.pmd_head_id=h.id
+		WHERE i.mat_description=#{mat_desc} and o.order_no=#{order_no} and h.factory_name=#{factory}
+		and h.workshop_name=#{workshop} and h.line_name=#{line}
+		group by i.mat_description
+	</select>
+	
+	<select id="queryPlanDone" parameterType="Map" resultType="Map">
+		SELECT ifnull(sum(p.quantity)*(select sum(i.quantity) 
+		from BMS_ZZJ_PMD_ITEMS  i 
+		where i.pmd_head_id=h.id  and  i.zzj_type=#{zzj_type} and i.mat_description=#{mat_desc}),0) plan_quantity,
+		(select ifnull(sum(ot.quantity),0) from BMS_ZZJ_OUTPUT ot 
+		where ot.order_id=#{order_id} and ot.factory_id=#{factory_id} 
+		and ot.workshop_name=#{workshop} and ot.line_name=#{line} 
+		and ot.batch=#{batch} and ot.zzj_type=#{zzj_type}
+		and ot.mat_description=#{mat_desc}) done_quantity
+		FROM  BMS_ZZJ_PMD_HEAD h 
+		LEFT JOIN BMS_ZZJ_PLAN p on p.order_id=h.order_id and p.factory_id=h.factory_id
+		and p.workshop_name=h.workshop_name and p.line_name=h.line_name
+		WHERE h.order_id=#{order_id} and h.factory_id=#{factory_id}  and h.workshop_name=#{workshop} 
+		and h.line_name=#{line}  and p.batch=#{batch}
+		group by h.order_id,h.factory_id,h.workshop_name,h.line_name
+	</select>
+	
+	<select id="queryTotalPlanDone" parameterType="Map" resultType="Map">
+		select a.*,ifnull(b.done_quantity,0) done_quantity
+		from (
+		select i.zzj_type,i.mat_description,
+		sum(i.quantity)*(select ifnull(sum(p.quantity),0) from BMS_ZZJ_PLAN p 
+		where p.order_id=#{order_id} and p.factory_id= #{factory_id}
+		and p.workshop_name= #{workshop}  and p.line_name= #{line}  and p.batch=#{batch} ) plan_quantity
+		from BMS_ZZJ_PMD_HEAD h
+		left join BMS_ZZJ_PMD_ITEMS i on h.id=i.pmd_head_id
+		where h.order_id=#{order_id} and h.factory_id= #{factory_id} and h.workshop_name= #{workshop} and h.line_name=#{line} 
+		group by h.id,i.zzj_type,i.mat_description) a
+		left join(
+		select sum(ot.quantity) done_quantity,ot.zzj_type,ot.mat_description
+		from BMS_ZZJ_OUTPUT ot
+		where ot.order_id=#{order_id} and ot.factory_id= #{factory_id} and ot.workshop_name= #{workshop} and ot.line_name=#{line} 
+		and ot.batch=#{batch}
+		group by ot.zzj_type,ot.mat_description) b 
+		on a.zzj_type=b.zzj_type and a.mat_description=b.mat_description
+		
+	</select>
+	
+	<insert id="saveMatOutput"  parameterType="Map">
+		insert into BMS_ZZJ_OUTPUT (order_id,factory_id,factory_name,workshop_name,line_name,
+		process,zzj_type,mat_description,batch,product_date,quantity,team,memo,editor,edit_date)
+		values
+		(#{order_id},#{factory_id},#{factory},#{workshop},#{line},
+		#{process},#{zzj_type},#{mat_desc},#{batch},#{product_date},#{quantity},#{team},#{memo},#{editor},#{edit_date})
+	</insert>
+	
+	<update id="updateZZJPlanStatus"  parameterType="Map">
+		update BMS_ZZJ_PLAN set status=#{status}
+		where order_id=#{order_id} and factory_id=#{factory_id} and workshop_name=#{workshop}
+		and line_name=#{line} and batch=#{batch}
+	</update>
+
+	<select id="queryMatOutputList" parameterType="Map" resultType="Map">
+		select o.mat_description,
+		group_concat(o.batch,'-',o.zzj_type,'-',o.quantity,'-',o.id,'-',o.team order by o.batch,o.zzj_type) detail,
+		sum(o.quantity) total_quantity
+		from BMS_ZZJ_OUTPUT o
+		where o.order_id=#{order_id} and o.factory_id=#{factory_id} and o.workshop_name=#{workshop}
+		and o.line_name=#{line} and o.product_date=#{product_date}
+		<if test="mat_desc !=null and mat_desc !='' ">
+			and o.mat_description like concat('%', #{mat_desc},'%')
+		</if>
+		<if test="process !=null and process !='' ">
+			and o.process = #{process}
+		</if>
+		group by o.mat_description
+		order by o.mat_description
+	</select>
+
+	<delete id="deleteMatOutputById" parameterType="String">
+		delete from BMS_ZZJ_OUTPUT where id=#{output_id}
+	</delete>
+	
+	<select id="queryPlanDoneList" parameterType="Map" resultType="Map">
+		SELECT  ifnull(i.ecn_quantity,'') ecn_quantity,i.quantity,i.pmd_head_id, i.zzj_type,i.mat_description,
+		p.batch,p.id,i.assembly_position,ifnull(p.quantity,0) batch_quantity,h.line_name,concat(o.order_no,' ',o.order_name,t.bus_type_code,' ',o.order_qty,'台' ) order_desc,
+		(select ifnull(sum(ot.quantity),0) from BMS_ZZJ_OUTPUT ot 
+				where ot.order_id=#{order_id} and ot.factory_id=#{factory_id}
+				<if test="process !=null and process !=''">
+					and  ot.process=#{process}
+				</if>	
+				<if test="zzj_type !=null and zzj_type !=''">
+					and  ot.zzj_type=#{zzj_type}
+				</if>
+				and ot.workshop_name=p.workshop_name and ot.line_name=p.line_name
+				and ot.batch= p.batch and ot.zzj_type=i.zzj_type and ot.mat_description=i.mat_description
+				) done_quantity
+		FROM BMS_ZZJ_PMD_ITEMS i 
+		left join BMS_ZZJ_PMD_HEAD h on h.id=i.pmd_head_id
+		left join BMS_OR_ORDER o on o.id=h.order_id
+		left join BMS_BASE_BUS_TYPE t on t.id=o.bus_type_id
+		left join BMS_ZZJ_PLAN p on p.factory_id=h.factory_id and p.order_id=h.order_id and h.workshop_name=p.workshop_name and h.line_name=p.line_name 
+		where  h.order_id=#{order_id} and h.factory_id=#{factory_id}  
+		<if test="workshop !=null and workshop !=''">
+			and  h.workshop_name=#{workshop}
+		</if>	
+		<if test="line !=null and line !=''">
+			and  h.line_name=#{line}
+		</if>	
+		<if test="line !=null and line !=''">
+			and  p.line_name=#{line}
+		</if>
+		<if test="batch !=null and batch !=''">
+			and  p.batch=#{batch}
+		</if>	
+		<if test="zzj_type !=null and zzj_type !=''">
+			and  i.zzj_type=#{zzj_type}
+		</if>			
+		<if test="mat_desc !=null and mat_desc !=''">
+			and i.mat_description like concat('%',#{mat_desc},'%')
+		</if>
+		order by i.zzj_type,p.batch,i.mat_description
+	</select>
+	
+	<select id="queryOutputDetailList" parameterType="Map" resultType="Map">
+		select CONCAT(o.order_no,' ' , o.order_name,t.bus_type_code,'  ',o.order_qty,'台') order_desc,ot.*
+		from BMS_ZZJ_OUTPUT ot
+		left join BMS_OR_ORDER o on ot.order_id=o.id
+		left join BMS_BASE_BUS_TYPE t on t.id=o.bus_type_id
+		where o.order_no=#{order_no} and ot.factory_id=#{factory}
+		<if test="workshop !=null and workshop !=''">
+			and ot.workshop_name=#{workshop}
+		</if>
+		<if test="line !=null and line !=''">
+			and ot.line_name=#{line}
+		</if>
+		<if test="team !=null and team !=''">
+			and ot.team=#{team}
+		</if>
+		<if test="process !=null and process !=''">
+			and ot.process=#{process}
+		</if>
+		<if test="zzj_type !=null and zzj_type !=''">
+			and ot.zzj_type=#{zzj_type}
+		</if>
+		<if test="batch !=null and batch !=''">
+			and ot.batch=#{batch}
+		</if>
+		<if test="mat_desc !=null and mat_desc !=''">
+			and ot.mat_description like concat('%',#{mat_desc},'%')
+		</if>
+		<if test="start_date !=null and start_date !=''">
+			and ot.product_date >=#{start_date}
+		</if>
+		<if test="end_date !=null and end_date !=''">
+			and ot.product_date &lt;=#{end_date}
+		</if>
+		order by ot.edit_date desc,ot.mat_description,ot.zzj_type
+		<if test="start!=null">
+			LIMIT #{start} ,#{length} 
+		</if>
+	</select>
+	
+	<select id="queryOutputDetailListCount" parameterType="Map" resultType="int">
+		select count(ot.id)
+		from BMS_ZZJ_OUTPUT ot
+		left join BMS_OR_ORDER o on ot.order_id=o.id
+		where o.order_no=#{order_no} and ot.factory_id=#{factory}
+		<if test="workshop !=null and workshop !=''">
+			and ot.workshop_name=#{workshop}
+		</if>
+		<if test="line !=null and line !=''">
+			and ot.line_name=#{line}
+		</if>
+		<if test="team !=null and team !=''">
+			and ot.team=#{team}
+		</if>
+		<if test="process !=null and process !=''">
+			and ot.process=#{process}
+		</if>
+		<if test="zzj_type !=null and zzj_type !=''">
+			and ot.zzj_type=#{zzj_type}
+		</if>
+		<if test="batch !=null and batch !=''">
+			and ot.batch=#{batch}
+		</if>
+		<if test="mat_desc !=null and mat_desc !=''">
+			and ot.mat_description like concat('%',#{mat_desc},'%')
+		</if>
+		<if test="start_date !=null and start_date !=''">
+			and ot.product_date >=#{start_date}
+		</if>
+		<if test="end_date !=null and end_date !=''">
+			and ot.product_date &lt;=#{end_date}
+		</if>
+
+	</select>
+	
+	<select id="queryMatOutputCount" parameterType="Map" resultType="Map">
+		select a.*,count(b.mat_description) done_type_count
+		from(
+		select count(distinct i.mat_description) mat_count,CONCAT(o.order_no,' ' , o.order_name,t.bus_type_code,'  ',o.order_qty,'台') order_desc,
+		i.zzj_type,h.order_id,h.factory_id
+		from BMS_ZZJ_PMD_HEAD h
+		left join BMS_OR_ORDER o on o.id=h.order_id
+		left join BMS_BASE_BUS_TYPE t on t.id=o.bus_type_id
+		left join BMS_ZZJ_PMD_ITEMS i on i.pmd_head_id=h.id 
+		left join BMS_ZZJ_PLAN p on h.order_id=p.order_id and h.factory_id=p.factory_id and h.workshop_name=p.workshop_name 
+		and h.line_name=p.line_name
+		where h.order_id=#{order_id} and h.factory_id=#{factory}  
+		<if test="workshop !=null and workshop !='' ">
+			and h.workshop_name=#{workshop}
+		</if>
+		<if test="line !=null and line !='' ">
+			and h.line_name=#{line}
+		</if>
+		<if test="zzj_type !=null and zzj_type !='' ">
+			and i.zzj_type=#{zzj_type}
+		</if>
+		<if test="batch !=null and batch !='' ">
+			and p.batch=#{batch}
+		</if>
+		
+		group by h.order_id,h.factory_id,i.zzj_type
+		)a
+		left join 
+		(select 
+		case when tmp.plan_quantity=0 then (
+		select sum(o.production_qty)
+		from BMS_OR_FACTORY_ORDER o 
+		where o.order_id=#{order_id} and o.factory_id=#{factory} 
+		)*tmp.quantity when tmp.plan_quantity>0 then tmp.plan_quantity end as plan_quantity,
+		(select ifnull(sum(ot.quantity),0) from BMS_ZZJ_OUTPUT ot 
+		where ot.order_id=#{order_id} and ot.factory_id=#{factory}  
+		and ot.process=#{process} 
+		and ot.zzj_type=tmp.zzj_type and ot.mat_description=tmp.mat_description
+		) done_quantity,
+		tmp.mat_description,tmp.zzj_type,tmp.order_id,tmp.factory_id
+		from(
+		SELECT sum(substring_index(substring_index(substring_index(ifnull(i.ecn_quantity,''),',', b.help_topic_id + 1), ',', -1),'-',-1)*
+		(substring_index(substring_index(substring_index(substring_index(ifnull(i.ecn_quantity,''),',', b.help_topic_id + 1), ',', -1),'-',2),'-',-1) -
+		substring_index(substring_index(substring_index(ifnull(i.ecn_quantity,''),',', b.help_topic_id + 1), ',', -1),'-',1) +1)) plan_quantity,
+		i.quantity,i.pmd_head_id, i.zzj_type,i.mat_description,h.order_id,h.factory_id
+		FROM BMS_ZZJ_PMD_ITEMS i 
+		join mysql.help_topic b ON b.help_topic_id &lt;  (LENGTH(ifnull(i.ecn_quantity,'')) - LENGTH(REPLACE(ifnull(i.ecn_quantity,''), ',', '')) + 1)
+		left join BMS_ZZJ_PMD_HEAD h on h.id=i.pmd_head_id 
+		left join BMS_ZZJ_PLAN p on h.order_id=p.order_id and h.factory_id=p.factory_id and h.workshop_name=p.workshop_name 
+		and h.line_name=p.line_name
+		where  h.order_id=#{order_id} and h.factory_id=#{factory} 
+		<if test="workshop !=null and workshop !='' ">
+			and h.workshop_name=#{workshop}
+		</if>
+		<if test="line !=null and line !='' ">
+			and h.line_name=#{line}
+		</if>
+		<if test="zzj_type !=null and zzj_type !='' ">
+			and i.zzj_type=#{zzj_type}
+		</if>
+		<if test="batch !=null and batch !='' ">
+			and p.batch=#{batch}
+		</if>
+		group by i.mat_description,i.zzj_type
+		) tmp
+		) b
+		on a.order_id=b.order_id and a.factory_id=b.factory_id and a.zzj_type=b.zzj_type
+		and b.done_quantity>=b.plan_quantity
+		group by a.order_id,a.factory_id,a.zzj_type
+	</select>	
+	
+	<!--  *************  tangjin start ***************-->
+	<select id="queryElectrophoresisList" parameterType="Map" resultType="Map">
+		SELECT s.*,o.order_no,u.username,
+		concat(o.order_no,' ',t.bus_type_code,o.order_name,' ',o.order_qty,'台') order_desc
+		FROM BMS_ZZJ_SUBCONTRACTING s 
+		LEFT JOIN BMS_OR_ORDER o on s.order_id=o.id
+		LEFT JOIN BMS_BASE_BUS_TYPE t ON t.id=o.bus_type_id
+		LEFT JOIN BMS_BASE_USER u ON u.id=s.editor
+		WHERE 1=1
+		<if test="type !=null and type !=''">
+			AND s.type=#{type}
+		</if>
+		<if test="order_id !=null and order_id !=''">
+			AND s.order_id=#{order_id}
+		</if>
+		<if test="order_desc !=null and order_desc !=''">
+			AND o.order_name like concat('%',#{order_desc},'%')
+		</if>
+		<if test="factory_name !=null and factory_name !=''">
+			AND s.factory_name=#{factory_name}
+		</if>
+		<if test="workshop_name !=null and workshop_name !='' and workshop_name !='全部'">
+			AND s.workshop_name=#{workshop_name}
+		</if>
+		<if test="line_name !=null and line_name !=''">
+			AND s.line_name=#{line_name}
+		</if>
+		<if test="batch !=null and batch !=''">
+			AND s.batch=#{batch}
+		</if>
+		<if test="business_type !=null and business_type !=''">
+			AND s.business_type=#{business_type}
+		</if>
+		<if test="zzj_type !=null and zzj_type !=''">
+			AND s.zzj_type=#{zzj_type}
+		</if>
+		<if test="mat_description !=null and mat_description !=''">
+			AND s.mat_description like concat('%',#{mat_description},'%')
+		</if>
+		<if test="business_date_start!=null and  business_date_start!=''">
+			<![CDATA[and s.business_date>=#{business_date_start}]]>
+		</if>
+		<if test="business_date_end!=null and  business_date_end !=''">
+			<![CDATA[and s.business_date <= #{business_date_end}]]>
+		</if>
+		order by s.edit_date desc
+		<if test="start !=null and length!=-1">
+			limit #{start},#{length}
+		</if>
+	</select>
+	
+	<select id="queryElectrophoresisListCount" parameterType="Map" resultType="int">
+		SELECT count(s.id) FROM BMS_ZZJ_SUBCONTRACTING s WHERE 1=1
+		<if test="type !=null and type !=''">
+			AND s.type=#{type}
+		</if>
+		<if test="order_id !=null and order_id !=''">
+			AND s.order_id=#{order_id}
+		</if>
+		<if test="order_desc !=null and order_desc !=''">
+			AND o.order_name like concat('%',#{order_desc},'%')
+		</if>
+		<if test="factory_name !=null and factory_name !=''">
+			AND s.factory_name=#{factory_name}
+		</if>
+		<if test="workshop_name !=null and workshop_name !='' and workshop_name !='全部'">
+			AND s.workshop_name=#{workshop_name}
+		</if>
+		<if test="line_name !=null and line_name !=''">
+			AND s.line_name=#{line_name}
+		</if>
+		<if test="batch !=null and batch !=''">
+			AND s.batch=#{batch}
+		</if>
+		<if test="business_type !=null and business_type !=''">
+			AND s.business_type=#{business_type}
+		</if>
+		<if test="zzj_type !=null and zzj_type !=''">
+			AND s.zzj_type=#{zzj_type}
+		</if>
+		<if test="mat_description !=null and mat_description !=''">
+			AND s.mat_description like concat('%',#{mat_description},'%')
+		</if>
+		<if test="business_date_start!=null and  business_date_start!=''">
+			<![CDATA[and s.business_date>=#{business_date_start}]]>
+		</if>
+		<if test="business_date_end!=null and  business_date_end !=''">
+			<![CDATA[and s.business_date <= #{business_date_end}]]>
+		</if>
+	</select>
+	<select id="queryZjjBatchList" parameterType="Map" resultType="Map">	
+		SELECT distinct d.batch as name FROM BMS_ZZJ_PLAN d WHERE 1=1
+		<if test="order_id !=null and order_id !=''">
+			and d.order_id=#{order_id}
+		</if>
+		<if test="factory_id !=null and factory_id !=''">
+			and d.factory_id=#{factory_id}
+		</if>
+		<if test="workshop !=null and workshop !=''">
+			and d.workshop_name=#{workshop}
+		</if>
+		<if test="line !=null and line !=''">
+			and d.line_name=#{line}		
+		</if>
+	</select>
+	<select id="queryMatListMatDesc" parameterType="Map" resultType="Map">
+		SELECT d.id,d.no,d.pmd_head_id,d.zzj_type,d.sap_mat,d.mat_description,d.mat_type,
+		h.factory_name,h.workshop_name,h.line_name,o.id order_id,h.factory_id,o.order_no,
+		concat(o.order_no,' ',t.bus_type_code,o.order_name,' ',o.order_qty,'台') order_desc
+		FROM BMS_ZZJ_PMD_ITEMS d
+		LEFT JOIN BMS_ZZJ_PMD_HEAD h ON d.pmd_head_id=h.id
+		LEFT JOIN BMS_OR_ORDER o ON o.id=h.order_id
+		LEFT JOIN BMS_BASE_BUS_TYPE t ON t.id=o.bus_type_id
+		WHERE 1=1 and d.surface_treatment='电泳'
+		and h.order_id=#{order_id} and h.factory_id=#{factory_id}
+		and h.workshop_name=#{workshop_name} and h.line_name=#{line_name}
+		<if test="mat_desc !=null and mat_desc !=''">
+			AND d.mat_description like concat('%',#{mat_desc},'%')
+		</if>
+		GROUP BY order_id,factory_id,workshop_name,zzj_type,mat_description,line_name
+	</select>
+	<insert id="saveElectrophoresis" parameterType="List" useGeneratedKeys="true" keyProperty="id" >
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into BMS_ZZJ_SUBCONTRACTING (type,order_id,
+		factory_id,factory_name,workshop_name,line_name,mat_description,zzj_type,
+		batch,business_date,quantity,business_type,vendor,memo,editor,edit_date)
+		values
+		<foreach collection="list" item="detail" index="index" separator=",">
+		(#{detail.type},#{detail.order_id},#{detail.factory_id},#{detail.factory_name},
+		#{detail.workshop_name},#{detail.line_name},#{detail.mat_description},#{detail.zzj_type},
+		#{detail.batch},#{detail.business_date},#{detail.quantity},#{detail.business_type},
+		#{detail.vendor},#{detail.memo},#{detail.editor},#{detail.edit_date})
+		</foreach>		
+	</insert>
+	<select id="checkElectroEnterQuantity" parameterType="Map" resultType="int">
+	select ifnull(output_quantity,0)-ifnull(input_quantity,0) from (
+	    select 
+		sum(case when business_type='1' then i.quantity END) output_quantity, 
+        sum(case when business_type='2' then i.quantity END) input_quantity from BMS_ZZJ_SUBCONTRACTING i 
+		where i.order_id=#{order_id} and i.factory_name=#{factory_name}
+		and i.workshop_name=#{workshop_name} and i.line_name=#{line_name}
+		and i.zzj_type=#{zzj_type} and i.batch=#{batch}
+		and i.mat_description like concat('%',#{mat_description},'%') 
+	) t
+	</select>
+	<delete id="delElectrophoresis" parameterType="int">
+		delete from BMS_ZZJ_SUBCONTRACTING where id = #{id}
+	</delete>
+	<update id="updateElectrophoresis" parameterType="Map">
+		update BMS_ZZJ_SUBCONTRACTING set
+		 batch=#{batch},quantity=#{quantity},vendor=#{vendor},
+		 business_date=#{business_date},memo=#{memo}
+		where id = #{id}
+	</update>
+	<select id="queryWorkshopSupplyList" parameterType="Map" resultType="Map">
+		<![CDATA[ SELECT s.id,s.factory_name,s.mat_description,s.zzj_type,s.delivery_workshop,s.line_name,
+		tmp.unit,tmp.specification,tmp.filling_size,tmp.quantity,s.receiving_workshop,s.quantity receiving_quantity,
+		s.business_date,concat(o.order_no,' ',t.bus_type_code,o.order_name,' ',o.order_qty,'台') order_desc,
+		(select sum(quantity) from BMS_ZZJ_WORKSHOPSUPPLY s1 where s1.order_id=s.order_id and
+		s1.delivery_workshop=s.delivery_workshop and s1.line_name=s.line_name and
+		 s1.factory_id=s.factory_id and s1.mat_description=s.mat_description and s1.zzj_type=s.zzj_type)
+		 received_quantity,u.username,s.edit_date,case when tmp.plan_quantity=0 then (
+		select sum(o.production_qty) from BMS_OR_FACTORY_ORDER o where o.order_id=h.order_id and o.factory_id=h.factory_id
+		)*tmp.quantity when tmp.plan_quantity>0 then tmp.plan_quantity end as demand_quantity
+			FROM BMS_ZZJ_WORKSHOPSUPPLY s 
+			LEFT JOIN BMS_ZZJ_PMD_HEAD h on h.order_id=s.order_id and h.factory_id=s.factory_id and 
+			h.workshop_name=s.delivery_workshop and h.line_name=s.line_name
+			LEFT JOIN BMS_OR_ORDER o on s.order_id=o.id
+			LEFT JOIN BMS_OR_FACTORY_ORDER f on f.order_id=o.id and f.factory_id=s.factory_id
+			LEFT JOIN BMS_BASE_USER u ON u.id=s.editor
+			LEFT JOIN BMS_BASE_BUS_TYPE t ON t.id=o.bus_type_id
+		    LEFT JOIN (
+		SELECT sum(substring_index(substring_index(substring_index(ifnull(i.ecn_quantity,''),',', b.help_topic_id + 1), ',', -1),'-',-1)*
+		(substring_index(substring_index(substring_index(substring_index(ifnull(i.ecn_quantity,''),',', b.help_topic_id + 1), ',', -1),'-',2),'-',-1) -
+		substring_index(substring_index(substring_index(ifnull(i.ecn_quantity,''),',', b.help_topic_id + 1), ',', -1),'-',1) +1)) plan_quantity,
+		i.filling_size,i.unit,i.quantity,i.specification,i.pmd_head_id,i.zzj_type,i.mat_description FROM BMS_ZZJ_PMD_ITEMS i 
+		join mysql.help_topic b ON b.help_topic_id <  (LENGTH(ifnull(i.ecn_quantity,'')) - LENGTH(REPLACE(ifnull(i.ecn_quantity,''), ',', '')) + 1)
+		group by i.mat_description,i.zzj_type) tmp on tmp.pmd_head_id=h.id and tmp.zzj_type=s.zzj_type and tmp.mat_description=s.mat_description
+		WHERE 1=1 AND s.order_id=#{order_id} AND s.factory_id=#{factory_id}]]>
+		<if test="delivery_workshop !=null and delivery_workshop !='' and delivery_workshop !='全部'">
+			AND s.delivery_workshop=#{delivery_workshop}
+		</if>
+		<if test="order_no !=null and order_no !=''">
+			AND o.order_no=#{order_no}
+		</if>
+		<if test="line_name !=null and line_name !='' and line_name !='全部'">
+			AND s.line_name=#{line_name}
+		</if>
+		<if test="receiving_workshop !=null and receiving_workshop !='' and receiving_workshop !='全部'">
+			AND s.receiving_workshop=#{receiving_workshop}
+		</if>
+		<if test="zzj_type !=null and zzj_type !=''">
+			AND s.zzj_type=#{zzj_type}
+		</if>
+		<if test="mat_description !=null and mat_description !=''">
+			AND s.mat_description like concat('%',#{mat_description},'%')
+		</if>
+		<if test="business_date_start!=null and  business_date_start!=''">
+			<![CDATA[and s.business_date>=#{business_date_start}]]>
+		</if>
+		<if test="business_date_end!=null and  business_date_end !=''">
+			<![CDATA[and s.business_date <= #{business_date_end}]]>
+		</if>
+		<if test="business_date!=null and  business_date!=''">
+			<![CDATA[and s.business_date=#{business_date}]]>
+		</if>
+		order by s.order_id desc,s.factory_id,s.mat_description
+		<if test="start !=null and length!=-1">
+			limit #{start},#{length}
+		</if>
+	</select>
+	
+	<select id="queryWorkshopSupplyListCount" parameterType="Map" resultType="int">
+		SELECT count(s.id) FROM BMS_ZZJ_WORKSHOPSUPPLY s WHERE s.order_id=#{order_id} AND s.factory_id=#{factory_id}
+		<if test="delivery_workshop !=null and delivery_workshop !='' and delivery_workshop !='全部'">
+			AND s.delivery_workshop=#{delivery_workshop}
+		</if>
+		<if test="line_name !=null and line_name !='' and line_name !='全部'">
+			AND s.line_name=#{line_name}
+		</if>
+		<if test="receiving_workshop !=null and receiving_workshop !='' and receiving_workshop !='全部'">
+			AND s.receiving_workshop=#{receiving_workshop}
+		</if>
+		<if test="zzj_type !=null and zzj_type !=''">
+			AND s.zzj_type=#{zzj_type}
+		</if>
+		<if test="mat_description !=null and mat_description !=''">
+			AND s.mat_description like concat('%',#{mat_description},'%')
+		</if>
+		<if test="business_date_start!=null and  business_date_start!=''">
+			<![CDATA[and s.business_date>=#{business_date_start}]]>
+		</if>
+		<if test="business_date_end!=null and  business_date_end !=''">
+			<![CDATA[and s.business_date <= #{business_date_end}]]>
+		</if>
+	</select>
+	<insert id="saveWorkshopSupply" parameterType="List" useGeneratedKeys="true" keyProperty="id" >
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into BMS_ZZJ_WORKSHOPSUPPLY (order_id,factory_id,factory_name,
+		delivery_workshop,line_name,receiving_workshop,mat_description,zzj_type,
+		business_date,quantity,business_type,editor,edit_date)
+		values
+		<foreach collection="list" item="detail" index="index" separator=",">
+		(#{detail.order_id},#{detail.factory_id},#{detail.factory_name},
+		#{detail.delivery_workshop},#{detail.line_name},#{detail.receiving_workshop},
+		#{detail.mat_description},#{detail.zzj_type},#{detail.business_date},#{detail.quantity},
+		#{detail.business_type},#{detail.editor},#{detail.edit_date})
+		</foreach>		
+	</insert>
+	<delete id="delWorkshopSupply" parameterType="int">
+		delete from BMS_ZZJ_WORKSHOPSUPPLY where id = #{id}
+	</delete>
+	<update id="updateWorkshopSupply" parameterType="Map">
+		update BMS_ZZJ_WORKSHOPSUPPLY set
+		 quantity=#{quantity},business_date=#{business_date}
+		where id = #{id}
+	</update>
+	
+    <select id="queryWorkshopSupplyAddByMap" parameterType="Map" resultType="Map">
+	   <![CDATA[
+	    select * from (
+	     select case when tmp.plan_quantity=0 then (
+			select sum(o.production_qty) from BMS_OR_FACTORY_ORDER o 
+			where o.order_id=tmp.order_id and o.factory_id=tmp.factory_id
+			)*tmp.quantity when tmp.plan_quantity>0 then tmp.plan_quantity end as demand_quantity,
+			(select ifnull(sum(ot.quantity),0) from BMS_ZZJ_WORKSHOPSUPPLY ot where ot.order_id=tmp.order_id and ot.factory_id=tmp.factory_id and 
+			   ot.zzj_type=tmp.zzj_type and ot.mat_description=tmp.mat_description and ot.delivery_workshop=tmp.workshop_name and 
+			 ot.line_name=tmp.line_name) received_quantity,tmp.quantity,
+			tmp.mat_description,tmp.zzj_type,tmp.unit,tmp.specification,tmp.filling_size,tmp.use_workshop,tmp.order_id,tmp.factory_id,tmp.factory_name,
+			tmp.workshop_name,tmp.line_name from (
+			SELECT sum(substring_index(substring_index(substring_index(ifnull(i.ecn_quantity,''),',', b.help_topic_id + 1), ',', -1),'-',-1)*
+			(substring_index(substring_index(substring_index(substring_index(ifnull(i.ecn_quantity,''),',', b.help_topic_id + 1), ',', -1),'-',2),'-',-1) -
+			substring_index(substring_index(substring_index(ifnull(i.ecn_quantity,''),',', b.help_topic_id + 1), ',', -1),'-',1) +1)) plan_quantity,
+			i.quantity,i.pmd_head_id, i.zzj_type,i.mat_description,i.unit,i.specification,i.filling_size,i.use_workshop
+			,h.order_id,h.factory_id,h.factory_name, h.workshop_name,h.line_name  FROM BMS_ZZJ_PMD_ITEMS i 
+			join mysql.help_topic b ON b.help_topic_id <  (LENGTH(ifnull(i.ecn_quantity,'')) - LENGTH(REPLACE(ifnull(i.ecn_quantity,''), ',', '')) + 1) ]]> 
+			left join BMS_ZZJ_PMD_HEAD h on h.id=i.pmd_head_id where h.order_id=#{order_id} AND h.factory_id=#{factory_id}
+			<if test="workshop_name !=null and workshop_name !=''">
+				AND h.workshop_name=#{workshop_name}
+			</if>
+			<if test="line_name !=null and line_name !=''">
+				AND h.line_name=#{line_name}
+			</if>
+			<if test="use_workshop !=null and use_workshop !=''">
+				AND i.use_workshop=#{use_workshop}
+			</if>
+			<if test="zzj_type !=null and zzj_type !=''">
+				AND i.zzj_type=#{zzj_type}
+			</if>
+			<if test="mat_description !=null and mat_description !=''">
+				AND i.mat_description like concat('%',#{mat_description},'%')
+			</if>
+		group by i.mat_description,i.zzj_type) tmp 
+		group by tmp.mat_description,tmp.zzj_type
+	    <![CDATA[) ou where demand_quantity>received_quantity ]]>
+	</select>
+	<select id="queryPmdByMap" parameterType="Map" resultType="Map">
+	   SELECT distinct i.zzj_type,o.order_no,u.username,h.create_date,h.order_id,h.factory_id,
+	    concat(o.order_no,' ',t.bus_type_code,o.order_name,' ',o.order_qty,'台') order_desc
+		FROM BMS_ZZJ_PMD_ITEMS i
+		LEFT JOIN BMS_ZZJ_PMD_HEAD h ON h.id=i.pmd_head_id
+		LEFT JOIN BMS_OR_ORDER o ON h.order_id=o.id
+		LEFT JOIN BMS_BASE_USER u ON u.id=h.creator
+		LEFT JOIN BMS_BASE_BUS_TYPE t ON t.id=o.bus_type_id
+		where 1=1
+		<if test="order_id !=null and order_id !=''">
+			AND h.order_id=#{order_id}
+		</if>
+		<if test="factory_id !=null and factory_id !=''">
+			AND h.factory_id=#{factory_id}
+		</if>
+		<if test="zzj_type !=null and zzj_type !=''">
+			AND i.zzj_type=#{zzj_type}
+		</if>
+	</select>
+	<select id="queryCurVersionQMDList" parameterType="Map" resultType="Map">
+		SELECT d.* FROM BMS_ZZJ_PMD_ITEMS  d
+		LEFT JOIN BMS_ZZJ_PMD_HEAD h ON d.pmd_head_id=h.id
+		WHERE 1=1
+		<if test="order_id !=null and order_id !=''">
+			AND h.order_id=#{order_id}
+		</if>
+		<if test="factory_id !=null and factory_id !=''">
+			AND h.factory_id=#{factory_id}
+		</if>
+		<if test="zzj_type !=null and zzj_type !=''">
+			AND d.zzj_type=#{zzj_type}
+		</if>
+		<if test="mat_description !=null and mat_description !=''">
+			AND d.mat_description like concat('%',#{mat_description},'%')
+		</if>
+		order by d.zzj_type,d.mat_description,d.assembly_position
+	</select>
+	<select id="queryPmdDetailByMap" parameterType="Map" resultType="Map">
+	   SELECT i.*,h.* FROM BMS_ZZJ_PMD_ITEMS_H i
+		LEFT JOIN BMS_ZZJ_PMD_HEAD h on h.id=i.pmd_head_id
+		where 1=1 AND ifnull(operation_type,'')!='' 
+		<if test="order_id !=null and order_id !=''">
+			AND h.order_id=#{order_id}
+		</if>
+		<if test="factory_id !=null and factory_id !=''">
+			AND h.factory_id=#{factory_id}
+		</if>
+		<if test="zzj_type !=null and zzj_type !=''">
+			AND i.zzj_type=#{zzj_type}
+		</if>
+		<if test="mat_description !=null and mat_description !=''">
+			AND i.mat_description like concat('%',#{mat_description},'%')
+		</if>
+		order by order_id,factory_id,zzj_type,mat_description,assembly_position
+	</select>
+	<select id="queryElectrophoresisByBatchList" parameterType="Map" resultType="Map">
+	  select * from (
+		select t.*,i.use_workshop,i.weight,sum(i.quantity) unit_quantity,<!--单车数量 -->
+		p.quantity batch_quantity,<!-- 批次数量 -->
+		sum(i.quantity)*p.quantity demand_quantity,<!-- 批次需求数量：批次需求数量=所查询批次的批次数量*单车用量 -->
+        sum(o.quantity) as zzj_input_quantity,<!--自制入库数量：该自制件该批次在产量入库节点录入“工序=入库”的数量。 -->
+        sum(i.quantity)*p.quantity-output_quantity un_output_quantity,<!--未外发数量：未外发数量=需求数量-外发数量 -->
+		output_quantity-input_quantity as output_un_input_quantity <!-- 已外发未进仓数量：累计外发数量-累计进仓数量 -->
+		 from (select s.order_id,s.factory_id,s.workshop_name,s.line_name,s.zzj_type,s.mat_description,s.batch,
+		sum(case when business_type='1' then s.quantity END) output_quantity, 
+        sum(case when business_type='2' then s.quantity END) input_quantity <!--累计进仓数量：累加计算所查询批次所有记录的进仓数量-->
+        from BMS_ZZJ_SUBCONTRACTING s GROUP BY s.order_id,s.factory_id,s.zzj_type,s.mat_description,s.batch) t 
+		LEFT JOIN BMS_ZZJ_PMD_HEAD h on h.order_id=t.order_id and h.factory_id=t.factory_id and t.workshop_name=h.workshop_name and t.line_name=h.line_name 
+		LEFT JOIN BMS_ZZJ_PMD_ITEMS i on h.id=i.pmd_head_id and t.zzj_type=i.zzj_type and i.mat_description=t.mat_description
+		LEFT JOIN BMS_ZZJ_PLAN p on p.order_id=t.order_id and p.factory_id=t.factory_id and p.batch=t.batch and p.workshop_name=t.workshop_name and p.line_name=t.line_name
+		LEFT JOIN BMS_ZZJ_OUTPUT o on o.order_id=t.order_id and o.factory_id=t.factory_id and o.batch=t.batch and o.workshop_name=t.workshop_name and o.line_name=t.line_name
+		and o.zzj_type=t.zzj_type and o.mat_description=t.mat_description and o.process='入库'
+		where t.order_id=#{order_id} and t.factory_id=#{factory_id}
+		<if test="zzj_type !=null and zzj_type !=''">
+			and t.zzj_type=#{zzj_type}
+		</if>
+		<if test="line_name !=null and line_name !=''">
+			and t.line_name=#{line_name}
+		</if>
+		<if test="batch !=null and batch !=''">
+			and t.batch=#{batch}
+		</if>
+		<if test="workshop_name !=null and workshop_name !='' and workshop_name !='全部'">
+			and t.workshop_name=#{workshop_name}
+		</if>
+		<if test="mat_description !=null and mat_description !=''">
+			and t.mat_description like concat('%',#{mat_description},'%')
+		</if>
+		group by zzj_type,mat_description,batch,use_workshop,weight
+		order by t.zzj_type,t.mat_description
+		) t1 where 1=1 
+		<if test="use_workshop !=null and use_workshop !='' and use_workshop !='全部'">
+			and use_workshop=#{use_workshop}
+		</if>
+<!-- 		<if test="kind !=null and kind !=''"> -->
+	    <if test="kind==1"><!-- 自制件进仓 -->
+		   and zzj_input_quantity>0
+	    </if>
+	    <if test="kind==2"><!-- 已外发 -->
+		   and output_quantity>0
+	    </if>
+	    <if test="kind==3"><!-- 未外发 -->
+		   and un_output_quantity>0
+	    </if>
+	    <if test="kind==4"><!-- 已进仓 -->
+		   and input_quantity>0
+	    </if>
+	    <if test="kind==5"> <!-- 已外发未进仓 -->
+		   and un_input_quantity>0
+	    </if>
+<!-- 		</if> -->
+		<if test="start!=null">
+			LIMIT #{start} ,#{length} 
+		</if>
+	</select>
+	<select id="queryElectrophoresisByBatchCount" parameterType="Map" resultType="int">
+		select count(1) from (
+		select t.*,i.use_workshop,i.weight,sum(i.quantity) unit_quantity,<!--单车数量 -->
+		p.quantity batch_quantity,<!-- 批次数量 -->
+		sum(i.quantity)*p.quantity demand_quantity,<!-- 批次需求数量：批次需求数量=所查询批次的批次数量*单车用量 -->
+        sum(o.quantity) as zzj_input_quantity,<!--自制入库数量：该自制件该批次在产量入库节点录入“工序=入库”的数量。 -->
+        sum(i.quantity)*p.quantity-output_quantity un_output_quantity,<!--未外发数量：未外发数量=需求数量-外发数量 -->
+		output_quantity-input_quantity as output_un_input_quantity <!-- 已外发未进仓数量：累计外发数量-累计进仓数量 -->
+		 from (select s.order_id,s.factory_id,s.workshop_name,s.line_name,s.zzj_type,s.mat_description,s.batch,
+		sum(case when business_type='1' then s.quantity END) output_quantity, 
+        sum(case when business_type='2' then s.quantity END) input_quantity <!--累计进仓数量：累加计算所查询批次所有记录的进仓数量-->
+        from BMS_ZZJ_SUBCONTRACTING s GROUP BY s.order_id,s.factory_id,s.zzj_type,s.mat_description,s.batch) t 
+		LEFT JOIN BMS_ZZJ_PMD_HEAD h on h.order_id=t.order_id and h.factory_id=t.factory_id and t.workshop_name=h.workshop_name and t.line_name=h.line_name 
+		LEFT JOIN BMS_ZZJ_PMD_ITEMS i on h.id=i.pmd_head_id and t.zzj_type=i.zzj_type and i.mat_description=t.mat_description
+		LEFT JOIN BMS_ZZJ_PLAN p on p.order_id=t.order_id and p.factory_id=t.factory_id and p.batch=t.batch and p.workshop_name=t.workshop_name and p.line_name=t.line_name
+		LEFT JOIN BMS_ZZJ_OUTPUT o on o.order_id=t.order_id and o.factory_id=t.factory_id and o.batch=t.batch and o.workshop_name=t.workshop_name and o.line_name=t.line_name
+		and o.zzj_type=t.zzj_type and o.mat_description=t.mat_description and o.process='入库'
+		where t.order_id=#{order_id} and t.factory_id=#{factory_id}
+		<if test="zzj_type !=null and zzj_type !=''">
+			and t.zzj_type=#{zzj_type}
+		</if>
+		<if test="line_name !=null and line_name !=''">
+			and t.line_name=#{line_name}
+		</if>
+		<if test="batch !=null and batch !=''">
+			and t.batch=#{batch}
+		</if>
+		<if test="workshop_name !=null and workshop_name !='' and workshop_name !='全部'">
+			and t.workshop_name=#{workshop_name}
+		</if>
+		<if test="mat_description !=null and mat_description !=''">
+			and t.mat_description like concat('%',#{mat_description},'%')
+		</if>
+		
+		group by zzj_type,mat_description,batch,use_workshop,weight
+		) t1 where 1=1 
+		<if test="use_workshop !=null and use_workshop !='' and use_workshop !='全部'">
+			and use_workshop=#{use_workshop}
+		</if>
+<!-- 		<if test="kind !=null and kind !=''"> -->
+	    <if test="kind==1"><!-- 自制件进仓 -->
+		   and zzj_input_quantity>0
+	    </if>
+	    <if test="kind==2"><!-- 已外发 -->
+		   and output_quantity>0
+	    </if>
+	    <if test="kind==3"><!-- 未外发 -->
+		   and un_output_quantity>0
+	    </if>
+	    <if test="kind==4"><!-- 已进仓 -->
+		   and input_quantity>0
+	    </if>
+	    <if test="kind==5"> <!-- 已外发未进仓 -->
+		   and un_input_quantity>0
+	    </if>
+<!-- 		</if> -->
+	</select>
+	<select id="queryElectrophoresisByOrderList" parameterType="Map" resultType="Map">
+		select * from (
+		select t.*,i.use_workshop,i.weight,sum(i.quantity) unit_quantity,<!--单车数量 -->
+		(select sum(p.quantity) from BMS_ZZJ_PLAN p where p.order_id=t.order_id and p.factory_id=t.factory_id and p.workshop_name=t.workshop_name and p.line_name=t.line_name) batch_quantity,<!-- 批次数量 -->
+		sum(i.quantity)*(select sum(p.quantity) from BMS_ZZJ_PLAN p where p.order_id=t.order_id and p.factory_id=t.factory_id and p.workshop_name=t.workshop_name and p.line_name=t.line_name)
+        demand_quantity,<!-- 批次需求数量：批次需求数量=所查询批次的批次数量*单车用量 -->
+        sum(o.quantity) as zzj_input_quantity,<!--自制入库数量：该自制件该批次在产量入库节点录入“工序=入库”的数量。 -->
+        sum(i.quantity)*(select sum(p.quantity) from BMS_ZZJ_PLAN p where p.order_id=t.order_id and p.factory_id=t.factory_id and p.workshop_name=t.workshop_name and p.line_name=t.line_name)
+        -output_quantity un_output_quantity,<!--未外发数量：未外发数量=需求数量-外发数量 -->
+		output_quantity-input_quantity as output_un_input_quantity <!-- 已外发未进仓数量：累计外发数量-累计进仓数量 -->
+		 from (select s.order_id,s.factory_id,s.workshop_name,s.line_name,s.zzj_type,s.mat_description,
+		sum(case when business_type='1' then s.quantity END) output_quantity, 
+        sum(case when business_type='2' then s.quantity END) input_quantity <!--累计进仓数量：累加计算所查询批次所有记录的进仓数量-->
+        from BMS_ZZJ_SUBCONTRACTING s GROUP BY s.order_id,s.factory_id,s.zzj_type,s.mat_description) t 
+		LEFT JOIN BMS_ZZJ_PMD_HEAD h on h.order_id=t.order_id and h.factory_id=t.factory_id and t.workshop_name=h.workshop_name and t.line_name=h.line_name 
+		LEFT JOIN BMS_ZZJ_PMD_ITEMS i on h.id=i.pmd_head_id and t.zzj_type=i.zzj_type and i.mat_description=t.mat_description
+		LEFT JOIN BMS_ZZJ_OUTPUT o on o.order_id=t.order_id and o.factory_id=t.factory_id and o.workshop_name=t.workshop_name and o.line_name=t.line_name
+		and o.zzj_type=t.zzj_type and o.mat_description=t.mat_description and o.process='入库'
+		where t.order_id=#{order_id} and t.factory_id=#{factory_id}
+		<if test="zzj_type !=null and zzj_type !=''">
+			and t.zzj_type=#{zzj_type}
+		</if>
+		<if test="line_name !=null and line_name !=''">
+			and t.line_name=#{line_name}
+		</if>
+		<if test="workshop_name !=null and workshop_name !='' and workshop_name !='全部'">
+			and t.workshop_name=#{workshop_name}
+		</if>
+		<if test="mat_description !=null and mat_description !=''">
+			and t.mat_description like concat('%',#{mat_description},'%')
+		</if>
+		group by zzj_type,mat_description,use_workshop,weight
+		order by t.zzj_type,t.mat_description
+		) t1 where 1=1 
+		<if test="use_workshop !=null and use_workshop !='' and use_workshop !='全部'">
+			and use_workshop=#{use_workshop}
+		</if>
+		<if test="kind !=null and kind !=''">
+		    <if test="kind==1"><!-- 自制件进仓 -->
+			   and zzj_input_quantity>0
+		    </if>
+		    <if test="kind==2"><!-- 已外发 -->
+			   and output_quantity>0
+		    </if>
+		    <if test="kind==3"><!-- 未外发 -->
+			   and un_output_quantity>0
+		    </if>
+		    <if test="kind==4"><!-- 已进仓 -->
+			   and input_quantity>0
+		    </if>
+		    <if test="kind==5"> <!-- 已外发未进仓 -->
+			   and output_un_input_quantity>0
+		    </if>
+		</if>
+		<if test="totalkind !=null and totalkind !=''">
+		    <if test="totalkind=='zzj_input'"><!-- 自制件进仓 -->
+			   and zzj_input_quantity=demand_quantity
+		    </if>
+		    <if test="totalkind=='output'"><!-- 已外发 -->
+			   and output_quantity=demand_quantity
+		    </if>
+		    <if test="totalkind=='un_output'"><!-- 未外发 -->
+			   and un_output_quantity>0
+		    </if>
+		    <if test="totalkind=='input'"><!-- 已进仓 -->
+			   and input_quantity=demand_quantity
+		    </if>
+		    <if test="totalkind=='output_un_input'"> <!-- 已外发未进仓 -->
+			   and output_un_input_quantity>0
+		    </if>
+		</if>
+		<if test="start!=null">
+			LIMIT #{start} ,#{length} 
+		</if>
+	</select>
+	<select id="queryElectrophoresisByOrderCount" parameterType="Map" resultType="int">
+		select count(1) from (
+		select t.*,i.use_workshop,i.weight,sum(i.quantity) unit_quantity,<!--单车数量 -->
+		(select sum(p.quantity) from BMS_ZZJ_PLAN p where p.order_id=t.order_id and p.factory_id=t.factory_id and p.workshop_name=t.workshop_name and p.line_name=t.line_name) batch_quantity,<!-- 批次数量 -->
+		sum(i.quantity)*(select sum(p.quantity) from BMS_ZZJ_PLAN p where p.order_id=t.order_id and p.factory_id=t.factory_id and p.workshop_name=t.workshop_name and p.line_name=t.line_name)
+        demand_quantity,<!-- 批次需求数量：批次需求数量=所查询批次的批次数量*单车用量 -->
+        sum(o.quantity) as zzj_input_quantity,<!--自制入库数量：该自制件该批次在产量入库节点录入“工序=入库”的数量。 -->
+        sum(i.quantity)*(select sum(p.quantity) from BMS_ZZJ_PLAN p where p.order_id=t.order_id and p.factory_id=t.factory_id and p.workshop_name=t.workshop_name and p.line_name=t.line_name)
+        -output_quantity un_output_quantity,<!--未外发数量：未外发数量=需求数量-外发数量 -->
+		output_quantity-input_quantity as output_un_input_quantity <!-- 已外发未进仓数量：累计外发数量-累计进仓数量 -->
+		 from (select s.order_id,s.factory_id,s.workshop_name,s.line_name,s.zzj_type,s.mat_description,
+		sum(case when business_type='1' then s.quantity END) output_quantity, 
+        sum(case when business_type='2' then s.quantity END) input_quantity <!--累计进仓数量：累加计算所查询批次所有记录的进仓数量-->
+        from BMS_ZZJ_SUBCONTRACTING s GROUP BY s.order_id,s.factory_id,s.zzj_type,s.mat_description) t 
+		LEFT JOIN BMS_ZZJ_PMD_HEAD h on h.order_id=t.order_id and h.factory_id=t.factory_id and t.workshop_name=h.workshop_name and t.line_name=h.line_name 
+		LEFT JOIN BMS_ZZJ_PMD_ITEMS i on h.id=i.pmd_head_id and t.zzj_type=i.zzj_type and i.mat_description=t.mat_description
+		LEFT JOIN BMS_ZZJ_OUTPUT o on o.order_id=t.order_id and o.factory_id=t.factory_id and o.workshop_name=t.workshop_name and o.line_name=t.line_name
+		and o.zzj_type=t.zzj_type and o.mat_description=t.mat_description and o.process='入库'
+		where t.order_id=#{order_id} and t.factory_id=#{factory_id}
+		<if test="zzj_type !=null and zzj_type !=''">
+			and t.zzj_type=#{zzj_type}
+		</if>
+		<if test="line_name !=null and line_name !=''">
+			and t.line_name=#{line_name}
+		</if>
+		<if test="workshop_name !=null and workshop_name !='' and workshop_name !='全部'">
+			and t.workshop_name=#{workshop_name}
+		</if>
+		<if test="mat_description !=null and mat_description !=''">
+			and t.mat_description like concat('%',#{mat_description},'%')
+		</if>
+		group by zzj_type,mat_description,use_workshop,weight
+		) t1 where 1=1 
+		<if test="use_workshop !=null and use_workshop !='' and use_workshop !='全部'">
+			and use_workshop=#{use_workshop}
+		</if>
+		<if test="kind !=null and kind !=''">
+		    <if test="kind==1"><!-- 自制件进仓 -->
+			   and zzj_input_quantity>0
+		    </if>
+		    <if test="kind==2"><!-- 已外发 -->
+			   and output_quantity>0
+		    </if>
+		    <if test="kind==3"><!-- 未外发 -->
+			   and un_output_quantity>0
+		    </if>
+		    <if test="kind==4"><!-- 已进仓 -->
+			   and input_quantity>0
+		    </if>
+		    <if test="kind==5"> <!-- 已外发未进仓 -->
+			   and output_un_input_quantity>0
+		    </if>
+		</if>
+		<if test="totalkind !=null and totalkind !=''"><!--从按订单分类汇总链接过来的查询条件 -->
+		    <if test="totalkind=='zzj_input'"><!-- 自制件进仓 -->
+			   and zzj_input_quantity=demand_quantity
+		    </if>
+		    <if test="totalkind=='output'"><!-- 已外发 -->
+			   and output_quantity=demand_quantity
+		    </if>
+		    <if test="totalkind=='un_output'"><!-- 未外发 -->
+			   and un_output_quantity>0
+		    </if>
+		    <if test="totalkind=='input'"><!-- 已进仓 -->
+			   and input_quantity=demand_quantity
+		    </if>
+		    <if test="totalkind=='output_un_input_count'"> <!-- 已外发未进仓 -->
+			   and output_un_input_quantity>0
+		    </if>
+		</if>
+	</select>
+	<select id="queryElectrophoresisTotalList" parameterType="Map" resultType="Map">
+	  select zzj_type,use_workshop,
+		 (select count(1) from BMS_ZZJ_PMD_ITEMS t2 LEFT JOIN BMS_ZZJ_PMD_HEAD t3 ON t3.id=t2.pmd_head_id where t2.zzj_type=t1.zzj_type and 
+		 t2.use_workshop=t1.use_workshop and t2.surface_treatment='电泳' and t3.order_id=#{order_id} and t3.factory_id=#{factory_id}) as demand_count,
+		 sum(case when zzj_input_quantity=demand_quantity then 1 else 0 END) zzj_input_count,
+		 sum(case when output_quantity=demand_quantity then 1 else 0 END) output_count,
+		 sum(case when input_quantity=demand_quantity then 1 else 0 END) input_count
+      from (
+		select t.*,i.use_workshop,i.weight,sum(i.quantity) unit_quantity,<!--单车数量 -->
+		(select sum(p.quantity) from BMS_ZZJ_PLAN p where p.order_id=t.order_id and p.factory_id=t.factory_id and p.workshop_name=t.workshop_name and p.line_name=t.line_name) batch_quantity,<!-- 批次数量 -->
+		sum(i.quantity)*(select sum(p.quantity) from BMS_ZZJ_PLAN p where p.order_id=t.order_id and p.factory_id=t.factory_id and p.workshop_name=t.workshop_name and p.line_name=t.line_name)
+        demand_quantity,<!-- 批次需求数量：批次需求数量=所查询批次的批次数量*单车用量 -->
+        sum(o.quantity) as zzj_input_quantity,<!--自制入库数量：该自制件该批次在产量入库节点录入“工序=入库”的数量。 -->
+        sum(i.quantity)*(select sum(p.quantity) from BMS_ZZJ_PLAN p where p.order_id=t.order_id and p.factory_id=t.factory_id and p.workshop_name=t.workshop_name and p.line_name=t.line_name)
+        -output_quantity un_output_quantity,<!--未外发数量：未外发数量=需求数量-外发数量 -->
+		output_quantity-input_quantity as output_un_input_quantity <!-- 已外发未进仓数量：累计外发数量-累计进仓数量 -->
+		 from (select s.order_id,s.factory_id,s.workshop_name,s.line_name,s.zzj_type,s.mat_description,
+		sum(case when business_type='1' then s.quantity END) output_quantity, 
+        sum(case when business_type='2' then s.quantity END) input_quantity <!--累计进仓数量：累加计算所查询批次所有记录的进仓数量-->
+        from BMS_ZZJ_SUBCONTRACTING s GROUP BY s.order_id,s.factory_id,s.zzj_type,s.mat_description) t 
+		LEFT JOIN BMS_ZZJ_PMD_HEAD h on h.order_id=t.order_id and h.factory_id=t.factory_id and t.workshop_name=h.workshop_name and t.line_name=h.line_name 
+		LEFT JOIN BMS_ZZJ_PMD_ITEMS i on h.id=i.pmd_head_id and t.zzj_type=i.zzj_type and i.mat_description=t.mat_description
+		LEFT JOIN BMS_ZZJ_OUTPUT o on o.order_id=t.order_id and o.factory_id=t.factory_id and o.workshop_name=t.workshop_name and o.line_name=t.line_name
+		          and o.zzj_type=t.zzj_type and o.mat_description=t.mat_description and o.process='入库'
+		where t.order_id=#{order_id} and t.factory_id=#{factory_id}
+		<if test="zzj_type !=null and zzj_type !=''">
+			and t.zzj_type=#{zzj_type}
+		</if>
+		<if test="line_name !=null and line_name !=''">
+			and t.line_name=#{line_name}
+		</if>
+		<if test="workshop_name !=null and workshop_name !='' and workshop_name !='全部'">
+			and t.workshop_name=#{workshop_name}
+		</if>
+		group by zzj_type,mat_description,use_workshop,weight
+		) t1 where 1=1
+		<if test="use_workshop !=null and use_workshop !='' and use_workshop !='全部'">
+			and use_workshop=#{use_workshop}
+		</if>
+		 group by zzj_type,use_workshop
+	</select>
+	<select id="queryElectrophoresisUnOuterList" parameterType="Map" resultType="Map">
+		<![CDATA[select * from (
+		select i.zzj_type,i.use_workshop,i.mat_description,i.weight,sum(i.quantity) unit_quantity,output_quantity,input_quantity,sum(o.quantity) as zzj_input_quantity,sum(i.quantity)*
+        (select sum(p.quantity) from BMS_ZZJ_PLAN p where p.order_id=#{order_id} and p.factory_id=#{factory_id} 
+		and p.line_name=#{line_name} and p.workshop_name=#{workshop_name}) as demand_quantity
+        from BMS_ZZJ_PMD_HEAD h 
+		left join BMS_ZZJ_PMD_ITEMS i on i.pmd_head_id=h.id and i.surface_treatment='电泳' and i.zzj_type=#{zzj_type}
+        left join BMS_ZZJ_OUTPUT o on o.order_id=h.order_id and o.factory_id=h.factory_id and o.workshop_name=h.workshop_name and o.line_name=h.line_name
+		and o.zzj_type=i.zzj_type and o.mat_description=i.mat_description and o.process='入库'
+		left join (select s.order_id,s.factory_id,s.workshop_name,s.line_name,s.zzj_type,s.mat_description,
+		sum(case when business_type='1' then s.quantity END) output_quantity, 
+        sum(case when business_type='2' then s.quantity END) input_quantity 
+        from BMS_ZZJ_SUBCONTRACTING s GROUP BY s.order_id,s.factory_id,s.workshop_name,s.line_name,s.zzj_type,s.mat_description) s on h.order_id=s.order_id and h.factory_id=s.factory_id 
+		and s.workshop_name=h.workshop_name and s.line_name=h.line_name and s.mat_description=i.mat_description and s.zzj_type=i.zzj_type
+		where h.order_id=#{order_id} and h.factory_id=#{factory_id} 
+		and h.line_name=#{line_name} and h.workshop_name=#{workshop_name}
+		GROUP BY i.zzj_type,i.use_workshop,i.mat_description,i.weight) ta where demand_quantity>ifnull(output_quantity,0) ]]>
+		<if test="start!=null">
+			LIMIT #{start} ,#{length} 
+		</if>
+	</select>
+	<select id="queryElectrophoresisUnOuterCount" parameterType="Map" resultType="int">
+		select count(1) from (select output_quantity,sum(i.quantity)*
+        (select sum(p.quantity) from BMS_ZZJ_PLAN p where p.order_id=#{order_id} and p.factory_id=#{factory_id} 
+		and p.line_name=#{line_name} and p.workshop_name=#{workshop_name}) as demand_quantity
+        from BMS_ZZJ_PMD_HEAD h 
+		left join BMS_ZZJ_PMD_ITEMS i on i.pmd_head_id=h.id and i.surface_treatment='电泳' and i.zzj_type=#{zzj_type}
+        left join BMS_ZZJ_OUTPUT o on o.order_id=h.order_id and o.factory_id=h.factory_id and o.workshop_name=h.workshop_name and o.line_name=h.line_name
+		and o.zzj_type=i.zzj_type and o.mat_description=i.mat_description and o.process='入库'
+		left join (select s.order_id,s.factory_id,s.workshop_name,s.line_name,s.zzj_type,s.mat_description,
+		sum(case when business_type='1' then s.quantity END) output_quantity, 
+        sum(case when business_type='2' then s.quantity END) input_quantity 
+        from BMS_ZZJ_SUBCONTRACTING s GROUP BY s.order_id,s.factory_id,s.workshop_name,s.line_name,s.zzj_type,s.mat_description) s on h.order_id=s.order_id and h.factory_id=s.factory_id 
+		and s.workshop_name=h.workshop_name and s.line_name=h.line_name and s.mat_description=i.mat_description and s.zzj_type=i.zzj_type
+		where h.order_id=#{order_id} and h.factory_id=#{factory_id}
+		and h.line_name=#{line_name} and h.workshop_name=#{workshop_name}
+		GROUP BY i.zzj_type,i.use_workshop,i.mat_description,i.weight ) t where demand_quantity>ifnull(output_quantity,0)
+	</select>
+	<!--*************  tangjin end ***************-->
+	
+	<insert id="batchSaveOutput" parameterType="Map" useGeneratedKeys="true" keyProperty="id" >
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into BMS_ZZJ_OUTPUT 
+		(order_id,factory_id,factory_name,workshop_name,line_name,process,zzj_type,mat_description,batch,product_date,
+		quantity,team,memo,editor,edit_date,finished_flag)
+		values
+		<foreach collection="output_list" item="detail" index="index" separator=",">
+			(#{detail.order_id},#{detail.factory_id},#{detail.factory_name},#{detail.workshop_name},#{detail.line_name},#{detail.process},#{detail.zzj_type},
+			#{detail.mat_description},#{detail.batch},#{detail.product_date},#{detail.quantity},#{detail.team},
+			#{detail.memo},#{detail.editor},#{detail.edit_date},#{detail.finished_flag})
+		</foreach>		
+	</insert>
+</mapper>

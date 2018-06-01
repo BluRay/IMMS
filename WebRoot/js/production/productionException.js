@@ -6,6 +6,7 @@ $(document).ready(function () {
 		//getBusNumberSelect('#vinText2');
 		//alert(location.href.substr(location.href.indexOf("action?")+7,location.href.length));
 		//$('#rightlink').attr('href','production!execution.action?' + location.href.substr(location.href.indexOf("action?")+7,location.href.length)); 
+		getBusNumberSelect('#vinText');
 		getKeysSelect("ABNORMAL_REASON", "", "#reason_type"); 
 		getKeysSelect("LACK_REASON", "", "#lack_reason"); 
 		$('#TodayWaxPlanTable2 tr').find('th:eq(1)').hide();
@@ -34,8 +35,18 @@ $(document).ready(function () {
 	
 	function ajaxEnter(){	
 		//数据验证
+		if($("#exec_process").val()=='0'){
+			alert("请选择监控点！");
+			$("#btnSubmit").removeAttr("disabled");
+			return false;
+		}
 		if($('#reason_type').val() == ""){
 			alert("请选择异常类别！");
+			$("#btnSubmit").removeAttr("disabled");
+			return false;
+		}
+		if($('#order').val() == ""){
+			alert("订单不能为空！");
 			$("#btnSubmit").removeAttr("disabled");
 			return false;
 		}
@@ -54,7 +65,6 @@ $(document).ready(function () {
 			$("#btnSubmit").removeAttr("disabled");
 			return false;
 		}
-		
 		
 		var busNoStr = busNoArray.join("|");;
 		var trs=$("#dispatchDetail tbody").find("tr");
@@ -81,6 +91,7 @@ $(document).ready(function () {
             	"line" : $('#exec_line :selected').text(),
             	"process" : $('#exec_processname').val(),
                 //"bus_number":busNoStr,					//$('#vinText').val(),
+            	"order":$('#order').val(),
                 "bus_list":JSON.stringify(busList),
                 "reason_type_id":$('#reason_type :selected').attr("keyvalue")||"0",
                 "lack_reason_id":$('#lack_reason :selected').attr("keyvalue")||"0",
@@ -98,7 +109,7 @@ $(document).ready(function () {
                 else{
                     fadeMessageAlert(null,response.message,"agritter-error");
                 }
-
+                $("#btnSubmit").removeAttr("disabled");
                 setTimeout(function() {
                     $("#vinHint").hide().html("未输入车号");
                     toggleVinHint(true);
@@ -282,7 +293,7 @@ $(document).ready(function () {
 			url : "/BMS/common/getFactorySelectAuth",
 			dataType : "json",
 			data : {
-				function_url:'production/exception'
+				function_url:'/BMS/production/exception'
 			},
 			async : false,
 			error : function(response) {
@@ -322,7 +333,7 @@ function getAllWorkshopSelect() {
 		data : {
 				factory:$("#exec_factory :selected").text(),
 				org_kind:'1',
-				function_url:'production/exception'
+				function_url:'/BMS/production/exception'
 			},
 		async : false,
 		error : function(response) {
@@ -368,13 +379,13 @@ function getAllProcessSelect(order_type) {
 	order_type=order_type||'标准订单';
 	$("#exec_process").empty();
 	$.ajax({
-		url : "getProcessMonitorSelect",
+		url : "getProcessMonitor",
 		dataType : "json",
 		data : {
 			factory:$("#exec_factory :selected").text(),
 			workshop:$("#exec_workshop :selected").text(),
 			line:$("#exec_line").val(),
-			order_type:order_type
+			//order_type:order_type
 			},
 		async : false,
 		error : function(response) {
@@ -382,7 +393,7 @@ function getAllProcessSelect(order_type) {
 		},
 		success : function(response) {
 			//getSelects_noall(response.data, "", "#exec_process"); 
-			var strs = "";
+			var strs = "<option value='0'>请选择</option>";
 		    $("#exec_process").html("");
 		    var process_id_default="";
 		    var process_name_default="";   
@@ -404,7 +415,7 @@ function getAllProcessSelect(order_type) {
 		    });
 		  //  alert(process_id_default);
 		    $("#exec_process").append(strs);
-		    $("#exec_process").val(process_id_default+"");
+		    //$("#exec_process").val(process_id_default+"");
 		    $("#exec_processname").val(process_name_default);
 		}
 	});

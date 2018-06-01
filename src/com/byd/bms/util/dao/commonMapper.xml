@@ -4,7 +4,7 @@
 
 	<select id="queryOrderList" parameterType="Map" resultType="Map">
 		select distinct o.id,o.order_name name,o.order_no orderNo,o.order_code
-		orderCode,o.order_qty orderQty,t.bus_type_code busType,t.id bus_type_id
+		orderCode,o.order_qty orderQty,t.bus_type_code busType,t.id bus_type_id,o.order_area area
 		from BMS_OR_ORDER o
 		left join BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id 
 		<if test="factory !=null and  factory !=''">
@@ -19,6 +19,30 @@
 			and f.factory_name=#{factory}
 		</if>
 		order by o.id desc
+	</select>
+	<select id="queryAllOrderList" parameterType="Map" resultType="Map">
+		(select distinct o.id,o.order_name name,o.order_no orderNo,o.order_code
+		orderCode,o.order_qty orderQty,t.bus_type_code busType,t.id bus_type_id
+		from BMS_OR_ORDER o
+		left join BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id 
+		<if test="factory !=null and  factory !=''">
+		left join BMS_OR_FACTORY_ORDER fo on fo.order_id=o.id
+		left join BMS_BASE_FACTORY f on fo.factory_id=f.id
+		</if>		
+		where (o.order_no like CONCAT('%',#{orderNo},'%') or o.order_name like CONCAT('%',#{orderNo},'%') )
+		<if test="busType!=null and  busType!=''">
+			and t.bus_type_code=#{busType}
+		</if>
+		<if test="factory !=null and  factory !=''">
+			and f.factory_name=#{factory}
+		</if>
+		order by o.id desc)
+		UNION
+		(SELECT h.id,h.order_name AS name,h.order_no AS orderNo,h.order_code AS orderCode,
+		h.order_qty as orderQty,h.bus_type_code AS busType,0 AS 'bus_type_id' 
+		FROM BMS_OR_HISTORY_ORDER h
+		where (h.order_no like CONCAT('%',#{orderNo},'%') or h.order_name like CONCAT('%',#{orderNo},'%') )
+		)
 	</select>
 
 	<select id="queryFactoryList" parameterType="Map" resultType="Map">			
@@ -38,20 +62,27 @@
 		</if> -->
 	</select>
 	
+	<select id="checkFunctionPermission" parameterType="Map" resultType="int">
+	SELECT COUNT(*) AS permission FROM BMS_BASE_FUNCTION f WHERE f.`type` = '1' 
+	AND f.permission = #{permission} AND f.id IN (
+	SELECT DISTINCT rp.function_id FROM BMS_BASE_ROLE_PERMISSION rp WHERE rp.role_id IN (
+	SELECT ur.role_id FROM BMS_BASE_USER_ROLE ur WHERE ur.staff_number = #{staff_number}))
+	</select>
+	
 	<select id="queryFactoryListAuth" parameterType="Map" resultType="Map">			
 		SELECT o.id,o.factory_name name 
 		FROM BMS_BASE_FACTORY o WHERE o.delete_flag = '0' and o.capacity>0
 		<if test="function_url !=null and  function_url !=''">
-		AND (locate(o.factory_code,
+		AND (FIND_IN_SET(o.factory_code,
 		(SELECT GROUP_CONCAT(R.permission_value) FROM BMS_BASE_USER_ROLE R WHERE R.staff_number = #{staff_number} AND R.permission_key = '1'
 		AND R.role_id IN 
 		(SELECT RP.role_id FROM BMS_BASE_ROLE_PERMISSION RP WHERE 
-		RP.function_id = (SELECT ID FROM BMS_BASE_FUNCTION F WHERE F.function_url = #{function_url})))
+		RP.function_id = (SELECT ID FROM BMS_BASE_FUNCTION F WHERE F.function_url like concat('%',#{function_url}) )))
 		)>0 OR
 		((SELECT IFNULL(GROUP_CONCAT(R.permission_value),'') FROM BMS_BASE_USER_ROLE R WHERE R.staff_number = #{staff_number} AND R.permission_key = '1'
 		AND R.role_id IN 
 		(SELECT RP.role_id FROM BMS_BASE_ROLE_PERMISSION RP WHERE 
-		RP.function_id = (SELECT ID FROM BMS_BASE_FUNCTION F WHERE F.function_url = #{function_url}))) = '')
+		RP.function_id = (SELECT ID FROM BMS_BASE_FUNCTION F WHERE F.function_url like concat('%',#{function_url})))) = '')
 		)
 		</if>
 	</select>
@@ -61,7 +92,7 @@
 	</select>
 	
 	<select id="queryBusTypeList" parameterType="String" resultType="Map">
-		select id,bus_type_code name,internal_name code,vehicle_model from BMS_BASE_BUS_TYPE
+		select id,bus_type_code name,internal_name code,bus_series series from BMS_BASE_BUS_TYPE
 		group by bus_type_code
 	</select>
 	
@@ -99,7 +130,7 @@
 			and o.org_kind=#{org_kind}
 		</if>		
 		<if test="function_url !=null and  function_url !=''">
-		AND (locate(o.org_code,
+		AND (FIND_IN_SET(o.org_code,
 		(SELECT GROUP_CONCAT(R.permission_value) FROM BMS_BASE_USER_ROLE R WHERE R.staff_number = #{staff_number} AND R.permission_key = '2'
 		AND R.role_id IN 
 		(SELECT RP.role_id FROM BMS_BASE_ROLE_PERMISSION RP WHERE 
@@ -129,7 +160,7 @@
 		from BMS_BASE_PROCESS p
 		where p.factory=#{factory} and p.workshop=#{workshop}
 		<if test="function_url !=null and  function_url !=''">
-		AND (locate(o.org_code,
+		AND (FIND_IN_SET(o.org_code,
 		(SELECT GROUP_CONCAT(R.permission_value) FROM BMS_BASE_USER_ROLE R WHERE R.staff_number = #{staff_number} AND R.permission_key = '2'
 		AND R.role_id IN 
 		(SELECT RP.role_id FROM BMS_BASE_ROLE_PERMISSION RP WHERE 
@@ -205,7 +236,17 @@
 		LEFT JOIN BMS_BASE_ORG o1 ON o.parent_id=o1.id 
 		LEFT JOIN BMS_BASE_ORG o2 on o1.parent_id=o2.id 
 		LEFT JOIN BMS_BASE_ORG o3 on o2.parent_id=o3.id
-		WHERE o.org_type='4' and o1.name =#{workgroup} and o.deleted='0' and o2.name=#{workshop} and o3.name=#{factory}
+		WHERE o.org_type='4' and o.deleted='0'
+		<if test="workgroup !=null and workgroup !='' ">
+			and o1.name =#{workgroup} 
+		</if>
+		<if test="workshop !=null and workshop !='' ">
+			and o2.name=#{workshop} 
+		</if>	 
+		 <if test="factory !=null and factory !='' ">
+			and o3.name=#{factory}
+		</if>	
+		
 	</select>
 	
 	<select id="queryWorkgroupListAll" parameterType="Map" resultType="Map">
@@ -755,13 +796,18 @@
 		WHERE month=#{month} AND submit_factory=#{factory} AND submit_workshop=#{workshop} AND status in('已提交','已结算')
 	</select>
 	<select id="getBasePrice" parameterType="Map" resultType="Map">
-		select p.* from BMS_HR_HOUR_PRICE p left join
+		<!-- select p.* from BMS_HR_HOUR_PRICE p left join
 		  BMS_BASE_FACTORY f on f.id=p.factory_id
 		where f.factory_name=#{factory}		
 		and effective_date&lt;=#{workDate}
 		and hour_type=(SELECT x.value FROM BMS_BASE_KEY x WHERE x.key_code='HOUR_PRICE' AND x.key_name = (SELECT k.key_name FROM BMS_BASE_KEY k WHERE k.key_code='WAIT_HOUR_TYPE' AND k.value= #{type}))
 		order by edit_date desc
-		limit 1
+		limit 1 -->
+		select p.* from BMS_HR_JOB_UNIT_PRICE p 
+		where p.factory_name=#{factory} and p.job=#{job}
+		and p.effective_date&lt;=#{workDate}
+		order by p.edit_date desc
+		limit 1 	
 	</select>
 	
 	<select id="queryChildOrgList" parameterType="String" resultType="Map">

@@ -131,7 +131,7 @@ $(document).ready(function(){
 	})
 	
 	$(document).on("change","#check_node",function(e){
-		drawTplDetailTable("#tableDetail",null,true);		
+		//drawTplDetailTable("#tableDetail",null,true);		
 		
 		//alert($("#check_node :selected").text());
 		if($("#check_node :selected").text()=="车架"||$("#check_node :selected").text()=="车身"||
@@ -192,7 +192,6 @@ function initPage(){
 	$("#order").attr("disabled",true);
 	$("#order_config").css("display","none");
 	$("#order_config_span").css("display","");
-	
 //	getBusNumberSelect('#nav-search-input');
 	getBusNumberSelect('#search_bus_number');
 	getKeysSelect("CHECK_NODE", "", "#search_node","全部","id");
@@ -748,8 +747,8 @@ function ajaxQuery(){
 		test_result.push($(this).val());
 	});
 	test_result=test_result.join(",");
+
 	
-	$(".divLoading").addClass("fade in").show();
 	var tb=$("#tableResult").DataTable({
 		serverSide: true,
 /*		fixedColumns:   {
@@ -782,6 +781,8 @@ function ajaxQuery(){
 			}
 		},
 		ajax:function (data, callback, settings) {
+			$("#btnQuery").attr("disabled","disabled"); 
+			$(".divLoading").addClass("fade in").show();
 			var param ={
 				"draw":1,
 				"bus_number":bus_number,
@@ -812,6 +813,9 @@ function ajaxQuery(){
                     //调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
                     //此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
                     callback(returnData);
+
+                	$(".divLoading").hide();
+                	$("#btnQuery").removeAttr("disabled");
                 }
             });
 		
@@ -834,7 +838,6 @@ function ajaxQuery(){
 		            }
 		          ],
 	});
-	$(".divLoading").hide();
 }
 
 function showInfoPage(row){

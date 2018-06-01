@@ -679,10 +679,10 @@ public class ReportController extends BaseController {
 	@ResponseBody
 	public ModelMap getFactoryRateData(){
 		model.clear();
-		Map<String,Object> condMap=new HashMap<String,Object>();
+		Map<String,String> condMap=new HashMap<String,String>();
 		condMap.put("start_date", request.getParameter("start_date"));
 		condMap.put("end_date", request.getParameter("end_date"));
-		
+		if(!"0".equals(request.getParameter("factoryIds")))condMap.put("factoryIds", request.getParameter("factoryIds"));
 		reportService.getFactoryRateData(condMap,model);
 		
 		condMap=null;

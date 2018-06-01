@@ -40,7 +40,41 @@ $(document).ready(function (){
 		ajaxQuery();
     });
 	
+	$("#btnBuslist").click(function(){
+		var dialog = $( "#dialog-config" ).removeClass('hide').dialog({
+			width:400,
+			height:280,
+			modal: true,
+			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i> 指定车号</h4></div>",
+			title_html: true,
+			buttons: [ 
+				{
+					text: "取消",
+					"class" : "btn btn-minier",
+					click: function() {
+						$( this ).dialog( "close" ); 
+					} 
+				},
+				{
+					text: "确定",
+					"class" : "btn btn-primary btn-minier",
+					click: function() {
+						if($("#search_bus_number").val().trim().length>0){
+							getBusNumberFollowList();
+						}						
+						$("#search_bus_number").val("");
+						$( this ).dialog( "close" ); 
+					} 
+				}
+			]
+		});
+	});
+	
 	$("#btnBusQuery").click(function () {
+		getBusNumberFollowList();
+	});
+	
+	function getBusNumberFollowList(){
 		$.ajax({
 			url: "queryBusNumberFollowList",
 			dataType: "json",
@@ -53,7 +87,8 @@ $(document).ready(function (){
 					"factory":$("#search_busnumber_factory").val(),
 					"workshop":$("#search_busnumber_workshop").val(),
 					"start":$("#search_busnumber_start").val(),
-					"end":$("#search_busnumber_end").val()
+					"end":$("#search_busnumber_end").val(),
+					"bus_number":$('#search_bus_number').val(),
 			},
 			async: false,
 			error: function () {alert(response.message);},
@@ -74,7 +109,7 @@ $(document).ready(function (){
 				});
 			}
 		});
-	});
+	}
 	
 	$('input:radio[name="switch_mode"]').change(function(){
 		//console.log("switch_mode = " + $(this).val());

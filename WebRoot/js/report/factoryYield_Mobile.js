@@ -34,12 +34,14 @@ function ajaxQuery(){
 	var end_date = "";
 	var now = new Date(); //当前日期
 	var nowDayOfWeek = now.getDay(); 	//今天本周的第几天 
+	var nowMonthOfYear = now.getMonth();
+	
 	//var startDate=new Date(now.getTime()-6*24*3600*1000);
 	if($("#search_index").val() =='0'){
 		start_date= formatDate(now);
 		end_date = formatDate(now);
 	}else if($("#search_index").val() =='1'){
-		var startDate=new Date(now.getTime()-nowDayOfWeek*24*3600*1000);
+		var startDate=new Date(now.getTime()-(nowDayOfWeek-1)*24*3600*1000);
 		start_date= formatDate(startDate);
 		end_date = formatDate(now);
 	}else if($("#search_index").val() =='2'){
@@ -48,8 +50,34 @@ function ajaxQuery(){
 	}else if($("#search_index").val() =='3'){
 		start_date= ChangeDateToString(now).substring(0,4) + "-01-01";
 		end_date = ChangeDateToString(now).substring(0,4) + "-12-31";
+	}else if($("#search_index").val() =='4'){	//昨日
+		var startDate=new Date(now.getTime()-24*3600*1000);
+		start_date= formatDate(startDate);
+		end_date = formatDate(startDate);
+	}else if($("#search_index").val() =='5'){	//上周
+		var startDate=new Date(now.getTime()-(nowDayOfWeek+6)*24*3600*1000);
+		var endDate=new Date(now.getTime()-(nowDayOfWeek)*24*3600*1000);
+		start_date= formatDate(startDate);
+		end_date = formatDate(endDate);
+	}else if($("#search_index").val() =='6'){	//上月
+		var nowYear = now.getYear(); 
+		nowYear += (nowYear < 2000)?1900:0;
+		var lastMonthDate = new Date(); //上月日期
+		lastMonthDate.setDate(1);
+		lastMonthDate.setMonth(lastMonthDate.getMonth()-1);
+		var lastYear = lastMonthDate.getYear();
+		var lastMonth = lastMonthDate.getMonth();
+		var lastMonthStartDate = new Date(nowYear, lastMonth, 1);
+		
+		var monthStartDate = new Date(nowYear, lastMonth, 1); 
+		var monthEndDate = new Date(nowYear, lastMonth + 1, 1); 
+		var days = (monthEndDate - monthStartDate)/(1000 * 60 * 60 * 24); 
+				
+		var lastMonthEndDate = new Date(nowYear, lastMonth, days);
+		start_date = formatDate(lastMonthStartDate);
+		end_date = formatDate(lastMonthEndDate);		
 	}
-	
+	console.log("start_date = " + start_date + " | end_date = " + end_date);
 	$("#tableResult").DataTable({
 		serverSide: true,
 	    paginate:false,
@@ -114,8 +142,13 @@ function ajaxQuery(){
 		            {"title":"达成率","class":"center","data":"","render":function(data,type,row){
 		            	var number1=row.finished_qty;
 		            	var number2=row.plan_qty!=0 ? row.plan_qty : 1;
-		            	var result=((Math.round(number1 / number2 * 10000) / 100.00)>100 ? 100:Math.round(number1 / number2 * 10000) / 100.00) + "%";// 小数点后两位百分比
-                        return (result!='0%') ? result : '-'
+		            	var result=((Math.round(number1 / number2 * 10000) / 100.00)>100000 ? 100:Math.round(number1 / number2 * 10000) / 100.00) + "%";// 小数点后两位百分比
+                        if(row.plan_qty ==0){
+                        	return '-';
+                        }else{
+                        	return (result!='0%') ? result : '-'
+                        }
+		            	
 		            },"defaultContent": ""}
 		          ]
 	});

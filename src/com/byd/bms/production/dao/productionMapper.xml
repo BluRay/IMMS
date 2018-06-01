@@ -24,12 +24,27 @@
 		order by r.sequence asc
 	</select>
 	
-	<select id="queryBusInfo" parameterType="String" resultType="Map">
-		select b.*,f.factory_name,CONCAT(o.order_name,t.bus_type_code,' ',o.order_qty,'台') AS order_desc,o.order_area,o.order_no,o.order_color,
-		case b.status when '0' then '正常' else '冻结' end as status,p.factory,p.workshop,p.line,p.process_name,o.order_type,o.bus_type_id
+	<select id="queryProcessMonitor" parameterType="Map" resultType="Map">
+	SELECT p.id,p.process_code,p.process_name,k.key_name plan_node_name,k.key_name_en field_name 
+	FROM BMS_BASE_PROCESS p
+	left join BMS_BASE_KEY k on k.value=p.plan_node_id and k.key_code='PLAN_CODE'
+	WHERE p.factory=#{factory} and p.workshop=#{workshop} and p.line=#{line} 
+	</select>
+	
+	<select id="getOrderIdByOrderNo" parameterType="String" resultType="int">
+	SELECT IFNULL(SUM(id),0) AS id FROM BMS_OR_ORDER WHERE order_no =  #{order_no}
+	</select>
+	
+	<select id="queryBusInfo" parameterType="Map" resultType="Map">
+		select b.*,f.factory_name,CONCAT(o.order_name,t.bus_type_code,' ',o.order_qty,'台') AS order_desc,o.order_area,o.order_no,c.color order_color,
+		case b.status when '0' then '正常' else '冻结' end as status,p.factory,p.workshop,p.line,p.process_name,o.order_type,o.bus_type_id,
+		(select distinct s.line_name from BMS_PD_SCAN s 
+		where s.bus_number=b.bus_number and s.factory_name=f.factory_name and s.workshop_name=#{workshop_old} ) old_line,
+		#{workshop_old} old_workshop
 		from BMS_PLAN_BUS b
 		left join BMS_BASE_FACTORY f on b.factory_id=f.id
 		left join BMS_OR_ORDER o on b.order_id=o.id
+		left join BMS_OR_ORDER_CONFIG c on c.order_id=o.id and b.order_config_id = c.id
 		left join BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id
 		left join BMS_BASE_PROCESS p on p.id=b.latest_process_id
 		where b.bus_number=#{bus_number}
@@ -86,7 +101,7 @@
 		LEFT JOIN BMS_BASE_PROCESS p on r.factory=p.factory and r.workshop=p.workshop 
 		and p.process_name=r.process_name 
 		where r.factory=#{factory_name} and r.sequence>=(
-			select r1.sequence+1 from BMS_PD_SCAN_RULE r1 where r1.factory=#{factory_name}
+			select r1.sequence+1 from BMS_PD_SCAN_RULE r1 where r1.factory=#{factory_name} and r1.workshop=#{workshop}
 			and r1.process_name=#{process_name} and r1.order_type=#{order_type})
 		and r.order_type=#{order_type}  and p.monitory_point_flag='1'
 		order by r.sequence 
@@ -108,9 +123,11 @@
 		(bus_number,factory_id,key_parts_template_details_id,workshop,process_number,process_name,parts_no,parts_name,vendor,batch,editor_id,edit_date)
 		values
 		<foreach  collection="parts_list" item="detail" index="index" separator=",">
+		<if test="detail.parts_id==null or detail.parts_id==''">
 		(#{detail.bus_number},#{detail.factory_id},#{detail.id},#{detail.workshop},#{detail.process_number},#{detail.process_name},
 		#{detail.parts_no} ,#{detail.parts_name},#{detail.vendor},#{detail.batch},#{detail.editor_id},#{detail.edit_date}
 		)
+		</if>	
 		</foreach>
 	</insert>
 	
@@ -159,9 +176,10 @@
 	</insert>
 	
 	<select id="queryBusInfoList" parameterType="Map" resultType="Map">
-		SELECT b.*,CONCAT(o.order_no,' ',o.order_name,t.bus_type_code,o.order_qty,' ','台') AS order_desc,f.factory_name,o.order_no
+		SELECT b.*,CONCAT(o.order_no,' ',o.order_name,t.bus_type_code,o.order_qty,' ','台') AS order_desc,f.factory_name,o.order_no,c.*
 		FROM BMS_PLAN_BUS b
 		LEFT JOIN BMS_OR_ORDER o on b.order_id=o.id
+		LEFT JOIN BMS_OR_ORDER_CONFIG c on c.id=b.order_config_id and c.order_id=o.id
 		LEFT JOIN BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id
 		LEFT JOIN BMS_BASE_FACTORY f on b.factory_id=f.id
 		WHERE 1=1
@@ -206,6 +224,7 @@
 	<update id='updateBusInfo' parameterType="Map">
 		update BMS_PLAN_BUS 
 		<trim prefix="set" suffixOverrides=",">
+			bus_number=bus_number,
 			<if test="bus_color !=null and bus_color !=''">
 				bus_color=#{bus_color},
 			</if>
@@ -250,6 +269,12 @@
 			</if>
 			<if test="zcgg_date !=null and zcgg_date !=''">
 				zcgg_date=#{zcgg_date}
+			</if>
+			<if test="hgz_printer !=null and hgz_printer !=''">
+				hgz_printer=#{hgz_printer},
+			</if>
+			<if test="hgz_print_date !=null and hgz_print_date !=''">
+				hgz_print_date=#{hgz_print_date},
 			</if>
 		</trim>
 			where 1=1
@@ -313,7 +338,7 @@
 		LEFT JOIN BMS_BASE_USER u on u.id=s.editor_id
 		where 1=1
 		<if test="factory_id!=''">
-			and s.factory_id = #{factory_id}
+			and s.factory_id IN ${factory_id}
 		</if>
 		<if test="order_no!=''">
 			and o.order_no = #{order_no}
@@ -331,7 +356,7 @@
 			and s.supply_date &lt;= #{search_date_end}
 		</if>
 		<if test="orderColumn !=null">
-			order by ${orderColumn}
+			order by ${orderColumn},edit_date DESC
 		</if>
 		<if test="start !=null">
 			LIMIT #{start} ,#{length} 
@@ -344,7 +369,7 @@
 		LEFT JOIN BMS_OR_ORDER o on s.order_id=o.id
 		where 1=1
 		<if test="factory_id!=''">
-			and s.factory_id = #{factory_id}
+			and s.factory_id IN ${factory_id}
 		</if>
 		<if test="order_no!=''">
 			and o.order_no = #{order_no}
@@ -441,7 +466,7 @@
 		LEFT JOIN BMS_BASE_USER u on u.id=p.editor_id
 		where 1=1
 		<if test="factory_id !=''">
-			and p.factory_id = #{factory_id}
+			and p.factory_id IN ${factory_id}
 		</if>
 		<if test="order_no !=''">
 			and o.order_no = #{order_no}
@@ -456,7 +481,7 @@
 			and p.prod_date &lt;= #{search_date_end}
 		</if>
 		<if test="orderColumn !=null">
-			order by ${orderColumn}
+			order by ${orderColumn},p.edit_date DESC
 		</if>
 		<if test="start !=null">
 			LIMIT #{start} ,#{length} 
@@ -469,7 +494,7 @@
 		LEFT JOIN BMS_OR_ORDER o ON p.order_id = o.id
 		where 1=1
 		<if test="factory_id !=''">
-			and p.factory_id = #{factory_id}
+			and p.factory_id IN ${factory_id}
 		</if>
 		<if test="order_no !=''">
 			and o.order_no = #{order_no}
@@ -489,7 +514,7 @@
 		SELECT
 		b.id,o.order_no,o.order_name,t.bus_type_code,o.order_qty,f.factory_name,b.bus_number,b.vin,c.order_config_name,c.customer,
 		b.productive_date,b.left_motor_number,b.right_motor_number,
-		b.bus_color,b.bus_seats,b.production_status,c.config_file,b.dispatch_date,b.customer_number,
+		b.bus_color,c.bus_seats,b.production_status,c.config_file,b.dispatch_date,b.customer_number,
 		b.welding_online_date,b.welding_offline_date,b.fiberglass_offline_date,b.painting_online_date,
 		b.painting_offline_date,b.chassis_online_date,b.chassis_offline_date,b.assembly_online_date,
 		b.assembly_offline_date,b.debugarea_online_date,b.debugarea_offline_date,b.testline_online_date,
@@ -498,7 +523,7 @@
 		LEFT JOIN BMS_OR_ORDER o ON b.order_id = o.id
 		LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id = t.id
 		LEFT JOIN BMS_BASE_FACTORY f ON b.factory_id = f.id
-		LEFT JOIN BMS_OR_ORDER_CONFIG c ON b.order_config_id = c.id
+		LEFT JOIN BMS_OR_ORDER_CONFIG c ON b.order_config_id = c.id and b.order_config_id=c.id
 		WHERE b.bus_number = #{bus_number} OR b.vin = #{bus_number} OR b.left_motor_number=#{bus_number}
 		OR b.right_motor_number=#{bus_number}
 	</select>
@@ -513,14 +538,16 @@
 		b.bus_number = #{bus_number}
 		OR b.vin = #{bus_number} OR b.left_motor_number=#{bus_number}
 		OR b.right_motor_number=#{bus_number})
+		order by s.scan_time asc
 	</select>
 	<select id="getNamePlateInfo" parameterType="String" resultType="Map">
-		select t.bus_type_code,t.brand,t.vehicle_model,t.motor_model,t.chassis_model,t.motor_power,t.max_weight,t.battery_model,
-		t.passenger_num,t.max_speed,t.light_downdip,b.sequence,t.battery_capacity,b.dp_production_date AS productive_date,
-		b.zc_production_date,t.rated_voltage,b.bus_number,b.vin
+		select t.bus_type_code,c.brand,c.vehicle_model,c.motor_model,c.chassis_model,c.motor_power,c.max_weight,
+		c.battery_model,c.passenger_num,c.max_speed,c.light_downdip,b.sequence,c.battery_capacity,
+		b.dp_production_date AS productive_date,b.zc_production_date,c.rated_voltage,b.bus_number,b.vin
 		FROM BMS_PLAN_BUS b
 		LEFT JOIN BMS_OR_ORDER o ON b.order_id = o.id
-		LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id = t.id
+		LEFT JOIN BMS_OR_ORDER_CONFIG c ON c.order_id=o.id and b.order_config_id=c.id
+		LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id = t.id 
 		WHERE b.bus_number = #{bus_number} OR b.vin = #{bus_number} OR b.left_motor_number = #{bus_number} OR b.right_motor_number = #{bus_number}
 	</select>	
 	<select id="getProductionSearchException" parameterType="String" resultType="Map">
@@ -534,18 +561,18 @@
 		#{bus_number} OR b.vin = #{bus_number} OR b.left_motor_number = #{bus_number} OR b.right_motor_number = #{bus_number})
 	</select>
 	<select id="getCertificationInfo" parameterType="String" resultType="Map">
-		select t.bus_type_code,t.brand,t.vehicle_model,oc.tire_type,t.motor_model,t.chassis_model,t.motor_power,
-		t.max_weight,t.battery_model,b.sequence,t.battery_capacity,b.passenger_num AS passengers,b.spring_num,
-		b.nameplate_print_date AS productive_date,t.rated_voltage,b.bus_number,b.vin,b.ccczs_date,b.dpgg_date,b.zcgg_date,
+		select t.bus_type_code,c.brand,c.vehicle_model,c.tire_type,c.motor_model,c.chassis_model,c.motor_power,
+		c.max_weight,c.battery_model,b.sequence,c.battery_capacity,c.passenger_num AS passengers,c.spring_num,
+		b.nameplate_print_date AS productive_date,c.rated_voltage,b.bus_number,b.vin,c.ccczs_date,c.dpgg_date,c.zcgg_date,
 		b.dp_production_date,b.zc_production_date,
 		case when b.right_motor_number is not null then CONCAT(b.left_motor_number,'/',b.right_motor_number)
 		else b.left_motor_number end as motor_number,
-		b.bus_color,b.bus_seats
+		b.bus_color,c.bus_seats
 		from BMS_PLAN_BUS b
 		LEFT JOIN BMS_OR_ORDER o ON b.order_id = o.id
-		LEFT JOIN BMS_OR_ORDER_CONFIG oc ON b.order_config_id = oc.id
+		LEFT JOIN BMS_OR_ORDER_CONFIG c ON b.order_config_id = c.id and o.id=c.order_id
 		LEFT JOIN BMS_BASE_BUS_TYPE t ON t.id=o.bus_type_id and
-		t.bus_type_code=substr(b.bus_number,1,LOCATE('-',b.bus_number)-1)
+		t.bus_type_code=substr(b.bus_number,1,LOCATE('-',b.bus_number)-1)  
 		WHERE b.bus_number = #{bus_number} OR b.vin = #{bus_number}
 		OR b.left_motor_number = #{bus_number} OR b.right_motor_number = #{bus_number}
 	</select>
@@ -554,7 +581,7 @@
 		LEFT OUTER JOIN BMS_BASE_USER U ON F.confirmor_id = U.staff_number
 		LEFT OUTER JOIN BMS_TECH_TASK T ON F.tech_task_id = T.id
 		WHERE (F.bus_number = #{bus_number} OR 
-		F.bus_number = (SELECT B.bus_number FROM BMS_PLAN_BUS B WHERE B.VIN = #{bus_number}
+		F.bus_number = (SELECT distinct B.bus_number FROM BMS_PLAN_BUS B WHERE B.VIN = #{bus_number}
 		or B.left_motor_number = #{bus_number} or B.right_motor_number = #{bus_number}))
 	</select>
 	<select id="getQmTestCardList" parameterType="String" resultType="Map">
@@ -568,6 +595,7 @@
 		LEFT OUTER JOIN BMS_BASE_USER U ON P.editor_id = U.id
 		WHERE (P.bus_number = #{bus_number} OR P.bus_number = (SELECT B.bus_number FROM BMS_PLAN_BUS B WHERE B.VIN = #{bus_number}
 		OR B.left_motor_number = #{bus_number} OR B.right_motor_number = #{bus_number}))
+		order by p.id asc
 	</select>	
 	
 	
@@ -638,13 +666,12 @@
 	<select id="getNameplatePrintList" parameterType="Map" resultType="Map">
 		select b.bus_number,b.vin,b.zc_production_date productive_date,u.username printer,
 		case when b.nameplate_print_date is null then '未打印' else '已打印' end as print_flag,
-		t.battery_model,t.max_weight,t.chassis_model,
-		substring(b.nameplate_print_date,1,10) print_date,t.brand,t.motor_model,t.motor_power,
-		case when b.rated_voltage>0 then b.rated_voltage else(case when c.rated_voltage>0 then c.rated_voltage else t.rated_voltage end)  end as rated_voltage,
-		case when b.battery_capacity>0 then b.battery_capacity else(case when c.battery_capacity>0 then c.battery_capacity  else t.battery_capacity end) end as battery_capacity
+		c.battery_model,c.max_weight,c.chassis_model,
+		substring(b.nameplate_print_date,1,10) print_date,c.brand,c.motor_model,c.motor_power,
+		c.rated_voltage,c.battery_capacity
 		from BMS_PLAN_BUS b
 		left join BMS_OR_ORDER o on b.order_id=o.id
-		left join BMS_OR_ORDER_CONFIG c on b.order_config_id=c.id
+		left join BMS_OR_ORDER_CONFIG c on b.order_config_id=c.id and b.order_config_id = c.id
 		left join BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id
 		left join BMS_BASE_USER u on b.nameplate_printer_id=u.id
 		where 1=1 and b.factory_id=#{factoryId}
@@ -692,14 +719,15 @@
 	</update>
 	
 	<select id="getCertificationList" parameterType="Map" resultType="Map">
-		SELECT b.id,b.bus_number,b.vin,b.bus_color,concat(b.left_motor_number,'/',b.right_motor_number) motor_number,
-		f.factory_name, t.vehicle_model,t.chassis_model,t.motor_model,b.zc_production_date as productive_date,b.dp_production_date,
-		case when b.bus_seats>0 then b.bus_seats else(case when c.bus_seats>0 then c.bus_seats else t.passenger_num end) end as bus_seats ,
-		case when b.tire_type>0 then b.tire_type else c.tire_type end as tire_type,o.order_no,
-		case when b.spring_num>0 then b.spring_num else c.spring_num end as spring_num,b.dp_zzd,b.zc_zzd,b.hgz_note, 
-		case when b.passenger_num>0 then concat(b.passenger_num,'/',b.bus_seats) else( case when c.passenger_num>0 then concat(c.passenger_num,'/',c.bus_seats) else concat(t.passengers,'/',t.passenger_num) end) end as passengers 
-		FROM BMS_PLAN_BUS b LEFT JOIN BMS_OR_ORDER o ON b.order_id = o.id 
-		LEFT JOIN BMS_OR_ORDER_CONFIG c on c.id=b.order_config_id 
+		SELECT b.id,b.bus_number,b.vin,b.bus_color,
+		case when length(b.left_motor_number)>9 then concat(substring(b.left_motor_number,15,9),'/',substring(b.right_motor_number,15,9))
+		else  concat(b.left_motor_number,'/',b.right_motor_number) end as motor_number,
+		f.factory_name, c.vehicle_model,c.chassis_model,c.motor_model,b.zc_production_date as productive_date,
+		b.dp_production_date,c.bus_seats,c.tire_type,o.order_no,c.spring_num,c.dp_zzd,c.zc_zzd,c.hgz_note, 
+		c.passenger_num as passengers, b.hgz_printer,b.hgz_print_date
+		FROM BMS_PLAN_BUS b 
+		LEFT JOIN BMS_OR_ORDER o ON b.order_id = o.id 
+		LEFT JOIN BMS_OR_ORDER_CONFIG c on c.id=b.order_config_id and b.order_config_id = c.id
 		LEFT JOIN BMS_BASE_FACTORY f ON b.factory_id = f.id 
 		LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id = t.id 
 		WHERE b.vin IS NOT NULL and b.left_motor_number IS NOT NULL 
@@ -710,12 +738,24 @@
 		<if test="order_no!=''">
 			and o.order_no= #{order_no}
 		</if>
+		<if test="transfer_status =='已传输'">
+			and b.hgz_print_date >0
+		</if>
+		<if test="transfer_status =='未传输'">
+			and (b.hgz_print_date =0 or b.hgz_print_date is null)
+		</if>
 		<if test="bus_number_size!=0">
 			and b.bus_number in
 			<foreach item="item" index="index" collection="bus_number"
 				open="(" separator="," close=")">
 				#{item}
 			</foreach>
+		</if>
+		<if test="transfer_status =='已传输'">
+			order by b.hgz_print_date desc
+		</if>
+		<if test="transfer_status !='已传输'">
+			order by b.hgz_print_date asc
 		</if>
 		<if test="start !=null">
 			LIMIT #{start} ,#{length} 
@@ -732,6 +772,12 @@
 		</if>
 		<if test="order_no!=''">
 			and o.order_no= #{order_no}
+		</if>
+		<if test="transfer_status =='已传输'">
+			and b.hgz_print_date >0
+		</if>
+		<if test="transfer_status =='未传输'">
+			and (b.hgz_print_date =0 or b.hgz_print_date is null)
 		</if>
 		<if test="bus_number_size!=0">
 			and b.bus_number in
@@ -1006,7 +1052,10 @@
 	<select id="getBusNumberByVin" parameterType="Map" resultType="Map">
 		select bus_number from BMS_PLAN_BUS where vin=#{vin}
 	</select>
-
+	<select id="getBusNumberByMotor" parameterType="Map" resultType="Map">
+		select bus_number from BMS_PLAN_BUS 
+		where ${motor_field}=#{motor_number} 
+	</select>
 	<!-- 车身号打印 -->
 	<select id="getBusNoPrintList" parameterType="Map" resultType="Map">
 		select
@@ -1020,7 +1069,7 @@
 		left join BMS_PLAN_PRODUCTION_PLAN p on b.production_plan_id=p.id
 		left join BMS_OR_ORDER o on b.order_id=o.id
 		left join BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id
-		left join BMS_OR_ORDER_CONFIG g on b.order_config_id=g.id
+		left join BMS_OR_ORDER_CONFIG g on b.order_config_id=g.id and b.order_config_id = g.id
 		left join BMS_BASE_USER u on n.printer_id=u.id
 		left join BMS_OR_FACTORY_ORDER_CONFIG c ON c.order_config_id=g.id and c.order_id=o.id and c.factory_id=b.factory_id
 		where 1=1 and b.factory_id=#{factoryId}
@@ -1057,7 +1106,7 @@
 		left join BMS_PLAN_PRODUCTION_PLAN p on b.production_plan_id=p.id
 		left join BMS_OR_ORDER o on b.order_id=o.id
 		left join BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id
-		left join BMS_OR_ORDER_CONFIG g on b.order_config_id=g.id
+		left join BMS_OR_ORDER_CONFIG g on b.order_config_id=g.id and b.order_config_id = g.id
 		left join BMS_BASE_USER u on n.printer_id=u.id
 		left join BMS_OR_FACTORY_ORDER_CONFIG c ON c.order_config_id=g.id and c.order_id=o.id and c.factory_id=b.factory_id
 		where 1=1 and b.factory_id=#{factoryId}
@@ -1876,7 +1925,13 @@
 			<if test="order_id !=null and order_id !=''">
 				and p.order_id=#{order_id}
 			</if>	
-			order by p.effective_date desc limit 1),0) standard_price
+			order by p.effective_date desc limit 1),0) standard_price,
+			ifnull((select p.unit_price from BMS_HR_JOB_UNIT_PRICE p where p.factory_name=#{factory} 
+			and p.job=s.job
+			<if test="work_date !=null and work_date !=''">
+				and p.effective_date&lt;=#{work_date}
+			</if>	
+			order by p.effective_date desc limit 1),0) standard_price_wait
 			from BMS_HR_STAFF s
 			where s.salary_type='计件' and s.status='在职'
 			<if test="staff_number !=null and staff_number !=''">
@@ -1888,7 +1943,8 @@
 			order by s.staff_number
 	</select>
 	<select id="getWaitWorkTimeList" parameterType="Map" resultType="Map">
-		SELECT s.* FROM BMS_HR_WAIT_SALARY s WHERE 1=1
+		SELECT s.* 
+		FROM BMS_HR_WAIT_SALARY s WHERE 1=1
 		<if test="status !=null and status !=''">
 			and s.status=#{status}
 		</if>
@@ -2184,6 +2240,9 @@
 				</if>
 				<if test="detail.work_hour!=null">
 					work_hour=#{detail.work_hour},
+				</if>
+				<if test="detail.hour_price!=null">
+					hour_price=#{detail.hour_price},
 				</if>
 				<if test="detail.wpay!=null">
 					wpay=#{detail.wpay},
@@ -3257,4 +3316,29 @@
 		select count(id) from BMS_QM_KEY_PARTS 
 		where parts_name like '%动力电池包%' and batch=#{batch}
 	</select>
+	
+	<select id="getKeyPartBatchInfo" parameterType="Map" resultType="Map">
+	SELECT bus_number,key_parts_template_details_id,parts_name,batch FROM BMS_QM_KEY_PARTS 
+	WHERE (bus_number = #{bus_number} OR bus_number = (SELECT B.bus_number FROM BMS_PLAN_BUS B WHERE B.VIN = #{bus_number})) 
+	AND parts_name LIKE '%动力电池%'
+	</select>
+	
+	<select id="queryKeyPartsByBus" parameterType="Map" resultType="Map">
+		SELECT bus_number,key_parts_template_details_id,parts_name,batch FROM BMS_QM_KEY_PARTS 
+		WHERE (bus_number = #{bus_number} OR bus_number = (SELECT B.bus_number FROM BMS_PLAN_BUS B WHERE B.VIN = #{bus_number})) 
+		AND parts_name=#{parts_name} and process_name !='检测线下线'
+	</select>
+	
+	<select id="queryKeyPartsJCXByBus" parameterType="Map" resultType="Map">
+		SELECT p.bus_number,p.key_parts_template_details_id,p.parts_name,p.parts_no,p.batch,ptd.size,ptd.vendor
+		FROM BMS_QM_KEY_PARTS p
+		LEFT JOIN BMS_QM_KEY_PARTS_TEMPLATE_DETAILS ptd on p.key_parts_template_details_id=ptd.id
+		WHERE p.bus_number=#{bus_number}
+		and (
+		<foreach collection="parts_list" item="parts_name" index="index" separator=" or ">
+			p.parts_name like concat('%',#{parts_name},'%')
+		</foreach>
+		)
+	</select>
+	
 </mapper>

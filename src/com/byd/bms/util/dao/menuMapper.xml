@@ -20,7 +20,7 @@
 		FROM BMS_BASE_MODEL m
 		LEFT OUTER JOIN BMS_BASE_FUNCTION f ON m.id = f.model_id
 		left join BMS_BASE_USER_FAVORITE fo on fo.model_id=m.id and fo.staff_number=#{staff_number}
-		WHERE isDeleted='0'  AND
+		WHERE isDeleted='0' AND type != 1 AND
 		((find_in_set (m.id,
 		(SELECT group_concat(distinct p.function_id) FROM BMS_BASE_ROLE_PERMISSION p 
 		WHERE find_in_set (p.role_id,(SELECT group_concat(distinct r.role_id) FROM BMS_BASE_USER_ROLE r WHERE r.STAFF_NUMBER = #{staff_number}))>0

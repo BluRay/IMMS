@@ -195,7 +195,7 @@ function ajaxQuery(){
 	tb=$("#tableResult").dataTable({
 		serverSide: true,
 		fixedColumns:   {
-            leftColumns: 2,
+            leftColumns: 3,
             rightColumns:2
         },
 		dom: 'Bfrtip',

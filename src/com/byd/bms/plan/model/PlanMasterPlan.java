@@ -45,6 +45,7 @@ public class PlanMasterPlan {
 	private String factory_name;
 	private String plan_code_keyname;
 	private int sumQty;
+	private String publish_dates;//已发布计划日期列表
 	
 	public int getId() {
 		return id;
@@ -310,5 +311,12 @@ public class PlanMasterPlan {
 	public void setSumQty(int sumQty) {
 		this.sumQty = sumQty;
 	}
+	public String getPublish_dates() {
+		return publish_dates;
+	}
+	public void setPublish_dates(String publish_dates) {
+		this.publish_dates = publish_dates;
+	}
+
 	
 }

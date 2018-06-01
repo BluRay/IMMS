@@ -108,14 +108,25 @@ public interface IQualityDao {
 	public List<Map<String,String>> getTestingBusList(Map<String, Object> conditionMap);
 	public int getTestingBusListCount(Map<String, Object> conditionMap);
 	public Map<String,Object> getBusTestingDate(Map<String, Object> conditionMap);
+	public Map<String,Object> getBusTestingDateWH(Map<String, Object> conditionMap);
 	public int checkJcxBusInfoId(Map<String, Object> conditionMap);
 	public int insertJcxBusInfo(Map<String, Object> conditionMap);
 	public int updateJcxBusInfo(Map<String, Object> conditionMap);
 	public List<Map<String, Object>> getBusTestingDateReport(Map<String, Object> conditionMap);
 	public List<Map<String, Object>> getBusTestingInfo(Map<String, Object> conditionMap);
 	public int getBusTestingDateReportCount(Map<String, Object> conditionMap);
+
+	public List<Map<String, Object>> getKeyPartsInfo(Map<String, Object> conditionMap);
+	public int getKeyPartsCount(Map<String, Object> conditionMap);
+	
 	public List<Map<String, Object>> getProcessFaultReportData(Map<String, Object> conditionMap);
+	public List<Map<String, Object>> getProcessFaultOrderReportData(Map<String, Object> conditionMap);
+	public List<Map<String, Object>> getProcessFaultOrderReportData2(Map<String, Object> conditionMap);
+	public List<Map<String, Object>> getOrderFaultReportList(Map<String, Object> conditionMap);
 	public List<Map<String, Object>> getFactoryIdByVin(Map<String, Object> conditionMap);
+	public List<Map<String, String>> getProcessFaultArea();
+	public int checkOrderNo(String order_no);
+	public int deleteProcessFault(String processFaultId);
 	//======================== yk end=================================//
 		
 		
@@ -177,6 +188,10 @@ public interface IQualityDao {
 	public List<Map<String, String>> getFaultLibList(Map<String, Object> conditionMap);	
 
 	public int getFaultLibCount(Map<String, Object> conditionMap);
+	
+	//======================== pengtao add start=================================//
+	public List<Map<String, Object>> queryKeyPartsListByPartsNo(Map<String, Object> condMap);
+	//======================== pengtao add end=================================//
 
 
 }

@@ -146,7 +146,11 @@ $(document).ready(function() {
 			$("#select_finish_date").val("");
 		}
 	});
-	$(document).on("click","#addStaff",function() {		
+	$(document).on("click","#addStaff",function() {	
+		var length=$("#tableResult tbody tr").eq(0).find("td").length;
+		if(length==1){
+			$("#tableResult tbody").html("");
+		}
 		var tr=$("<tr />");
 		$("<td class='center'/>").html("<i class=\"fa fa-times bigger-110\" style=\"cursor: pointer;color: red;\"></i>").appendTo(tr);
 		$("<td class='center'/>").html("<input type='text' class='staff_number' style='width:100%;height:28px;margin: 0;font-size:12px;text-align:center;' />").appendTo(tr);
@@ -154,6 +158,7 @@ $(document).ready(function() {
 		$("<td class='center job'/>").html("").appendTo(tr);
 		$("<td class='center'/>").html("<input class='input-small workhour' style='width:60px;height:28px;' type='text'>").appendTo(tr);
 		$("<td class='center'/>").html("<input class='input-small whereabouts' style='width:60px;height:28px;' type='text'>").appendTo(tr);
+		$("<td class='center standard_price'/>").html("").appendTo(tr);
 		$("<td class='center team_org'/>").html("").appendTo(tr);
 		$("<td class='center workgroup_org'/>").html("").appendTo(tr);
 		$("<td class='center workshop_org'/>").html("").appendTo(tr);
@@ -180,10 +185,11 @@ $(document).ready(function() {
 		 if(staff){
 		     $(tds[1]).html(staff.name);
 			 $(tds[2]).html(staff.job);
-			 $(tds[5]).html(staff.team_org);
-			 $(tds[6]).html(staff.workgroup_org);
-			 $(tds[7]).html(staff.workshop_org);
-			 $(tds[8]).html(staff.plant_org);
+			 $(tds[5]).html(staff.standard_price_wait);
+			 $(tds[6]).html(staff.team_org);
+			 $(tds[7]).html(staff.workgroup_org);
+			 $(tds[8]).html(staff.workshop_org);
+			 $(tds[9]).html(staff.plant_org);
 		}
 	});
 	$("#btnQueryReason").click(function(){
@@ -325,12 +331,12 @@ $(document).ready(function() {
 			return false;
 		}
 		else{
-			var standard_price=ajaxGetStandardPrice();
+			/*var standard_price=ajaxGetStandardPrice();
 			if(standard_price==0){
 				saveFlag=false;				
 				alert("未维护【"+type+"】等待工时单价！");
 				return false;
-			}		
+			}	*/	
 			$("#tableResult tbody").find("tr").each(function() {						
 						var tr = $(this);
 						
@@ -340,6 +346,12 @@ $(document).ready(function() {
 						}else{
 							staff_number=tr.find(".staff_number").val();
 						}		
+						var standard_price=tr.find(".standard_price").html();
+						if(standard_price==0||standard_price==""){
+							saveFlag=false;				
+							alert("未维护【"+type+"】等待工时单价！");
+							return false;
+						}
 						
 						var workHour=tr.find(".workhour").val();
 						var whereabouts=tr.find(".whereabouts").val();
@@ -493,7 +505,7 @@ function ajaxQueryTeamStaffDetail(){
 				workgroup:workgroup,
 				team:team,
 				org_id:org_id,
-//				work_date:$("#work_date").val()
+				work_date:$("#wait_date").val()
 			};
 
             $.ajax({
@@ -525,6 +537,12 @@ function ajaxQueryTeamStaffDetail(){
 		            }},
 		            {"title":"人员去向","class":"center","render":function(data,type,row){
 		            	return "<input type='text' class='input-small whereabouts' style='width:60px;height:28px;'>";
+		            }},
+		            {"title":"工时单价","class":"center standard_price","data":"standard_price_wait","render":function(data,type,row){
+		            	if(data==undefined||data.trim().length==0){
+		            		return "";
+		            	}
+		            	return data;
 		            }},
 		            {"title":"小班组","class":"center team_org","data":"team_org","defaultContent":""},
 		            {"title":"班组","class":"center workgroup_org","data":"workgroup_org","defaultContent": ""},	

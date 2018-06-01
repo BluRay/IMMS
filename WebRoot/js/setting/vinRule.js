@@ -9,8 +9,9 @@ $(document).ready(function(){
 		}
 	})*/
 
-	getFactorySelect();
+	//getFactorySelect();
 	getBusType($("#add_busType"));
+	getBusType($("#search_busType"));
 	getKeysSelect("ORDER_AREA", "", $("#add_area"),"-请选择-","");
 	ajaxQuery();
 	getKeysSelect("ORDER_AREA", "", $("#search_area"),"全部",""); 
@@ -30,7 +31,7 @@ $(document).ready(function(){
 		var dialog = $( "#dialog-add" ).removeClass('hide').dialog({
 			width:600,
 			modal: true,
-			title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-gear green"></i> 新增工厂</h4></div>',
+			title: '<div class="widget-header"><h4 class="smaller"><i class="ace-icon fa fa-gear green"></i> 新增VIN规则</h4></div>',
 			title_html: true,
 			buttons: [ 
 				{

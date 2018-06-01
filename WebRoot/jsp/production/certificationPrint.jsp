@@ -10,6 +10,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 		<link rel="stylesheet" href="../assets/css/fixedColumns.bootstrap.min.css" />
 		<link rel="stylesheet" href="../assets/css/fixedColumns.dataTables.min.css" />
+		<link rel="stylesheet" href="../assets/css/buttons.dataTables.css" /> 
 		<link rel="stylesheet" href="../assets/css/jquery-ui.min.css" />
 		<link rel="stylesheet" href="../assets/css/jquery-ui.custom.min.css" />
 		<link rel="stylesheet" href="../assets/css/jquery.gritter.css" />
@@ -37,6 +38,13 @@
 								<td>
 								<input type="text" class="input-medium revise" id="search_order_no" style="height: 30px;" />
 								</td>
+								<td>传输状态：</td>
+								<td>
+								<select name="" id="search_status" class="input-medium carType">
+									<option value=''>全部</option>
+									<option value='已传输'>已传输</option>
+									<option value='未传输'>未传输</option>
+								</select></td>
 								<td>
 								<input type="button" class="btn btn-sm  btn-primary" id="btnQuery" value="查询" style="margin-left: 2px;"></input>
 								<input class="btn btn-sm btn-danger" id="btnBuslist" value="指定车号" style="margin-left: 2px;" type="button">
@@ -77,6 +85,12 @@
 	<script src="../assets/js/dataTables.fixedColumns.min.js"></script>
 	<script src="../assets/js/bootstrap3-typeahead.js"></script>
 	<script type="text/javascript" src="../js/jquery.form.js"></script>
+	<script src="../js/hr/mergeTableCell.js"></script>
+	<script src="../js/exportTable2Excel.js"></script>
+	<script src="../assets/js/jszip.min.js"></script>
+	<script src="../assets/js/dataTables.buttons.js"></script>
+	<script src="../assets/js/buttons.colVis.js"></script>
+	<script src="../assets/js/buttons.html5.js"></script>
 	<script type="text/javascript" src="../js/common.js"></script>
 	<script type="text/javascript" src="../assets/js/bootstrap3-typeahead.js"></script>
 	<script type="text/javascript" src="../js/jsrender.min.js"></script>

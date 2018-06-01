@@ -172,6 +172,7 @@ function ajaxShowBusNumber(order_id,factory_id,order_config_id){
 		error: function () {alertError();},
 		success: function (response) {
 			if(response.success){
+				$("#tableBusNumber tbody").html("");
 				drawBusInfoTable(response.data)
 			} else {
 				alert(response.message);
@@ -250,9 +251,9 @@ function drawOrderBOMTable(data){
 		autoWidth:false,
 		destroy: true,
 		paginate:false,
-		fixedColumns: {
-            leftColumns:1,
-            rightColumns:1
+		fixedColumns:   {
+            leftColumns: 1,
+            rightColumns:0
         },
 /*		sScrollY: $("#dialog-message").height()-30,
 		scrollX: true,*/
@@ -283,11 +284,8 @@ function drawOrderBOMTable(data){
 }
 
 function drawBusInfoTable(data){
-	if($.fn.dataTable.isDataTable("#tableBusNumber")){	
-		$('#tableBusNumber').DataTable().destroy();
-		$('#tableBusNumber').empty();
-	}
-	var t=$("#tableBusNumber").DataTable({
+
+	var t=$("#tableBusNumber").dataTable({
 		paiging:false,
 		showRowNumber:true,
 		ordering:false,
@@ -297,10 +295,9 @@ function drawBusInfoTable(data){
 		paginate:false,
 		fixedColumns: {
             leftColumns:1,
-            rightColumns:1
         },
-/*		sScrollY: $("#dialog-message").height()-30,
-		scrollX: true,*/
+		sScrollY: $("#dialog-message").height()-30,
+		scrollX: true,
 /*		createdRow: function ( row, data, index ) {
 			//alert(index)
 			 $('td', row).	eq(1).find("input").data("allot_config_id",data.allot_config_id||0);
@@ -321,7 +318,7 @@ function drawBusInfoTable(data){
 		            {"title":"VIN","class":"center","data":"vin","defaultContent": ""},
 		            {"title":"生产工厂","class":"center","data":"factory_name","defaultContent": ""},
 		            {"title":"当前车间","class":"center","data":"workshop","defaultContent": ""},
-		            {"title":"当前工序","width":"200","class":"center","data":"process_name","defaultContent": ""},
+		            {"title":"当前工序","class":"center","data":"process_name","defaultContent": ""},
 		            {"title":"焊装上线","class":"center","data":"welding_online_date","defaultContent": ""},
 		            {"title":"焊装下线","class":"center","data":"welding_offline_date","defaultContent": ""},
 		            {"title":"涂装上线","class":"center","data":"painting_online_date","defaultContent": ""},

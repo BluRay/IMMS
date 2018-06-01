@@ -70,6 +70,8 @@ public interface IBaseDataDao {
 	public int addBusType(BmsBaseBusType busType);
 	public void updateBusType(BmsBaseBusType busType);
 	public BmsBaseBusType getBusTypeById(Map<String,Object> queryMap);
+	public void deleteBusType(Map<String, Object> condMap);
+	public void updateBusTypeByCode(BmsBaseBusType busType);
 	// VIN生成规则
 	public List<BmsBaseVinRule> getVinRuleList(Map<String,Object> queryMap);
 	public int getVinRuleTotalCount(Map<String,Object> queryMap);	

@@ -49,5 +49,5 @@ public interface IReportDao {
 
 	List<Map<String, Object>> queryOrderProcessData(Map<String, Object> condMap);
 
-	List<Map<String, Object>> queryFactoryRateData(Map<String, Object> condMap);
+	List<Map<String, Object>> queryFactoryRateData(Map<String, String> condMap);
 }

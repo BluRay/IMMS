@@ -84,7 +84,7 @@ public class AccountController extends BaseController{
 			user.setEmail(email);
 			user.setTelephone(telephone);
 			user.setCellphone(cellphone);
-			user.setPassword(MD5Util.getEncryptedPwd(password));
+			user.setPassword(MD5Util.entryptPassword(password));
 			user.setDisplay_name(display_name);
 			user.setFactory_id(Integer.valueOf(factory_id));
 			//user.setDepartment_id(Integer.valueOf(department_id));
@@ -153,7 +153,7 @@ public class AccountController extends BaseController{
 		String staff_number=request.getParameter("staff_number");
 		BmsBaseUser user = new BmsBaseUser();
 		user.setStaff_number(staff_number);
-		user.setPassword(MD5Util.getEncryptedPwd(staff_number));
+		user.setPassword(MD5Util.entryptPassword(staff_number));
 		int reuslt = settingService.resetUserPass(user);
 		initModel(true,"success",reuslt);
 		model = mv.getModelMap();
@@ -319,19 +319,17 @@ public class AccountController extends BaseController{
 		String old_password = request.getParameter("old_password");
 		String new_password = request.getParameter("new_password");
 		int result = 0;
-		String oldmd5 = MD5Util.getEncryptedPwd(old_password);
-		String newmd5 = MD5Util.getEncryptedPwd(new_password);
-		Map<String,Object> condMap=new HashMap<String,Object>();
-		condMap.put("staff_number", staff_number);
-		condMap.put("password", oldmd5);
-		int checkPassword = settingService.checkUserPassword(condMap);
-		if(checkPassword == 0){
-			result = -1;
-		}else{
+		String oldmd5 = old_password;//MD5Util.entryptPassword(old_password);
+		String newmd5 = MD5Util.entryptPassword(new_password);
+		Map userInfo = settingService.getUserInfoByStaffnumber(staff_number);
+		if(MD5Util.validPassword(oldmd5, userInfo.get("password").toString())){
+			//密码是对的，修改
 			Map<String,Object> condMap2=new HashMap<String,Object>();
 			condMap2.put("staff_number", staff_number);
 			condMap2.put("password", newmd5);
 			result += settingService.updateUserPassword(condMap2);
+		}else{
+			result = -1;
 		}
 		mv.clear();
 		initModel(true,String.valueOf(result),null);

@@ -65,5 +65,5 @@ public interface IReportService {
 	 * @param condMap
 	 * @param model
 	 */
-	void getFactoryRateData(Map<String, Object> condMap, ModelMap model);
+	void getFactoryRateData(Map<String, String> condMap, ModelMap model);
 }

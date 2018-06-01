@@ -57,6 +57,9 @@ label {
 								<td><select name="" id="search_factory" class="input-medium" style="width:90px;"></select></td>							
 								<td>
 									<select id="search_index" class="input-small" style="height: 30px;width:60px">
+										<option value="4">昨日</option>
+										<option value="5">上周</option>
+										<option value="6">上月</option>
 										<option value="0">今天</option>
 										<option selected="selected" value="1">本周</option>
 										<option value="2">本月</option>

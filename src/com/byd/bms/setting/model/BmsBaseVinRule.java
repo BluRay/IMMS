@@ -10,7 +10,7 @@ public class BmsBaseVinRule {
 	
 	private int id;
 	
-	private int busTypeId; // 车型ID
+	//private int busTypeId; // 车型ID
 	
 	private String area;  // 区域
 	
@@ -23,6 +23,12 @@ public class BmsBaseVinRule {
 	private int editorId; //创建人ID
 	
 	private String editDate; //创建时间
+	
+	private int order_id;
+	
+	private String order_no;
+	
+	private String order_desc;
 
 	public int getId() {
 		return id;
@@ -32,13 +38,13 @@ public class BmsBaseVinRule {
 		this.id = id;
 	}
 
-	public int getBusTypeId() {
+/*	public int getBusTypeId() {
 		return busTypeId;
 	}
 
 	public void setBusTypeId(int busTypeId) {
 		this.busTypeId = busTypeId;
-	}
+	}*/
 
 	public String getArea() {
 		return area;
@@ -88,4 +94,30 @@ public class BmsBaseVinRule {
 		this.editDate = editDate;
 	}
 
+	public int getOrder_id() {
+		return order_id;
+	}
+
+	public void setOrder_id(int order_id) {
+		this.order_id = order_id;
+	}
+
+	public String getOrder_no() {
+		return order_no;
+	}
+
+	public void setOrder_no(String order_no) {
+		this.order_no = order_no;
+	}
+
+	public String getOrder_desc() {
+		return order_desc;
+	}
+
+	public void setOrder_desc(String order_desc) {
+		this.order_desc = order_desc;
+	}
+
+	
+	
 }

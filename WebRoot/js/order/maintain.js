@@ -510,7 +510,7 @@ function ajaxQuery(){
 		            {"title":"生产工厂","class":"center","data":"factory_name","defaultContent": ""},		            
 		            {"title":"生产数量","class":"center","data": "production_qty","defaultContent": ""},
 		            {"title":"订单状态","class":"center","data":"status","render":function(data,type,row){
-		            	return data=="0"?"未开始":(data=="1"?"生产中":"已完成")},"defaultContent":""
+		            	return undefined==data?"未开始":(data=="0"?"未开始":(data=="1"?"生产中":"已完成"))},"defaultContent":""
 		            },
 		            {"title":"车号信息","class":"center","data":null,"render":function(data,type,row){
 		            	return "<i class=\"glyphicon glyphicon-search bigger-110 showbus\" onclick = 'ajaxShowBusNumber(" + row.id+ ","+row.factory_id+");' style='color:blue;cursor: pointer;'></i>";
@@ -541,7 +541,7 @@ function getFactorySelect() {
 	$.ajax({
 		url : "/BMS/common/getFactorySelectAuth",
 		dataType : "json",
-		data : {"function_url":"order/maintain"},
+		data : {"function_url":"/BMS/order/maintain"},
 		async : false,
 		error : function(response) {
 			alert(response.message)
@@ -799,6 +799,8 @@ function ajaxAdd (argument) {
 			"data_order_code":$("#newOrderCode").val().toUpperCase(),
 			"data_order_type":$("#newOrderType").val(),
 			"data_bus_type_id":$("#newBusType").val(),
+			"data_bus_type_code":$("#newBusType").find("option:selected").attr("bus_type_code"),
+			"data_bus_series":$("#newBusType").find("option:selected").attr("bus_series"),
 			"data_order_qty":$("#new_order_qty").val(),
 			"data_customer":$("#new_customer").val(),
 			"data_order_area":$("#newOrderArea").val(),
@@ -858,39 +860,40 @@ function ajaxEdit(order_id){
 					if(index==response.data.length-1){
 						$("#dialog-order").data("bus_num_end",value.busnum_end);
 					}
-					//填充生产工厂信息
-					var close_btn = "";
-					var factory_selectable=false;
-					if(value.minbusnum == 0) {
-						close_btn = "<button type=\"button\" class=\"close edit\" aria-label=\"Close\" ><span aria-hidden=\"true\">&times;</span></button>";
-						factory_selectable=true;
+					if(undefined !=value.factory_id && value.factory_id !='null' && value.factory_id!='' && value.factory_id !=null ){
+						//填充生产工厂信息
+						var close_btn = "";
+						var factory_selectable=false;
+						if(value.minbusnum == 0) {
+							close_btn = "<button type=\"button\" class=\"close edit\" aria-label=\"Close\" ><span aria-hidden=\"true\">&times;</span></button>";
+							factory_selectable=true;
+						}
+						
+						var tr=$("<tr/>");
+						var paramHtml="<td>"+close_btn+"</td>" +
+						//"<td>" + select_str + "</td>" +
+						"<td>" + select_str1 + "<option value='"+ value.factory_id + "'> "+ value.factory_name + "</option>" + select_str2 + "</td>" +
+						"<td><input type='text' style='width:60px' class='input-small orderNum edit' value='"+value.production_qty+"' old_value="+value.production_qty+" id='production_qty2'/></td>" +
+						"<td><input type='text' style='width:60px' disabled='disabled' class='input-small busNum' value='"+value.busnum_start+"' id='busnum_start2'/></td>" +
+						"<td><input type='text' style='width:60px' disabled='disabled' class='input-small busNum' value='"+value.busnum_end+"' id='busnum_end2'/></td>" +
+						/*"<td ><input type='text' style='width:0px;display:none' class='input-small' value='"+value.minbusnum+"' id='minbusnum'/></td>" +
+						"<td ><input type='text' style='width:0px;display:none' class='input-small' value='"+value.maxbusnum+"' id='maxbusnum'/></td>" +*/
+						"";
+						$(tr).html(paramHtml).appendTo("#edit_factoryOrder_parameters");
+						$(tr).data("min_busnum",value.minbusnum);
+						$(tr).data("max_busnum",value.maxbusnum);
+						$(tr).data("production_qty",value.production_qty);
+						$(tr).data("factory_order_id",value.factory_order_id);
+						//$(tr).data("order_detail_id",value.id);
+						$(tr).data("busnum_start",value.busnum_start);
+						$(tr).data("busnum_end",value.busnum_end);
+						
+						if(!factory_selectable){
+							$(tr).find("select").attr("disabled",true);
+						}
+		
+						original += value.factory_id + ":" + value.production_qty + "_" + value.busnum_start + "|" + value.busnum_end + "," ;
 					}
-					
-					var tr=$("<tr/>");
-					var paramHtml="<td>"+close_btn+"</td>" +
-					//"<td>" + select_str + "</td>" +
-					"<td>" + select_str1 + "<option value='"+ value.factory_id + "'> "+ value.factory_name + "</option>" + select_str2 + "</td>" +
-					"<td><input type='text' style='width:60px' class='input-small orderNum edit' value='"+value.production_qty+"' old_value="+value.production_qty+" id='production_qty2'/></td>" +
-					"<td><input type='text' style='width:60px' disabled='disabled' class='input-small busNum' value='"+value.busnum_start+"' id='busnum_start2'/></td>" +
-					"<td><input type='text' style='width:60px' disabled='disabled' class='input-small busNum' value='"+value.busnum_end+"' id='busnum_end2'/></td>" +
-					/*"<td ><input type='text' style='width:0px;display:none' class='input-small' value='"+value.minbusnum+"' id='minbusnum'/></td>" +
-					"<td ><input type='text' style='width:0px;display:none' class='input-small' value='"+value.maxbusnum+"' id='maxbusnum'/></td>" +*/
-					"";
-					$(tr).html(paramHtml).appendTo("#edit_factoryOrder_parameters");
-					$(tr).data("min_busnum",value.minbusnum);
-					$(tr).data("max_busnum",value.maxbusnum);
-					$(tr).data("production_qty",value.production_qty);
-					$(tr).data("factory_order_id",value.factory_order_id);
-					//$(tr).data("order_detail_id",value.id);
-					$(tr).data("busnum_start",value.busnum_start);
-					$(tr).data("busnum_end",value.busnum_end);
-					
-					if(!factory_selectable){
-						$(tr).find("select").attr("disabled",true);
-					}
-	
-					original += value.factory_id + ":" + value.production_qty + "_" + value.busnum_start + "|" + value.busnum_end + "," ;
-					
 				})
 				$("#dialog-order").data("order_id",order_id);				
 				

@@ -907,6 +907,15 @@
 	<if test="end !=null and end !=''">
 		<![CDATA[ AND RIGHT(B.bus_number,5)+0 <= #{end} ]]>
 	</if>
+	
+	<if test="bus_number_size!=0">
+		and B.bus_number in
+		<foreach item="item" index="index" collection="bus_number"
+			open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</if>
+	
 	order by cast(reverse(substr(reverse(B.bus_number),1,instr(reverse(B.bus_number),'-')-1)) as signed)
 	</select>
 	
@@ -1769,6 +1778,14 @@ LEFT JOIN BMS_BASE_USER AS u ON u.staff_number = f.confirmor_id
 		</if>
 		<if test="bus_num_end !=null and bus_num_end !=''">
 		and substring_index(f.bus_number,'-',-1) &lt;= #{bus_num_end}
+		</if>
+		
+		<if test="bus_number_size!=0">
+			and f.bus_number in
+			<foreach item="item" index="index" collection="bus_number"
+				open="(" separator="," close=")">
+				#{item}
+			</foreach>
 		</if>
 	</select>
 	

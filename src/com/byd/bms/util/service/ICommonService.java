@@ -11,6 +11,7 @@ import com.byd.bms.util.model.BmsBaseProcess;
 public interface ICommonService {
 
 	List<Map<String,Object>> getOrderFuzzySelect(Map<String, Object> condMap);
+	List<Map<String,Object>> getAllOrderFuzzySelect(Map<String, Object> condMap);
 
 	List<Map<String,Object>> getFactorySelect(Map<String, Object> condMap);
 	
@@ -54,6 +55,8 @@ public interface ICommonService {
 	public List<Map<String,String>> getUserInfoByCard(String string);//刷厂牌获取用户信息
 	
 	public void getStaffNameByNumber(String staff_number,ModelMap model);
+	
+	public int checkFunctionPermission(Map<String,Object> condMap);
 
 	/**
 	 * @author xiong.jianwu

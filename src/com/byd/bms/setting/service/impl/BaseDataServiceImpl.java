@@ -344,6 +344,16 @@ public class BaseDataServiceImpl implements IBaseDataService {
 	public BmsBaseBusType getBusTypeById(Map<String, Object> queryMap) {
 		return baseDataDao.getBusTypeById(queryMap);
 	}
+	@Override
+	public void deleteBusType(Map<String, Object> condMap) {
+		
+		baseDataDao.deleteBusType(condMap);
+		
+	}
+	@Override
+	public void updateBusTypeByCode(BmsBaseBusType busType) {
+	    baseDataDao.updateBusTypeByCode(busType);
+	}
 	// VIN生成规则
 	
 	public Map<String, Object> getVinRuleList(Map<String, Object> queryMap) {
@@ -364,7 +374,7 @@ public class BaseDataServiceImpl implements IBaseDataService {
 		 */
 		int result=0;
 		Map map=new HashMap<String,Object>();
-		map.put("busTypeId", vinRule.getBusTypeId());
+		//map.put("busTypeId", vinRule.getBusTypeId());
 		map.put("area",vinRule.getArea());
 		int count=baseDataDao.getVinRuleTotalCount(map);
 		if(count==0){
@@ -386,5 +396,6 @@ public class BaseDataServiceImpl implements IBaseDataService {
 	public BmsBaseFactory getFactoryById(String id) {
 		return baseDataDao.getFactoryById(id);
 	}
+	
 
 }

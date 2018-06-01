@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <meta charset="utf-8" />
-<title>BMS</title>
+<title>BMS报表</title>
 <meta name="description" content="Common Buttons &amp; Icons" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
@@ -54,20 +54,31 @@ label {
 							<table style="line-height:1.7">
 							<tr>
 								<td style="text-align:right">工厂：</td>
-								<td><select name="" id="factory" class="input-medium" style="width:90px;"></select></td>							
+								<td><select name="" id="factory" class="input-medium" style="width:90px;"></select></td>	
+								<td>
+									<input type="text" id="prod_year" onclick="WdatePicker({el:'prod_year',dateFmt:'yyyy',enableKeyboard:false,onpicked:function(){drawFactoryOrderChart();}});" class="inpnut-small" style="height: 30px;width:60px"/>
+								</td>							
 								<td>
 									<select id="status" class="input-small" style="height: 30px;width:80px">
 										<option value="0">未开始</option>
 										<option value="1" selected>生产中</option>
 										<option value="2">已完成</option>
 									</select>
-								</td>
-								<td>
-									<input type="text" id="prod_year" onclick="WdatePicker({el:'prod_year',dateFmt:'yyyy',enableKeyboard:false,onpicked:function(){drawFactoryOrderChart();}});" class="inpnut-small" style="height: 30px;width:60px"/>
-								</td>								
+								</td>	
+								<td><span id="span_0"> (焊装已上线)</span></td>						
 							</tr>						
 							</table>
 						</form>
+					</div>
+					<div id="process" style="width:100%;height:20px;overflow-y:auto;overflow-x:hidden">				
+					
+					<!--<label class="col-xs-3 control-label no-padding-right">图示：</label>-->
+					<div class="progress">
+						<div class="progress-bar progress-bar-grey" style="width:34%;">未开始</div>
+						<div class="progress-bar progress-bar-warning" style="width:33%;">生产中</div>
+						<div class="progress-bar progress-bar-success" style="width:33%;">已完成</div>
+					</div>
+					
 					</div>
 					<div id="order_process" style="width:100%;height:300px;overflow-y:auto;overflow-x:hidden">				
 					

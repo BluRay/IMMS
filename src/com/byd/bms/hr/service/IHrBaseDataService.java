@@ -111,4 +111,8 @@ public interface IHrBaseDataService {
 	 * @param model
 	 */
 	public void deleteSupplierPriceData(String ids, ModelMap model);
+	
+	public List<Map<String,Object>> getJopPriceList(Map<String, Object> infomap);
+	
+	public void saveJobUnitPrice(Map<String, Object> condMap);
 }

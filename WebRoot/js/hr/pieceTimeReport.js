@@ -712,6 +712,7 @@ function exportExcelTableHtml(){
 		$(table_head).append(th);
 	})
 	
+	$(table).append($(table_head));
 	
 	var warp = document.createDocumentFragment();//创建文档碎片节点,最后渲染该碎片节点，减少浏览器渲染消耗的资源
 	

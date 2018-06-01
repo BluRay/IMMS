@@ -5,6 +5,7 @@ var const_email_validate=/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9
 var const_float_validate= /^[0-9]+[0-9]*\.?[0-9]*$/;//浮点数正则表达式
 var const_float_validate_one= /^\d*\.?\d?$/;//一位浮点数正则表达式
 var const_int_validate = /^[0-9]+[0-9]*$/;//整数正则表达式
+var pageSize=20;
 /*
  * 填充下拉列表 with id=>value;包括全部选项
  */
@@ -217,7 +218,7 @@ $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
 function select_selectOption(elementId,value){
 	var options=$(elementId).find("option");
 	$.each(options,function(i,option){
-		if($(option).text()==value||$(option).attr("value")==value){
+		if($(option).text()==value||$(option).attr("value")==value ||$(option).attr("bus_type_code")==value){
 			$(elementId).find("option").eq(i).attr("selected", "selected");
 		}
 	})
@@ -303,6 +304,9 @@ function generatekeys(keyCode, list) {
  */
 
 function getFactorySelect(url,selectval,selectId,selectType,valName,orgKind){
+	if(url !=null &&url!="" && url.indexOf('/BMS')<0){
+		url='/BMS/'+url;
+	}
 	orgKind=orgKind||'1';
 	$.ajax({
 		url : "/BMS/common/getFactorySelectAuth",
@@ -328,6 +332,9 @@ function getFactorySelect(url,selectval,selectId,selectType,valName,orgKind){
  */
 
 function getWorkshopSelect(url,factory,selectval,selectId,selectType,valName,orgKind){
+	if(url.indexOf('/BMS')<0){
+		url='/BMS/'+url;
+	}
 	orgKind=orgKind==undefined?'1':orgKind;
 	$.ajax({
 		url : "/BMS/common/getWorkshopSelectAuth",
@@ -421,6 +428,7 @@ function getWorkgroupStandardSelect(workshop,selectval,selectId,selectType,valNa
  */
 
 function getTeamSelect(factory,workshop,workgroup,selectval,selectId,selectType,valName){
+	$(selectId).empty();
 	$.ajax({
 		url : "/BMS/common/getTeamSelect",
 		dataType : "json",
@@ -808,6 +816,9 @@ function EnterPress(e){ //传入 event
  * orgKind  
  */
 function getOrgAuthTree(treeId,url,orgType,orgKind,level,nodeName_default){
+	if(url.indexOf('/BMS')<0){
+		url='/BMS/'+url;
+	}
 	/*  ztree 配置信息 */
 	// zTree 的参数配置，深入使用请参考 API 文档（setting 配置详解）
 	var setting = {

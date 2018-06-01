@@ -127,8 +127,16 @@ function ajaxQuery(){
 		            	}
 		            	return result},"defaultContent":""
 		            },
+		            {"title":"当前节点",width:'120',"class":"center","data":"display_Name","defaultContent":"","render":function(data,type,row){
+		            	var str="";
+		            	if(row.reviewId!=''){
+		            		str="<div id=div_"+row.reviewId+" onmouseover = getReviewPerson('" + row.reviewId+ "') style='color:green;cursor: pointer;'>"+(data==null ? '' : data)+"<input type='hidden' id=input_"+row.reviewId+"></div>";
+		            	}
+		            	return str;
+		              }
+		            },
 		            {"title":"评审结果",width:'80',"class":"center","data":"review_status","render":function(data,type,row){
-		            	return data=="2"? "<i class=\"glyphicon glyphicon-search bigger-110 editorder\" onclick = 'ajaxSearch(" + row.reviewId+ ");' style='color:green;cursor: pointer;'></i>": ""},
+		            	return data!="0"? "<i class=\"glyphicon glyphicon-search bigger-110 editorder\" onclick = 'ajaxSearch(" + row.reviewId+ ");' style='color:green;cursor: pointer;'></i>": ""},
 		            	"defaultContent": ""
 		            },
 		            {"title":"评审",width:'60',"class":"center","data":"review_status","render":function(data,type,row){
@@ -141,16 +149,13 @@ function ajaxQuery(){
 		            		flag=1;title="复评";
 		            	}
 		            	if(row.permission==true){
-
-		            		if(row.count==0 || row.count==1 ||(row.count>1 && row.review_status!='2')){
-			            		result= "<i title='"+title+"' class=\"ace-icon fa fa-pencil bigger-130 editorder\" onclick ='ajaxReview(\""+ row.factory_order_id+"\",\""+row.factory_id+"\",\""+flag+"\");' style='color:green;cursor: pointer;'></i>";			
-				            }
-//			            	if(row.count==1){
+		            		// sql去掉count优化查询后，注释掉
+//                            if(row.count==0 || row.count==1 ||(row.count>1 && row.review_status!='2')){
 //			            		result= "<i title='"+title+"' class=\"ace-icon fa fa-pencil bigger-130 editorder\" onclick ='ajaxReview(\""+ row.factory_order_id+"\",\""+row.factory_id+"\",\""+flag+"\");' style='color:green;cursor: pointer;'></i>";			
 //				            }
-//			            	if(row.count>1 && row.review_status!='2'){
-//			            		 result= "<i title='"+title+"' class=\"ace-icon fa fa-pencil bigger-130 editorder\" onclick ='ajaxReview(\""+ row.factory_order_id+"\",\""+row.factory_id+"\",\""+flag+"\");' style='color:green;cursor: pointer;'></i>";			
-//			            	}
+		            		if(row.reviewId=='' || (row.reviewId!='' && row.review_status!='2')){
+			            		result= "<i title='"+title+"' class=\"ace-icon fa fa-pencil bigger-130 editorder\" onclick ='ajaxReview(\""+ row.factory_order_id+"\",\""+row.factory_id+"\",\""+flag+"\");' style='color:green;cursor: pointer;'></i>";			
+				            }
 		            	}
 		            	return result},
 		            	"defaultContent": ""},
@@ -474,8 +479,30 @@ function isApplyPermission(factoryId,type){
 				isPermission=response.isPermission;
 			}
 		}
-	})
+	});
 	return isPermission;
+}
+function getReviewPerson(reviewId){
+	if(reviewId==''){
+		return false;
+	}
+	var reviewPerson=$("#input_"+reviewId).val();
+	if(reviewPerson!=''){
+		$("#div_"+reviewId).attr("title","评审人员:"+reviewPerson);
+		return false;
+	}
+	$.ajax({
+		url: "/BMS/order/review/getReviewPerson",
+		dataType: "json",
+		data: {
+			"id" : reviewId
+		},
+		error: function () {},
+		success: function (response) {
+			$("#input_"+reviewId).val(response.reviewPerson);
+			$("#div_"+reviewId).attr("title",response.reviewPerson);
+		}
+	})
 }
 function turnNullToStr(str){
 	var result="";

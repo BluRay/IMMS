@@ -40,6 +40,13 @@
 		
 	</select>
 	
+	<select id="checkOrderNo" parameterType="String" resultType="int">
+	SELECT (
+	(SELECT COUNT(*) FROM BMS_OR_ORDER WHERE order_no = #{order_no} )
+	+
+	(SELECT COUNT(*) FROM BMS_OR_HISTORY_ORDER WHERE order_no = #{order_no})) AS order_count
+	</select>
+	
 	<select id="getConfigTotalCount" parameterType="Map" resultType="int">
 		select count(c.id)
 		from BMS_OR_ORDER_CONFIG c 
@@ -97,6 +104,12 @@
 		from BMS_QM_KEY_PARTS_TEMPLATE_DETAILS d
 		left join BMS_QM_KEY_PARTS_TEMPLATE_HEADER h on d.key_components_template_id=h.id
 		where h.bus_type_id=#{bus_type_id} and h.order_id=#{order_id} and h.order_config_id=#{order_config_id}
+	</select>
+	
+	<select id="queryKeyPartsListByPartsNo" parameterType="Map" resultType="Map">
+		select d.sap_mat,d.parts_no,d.parts_name,d.size,d.vendor,d.workshop,d.process,d.3C_components ccc,d.3C_no cccNo
+		from BMS_QM_KEY_PARTS_TEMPLATE_DETAILS d
+		where d.parts_no=#{parts_no} and d.parts_name=#{parts_name}
 	</select>
 	
 	<select id="queryWorkshopProcessList" resultType="Map">
@@ -550,6 +563,19 @@
 		D.S2_COORD_VAL AS 's2_coord_val',D.PARK_LFT_EFF_FRS_VAL AS 'park_lft_eff_frs_val',
 		D.PARK_RGT_EFF_FRS_VAL AS 'park_rgt_eff_frs_val',D.PARK_EFF_PEC_VAL AS 'park_eff_pec_val',
 		D.TOT_EFF_FRS_VAL AS 'tot_eff_frs_val',D.TOT_EFF_PEC_VAL AS 'tot_eff_pec_val',
+		
+		B.CHECK_NO AS 'check_no',
+		E.RHB_LIGHT_STD AS 'rhb_light_std',E.RHB_LIGHT_JUS AS 'rhb_light_jus',
+		E.LHB_LIGHT_STD AS 'lhb_light_std',E.LHB_LIGHT_JUS AS 'lhb_light_jus',
+		E.LHB_UDOBS_STD AS 'lhb_udobs_std',E.LHB_UDOFF_JUS AS 'lhb_udoff_jus',E.LHB_UDOFF_VAL AS 'lhb_udoff_val',
+		E.RHB_UDOBS_STD AS 'rhb_udobs_std',E.RHB_UDOFF_JUS AS 'rhb_udoff_jus',E.RHB_UDOFF_VAL AS 'rhb_udoff_val',
+		E.LHB_LROFF_STD AS 'lhb_lroff_std',E.LHB_LROFF_JUS AS 'lhb_lroff_jus',
+		E.RHB_LROFF_STD AS 'rhb_lroff_std',E.RHB_LROFF_JUS AS 'rhb_lroff_jus',
+		E.LDB_LROFF_STD AS 'ldb_lroff_std',E.LDB_LROFF_JUS AS 'ldb_lroff_jus',
+		E.RDB_LROFF_STD AS 'rdb_lroff_std',E.RDB_LROFF_JUS AS 'rdb_lroff_jus',
+		E.LDB_UDOBS_STD AS 'ldb_udobs_std',E.LDB_UDOFF_JUS AS 'ldb_udoff_jus',E.LDB_UDOFF_VAL AS 'ldb_udoff_val',
+		E.RDB_UDOBS_STD AS 'rdb_udobs_std',E.RDB_UDOFF_JUS AS 'rdb_udoff_jus',E.RDB_UDOFF_VAL AS 'rdb_udoff_val',
+		
 		E.LHB_LIGHT_VAL AS 'lhb_light_val',E.RHB_LIGHT_VAL AS 'rhb_light_val',E.LHB_HEIGHT_VAL AS 'lhb_height_val',
 		E.RHB_HEIGHT_VAL AS 'rhb_height_val',E.LHB_LROFF_VAL AS 'lhb_lroff_val',
 		E.LHB_UDOBS_VAL AS 'lhb_udobs_val',E.LDB_LROFF_VAL AS 'ldb_lroff_val',E.LDB_UDOBS_VAL AS 'ldb_udobs_val',
@@ -560,12 +586,76 @@
 		WHERE I.VIN = #{vin} AND I.VID = B.VID AND B.TID = (SELECT MAX(TID) FROM AC_DATA_BASE WHERE VID = B.VID)
 		AND C.TID = B.TID AND D.TID = B.TID AND E.TID = B.TID AND F.TID = B.TID AND G.TID = B.TID
 	</select>
+	
+	<select id="getBusTestingDateWH" parameterType="Map" resultType="Map">
+	SELECT I.VIN,I.ManufactureCountry AS 'LICENSE_NO' ,I.EngineNumber AS 'motor_number',I.Model AS 'bus_type',
+	'大型汽车' AS 'license_type',I.VehType AS 'bus_vehicle_type',I.FuelTypeCode AS 'fuel_type',
+	I.ChassisModel AS 'chassis_model', I.ChassisNumber AS 'chassis_number',
+	I.UsePhase AS 'check_type',CONVERT(varchar(100), B.EnTryTime, 23) AS 'register_date',
+	CONVERT(varchar(100), B.EnTryTime, 23) AS 'manufacture_date',
+	CONVERT(varchar(100), B.UpdateStatusTime, 23) AS 'check_date',B.ReportNumber AS 'check_number',
+	'' AS 'check_times','is_passed' = case B.VehJudge WHEN '0' THEN '合格' ELSE '不合格' end,
+	'' AS 'test_results','' AS 'is_passed_aj',CAST(C.MeasuredValue as numeric(6,2)) AS 'speed',CAST(C.IndicationError as numeric(6,2)) AS 'speed_mistake',
+	CAST(D.Axle1LStatload as numeric(6,2)) AS 's1_lft_wgt_val',CAST(D.Axle1RStatload as numeric(6,2)) AS 's1_rgt_wgt_val',
+	'' AS 's1_tot_wgt_val',CAST(D.Axle2LStatload as numeric(6,2)) AS 's2_lft_wgt_val',CAST(D.Axle2RStatload as numeric(6,2)) AS 's2_rgt_wgt_val',
+	'' AS 's2_tot_wgt_val','' AS 'wgt_cal_val',D.VehLoad AS 'tot_wgt_val',
+	E.Axle1LSumsbforce AS 's1_lft_eff_frs_val',E.Axle1RSumsbforce AS 's1_rgt_eff_frs_val',
+	CAST(E.Axle1SBRate as numeric(6,2)) AS 's1_eff_pec_val',E.Axle1LSubsbforce AS 's1_lft_equ_frs_val',
+	E.Axle1RSubsbforce AS 's1_rgt_equ_frs_val',CAST(E.Axle1UnbRate as numeric(6,2)) AS 's1_equ_pec_val',E.Axle1LBlkForce AS 's1_lft_lag_frs_val',
+	CAST(E.Axle1LBlkRate as numeric(6,2)) AS 's1_lft_lag_pec_val', --一轴左轮阻滞比
+	CAST(E.Axle1RBlkForce as numeric(6,2)) AS 's1_rgt_lag_frs_val',
+	CAST(E.Axle1RBlkRate as numeric(6,2)) AS 's1_rgt_lag_pec_val', --一轴右轮阻滞比
+	'' AS 's1_coord_val', E.Axle2LSumsbforce AS 's2_lft_eff_frs_val',E.Axle2RSumsbforce AS 's2_rgt_eff_frs_val',
+	E.Axle2SBRate AS 's2_eff_pec_val',E.Axle2LSubsbforce AS 's2_lft_equ_frs_val',
+	E.Axle2RSubsbforce AS 's2_rgt_equ_frs_val',CAST(E.Axle2UnbRate as numeric(6,2)) AS 's2_equ_pec_val',
+	E.Axle2LBlkForce AS 's2_lft_lag_frs_val',
+	CAST(E.Axle2LBlkRate as numeric(6,2)) AS 's2_lft_lag_pec_val',  --二轴左轮阻滞比
+	E.Axle2RBlkForce AS 's2_rgt_lag_frs_val',
+	CAST(E.Axle2RBlkRate as numeric(6,2)) AS 's2_rgt_lag_pec_val',  --二轴右轮阻滞比
+	'' AS 's2_coord_val',E.Axle2LPBForce AS 'park_lft_eff_frs_val',E.Axle2RPBForce AS 'park_rgt_eff_frs_val',
+	CAST(E.VehPBRate as numeric(6,2)) AS 'park_eff_pec_val',E.VehSumSBForce AS 'tot_eff_frs_val',CAST(E.VehSBRate as numeric(6,2)) AS 'tot_eff_pec_val',B.RunningNumber AS 'check_no',
+	
+	'18000' AS 'rhb_light_std','' AS 'rhb_light_jus',
+	'18000' AS 'lhb_light_std','' AS 'lhb_light_jus',
+	'下114~上100' AS 'lhb_udobs_std','1' AS 'lhb_udoff_jus',CAST(F.LMaHHeightRatio as numeric(6,2)) AS 'lhb_udoff_val',
+	'下112~上100' AS 'rhb_udobs_std','1' AS 'rhb_udoff_jus',CAST(F.RMaHHeightRatio as numeric(6,2)) AS 'rhb_udoff_val',
+	'-170~350' AS 'lhb_lroff_std','' AS 'lhb_lroff_jus',
+	'-170~350' AS 'rhb_lroff_std','' AS 'rhb_lroff_jus',
+	'-170~350' AS 'ldb_lroff_std','' AS 'ldb_lroff_jus',
+	'-170~350' AS 'rdb_lroff_std','' AS 'rdb_lroff_jus',
+	'下50~下300' AS 'ldb_udobs_std','1' AS 'ldb_udoff_jus',CAST(F.LLHeightRatio as numeric(6,2)) AS 'ldb_udoff_val',
+	'下50~下300' AS 'rdb_udobs_std','1' AS 'rdb_udoff_jus',CAST(F.RLHeightRatio as numeric(6,2)) AS 'rdb_udoff_val',
+
+	F.LMaHIntensity AS 'lhb_light_val',F.RMaHIntensity AS 'rhb_light_val',F.LeftLightHeight AS 'lhb_height_val',
+	F.RightLightHeight AS 'rhb_height_val',CAST(F.LMaHHO as numeric(6,2)) AS 'lhb_lroff_val',
+	-- cast(ROUND(F.LMaHVO/F.LMaHHeightRatio,2) as numeric(6,2)) AS 'lhb_udobs_val',
+	CAST(F.LMaHVO as numeric(6,2)) AS 'lhb_udobs_val',
+	CAST(F.LLHO as numeric(6,2)) AS 'ldb_lroff_val',
+	-- cast(ROUND(F.LLVO /F.LLHeightRatio,2) as numeric(6,2)) AS 'ldb_udobs_val',
+	CAST(F.LLVO as numeric(6,2)) AS 'ldb_udobs_val',
+	
+	CAST(F.RMaHHO as numeric(6,2)) AS 'rhb_lroff_val',
+	
+	-- cast(ROUND(F.RMaHVO/F.RMaHHeightRatio,2) as numeric(6,2)) AS 'rhb_udobs_val',
+	CAST(F.RMaHVO as numeric(6,2)) AS 'rhb_udobs_val',
+	
+	CAST(F.RLHO as numeric(6,2)) AS 'rdb_lroff_val', 
+	CAST(F.RLVO as numeric(6,2)) AS 'rdb_udobs_val',
+	CAST(G.MeasuredValue as numeric(6,2)) AS 'horn_level',H.SideslipValue AS 'side_slide_val'
+	
+	FROM VehInfo I ,DetLog B,SpeedometerData C ,AxleLoadData D,BrakeData E,HeadLightData F,SpeakerData G,SteerabilityData H
+	WHERE I.VIN = #{vin} AND I.VIN = B.VIN 
+	AND B.RunningNumber = (SELECT MAX(RunningNumber) FROM DetLog WHERE VIN=I.VIN)
+	AND B.RunningNumber = C.RunningNumber AND B.RunningNumber = D.RunningNumber AND B.RunningNumber = E.RunningNumber
+	AND B.RunningNumber = F.RunningNumber AND B.RunningNumber = G.RunningNumber AND B.RunningNumber = H.RunningNumber
+	</select>
+	
 	<select id="checkJcxBusInfoId" parameterType="Map" resultType="int">
 		SELECT COUNT(id) FROM JCX_BUS_INFO WHERE vin = #{vin}
 	</select>
 	<insert id="insertJcxBusInfo" parameterType="Map" useGeneratedKeys="true" keyProperty="id">
 	INSERT INTO JCX_BUS_INFO (
-	bus_number,vin,factory_id,motor_number,bus_type,license_type,bus_vehicle_type,fuel_type,chassis_number,chassis_model,
+	check_no,bus_number,vin,factory_id,motor_number,bus_type,license_type,bus_vehicle_type,fuel_type,chassis_number,chassis_model,
 	check_type,register_date,manufacture_date,check_date,check_number,check_times,is_passed,test_results,
 	is_passed_aj,speed,speed_mistake,s1_lft_wgt_val,s1_rgt_wgt_val,s1_tot_wgt_val,s2_lft_wgt_val,s2_rgt_wgt_val,
 	s2_tot_wgt_val,wgt_cal_val,tot_wgt_val,s1_lft_eff_frs_val,s1_rgt_eff_frs_val,s1_eff_pec_val,s1_lft_equ_frs_val,s1_rgt_equ_frs_val,
@@ -573,10 +663,16 @@
 	s2_eff_pec_val,s2_lft_equ_frs_val,s2_rgt_equ_frs_val,s2_equ_pec_val,s2_lft_lag_frs_val,s2_lft_lag_pec_val,s2_rgt_lag_frs_val,s2_rgt_lag_pec_val,
 	s2_coord_val,park_lft_eff_frs_val,park_rgt_eff_frs_val,park_eff_pec_val,tot_eff_frs_val,tot_eff_pec_val,
 	lhb_light_val,rhb_light_val,lhb_height_val,rhb_height_val,lhb_lroff_val,lhb_udobs_val,ldb_lroff_val,
-	ldb_udobs_val,rhb_lroff_val,rhb_udobs_val,rdb_lroff_val,rdb_udobs_val,horn_level,side_slide_val
+	ldb_udobs_val,rhb_lroff_val,rhb_udobs_val,rdb_lroff_val,rdb_udobs_val,horn_level,side_slide_val,
+	
+	rhb_light_std,rhb_light_jus,lhb_light_std,lhb_light_jus,lhb_udobs_std,lhb_udoff_jus,lhb_udoff_val,
+	rhb_udobs_std,rhb_udoff_jus,rhb_udoff_val,lhb_lroff_std,lhb_lroff_jus,rhb_lroff_std,rhb_lroff_jus,
+	ldb_lroff_std,ldb_lroff_jus,rdb_lroff_std,rdb_lroff_jus,ldb_udobs_std,ldb_udoff_jus,ldb_udoff_val,
+	rdb_udobs_std,rdb_udoff_jus,rdb_udoff_val
+	
 	)
 	VALUES(
-	#{LICENSE_NO},#{VIN},#{factory_id},#{motor_number},#{bus_type},#{license_type},#{bus_vehicle_type},#{fuel_type},#{chassis_number},#{chassis_model},
+	#{check_no},#{LICENSE_NO},#{VIN},#{factory_id},#{motor_number},#{bus_type},#{license_type},#{bus_vehicle_type},#{fuel_type},#{chassis_number},#{chassis_model},
 	#{check_type},#{register_date},#{manufacture_date},#{check_date},#{check_number},#{check_times},#{is_passed},#{test_results},
 	#{is_passed_aj},#{speed},#{speed_mistake},#{s1_lft_wgt_val},#{s1_rgt_wgt_val},#{s1_tot_wgt_val},#{s2_lft_wgt_val},#{s2_rgt_wgt_val},
 	#{s2_tot_wgt_val},#{wgt_cal_val},#{tot_wgt_val},#{s1_lft_eff_frs_val},#{s1_rgt_eff_frs_val},#{s1_eff_pec_val},#{s1_lft_equ_frs_val},#{s1_rgt_equ_frs_val},
@@ -584,7 +680,13 @@
 	#{s2_eff_pec_val},#{s2_lft_equ_frs_val},#{s2_rgt_equ_frs_val},#{s2_equ_pec_val},#{s2_lft_lag_frs_val},#{s2_lft_lag_pec_val},#{s2_rgt_lag_frs_val},#{s2_rgt_lag_pec_val},
 	#{s2_coord_val},#{park_lft_eff_frs_val},#{park_rgt_eff_frs_val},#{park_eff_pec_val},#{tot_eff_frs_val},#{tot_eff_pec_val},
 	#{lhb_light_val},#{rhb_light_val},#{lhb_height_val},#{rhb_height_val},#{lhb_lroff_val},#{lhb_udobs_val},#{ldb_lroff_val},
-	#{ldb_udobs_val},#{rhb_lroff_val},#{rhb_udobs_val},#{rdb_lroff_val},#{rdb_udobs_val},#{horn_level},#{side_slide_val}
+	#{ldb_udobs_val},#{rhb_lroff_val},#{rhb_udobs_val},#{rdb_lroff_val},#{rdb_udobs_val},#{horn_level},#{side_slide_val},
+	
+	#{rhb_light_std},#{rhb_light_jus},#{lhb_light_std},#{lhb_light_jus},#{lhb_udobs_std},#{lhb_udoff_jus},#{lhb_udoff_val},
+	#{rhb_udobs_std},#{rhb_udoff_jus},#{rhb_udoff_val},#{lhb_lroff_std},#{lhb_lroff_jus},#{rhb_lroff_std},#{rhb_lroff_jus},
+	#{ldb_lroff_std},#{ldb_lroff_jus},#{rdb_lroff_std},#{rdb_lroff_jus},#{ldb_udobs_std},#{ldb_udoff_jus},#{ldb_udoff_val},
+	#{rdb_udobs_std},#{rdb_udoff_jus},#{rdb_udoff_val}
+	
 	)
 	</insert>
 	<update id="updateJcxBusInfo" parameterType="Map">
@@ -607,32 +709,220 @@
 	lhb_light_val=#{lhb_light_val},rhb_light_val=#{rhb_light_val},lhb_height_val=#{lhb_height_val},
 	rhb_height_val=#{rhb_height_val},lhb_lroff_val=#{lhb_lroff_val},lhb_udobs_val=#{lhb_udobs_val},ldb_lroff_val=#{ldb_lroff_val},
 	ldb_udobs_val=#{ldb_udobs_val},rhb_lroff_val=#{rhb_lroff_val},rhb_udobs_val=#{rhb_udobs_val},
-	rdb_lroff_val=#{rdb_lroff_val},rdb_udobs_val=#{rdb_udobs_val},horn_level=#{horn_level},side_slide_val=#{side_slide_val}
+	rdb_lroff_val=#{rdb_lroff_val},rdb_udobs_val=#{rdb_udobs_val},horn_level=#{horn_level},side_slide_val=#{side_slide_val},
+	
+	check_no=#{check_no},rhb_light_std=#{rhb_light_std},rhb_light_jus=#{rhb_light_jus},lhb_light_std=#{lhb_light_std},
+	lhb_light_jus=#{lhb_light_jus},lhb_udobs_std=#{lhb_udobs_std},lhb_udoff_jus=#{lhb_udoff_jus},lhb_udoff_val=#{lhb_udoff_val},
+	rhb_udobs_std=#{rhb_udobs_std},rhb_udoff_jus=#{rhb_udoff_jus},rhb_udoff_val=#{rhb_udoff_val},lhb_lroff_std=#{lhb_lroff_std},
+	lhb_lroff_jus=#{lhb_lroff_jus},rhb_lroff_std=#{rhb_lroff_std},rhb_lroff_jus=#{rhb_lroff_jus},
+	ldb_lroff_std=#{ldb_lroff_std},ldb_lroff_jus=#{ldb_lroff_jus},rdb_lroff_std=#{rdb_lroff_std},
+	rdb_lroff_jus=#{rdb_lroff_jus},ldb_udobs_std=#{ldb_udobs_std},ldb_udoff_jus=#{ldb_udoff_jus},ldb_udoff_val=#{ldb_udoff_val},
+	rdb_udobs_std=#{rdb_udobs_std},rdb_udoff_jus=#{rdb_udoff_jus},rdb_udoff_val=#{rdb_udoff_val}
+	
 	WHERE vin=#{VIN}
 	</update>
 	
-	<select id="getProcessFaultReportData" parameterType="Map" resultType="Map">
-	SELECT COUNT(*) AS fault_count,f.factory_name AS plant_org FROM BMS_QM_PROCESS_PROBLEM p
-	LEFT JOIN BMS_BASE_FACTORY f ON p.factory_id = f.id
-	WHERE f.factory_name IS NOT NULL 
-	<if test="start_date !=null and start_date !=''">
+	<select id="getProcessFaultOrderReportData" parameterType="Map" resultType="Map">
+	SELECT COUNT(*) AS fault_level_count,fault_level_id FROM BMS_QM_PROCESS_PROBLEM
+	WHERE fault_date >= #{start_date} 
+	<![CDATA[ AND fault_date <= #{end_date} ]]>
+	GROUP BY fault_level_id
+	</select>
+	<select id="getProcessFaultOrderReportData2" parameterType="Map" resultType="Map">
+	SELECT COUNT(*) AS is_batch_count, IF(is_batch ='1','批量','非批量') AS is_batch FROM BMS_QM_PROCESS_PROBLEM
+	WHERE fault_date >= #{start_date} 
+	<![CDATA[ AND fault_date <= #{end_date} ]]>
+	GROUP BY is_batch
+	</select>
+	
+	<select id="getOrderFaultReportList" parameterType="Map" resultType="Map">
+	SELECT a.order_desc,a.order_qty,a.p_count,
+	CONCAT(ROUND(a.p_count/a.order_qty*100,2),'%') AS p_rate,
+	a.factory_name,a.production_qty,a.pf_count,CONCAT(ROUND(a.pf_count/a.production_qty*100,2),'%') AS pf_rate from (
+	select CONCAT(o.order_no,' ',o.order_name,t.bus_type_code,' ',o.order_qty,'台') AS order_desc,o.order_qty
+	,(SELECT COUNT(*) FROM BMS_QM_PROCESS_PROBLEM p WHERE p.order_no = o.order_no
 	AND p.fault_date >= #{start_date}
+	<![CDATA[ AND fault_date <= #{end_date} ]]>
+	) AS p_count
+	
+	,f.factory_name,fo.production_qty
+	,(SELECT COUNT(*) FROM BMS_QM_PROCESS_PROBLEM p LEFT JOIN BMS_PLAN_BUS b ON p.vin = b.vin
+	WHERE p.order_no = o.order_no AND p.factory_id = fo.factory_id AND b.factory_order_id = fo.id
+	AND p.fault_date >= #{start_date}
+	<![CDATA[ AND fault_date <= #{end_date} ]]>
+	) AS pf_count
+	
+	from BMS_OR_ORDER o
+	left join BMS_BASE_BUS_TYPE t on o.bus_type_id=t.id
+	left join BMS_OR_FACTORY_ORDER fo on fo.order_id=o.id
+	left join BMS_BASE_FACTORY f on fo.factory_id=f.id
+	) a WHERE a.p_count >0 ORDER BY a.p_count/a.order_qty DESC
+	</select>
+	
+	<select id="getProcessFaultReportData" parameterType="Map" resultType="Map">
+	<if test="report_type == 1">
+	SELECT f.factory_name AS plant_org,IFNULL(t.fault_count,0) AS fault_count FROM BMS_BASE_FACTORY f 
+	LEFT JOIN (
+		SELECT COUNT(*) AS fault_count,
+		<if test="report_type == 1">
+		f.factory_name AS plant_org 
+		</if>
+		<if test="report_type == 2">
+		p.processFaultArea AS plant_org 
+		</if>
+		<if test="report_type == 3">
+		t.bus_type_code AS plant_org 
+		</if>
+		FROM BMS_QM_PROCESS_PROBLEM p
+		LEFT JOIN BMS_BASE_FACTORY f ON p.factory_id = f.id
+		LEFT JOIN BMS_BASE_BUS_TYPE t ON p.bus_type = t.id
+		WHERE f.factory_name IS NOT NULL 
+		<if test="start_date !=null and start_date !=''">
+		AND p.fault_date >= #{start_date}
+		</if>
+		<if test="end_date !=null and end_date !=''">
+		<![CDATA[ AND p.fault_date <= #{end_date} ]]>
+		</if>
+		<if test="report_type == 1">
+		GROUP BY f.factory_name
+		</if>
+		<if test="report_type == 2">
+		GROUP BY p.processFaultArea
+		</if>
+		<if test="report_type == 3">
+		GROUP BY t.bus_type_code
+		</if>
+	) t ON f.factory_name = t.plant_org 
+	ORDER BY fault_count DESC
 	</if>
-	<if test="end_date !=null and end_date !=''">
-	<![CDATA[ AND p.fault_date <= #{end_date} ]]>
+	<if test="report_type != 1">
+		SELECT COUNT(*) AS fault_count,
+		<if test="report_type == 1">
+		f.factory_name AS plant_org 
+		</if>
+		<if test="report_type == 2">
+		p.processFaultArea AS plant_org 
+		</if>
+		<if test="report_type == 3">
+		t.bus_type_code AS plant_org 
+		</if>
+		FROM BMS_QM_PROCESS_PROBLEM p
+		LEFT JOIN BMS_BASE_FACTORY f ON p.factory_id = f.id
+		LEFT JOIN BMS_BASE_BUS_TYPE t ON p.bus_type = t.id
+		WHERE f.factory_name IS NOT NULL 
+		<if test="start_date !=null and start_date !=''">
+		AND p.fault_date >= #{start_date}
+		</if>
+		<if test="end_date !=null and end_date !=''">
+		<![CDATA[ AND p.fault_date <= #{end_date} ]]>
+		</if>
+		<if test="report_type == 1">
+		GROUP BY f.factory_name
+		</if>
+		<if test="report_type == 2">
+		GROUP BY p.processFaultArea
+		</if>
+		<if test="report_type == 3">
+		GROUP BY t.bus_type_code
+		</if>
+		ORDER BY fault_count DESC
 	</if>
-	GROUP BY f.factory_name
 	</select>
 	
 	<select id="getFactoryIdByVin" parameterType="Map" resultType="Map">
-	SELECT b.vin,b.factory_id,o.order_no,f.area FROM BMS_PLAN_BUS b
+	SELECT b.vin,b.factory_id,o.bus_type_id,o.order_no,f.area, 
+	CONCAT(o.order_name,t.bus_type_code,'  ',o.order_qty,'台') AS 'order_describe'
+	FROM BMS_PD_VIN b
 	LEFT JOIN BMS_BASE_FACTORY f ON b.factory_id = f.id
 	LEFT JOIN  BMS_OR_ORDER o ON b.order_id = o.id
+	LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id = t.id 
 	WHERE b.vin = #{vin}
 	</select>
 	
+	<select id="getProcessFaultArea" resultType="Map">
+	SELECT key_name FROM BMS_BASE_KEY WHERE key_code = 'PROCESS_FAULT_AREA' AND delete_flag = 0
+	</select>
+	
+	<select id="getKeyPartsInfo" parameterType="Map" resultType="Map">
+	<![CDATA[
+	SELECT P.bus_number,CONCAT(O.order_no,'<br/>',O.order_name,T.bus_type_code,'  ',O.order_qty,'台') as order_no,F.factory_name,
+	F.area,B.vin,B.warehousing_date,O.productive_year,B.left_motor_number,B.right_motor_number,
+	CONCAT(GROUP_CONCAT(CONCAT(P.parts_name,'(',P.parts_no,') 批次：',IFNULL(P.batch,'/'),';<br/><hr/>') separator ''))
+	AS part_info
+	FROM BMS_QM_KEY_PARTS P
+	LEFT JOIN BMS_PLAN_BUS B ON P.bus_number = B.bus_number
+	LEFT JOIN BMS_BASE_FACTORY F ON P.factory_id = F.id
+	LEFT JOIN BMS_OR_ORDER O ON B.order_id = O.id
+	LEFT JOIN BMS_BASE_BUS_TYPE T ON O.bus_type_id=T.id
+	WHERE 1=1 
+	]]>
+	<if test="factory_id !=null and factory_id !=''">
+	AND P.factory_id = #{factory_id}
+	</if>
+	<if test="year !=null and year !=''">
+	AND O.productive_year = #{year}
+	</if>
+	<if test="motor !=null and motor !=''">
+	AND (B.left_motor_number = #{motor} OR B.right_motor_number = #{motor})
+	</if>
+	<if test="parts_no !=null and parts_no !=''">
+	AND P.batch = #{parts_no}
+	</if>
+	<if test="date_start !=null and date_start !=''">
+	AND B.warehousing_date >= CONCAT(#{date_start},' 00:00:00')
+	</if>
+	<if test="date_end !=null and date_end !=''">
+	<![CDATA[ AND B.warehousing_date <= CONCAT(#{date_end},' 23:59:59') ]]>
+	</if>
+	
+	<if test="bus_number !=null and bus_number !=''">
+	AND (P.bus_number = #{bus_number} OR P.bus_number = (SELECT B.bus_number FROM BMS_PLAN_BUS B WHERE B.VIN = #{bus_number}))
+	</if>
+	<if test="order_no !=null and order_no !=''">
+	AND O.order_no = #{order_no}
+	</if>
+	AND P.parts_name LIKE '%动力电池%'
+	GROUP BY P.bus_number
+	<if test="start !=null">
+		LIMIT #{start} ,#{length} 
+	</if>
+	</select>
+	<select id="getKeyPartsCount" parameterType="Map" resultType="int">
+	SELECT COUNT(DISTINCT P.bus_number) AS bus_count
+	FROM BMS_QM_KEY_PARTS P
+	LEFT JOIN BMS_PLAN_BUS B ON P.bus_number = B.bus_number
+	LEFT JOIN BMS_BASE_FACTORY F ON P.factory_id = F.id
+	LEFT JOIN BMS_OR_ORDER O ON B.order_id = O.id
+	WHERE 1=1 
+	<if test="factory_id !=null and factory_id !=''">
+	AND P.factory_id = #{factory_id}
+	</if>
+	<if test="year !=null and year !=''">
+	AND O.productive_year = #{year}
+	</if>
+	<if test="motor !=null and motor !=''">
+	AND (B.left_motor_number = #{motor} OR B.right_motor_number = #{motor})
+	</if>
+	<if test="parts_no !=null and parts_no !=''">
+	AND P.batch = #{parts_no}
+	</if>
+	<if test="date_start !=null and date_start !=''">
+	AND B.warehousing_date >= CONCAT(#{date_start},' 00:00:00')
+	</if>
+	<if test="date_end !=null and date_end !=''">
+	<![CDATA[ AND B.warehousing_date <= CONCAT(#{date_end},' 23:59:59') ]]>
+	</if>
+	<if test="bus_number !=null and bus_number !=''">
+	AND (P.bus_number = #{bus_number} OR P.bus_number = (SELECT B.bus_number FROM BMS_PLAN_BUS B WHERE B.VIN = #{bus_number}))
+	</if>
+	<if test="order_no !=null and order_no !=''">
+	AND O.order_no = #{order_no}
+	</if>
+	AND P.parts_name LIKE '%动力电池%'
+	</select>
+	
 	<select id="getBusTestingInfo" parameterType="Map" resultType="Map">
-	SELECT * FROM jcx_bus_info WHERE vin = #{vin}
+	SELECT * FROM JCX_BUS_INFO WHERE vin = #{vin}
 	</select>
 	
 	<select id="getBusTestingDateReport" parameterType="Map" resultType="Map">
@@ -776,18 +1066,31 @@
 	</update>
 	
 	<select id="getProcessFaultList" parameterType="Map" resultType="Map">
-	SELECT p.*,CONCAT(o.order_no,'  ',o.order_name,b.bus_type_code,'  ',o.order_qty,'台') as order_no,WEEKOFYEAR(fault_date) AS week,f.factory_name,f.area,u.display_name AS editor_name,b.bus_type_code FROM BMS_QM_PROCESS_PROBLEM p
+	SELECT p.*,order_no,order_describe,WEEKOFYEAR(fault_date) AS week,
+	f.factory_name,p.processFaultArea AS area,u.display_name AS editor_name,b.bus_type_code FROM BMS_QM_PROCESS_PROBLEM p
 	LEFT JOIN BMS_BASE_FACTORY f ON p.factory_id = f.id
 	LEFT JOIN BMS_BASE_BUS_TYPE b ON p.bus_type = b.id
 	LEFT JOIN BMS_BASE_USER u on p.editor_id=u.id
   	LEFT JOIN BMS_PLAN_BUS s on p.vin = s.vin
-	LEFT JOIN BMS_OR_ORDER o on s.order_id = o.id
 	WHERE 1=1 
+	<if test="vin != null and vin != ''">
+	AND p.vin LIKE CONCAT('%',#{vin},'%')
+	</if>
+	<if test="date_start != null and date_start != ''">
+	AND p.fault_date >= #{date_start}
+	</if>
+	<if test="date_end != null and date_end != ''">
+	<![CDATA[ AND p.fault_date <= #{date_end} ]]>
+	</if>
+	<if test="order_no != null and order_no != ''">
+	AND p.order_no = #{order_no}
+	</if>
+	
 		<if test="bus_type != null and bus_type != ''">
 		AND b.bus_type_code = #{bus_type}
 		</if>
-		<if test="area != null and area != ''">
-		AND f.area = #{area}
+		<if test="area != null and area != '全部'">
+		AND p.processFaultArea = #{area}
 		</if>
 		<if test="week != null and week != ''">
 		AND WEEKOFYEAR(p.fault_date) = #{week}
@@ -795,10 +1098,10 @@
 		<if test="level != null and level != ''">
 		AND p.fault_level_id = #{level}
 		</if>
-		<if test="fault_mils == '1'">
+		<if test="fault_mils == 1">
 		AND fault_mils >= 15000
 		</if>
-		<if test="fault_mils == '2'">
+		<if test="fault_mils == 2">
 		<![CDATA[ AND fault_mils < 15000 ]]>
 		</if>
 		<if test="is_batch != null and is_batch != ''">
@@ -819,15 +1122,24 @@
 	SELECT COUNT(p.id) FROM BMS_QM_PROCESS_PROBLEM p
 	LEFT JOIN BMS_BASE_FACTORY f ON p.factory_id = f.id
 	LEFT JOIN BMS_BASE_BUS_TYPE b ON p.bus_type = b.id
-	LEFT JOIN BMS_BASE_USER u on p.editor_id=u.id
-  	LEFT JOIN BMS_PLAN_BUS s on p.vin = s.vin
-	LEFT JOIN BMS_OR_ORDER o on s.order_id = o.id
 	WHERE 1=1 
+	<if test="vin != null and vin != ''">
+	AND p.vin LIKE CONCAT('%',#{vin},'%')
+	</if>
+	<if test="date_start != null and date_start != ''">
+	AND p.fault_date >= #{date_start}
+	</if>
+	<if test="date_end != null and date_end != ''">
+	<![CDATA[ AND p.fault_date <= #{date_end} ]]>
+	</if>
+	<if test="order_no != null and order_no != ''">
+	AND p.order_no = #{order_no}
+	</if>
 		<if test="bus_type != null and bus_type != ''">
 		AND b.bus_type_code = #{bus_type}
 		</if>
-		<if test="area != null and area != ''">
-		AND f.area = #{area}
+		<if test="area != null and area != '全部'">
+		AND p.processFaultArea = #{area}
 		</if>
 		<if test="week != null and week != ''">
 		AND WEEKOFYEAR(p.fault_date) = #{week}
@@ -835,10 +1147,10 @@
 		<if test="level != null and level != ''">
 		AND p.fault_level_id = #{level}
 		</if>
-		<if test="fault_mils == '1'">
+		<if test="fault_mils == 1">
 		AND fault_mils >= 15000
 		</if>
-		<if test="fault_mils == '2'">
+		<if test="fault_mils == 2">
 		<![CDATA[ AND fault_mils < 15000 ]]>
 		</if>
 		<if test="is_batch != null and is_batch != ''">
@@ -857,33 +1169,59 @@
 			SELECT LAST_INSERT_ID()
 		</selectKey>
 		INSERT INTO BMS_QM_PROCESS_PROBLEM 
-		(factory_id, customer_name, vin, order_id, order_describe, customer_bus_number, license_number, 
+		(factory_id, customer_name, vin, order_no,processFaultArea, order_describe, customer_bus_number, license_number, 
 		fault_phenomenon, fault_components, fault_date, bus_type, fault_mils, fault_level_id, response_factory,
 		response_workshop, is_batch, fault_reason, resolve_method, resolve_date, resolve_result, 
-		memo, report_file_path, punish, compensation, status, editor_id, edit_date)	
-		VALUES(#{factory_id},#{customer_name},#{vin},#{order_id},#{order_describe},#{customer_bus_number},#{license_number},
+		memo, report_file_path, punish, compensation, status,create_user, editor_id, edit_date)	
+		VALUES(#{factory_id},#{customer_name},#{vin},
+		#{order_no},#{processFaultArea},
+		<if test="order_describe != ''">
+		#{order_describe},
+		</if>
+		<if test="order_describe == ''">
+		(SELECT order_desc FROM BMS_OR_HISTORY_ORDER WHERE order_no = #{order_no}),
+		</if>
+		#{customer_bus_number},#{license_number},
 		#{fault_phenomenon},#{fault_components},#{fault_date},#{bus_type},#{fault_mils},#{fault_level_id},#{response_factory},
 		#{response_workshop},#{is_batch},#{fault_reason},#{resolve_method},#{resolve_date},#{resolve_result},
-		#{memo},#{report_file_path},#{punish},#{compensation},#{status},#{editor_id},#{edit_date})
+		#{memo},#{report_file_path},#{punish},#{compensation},#{status},#{create_user},#{editor_id},#{edit_date})
 	</insert>
 	<insert id="addProcessFault2" parameterType="com.byd.bms.quality.model.ProcessFaultBean" useGeneratedKeys="true">
 		<selectKey resultType="int" keyProperty="id" order="AFTER">
 			SELECT LAST_INSERT_ID()
 		</selectKey>
 		INSERT INTO BMS_QM_PROCESS_PROBLEM 
-		(factory_id, customer_name, vin, order_id, order_describe, customer_bus_number, license_number, 
-		fault_phenomenon, fault_components, fault_date, bus_type, fault_mils, fault_level_id, 
+		(factory_id, customer_name, vin, order_no,processFaultArea, order_describe, customer_bus_number, license_number, 
+		fault_phenomenon, fault_components, fault_date, bus_type, fault_mils, fault_level_id, response_factory,
 		response_workshop, is_batch, fault_reason, resolve_method, resolve_date, resolve_result, 
-		memo, report_file_path, punish, compensation, status, editor_id, edit_date)	
-		VALUES((SELECT id FROM BMS_BASE_FACTORY WHERE factory_name = #{factory_name}),#{customer_name},#{vin},#{order_id},#{order_describe},#{customer_bus_number},#{license_number},
-		#{fault_phenomenon},#{fault_components},#{fault_date},(SELECT id FROM BMS_BASE_BUS_TYPE WHERE bus_type_code = #{bus_type}),#{fault_mils},#{fault_level_id},
+		memo, report_file_path, punish, compensation, status,create_user, editor_id, edit_date)	
+		VALUES((SELECT factory_id FROM BMS_PD_VIN WHERE vin = #{vin}),#{customer_name},#{vin},
+		(SELECT order_no FROM BMS_OR_ORDER WHERE id = 
+		(SELECT order_id FROM BMS_PD_VIN WHERE vin = #{vin})),#{processFaultArea},
+		(
+		SELECT CONCAT(o.order_name,t.bus_type_code,' ',o.order_qty,'台') AS order_describe FROM BMS_OR_ORDER o
+		LEFT JOIN BMS_BASE_BUS_TYPE t ON o.bus_type_id=t.id
+		WHERE o.id = 
+		(SELECT order_id FROM BMS_PD_VIN WHERE vin = #{vin})
+		)
+		,#{customer_bus_number},#{license_number},
+		#{fault_phenomenon},#{fault_components},#{fault_date},
+		(SELECT bus_type_id FROM BMS_OR_ORDER WHERE id = (SELECT order_id FROM BMS_PD_VIN WHERE vin = #{vin})),
+		#{fault_mils},#{fault_level_id},#{response_factory},
 		#{response_workshop},#{is_batch},#{fault_reason},#{resolve_method},#{resolve_date},#{resolve_result},
-		#{memo},#{report_file_path},#{punish},#{compensation},#{status},#{editor_id},#{edit_date})
+		#{memo},#{report_file_path},#{punish},#{compensation},#{status},#{create_user},#{editor_id},#{edit_date})
 	</insert>
 	<update id="editProcessFault" parameterType="com.byd.bms.quality.model.ProcessFaultBean">
 		UPDATE BMS_QM_PROCESS_PROBLEM
-		SET factory_id=#{factory_id}, customer_name=#{customer_name}, vin=#{vin}, license_number=#{license_number},
+		SET customer_name=#{customer_name}, vin=#{vin}, license_number=#{license_number},
 		fault_date=#{fault_date}, bus_type=#{bus_type}, fault_mils=#{fault_mils},
+		order_describe = #{order_describe},processFaultArea=#{processFaultArea},
+		<if test="factory_id != null and factory_id != ''">
+		factory_id = #{factory_id},
+		</if>
+		<if test="order_no != null and order_no != ''">
+		order_no =  #{order_no},
+		</if>
 		<if test="customer_bus_number != null and customer_bus_number != ''">
 		customer_bus_number = #{customer_bus_number},  
 		</if>
@@ -897,7 +1235,7 @@
 		fault_level_id = #{fault_level_id},  
 		</if>
 		<if test="response_workshop != null and response_workshop != ''">
-		response_workshop = #{response_workshop},  
+		response_factory = #{response_factory},  response_workshop = #{response_workshop},  
 		</if>
 		<if test="is_batch != null and is_batch != ''">
 		is_batch = #{is_batch},  
@@ -923,6 +1261,9 @@
 		<if test="punish != null and punish != ''">
 		punish = #{punish},  
 		</if>
+		<if test="create_user != null and create_user != ''">
+		create_user = #{create_user},  
+		</if>
 		<if test="compensation != null and compensation != ''">
 		compensation = #{compensation},  
 		</if>
@@ -934,7 +1275,9 @@
 		WHERE id = #{id};
 	</update>
 	<select id="showProcessFaultInfo" parameterType="int" resultType="com.byd.bms.quality.model.ProcessFaultBean">
-		SELECT * FROM BMS_QM_PROCESS_PROBLEM WHERE id = #{id}
+		SELECT p.*,b.id AS bus_id FROM BMS_QM_PROCESS_PROBLEM p
+		LEFT JOIN BMS_PLAN_BUS b ON p.vin = b.vin
+		WHERE p.id = #{id}
 	</select>
 	<select id="showProblemImproveInfo" parameterType="int" resultType="com.byd.bms.quality.model.ProblemImproveBean">
 		SELECT id,fault_description,factory_id,customer_name,report_status,vin,order_id,order_describe,license_number,fault_phenomenon,
@@ -964,7 +1307,7 @@
 		<if test="factoryId!=null and factoryId!=''">
 			and t.factory_id=#{factoryId}
 		</if>
-		<if test="workshop!=null and workshop!='全部'">
+		<if test="workshop!=null and workshop!='' and workshop!='全部'">
 			and t.workshop=#{workshop}
 		</if>
 		<if test="orderNo!=null and orderNo!=''">
@@ -998,7 +1341,7 @@
 		<if test="factoryId!=null and factoryId!=''">
 			and t.factory_id=#{factoryId}
 		</if>
-		<if test="workshop!=null and workshop!='全部'">
+		<if test="workshop!=null and workshop!='' and workshop!='全部'">
 			and t.workshop=#{workshop}
 		</if>
 		<if test="orderNo!=null and orderNo!=''">
@@ -1022,13 +1365,28 @@
 		WHERE id = #{keypartsId}
 	</update>
      <select id="getBusNumberDetailList" parameterType="Map" resultType="Map">
-		select t.*,t.3C_components as CCC_components,b.id as keypartsId,
+		<!-- select t.*,t.3C_components as CCC_components,b.id as keypartsId,
 		   case 3C_components WHEN '是' THEN t.3C_no WHEN '否' THEN b.batch end  as batch
+		    from BMS_QM_KEY_PARTS b
+		    LEFT JOIN  BMS_QM_KEY_PARTS_TEMPLATE_DETAILS  t on b.key_parts_template_details_id=t.id 
+		    LEFT JOIN BMS_QM_KEY_PARTS_TEMPLATE_HEADER h on h.id=t.key_components_template_id 
+			 where 1=1 and t.key_components_template_id=#{key_components_template_id} 
+			 AND b.bus_number = #{bus_number}
+			and t.workshop=#{workshop}
+			order by b.id -->
+			select t.*,t.3C_components as CCC_components,b.id as keypartsId,
+		  	case 3C_components WHEN '是' THEN t.3C_no WHEN '否' THEN b.batch end  as batch,
+			(select count(s.id) from BMS_PD_SCAN s left join BMS_BASE_PROCESS p on s.process_id=p.id
+			left join BMS_BASE_KEY k on k.value=p.plan_node_id and k.key_code='PLAN_CODE'
+			where p.plan_node_id is not null and s.bus_number=#{bus_number} and s.workshop_name=#{workshop}
+			and k.key_name=concat(#{workshop},'下线')
+			) offline_flag,case when b.process_number is not null then 1 else  0 end as scan_flag
 		    from BMS_QM_KEY_PARTS_TEMPLATE_DETAILS  t 
 		    LEFT JOIN BMS_QM_KEY_PARTS_TEMPLATE_HEADER h on h.id=t.key_components_template_id
-		    LEFT JOIN BMS_QM_KEY_PARTS b on b.key_parts_template_details_id=t.id AND b.bus_number = #{bus_number}
-			 where 1=1 and t.key_components_template_id=#{key_components_template_id}
+		    LEFT JOIN BMS_QM_KEY_PARTS b on b.key_parts_template_details_id=t.id AND b.bus_number =#{bus_number}
+			 where 1=1 and t.key_components_template_id=#{key_components_template_id} 
 			and t.workshop=#{workshop}
+			order by t.id
 	</select>
 	
 	<select id="getMaterialExceptionLogsList" parameterType="Map" resultType="Map">
@@ -1421,7 +1779,7 @@
 		<if test="test_node_id!=null and test_node_id!='' and test_node_id!='全部'">
 			and p.test_node_id = #{test_node_id}
 		</if>
-		<if test="bus_type!=null and bus_type!='全部'">
+		<if test="bus_type!=null and bus_type!=''">
 			and p.bus_type = #{bus_type}
 		</if>
 		<if test="bus_number!=null and bus_number!=''">
@@ -1543,4 +1901,7 @@
 		 parent_id in (select id from BMS_BASE_ORG o 
 		where o.foreign_id=#{factory_id} and org_type='1' and deleted='0') and deleted='0'
     </select>
+    <delete id="deleteProcessFault" parameterType="String" >
+    DELETE FROM BMS_QM_PROCESS_PROBLEM WHERE id = #{processFaultId}
+    </delete>
 </mapper>

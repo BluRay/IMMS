@@ -57,6 +57,7 @@
 					<div id="selectBusNumberModal" class="hide" style="align:center;height:500px">
 						车号流水：<input type="text" class="input-medium revise" placeholder="车号流水开始..."  id="bus_num_start" >
 				       	~<input type="text" class="input-medium revise" placeholder="车号流水结束..."  id="bus_num_end" >
+				       	<input class="btn btn-sm btn-danger" id="btnBuslist" value="指定车号" style="margin-left: 2px;" type="button">
 				       	<input type="button" class="btn btn-sm btn-primary" id="btn_single_bus_num_query" value="查询"></input>
 				       	
 				       	<table id="selectBusNumber_table" style="table-layout:fixed;font-size:12px" class="table table-bordered table-striped">
@@ -152,6 +153,17 @@
 			    	<input type="hidden" id="select_workshop_view" />
 			    	<input type="hidden" id="select_order_no_view" />
 					
+					</div>
+					
+					<div id="dialog-config" class="hide">
+						<form id="  " class="form-horizontal">
+							<div class="form-group">
+								<label class="col-sm-2 control-label no-padding-right no-padding-right" for="vin">车号：</label>
+								<div class="col-sm-9">
+									<textarea rows="6" id="search_bus_number" style="width:300px" placeholder="每行输入一个车号后回车！"></textarea>
+								</div>
+							</div>
+						</form>
 					</div>
 
 			<!-- 脚 -->

@@ -13,6 +13,14 @@ $(document).ready(function () {
 	})
 	
 	$(document).on("change","#status",function(e){
+		if($("#status").val()=="0"){
+			$("#span_0").html(" (焊装未上线)");
+		}else if($("#status").val()=="1"){
+			$("#span_0").html(" (焊装已上线)");
+		}else if($("#status").val()=="2"){
+			$("#span_0").html(" (总装下线)");
+		}
+		
 		drawFactoryOrderChart();
 	})
 	

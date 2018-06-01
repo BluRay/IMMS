@@ -61,6 +61,7 @@
 							<input type="text"  class="input-medium" style="width:100%"  id="order"  placeholder="订单编号.." />
 							<input type="text" style="display:none" id="order_id" />
 						</div>
+						<div id="order_desc"></div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="configName">*&nbsp;配置名称：</label>
@@ -95,27 +96,78 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="tire_type">&nbsp;轮胎规格：</label>
+						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="vehicle_length">&nbsp;品牌：</label>
 						<div class="col-sm-3">
 							<input type="text"  class="input-medium" style="width:100%"
-								placeholder="轮胎规格..." id="tire_type" />
+								placeholder="品牌..." id="brand"  value="比亚迪牌"  readonly="readonly"/>
 						</div>
-						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="spring_num">&nbsp;弹簧片数：</label>
+						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="wheelbase">&nbsp;制造商：</label>
 						<div class="col-sm-3">
 							<input type="text"  class="input-medium" style="width:100%"
-								placeholder="弹簧片数..." id="spring_num" />
+								placeholder="制造商..." id="manufacturer" value="比亚迪汽车工业有限公司" readonly="readonly" />
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="bus_seats">&nbsp;座位数：</label>
+						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="vehicle_length">&nbsp;车辆类型：</label>
 						<div class="col-sm-3">
-							<input type="text"  class="input-medium" style="width:100%"
-								placeholder="座位数..." id="bus_seats" />
+							<select name="vehicle_type" id="vehicle_type" class="input-medium vehicle_type" style="width:100%" >
+								<option value="客车">客车</option>
+								<option value="乘用车" >乘用车</option>
+								<option value="货车" >货车</option>
+								<option value="专用车" >专用车</option>
+							</select>
 						</div>
-						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="rated_voltage">&nbsp;额定电压：</label>
+						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="wheelbase">&nbsp;动力类型：</label>
+						<div class="col-sm-3">
+							<select name="power_type" id="power_type" class="input-medium power_type" style="width:100%" >
+								<option value="纯电动" >纯电动</option>
+								<option value="插电混合" >插电混合</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="vehicle_length">&nbsp;车辆长度：</label>
+						<div class="col-sm-3">
+							<span class="input-icon input-icon-right">
+								<input type="text"  class="input-medium" style="width:100%" placeholder="车辆长度..." id="vehicle_length" />
+								<span style="margin-left:-30px;">mm</span>
+							</span>
+						</div>
+						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="wheelbase">&nbsp;轴距：</label>
+						<div class="col-sm-3">
+							<span class="input-icon input-icon-right">
+								<input type="text"  class="input-medium" style="width:100%" placeholder="轴距..." id="wheelbase" />
+								<span style="margin-left:-30px;">mm</span>
+							</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="max_weight">&nbsp;最大允许总质量：</label>
+						<div class="col-sm-3">
+							<span class="input-icon input-icon-right">
+								<input type="text"  class="input-medium" style="width:100%" placeholder="最大允许总质量..." id="max_weight" />
+								<span style="margin-left:-25px;">KG</span>
+							</span>
+						</div>
+						
+						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="max_speed">&nbsp;最高车速：</label>
+						<div class="col-sm-3">
+							<span class="input-icon input-icon-right">
+								<input type="text"  class="input-medium" style="width:100%" placeholder="最高车速..." id="max_speed" />
+								<span style="margin-left:-45px;">KM/H</span>
+							</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="drive_motor">&nbsp;驱动电机：</label>
 						<div class="col-sm-3">
 							<input type="text"  class="input-medium" style="width:100%"
-								placeholder="额定电压..." id="rated_voltage" />
+								placeholder="驱动电机..." id="drive_motor" />
+						</div>
+						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="motor_power">&nbsp;电机最大功率：</label>
+						<div class="col-sm-3">
+							<input type="text"  class="input-medium" style="width:100%"
+								placeholder="电机最大功率..." id="motor_power" />
 						</div>
 					</div>
 					<div class="form-group">
@@ -124,10 +176,23 @@
 							<input type="text"  class="input-medium" style="width:100%"
 								placeholder="电池容量..." id="battery_capacity" />
 						</div>
-						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="passenger_num">&nbsp;额定载客人数：</label>
+						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="battery_model">&nbsp;电池型号：</label>
 						<div class="col-sm-3">
 							<input type="text"  class="input-medium" style="width:100%"
-								placeholder="额定载客人数..." id="passenger_num" />
+								placeholder="电池型号..." id="battery_model" />
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="rated_voltage">&nbsp;额定电压：</label>
+						<div class="col-sm-3">
+							<input type="text"  class="input-medium" style="width:100%"
+								placeholder="额定电压..." id="rated_voltage" />
+						</div>
+						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="light_downdip">&nbsp;灯光下倾值：</label>
+						<div class="col-sm-3">
+							<input type="text"  class="input-medium" style="width:100%"
+								placeholder="灯光下倾值..." id="light_downdip" />
 						</div>
 					</div>
 					

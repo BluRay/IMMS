@@ -46,7 +46,7 @@
 							<td><select name="" id="search_factory" class="input-small">
 							</select>
 							 	<script id="tmplBusTypeSelect" type="text/x-jsrander">
-                                    <option value='{{:id}}'>{{:name}}  ({{:vehicle_model}})</option>
+                                    <option value='{{:id}}' bus_type_code='{{:name}}' internal_name ='{{:code}}' bus_series = '{{:series}}' >{{:name}}  ({{:code}})</option>
                                 </script>
 							</td>
 							<td><input type="button"

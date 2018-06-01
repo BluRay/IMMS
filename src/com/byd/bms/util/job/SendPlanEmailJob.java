@@ -287,7 +287,28 @@ public class SendPlanEmailJob  implements Job {
 				}else{
 					tr.add(tableX.new TdTd(" "));
 				}
-			}else{
+			}else if(m1.get("key_name").endsWith("上线")){
+				Map<String,Object> conditionMap1 = new HashMap<String,Object>();
+				conditionMap1.put("date_start", sdf.format(new Date()));
+				conditionMap1.put("date_end", sdf.format(new Date()));
+				conditionMap1.put("factory_id", String.valueOf(m.get("factory_id")));
+				conditionMap1.put("factory", String.valueOf(m.get("factory_name")));
+				conditionMap1.put("order_id", m1.get("order_id"));
+				conditionMap1.put("order_no", m1.get("order_no"));
+				conditionMap1.put("workshop_name", m1.get("key_name").replaceAll("上线", ""));
+				List<ProductionException> datalist1=new ArrayList<ProductionException>();
+				datalist1=planDao.getExceptionPauseListOnline(conditionMap1);
+				if(datalist1.size()>0){
+					String remark = datalist1.get(0).getDetailed_reasons();
+					if(datalist1.size()>1){
+						remark += "<br>"+datalist1.get(1).getDetailed_reasons();
+					}
+					tr.add(tableX.new TdTd(remark));
+				}else{
+					tr.add(tableX.new TdTd(" "));
+				}
+			}
+			else{
 				tr.add(tableX.new TdTd(" "));
 			}
 			tbodyX.add(tr);

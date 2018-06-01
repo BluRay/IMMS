@@ -192,6 +192,8 @@ public class OrderController extends BaseController{
 		order.setOrder_code(request.getParameter("data_order_code"));
 		order.setOrder_type(request.getParameter("data_order_type"));		
 		order.setBus_type_id(Integer.parseInt(request.getParameter("data_bus_type_id")));
+		order.setBus_type_code(request.getParameter("data_bus_type_code"));
+		order.setBus_series(request.getParameter("data_bus_series"));
 		order.setOrder_qty(Integer.parseInt(request.getParameter("data_order_qty")));
 		order.setProductive_year(request.getParameter("data_productive_year"));
 		order.setDelivery_date(request.getParameter("delivery_date"));
@@ -303,9 +305,6 @@ public class OrderController extends BaseController{
 		dataType.put("4", ExcelModel.CELL_TYPE_CANNULL);
 		dataType.put("5", ExcelModel.CELL_TYPE_CANNULL);
 		dataType.put("6", ExcelModel.CELL_TYPE_CANNULL);
-		dataType.put("7", ExcelModel.CELL_TYPE_CANNULL);
-		dataType.put("8", ExcelModel.CELL_TYPE_CANNULL);
-		dataType.put("9", ExcelModel.CELL_TYPE_CANNULL);
 		excelModel.setDataType(dataType);
 		excelModel.setPath(fileName);
 		File tempfile=new File(fileName);
@@ -322,15 +321,13 @@ public class OrderController extends BaseController{
 		for (Object[] data : excelModel.getData()) {
 			Map<String, String> infomap = new HashMap<String, String>();
 
-			infomap.put("parts_type", data[0] == null ? null : data[0].toString().trim());
-			infomap.put("sap_mat", data[1] == null ? null : data[1].toString().trim());
-			infomap.put("components_no", data[2] == null ? null : data[2].toString().trim());
-			infomap.put("components_name", data[3] == null ? null : data[3].toString().trim());
-			infomap.put("size", data[4] == null ? null : data[4].toString().trim());
-			infomap.put("type", data[5] == null ? null : data[5].toString().trim());
-			infomap.put("vendor", data[6] == null ? null : data[6].toString().trim());
-			infomap.put("workshop", data[7] == null ? null : data[7].toString().trim());
-			infomap.put("notes", data[8] == null ? null : data[8].toString().trim());
+			infomap.put("family_name", data[0] == null ? null : data[0].toString().trim());
+			infomap.put("feature_code", data[1] == null ? null : data[1].toString().trim());
+			infomap.put("feature_name", data[2] == null ? null : data[2].toString().trim());
+			infomap.put("supplier_code", data[3] == null ? null : data[3].toString().trim());
+			infomap.put("supplier_name", data[4] == null ? null : data[4].toString().trim());
+			infomap.put("workshop", data[5] == null ? null : data[5].toString().trim());
+			infomap.put("notes", data[6] == null ? null : data[6].toString().trim());
 
 			addList.add(infomap);
 		}
@@ -352,12 +349,22 @@ public class OrderController extends BaseController{
 		configDetail.put("materialNo",request.getParameter("materialNo"));
 		configDetail.put("customer",request.getParameter("customer"));
 		configDetail.put("material",request.getParameter("material"));
-		configDetail.put("tire_type",request.getParameter("tire_type"));
-		configDetail.put("spring_num",request.getParameter("spring_num"));
-		configDetail.put("bus_seats",request.getParameter("bus_seats"));
-		configDetail.put("rated_voltage",request.getParameter("rated_voltage"));
+		
+		configDetail.put("brand",request.getParameter("brand"));
+		configDetail.put("manufacturer",request.getParameter("manufacturer"));
+		configDetail.put("vehicle_type",request.getParameter("vehicle_type"));
+		configDetail.put("power_type",request.getParameter("power_type"));
+		configDetail.put("vehicle_length",request.getParameter("vehicle_length"));
+		configDetail.put("wheelbase",request.getParameter("wheelbase"));
+		configDetail.put("max_weight",request.getParameter("max_weight"));
+		configDetail.put("max_speed",request.getParameter("max_speed"));
+		configDetail.put("drive_motor",request.getParameter("drive_motor"));
+		configDetail.put("motor_power",request.getParameter("motor_power"));
 		configDetail.put("battery_capacity",request.getParameter("battery_capacity"));
-		configDetail.put("passenger_num",request.getParameter("passenger_num"));
+		configDetail.put("battery_model",request.getParameter("battery_model"));
+		configDetail.put("rated_voltage",request.getParameter("rated_voltage"));
+		configDetail.put("light_downdip",request.getParameter("light_downdip"));
+		
 		configDetail.put("config_detail",request.getParameter("config_detail"));
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String curTime = df.format(new Date());
@@ -548,26 +555,60 @@ public class OrderController extends BaseController{
 	 * 
 	 * @return
 	 */
-	@RequestMapping("/orderColor")
+	@RequestMapping("/orderConfigParam")
 	public ModelAndView orderColor(){ 
-		mv.setViewName("order/orderColor");
+		mv.setViewName("order/orderConfigParam");
         return mv;  
     } 
 	
 	/**
-	 * 根据订单id更新订单颜色
+	 * ajax 获取订单详情
+	 * @return model
+	 */
+	@RequestMapping("/getOrderConfigParam")
+	@ResponseBody
+	public ModelMap getOrderConfigParam(){
+		model=new ModelMap();
+		Map<String,Object> conditionMap=new HashMap<String,Object>();
+		if (request.getParameter("search_order_no") != null) conditionMap.put("search_order_no", request.getParameter("search_order_no"));
+		if (request.getParameter("order_id") != null){
+			conditionMap.put("order_id", request.getParameter("order_id"));
+		}
+		List datalist=new ArrayList();
+		datalist=orderService.getOrderConfigParam(conditionMap);	
+		
+		model.put("data", datalist);
+		return model;
+	}
+	
+	/**
+	 * 根据订单id更新订单配置参数信息
 	 * @return
 	 */
-	@RequestMapping("/editOrderColor")
+	@RequestMapping("/editOrderConfigParam")
 	@ResponseBody
-	public ModelMap editOrderColor(){
+	public ModelMap editOrderConfigParam(){
 		model.clear();
 		String order_id=request.getParameter("order_id");
 		Map<String,Object> condMap=new HashMap<String,Object>();
 		condMap.put("order_id", order_id);
-		condMap.put("order_color", request.getParameter("order_color"));
-		orderService.editOrderColor(condMap,model);
+		condMap.put("color", request.getParameter("color"));
+		condMap.put("vehicle_model", request.getParameter("vehicle_model"));
+		condMap.put("chassis_model", request.getParameter("chassis_model"));
+		condMap.put("motor_model", request.getParameter("motor_model"));
+		condMap.put("bus_seats", request.getParameter("bus_seats"));
+		condMap.put("passenger_num", request.getParameter("passenger_num"));
+		condMap.put("spring_num", request.getParameter("spring_num"));
+		condMap.put("dp_zzd", request.getParameter("dp_zzd"));
+		condMap.put("zc_zzd", request.getParameter("zc_zzd"));
+		condMap.put("dpgg_date", request.getParameter("dpgg_date"));
+		condMap.put("zcgg_date", request.getParameter("zcgg_date"));
+		condMap.put("ccczs_date", request.getParameter("ccczs_date"));
+		condMap.put("hgz_note", request.getParameter("hgz_note"));
+		condMap.put("tire_type", request.getParameter("tire_type"));
+		
+		orderService.editOrderConfigParam(condMap);
 		return model;
 	}
-	
+
 }

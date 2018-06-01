@@ -6,12 +6,26 @@ package com.byd.bms.order.model;
  */
 public class BmsOrder {
 	private int id;
+	private String order_no_bom;			//BOM系统订单编号
+	private String bus_series;				//关联车型表 代号/内部名称(平台)
+	private String bus_code;				//车辆型号（对接BOM系统-公告号BYD6121LGEV4）
+	private String vehicle_class;			//整车类别（包括整车、底盘车）
+	private String order_color;				//
+	private String expect_delivery_date;	//销售期望交期
+	private String supply_days;				//供应总天数
+	private String project_background;		//项目背景
+	private String special_requirements;	//特殊要求
+	private String po_approval_date;		//PO批准时间
+	private String order_source;			//1 BMS 2 BOM
+	private String synchronised_date;		//同步时间
 	private String order_no;
 	private String order_name;
 	private String order_name_str;
 	private String order_code;
 	private String order_type;
 	private int bus_type_id;
+	private String bus_type_code;
+	private String internal_name;
 	private String bus_type;
 	private int order_qty;
 	private int issed_qty;
@@ -131,6 +145,90 @@ public class BmsOrder {
 	}
 	public void setOrder_area(String order_area) {
 		this.order_area = order_area;
+	}
+	public String getBus_type_code() {
+		return bus_type_code;
+	}
+	public void setBus_type_code(String bus_type_code) {
+		this.bus_type_code = bus_type_code;
+	}
+	public String getInternal_name() {
+		return internal_name;
+	}
+	public void setInternal_name(String internal_name) {
+		this.internal_name = internal_name;
+	}
+	public String getOrder_no_bom() {
+		return order_no_bom;
+	}
+	public void setOrder_no_bom(String order_no_bom) {
+		this.order_no_bom = order_no_bom;
+	}
+	public String getBus_series() {
+		return bus_series;
+	}
+	public void setBus_series(String bus_series) {
+		this.bus_series = bus_series;
+	}
+	public String getBus_code() {
+		return bus_code;
+	}
+	public void setBus_code(String bus_code) {
+		this.bus_code = bus_code;
+	}
+	public String getVehicle_class() {
+		return vehicle_class;
+	}
+	public void setVehicle_class(String vehicle_class) {
+		this.vehicle_class = vehicle_class;
+	}
+	public String getOrder_color() {
+		return order_color;
+	}
+	public void setOrder_color(String order_color) {
+		this.order_color = order_color;
+	}
+	public String getExpect_delivery_date() {
+		return expect_delivery_date;
+	}
+	public void setExpect_delivery_date(String expect_delivery_date) {
+		this.expect_delivery_date = expect_delivery_date;
+	}
+	public String getSupply_days() {
+		return supply_days;
+	}
+	public void setSupply_days(String supply_days) {
+		this.supply_days = supply_days;
+	}
+	public String getProject_background() {
+		return project_background;
+	}
+	public void setProject_background(String project_background) {
+		this.project_background = project_background;
+	}
+	public String getSpecial_requirements() {
+		return special_requirements;
+	}
+	public void setSpecial_requirements(String special_requirements) {
+		this.special_requirements = special_requirements;
+	}
+	public String getPo_approval_date() {
+		return po_approval_date;
+	}
+	public void setPo_approval_date(String po_approval_date) {
+		this.po_approval_date = po_approval_date;
+	}
+	public String getOrder_source() {
+		return order_source;
+	}
+	public void setOrder_source(String order_source) {
+		this.order_source = order_source;
+	}
+	public String getSynchronised_date() {
+		return synchronised_date;
+	}
+	public void setSynchronised_date(String synchronised_date) {
+		this.synchronised_date = synchronised_date;
 	}	
-
+	
 }

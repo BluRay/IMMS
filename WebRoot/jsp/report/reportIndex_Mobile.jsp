@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+String factory_id = session.getAttribute("factory_id").toString();
+%>
 <html lang="zh-CN">
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -84,7 +86,36 @@ label {
 										</label>
 									</div>
 								</div>
-							</div>		
+							</div>			
+							
+							<div class="row" style="margin-top:5px;">
+								<div class="col-xs-12">
+									<div class="col-xs-4">
+										<img id="scan" class="img " src="../images/mreport_7.png" style="width:90%;height:90%;" onclick="javascript: return pageForward('weld_monitor');">							
+									</div>
+									<div class="col-xs-4">
+										<img id="scan" class="img " src="../images/mreport_7.png" style="width:90%;height:90%;" onclick="javascript: return pageForward('assb_monitor');">
+									</div>
+									<div class="col-xs-4">
+									</div>
+								</div>
+							</div>	
+							<div class="row" style="margin-top:5px;">
+								<div class="col-xs-12">
+									<div class="col-xs-4" style="text-align:center;margin-left: -7px;">
+										<label style='font-size:12px;'>
+										焊装监控
+										</label>
+									</div>
+									<div class="col-xs-4" style="text-align:center;margin-left: 3px;">
+										<label style='font-size:12px;'>
+										总装监控
+										</label>
+									</div>
+									<div class="col-xs-4" style="text-align:center;margin-left: 1px;">
+									</div>
+								</div>
+							</div>
 							
 									
 
@@ -115,6 +146,12 @@ label {
 			if(flag=='report'){
 				url="/BMS/report/reportIndexMobile"
 			}			
+			if(flag=='weld_monitor'){
+				url="/BMS/production/monitorBoard?workshop=welding&factory="+<%=factory_id%>
+			}
+			if(flag=='assb_monitor'){
+				url="/BMS/production/monitorBoard?workshop=assembly&factory="+<%=factory_id%>
+			}
 			window.location=url
 		}
 	</script>

@@ -40,7 +40,10 @@
 						<table>
 							<tr>
 								<td>车型：</td>
-								<td><input type="text" style="height: 30px;" class="input-medium revise" placeholder="车型..." value="" id="search_busType" /></td>
+								<td>
+								<select id="search_busType" class="input-small"></select>
+<!-- 								<input type="text" style="height: 30px;" class="input-medium revise" placeholder="车型..." value="" id="search_busType" /> -->
+								</td>
 								<td>&nbsp;区域：</td>
 								<td><select id="search_area" class="input-small"></select></td>
 								<td><input type="button" class="btn btn-sm btn-primary btnQuery" id="btnQuery" value="查询" style="margin-left: 2px;"></input>

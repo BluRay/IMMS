@@ -160,6 +160,23 @@ public class ProductionController extends BaseController {
 	}
 	
 	/**
+	 * 查询监控工序下拉列表(生产异常)
+	 * @return
+	 */
+	@RequestMapping("/getProcessMonitor")
+	@ResponseBody
+	public ModelMap getProcessMonitor(){
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("factory", request.getParameter("factory"));
+		condMap.put("workshop", request.getParameter("workshop"));
+		condMap.put("line", request.getParameter("line"));
+		condMap.put("order_type", request.getParameter("order_type"));
+		model=new ModelMap();
+		model.put("data", productionService.getProcessMonitor(condMap));
+		return model;
+	}
+	
+	/**
 	 * 车辆扫描后获取车辆信息（订单、车间、线别、当前工序、状态、颜色、订单配置信息）
 	 * @return
 	 */
@@ -169,13 +186,16 @@ public class ProductionController extends BaseController {
 		model=new ModelMap();
 		//封装查询条件
 		String bus_number=request.getParameter("bus_number");
-/*		String factory=request.getParameter("factory");
-		String workshop=request.getParameter("workshop");
-		String line=request.getParameter("line");
-		*/
+		String process_old=request.getParameter("exec_process_name");
+		String workshop_old=request.getParameter("workshop_name");
+		
 		//查询车辆基本信息
 		Map<String,Object> businfo=new HashMap<String,Object>();
-		businfo=productionService.getBusInfo(bus_number);
+		Map<String,Object> condMap_bus=new HashMap<String,Object>();
+		condMap_bus.put("bus_number", bus_number);
+		condMap_bus.put("process_old", process_old);
+		condMap_bus.put("workshop_old", workshop_old);
+		businfo=productionService.getBusInfo(condMap_bus);
 		if(businfo==null){
 			model.put("businfo", null);
 			model.put("nextProcess", null);
@@ -184,6 +204,7 @@ public class ProductionController extends BaseController {
 			condMap.put("factory_name", businfo.get("factory"));
 			condMap.put("order_type", businfo.get("order_type"));
 			condMap.put("process_name", businfo.get("process_name"));
+			condMap.put("workshop", businfo.get("workshop"));
 			Map<String,Object> nextProcess=productionService.getNextProcess(condMap);
 			model.put("businfo", businfo);
 			model.put("nextProcess", nextProcess);
@@ -343,7 +364,15 @@ public class ProductionController extends BaseController {
 		String userid=String.valueOf(session.getAttribute("user_id"));
 		logger.info("---->enterException " + curTime + " " + userid);
 		
-		String bus_number = request.getParameter("bus_number");
+		String order_no = request.getParameter("order");
+		int o_id = 0;
+		o_id = productionService.getOrderIdByOrderNo(order_no);
+		if(o_id == 0){
+			initModel(false,"订单输入有误！",null);
+			model = mv.getModelMap();			
+			return model;
+		}
+		
 		//logger.info("---->bus_number = " + bus_number);
 		//String[] bus_numberArray=bus_number.split("\\|");
 		JSONArray busarr=JSONArray.fromObject(request.getParameter("bus_list"));
@@ -354,6 +383,8 @@ public class ProductionController extends BaseController {
 			JSONObject bus=(JSONObject) it.next();
 			String cur_bus_number = bus.getString("bus_number");
 			int order_id = bus.getInt("order_id");
+			if(order_id == 0)order_id = o_id;
+			
 			ProductionException exception = new ProductionException();
 			exception.setFactory(request.getParameter("factory"));
 			exception.setWorkshop(request.getParameter("workshop"));
@@ -720,8 +751,9 @@ public class ProductionController extends BaseController {
 		String conditions=request.getParameter("conditions");
 		JSONArray jsa=JSONArray.fromObject(conditions);
 		List<Map<String,Object>> buslist=JSONArray.toList(jsa,Map.class);
-		
-		productionService.transferDataToHGZSys(buslist,model);
+
+		String editor=String.valueOf(session.getAttribute("display_name"));
+		productionService.transferDataToHGZSys(buslist,model,editor);
 		
 		return model;
 	}
@@ -755,6 +787,18 @@ public class ProductionController extends BaseController {
 		        JSONObject.fromObject(conditionMap).toString());
 		model.put("data", jsonstr);
 		
+		return model;
+	}
+	
+	@RequestMapping("/getKeyPartBatchInfo")
+	@ResponseBody
+	public ModelMap getKeyPartBatchInfo(){
+		model.clear();
+		Map<String,Object> conditionMap=new HashMap<String,Object>();
+		conditionMap.put("bus_number", request.getParameter("bus_number"));
+		List<Map<String,Object>> datalist = productionService.getKeyPartBatchInfo(conditionMap);
+		initModel(true,"success",datalist);
+		model = mv.getModelMap();
 		return model;
 	}
 	
@@ -1069,12 +1113,14 @@ public class ProductionController extends BaseController {
 	@ResponseBody
 	public ModelMap getStaffInfo(){
 		model.clear();
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		String cur_date = df.format(new Date());
 		String factory=request.getParameter("factory");
 		String workshop=request.getParameter("workshop");
 		String workgroup=request.getParameter("workgroup");
 		String team=request.getParameter("team");
 		String order_id=request.getParameter("order_id");
-		String work_date=request.getParameter("work_date");
+		String work_date=request.getParameter("work_date")==null?cur_date:request.getParameter("work_date");
 		String org_id=request.getParameter("org_id");
 		String staff_number=request.getParameter("staff_number");
 		Map<String,Object> condMap=new HashMap<String,Object>();
@@ -1121,6 +1167,16 @@ public class ProductionController extends BaseController {
 		
 		productionService.checkPartsBatch(batch,model);
 		
+		return model;
+	}
+	
+	@RequestMapping("/getKeyPartsVal")
+	@ResponseBody
+	public ModelMap getKeyPartsVal(){
+		model.clear();
+		String bus_number=request.getParameter("bus_number");
+		
+		productionService.getKeyPartsVal(bus_number,model);
 		return model;
 	}
 	/****************************  xiongjianwu ***************************/
@@ -1309,6 +1365,23 @@ public class ProductionController extends BaseController {
 		return model;
 	}
 	
+	/**
+	 * 检测线下线对关键零部件信息进行二次校验
+	 * @return
+	 */
+	@RequestMapping("/getKeyPartsByBus")
+	@ResponseBody
+	public ModelMap getKeyPartsByBus(){
+		model.clear();
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("bus_number", request.getParameter("bus_number"));
+		condMap.put("parts_name",request.getParameter("parts_name"));
+		
+		List<Map<String, String>> datalist = productionService.getKeyPartsByBus(condMap);
+		model.put("data", datalist);	
+		return model;
+	}
+	
 	/**************************** TANGJIN  ************************/
 	
 	/**打印VIN码*/
@@ -1417,6 +1490,24 @@ public class ProductionController extends BaseController {
 		Map conditionMap=new HashMap<String,Object>();
 		conditionMap.put("vin", vin);
 		List selectList = productionService.getBusNumberByVin(conditionMap);
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("data", selectList);
+		model.addAllAttributes(result);
+		return model;
+	}
+	/**
+	 * 根据电机号查询车辆
+	 * @return
+	 */
+	@RequestMapping("/getBusNumberByMotor")
+	@ResponseBody
+	public ModelMap getBusNumberByMotor() {
+		model=new ModelMap();
+		String motor_number=request.getParameter("motor_number");
+		Map conditionMap=new HashMap<String,Object>();
+		conditionMap.put("motor_number", motor_number);
+		conditionMap.put("motor_field", request.getParameter("motor_field"));
+		List selectList = productionService.getBusNumberByMotor(conditionMap);
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("data", selectList);
 		model.addAllAttributes(result);

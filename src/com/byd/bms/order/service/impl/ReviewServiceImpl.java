@@ -143,4 +143,17 @@ public class ReviewServiceImpl implements IReviewService {
 		return datalist;
 	}
 
+	@Override
+	public String getReviewPersonList(String id) {
+		String result="";
+		List<Map<String,String>> datalist=reviewDao.getReviewPersonList(id);
+		for(Map<String,String> obj : datalist){
+			result+=obj.get("username")+";";
+		}
+		if(result.length()>1){
+			result=result.substring(0, result.length()-1);
+		}
+		return result;
+	}
+
 }

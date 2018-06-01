@@ -2,6 +2,7 @@ package com.byd.bms.quality.model;
 
 public class ProcessFaultBean {
 	private int id;
+	private int bus_id;
 	private int factory_id;
 	private String factory_name;
 	private String customer_name;
@@ -30,9 +31,11 @@ public class ProcessFaultBean {
 	private String punish;
 	private String compensation;
 	private String status;
+	private String create_user;
 	private int editor_id;
 	private String editor_name;
 	private String edit_date;
+	private String processFaultArea;
 	public int getId() {
 		return id;
 	}
@@ -224,6 +227,24 @@ public class ProcessFaultBean {
 	}
 	public void setResponse_factory(String response_factory) {
 		this.response_factory = response_factory;
+	}
+	public String getCreate_user() {
+		return create_user;
+	}
+	public void setCreate_user(String create_user) {
+		this.create_user = create_user;
+	}
+	public int getBus_id() {
+		return bus_id;
+	}
+	public void setBus_id(int bus_id) {
+		this.bus_id = bus_id;
+	}
+	public String getProcessFaultArea() {
+		return processFaultArea;
+	}
+	public void setProcessFaultArea(String processFaultArea) {
+		this.processFaultArea = processFaultArea;
 	}
 	
 }

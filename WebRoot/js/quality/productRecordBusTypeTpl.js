@@ -42,7 +42,7 @@ $(document).ready(function(){
 			width:900,
 			height:520,
 			modal: true,
-			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i>车型成品记录表模板导入</h4></div>",
+			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i> 成品记录表模板导入</h4></div>",
 			title_html: true,
 			buttons: [ 
 				{
@@ -339,7 +339,7 @@ function showEditPage(row){
 		width:920,
 		height:520,
 		modal: true,
-		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i>车型成品记录表模板导入</h4></div>",
+		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i> 成品记录表模板编辑</h4></div>",
 		title_html: true,
 		buttons: [ 
 			{
@@ -396,7 +396,7 @@ function showInfoPage(row){
 		width:920,
 		height:520,
 		modal: true,
-		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i>车型成品记录表模板查看</h4></div>",
+		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i> 成品记录表模板查看</h4></div>",
 		title_html: true,
 		buttons: [ 
 		/*	{

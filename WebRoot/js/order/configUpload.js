@@ -12,12 +12,6 @@ $(document).ready(function(){
 		showCreatePage();
 	})
 
-/*	$('#nav-search-input').bind('keydown', function(event) {
-		if (event.keyCode == "13") {
-			window.open("/BMS/production/productionsearchbusinfo?bus_number=" + $("#nav-search-input").val());
-			return false;
-		}
-	})*/
 	
 	$("#configQty").change(function(){
 		//alert($(this).data("allot_qty"));
@@ -154,7 +148,7 @@ function ajaxQuery(){
 		            {"title":"操作","class":"center","data":null,"render":function(data,type,row){
 		            	var edit_str = "<i class=\"ace-icon fa fa-pencil bigger-130 editorder\" title='导入' onclick = 'showEditPage(" + JSON.stringify(row)+ ");' style='color:green;cursor: pointer;'></i>";
 		            	if(typeof(row.config_id) == "undefined"){
-		            		edit_str = "";
+		            		//edit_str = "";
 		            	}
 		            	
 		            	return "<i class=\"glyphicon glyphicon-search bigger-130 showbus\" title='查看' onclick = 'showInfoPage(" + JSON.stringify(row)+");' style='color:blue;cursor: pointer;'></i>&nbsp;&nbsp;&nbsp;"+ 
@@ -176,17 +170,26 @@ function showEditPage(row){
 	$("#order").val(row.order_no).attr("disabled",true).data("total_config_qty",row.total_config_qty||0);
 	$("#order").attr("order_qty",row.order_qty);
 	$("#order_id").val(row.id)
+	$("#order_desc").html(row.order_name_str);
 	$("#configName").val(row.order_config_name).attr("disabled",false).attr("config_id",row.config_id);
 	$("#configQty").val(row.config_qty).attr("disabled",false).data("allot_qty",allot_qty).data("old_qty",row.config_qty);
 	$("#materialNo").val(row.sap_materialNo).attr("disabled",false);
 	$("#customer").val(row.customer).attr("disabled",false);
 	$("#material").val(row.material).attr("disabled",false);
-	$("#tire_type").val(row.tire_type).attr("disabled",false);
-	$("#spring_num").val(row.spring_num).attr("disabled",false);
-	$("#bus_seats").val(row.bus_seats).attr("disabled",false);
-	$("#rated_voltage").val(row.rated_voltage).attr("disabled",false);
+	$("#brand").val('比亚迪牌').attr("disabled",false);
+	$("#manufacturer").val('比亚迪汽车工业有限公司').attr("disabled",false);
+	$("#vehicle_type").val(row.vehicle_type==undefined?"客车":(row.vehicle_type==""?"客车":row.vehicle_type)).attr("disabled",false);
+	$("#power_type").val(row.power_type==undefined?"纯电动":(row.power_type==""?"纯电动":row.power_type)).attr("disabled",false);
+	$("#vehicle_length").val(row.vehicle_length).attr("disabled",false);
+	$("#wheelbase").val(row.wheelbase).attr("disabled",false);
+	$("#max_weight").val(row.max_weight).attr("disabled",false);
+	$("#max_speed").val(row.max_speed).attr("disabled",false);
+	$("#drive_motor").val(row.drive_motor).attr("disabled",false);
+	$("#motor_power").val(row.motor_power).attr("disabled",false);
 	$("#battery_capacity").val(row.battery_capacity).attr("disabled",false);
-	$("#passenger_num").val(row.passenger_num).attr("disabled",false);
+	$("#battery_model").val(row.battery_model).attr("disabled",false);
+	$("#rated_voltage").val(row.rated_voltage).attr("disabled",false);
+	$("#light_downdip").val(row.light_downdip).attr("disabled",false);
 	$("#upload_div").show();
 	json_configList=null;
 	
@@ -248,12 +251,23 @@ function showCreatePage(){
 	$("#materialNo").val("").attr("disabled",false);;
 	$("#customer").val("").attr("disabled",false);;
 	$("#material").val("").attr("disabled",false);;
-	$("#tire_type").val("").attr("disabled",false);;
-	$("#spring_num").val("").attr("disabled",false);;
-	$("#bus_seats").val("").attr("disabled",false);;
-	$("#rated_voltage").val("").attr("disabled",false);;
-	$("#battery_capacity").val("").attr("disabled",false);;
-	$("#passenger_num").val("").attr("disabled",false);;
+	
+	$("#brand").val('比亚迪牌').attr("disabled",false);
+	$("#manufacturer").val('比亚迪汽车工业有限公司').attr("disabled",false);
+	$("#vehicle_type").val('客车').attr("disabled",false);
+	$("#power_type").val('纯电动').attr("disabled",false);
+	
+	$("#vehicle_length").val("").attr("disabled",false);
+	$("#wheelbase").val("").attr("disabled",false);
+	$("#max_weight").val("").attr("disabled",false);
+	$("#max_speed").val("").attr("disabled",false);
+	$("#drive_motor").val("").attr("disabled",false);
+	$("#motor_power").val("").attr("disabled",false);
+	$("#battery_capacity").val("").attr("disabled",false);
+	$("#battery_model").val("").attr("disabled",false);
+	$("#rated_voltage").val("").attr("disabled",false);
+	$("#light_downdip").val("").attr("disabled",false);
+	
 	$("#upload_div").show();
 	$("#orderConfigTable").html("");
 	json_configList=null;
@@ -316,14 +330,12 @@ function drawConfigListTable(data){
         }],
 		data:data.data,
 		columns: [
-		            {"title":"零部件类别","class":"center","data":"parts_type","defaultContent": ""},
-		            {"title":"物料编码","class":"center","data":"sap_mat","defaultContent": ""},
-		            {"title":"零部件编号","class":"center","data":"components_no","defaultContent": ""},
-		            {"title":"零部件名称","class":"center","data": "components_name","defaultContent": ""},
-		            {"title":"材料/规格","class":"center","data":"size","defaultContent": ""},		            
-		            {"title":"类别","class":"center","data":"type","defaultContent": ""},		            
-		            {"title":"供应商名称","class":"center","data": "vendor","defaultContent": ""},
-		            {"title":"装配车间","class":"center","data":"workshop","defaultContent":""},
+		            {"title":"零部件类别","class":"center","data":"family_name","defaultContent": ""},
+		            {"title":"零部件编号","class":"center","data":"feature_code","defaultContent": ""},
+		            {"title":"零部件名称","class":"center","data": "feature_name","defaultContent": ""},
+		            {"title":"供应商代码","class":"center","data":"supplier_code","defaultContent": ""},		            
+		            {"title":"供应商名称","class":"center","data": "supplier_name","defaultContent": ""},
+		            {"title":"物料编码","class":"center","data":"sap_material","defaultContent": ""},
 		            {"title":"备注","class":"center","data":"notes","defaultContent": ""}		          
 		          ]	
 	});
@@ -374,12 +386,21 @@ function ajaxEdit(saveAdd){
 	var materialNo=$("#materialNo").val();
 	var customer=$("#customer").val();
 	var material=$("#material").val();
-	var tire_type=$("#tire_type").val();
-	var spring_num=$("#spring_num").val();
-	var bus_seats=$("#bus_seats").val();
-	var rated_voltage=$("#rated_voltage").val();
-	var battery_capacity=$("#battery_capacity").val();
-	var passenger_num=$("#passenger_num").val();
+	
+	var brand = $("#brand").val();
+	var manufacturer = $("#manufacturer").val();
+	var vehicle_type = $("#vehicle_type").val();
+	var power_type = $("#power_type").val();
+	var vehicle_length = $("#vehicle_length").val();
+	var wheelbase = $("#wheelbase").val();
+	var max_weight = $("#max_weight").val();
+	var max_speed = $("#max_speed").val();
+	var drive_motor = $("#drive_motor").val();
+	var motor_power = $("#motor_power").val();
+	var battery_capacity = $("#battery_capacity").val();
+	var battery_model = $("#battery_model").val();
+	var rated_voltage = $("#rated_voltage").val();
+	var light_downdip = $("#light_downdip").val();
 	
 	if(order_id==undefined||order_id=='0'){
 		alert("请输入有效订单！");
@@ -467,12 +488,21 @@ function ajaxEdit(saveAdd){
 	param.materialNo=materialNo;
 	param.customer=customer;
 	param.material=material;
-	param.tire_type=tire_type;
-	param.spring_num=spring_num;
-	param.bus_seats=bus_seats;
-	param.rated_voltage=rated_voltage;
+	param.brand = brand;
+	param.manufacturer  =manufacturer;
+	param.vehicle_type = vehicle_type;
+	param.power_type =power_type;
+	param.vehicle_length=vehicle_length;
+	param.wheelbase=wheelbase;
+	param.max_weight=max_weight;
+	param.max_speed=max_speed;
+	param.drive_motor=drive_motor;
+	param.motor_power=motor_power;
 	param.battery_capacity=battery_capacity;
-	param.passenger_num=passenger_num;
+	param.battery_model=battery_model;
+	param.rated_voltage=rated_voltage;
+	param.light_downdip=light_downdip;
+	
 	param.config_detail=JSON.stringify(json_configList);
 	
 	$.ajax({
@@ -506,17 +536,28 @@ function showInfoPage(row){
 	//显示订单配置数据
 	$("#order").val(row.order_no).attr("disabled",true);
 	$("#order_id").val(row.id);
+	$("#order_desc").html(row.order_name_str);
 	$("#configName").val(row.order_config_name).attr("disabled",true);
 	$("#configQty").val(row.config_qty).attr("disabled",true);
 	$("#materialNo").val(row.sap_materialNo).attr("disabled",true);
 	$("#customer").val(row.customer).attr("disabled",true);
 	$("#material").val(row.material).attr("disabled",true);
-	$("#tire_type").val(row.tire_type).attr("disabled",true);
-	$("#spring_num").val(row.spring_num).attr("disabled",true);
-	$("#bus_seats").val(row.bus_seats).attr("disabled",true);
-	$("#rated_voltage").val(row.rated_voltage).attr("disabled",true);
+	
+	$("#brand").val('比亚迪牌').attr("disabled",true);
+	$("#manufacturer").val('比亚迪汽车工业有限公司').attr("disabled",true);
+	$("#vehicle_type").val(row.vehicle_type).attr("disabled",true);
+	$("#power_type").val(row.power_type).attr("disabled",true);
+	$("#vehicle_length").val(row.vehicle_length).attr("disabled",true);
+	$("#wheelbase").val(row.wheelbase).attr("disabled",true);
+	$("#max_weight").val(row.max_weight).attr("disabled",true);
+	$("#max_speed").val(row.max_speed).attr("disabled",true);
+	$("#drive_motor").val(row.drive_motor).attr("disabled",true);
+	$("#motor_power").val(row.motor_power).attr("disabled",true);
 	$("#battery_capacity").val(row.battery_capacity).attr("disabled",true);
-	$("#passenger_num").val(row.passenger_num).attr("disabled",true);
+	$("#battery_model").val(row.battery_model).attr("disabled",true);
+	$("#rated_voltage").val(row.rated_voltage).attr("disabled",true);
+	$("#light_downdip").val(row.light_downdip).attr("disabled",true);
+	
 	$("#upload_div").hide();
 	
 	var param ={

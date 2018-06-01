@@ -60,7 +60,7 @@ border-bottom: 1px solid black;
 				<span style="font-size:18px">比亚迪汽车工业有限公司</span><br/><span style="font-size:18px">整车出厂检验单</span>
 				<table style="width:900px;">
 				<tr>
-					<td style="width:33%;text-align:left;">检验日期：2018-01-01</td><td style="width:33%;text-align:center;">检验流水号：</td><td style="width:33%;text-align:right;">检验线号：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+					<td style="width:33%;text-align:left;">检验日期：<span id="check_date"></span></td><td style="width:33%;text-align:center;">检验流水号：<span id="check_no"></span></td><td style="width:33%;text-align:right;">检验线号：1号线&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 				</tr>
 				</table>
 				
@@ -208,9 +208,9 @@ border-bottom: 1px solid black;
 				</tr>
 				<tr>
 					<td class="x" style="width:99px">标准</td>
-					<td class="x" colspan="2">18000</td><td class="x" colspan="3">18000</td>
-					<td class="x" colspan="2">0.8~0.95</td><td class="x" colspan="2">0.8~0.95</td>
-					<td class="x" style="">-170~350</td><td class="x" colspan="2">-350~350</td>
+					<td class="x" colspan="2"><span id="t_20_1"></span></td><td class="x" colspan="3"><span id="t_20_2"></span></td>
+					<td class="x" colspan="2"><span id="t_20_3"></span></td><td class="x" colspan="2"><span id="t_20_4"></span></td>
+					<td class="x" style=""><span id="t_20_5"></span></td><td class="x" colspan="2"><span id="t_20_6"></span></td>
 				</tr>
 				<tr>
 					<td class="x" style="width:99px">评价</td>
@@ -230,8 +230,8 @@ border-bottom: 1px solid black;
 				</tr>
 				<tr>
 					<td class="x" style="width:99px">标准</td><td class="x" colspan="6"> / </td>
-					<td class="x" colspan="2">0.6~0.8</td><td class="x" colspan="2">0.6~0.8</td>
-					<td class="x" style="">-170~350</td><td class="x" colspan="2">-170~350</td>
+					<td class="x" colspan="2"><span id="t_24_1"></span></td><td class="x" colspan="2"><span id="t_24_2"></span></td>
+					<td class="x" style=""><span id="t_24_3"></span></td><td class="x" colspan="2"><span id="t_24_4"></span></td>
 				</tr>
 				<tr>
 					<td class="x" style="width:99px">评价</td><td class="x" colspan="6"> / </td>

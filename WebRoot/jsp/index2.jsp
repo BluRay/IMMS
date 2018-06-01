@@ -38,28 +38,7 @@ String factory=(String)session.getAttribute("factory");
 			<jsp:include page="left.jsp" flush="true"/>
 			<!-- 主体 -->
 			<div class="main-content">			
-			<!-- 路径和搜索框 -->
-			<div class="breadcrumbs breadcrumbs-fixed" id="breadcrumbs">
-					<ul class="breadcrumb">
-						<li><i class="ace-icon fa fa-home home-icon"></i><a href="/BMS/index">首页</a></li>
-						<li class="active">
-						<select name="" id="search_factory" class="myselect">
-						</select>
-						<input id="factory_id_default" type="hidden" value='<%=factory_id%>'>
-					</ul><!-- /.breadcrumb -->
-
-					<!-- #section:basics/content.searchbox -->
-					<div class="nav-search" id="nav-search">
-						<form class="form-search">
-							<span><i class="ace-icon fa fa-book blue"></i><a href="../BMS系统操作手册20170822.pptx">《BMS操作手册》</a></span> 
-							<span class="input-icon">
-								<input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" /><i class="ace-icon fa fa-search nav-search-icon"></i>
-							</span>
-						</form>
-					</div><!-- /.nav-search -->
-				</div>
-				
-			<div class="page-content">
+			<div class="page-content" style="padding-left: 5px;padding-right: 12px;">
 					<!-- 设置小部件 -->
 					<%-- <jsp:include page="settings.jsp" flush="true"/> --%>
 					<!-- /section:settings.box -->
@@ -69,7 +48,11 @@ String factory=(String)session.getAttribute("factory");
 										<!-- #section:custom/widget-box -->
 										<div class="widget-box ui-sortable-handle">
 											<div class="widget-header">
-												<h5 class="widget-title"><a href='#' onclick="reportFoward('plan/planSearch')">工厂日计划达成</a></h5>
+												<h5 class="widget-title"><a href='#' onclick="reportFoward('plan/planSearch')">工厂日计划达成</a>
+													<select id="search_factory" class="myselect">
+													</select>
+													<input id="factory_id_default" type="hidden" value='<%=factory_id%>'>
+												</h5>
 												<!-- #section:custom/widget-box.toolbar -->
 												<div class="widget-toolbar">
 
@@ -202,9 +185,19 @@ String factory=(String)session.getAttribute("factory");
 	</div>
 	<script src="assets/js/jquery-ui.custom.min.js"></script>
 	<script src="assets/js/jquery.easypiechart.min.js"></script>
+	<script src="assets/js/bootstrap3-typeahead.js"></script>
 	<script src="js/highcharts.js"></script>
 	<script src="js/common.js"></script>
 	<script src="js/index.js"></script>
-	
+	<jsp:include page="tabPannel.jsp" flush="true"/>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("#search_factory").change(function(){
+				drawFactoryDailyChart();
+				drawFactoryOrderChart();
+				drawFactoryException();
+			})
+		});
+	</script>
 	</body>
 </html>

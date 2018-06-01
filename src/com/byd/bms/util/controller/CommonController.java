@@ -21,6 +21,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.byd.bms.production.service.IProductionService;
 import com.byd.bms.util.EmailSender;
 import com.byd.bms.util.EmailSender.TableTable;
 import com.byd.bms.util.EmailSender.TableTable.TdTd;
@@ -37,6 +38,8 @@ import com.sap.conn.jco.JCoTable;
 public class CommonController extends BaseController {
 	@Autowired
 	protected ICommonService commonService;
+	@Autowired
+	protected IProductionService productionService;
 	/**
 	 * added by xjw for 根据订单编号输入值模糊查询订单下拉列表
 	 * 
@@ -54,6 +57,22 @@ public class CommonController extends BaseController {
 		condMap.put("busType", busType);
 		condMap.put("factory",factory);
 		model.put("data", commonService.getOrderFuzzySelect(condMap));
+
+		return model;
+	}
+	
+	@RequestMapping("/getAllOrderFuzzySelect")
+	@ResponseBody
+	public ModelMap getAllOrderFuzzySelect() {
+		model=new ModelMap();
+		String orderNo = request.getParameter("orderNo");
+		String busType = request.getParameter("busType");
+		String factory = request.getParameter("factory");
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("orderNo", orderNo);
+		condMap.put("busType", busType);
+		condMap.put("factory",factory);
+		model.put("data", commonService.getAllOrderFuzzySelect(condMap));
 
 		return model;
 	}
@@ -782,6 +801,23 @@ public class CommonController extends BaseController {
 		conditionMap.put("team", request.getParameter("team"));
 		
 		commonService.getWorkgroupPrice(conditionMap,model);
+		return model;
+	}
+	
+	/**
+	 * 查询监控工序下拉列表
+	 * @return
+	 */
+	@RequestMapping("/getProcessMonitorSelect")
+	@ResponseBody
+	public ModelMap getProcessMonitorSelect(){
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("factory", request.getParameter("factory"));
+		condMap.put("workshop", request.getParameter("workshop"));
+		condMap.put("line", request.getParameter("line"));
+		condMap.put("order_type", request.getParameter("order_type"));
+		model=new ModelMap();
+		model.put("data", productionService.getProcessMonitorSelect(condMap));
 		return model;
 	}
 }

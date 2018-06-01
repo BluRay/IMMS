@@ -54,7 +54,7 @@
 									 <table>
 										<tr>
 											<td>等待日期：</td>
-											<td><input id="wait_date" placeholder="开始时间..." style="height: 30px;width:100px" type="text" onClick="WdatePicker({el:'wait_date',dateFmt:'yyyy-MM-dd'});"></td>
+											<td><input id="wait_date" placeholder="开始时间..." style="height: 30px;width:100px" type="text" onClick="WdatePicker({el:'wait_date',dateFmt:'yyyy-MM-dd',onpicked:function(){ajaxQueryTeamStaffDetail();}});"></td>
 											<td>&nbsp;等待原因：</td>
 											<td>
 											    <select id="waitReason" class="input-small" style='width:100px;height: 30px;'>

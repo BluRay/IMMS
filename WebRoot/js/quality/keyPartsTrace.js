@@ -11,9 +11,10 @@ $(document).ready(function(){
 		getBusNumberSelect('#search_busNumber');
 		getFactorySelect("quality/keyPartsTrace",'',"#search_factory","全部",'id');
 		getBusTypeSelect("","#search_bus_type","全部","id");
-		getWorkshopSelect("",$("#search_factory :selected").text(),"","#search_workshop","全部","id");
+		getWorkshopSelect("quality/keyPartsTrace",$("#search_factory :selected").text(),"","#search_workshop",null,"id");
+		//getWorkshopSelect("",$("#search_factory :selected").text(),"","#search_workshop","全部","id");
 		getOrderNoSelect("#search_order","#orderId");
-		ajaxQuery();
+		//ajaxQuery();
 	}
 
 /*	$('#nav-search-input').bind('keydown', function(event) {
@@ -28,7 +29,7 @@ $(document).ready(function(){
 	});
 	
 	$('#search_factory').change(function(){ 
-		getWorkshopSelect("quality/keyPartsTrace",$("#search_factory :selected").text(),"","#search_workshop","全部","id");
+		getWorkshopSelect("hrReport/waitReport",$("#search_factory :selected").text(),"","#search_workshop","全部","id");
 	});
 	$('#search_order').change(function(){ 
 		$("#search_config").html("");
@@ -91,6 +92,8 @@ function ajaxQuery(){
 			}
 		},
 		ajax:function (data, callback, settings) {
+			$("#btnQuery").attr("disabled","disabled"); 
+			$(".divLoading").addClass("fade in").show();
 			var param ={
 				"draw":1,
 				"factoryId":$("#search_factory").val(),
@@ -122,6 +125,8 @@ function ajaxQuery(){
                     //调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
                     //此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
                     callback(returnData);
+                	$(".divLoading").hide();
+                	$("#btnQuery").removeAttr("disabled");
                 }
             });
 		},
@@ -212,7 +217,13 @@ function showBusNumberDetail(json){
         			});
                 	//封装返回数据
                     var returnData = {};
-                    returnData.data = result.data;						
+                    var data_list=[];
+                    $.each(result.data,function(index,obj){
+                    	if(obj.scan_flag>0||obj.offline_flag>0){
+                    		data_list.push(obj)
+                    	}
+                    })
+                    returnData.data = data_list;					
                     //调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
                     //此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
                     callback(returnData);
@@ -291,7 +302,7 @@ function getOrderConfigSelect(order_id,selectval,selectId,selectType,valName){
  * selectType:下拉框组件类型：==全部==、==请选择==、== ==
  * valName:option value值:id/name
  */
-
+/**
 function getWorkshopSelect(url,factory,selectval,selectId,selectType,valName){
 	$.ajax({
 		url : "/BMS/common/getWorkshopSelectAuth",
@@ -305,7 +316,7 @@ function getWorkshopSelect(url,factory,selectval,selectId,selectType,valName){
 			getSelects(response.data,selectval,selectId,selectType, valName);	
 		}
 	});
-}
+}**/
 
 function ajaxEdit(){
 

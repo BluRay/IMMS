@@ -113,7 +113,7 @@
 					</table>
 				</form>
 			</div>
-			
+			<input type="hidden" id="login_user" value="<%=session.getAttribute("display_name")%>" />
 			<!-- 脚 -->
 			<%-- <jsp:include page="footer.jsp" flush="true"/> --%>
 			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse"><i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i></a>

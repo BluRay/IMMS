@@ -6,8 +6,12 @@ $(document).ready(function(){
 	
 	function initPage(){
 		//getBusNumberSelect('#nav-search-input');
-		getFactorySelect("report/dpuReport",'',"#search_factory",null,'id');
+		getFactorySelect("report/dpuReport",'',"#search_factory","全部",'id');
 		getKeysSelect("CHECK_NODE", "", "#search_test_node_id",null,"id");
+		var now = new Date(); //当前日期
+		$("#start_date").val(ChangeDateToString(now).substring(0,7) + "-01");
+		$("#end_date").val(ChangeDateToString(now));
+		getQuery();
 	}
 	
 /*	$('#nav-search-input').bind('keydown', function(event) {
@@ -17,7 +21,8 @@ $(document).ready(function(){
 		}
 	})*/
 	
-	$("#btnQuery").click (function () {
+	function getQuery(){
+
 		if($("#start_date").val()==""){
 			alert("请选择开始日期！");
 			$("#start_date").focus();
@@ -29,7 +34,16 @@ $(document).ready(function(){
 			return false;
 		}
 		
-		var factory=$("#search_factory").val();
+		var factory_str = "";
+		$("#search_factory option").each(function(){
+			if($(this).val() != '')factory_str += $(this).val() + ",";
+		});
+		factory_str = factory_str.substring(0,factory_str.length-1);
+		if($("#search_factory").val() != ''){
+			factory_str = $("#search_factory").val();
+		}
+		
+		var factory="("+ factory_str + ")";
 		var test_node_id=$("#search_test_node_id").val();
 		var startDate=$("#start_date").val();
 		var endDate=$("#end_date").val();
@@ -50,6 +64,10 @@ $(document).ready(function(){
 			}
 		});
 		ajaxQuery(conditions);
+	}
+	
+	$("#btnQuery").click (function () {
+		getQuery();
 	})
 	
 });
@@ -238,4 +256,25 @@ function ajaxQuery(conditions){
 	});
 }
 
-
+function ChangeDateToString(DateIn){
+	var Year = 0;
+	var Month = 0;
+	var Day = 0;
+	var CurrentDate = "";
+	// 初始化时间
+	Year = DateIn.getFullYear();
+	Month = DateIn.getMonth() + 1;
+	Day = DateIn.getDate();
+	CurrentDate = Year + "-";
+	if (Month >= 10){
+		CurrentDate = CurrentDate + Month + "-";
+	}else {
+		CurrentDate = CurrentDate + "0" + Month + "-";
+	}
+	if (Day >= 10) {
+		CurrentDate = CurrentDate + Day;
+	} else {
+		CurrentDate = CurrentDate + "0" + Day;
+	}
+	return CurrentDate;
+}

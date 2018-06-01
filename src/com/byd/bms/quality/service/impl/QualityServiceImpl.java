@@ -92,6 +92,11 @@ public class QualityServiceImpl implements IQualityService {
 	public void getKeyPartsList(HashMap<String, Object> condMap, ModelMap model) {
 		model.put("data", qualityDao.queryKeyPartsList(condMap));		
 	}
+	
+	@Override
+	public int deleteProcessFault(String processFaultId){
+		return qualityDao.deleteProcessFault(processFaultId);
+	}
 	@Override
 	public void validateWorkshopProcess(List<Map<String, String>> addList) throws Exception {
 		List<Map<String,String>> process_list=qualityDao.queryWorkshopProcessList(addList);
@@ -329,7 +334,10 @@ public class QualityServiceImpl implements IQualityService {
 		
 	
 	//========================yk start=================================//
-			
+	@Override
+	public int checkOrderNo(String order_no){
+		return qualityDao.checkOrderNo(order_no);
+	}
 			
 	//======================== yk end=================================//
 			
@@ -597,6 +605,14 @@ public class QualityServiceImpl implements IQualityService {
 		result = qualityDao.getBusTestingDate(conditionMap);		
 		return result;
 	}
+	@Override
+	@DataSource("dataSourceTestingLineWH")
+	public Map<String, Object> getBusTestingDateWH(Map<String, Object> conditionMap){
+		Map<String, Object> result=new HashMap<String,Object>();
+		result = qualityDao.getBusTestingDateWH(conditionMap);		
+		return result;
+	}
+	
 	
 	@Override
 	@DataSource("dataSourceTestingLineJCX")
@@ -620,6 +636,17 @@ public class QualityServiceImpl implements IQualityService {
 	}
 	
 	@Override
+	public Map<String, Object> getKeyPartsInfo(Map<String,Object> queryMap){
+		int totalCount=0;	
+		List<Map<String, Object>> datalist = qualityDao.getKeyPartsInfo(queryMap);
+		totalCount = qualityDao.getKeyPartsCount(queryMap);
+		Map<String, Object> result = new HashMap<String,Object>();
+		result.put("total", totalCount);
+		result.put("rows", datalist);
+		return result;
+	}
+	
+	@Override
 	public List<Map<String, Object>> getProcessFaultReportData(Map<String,Object> queryMap){
 		List<Map<String, Object>> data = new ArrayList<Map<String, Object>>();
 		data = qualityDao.getProcessFaultReportData(queryMap);		
@@ -627,9 +654,37 @@ public class QualityServiceImpl implements IQualityService {
 	}
 	
 	@Override
+	public List<Map<String, Object>> getProcessFaultOrderReportData(Map<String,Object> queryMap){
+		List<Map<String, Object>> data = new ArrayList<Map<String, Object>>();
+		data = qualityDao.getProcessFaultOrderReportData(queryMap);		
+		return data;
+	}
+	
+	@Override
+	public List<Map<String, Object>> getProcessFaultOrderReportData2(Map<String,Object> queryMap){
+		List<Map<String, Object>> data = new ArrayList<Map<String, Object>>();
+		data = qualityDao.getProcessFaultOrderReportData2(queryMap);		
+		return data;
+	}
+	
+	@Override
+	public List<Map<String, Object>> getOrderFaultReportList(Map<String,Object> queryMap){
+		List<Map<String, Object>> data = new ArrayList<Map<String, Object>>();
+		data = qualityDao.getOrderFaultReportList(queryMap);		
+		return data;
+	}
+	
+	@Override
 	public List<Map<String, Object>> getFactoryIdByVin(Map<String,Object> queryMap){
 		List<Map<String, Object>> data = new ArrayList<Map<String, Object>>();
 		data = qualityDao.getFactoryIdByVin(queryMap);	
+		return data;
+	}
+	
+	@Override
+	public List<Map<String, String>> getProcessFaultArea(){
+		List<Map<String, String>> data = new ArrayList<Map<String, String>>();
+		data = qualityDao.getProcessFaultArea();
 		return data;
 	}
 	
@@ -693,6 +748,11 @@ public class QualityServiceImpl implements IQualityService {
 		List<Map<String,Object>> datalist= qualityDao.getWorkshopByFactoryId(factory_id);
 		result.put("data", datalist);
 		return result;
+	}
+	@Override
+	public List<Map<String, Object>> queryKeyPartsListByPartsNo(Map<String, Object> condMap) {
+		// TODO Auto-generated method stub
+		return qualityDao.queryKeyPartsListByPartsNo(condMap);
 	}
 		
 }

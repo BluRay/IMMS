@@ -90,4 +90,9 @@ public interface IHrBaseDataDao {
 	public int querySupplierPriceListCount(Map<String, Object> condMap);
 
 	public void deleteSupplierPrice(@Param(value="ids")String ids);
+	
+	public List<Map<String,Object>> getJopPriceList(Map<String, Object> infomap);
+	
+	public int addJobUnitPrice(List<Map<String,Object>> addList);
+	public int modifyJobUnitPrice(List<Map<String,Object>> modifyList);
 }

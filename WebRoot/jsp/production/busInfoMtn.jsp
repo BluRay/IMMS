@@ -57,13 +57,13 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="" style="width:21%">*&nbsp;生产工厂：</label>
 						<div class="col-sm-3">
-							<select id="factory" class="input-medium" style="width:100%" >
+							<select id="factory" class="input-medium" style="width:100%" disabled>
 								<option value=''>请选择</option>
 							</select>
 						</div>
 						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="order" style="width:21%">*&nbsp;订单编号：</label>
 						<div class="col-sm-2" style="width:19%">
-							<input type="text"  class="input-medium" style="width:100%"  id="order"  placeholder="订单编号.." />
+							<input type="text"  class="input-medium" style="width:100%"  id="order"  placeholder="订单编号.." disabled />
 							<input type="text" style="display:none" id="order_id" />
 						</div>
 						<label id="specify_order_lable" class="col-sm-2 control-label no-padding-left"  style="width: 80px;" for=""><a href="#" onclick="javascript:specifyBus();">指定车号</a></label>
@@ -75,34 +75,23 @@
 						</div>
 						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="bus_seats" style="width:21%">&nbsp;座位数：</label>
 						<div class="col-sm-3">
-							<input type="text" class="input-medium" style="width:100%" placeholder="座位数..." id="bus_seats" />
+							<input type="text" class="input-medium" style="width:100%" placeholder="座位数..." id="bus_seats" disabled />
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="" style="width:21%">&nbsp;额定载客人数：</label>
 						<div class="col-sm-3">
-							<input type="text"  class="input-medium" style="width:100%" placeholder="额定载客人数..." id="passenger_num" />
+							<input type="text"  class="input-medium" style="width:100%" placeholder="额定载客人数..." id="passenger_num" disabled/>
 						</div>
 						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="" style="width:21%">&nbsp;轮胎规格：</label>
 						<div class="col-sm-3">
-							<input type="text"  class="input-medium" style="width:100%" placeholder="轮胎规格..." id="tire_type" />
+							<input type="text"  class="input-medium" style="width:100%" placeholder="轮胎规格..." id="tire_type" disabled/>
 						</div>
 					</div>
-					<!--
-					<div class="form-group">
-						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="battery_capacity" style="width:21%">&nbsp;电池容量：</label>
-						<div class="col-sm-3">
-							<input type="text"  class="input-medium" style="width:100%" placeholder="电池容量.." id="battery_capacity" />
-						</div>
-						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="rated_voltage" style="width:21%">&nbsp;额定电压：</label>
-						<div class="col-sm-3">
-							<input type="text"  class="input-medium" style="width:100%" placeholder="额定电压..." id="rated_voltage" />
-						</div>
-					</div>  -->
 					<div class="form-group">						
 						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="spring_num" style="width:21%">&nbsp;弹簧片数：</label>
 						<div class="col-sm-3">
-							<input type="text"  class="input-medium" style="width:100%"placeholder="弹簧片数..." id="spring_num" />
+							<input type="text"  class="input-medium" style="width:100%"placeholder="弹簧片数..." id="spring_num" disabled/>
 						</div>
 						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="dp_production_date" style="width:21%">&nbsp;底盘生产日期：</label>
 						<div class="col-sm-3">
@@ -112,7 +101,7 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="dp_zzd" style="width:21%">&nbsp;底盘资质地：</label>
 						<div class="col-sm-3">
-							<input type="text"  class="input-medium" style="width:100%" placeholder="底盘资质地..." id="dp_zzd" />
+							<input type="text"  class="input-medium" style="width:100%" placeholder="底盘资质地..." id="dp_zzd" disabled/>
 						</div>
 						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="zc_production_date" style="width:21%">&nbsp;整车生产日期：</label>
 						<div class="col-sm-3">
@@ -122,30 +111,77 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="zc_zzd" style="width:21%">&nbsp;整车资质地：</label>
 						<div class="col-sm-3">
-							<input type="text"  class="input-medium" style="width:100%" placeholder="整车资质地.." id="zc_zzd" />
+							<input type="text"  class="input-medium" style="width:100%" placeholder="整车资质地.." id="zc_zzd" disabled/>
 						</div>
 						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="hgz_note" style="width:21%">&nbsp;合格证备注：</label>
 						<div class="col-sm-3">
-							<input type="text"  class="input-medium" style="width:100%" placeholder="合格证备注..." id="hgz_note" />
+							<input type="text"  class="input-medium" style="width:100%" placeholder="合格证备注..." id="hgz_note" disabled/>
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="ccczs_date" style="width:21%">&nbsp;CCC证书签发日期：</label>
 						<div class="col-sm-3">
-							<input type="text"  class="input-medium" style="width:100%" placeholder="CCC证书签发日期.." id="ccczs_date" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+							<input type="text"  class="input-medium" style="width:100%" placeholder="CCC证书签发日期.." id="ccczs_date" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" disabled/>
 						</div>
 						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="dpgg_date" style="width:21%">&nbsp;底盘公告生效日期：</label>
 						<div class="col-sm-3">
-							<input type="text"  class="input-medium" style="width:100%" placeholder="底盘公告生效日期..." id="dpgg_date" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+							<input type="text"  class="input-medium" style="width:100%" placeholder="底盘公告生效日期..." id="dpgg_date" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" disabled/>
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="zcgg_date" style="width:21%">&nbsp;整车公告生效日期：</label>
 						<div class="col-sm-3">
-							<input type="text"  class="input-medium" style="width:100%" placeholder="整车公告生效日期.." id="zcgg_date" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+							<input type="text"  class="input-medium" style="width:100%" placeholder="整车公告生效日期.." id="zcgg_date" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" disabled/>
 						</div>
 						
 					</div>
+			</form>
+		</div>
+		
+		<div id="dialog-config-batch" class="hide">
+				<form id="create_form" class="form-horizontal">
+					<div class="form-group">
+						<label class="col-sm-4 control-label no-padding-right no-padding-right" for="" >*&nbsp;生产工厂：</label>
+						<div class="col-sm-5">
+							<select id="factory_batch" class="input-medium" style="width:100%" >
+								<option value=''>请选择</option>
+							</select>
+						</div>	
+						<label id="specify_order_lable" class="col-sm-3 control-label no-padding-left"  style="width: 80px;" for=""><a href="#" onclick="javascript:specifyBus();">指定车号</a></label>			
+					</div>
+					<div class="form-group">
+						<label class="col-sm-4 control-label no-padding-right no-padding-right" for="order" >*&nbsp;订单编号：</label>
+						<div class="col-sm-5" >
+							<input type="text"  class="input-medium" style="width:100%"  id="order_batch"  placeholder="订单编号.." />
+							<input type="text" style="display:none" id="order_id" />
+						</div>
+					</div>
+					<div class="form-group">						
+						<label class="col-sm-4 control-label no-padding-right no-padding-right" for="dp_production_date" >&nbsp;底盘生产日期：</label>
+						<div class="col-sm-5">
+							<input id="dp_production_date_batch" class="input-medium" style="width:100%" placeholder="底盘生产日期.." onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-4 control-label no-padding-right no-padding-right" for="zc_production_date" >&nbsp;整车生产日期：</label>
+						<div class="col-sm-5">
+							<input id="zc_production_date_batch" class="input-medium" style="width:100%" placeholder="整车生产日期.." onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text">
+						</div>
+					</div>
+					
+					<!-- <div class="form-group">						
+						<label class="col-sm-4 control-label no-padding-right no-padding-right" for="dpgg_date" >&nbsp;底盘公告生效日期：</label>
+						<div class="col-sm-5">
+							<input type="text"  class="input-medium" style="width:100%" placeholder="底盘公告生效日期..." id="dpgg_date_batch" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-4 control-label no-padding-right no-padding-right" for="zcgg_date" >&nbsp;整车公告生效日期：</label>
+						<div class="col-sm-5">
+							<input type="text"  class="input-medium" style="width:100%" placeholder="整车公告生效日期.." id="zcgg_date_batch" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+						</div>					
+					</div> -->
+					
 			</form>
 		</div>
 		

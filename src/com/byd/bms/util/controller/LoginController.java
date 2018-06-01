@@ -29,11 +29,30 @@ public class LoginController extends BaseController{
 	
 	@RequestMapping("/")  
     public ModelAndView index(){ 
+		String user_type = session.getAttribute("user_type").toString();
+		/**
+		String dev = "PC";
+		if(session.getAttribute("dev") != null){
+			dev = session.getAttribute("dev").toString();
+		}
+		
+		if("PC".equals(dev)){
+			if (user_type.equals("1")) {
+				mv.setViewName("index");
+			} else {
+				mv.setViewName("index2");
+			}
+		}else{
+			mv.setViewName("home_mobile");
+		}**/
+		
 		String requestHeader = request.getHeader("user-agent");
 		if(HttpUtil.isMobileDevice(requestHeader)){
 			mv.setViewName("home_mobile");
-		}else{
+		}else if(user_type.equals("1")){
 			mv.setViewName("index");
+		}else{
+			mv.setViewName("index2");
 		}
 
         return mv;  
@@ -56,6 +75,8 @@ public class LoginController extends BaseController{
 		
 		if(MD5Util.validPassword(password, user.getPassword())){
 			session.setAttribute("user_name", user.getUsername());
+			session.setAttribute("password", user.getPassword());
+			session.setAttribute("loginKey", password);
 			session.setAttribute("display_name", user.getDisplay_name());
 			session.setAttribute("user_id", user.getId());
 			session.setAttribute("user_type", user.getUser_type());
@@ -68,6 +89,7 @@ public class LoginController extends BaseController{
 			session.setAttribute("division", user.getDivision());
 			session.setAttribute("division_id", user.getDivision_id());
 			session.setAttribute("bmsuser", user);
+			session.setAttribute("dev", "PC");
 			model.addAttribute("user", user);
 			
 			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -93,6 +115,7 @@ public class LoginController extends BaseController{
 		session.setAttribute("user_id", null);
 		session.setAttribute("factory", null);
 		session.setAttribute("bmsuser", null);
+		session.setAttribute("dev", null);
 		mv.setViewName("login");
         return mv;  
     }
@@ -100,14 +123,28 @@ public class LoginController extends BaseController{
 	@RequestMapping("/index")  
     public ModelAndView index1(){ 
 		String user_type = session.getAttribute("user_type").toString();
-		String requestHeader = request.getHeader("user-agent");
+		String dev = "PC";
+		if(session.getAttribute("dev") != null){
+			dev = session.getAttribute("dev").toString();
+		}
+		//String requestHeader = request.getHeader("user-agent");
+		if("PC".equals(dev)){
+			if (user_type.equals("1")) {
+				mv.setViewName("index");
+			} else {
+				mv.setViewName("index2");
+			}
+		}else{
+			mv.setViewName("home_mobile");
+		}
+		/**
 		if(HttpUtil.isMobileDevice(requestHeader)){
 			mv.setViewName("home_mobile");
 		}else if(user_type.equals("1")){
 			mv.setViewName("index");
 		}else{
 			mv.setViewName("index2");
-		}
+		}**/
 		
         return mv;  
     } 
@@ -196,7 +233,9 @@ public class LoginController extends BaseController{
 			session.setAttribute("user_id", user.getId());
 			session.setAttribute("staff_number", user.getStaff_number());
 			session.setAttribute("factory", user.getFactory());
+			session.setAttribute("factory_id", user.getFactory_id());
 			session.setAttribute("bmsuser", user);
+			session.setAttribute("dev", "Mobile");
 			model.addAttribute("user", user);
 			
 			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
