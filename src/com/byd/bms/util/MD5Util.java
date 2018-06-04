@@ -4,12 +4,10 @@ import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.StringEscapeUtils;
 
-
-import sun.misc.BASE64Encoder;
+//////import sun.misc.BASE64Encoder;
 
 public class MD5Util {  
 	  
@@ -64,12 +62,12 @@ public class MD5Util {
             throws NoSuchAlgorithmException, UnsupportedEncodingException {  
     	//确定计算方法
         MessageDigest md5=MessageDigest.getInstance("MD5");
-        BASE64Encoder base64en = new BASE64Encoder();
+        //////BASE64Encoder base64en = new BASE64Encoder();
         //加密后的字符串
         StringBuffer sb=new StringBuffer(password);
         sb.append(secureKey);
-        String encrptedPwd=base64en.encode(md5.digest(sb.toString().getBytes("utf-8")));
-		return encrptedPwd;
+        //////String encrptedPwd=base64en.encode(md5.digest(sb.toString().getBytes("utf-8")));
+		return password;//////encrptedPwd;
     }  
     
 	/**

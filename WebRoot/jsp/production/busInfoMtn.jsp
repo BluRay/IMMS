@@ -101,7 +101,7 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="dp_zzd" style="width:21%">&nbsp;底盘资质地：</label>
 						<div class="col-sm-3">
-							<input type="text"  class="input-medium" style="width:100%" placeholder="底盘资质地..." id="dp_zzd" disabled/>
+							<input type="text"  class="input-medium" style="width:100%" placeholder="底盘资质地..." id="dp_zzd" />
 						</div>
 						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="zc_production_date" style="width:21%">&nbsp;整车生产日期：</label>
 						<div class="col-sm-3">
@@ -111,7 +111,7 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="zc_zzd" style="width:21%">&nbsp;整车资质地：</label>
 						<div class="col-sm-3">
-							<input type="text"  class="input-medium" style="width:100%" placeholder="整车资质地.." id="zc_zzd" disabled/>
+							<input type="text"  class="input-medium" style="width:100%" placeholder="整车资质地.." id="zc_zzd" />
 						</div>
 						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="hgz_note" style="width:21%">&nbsp;合格证备注：</label>
 						<div class="col-sm-3">
@@ -121,17 +121,17 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="ccczs_date" style="width:21%">&nbsp;CCC证书签发日期：</label>
 						<div class="col-sm-3">
-							<input type="text"  class="input-medium" style="width:100%" placeholder="CCC证书签发日期.." id="ccczs_date" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" disabled/>
+							<input type="text"  class="input-medium" style="width:100%" placeholder="CCC证书签发日期.." id="ccczs_date" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
 						</div>
 						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="dpgg_date" style="width:21%">&nbsp;底盘公告生效日期：</label>
 						<div class="col-sm-3">
-							<input type="text"  class="input-medium" style="width:100%" placeholder="底盘公告生效日期..." id="dpgg_date" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" disabled/>
+							<input type="text"  class="input-medium" style="width:100%" placeholder="底盘公告生效日期..." id="dpgg_date" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right no-padding-right" for="zcgg_date" style="width:21%">&nbsp;整车公告生效日期：</label>
 						<div class="col-sm-3">
-							<input type="text"  class="input-medium" style="width:100%" placeholder="整车公告生效日期.." id="zcgg_date" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" disabled/>
+							<input type="text"  class="input-medium" style="width:100%" placeholder="整车公告生效日期.." id="zcgg_date" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
 						</div>
 						
 					</div>
@@ -169,7 +169,7 @@
 						</div>
 					</div>
 					
-					<!-- <div class="form-group">						
+					<div class="form-group">						
 						<label class="col-sm-4 control-label no-padding-right no-padding-right" for="dpgg_date" >&nbsp;底盘公告生效日期：</label>
 						<div class="col-sm-5">
 							<input type="text"  class="input-medium" style="width:100%" placeholder="底盘公告生效日期..." id="dpgg_date_batch" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
@@ -180,7 +180,26 @@
 						<div class="col-sm-5">
 							<input type="text"  class="input-medium" style="width:100%" placeholder="整车公告生效日期.." id="zcgg_date_batch" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
 						</div>					
-					</div> -->
+					</div>
+					
+					<div class="form-group">						
+						<label class="col-sm-4 control-label no-padding-right no-padding-right" for="dpgg_date" >&nbsp;CCC证书签发日期：</label>
+						<div class="col-sm-5">
+							<input type="text"  class="input-medium" style="width:100%" placeholder="CCC证书签发日期.." id="ccczs_date_batch" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-4 control-label no-padding-right no-padding-right" for="zcgg_date" >&nbsp;底盘资质地：</label>
+						<div class="col-sm-5">
+							<input type="text"  class="input-medium" style="width:100%" placeholder="底盘资质地.." id="dp_zzd_batch" />
+						</div>					
+					</div>
+					<div class="form-group">						
+						<label class="col-sm-4 control-label no-padding-right no-padding-right" for="dpgg_date" >&nbsp;整车资质地：</label>
+						<div class="col-sm-5">
+							<input type="text"  class="input-medium" style="width:100%" placeholder="整车资质地..." id="zc_zzd_batch" />
+						</div>
+					</div>
 					
 			</form>
 		</div>

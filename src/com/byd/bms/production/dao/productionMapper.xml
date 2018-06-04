@@ -36,7 +36,12 @@
 	</select>
 	
 	<select id="queryBusInfo" parameterType="Map" resultType="Map">
-		select b.*,f.factory_name,CONCAT(o.order_name,t.bus_type_code,' ',o.order_qty,'台') AS order_desc,o.order_area,o.order_no,c.color order_color,
+		select case when (b.dp_zzd is null or b.dp_zzd ='') then c.dp_zzd else b.dp_zzd end as dp_zzd,
+		case when (b.zc_zzd is null or b.zc_zzd ='') then c.zc_zzd else b.zc_zzd end as zc_zzd,
+		case when (b.ccczs_date is null or b.ccczs_date ='') then c.ccczs_date else b.ccczs_date end as ccczs_date,
+		case when (b.dpgg_date is null or b.dpgg_date ='') then c.dpgg_date else b.dpgg_date end as dpgg_date,
+		case when (b.zcgg_date is null or b.zcgg_date ='') then c.zcgg_date else b.zcgg_date end as zcgg_date,
+		b.*,f.factory_name,CONCAT(o.order_name,t.bus_type_code,' ',o.order_qty,'台') AS order_desc,o.order_area,o.order_no,c.color order_color,
 		case b.status when '0' then '正常' else '冻结' end as status,p.factory,p.workshop,p.line,p.process_name,o.order_type,o.bus_type_id,
 		(select distinct s.line_name from BMS_PD_SCAN s 
 		where s.bus_number=b.bus_number and s.factory_name=f.factory_name and s.workshop_name=#{workshop_old} ) old_line,
@@ -176,7 +181,12 @@
 	</insert>
 	
 	<select id="queryBusInfoList" parameterType="Map" resultType="Map">
-		SELECT b.*,CONCAT(o.order_no,' ',o.order_name,t.bus_type_code,o.order_qty,' ','台') AS order_desc,f.factory_name,o.order_no,c.*
+		SELECT case when (b.dp_zzd is null or b.dp_zzd ='') then c.dp_zzd else b.dp_zzd end as dp_zzd,
+		case when (b.zc_zzd is null or b.zc_zzd ='') then c.zc_zzd else b.zc_zzd end as zc_zzd,
+		case when (b.ccczs_date is null or b.ccczs_date ='') then c.ccczs_date else b.ccczs_date end as ccczs_date,
+		case when (b.dpgg_date is null or b.dpgg_date ='') then c.dpgg_date else b.dpgg_date end as dpgg_date,
+		case when (b.zcgg_date is null or b.zcgg_date ='') then c.zcgg_date else b.zcgg_date end as zcgg_date,
+		b.*,CONCAT(o.order_no,' ',o.order_name,t.bus_type_code,o.order_qty,' ','台') AS order_desc,f.factory_name,o.order_no,c.*
 		FROM BMS_PLAN_BUS b
 		LEFT JOIN BMS_OR_ORDER o on b.order_id=o.id
 		LEFT JOIN BMS_OR_ORDER_CONFIG c on c.id=b.order_config_id and c.order_id=o.id
@@ -563,7 +573,10 @@
 	<select id="getCertificationInfo" parameterType="String" resultType="Map">
 		select t.bus_type_code,c.brand,c.vehicle_model,c.tire_type,c.motor_model,c.chassis_model,c.motor_power,
 		c.max_weight,c.battery_model,b.sequence,c.battery_capacity,c.passenger_num AS passengers,c.spring_num,
-		b.nameplate_print_date AS productive_date,c.rated_voltage,b.bus_number,b.vin,c.ccczs_date,c.dpgg_date,c.zcgg_date,
+		b.nameplate_print_date AS productive_date,c.rated_voltage,b.bus_number,b.vin,
+		case when (b.ccczs_date is null or b.ccczs_date ='') then c.ccczs_date else b.ccczs_date end as ccczs_date,
+		case when (b.dpgg_date is null or b.dpgg_date ='') then c.dpgg_date else b.dpgg_date end as dpgg_date,
+		case when (b.zcgg_date is null or b.zcgg_date ='') then c.zcgg_date else b.zcgg_date end as zcgg_date,
 		b.dp_production_date,b.zc_production_date,
 		case when b.right_motor_number is not null then CONCAT(b.left_motor_number,'/',b.right_motor_number)
 		else b.left_motor_number end as motor_number,
@@ -723,7 +736,9 @@
 		case when length(b.left_motor_number)>9 then concat(substring(b.left_motor_number,15,9),'/',substring(b.right_motor_number,15,9))
 		else  concat(b.left_motor_number,'/',b.right_motor_number) end as motor_number,
 		f.factory_name, c.vehicle_model,c.chassis_model,c.motor_model,b.zc_production_date as productive_date,
-		b.dp_production_date,c.bus_seats,c.tire_type,o.order_no,c.spring_num,c.dp_zzd,c.zc_zzd,c.hgz_note, 
+		b.dp_production_date,c.bus_seats,c.tire_type,o.order_no,c.spring_num,c.hgz_note, 
+		case when (b.dp_zzd is null or b.dp_zzd ='') then c.dp_zzd else b.dp_zzd end as dp_zzd,
+		case when (b.zc_zzd is null or b.zc_zzd ='') then c.zc_zzd else b.zc_zzd end as zc_zzd,
 		c.passenger_num as passengers, b.hgz_printer,b.hgz_print_date
 		FROM BMS_PLAN_BUS b 
 		LEFT JOIN BMS_OR_ORDER o ON b.order_id = o.id 

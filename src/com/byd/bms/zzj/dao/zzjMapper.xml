@@ -56,7 +56,7 @@
 			LAST_INSERT_ID()
 		</selectKey>
 		insert into BMS_ZZJ_PMD_HEAD (order_id,factory_id,factory_name,workshop_name,line_name,creator,create_date)
-		values (#{order_id},#{factory_id},#{factory_name},#{workshop_name},#{line_name},#{editor_id},#{edit_date})
+		values (#{order_id},#{factory_id},#{factory_name},#{workshop_name},#{line_name},#{editor},#{edit_date})
 	</insert>
 	<select id="queryMatListCount" parameterType="Map" resultType="int">
 		SELECT count(DISTINCT d.id)
@@ -125,7 +125,7 @@
 		process_flow,team,change_escription,change_subject,change_type,change_from,ecn_quantity,editor,edit_date)
 		values
 		<foreach collection="pmd_list" item="detail" index="index" separator=",">
-				(#{index}+1,#{detail.pmd_head_id},#{detail.operation_type},#{detail.zzj_type},#{detail.sap_mat},#{detail.mat_description},#{detail.mat_type},#{detail.specification},
+				(#{index}+1,#{pmd_head_id},#{detail.operation_type},#{detail.zzj_type},#{detail.sap_mat},#{detail.mat_description},#{detail.mat_type},#{detail.specification},
 				#{detail.unit},#{detail.loss},#{detail.quantity},#{detail.weight},#{detail.weight_total},#{detail.use_workshop},#{detail.use_line},
 				#{detail.process},#{detail.assembly_position},#{detail.crafts_identification},#{detail.filling_size},#{detail.accuracy_demand},
 				#{detail.surface_treatment},#{detail.memo},#{detail.crafts_memo},#{detail.subcontracting_type},#{detail.process_sequence},

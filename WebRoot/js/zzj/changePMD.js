@@ -333,7 +333,7 @@ $(document).ready(function(){
 								}
 							}
 							if(rowData.operation_type=="修改"){
-								modifyList.push(rowData);
+								//modifyList.push(rowData);
 							}else if(rowData.operation_type=="新增"){
 								addList.push(rowData);
 							}

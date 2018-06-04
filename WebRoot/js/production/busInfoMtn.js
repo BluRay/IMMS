@@ -12,7 +12,7 @@ $(document).ready(function(){
 		
 		var dialog = $( "#dialog-config-batch" ).removeClass('hide').dialog({
 			width:450,
-			height:300,
+			height:500,
 			modal: true,
 			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i> 批量编辑</h4></div>",
 			title_html: true,
@@ -247,7 +247,7 @@ function ajaxAdd(){
 		alert("请输入有效订单编号！");
 		return false;
 	}
-	var flag=validateDates();
+	var flag=validateDates("_batch");
 	if(flag)	
 	$.ajax({
 		type:"post",
@@ -257,8 +257,12 @@ function ajaxAdd(){
 			factory_id:$("#factory_batch").val(),
 			order_id:$("#order_batch").attr("order_id"),
 			bus_list:$("#bus_list").val().replace(/\n/g,','),			
-			dp_production_date:$("#dp_production_date").val(),
-			zc_production_date:$("#zc_production_date").val()
+			dp_production_date:$("#dp_production_date_batch").val(),
+			zc_production_date:$("#zc_production_date_batch").val(),
+			dp_zzd:$("#dp_zzd_batch").val(),
+			zc_zzd:$("#zc_zzd_batch").val(),
+			ccczs_date:$("#ccczs_date_batch").val()
+			
 		},
 		success:function(response){
 			alert(response.message);
@@ -292,13 +296,13 @@ function ajaxEdit(bus_number){
 			rated_voltage:"",			//$("#rated_voltage").val(),
 			spring_num:$("#spring_num").val(),*/
 			dp_production_date:$("#dp_production_date").val(),
-			/*dp_zzd:$("#dp_zzd").val(),*/
+			dp_zzd:$("#dp_zzd").val(),
 			zc_production_date:$("#zc_production_date").val(),
-			/*zc_zzd:$("#zc_zzd").val(),
-			hgz_note:$("#hgz_note").val(),
+			zc_zzd:$("#zc_zzd").val(),
 			ccczs_date:$("#ccczs_date").val(),
+			/*hgz_note:$("#hgz_note").val(),*/			
 			dpgg_date:$("#dpgg_date").val(),
-			zcgg_date:$("#zcgg_date").val(),*/
+			zcgg_date:$("#zcgg_date").val()
 		},
 		success:function(response){
 			alert(response.message);
@@ -311,12 +315,13 @@ function ajaxEdit(bus_number){
 	})
 }
 
-function validateDates(){
-	var dp_production_date=$("#dp_production_date").val();
-	var dpgg_date=$("#dpgg_date").val();
-	var ccczs_date=$("#ccczs_date").val();
-	var zcgg_date=$("#zcgg_date").val();
-	var zc_production_date=$("#zc_production_date").val();
+function validateDates(batch){
+	batch=batch||"";
+	var dp_production_date=$("#dp_production_date"+batch).val();
+	var dpgg_date=$("#dpgg_date"+batch).val();
+	var ccczs_date=$("#ccczs_date"+batch).val();
+	var zcgg_date=$("#zcgg_date"+batch).val();
+	var zc_production_date=$("#zc_production_date"+batch).val();
 	var flag=true;
 	
 	if(dp_production_date.trim().length>0&&dpgg_date.trim().length>0){
