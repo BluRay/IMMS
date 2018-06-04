@@ -2,8 +2,10 @@ package com.byd.bms.quality.controller;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -48,6 +50,8 @@ import com.byd.bms.util.service.ICommonService;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import sun.misc.BASE64Decoder;  
+import sun.misc.BASE64Encoder;
 
 /**
  * 品质模块Controller
@@ -937,6 +941,121 @@ public class QualityController extends BaseController {
 		return model;
 	}
 	
+	@RequestMapping("addProcessFaultMobile")
+	@ResponseBody
+	public ModelMap addProcessFaultMobile() {
+		int userid=(int) session.getAttribute("user_id");
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		
+		Map<String, Object> conditionMap = new HashMap<String, Object>();
+		conditionMap.put("vin", request.getParameter("vin").toString());
+		conditionMap.put("area", request.getParameter("area").toString());
+		conditionMap.put("license_number", request.getParameter("license_number").toString());
+		conditionMap.put("fault_date", request.getParameter("fault_date").toString());
+		conditionMap.put("fault_mils", request.getParameter("fault_mils").toString());
+		conditionMap.put("fault_level_id", request.getParameter("fault_level_id").toString());
+		conditionMap.put("is_batch", request.getParameter("is_batch").toString());
+		conditionMap.put("fault_phenomenon", request.getParameter("fault_phenomenon").toString());
+		conditionMap.put("fault_reason", request.getParameter("fault_reason").toString());
+		conditionMap.put("resolve_method", request.getParameter("resolve_method").toString());
+		conditionMap.put("order_no", request.getParameter("order_no").toString());
+		conditionMap.put("order_desc", request.getParameter("order_desc").toString());
+		conditionMap.put("factory_id", request.getParameter("factory_id").toString());
+		conditionMap.put("bus_type", request.getParameter("bus_type").toString());
+		conditionMap.put("response_factory", request.getParameter("response_factory").toString());
+		conditionMap.put("workshop", request.getParameter("workshop").toString());
+		conditionMap.put("resolve_user", request.getParameter("resolve_user").toString());
+		conditionMap.put("resolve_result", request.getParameter("resolve_result").toString());
+		conditionMap.put("resolve_date", request.getParameter("resolve_date").toString());
+		conditionMap.put("punish", request.getParameter("punish").toString());
+		conditionMap.put("compensation", request.getParameter("compensation").toString());
+		conditionMap.put("memo", request.getParameter("memo").toString());
+		conditionMap.put("create_user", userid);
+		conditionMap.put("edit_date", curTime);
+		conditionMap.put("id", 0);
+		
+		//180530 且点“保存”时对所填的“生产订单“信息内容做校验，校验其是否是BMS_OR_ORDER & BMS_OR_HISTORY_ORDER中的order_no字段值，
+		//若否，则不能保存；
+		int checkOrderNo = qualityService.checkOrderNo(request.getParameter("order_no"));
+		if(checkOrderNo == 0){
+			initModel(false,"订单输入有误！",null);
+			model = mv.getModelMap();
+			return model;
+		}
+		
+		qualityService.addProcessFaultMobile(conditionMap);
+		System.out.println("-->result = " + conditionMap.get("id"));
+		
+		//存储照片 id_a_01.jpg
+		String picA01 = request.getParameter("pic01");
+		String picA02 = request.getParameter("pic02");
+		String picA03 = request.getParameter("pic03");
+		String picA04 = request.getParameter("pic04");
+		String picA05 = request.getParameter("pic05");
+		String picB01 = request.getParameter("picb01");
+		String picB02 = request.getParameter("picb02");
+		String picB03 = request.getParameter("picb03");
+		String picB04 = request.getParameter("picb04");
+		String picB05 = request.getParameter("picb05");
+		
+		String picAstr = "";String picBstr = "";
+		if(!("".equals(picA01))) {
+			saveBase64Pic(picA01,conditionMap.get("id") + "_A_01.jpg");
+			picAstr += conditionMap.get("id") + "_A_01.jpg|";
+		}
+		if(!("".equals(picA02))) {
+			saveBase64Pic(picA02,conditionMap.get("id") + "_A_02.jpg");
+			picAstr += conditionMap.get("id") + "_A_02.jpg|";
+		}
+		if(!("".equals(picA03))) {
+			saveBase64Pic(picA03,conditionMap.get("id") + "_A_03.jpg");
+			picAstr += conditionMap.get("id") + "_A_03.jpg|";
+		}
+		if(!("".equals(picA04))) {
+			saveBase64Pic(picA04,conditionMap.get("id") + "_A_04.jpg");
+			picAstr += conditionMap.get("id") + "_A_04.jpg|";
+		}
+		if(!("".equals(picA05))) {
+			saveBase64Pic(picA05,conditionMap.get("id") + "_A_05.jpg");
+			picAstr += conditionMap.get("id") + "_A_05.jpg|";
+		}
+		if(!("".equals(picB01))) {
+			saveBase64Pic(picB01,conditionMap.get("id") + "_B_01.jpg");
+			picBstr += conditionMap.get("id") + "_B_01.jpg|";
+		}
+		if(!("".equals(picB02))) {
+			saveBase64Pic(picB02,conditionMap.get("id") + "_B_02.jpg");
+			picBstr += conditionMap.get("id") + "_B_02.jpg|";
+		}
+		if(!("".equals(picB03))) {
+			saveBase64Pic(picB03,conditionMap.get("id") + "_B_03.jpg");
+			picBstr += conditionMap.get("id") + "_B_03.jpg|";
+		}
+		if(!("".equals(picB04))) {
+			saveBase64Pic(picB04,conditionMap.get("id") + "_B_04.jpg");
+			picBstr += conditionMap.get("id") + "_B_04.jpg|";
+		}
+		if(!("".equals(picB05))) {
+			saveBase64Pic(picB05,conditionMap.get("id") + "_B_05.jpg");
+			picBstr += conditionMap.get("id") + "_B_05.jpg|";
+		}
+		
+		conditionMap.put("picAstr", picAstr);
+		conditionMap.put("picBstr", picBstr);
+		if((!("".equals(picAstr)))&&(!("".equals(picBstr)))) {
+			qualityService.updateProcessFaultPics(conditionMap);
+		}
+		
+		System.out.println("-->picAstr = " + picAstr);
+		System.out.println("-->picBstr = " + picBstr);
+		
+		initModel(true,String.valueOf(0),null);
+		model = mv.getModelMap();
+		return model;
+	}
+			
+	
 	@RequestMapping(value="addProcessFault",method=RequestMethod.POST)
 	@ResponseBody
 	public ModelMap addProcessFault(@RequestParam(value="new_report_file",required=false) MultipartFile file){	
@@ -987,6 +1106,29 @@ public class QualityController extends BaseController {
 		initModel(true,String.valueOf(result),null);
 		model = mv.getModelMap();
 		return model;
+	}
+	
+	public boolean saveBase64Pic(String pic_str , String pic_name) {
+		BASE64Decoder decoder = new BASE64Decoder();
+		try {
+			// Base64解码
+			byte[] b = decoder.decodeBuffer(pic_str);
+			for (int i = 0; i < b.length; ++i) {
+				if (b[i] < 0) {// 调整异常数据
+					b[i] += 256;
+				}
+			}
+			// 生成jpeg图片
+			ServletContext servletContext = ContextLoader.getCurrentWebApplicationContext().getServletContext(); 
+			String imgFilePath = servletContext.getRealPath("/file/upload/ProcessFault/") + "/" + pic_name + ".jpg";// 新生成的图片
+			OutputStream out = new FileOutputStream(imgFilePath);
+			out.write(b);
+			out.flush();
+			out.close();
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
 	}
 	
 	public static boolean isPureDigital(String string) {

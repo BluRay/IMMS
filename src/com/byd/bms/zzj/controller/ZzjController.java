@@ -307,7 +307,7 @@ public class ZzjController extends BaseController{
 		String header_id = request.getParameter("header_id");
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String edit_date = df.format(new Date());
-		String editor=String.valueOf(session.getAttribute("staff_number"));
+		String editor=String.valueOf(session.getAttribute("display_name"));
 		//新增
 		JSONArray add_arr=JSONArray.fromObject(addList);
 		Iterator it=add_arr.iterator();
@@ -783,7 +783,7 @@ public class ZzjController extends BaseController{
 		String line_name=request.getParameter("line_name");
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String edit_date = df.format(new Date());
-		String editor_id=String.valueOf(session.getAttribute("user_id"));
+		String editor_id=String.valueOf(session.getAttribute("display_name"));
 		JSONArray add_arr=JSONArray.fromObject(addList);
 		Iterator it=add_arr.iterator();
 		List<Map<String,Object>> output_list=new ArrayList<Map<String,Object>>();
@@ -1350,7 +1350,6 @@ public class ZzjController extends BaseController{
 		String datalist=request.getParameter("datalist");
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String curTime = df.format(new Date());
-		String user_name=String.valueOf(session.getAttribute("user_name"));
 		String user_id=String.valueOf(session.getAttribute("user_id"));
 		JSONArray jsonArray=JSONArray.fromObject(datalist);
 		List<Map<String,Object>> list=new ArrayList<Map<String,Object>>();

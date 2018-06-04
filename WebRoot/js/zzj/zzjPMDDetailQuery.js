@@ -180,6 +180,8 @@ function ajaxChangeDataQuery(){
 	            {"title":"变更说明","class":"center","data": "change_escription","width":"120px","defaultContent": ""},
 	            {"title":"变更主体","class":"center","data": "change_subject","width":"120px","defaultContent": ""},
 	            {"title":"变更类型","class":"center","data": "change_type","width":"90px","defaultContent": ""},
+	            {"title":"修改人","class":"center","data": "editor","width":"90px","defaultContent": ""},
+	            {"title":"修改时间","class":"center","data": "edit_date","width":"150px","defaultContent": ""},
 	        ];
 			$("#tableResult").DataTable({
 				paiging:false,

@@ -173,33 +173,34 @@ function ajaxShowBusNumber(order_id,factory_id,order_config_id){
 		success: function (response) {
 			if(response.success){
 				$("#tableBusNumber tbody").html("");
+				var dialog = $( "#dialog-message" ).removeClass('hide').dialog({
+					width:1000,
+					height:520,
+					modal: true,
+					title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i> 车辆明细</h4></div>",
+					title_html: true,
+					buttons: [ 
+						{
+							text: "取消",
+							"class" : "btn btn-minier",
+							click: function() {
+								$( this ).dialog( "close" ); 
+							} 
+						},
+						{
+							text: "确定",
+							"class" : "btn btn-primary btn-minier",
+							click: function() {
+								$( this ).dialog( "close" ); 
+							} 
+						}
+					]
+				});
 				drawBusInfoTable(response.data)
 			} else {
 				alert(response.message);
 			}
-			var dialog = $( "#dialog-message" ).removeClass('hide').dialog({
-				width:1000,
-				height:520,
-				modal: true,
-				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon glyphicon glyphicon-list-alt' style='color:green'></i> 车辆明细</h4></div>",
-				title_html: true,
-				buttons: [ 
-					{
-						text: "取消",
-						"class" : "btn btn-minier",
-						click: function() {
-							$( this ).dialog( "close" ); 
-						} 
-					},
-					{
-						text: "确定",
-						"class" : "btn btn-primary btn-minier",
-						click: function() {
-							$( this ).dialog( "close" ); 
-						} 
-					}
-				]
-			});
+			
 			
 		}
 	})
@@ -255,8 +256,8 @@ function drawOrderBOMTable(data){
             leftColumns: 1,
             rightColumns:0
         },
-/*		sScrollY: $("#dialog-message").height()-30,
-		scrollX: true,*/
+		sScrollY: $("#dialog-message").height()-30,
+		scrollX: true,
 /*		createdRow: function ( row, data, index ) {
 			//alert(index)
 			 $('td', row).	eq(1).find("input").data("allot_config_id",data.allot_config_id||0);
@@ -296,8 +297,8 @@ function drawBusInfoTable(data){
 		fixedColumns: {
             leftColumns:1,
         },
-		sScrollY: $("#dialog-message").height()-30,
-		scrollX: true,
+		/*sScrollY: $("#dialog-message").height()-30,
+		scrollX: true,*/
 /*		createdRow: function ( row, data, index ) {
 			//alert(index)
 			 $('td', row).	eq(1).find("input").data("allot_config_id",data.allot_config_id||0);

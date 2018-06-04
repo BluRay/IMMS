@@ -704,11 +704,9 @@
 		s1.delivery_workshop=s.delivery_workshop and s1.line_name=s.line_name and
 		 s1.factory_id=s.factory_id and s1.mat_description=s.mat_description and s1.zzj_type=s.zzj_type)
 		 received_quantity,u.username,s.edit_date,case when tmp.plan_quantity=0 then (
-		select sum(o.production_qty) from BMS_OR_FACTORY_ORDER o where o.order_id=h.order_id and o.factory_id=h.factory_id
+		select sum(o.production_qty) from BMS_OR_FACTORY_ORDER o where o.order_id=s.order_id and o.factory_id=s.factory_id
 		)*tmp.quantity when tmp.plan_quantity>0 then tmp.plan_quantity end as demand_quantity
 			FROM BMS_ZZJ_WORKSHOPSUPPLY s 
-			LEFT JOIN BMS_ZZJ_PMD_HEAD h on h.order_id=s.order_id and h.factory_id=s.factory_id and 
-			h.workshop_name=s.delivery_workshop and h.line_name=s.line_name
 			LEFT JOIN BMS_OR_ORDER o on s.order_id=o.id
 			LEFT JOIN BMS_OR_FACTORY_ORDER f on f.order_id=o.id and f.factory_id=s.factory_id
 			LEFT JOIN BMS_BASE_USER u ON u.id=s.editor
@@ -719,8 +717,19 @@
 		substring_index(substring_index(substring_index(ifnull(i.ecn_quantity,''),',', b.help_topic_id + 1), ',', -1),'-',1) +1)) plan_quantity,
 		i.filling_size,i.unit,i.quantity,i.specification,i.pmd_head_id,i.zzj_type,i.mat_description FROM BMS_ZZJ_PMD_ITEMS i 
 		join mysql.help_topic b ON b.help_topic_id <  (LENGTH(ifnull(i.ecn_quantity,'')) - LENGTH(REPLACE(ifnull(i.ecn_quantity,''), ',', '')) + 1)
-		group by i.mat_description,i.zzj_type) tmp on tmp.pmd_head_id=h.id and tmp.zzj_type=s.zzj_type and tmp.mat_description=s.mat_description
-		WHERE 1=1 AND s.order_id=#{order_id} AND s.factory_id=#{factory_id}]]>
+		left join BMS_ZZJ_PMD_HEAD h on h.id=i.pmd_head_id where h.order_id=#{order_id} AND h.factory_id=#{factory_id}
+        ]]>
+        <if test="delivery_workshop !=null and delivery_workshop !='' and delivery_workshop !='全部'">
+			AND h.workshop_name=#{delivery_workshop}
+		</if>
+		<if test="line_name !=null and line_name !='' and line_name !='全部'">
+			AND h.line_name=#{line_name}
+		</if>
+		<if test="receiving_workshop !=null and receiving_workshop !='' and receiving_workshop !='全部'">
+			AND i.use_workshop=#{receiving_workshop}
+		</if>
+        group by h.order_id,h.factory_id,h.workshop_name,h.line_name,i.mat_description,i.zzj_type,i.use_workshop) tmp on tmp.zzj_type=s.zzj_type and tmp.mat_description=s.mat_description
+		WHERE 1=1 AND s.order_id=#{order_id} AND s.factory_id=#{factory_id}
 		<if test="delivery_workshop !=null and delivery_workshop !='' and delivery_workshop !='全部'">
 			AND s.delivery_workshop=#{delivery_workshop}
 		</if>
@@ -837,7 +846,7 @@
 			<if test="mat_description !=null and mat_description !=''">
 				AND i.mat_description like concat('%',#{mat_description},'%')
 			</if>
-		group by i.mat_description,i.zzj_type) tmp 
+		group by i.mat_description,i.zzj_type,i.use_workshop) tmp 
 		group by tmp.mat_description,tmp.zzj_type
 	    <![CDATA[) ou where demand_quantity>received_quantity ]]>
 	</select>
@@ -881,7 +890,7 @@
 	<select id="queryPmdDetailByMap" parameterType="Map" resultType="Map">
 	   SELECT i.*,h.* FROM BMS_ZZJ_PMD_ITEMS_H i
 		LEFT JOIN BMS_ZZJ_PMD_HEAD h on h.id=i.pmd_head_id
-		where 1=1 AND ifnull(operation_type,'')!='' 
+		where 1=1 <!-- AND ifnull(operation_type,'')!=''  -->
 		<if test="order_id !=null and order_id !=''">
 			AND h.order_id=#{order_id}
 		</if>

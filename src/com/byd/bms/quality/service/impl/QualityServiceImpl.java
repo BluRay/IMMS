@@ -522,6 +522,14 @@ public class QualityServiceImpl implements IQualityService {
 		return qualityDao.addProcessFault(pocessFault);
 	}
 	@Override
+	public int addProcessFaultMobile(Map<String, Object> queryMap) {
+		return qualityDao.addProcessFaultMobile(queryMap);
+	}
+	@Override
+	public int updateProcessFaultPics(Map<String, Object> conditionMap) {
+		return qualityDao.updateProcessFaultPics(conditionMap);
+	}
+	@Override
 	public int addProcessFault2(ProcessFaultBean pocessFault) {
 		return qualityDao.addProcessFault2(pocessFault);
 	}

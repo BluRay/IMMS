@@ -58,24 +58,17 @@ label {
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="col-xs-3 control-label no-padding-right">车辆型号:</label>
+							<label class="col-xs-3 control-label no-padding-right">销售地区:</label>
 							<div class="col-xs-9">
-								<select id="new_bus_type" class="input-medium" style="width:100%">
-								</select>
+								<select id="new_area" class="form-control" style="width:100%"></select>
 							</div>
-						</div>
+						</div>	
 						<div class="form-group">
-							<label class="col-xs-3 control-label no-padding-right">生产订单:</label>
+							<label class="col-xs-3 control-label no-padding-right">车牌号码:</label>
 							<div class="col-xs-9">
-								<input id="new_order_no" class="input-medium" style="width:100%;height:30px;" placeholder="生产订单..." type="text">
+								<input id="new_license_number" class="input-medium" style="width:100%;height:30px;" placeholder="车牌号码..." type="text">
 							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-xs-3 control-label no-padding-right">故障里程:</label>
-							<div class="col-xs-9">
-								<input id="new_fault_mils" class="input-medium" style="width:100%;height:30px;" placeholder="故障里程..." type="text">
-							</div>
-						</div>
+						</div>	
 						<div class="form-group">
 							<label class="col-xs-3 control-label no-padding-right">反馈日期:</label>
 							<div class="col-xs-9">
@@ -83,9 +76,16 @@ label {
 							</div>
 						</div>	
 						<div class="form-group">
+							<label class="col-xs-3 control-label no-padding-right">故障里程:</label>
+							<div class="col-xs-9">
+								<input id="new_fault_mils" class="input-medium" style="width:100%;height:30px;" placeholder="故障里程..." type="text">
+							</div>
+						</div>
+						<div class="form-group">
 							<label class="col-xs-3 control-label no-padding-right">故障等级:</label>
 							<div class="col-xs-9">
 								<select id="new_fault_level" class="input-medium" style="width:100%">
+								<option value="">请选择</option>
 								<option value="A">A</option>
 								<option value="B">B</option>
 								<option value="C">C</option>
@@ -97,27 +97,10 @@ label {
 							<label class="col-xs-3 control-label no-padding-right">故障性质:</label>
 							<div class="col-xs-9">
 								<select id="new_is_batch" class="input-medium" style="width:100%">
+								<option value="">请选择</option>
 								<option value="0">非批量</option>
 								<option value="1">批量</option>
 								</select>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-xs-3 control-label no-padding-right">车牌号码:</label>
-							<div class="col-xs-9">
-								<input id="new_license_number" class="input-medium" style="width:100%;height:30px;" placeholder="车牌号码..." type="text">
-							</div>
-						</div>	
-						<div class="form-group">
-							<label class="col-xs-3 control-label no-padding-right">销售地区:</label>
-							<div class="col-xs-9">
-								<select id="new_area" class="form-control" style="width:100%"></select>
-							</div>
-						</div>	
-						<div class="form-group">
-							<label class="col-xs-3 control-label no-padding-right">生产工厂:</label>
-							<div class="col-xs-9">
-								<select id="new_factory" class="input-medium" style="width:100%"></select>
 							</div>
 						</div>
 						<div class="form-group">
@@ -133,9 +116,42 @@ label {
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="col-xs-3 control-label no-padding-right">解决方法:</label>
+							<label class="col-xs-3 control-label no-padding-right">处理方法:</label>
 							<div class="col-xs-9">
 								<textarea style="width:100%" class="input-xlarge" id="new_resolve_method" rows="2" style="width:100%;"></textarea>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-xs-3 control-label no-padding-right">处理前照片:</label>
+							<div id="photo_div" class="col-xs-9">
+							<img onclick="fun_openCamera(0);" width="100%" height="200" id='img_src_0'></img><br/>
+							*点击上方图片框拍摄照片<br/>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-xs-3 control-label no-padding-right">处理后照片:</label>
+							<div id="photo_div2" class="col-xs-9">
+							<img onclick="fun_openCamera2(0);" width="100%" height="200" id='img2_src_0'></img><br/>
+							*点击上方图片框拍摄照片<br/>
+							</div>
+						</div>	
+						<div class="form-group">
+							<label class="col-xs-3 control-label no-padding-right">生产订单:</label>
+							<div class="col-xs-9">
+								<input id="new_order_no" class="input-medium" style="width:100%;height:30px;" placeholder="生产订单..." type="text">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-xs-3 control-label no-padding-right">生产工厂:</label>
+							<div class="col-xs-9">
+								<select id="new_factory" class="input-medium" style="width:100%"></select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-xs-3 control-label no-padding-right">车辆型号:</label>
+							<div class="col-xs-9">
+								<select id="new_bus_type" class="input-medium" style="width:100%">
+								</select>
 							</div>
 						</div>
 						<div class="form-group">
@@ -151,11 +167,11 @@ label {
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="col-xs-3 control-label no-padding-right">处理时间:</label>
+							<label class="col-xs-3 control-label no-padding-right">处理人:</label>
 							<div class="col-xs-9">
-								<input id="new_resolve_date" class="input-medium" style="width:100%;height:30px;" placeholder="选择处理时间..." onclick="WdatePicker({el:'new_resolve_date',dateFmt:'yyyy-MM-dd'});" type="text">
+								<input id="new_resolve_user" class="input-medium" style="width:100%;height:30px;" placeholder="处理人..." type="text">
 							</div>
-						</div>
+						</div>	
 						<div class="form-group">
 							<label class="col-xs-3 control-label no-padding-right">处理结果:</label>
 							<div class="col-xs-9">
@@ -163,11 +179,11 @@ label {
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="col-xs-3 control-label no-padding-right">处理人:</label>
+							<label class="col-xs-3 control-label no-padding-right">处理日期:</label>
 							<div class="col-xs-9">
-								<input id="new_create_user" class="input-medium" style="width:100%;height:30px;" placeholder="处理人..." type="text">
+								<input id="new_resolve_date" class="input-medium" style="width:100%;height:30px;" placeholder="选择处理日期..." onclick="WdatePicker({el:'new_resolve_date',dateFmt:'yyyy-MM-dd'});" type="text">
 							</div>
-						</div>	
+						</div>
 						<div class="form-group">
 							<label class="col-xs-3 control-label no-padding-right">处罚情况:</label>
 							<div class="col-xs-9">
@@ -187,15 +203,6 @@ label {
 								<input type="text" class="input-medium" id="new_order_desc" style="display:none;width:40px"/>
 							</div>
 						</div>
-						
-						<div class="form-group">
-							<label class="col-xs-3 control-label no-padding-right">上传照片:</label>
-							<div id="photo_div" class="col-xs-9">
-							<img onclick="yspCheckIn.openCamera()" width="200" height="200" id='img_src_0'></img><br/>
-							*点击上方图片框拍摄照片<br/>
-							
-							</div>
-						</div>		
 						
 					</form>
 				</div>

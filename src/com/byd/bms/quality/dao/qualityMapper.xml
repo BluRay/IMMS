@@ -1164,6 +1164,29 @@
 		</if>
 	</select>
 	
+	<insert id="addProcessFaultMobile" parameterType="Map" useGeneratedKeys="true">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+			INSERT INTO BMS_QM_PROCESS_PROBLEM 
+			(factory_id, customer_name, vin,area, order_no,processFaultArea, order_describe, customer_bus_number, license_number, 
+			fault_phenomenon, fault_components, fault_date, bus_type, fault_mils, fault_level_id, response_factory,
+			response_workshop,resolve_user, is_batch, fault_reason, resolve_method, resolve_date, resolve_result, 
+			memo, report_file_path, punish, compensation, status,create_user, edit_date)	
+			VALUES(#{factory_id},#{customer_name},#{vin},#{area},
+			#{order_no},#{processFaultArea},
+			<if test="order_describe != ''">
+			#{order_describe},
+			</if>
+			<if test="order_describe == ''">
+			(SELECT order_desc FROM BMS_OR_HISTORY_ORDER WHERE order_no = #{order_no}),
+			</if>
+			#{customer_bus_number},#{license_number},
+			#{fault_phenomenon},#{fault_components},#{fault_date},#{bus_type},#{fault_mils},#{fault_level_id},#{response_factory},
+			#{workshop},#{resolve_user},#{is_batch},#{fault_reason},#{resolve_method},#{resolve_date},#{resolve_result},
+			#{memo},#{report_file_path},#{punish},#{compensation},#{status},#{create_user},#{edit_date})
+	</insert>
+	
 	<insert id="addProcessFault" parameterType="com.byd.bms.quality.model.ProcessFaultBean" useGeneratedKeys="true">
 		<selectKey resultType="int" keyProperty="id" order="AFTER">
 			SELECT LAST_INSERT_ID()
@@ -1211,6 +1234,10 @@
 		#{response_workshop},#{is_batch},#{fault_reason},#{resolve_method},#{resolve_date},#{resolve_result},
 		#{memo},#{report_file_path},#{punish},#{compensation},#{status},#{create_user},#{editor_id},#{edit_date})
 	</insert>
+	<update id= "updateProcessFaultPics" parameterType="Map">
+	UPDATE BMS_QM_PROCESS_PROBLEM SET fault_pre_pics = #{picAstr} , falut_pics = #{picBstr} WHERE id = #{id}
+	</update>
+	
 	<update id="editProcessFault" parameterType="com.byd.bms.quality.model.ProcessFaultBean">
 		UPDATE BMS_QM_PROCESS_PROBLEM
 		SET customer_name=#{customer_name}, vin=#{vin}, license_number=#{license_number},
