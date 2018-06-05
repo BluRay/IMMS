@@ -1001,51 +1001,51 @@ public class QualityController extends BaseController {
 		
 		String picAstr = "";String picBstr = "";
 		if(!("".equals(picA01))) {
-			saveBase64Pic(picA01,conditionMap.get("id") + "_A_01.jpg");
+			saveBase64Pic(picA01,conditionMap.get("id") + "_A_01");
 			picAstr += conditionMap.get("id") + "_A_01.jpg|";
 		}
 		if(!("".equals(picA02))) {
-			saveBase64Pic(picA02,conditionMap.get("id") + "_A_02.jpg");
+			saveBase64Pic(picA02,conditionMap.get("id") + "_A_02");
 			picAstr += conditionMap.get("id") + "_A_02.jpg|";
 		}
 		if(!("".equals(picA03))) {
-			saveBase64Pic(picA03,conditionMap.get("id") + "_A_03.jpg");
+			saveBase64Pic(picA03,conditionMap.get("id") + "_A_03");
 			picAstr += conditionMap.get("id") + "_A_03.jpg|";
 		}
 		if(!("".equals(picA04))) {
-			saveBase64Pic(picA04,conditionMap.get("id") + "_A_04.jpg");
+			saveBase64Pic(picA04,conditionMap.get("id") + "_A_04");
 			picAstr += conditionMap.get("id") + "_A_04.jpg|";
 		}
 		if(!("".equals(picA05))) {
-			saveBase64Pic(picA05,conditionMap.get("id") + "_A_05.jpg");
+			saveBase64Pic(picA05,conditionMap.get("id") + "_A_05");
 			picAstr += conditionMap.get("id") + "_A_05.jpg|";
 		}
 		if(!("".equals(picB01))) {
-			saveBase64Pic(picB01,conditionMap.get("id") + "_B_01.jpg");
+			saveBase64Pic(picB01,conditionMap.get("id") + "_B_01");
 			picBstr += conditionMap.get("id") + "_B_01.jpg|";
 		}
 		if(!("".equals(picB02))) {
-			saveBase64Pic(picB02,conditionMap.get("id") + "_B_02.jpg");
+			saveBase64Pic(picB02,conditionMap.get("id") + "_B_02");
 			picBstr += conditionMap.get("id") + "_B_02.jpg|";
 		}
 		if(!("".equals(picB03))) {
-			saveBase64Pic(picB03,conditionMap.get("id") + "_B_03.jpg");
+			saveBase64Pic(picB03,conditionMap.get("id") + "_B_03");
 			picBstr += conditionMap.get("id") + "_B_03.jpg|";
 		}
 		if(!("".equals(picB04))) {
-			saveBase64Pic(picB04,conditionMap.get("id") + "_B_04.jpg");
+			saveBase64Pic(picB04,conditionMap.get("id") + "_B_04");
 			picBstr += conditionMap.get("id") + "_B_04.jpg|";
 		}
 		if(!("".equals(picB05))) {
-			saveBase64Pic(picB05,conditionMap.get("id") + "_B_05.jpg");
+			saveBase64Pic(picB05,conditionMap.get("id") + "_B_05");
 			picBstr += conditionMap.get("id") + "_B_05.jpg|";
 		}
 		
 		conditionMap.put("picAstr", picAstr);
 		conditionMap.put("picBstr", picBstr);
-		if((!("".equals(picAstr)))&&(!("".equals(picBstr)))) {
-			qualityService.updateProcessFaultPics(conditionMap);
-		}
+		//if((!("".equals(picAstr)))&&(!("".equals(picBstr)))) {
+		qualityService.updateProcessFaultPics(conditionMap);
+		//}
 		
 		System.out.println("-->picAstr = " + picAstr);
 		System.out.println("-->picBstr = " + picBstr);

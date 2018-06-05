@@ -1169,12 +1169,12 @@
 			SELECT LAST_INSERT_ID()
 		</selectKey>
 			INSERT INTO BMS_QM_PROCESS_PROBLEM 
-			(factory_id, customer_name, vin,area, order_no,processFaultArea, order_describe, customer_bus_number, license_number, 
+			(factory_id, customer_name, vin, order_no,processFaultArea, order_describe, customer_bus_number, license_number, 
 			fault_phenomenon, fault_components, fault_date, bus_type, fault_mils, fault_level_id, response_factory,
 			response_workshop,resolve_user, is_batch, fault_reason, resolve_method, resolve_date, resolve_result, 
 			memo, report_file_path, punish, compensation, status,create_user, edit_date)	
-			VALUES(#{factory_id},#{customer_name},#{vin},#{area},
-			#{order_no},#{processFaultArea},
+			VALUES(#{factory_id},#{customer_name},#{vin},
+			#{order_no},#{area},
 			<if test="order_describe != ''">
 			#{order_describe},
 			</if>
