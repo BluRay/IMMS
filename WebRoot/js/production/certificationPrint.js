@@ -81,7 +81,7 @@ $(document).ready(function () {
 				alert("底盘生产日期及整车生产日期不能超过当天日期！");
 				return false;
 			}
-			/**
+			
 			$.ajax({
 			    url: "certificatePrint",
 			    dataType: "json",
@@ -98,7 +98,7 @@ $(document).ready(function () {
 			    	$(".divLoading").hide();
 			    	alert("系统异常！");
 			    }
-			    })**/
+			    })
 			   
 		}else{
 			alert("请选择需要传输打印的车号！");

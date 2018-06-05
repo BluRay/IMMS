@@ -762,5 +762,9 @@ public class QualityServiceImpl implements IQualityService {
 		// TODO Auto-generated method stub
 		return qualityDao.queryKeyPartsListByPartsNo(condMap);
 	}
+	@Override
+	public List<Map<String,String>> getProcessFaultListFromMobile(Map<String, Object> conditionMap){
+		return qualityDao.getProcessFaultListFromMobile(conditionMap);
+	}
 		
 }

@@ -2529,18 +2529,18 @@
 	FROM BMS_PD_TMP_ORDER O
 	LEFT OUTER JOIN BMS_HR_STAFF_TMP_HOURS H ON H.temp_order_id = O.id 
 	WHERE O.deleted = 0 
+	<if test="factory !=null">
+		and O.factory = #{factory}
+	</if>
+	<if test="workshop !=null">
+		and find_in_set(O.workshop,#{workshop})>0
+	</if>
+	<if test="orderNo !=null and orderNo !=''">
+		and O.tmp_order_no like concat('%',#{orderNo},'%')
+	</if>
 	GROUP BY O.id) T 
 	LEFT OUTER JOIN BMS_BASE_USER U ON T.applier = U.id
 	WHERE 1=1 
-	<if test="factory !=null">
-		and T.factory = #{factory}
-	</if>
-	<if test="workshop !=null">
-		and find_in_set(T.workshop,#{workshop})>0
-	</if>
-	<if test="orderNo !=null and orderNo !=''">
-		and T.tmp_order_no like concat('%',#{orderNo},'%')
-	</if>
 	<if test="hourstatus=='未审批'">
 		and T.审批状态 = '未审批'
 	</if>
@@ -2561,16 +2561,16 @@
 	FROM BMS_PD_TMP_ORDER O
 	LEFT OUTER JOIN BMS_HR_STAFF_TMP_HOURS H ON H.temp_order_id = O.id 
 	WHERE O.deleted = 0 
-	GROUP BY O.id) T WHERE 1=1 
 	<if test="factory !=null">
-		and T.factory = #{factory}
+		and O.factory = #{factory}
 	</if>
 	<if test="workshop !=null">
-		and find_in_set(T.workshop,#{workshop})>0
+		and find_in_set(O.workshop,#{workshop})>0
 	</if>
 	<if test="orderNo !=null and orderNo !=''">
-		and T.tmp_order_no like concat('%',#{orderNo},'%')
+		and O.tmp_order_no like concat('%',#{orderNo},'%')
 	</if>
+	GROUP BY O.id) T WHERE 1=1 
 	<if test="hourstatus=='未审批'">
 		and T.审批状态 = '未审批'
 	</if>

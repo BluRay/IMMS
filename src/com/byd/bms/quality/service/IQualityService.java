@@ -67,6 +67,7 @@ public interface IQualityService {
 	public int addProcessFault2(ProcessFaultBean pocessFault);
 	public int editProcessFault(ProcessFaultBean pocessFault);
 	public ProcessFaultBean showProcessFaultInfo(int id);
+	public List<Map<String,String>> getProcessFaultListFromMobile(Map<String, Object> conditionMap);
 	
 	public int insertProblemImprove(ProblemImproveBean problemImprove);
 	public Map<String, Object> getProblemImproveList(Map<String, Object> conditionMap);

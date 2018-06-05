@@ -129,6 +129,7 @@ public interface IQualityDao {
 	public List<Map<String, String>> getProcessFaultArea();
 	public int checkOrderNo(String order_no);
 	public int deleteProcessFault(String processFaultId);
+	public List<Map<String,String>> getProcessFaultListFromMobile(Map<String, Object> conditionMap);
 	//======================== yk end=================================//
 		
 		

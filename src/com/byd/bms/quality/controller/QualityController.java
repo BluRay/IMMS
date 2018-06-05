@@ -1403,6 +1403,20 @@ public class QualityController extends BaseController {
 		return model;
 	}
 	
+	@RequestMapping("getProcessFaultListFromMobile")
+	@ResponseBody
+	public ModelMap getProcessFaultListFromMobile() {
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		condMap.put("vin", request.getParameter("vin"));
+		condMap.put("area", request.getParameter("area"));
+		condMap.put("fault_date_start", request.getParameter("fault_date_start"));
+		condMap.put("fault_date_end", request.getParameter("fault_date_end"));
+		List<Map<String, String>> dateList = qualityService.getProcessFaultListFromMobile(condMap);
+		initModel(true,"SUCCESS",dateList);
+		model = mv.getModelMap();
+		return model;
+	}
+	
 	private String saveFileMethod(MultipartFile file) {
 		ServletContext servletContext = ContextLoader.getCurrentWebApplicationContext().getServletContext(); 
 		String filepath = "";
@@ -1437,6 +1451,12 @@ public class QualityController extends BaseController {
 	@RequestMapping("/processFault_mobile")
 	public ModelAndView processFault_mobile(){
 		mv.setViewName("quality/processFault_Mobile");
+		return mv;
+	}
+	
+	@RequestMapping("/processFaultList_mobile")
+	public ModelAndView processFaultList_mobile(){
+		mv.setViewName("quality/processFaultList_Mobile");
 		return mv;
 	}
 	

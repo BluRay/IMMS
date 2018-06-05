@@ -1931,4 +1931,13 @@
     <delete id="deleteProcessFault" parameterType="String" >
     DELETE FROM BMS_QM_PROCESS_PROBLEM WHERE id = #{processFaultId}
     </delete>
+    
+    <select id="getProcessFaultListFromMobile" parameterType="Map" resultType="Map">
+    SELECT vin,processFaultArea,license_number FROM BMS_QM_PROCESS_PROBLEM WHERE 1=1 
+    AND fault_date >= #{fault_date_start} AND fault_date &lt;= #{fault_date_end}
+    <if test="area !='全部' and area !=null">
+    AND processFaultArea = #{area}
+    </if>
+	AND vin like CONCAT('%',#{vin},'%')
+    </select>
 </mapper>
