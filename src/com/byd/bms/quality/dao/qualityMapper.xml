@@ -1187,6 +1187,23 @@
 			#{memo},#{report_file_path},#{punish},#{compensation},#{status},#{create_user},#{edit_date})
 	</insert>
 	
+	<update id = "editProcessFaultMobile" parameterType="Map">
+	UPDATE BMS_QM_PROCESS_PROBLEM
+	SET factory_id=#{factory_id}, vin=#{vin}, order_no=#{order_no}, 
+	<if test="order_describe != ''">
+	order_describe = #{order_describe},
+	</if>
+	<if test="order_describe == ''">
+	order_describe = (SELECT order_desc FROM BMS_OR_HISTORY_ORDER WHERE order_no = #{order_no}),
+	</if>
+	processFaultArea=#{area}, license_number=#{license_number}, fault_phenomenon=#{fault_phenomenon}, fault_components=#{fault_components}, 
+	fault_date=#{fault_date}, bus_type=#{bus_type}, fault_mils=#{fault_mils}, fault_level_id=#{fault_level_id}, 
+	response_factory=#{response_factory}, response_workshop=#{workshop}, is_batch=#{is_batch}, fault_reason=#{fault_reason}, 
+	resolve_user=#{resolve_user}, resolve_method=#{resolve_method}, resolve_date=#{resolve_date}, resolve_result=#{resolve_result}, 
+	memo=#{memo}, punish=#{punish}, compensation=#{compensation}, status=#{status}, create_user=#{create_user}, edit_date=#{edit_date}
+	WHERE id=#{id}
+	</update>
+	
 	<insert id="addProcessFault" parameterType="com.byd.bms.quality.model.ProcessFaultBean" useGeneratedKeys="true">
 		<selectKey resultType="int" keyProperty="id" order="AFTER">
 			SELECT LAST_INSERT_ID()
@@ -1933,7 +1950,7 @@
     </delete>
     
     <select id="getProcessFaultListFromMobile" parameterType="Map" resultType="Map">
-    SELECT vin,processFaultArea,license_number FROM BMS_QM_PROCESS_PROBLEM WHERE 1=1 
+    SELECT id,vin,processFaultArea,license_number FROM BMS_QM_PROCESS_PROBLEM WHERE 1=1 
     AND fault_date >= #{fault_date_start} AND fault_date &lt;= #{fault_date_end}
     <if test="area !='全部' and area !=null">
     AND processFaultArea = #{area}

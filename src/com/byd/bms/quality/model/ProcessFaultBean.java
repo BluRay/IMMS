@@ -23,9 +23,12 @@ public class ProcessFaultBean {
 	private String response_workshop;
 	private String is_batch;
 	private String fault_reason;
+	private String resolve_user;
 	private String resolve_method;
 	private String resolve_date;
 	private String resolve_result;
+	private String fault_pre_pics;
+	private String fault_pics;
 	private String memo;
 	private String report_file_path;
 	private String punish;
@@ -245,6 +248,24 @@ public class ProcessFaultBean {
 	}
 	public void setProcessFaultArea(String processFaultArea) {
 		this.processFaultArea = processFaultArea;
+	}
+	public String getResolve_user() {
+		return resolve_user;
+	}
+	public void setResolve_user(String resolve_user) {
+		this.resolve_user = resolve_user;
+	}
+	public String getFault_pre_pics() {
+		return fault_pre_pics;
+	}
+	public void setFault_pre_pics(String fault_pre_pics) {
+		this.fault_pre_pics = fault_pre_pics;
+	}
+	public String getFault_pics() {
+		return fault_pics;
+	}
+	public void setFault_pics(String fault_pics) {
+		this.fault_pics = fault_pics;
 	}
 	
 }

@@ -3,7 +3,6 @@ package com.byd.bms.quality.controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
@@ -17,8 +16,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.servlet.ServletContext;
-
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -31,7 +28,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.ContextLoader;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.byd.bms.order.service.IOrderService;
 import com.byd.bms.quality.service.IQualityService;
 import com.byd.bms.quality.model.BmsBaseQCStdRecord;
@@ -51,7 +47,6 @@ import com.byd.bms.util.service.ICommonService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import sun.misc.BASE64Decoder;  
-import sun.misc.BASE64Encoder;
 
 /**
  * 品质模块Controller
@@ -941,9 +936,9 @@ public class QualityController extends BaseController {
 		return model;
 	}
 	
-	@RequestMapping("addProcessFaultMobile")
+	@RequestMapping("editProcessFaultMobile")
 	@ResponseBody
-	public ModelMap addProcessFaultMobile() {
+	public ModelMap editProcessFaultMobile() {
 		int userid=(int) session.getAttribute("user_id");
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String curTime = df.format(new Date());
@@ -973,6 +968,54 @@ public class QualityController extends BaseController {
 		conditionMap.put("memo", request.getParameter("memo").toString());
 		conditionMap.put("create_user", userid);
 		conditionMap.put("edit_date", curTime);
+		conditionMap.put("id", request.getParameter("id").toString());
+		
+		int checkOrderNo = qualityService.checkOrderNo(request.getParameter("order_no"));
+		if(checkOrderNo == 0){
+			initModel(false,"订单输入有误！",null);
+			model = mv.getModelMap();
+			return model;
+		}
+		
+		qualityService.editProcessFaultMobile(conditionMap);
+		
+		initModel(true,String.valueOf(0),null);
+		model = mv.getModelMap();
+		return model;
+	}
+	
+	@RequestMapping("addProcessFaultMobile")
+	@ResponseBody
+	public ModelMap addProcessFaultMobile(@RequestParam(value="pre_pic_file",required=false) MultipartFile[] pre_files,@RequestParam(value="pic_file",required=false) MultipartFile[] files) {
+		int userid=(int) session.getAttribute("user_id");
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String curTime = df.format(new Date());
+		
+		Map<String, Object> conditionMap = new HashMap<String, Object>();
+		conditionMap.put("vin", request.getParameter("vin").toString());
+		conditionMap.put("area", request.getParameter("area").toString());
+		conditionMap.put("license_number", request.getParameter("license_number").toString());
+		conditionMap.put("fault_date", request.getParameter("fault_date").toString());
+		conditionMap.put("fault_mils", request.getParameter("fault_mils").toString());
+		conditionMap.put("fault_level_id", request.getParameter("fault_level").toString());
+		conditionMap.put("is_batch", request.getParameter("is_batch").toString());
+		conditionMap.put("fault_phenomenon", request.getParameter("fault_phenomenon").toString());
+		conditionMap.put("fault_reason", request.getParameter("fault_reason").toString());
+		conditionMap.put("resolve_method", request.getParameter("resolve_method").toString());
+		conditionMap.put("order_no", request.getParameter("order_no"));
+		conditionMap.put("order_desc", request.getParameter("order_desc"));
+		conditionMap.put("factory_id", request.getParameter("factory"));
+		conditionMap.put("bus_type", request.getParameter("bus_type"));
+		conditionMap.put("response_factory", request.getParameter("response_factory"));
+		conditionMap.put("workshop", request.getParameter("workshop"));
+		conditionMap.put("resolve_user", request.getParameter("resolve_user"));
+		conditionMap.put("resolve_result", request.getParameter("resolve_result"));
+		conditionMap.put("resolve_date", request.getParameter("resolve_date"));
+		conditionMap.put("punish", request.getParameter("punish"));
+		conditionMap.put("compensation", request.getParameter("compensation"));
+		conditionMap.put("memo", request.getParameter("memo"));
+		conditionMap.put("create_user", userid);
+		conditionMap.put("edit_date", curTime);
 		conditionMap.put("id", 0);
 		
 		//180530 且点“保存”时对所填的“生产订单“信息内容做校验，校验其是否是BMS_OR_ORDER & BMS_OR_HISTORY_ORDER中的order_no字段值，
@@ -987,6 +1030,35 @@ public class QualityController extends BaseController {
 		qualityService.addProcessFaultMobile(conditionMap);
 		System.out.println("-->result = " + conditionMap.get("id"));
 		
+		String picAstr = "";String picBstr = "";
+		//判断file数组不能为空并且长度大于0  
+		if (pre_files != null && pre_files.length > 0) {
+			// 循环获取file数组中得文件
+			for (int i = 0; i < pre_files.length; i++) {
+				MultipartFile file = pre_files[i];
+				// 保存文件
+				saveFileMethod(file,conditionMap.get("id") + "_A_0"+(i+1)+".jpg");
+				picAstr += conditionMap.get("id") + "_A_0"+(i+1)+".jpg|";
+				System.out.println("pre_files " + file.getName() + " = " + file.getOriginalFilename());
+			}
+		}
+		System.out.println("picAstr =  " + picAstr);
+		
+		if (files != null && files.length > 0) {
+			// 循环获取file数组中得文件
+			for (int i = 0; i < files.length; i++) {
+				MultipartFile file = files[i];
+				// 保存文件
+				saveFileMethod(file,conditionMap.get("id") + "_B_0"+(i+1)+".jpg");
+				picBstr += conditionMap.get("id") + "_B_0"+(i+1)+".jpg|";
+				System.out.println("file " + file.getName() + " = " + file.getOriginalFilename());
+			}
+		}
+		conditionMap.put("picAstr", picAstr);
+		conditionMap.put("picBstr", picBstr);
+		qualityService.updateProcessFaultPics(conditionMap);
+		
+		/**
 		//存储照片 id_a_01.jpg
 		String picA01 = request.getParameter("pic01");
 		String picA02 = request.getParameter("pic02");
@@ -1043,13 +1115,8 @@ public class QualityController extends BaseController {
 		
 		conditionMap.put("picAstr", picAstr);
 		conditionMap.put("picBstr", picBstr);
-		//if((!("".equals(picAstr)))&&(!("".equals(picBstr)))) {
 		qualityService.updateProcessFaultPics(conditionMap);
-		//}
-		
-		System.out.println("-->picAstr = " + picAstr);
-		System.out.println("-->picBstr = " + picBstr);
-		
+		**/
 		initModel(true,String.valueOf(0),null);
 		model = mv.getModelMap();
 		return model;
@@ -1447,10 +1514,46 @@ public class QualityController extends BaseController {
 
 		return filepath;
 	}
+	private String saveFileMethod(MultipartFile file , String file_name) {
+		ServletContext servletContext = ContextLoader.getCurrentWebApplicationContext().getServletContext(); 
+		String filepath = "";
+		if (file != null) {
+			try {
+				 //取得当前上传文件的文件名称  
+                String myFileName = file.getOriginalFilename();  
+                //如果名称不为“”,说明该文件存在，否则说明该文件不存在  
+                if(myFileName.trim() !=""){  
+    				// 把上传的文件放到指定的路径下
+    				String path = servletContext.getRealPath("/file/upload/ProcessFault/");
+    				// 写到指定的路径中
+    				File savedir = new File(path);
+    				// 如果指定的路径没有就创建
+    				if (!savedir.exists()) {
+    					savedir.mkdirs();
+    				}
+    				//System.out.println(myFileName.substring(myFileName.indexOf("."),myFileName.length()));
+    				File saveFile = new File(savedir, file_name);
+                    System.out.println(myFileName);  
+                    file.transferTo(saveFile);
+                    filepath = "/BMS/file/upload/ProcessFault/" + saveFile.getName();
+                }
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		return filepath;
+	}
 	
 	@RequestMapping("/processFault_mobile")
 	public ModelAndView processFault_mobile(){
 		mv.setViewName("quality/processFault_Mobile");
+		return mv;
+	}
+	
+	@RequestMapping("/processFaultInfo_mobile")
+	public ModelAndView processFaultInfo_mobile(){		//手机端查询 编辑 售后问题
+		mv.setViewName("quality/processFaultInfo_Mobile");
 		return mv;
 	}
 	

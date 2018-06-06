@@ -114,7 +114,10 @@ function ajaxQuery(){
 			
 			},
 			columns: [
-			            {"title":"VIN号","class":"center workshop","data":"vin","defaultContent": ""},
+			            {"title":"VIN号","class":"center workshop","data":"vin","defaultContent": "","render":function(data,type,row){
+			            	return "<a href='processFaultInfo_mobile?id="+row.id+"&type=1'>"+data+"</a>"
+			            	}
+			            },
 			            {"title":"销售区域","class":"center workshop","data":"processFaultArea","defaultContent": ""},
 			            {"title":"车牌号码","class":"center workshop","data":"license_number","defaultContent": ""}
 			          ]

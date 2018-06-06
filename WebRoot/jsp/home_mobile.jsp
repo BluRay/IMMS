@@ -45,6 +45,7 @@
 					<ul class="breadcrumb" style="font-size:14px;">
 						<li><a href="/BMS/index_mobile"><i class="ace-icon fa fa-home home-icon bigger-160"></i>BMS</a></li>
 						<li><a href="/BMS/quality/processFault_mobile">processFault</a></li>
+						<li><a href="/BMS/quality/processFaultList_mobile">list</a></li>
 					</ul><!-- /.breadcrumb -->
 
 					<!-- #section:basics/content.searchbox -->
