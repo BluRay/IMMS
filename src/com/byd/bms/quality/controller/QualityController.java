@@ -938,7 +938,7 @@ public class QualityController extends BaseController {
 	
 	@RequestMapping("editProcessFaultMobile")
 	@ResponseBody
-	public ModelMap editProcessFaultMobile() {
+	public ModelMap editProcessFaultMobile(@RequestParam(value="pre_pic_file",required=false) MultipartFile[] pre_files,@RequestParam(value="pic_file",required=false) MultipartFile[] files) {
 		int userid=(int) session.getAttribute("user_id");
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String curTime = df.format(new Date());
@@ -955,8 +955,8 @@ public class QualityController extends BaseController {
 		conditionMap.put("fault_reason", request.getParameter("fault_reason").toString());
 		conditionMap.put("resolve_method", request.getParameter("resolve_method").toString());
 		conditionMap.put("order_no", request.getParameter("order_no").toString());
-		conditionMap.put("order_desc", request.getParameter("order_desc").toString());
-		conditionMap.put("factory_id", request.getParameter("factory_id").toString());
+		//conditionMap.put("order_desc", request.getParameter("order_desc").toString());
+		conditionMap.put("factory_id", request.getParameter("factory").toString());
 		conditionMap.put("bus_type", request.getParameter("bus_type").toString());
 		conditionMap.put("response_factory", request.getParameter("response_factory").toString());
 		conditionMap.put("workshop", request.getParameter("workshop").toString());
@@ -978,6 +978,34 @@ public class QualityController extends BaseController {
 		}
 		
 		qualityService.editProcessFaultMobile(conditionMap);
+		
+		String picAstr = "";String picBstr = "";
+		//判断file数组不能为空并且长度大于0  
+		if (pre_files != null && pre_files.length > 0) {
+			// 循环获取file数组中得文件
+			for (int i = 0; i < pre_files.length; i++) {
+				MultipartFile file = pre_files[i];
+				// 保存文件
+				saveFileMethod(file,conditionMap.get("id") + "_A_0"+(i+1)+".jpg");
+				picAstr += conditionMap.get("id") + "_A_0"+(i+1)+".jpg|";
+				System.out.println("pre_files " + file.getName() + " = " + file.getOriginalFilename());
+			}
+		}
+		System.out.println("picAstr =  " + picAstr);
+		
+		if (files != null && files.length > 0) {
+			// 循环获取file数组中得文件
+			for (int i = 0; i < files.length; i++) {
+				MultipartFile file = files[i];
+				// 保存文件
+				saveFileMethod(file,conditionMap.get("id") + "_B_0"+(i+1)+".jpg");
+				picBstr += conditionMap.get("id") + "_B_0"+(i+1)+".jpg|";
+				System.out.println("file " + file.getName() + " = " + file.getOriginalFilename());
+			}
+		}
+		conditionMap.put("picAstr", picAstr);
+		conditionMap.put("picBstr", picBstr);
+		qualityService.updateProcessFaultPics(conditionMap);
 		
 		initModel(true,String.valueOf(0),null);
 		model = mv.getModelMap();

@@ -134,7 +134,7 @@ label {
 							<div id="photo_div" class="col-xs-9">
 							<table style="width:100%">
 							<tr>
-							<td><input name="pre_pic_file" style="width:80%" type="file" /></td>
+							<td><input name="pre_pic_file" style="width:80%" type="file" accept=".jpg,.JPG"/></td>
 							<td><i id="add_pre_pic" class="fa fa-plus bigger-180" style="cursor: pointer;color: blue;"></i></td>
 							</tr>
 							<tbody id="pre_pic_tr" class="exp-table">
@@ -146,7 +146,7 @@ label {
 							<div id="photo_div2" class="col-xs-9">
 							<table style="width:100%">
 							<tr>
-							<td><input name="pic_file" style="width:80%" type="file" /></td>
+							<td><input name="pic_file" style="width:80%" type="file" accept=".jpg,.JPG"/></td>
 							<td><i id="add_pic" class="fa fa-plus bigger-180" style="cursor: pointer;color: blue;"></i></td>
 							</tr>
 							<tbody id="pic_tr" class="exp-table">

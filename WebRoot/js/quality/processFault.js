@@ -807,7 +807,7 @@ function initTable() {
 	        		}
 	        	}
             },{
-            	field: 'create_user',title: '处理人',width:"100px",align: 'center',valign: 'middle',align: 'center',
+            	field: 'resolve_user',title: '处理人',width:"100px",align: 'center',valign: 'middle',align: 'center',
                 sortable: false,visible: true,footerFormatter: totalTextFormatter,
                 cellStyle:function cellStyle(value, row, index, field) {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"12px"}};

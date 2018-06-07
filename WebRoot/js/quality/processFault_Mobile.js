@@ -1,7 +1,7 @@
-var pic01 = "";var pic02 = "";var pic03 = "";var pic04 = "";var pic05 = "";
-var picb01 = "";var picb02 = "";var picb03 = "";var picb04 = "";var picb05 = "";
-var photoCount = 0;var photobCount = 0;var photoMaCount = -1;var photoMbCount = -1;		//处理前照片  处理后照片 重新拍摄照片序号
-var picType = 0;
+//var pic01 = "";var pic02 = "";var pic03 = "";var pic04 = "";var pic05 = "";
+//var picb01 = "";var picb02 = "";var picb03 = "";var picb04 = "";var picb05 = "";
+//var photoCount = 0;var photobCount = 0;var photoMaCount = -1;var photoMbCount = -1;		//处理前照片  处理后照片 重新拍摄照片序号
+//var picType = 0;
 
 var pre_pic_count = 1;var pic_count = 1;
 $(document).ready(function () {	
@@ -9,14 +9,12 @@ $(document).ready(function () {
 	
 	function initPage(){
 		getFactorySelect('','',"#factory","请选择",'id');
-		getKeysSelect("PROCESS_FAULT_AREA", "", "#area","请选择","value");
+		getKeysSelect("PROCESS_FAULT_AREA", "", "#area","请选择","key_name");
 		getFactorySelect("quality/processFault",'',"#response_factory","请选择",'name');
 		getBusType();
 		getWorkshopSelect("quality/processFault",$("#response_factory :selected").text(),"","#workshop","请选择","id");
 		pic01 = "";pic02 = "";pic03 = "";pic04 = "";pic05 = "";
 		picb01 = "";picb02 = "";picb03 = "";picb04 = "";picb05 = "";
-		
-		//pic01="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";
 	}
 	
 	$("#vin").blur(function(){
@@ -89,7 +87,7 @@ $(document).ready(function () {
 		if(pic_count >= 5){
 			alert("最多上传5张图片！");
 		}else{
-			var paramHtml='<tr><td><input name="pic_file" style="width:80%" type="file" /></td>' +
+			var paramHtml='<tr><td><input name="pic_file" style="width:80%" type="file" accept=".jpg,.JPG"/></td>' +
 			'<td><i id="iconIcon" class="del_pic fa fa-times bigger-180" style="cursor: pointer;color: blue;"></i></td></tr>';
 			$(paramHtml).appendTo("#pic_tr");	
 			pic_count ++ ;
@@ -101,7 +99,7 @@ $(document).ready(function () {
 		if(pre_pic_count >= 5){
 			alert("最多上传5张图片！");
 		}else{
-			var paramHtml='<tr><td><input name="pre_pic_file" style="width:80%" type="file" /></td>' +
+			var paramHtml='<tr><td><input name="pre_pic_file" style="width:80%" type="file" accept=".jpg,.JPG"/></td>' +
 			'<td><i id="iconIcon" class="del_pre_pic fa fa-times bigger-180" style="cursor: pointer;color: blue;"></i></td></tr>';
 			$(paramHtml).appendTo("#pre_pic_tr");	
 			pre_pic_count ++ ;
@@ -226,8 +224,16 @@ function ajaxEnter(){
 		type: "post",
 		dataType:"json",
 		success:function(response){
-			
-			
+			resetPage();
+            if(response.success){ 
+                fadeMessageAlert(null,"操作成功！","gritter-success");
+                $("#btn_save").removeAttr("disabled");
+                location.reload();
+            }
+            else{
+                fadeMessageAlert(null,response.message,"agritter-error");
+                $("#btn_save").removeAttr("disabled");
+            }
 		}
 	});
 	/**

@@ -1174,7 +1174,7 @@
 			response_workshop,resolve_user, is_batch, fault_reason, resolve_method, resolve_date, resolve_result, 
 			memo, report_file_path, punish, compensation, status,create_user, edit_date)	
 			VALUES(#{factory_id},#{customer_name},#{vin},
-			#{order_no},#{area},
+			#{order_no},(SELECT key_name FROM BMS_BASE_KEY WHERE id= #{area}),
 			<if test="order_describe != ''">
 			#{order_describe},
 			</if>
@@ -1196,7 +1196,7 @@
 	<if test="order_describe == ''">
 	order_describe = (SELECT order_desc FROM BMS_OR_HISTORY_ORDER WHERE order_no = #{order_no}),
 	</if>
-	processFaultArea=#{area}, license_number=#{license_number}, fault_phenomenon=#{fault_phenomenon}, fault_components=#{fault_components}, 
+	processFaultArea=(SELECT key_name FROM BMS_BASE_KEY WHERE id= #{area}), license_number=#{license_number}, fault_phenomenon=#{fault_phenomenon}, fault_components=#{fault_components}, 
 	fault_date=#{fault_date}, bus_type=#{bus_type}, fault_mils=#{fault_mils}, fault_level_id=#{fault_level_id}, 
 	response_factory=#{response_factory}, response_workshop=#{workshop}, is_batch=#{is_batch}, fault_reason=#{fault_reason}, 
 	resolve_user=#{resolve_user}, resolve_method=#{resolve_method}, resolve_date=#{resolve_date}, resolve_result=#{resolve_result}, 
@@ -1252,7 +1252,14 @@
 		#{memo},#{report_file_path},#{punish},#{compensation},#{status},#{create_user},#{editor_id},#{edit_date})
 	</insert>
 	<update id= "updateProcessFaultPics" parameterType="Map">
-	UPDATE BMS_QM_PROCESS_PROBLEM SET fault_pre_pics = #{picAstr} , falut_pics = #{picBstr} WHERE id = #{id}
+	UPDATE BMS_QM_PROCESS_PROBLEM SET id = id 
+	<if test="picAstr != null and picAstr != ''">
+	,fault_pre_pics = #{picAstr} 
+	</if>
+	<if test="picBstr != null and picBstr != ''">
+	,fault_pics = #{picBstr}
+	</if>
+	 WHERE id = #{id}
 	</update>
 	
 	<update id="editProcessFault" parameterType="com.byd.bms.quality.model.ProcessFaultBean">
