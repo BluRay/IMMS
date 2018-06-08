@@ -859,7 +859,10 @@
 		</if>					
 		and s1.factory_id=#{factory_id}
 		left join BMS_PD_WORKSHOP_SUPPLY s2 on s2.id=s.id and s2.factory_id=#{factory_id} 
-		where s.supply_workshop='自制件' and s.receive_workshop='部件' and s.factory_id=#{factory_id} 
+		where s.supply_workshop='自制件' and s.receive_workshop='部件' and s.factory_id=#{factory_id} 		
+		<if test="end_date !=null and end_date !=''"><!-- 20180608YK 修改逻辑为 累计完成数加上结束日期的判断 -->
+			and s.supply_date &lt;=#{end_date} 
+		</if>
 		group by s.order_id) tmp on tmp.order_id=fo.order_id
 		where fo.order_id is not null and fo.factory_id=#{factory_id} 
 		<if test="order_no !=null and order_no !=''">
@@ -885,7 +888,11 @@
 			and f1.prod_date &lt;= #{end_date}
 		</if>	
 		left join BMS_PD_PARTS_PLAN_FINISH f2 on f.id=f2.id 
-		where f.factory_id=#{factory_id}  and p1.key_name='前段车架总成' group by f.order_id ) tmp
+		where f.factory_id=#{factory_id}  	
+		<if test="end_date !=null and end_date !=''"><!-- 20180608YK 修改逻辑为 累计完成数加上结束日期的判断 -->
+			and f.prod_date &lt;=#{end_date} 
+		</if>
+		and p1.key_name='前段车架总成' group by f.order_id ) tmp
 		on tmp.order_id=fo.order_id	 
 		where fo.factory_id=#{factory_id} and fo.order_id is not null
 		<if test="order_no !=null and order_no !=''">
@@ -911,7 +918,11 @@
 			and f1.prod_date &lt;= #{end_date}
 		</if>	
 		left join BMS_PD_PARTS_PLAN_FINISH f2 on f.id=f2.id 
-		where f.factory_id=#{factory_id}  and p1.key_name='喷砂' group by f.order_id ) tmp
+		where f.factory_id=#{factory_id}  
+		<if test="end_date !=null and end_date !=''"><!-- 20180608YK 修改逻辑为 累计完成数加上结束日期的判断 -->
+			and f.prod_date &lt;=#{end_date} 
+		</if>
+		and p1.key_name='喷砂' group by f.order_id ) tmp
 		on tmp.order_id=fo.order_id	 
 		where fo.factory_id=#{factory_id} and fo.order_id is not null
 		<if test="order_no !=null and order_no !=''">
@@ -936,7 +947,11 @@
 			and b1.welding_online_date &lt;=concat(#{end_date},' 17:30:00')
 		</if>
 		LEFT JOIN BMS_PLAN_BUS b2 ON b.id=b2.id AND b2.welding_online_date != ''
-		where b.welding_online_date != '' and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=fo.order_id
+		where b.welding_online_date != '' and b.factory_id=#{factory_id} 
+		<if test="end_date !=null and end_date !=''"><!-- 20180608YK 修改逻辑为 累计完成数加上结束日期的判断 -->
+			and b.welding_online_date &lt;=concat(#{end_date},' 17:30:00')
+		</if>
+		group by b.order_id) tmp on tmp.order_id=fo.order_id
 		where fo.factory_id=#{factory_id} 
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no like concat(#{order_no},'%')
@@ -960,7 +975,11 @@
 			and b1.welding_offline_date &lt;=concat(#{end_date},' 17:30:00')
 		</if>
 		LEFT JOIN BMS_PLAN_BUS b2 ON b.id=b2.id AND b2.welding_offline_date != ''
-		where b.welding_offline_date != '' and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=fo.order_id
+		where b.welding_offline_date != '' and b.factory_id=#{factory_id} 
+		<if test="end_date !=null and end_date !=''"><!-- 20180608YK 修改逻辑为 累计完成数加上结束日期的判断 -->
+			and b.welding_offline_date &lt;=concat(#{end_date},' 17:30:00')
+		</if>
+		group by b.order_id) tmp on tmp.order_id=fo.order_id
 		where fo.factory_id=#{factory_id} 
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no like concat(#{order_no},'%')
@@ -984,7 +1003,11 @@
 			and b1.painting_online_date &lt;=concat(#{end_date},' 17:30:00')
 		</if>
 		LEFT JOIN BMS_PLAN_BUS b2 ON b.id=b2.id AND b2.painting_online_date != ''
-		where b.painting_online_date != '' and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=fo.order_id
+		where b.painting_online_date != '' and b.factory_id=#{factory_id}
+		<if test="end_date !=null and end_date !=''"><!-- 20180608YK 修改逻辑为 累计完成数加上结束日期的判断 -->
+			and b.painting_online_date &lt;=concat(#{end_date},' 17:30:00')
+		</if> 
+		group by b.order_id) tmp on tmp.order_id=fo.order_id
 		where fo.factory_id=#{factory_id}
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no like concat(#{order_no},'%')
@@ -1008,7 +1031,11 @@
 			and b1.painting_offline_date &lt;=concat(#{end_date},' 17:30:00')
 		</if>
 		LEFT JOIN BMS_PLAN_BUS b2 ON b.id=b2.id AND b2.painting_offline_date != ''
-		where b.painting_offline_date != '' and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=fo.order_id
+		where b.painting_offline_date != '' and b.factory_id=#{factory_id} 
+		<if test="end_date !=null and end_date !=''"><!-- 20180608YK 修改逻辑为 累计完成数加上结束日期的判断 -->
+			and b.painting_offline_date &lt;=concat(#{end_date},' 17:30:00')
+		</if> 
+		group by b.order_id) tmp on tmp.order_id=fo.order_id
 		where fo.factory_id=#{factory_id}
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no like concat(#{order_no},'%')
@@ -1032,7 +1059,11 @@
 			and b1.chassis_online_date &lt;=concat(#{end_date},' 17:30:00')
 		</if>
 		LEFT JOIN BMS_PLAN_BUS b2 ON b.id=b2.id AND b2.chassis_online_date != ''
-		where b.chassis_online_date != '' and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=fo.order_id
+		where b.chassis_online_date != '' and b.factory_id=#{factory_id} 
+		<if test="end_date !=null and end_date !=''"><!-- 20180608YK 修改逻辑为 累计完成数加上结束日期的判断 -->
+			and b.chassis_online_date &lt;=concat(#{end_date},' 17:30:00')
+		</if> 
+		group by b.order_id) tmp on tmp.order_id=fo.order_id
 		where fo.factory_id=#{factory_id}
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no like concat(#{order_no},'%')
@@ -1056,7 +1087,11 @@
 			and b1.chassis_offline_date &lt;=concat(#{end_date},' 17:30:00')
 		</if>
 		LEFT JOIN BMS_PLAN_BUS b2 ON b.id=b2.id AND b2.chassis_offline_date != ''
-		where b.chassis_offline_date != '' and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=fo.order_id
+		where b.chassis_offline_date != '' and b.factory_id=#{factory_id} 
+		<if test="end_date !=null and end_date !=''"><!-- 20180608YK 修改逻辑为 累计完成数加上结束日期的判断 -->
+			and b.chassis_offline_date &lt;=concat(#{end_date},' 17:30:00')
+		</if> 
+		group by b.order_id) tmp on tmp.order_id=fo.order_id
 		where fo.factory_id=#{factory_id}
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no like concat(#{order_no},'%')
@@ -1080,7 +1115,11 @@
 			and b1.assembly_online_date &lt;=concat(#{end_date},' 17:30:00')
 		</if>
 		LEFT JOIN BMS_PLAN_BUS b2 ON b.id=b2.id AND b2.assembly_online_date != ''
-		where b.assembly_online_date != '' and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=fo.order_id
+		where b.assembly_online_date != '' and b.factory_id=#{factory_id} 
+		<if test="end_date !=null and end_date !=''"><!-- 20180608YK 修改逻辑为 累计完成数加上结束日期的判断 -->
+			and b.assembly_online_date &lt;=concat(#{end_date},' 17:30:00')
+		</if> 
+		group by b.order_id) tmp on tmp.order_id=fo.order_id
 		where fo.factory_id=#{factory_id}
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no like concat(#{order_no},'%')
@@ -1104,7 +1143,11 @@
 			and b1.assembly_offline_date &lt;=concat(#{end_date},' 17:30:00')
 		</if>
 		LEFT JOIN BMS_PLAN_BUS b2 ON b.id=b2.id AND b2.assembly_offline_date != ''
-		where b.assembly_offline_date != '' and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=fo.order_id
+		where b.assembly_offline_date != '' and b.factory_id=#{factory_id} 
+		<if test="end_date !=null and end_date !=''"><!-- 20180608YK 修改逻辑为 累计完成数加上结束日期的判断 -->
+			and b.assembly_offline_date &lt;=concat(#{end_date},' 17:30:00')
+		</if> 
+		group by b.order_id) tmp on tmp.order_id=fo.order_id
 		where fo.factory_id=#{factory_id}
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no like concat(#{order_no},'%')
@@ -1128,7 +1171,11 @@
 			and b1.warehousing_date &lt;=concat(#{end_date},' 17:30:00')
 		</if>
 		LEFT JOIN BMS_PLAN_BUS b2 ON b.id=b2.id AND b2.warehousing_date != ''
-		where b.warehousing_date != '' and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=fo.order_id
+		where b.warehousing_date != '' and b.factory_id=#{factory_id} 
+		<if test="end_date !=null and end_date !=''"><!-- 20180608YK 修改逻辑为 累计完成数加上结束日期的判断 -->
+			and b.warehousing_date &lt;=concat(#{end_date},' 17:30:00')
+		</if> 
+		group by b.order_id) tmp on tmp.order_id=fo.order_id
 		where fo.factory_id=#{factory_id}
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no like concat(#{order_no},'%')
@@ -1158,7 +1205,11 @@
 			and b1.dispatch_date &lt;=concat(#{end_date},' 17:30:00')
 		</if>		
 		LEFT JOIN BMS_PLAN_BUS b2 ON b.id=b2.id AND b2.dispatch_date != ''
-		where b.dispatch_date != '' and b.factory_id=#{factory_id} group by b.order_id) tmp on tmp.order_id=dp.order_id
+		where b.dispatch_date != '' and b.factory_id=#{factory_id} 
+		<if test="end_date !=null and end_date !=''"><!-- 20180608YK 修改逻辑为 累计完成数加上结束日期的判断 -->
+			and b.dispatch_date &lt;=concat(#{end_date},' 17:30:00')
+		</if> 
+		group by b.order_id) tmp on tmp.order_id=dp.order_id
 		where dp.factory_id=#{factory_id}
 		<if test="order_no !=null and order_no !=''">
 			and o.order_no like concat(#{order_no},'%')

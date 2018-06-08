@@ -129,7 +129,7 @@ label {
 							</div>
 						</div>						
 						<div class="form-group">
-							<label class="col-xs-3 control-label no-padding-right">修改处理前照片:</label>
+							<label class="col-xs-3 control-label no-padding-right">更新照片:</label>
 							<div id="photo_div" class="col-xs-9">
 							<table style="width:100%">
 							<tr>
@@ -147,7 +147,7 @@ label {
 							</div>
 						</div>	
 						<div class="form-group">
-							<label class="col-xs-3 control-label no-padding-right">修改处理后照片:</label>
+							<label class="col-xs-3 control-label no-padding-right">更新照片:</label>
 							<div id="photo_div2" class="col-xs-9">
 							<table style="width:100%">
 							<tr>

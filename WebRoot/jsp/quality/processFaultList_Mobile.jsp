@@ -69,7 +69,7 @@ label {
 						
 						
 					</form>
-					<div style="width:100%;height:320px;overflow-y:auto;overflow-x:hidden">				
+					<div style="width:100%;overflow-y:auto;overflow-x:hidden">				
 						<table id="tableResult" class="table table-striped table-bordered table-hover" style="font-size: 12px;width:100%;text-align:center;">
 						</table>
 					</div>
