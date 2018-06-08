@@ -83,6 +83,10 @@ $(document).ready(function () {
 		pic_count--;
 	});
 	
+	$("#btn_scan").click(function(){
+    	yspCheckIn.qrCode();
+    })
+	
 	$("#add_pic").click( function (argument) {		
 		if(pic_count >= 5){
 			alert("最多上传5张图片！");

@@ -1620,6 +1620,14 @@
 		) tmp 
 	</select>
 	
+	<select id="getExceptionPauseListWarehouse" parameterType="Map" resultType="Map">
+	 SELECT DISTINCT e.detailed_reasons FROM  BMS_PD_PRODUCTION_EXCEPTION e 
+	 WHERE e.factory=#{factory}  AND (e.process_date &lt;= 0 or e.process_date is null  or substring(e.process_date,1,10)=#{date_start})
+	 and substring(e.edit_date,1,10)>=DATE_SUB(#{date_start},INTERVAL 15 DAY)
+	 and substring(e.edit_date,1,10) &lt;= #{date_start} and e.order_id=#{order_id}
+	 AND e.process = "入库"
+	</select>
+	
 	<select id="getPlanPublishList" parameterType="Map" resultType="Map">
 		select group_concat(distinct substring(pp.plan_date,-2)) publish_dates,pp.order_id
 		from BMS_PLAN_PRODUCTION_PLAN pp

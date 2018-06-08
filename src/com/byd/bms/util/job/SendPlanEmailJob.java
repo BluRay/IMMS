@@ -307,8 +307,23 @@ public class SendPlanEmailJob  implements Job {
 				}else{
 					tr.add(tableX.new TdTd(" "));
 				}
-			}
-			else{
+			}else if(m1.get("key_name").equals("入库")) {	// 180608YK 目前日报抓取只抓取到总装下线的生产异常及停线数据，没有抓取入库的，需将入库的异常数据也抓取到日报中来
+				Map<String,Object> conditionMap1 = new HashMap<String,Object>();
+				conditionMap1.put("date_start", sdf.format(new Date()));
+				conditionMap1.put("factory", String.valueOf(m.get("factory_name")));
+				conditionMap1.put("order_id", m1.get("order_id"));
+				List<Map<String, String>> datalist1= new ArrayList<Map<String, String>>();
+				datalist1 = planDao.getExceptionPauseListWarehouse(conditionMap1);
+				if(datalist1.size()>0){
+					String remark = datalist1.get(0).get("detailed_reasons");
+					if(datalist1.size()>1){
+						remark += "<br>"+datalist1.get(1).get("detailed_reasons");
+					}
+					tr.add(tableX.new TdTd(remark));
+				}else{
+					tr.add(tableX.new TdTd(""));
+				}
+			}else{
 				tr.add(tableX.new TdTd(" "));
 			}
 			tbodyX.add(tr);

@@ -117,4 +117,5 @@ public interface IPlanDao {
 	public List<Map<String, Object>> getPlanPublishList( Map<String, Object> queryMap);
 	public List<ProductionException> getExceptionPauseListOnline(
 			Map<String, Object> conditionMap1);
+	public List<Map<String, String>> getExceptionPauseListWarehouse(Map<String, Object> conditionMap1);
 }

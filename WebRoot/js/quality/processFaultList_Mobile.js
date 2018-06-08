@@ -17,6 +17,10 @@ $(document).ready(function () {
 	$("#search_area").change(function(){
     	ajaxQuery();
 	});
+	
+	$("#btn_scan").click(function(){
+    	yspCheckIn.qrCode();
+    })
 
 	//输入回车，发ajax进行校验；成功则显示并更新车辆信息
     $('#search_vin').bind('keydown', function(event) {
@@ -124,3 +128,9 @@ function ajaxQuery(){
 		});
 		
 	}
+
+
+function setQRData(str){
+	$("#search_vin").val(str);
+	ajaxQuery();
+}
