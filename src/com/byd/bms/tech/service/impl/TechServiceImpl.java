@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 
+import com.byd.bms.production.model.ProductionException;
 import com.byd.bms.tech.dao.ITechDao;
 import com.byd.bms.tech.service.ITechService;
 import com.byd.bms.util.DataSource;
@@ -840,6 +841,14 @@ public class TechServiceImpl implements ITechService {
 		map.put("tech_list", tech_list_str.substring(0, tech_list_str.length()-1));
 		map.put("time_total", total);
 		techDao.updateTaskTechList(map);
+	}
+	
+	public Map<String, Object> getTechFinanceReport(Map<String,Object> queryMap){
+		List<Map<String, String>> datalist = techDao.getTechFinanceReport(queryMap);
+		Map<String, Object> result = new HashMap<String,Object>();
+		result.put("total", 0);
+		result.put("rows", datalist);
+		return result;
 	}
 		
 }

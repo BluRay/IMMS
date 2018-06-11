@@ -1881,4 +1881,64 @@ LEFT JOIN BMS_BASE_USER AS u ON u.id = f.confirmor_id
 		</if>	
 	</select>
 	
+	<select id="getTechFinanceReport" parameterType="Map" resultType="Map">
+	SELECT report.* FROM (    
+	SELECT tmp.*,d.factory,d.prod_factory, d.single_time
+	FROM(
+	SELECT t.task_content,t.tech_order_no,f.tech_task_id,f.task_detail_id,k.key_name duty_unit,
+	f.order_no,f.workshop,count(f.bus_number) follow_num
+	FROM BMS_TECH_TASK_FOLLOW f
+	LEFT JOIN BMS_TECH_TASK t ON t.id=f.tech_task_id
+	LEFT JOIN BMS_BASE_KEY k ON k.id=t.duty_unit and k.key_code='ECN_DUTY_UNIT'
+	WHERE f.confirmor_date LIKE (CONCAT(#{month},'%'))
+	GROUP BY f.tech_task_id,f.task_detail_id,f.order_no,f.workshop
+	UNION ALL
+	SELECT t.task_content,t.tech_order_no,fp.tech_task_id,fp.task_detail_id,k.key_name duty_unit,
+	fp.order_no,fp.workshop,sum(fp.follow_num) follow_num
+	FROM BMS_TECH_TASK_FOLLOW_PRE fp
+	LEFT JOIN BMS_TECH_TASK t ON t.id=fp.tech_task_id
+	LEFT JOIN BMS_BASE_KEY k ON k.id=t.duty_unit and k.key_code='ECN_DUTY_UNIT'
+	WHERE fp.confirmor_date LIKE (CONCAT(#{month},'%'))
+	GROUP BY fp.tech_task_id,fp.task_detail_id,fp.order_no,fp.workshop
+	) tmp
+	LEFT JOIN 
+	(
+	SELECT d.tech_task_id,d.id,d.factory,d.prod_factory,d.order_no,
+	substring_index(substring_index(substring_index(d.time_list,',', b.help_topic_id + 1), ',', -1),':',1) workshop,
+	substring_index(substring_index(substring_index(d.time_list,',', b.help_topic_id + 1), ',', -1),':',-1) single_time
+	FROM
+	BMS_TECH_TASK_DETAIL d 
+	JOIN mysql.help_topic b ON b.help_topic_id &lt;(LENGTH(d.time_list) - LENGTH(REPLACE(d.time_list, ',', '')) + 1)
+	)d on d.id=tmp.task_detail_id and d.tech_task_id=tmp.tech_task_id 
+	and d.workshop=tmp.workshop and d.order_no=tmp.order_no
+	) report  WHERE 1=1
+	<if test="factory !=null and factory !='全部'">
+	AND report.factory = #{factory}
+	</if>
+	<if test="prod_factory !=null and prod_factory !='全部'">
+	AND report.prod_factory = #{prod_factory}
+	</if>
+	<if test="tech_order_no !=null and tech_order_no !=''">
+	AND report.tech_order_no = #{tech_order_no}
+	</if>
+	<if test="task_content !=null and task_content !=''">
+	AND report.task_content = #{task_content}
+	</if>
+	<if test="duty_unit !=null and duty_unit !=''">
+	AND report.duty_unit = #{duty_unit}
+	</if>
+	<if test="order_no !=null and order_no !=''">
+	AND report.order_no = #{order_no}
+	</if>
+	<if test="workshop !=null and workshop !='全部'">
+	AND report.workshop = #{workshop}
+	</if>
+	<if test="follow_num !=null and follow_num !=''">
+	AND report.follow_num = #{follow_num}
+	</if>
+	<if test="single_time !=null and single_time !=''">
+	AND report.single_time = #{single_time}
+	</if>
+	</select>
+	
 </mapper>

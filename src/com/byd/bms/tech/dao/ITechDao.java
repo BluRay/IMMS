@@ -94,4 +94,5 @@ public interface ITechDao {
 
 	public void caculateEcnSalary(Map<String, Object> conditionMap);
 	public List<Map<String,String>> getBusNumberByOrder(Map<String, Object> conditionMap);
+	public List<Map<String,String>> getTechFinanceReport(Map<String, Object> conditionMap);
 }

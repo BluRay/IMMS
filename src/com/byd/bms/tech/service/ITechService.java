@@ -92,4 +92,5 @@ public interface ITechService {
 	public List<Map<String,String>> getBusNumberByOrder(Map<String, Object> conditionMap);
 	
 	public int updateTechTaskPrice(Map<String, Object> conditionMap);
+	public Map<String, Object> getTechFinanceReport(Map<String,Object> queryMap);
 }

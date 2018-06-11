@@ -142,6 +142,34 @@ public class TechController extends BaseController{
         return mv;
 	}
 	
+	@RequestMapping("/techFinanceReport")
+	public ModelAndView techFinanceReport(){
+		mv.setViewName("tech/techFinanceReport");
+        return mv;
+	}
+	
+	@RequestMapping("/getTechFinanceReport")
+	@ResponseBody
+	public ModelMap getTechFinanceReport(){
+		Map<String,Object> condMap = new HashMap<String,Object>();
+		condMap.put("month", request.getParameter("search_month"));
+		condMap.put("factory", request.getParameter("search_factory"));
+		condMap.put("prod_factory", request.getParameter("search_prod_factory"));
+		condMap.put("tech_order_no", request.getParameter("search_tech_order_no"));
+		condMap.put("task_content", request.getParameter("search_task_content"));
+		condMap.put("duty_unit", request.getParameter("search_duty_unit"));
+		condMap.put("order_no", request.getParameter("search_order_no"));
+		condMap.put("workshop", request.getParameter("search_workshop"));
+		condMap.put("follow_num", request.getParameter("search_follow_num"));
+		condMap.put("single_time", request.getParameter("search_single_time"));
+		
+		Map<String,Object> list = techService.getTechFinanceReport(condMap);
+		mv.clear();
+		mv.getModelMap().addAllAttributes(list);
+		model = mv.getModelMap();
+		return model;
+	}
+	
 	/**
 	 * ajax 获取订单列表数据
 	 * @return model
