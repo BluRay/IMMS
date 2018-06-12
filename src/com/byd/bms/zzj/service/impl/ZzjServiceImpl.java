@@ -430,7 +430,7 @@ public class ZzjServiceImpl implements IZzjService {
 	
 	@Override
 	@Transactional
-	public int importOutput(Map<String, Object> condMap) {
+	public int importOutput(Map<String, Object> condMap){
 		//保存导入的产量信息
 		zzjDao.importOutput(condMap);
 
@@ -457,8 +457,8 @@ public class ZzjServiceImpl implements IZzjService {
 				/*model.put("success", false);
 				model.put("message", "累计生产数量不能超出计划数量！");	
 				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //手动开启事务回滚
-				break ;*/			
-				throw new RuntimeException("自制件产量录入：累计生产数量不能超出计划数量！") ;
+				break ;*/
+				throw new RuntimeException("自制件产量录入：累计生产数量不能超出计划数量！物料：" + map.get("mat_description")) ;
 			}	
 			
 			if(batchArr.indexOf(map.get("batch").toString())==-1){

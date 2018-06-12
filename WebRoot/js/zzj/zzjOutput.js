@@ -246,7 +246,7 @@ function ajaxSave(order_id,factory_id,factory_name,workshop_name,line_name,addLi
             }else{
             	$.gritter.add({
 					title: 'Message：',
-					text: "<h5>导入失败！</h5>",
+					text: "<h5>导入失败！"+response.message+"</h5>",
 					class_name: 'gritter-info'
 				});
             }
