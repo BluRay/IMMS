@@ -31,31 +31,31 @@
 								<td>&nbsp;技改工厂：</td>
 								<td><select id="search_prod_factory" class="input-small" style="height: 30px;width:80px"></select></td>
 								<td>&nbsp;技改单编号：</td>
-								<td><input id="search_tech_order_no" placeholder="技改单编号..." style="height: 30px;width:110px" type="text"></td>
+								<td><input id="search_tech_order_no" placeholder="技改单编号..." style="height: 30px;width:100px" type="text"></td>
 								<td>&nbsp;技改任务：</td>
-								<td><input id="search_task_content" placeholder="技改任务..." style="height: 30px;width:110px" type="text"></td>
+								<td><input id="search_task_content" placeholder="技改任务..." style="height: 30px;width:100px" type="text"></td>
 								<td>&nbsp;责任单位：</td>
-								<td><input id="search_duty_unit" placeholder="责任单位..." style="height: 30px;width:110px" type="text"></td>
+								<td><input id="search_duty_unit" placeholder="责任单位..." style="height: 30px;width:80px" type="text"></td>
 								<td></td>
 								<td></td>
 							</tr>
 							<tr>
-								<td>&nbsp;生产订单：</td>
+								<td>生产订单：</td>
 								<td><input id="search_order_no" placeholder="生产订单..." style="height: 30px;width:100px" type="text"></td>
 								<td>&nbsp;车间：</td>
 								<td><select id="search_workshop" class="input-small" style="height: 30px;width:80px"></select></td>
 								<td>&nbsp;跟进台数：</td>
-								<td><input id="search_follow_num" placeholder="跟进台数..." style="height: 30px;width:110px" type="text"></td>
+								<td><input id="search_follow_num" placeholder="跟进台数..." style="height: 30px;width:100px" type="text"></td>
 								<td>&nbsp;技改月份：</td>
-								<td><input id="search_month" placeholder="技改月份..." style="height: 30px;width:110px" type="text" onClick="WdatePicker({el:'search_month',dateFmt:'yyyy-MM'});"></td>
+								<td><input id="search_month" placeholder="技改月份..." style="height: 30px;width:100px" type="text" onClick="WdatePicker({el:'search_month',dateFmt:'yyyy-MM'});"></td>
 								<td>&nbsp;单车工时：</td>
-								<td><input id="search_single_time" placeholder="单车工时..." style="height: 30px;width:110px" type="text"></td>
+								<td><input id="search_single_time" placeholder="单车工时..." style="height: 30px;width:80px" type="text"></td>
 								<td><input id="btnQuery" type="button" class="btn btn-sm btn-success" value="查询" style="margin-left: 2px;"></input>&nbsp;&nbsp;</td>
 							</tr>
 						</table>
 					</div>
 					<div id="toolbar"></div>
-					<table  style="font-weight:normal;width:1500px;" id="table" data-toolbar="#toolbar" data-search="false" data-show-refresh="true"
+					<table  style="font-weight:normal;width:100%;" id="table" data-toolbar="#toolbar" data-search="false" data-show-refresh="true"
 				           data-show-toggle="false" data-show-columns="true" data-show-export="true" data-detail-view="false"
 				           data-detail-formatter="detailFormatter" data-minimum-count-columns="2" data-show-pagination-switch="true"
 				           data-pagination="true" data-id-field="id" data-page-list="[50, 100, 200, 500, ALL]"
@@ -77,7 +77,7 @@
 	.fixed-table-toolbar .bs-bars, .fixed-table-toolbar .search, .fixed-table-toolbar .columns {
 		position: absolute;
 		margin-top: 88px;
-		right: 20px;
+		right: 0px;
 		top: -49px;
 	}
 	.btn-default {

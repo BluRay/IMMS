@@ -45,6 +45,30 @@ $(document).ready(function(){
 		$("#order").prop("disabled",false);
 		getFactorySelect("production/workshopSupply","","#factory","请选择","id");
 		
+		var d = new Date();
+		var eYear = d.getFullYear();
+		var eMon = d.getMonth() + 1;
+		var eDay = d.getDate();
+		cDate = (eYear) + "-" + (eMon < 10 ? "0" + eMon : eMon) + "-" + (eDay < 10 ? "0" + eDay : eDay);
+		var hour = d.getHours();
+		var min = d.getMinutes();
+		//console.log(cDate + " " + hour + ":" + min);
+		startDate = new Date(cDate);
+        startDate = +startDate + 1000*60*60*24;
+        startDate = new Date(startDate);
+        var nextStartDate = startDate.getFullYear()+"-"+(((startDate.getMonth()+1) < 10 ? "0" + (startDate.getMonth()+1) : (startDate.getMonth()+1)))+"-"+(startDate.getDate() < 10 ? "0" + startDate.getDate() : startDate.getDate());
+        //console.log(nextStartDate);
+		if(hour >= 17){
+			if(min >= 30){
+				$("#supply_date").val(nextStartDate);
+			}else{
+				$("#supply_date").val(cDate);
+			}
+		}else{
+			$("#supply_date").val(cDate);
+		}
+		$("#supply_date").attr("disabled","disabled");
+		
 		var dialog = $( "#dialog-config" ).removeClass('hide').dialog({
 			width:450,
 			height:380,

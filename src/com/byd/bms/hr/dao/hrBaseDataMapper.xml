@@ -1029,8 +1029,10 @@
 	</delete>
 	
 	<select id="getJopPriceList" parameterType="Map" resultType="Map">
-		SELECT p.* 
-		FROM BMS_HR_JOB_UNIT_PRICE p
+		SELECT p.id,p.factory_name,p.effective_date,p.job,p.unit_price,CONCAT(p.editor,' ',u.display_name) AS 'editor' ,
+		p.edit_date
+		FROM BMS_HR_JOB_UNIT_PRICE p 
+		LEFT JOIN BMS_BASE_USER u ON p.editor = u.staff_number 
 		WHERE 1=1
 		<if test="factory_name !=null and factory_name !=''  and  factory_name!='全部'">
 			and p.factory_name=#{factory_name}
