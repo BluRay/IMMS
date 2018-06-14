@@ -74,7 +74,7 @@ function initTable() {
 	        	return {css: {"padding-left": "3px", "padding-right": "2px","font-size":"13px"}};
 	        	}
             },{
-            	field: 'order_no',title: '&nbsp;&nbsp;生产订单&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
+            	field: 'order_no',title: '&nbsp;&nbsp;订单&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
                 sortable: false,visible: true,footerFormatter: totalTextFormatter,
                 cellStyle:function cellStyle(value, row, index, field) {
 	        	return {css: {"padding-left": "3px", "padding-right": "2px","font-size":"13px"}};

@@ -1886,7 +1886,7 @@ LEFT JOIN BMS_BASE_USER AS u ON u.id = f.confirmor_id
 	SELECT tmp.*,d.factory,d.prod_factory, d.single_time
 	FROM(
 	SELECT t.task_content,t.tech_order_no,f.tech_task_id,f.task_detail_id,k.key_name duty_unit,
-	CONCAT(f.order_no,'  ',tt.bus_type_code,'  ',oo.order_qty,'台') AS order_no,f.order_no AS orderno,f.workshop,count(f.bus_number) follow_num
+	CONCAT(f.order_no,oo.order_name,'  ',tt.bus_type_code,'  ',oo.order_qty,'台') AS order_no,f.order_no AS orderno,f.workshop,count(f.bus_number) follow_num
 	FROM BMS_TECH_TASK_FOLLOW f
 	LEFT JOIN BMS_TECH_TASK t ON t.id=f.tech_task_id
 	LEFT JOIN BMS_OR_ORDER oo ON f.order_no = oo.order_no
@@ -1896,7 +1896,7 @@ LEFT JOIN BMS_BASE_USER AS u ON u.id = f.confirmor_id
 	GROUP BY f.tech_task_id,f.task_detail_id,f.order_no,f.workshop
 	UNION ALL
 	SELECT t.task_content,t.tech_order_no,fp.tech_task_id,fp.task_detail_id,k.key_name duty_unit,
-	CONCAT(fp.order_no,'  ',tt.bus_type_code,'  ',oo.order_qty,'台') AS order_no,fp.order_no AS orderno,fp.workshop,sum(fp.follow_num) follow_num
+	CONCAT(fp.order_no,oo.order_name,'  ',tt.bus_type_code,'  ',oo.order_qty,'台') AS order_no,fp.order_no AS orderno,fp.workshop,sum(fp.follow_num) follow_num
 	FROM BMS_TECH_TASK_FOLLOW_PRE fp
 	LEFT JOIN BMS_OR_ORDER oo ON fp.order_no = oo.order_no
 	LEFT JOIN BMS_BASE_BUS_TYPE tt ON oo.bus_type_id = tt.id 
