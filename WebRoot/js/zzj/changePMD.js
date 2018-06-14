@@ -170,7 +170,7 @@ $(document).ready(function(){
 				if(response.success){	
 						save_type = 'upload';
 						//导入成功
-						pmd_head_id = response.data.pmd_head_id;
+						pmd_header_id = response.data.pmd_head_id;
 						addList = response.data.addList;
 						datalist=response.data.addList;
 						//处理表格数据

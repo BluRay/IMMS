@@ -1175,10 +1175,10 @@
 			memo, report_file_path, punish, compensation, status,create_user, edit_date)	
 			VALUES(#{factory_id},#{customer_name},#{vin},
 			#{order_no},(SELECT key_name FROM BMS_BASE_KEY WHERE id= #{area}),
-			<if test="order_describe != ''">
-			#{order_describe},
+			<if test="order_desc != ''">
+			#{order_desc},
 			</if>
-			<if test="order_describe == ''">
+			<if test="order_desc == ''">
 			(SELECT order_desc FROM BMS_OR_HISTORY_ORDER WHERE order_no = #{order_no}),
 			</if>
 			#{customer_bus_number},#{license_number},
@@ -1302,6 +1302,9 @@
 		</if>
 		<if test="resolve_result != null and resolve_result != ''">
 		resolve_result = #{resolve_result},  
+		</if>
+		<if test="resolve_user != null and resolve_user != ''">
+		resolve_user = #{resolve_user},  
 		</if>
 		<if test="memo != null and memo != ''">
 		memo = #{memo},  

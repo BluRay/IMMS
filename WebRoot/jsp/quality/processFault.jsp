@@ -120,7 +120,7 @@
 						<td align="right" style="width:100px">处理结果：</td><td style="width:150px"><select class="input-medium" id="new_resolve_result" style="width:150px"><option value="0">关闭</option><option value="1">受理</option></select></td>
 					</tr>
 					<tr style="height:40px">
-						<td align="right" style="width:100px">处理人：</td><td colspan=3 style="width:150px"><input type="text" class="input-medium" id="new_create_user" style="width:150px" /></td>
+						<td align="right" style="width:100px">处理人：</td><td colspan=3 style="width:150px"><input type="text" class="input-medium" id="new_resolve_user" style="width:150px" /></td>
 					</tr>
 					<tr style="height:40px">
 						<td align="right" style="width:100px">问题报告：</td><td colspan=3><input name="new_report_file" type="file" id="new_report_file" /></td>
@@ -189,7 +189,7 @@
 						<td align="right" style="width:100px">处理结果：</td><td style="width:150px"><select class="input-medium" id="edit_resolve_result" style="width:150px"><option value="0">关闭</option><option value="1">受理</option></select></td>
 					</tr>
 					<tr style="height:40px">
-						<td align="right" style="width:100px">处理人：</td><td colspan=3><input type="text" class="input-medium" id="edit_create_user" style="width:150px" /></td>
+						<td align="right" style="width:100px">处理人：</td><td colspan=3><input type="text" class="input-medium" id="edit_resolve_user" style="width:150px" /></td>
 						
 					</tr>
 					<tr style="height:40px">

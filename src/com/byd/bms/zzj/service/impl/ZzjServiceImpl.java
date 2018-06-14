@@ -385,6 +385,7 @@ public class ZzjServiceImpl implements IZzjService {
 			//查询下料明细
 			header_id=Integer.parseInt(pmdHead.get("id").toString());
 			condMap.put("pmd_head_id", header_id);
+			resultMap.put("pmd_head_id", header_id);
 			List<Map<String,Object>> pmdItems = zzjDao.queryPmdItems(condMap);
 			resultMap.put("pmdHead", pmdHead);
 			resultMap.put("pmdItems", pmdItems);

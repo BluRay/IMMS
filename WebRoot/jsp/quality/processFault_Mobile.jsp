@@ -218,7 +218,7 @@ label {
 							<label class="col-xs-3 control-label no-padding-right">备注信息:</label>
 							<div class="col-xs-9">
 								<input id="memo" name="memo" class="input-medium" style="width:100%;height:30px;" placeholder="备注信息..." type="text">
-								<input type="text" class="input-medium" id="new_order_desc" name="new_order_desc" style="display:none;width:40px"/>
+								<input type="text" class="input-medium" id="order_desc" name="order_desc" style="display:none;width:40px"/>
 							</div>
 						</div>
 						

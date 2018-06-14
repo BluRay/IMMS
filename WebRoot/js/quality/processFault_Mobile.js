@@ -28,9 +28,9 @@ $(document).ready(function () {
 				success: function (response) {
 					//console.log(response.data.length);
 					if(response.data.length == 0){
-						$("#bus_type").removeAttr("disabled");
-						$("#order_no").removeAttr("disabled");
-						$("#factory").removeAttr("disabled");
+						$("#bus_type").removeAttr("readonly");
+						$("#order_no").removeAttr("readonly");
+						$("#factory").removeAttr("readonly");
 						$("#factory").val('');
 					}else{
 						$("#bus_type").attr("readonly","readonly"); 
@@ -387,18 +387,18 @@ function setQRData(str){
 			success: function (response) {
 				//console.log(response.data.length);
 				if(response.data.length == 0){
-					$("#bus_type").removeAttr("disabled");
-					$("#order_no").removeAttr("disabled");
-					$("#factory").removeAttr("disabled");
+					$("#bus_type").removeAttr("readonly");
+					$("#order_no").removeAttr("readonly");
+					$("#factory").removeAttr("readonly");
 					$("#factory").val('');
 				}else{
-					$("#bus_type").attr("disabled","disabled"); 
-					$("#order_no").attr("disabled","disabled"); 
+					$("#bus_type").attr("readonly","readonly"); 
+					$("#order_no").attr("readonly","readonly"); 
 					$("#bus_type").val(response.data[0].bus_type_id);
 					$("#order_no").val(response.data[0].order_no);
 					$("#order_desc").val(response.data[0].order_describe);
 					$("#factory").val(response.data[0].factory_id);
-					$("#factory").attr("disabled","disabled"); 
+					$("#factory").attr("readonly","readonly"); 
 				}
 			}
 		});

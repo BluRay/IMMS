@@ -93,7 +93,7 @@
 		and p.process_name=r.process_name and p.line=#{line_name}
 		LEFT JOIN BMS_BASE_KEY k on k.value=p.plan_node_id and k.key_code='PLAN_CODE'
 		where p.plan_node_id !=0 and r.factory=#{factory_name} <!-- and r.workshop=#{workshop_name} --> and r.sequence&lt;=(
-			select r1.sequence-1 from BMS_PD_SCAN_RULE r1 where r1.factory=#{factory_name} <!-- and r1.workshop=#{workshop_name} -->
+			select r1.sequence-1 from BMS_PD_SCAN_RULE r1 where r1.factory=#{factory_name} and r1.workshop=#{workshop_name}
 			and r1.process_name=#{process_name} and r1.order_type=#{order_type})
 		and r.order_type=#{order_type} 
 		order by r.sequence desc

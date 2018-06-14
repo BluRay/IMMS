@@ -1463,7 +1463,7 @@ public class QualityController extends BaseController {
 		pocessFault.setResolve_date(request.getParameter("resolve_date"));
 		pocessFault.setResolve_result(request.getParameter("resolve_result"));
 		pocessFault.setPunish(request.getParameter("punish"));
-		pocessFault.setCreate_user(request.getParameter("create_user"));
+		pocessFault.setResolve_user(request.getParameter("resolve_user"));
 		pocessFault.setCompensation(request.getParameter("compensation"));
 		pocessFault.setMemo(request.getParameter("memo"));
 		pocessFault.setId(Integer.valueOf(request.getParameter("id")));

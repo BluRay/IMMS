@@ -246,7 +246,7 @@ function showProcessFault(id){
 			$("#edit_punish").val(response.data.punish);
 			$("#edit_compensation").val(response.data.compensation);
 			$("#edit_memo").val(response.data.memo);
-			$("#edit_create_user").val(response.data.create_user);
+			$("#edit_resolve_user").val(response.data.resolve_user);
 			$("#edit_area").find("option:contains('"+response.data.processFaultArea+"')").attr("selected",true);
 			//$("#edit_report_file").hide();
 			if(response.data.report_file_path != null){
@@ -315,7 +315,7 @@ function editProcessFault(id){
 			$("#edit_punish").val(response.data.punish);
 			$("#edit_compensation").val(response.data.compensation);
 			$("#edit_memo").val(response.data.memo);
-			$("#edit_create_user").val(response.data.create_user);
+			$("#edit_resolve_user").val(response.data.resolve_user);
 			$("#edit_order_desc").val(response.data.order_describe);
 			//$("#edit_report_file").show();
 			if(response.data.report_file_path != null){
@@ -462,7 +462,7 @@ function btnEditConfirm(id){
 			"resolve_date" : $("#edit_resolve_date").val(),
 			"resolve_result" : $("#edit_resolve_result").val(),
 			"punish" : $("#edit_punish").val(),
-			"create_user" : $("#edit_create_user").val(),
+			"resolve_user" : $("#edit_resolve_user").val(),
 			"compensation" : $("#edit_compensation").val(),
 			"memo" : $("#edit_memo").val(),
 			"area":$('#edit_area').find("option:selected").text(),
@@ -580,7 +580,7 @@ function btnNewConfirm(){
 			"resolve_date" : $("#new_resolve_date").val(),
 			"resolve_result" : $("#new_resolve_result").val(),
 			"punish" : $("#new_punish").val(),
-			"create_user" : $("#new_create_user").val(),
+			"resolve_user" : $("#new_resolve_user").val(),
 			"compensation" : $("#new_compensation").val(),
 			"memo" : $("#new_memo").val()
 	    },
