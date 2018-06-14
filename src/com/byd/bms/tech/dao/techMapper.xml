@@ -1886,16 +1886,20 @@ LEFT JOIN BMS_BASE_USER AS u ON u.id = f.confirmor_id
 	SELECT tmp.*,d.factory,d.prod_factory, d.single_time
 	FROM(
 	SELECT t.task_content,t.tech_order_no,f.tech_task_id,f.task_detail_id,k.key_name duty_unit,
-	f.order_no,f.workshop,count(f.bus_number) follow_num
+	CONCAT(f.order_no,'  ',tt.bus_type_code,'  ',oo.order_qty,'台') AS order_no,f.order_no AS orderno,f.workshop,count(f.bus_number) follow_num
 	FROM BMS_TECH_TASK_FOLLOW f
 	LEFT JOIN BMS_TECH_TASK t ON t.id=f.tech_task_id
+	LEFT JOIN BMS_OR_ORDER oo ON f.order_no = oo.order_no
+	LEFT JOIN BMS_BASE_BUS_TYPE tt ON oo.bus_type_id = tt.id 
 	LEFT JOIN BMS_BASE_KEY k ON k.id=t.duty_unit and k.key_code='ECN_DUTY_UNIT'
 	WHERE f.confirmor_date LIKE (CONCAT(#{month},'%'))
 	GROUP BY f.tech_task_id,f.task_detail_id,f.order_no,f.workshop
 	UNION ALL
 	SELECT t.task_content,t.tech_order_no,fp.tech_task_id,fp.task_detail_id,k.key_name duty_unit,
-	fp.order_no,fp.workshop,sum(fp.follow_num) follow_num
+	CONCAT(fp.order_no,'  ',tt.bus_type_code,'  ',oo.order_qty,'台') AS order_no,fp.order_no AS orderno,fp.workshop,sum(fp.follow_num) follow_num
 	FROM BMS_TECH_TASK_FOLLOW_PRE fp
+	LEFT JOIN BMS_OR_ORDER oo ON fp.order_no = oo.order_no
+	LEFT JOIN BMS_BASE_BUS_TYPE tt ON oo.bus_type_id = tt.id 
 	LEFT JOIN BMS_TECH_TASK t ON t.id=fp.tech_task_id
 	LEFT JOIN BMS_BASE_KEY k ON k.id=t.duty_unit and k.key_code='ECN_DUTY_UNIT'
 	WHERE fp.confirmor_date LIKE (CONCAT(#{month},'%'))
@@ -1910,7 +1914,7 @@ LEFT JOIN BMS_BASE_USER AS u ON u.id = f.confirmor_id
 	BMS_TECH_TASK_DETAIL d 
 	JOIN mysql.help_topic b ON b.help_topic_id &lt;(LENGTH(d.time_list) - LENGTH(REPLACE(d.time_list, ',', '')) + 1)
 	)d on d.id=tmp.task_detail_id and d.tech_task_id=tmp.tech_task_id 
-	and d.workshop=tmp.workshop and d.order_no=tmp.order_no
+	and d.workshop=tmp.workshop and d.order_no=tmp.orderno
 	) report  WHERE 1=1
 	<if test="factory !=null and factory !='全部'">
 	AND report.factory = #{factory}

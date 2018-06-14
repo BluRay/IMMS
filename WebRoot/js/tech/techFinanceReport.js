@@ -80,18 +80,6 @@ function initTable() {
 	        	return {css: {"padding-left": "3px", "padding-right": "2px","font-size":"13px"}};
 	        	}
             },{
-            	field: 'workshop',title: '&nbsp;&nbsp;生产车间&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
-                sortable: false,visible: true,footerFormatter: totalTextFormatter,
-                cellStyle:function cellStyle(value, row, index, field) {
-	        	return {css: {"padding-left": "3px", "padding-right": "2px","font-size":"13px"}};
-	        	}
-            },{
-            	field: 'follow_num',title: '&nbsp;&nbsp;跟进台数&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
-                sortable: false,visible: true,footerFormatter: totalTextFormatter,
-                cellStyle:function cellStyle(value, row, index, field) {
-	        	return {css: {"padding-left": "3px", "padding-right": "2px","font-size":"13px"}};
-	        	}
-            },{
             	field: 'factory',title: '&nbsp;&nbsp;生产工厂&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
                 sortable: false,visible: true,footerFormatter: totalTextFormatter,
                 cellStyle:function cellStyle(value, row, index, field) {
@@ -104,11 +92,31 @@ function initTable() {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
     	        	}
             },{
+            	field: 'workshop',title: '&nbsp;&nbsp;技改车间&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
+                sortable: false,visible: true,footerFormatter: totalTextFormatter,
+                cellStyle:function cellStyle(value, row, index, field) {
+	        	return {css: {"padding-left": "3px", "padding-right": "2px","font-size":"13px"}};
+	        	}
+            },{
+            	field: 'follow_num',title: '&nbsp;&nbsp;技改完成台数&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
+                sortable: false,visible: true,footerFormatter: totalTextFormatter,
+                cellStyle:function cellStyle(value, row, index, field) {
+	        	return {css: {"padding-left": "3px", "padding-right": "2px","font-size":"13px"}};
+	        	}
+            },{
             	field: 'single_time',title: '&nbsp;&nbsp;单车工时&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
                 sortable: false,visible: true,footerFormatter: totalTextFormatter,
                 cellStyle:function cellStyle(value, row, index, field) {
     	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
     	        	}
+            },{
+            	field: 'single_time',title: '&nbsp;&nbsp;月度技改工时&nbsp;&nbsp;',align: 'center',valign: 'middle',align: 'center',
+                sortable: false,visible: true,footerFormatter: totalTextFormatter,
+                cellStyle:function cellStyle(value, row, index, field) {
+    	        	return {css: {"padding-left": "2px", "padding-right": "2px","font-size":"13px"}};
+	        	},formatter:function(value, row, index){
+    	        		return (row.follow_num * row.single_time).toFixed(2).replace(".00","");
+	        	}
             }
         ]
     ]
